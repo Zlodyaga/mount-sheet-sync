@@ -28,7 +28,7 @@ namespace MountSheetSync
 {
     static class Program
     {
-        public const string Version = "2.3.0";
+        public const string Version = "2.3.1";
         public const string Title = "Mount Sheet Sync";
 
         [STAThread]

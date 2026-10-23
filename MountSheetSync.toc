@@ -7,7 +7,7 @@
 ## Notes-esMX: Marca los jefes derrotados y las monturas nuevas en una tabla de Google de monturas, recuerda los personajes y la colección y muestra lo que queda esta semana.
 ## Notes-ptBR: Marca os chefes derrotados e as montarias novas numa planilha Google de montarias, lembra os personagens e a coleção e mostra o que falta nesta semana.
 ## Notes-ruRU: Отмечает убитых боссов и новые маунты в Google-таблице маунтов, запоминает персонажей и коллекцию для новой таблицы и показывает, что осталось на неделе.
-## Version: 2.3.0
+## Version: 2.3.1
 ## SavedVariables: MountSheetSyncDB
 ## X-Curse-Project-ID: 1761349
 ## X-Website: https://zlodyaga.github.io/

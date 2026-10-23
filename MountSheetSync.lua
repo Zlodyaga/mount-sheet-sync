@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 2.3.0 — ядро
+Mount Sheet Sync 2.3.1 — ядро
 =============================
 Записывает убийства боссов на текущем персонаже и новые маунты, чтобы программа
 Mount Sheet Sync (MountSheetSync.exe в трее Windows) отметила их в Google-таблице маунтов:
@@ -26,7 +26,7 @@ SavedVariables. Игра сохраняет файл
 
 local ADDON_NAME, ns = ...
 
-local VERSION = "2.3.0"
+local VERSION = "2.3.1"
 local MAX_RECORDS = 400               -- храним не больше стольких записей
 local MAX_AGE = 21 * 24 * 60 * 60     -- и не старше трёх недель
 local DUPLICATE_WINDOW = 120          -- ENCOUNTER_END и BOSS_KILL об одном бое, сек

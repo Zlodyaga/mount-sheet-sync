@@ -289,6 +289,7 @@ namespace MountSheetSync
         {
             TcpListener listener = new TcpListener(IPAddress.Loopback, 0);
             listener.Start();
+            BrowserInbox inbox = new BrowserInbox(listener);
             try
             {
                 int port = ((IPEndPoint)listener.LocalEndpoint).Port;
@@ -300,7 +301,7 @@ namespace MountSheetSync
                 DateTime deadline = DateTime.UtcNow + WaitForBrowser;
                 while (true)
                 {
-                    using (BrowserRequest req = BrowserRequest.Accept(listener, deadline, cancel))
+                    using (BrowserRequest req = inbox.Next(deadline, cancel))
                     {
                         if (req.Path == "/retry")
                         {
@@ -381,6 +382,121 @@ namespace MountSheetSync
             finally
             {
                 listener.Stop();
+                inbox.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// Запросы браузера на 127.0.0.1. Каждое соединение читается в своём потоке: пустое «запасное»
+        /// соединение браузера не задерживает настоящий ответ Google (раньше оно держало очередь до 10 с).
+        /// </summary>
+        sealed class BrowserInbox : IDisposable
+        {
+            readonly TcpListener listener;
+            readonly Queue<BrowserRequest> ready = new Queue<BrowserRequest>();
+            readonly object gate = new object();
+            bool closed;
+
+            public BrowserInbox(TcpListener listener)
+            {
+                this.listener = listener;
+                BeginAccept();
+            }
+
+            void BeginAccept()
+            {
+                try
+                {
+                    listener.BeginAcceptTcpClient(OnAccept, null);
+                }
+                catch (Exception)
+                {
+                    // слушатель уже остановлен
+                }
+            }
+
+            void OnAccept(IAsyncResult ar)
+            {
+                TcpClient client;
+                try
+                {
+                    client = listener.EndAcceptTcpClient(ar);
+                }
+                catch (Exception)
+                {
+                    return;
+                }
+                lock (gate)
+                {
+                    if (closed)
+                    {
+                        client.Close();
+                        return;
+                    }
+                }
+                BeginAccept();
+                ThreadPool.QueueUserWorkItem(delegate
+                {
+                    BrowserRequest r;
+                    try
+                    {
+                        r = BrowserRequest.From(client);
+                    }
+                    catch (Exception)
+                    {
+                        client.Close();
+                        return;
+                    }
+                    if (r == null)
+                    {
+                        return;
+                    }
+                    lock (gate)
+                    {
+                        if (!closed)
+                        {
+                            ready.Enqueue(r);
+                            Monitor.PulseAll(gate);
+                            return;
+                        }
+                    }
+                    r.Dispose();
+                });
+            }
+
+            public BrowserRequest Next(DateTime deadline, CancellationToken cancel)
+            {
+                lock (gate)
+                {
+                    while (ready.Count == 0)
+                    {
+                        if (cancel.IsCancellationRequested)
+                        {
+                            throw new GoogleAuthException(Tr._("вход отменён"), false);
+                        }
+                        if (DateTime.UtcNow > deadline)
+                        {
+                            throw new GoogleAuthException(Tr._("вход не завершён за 5 минут — попробуйте ещё раз"), false);
+                        }
+                        Monitor.Wait(gate, 250);
+                    }
+                    return ready.Dequeue();
+                }
+            }
+
+            public void Dispose()
+            {
+                List<BrowserRequest> left;
+                lock (gate)
+                {
+                    closed = true;
+                    left = new List<BrowserRequest>(ready);
+                    ready.Clear();
+                }
+                foreach (BrowserRequest r in left)
+                {
+                    r.Dispose();
+                }
             }
         }
 
@@ -393,26 +509,24 @@ namespace MountSheetSync
             public string Path = "";
             public Dictionary<string, string> Query = new Dictionary<string, string>(StringComparer.Ordinal);
 
-            public static BrowserRequest Accept(TcpListener listener, DateTime deadline, CancellationToken cancel)
+            /// <summary>Прочитать запрос с принятого соединения; null — браузер ничего не прислал (запасное соединение).</summary>
+            public static BrowserRequest From(TcpClient client)
             {
-                IAsyncResult ar = listener.BeginAcceptTcpClient(null, null);
-                while (!ar.AsyncWaitHandle.WaitOne(250))
-                {
-                    if (cancel.IsCancellationRequested)
-                    {
-                        throw new GoogleAuthException(Tr._("вход отменён"), false);
-                    }
-                    if (DateTime.UtcNow > deadline)
-                    {
-                        throw new GoogleAuthException(Tr._("вход не завершён за 5 минут — попробуйте ещё раз"), false);
-                    }
-                }
                 BrowserRequest r = new BrowserRequest();
-                r.client = listener.EndAcceptTcpClient(ar);
-                r.client.ReceiveTimeout = 10000;
+                r.client = client;
+                // Браузеры заранее открывают «запасные» соединения и могут долго ничего по ним не слать —
+                // поэтому каждое соединение читается отдельно (BrowserInbox), а не по очереди.
+                r.client.ReceiveTimeout = 60000;
                 r.client.SendTimeout = 10000;
                 r.stream = r.client.GetStream();
-                string[] parts = ReadRequestHead(r.stream).Split(' ');
+                string line = ReadRequestHead(r.stream);
+                if (line.Length == 0)
+                {
+                    r.answered = true;
+                    r.Dispose();
+                    return null;
+                }
+                string[] parts = line.Split(' ');
                 string target = parts.Length >= 2 && parts[0] == "GET" ? parts[1] : "";
                 int q = target.IndexOf('?');
                 r.Path = q >= 0 ? target.Substring(0, q) : target;

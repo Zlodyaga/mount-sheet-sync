@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.3.1
+- Google sign-in no longer stalls (and sometimes fails the first time) when the browser opens spare
+  connections to the program: every connection is now read on its own.
+
 ## 2.3.0
 - Addon in six languages (English, Russian, German, French, Spanish, Portuguese): the game language when known,
   English otherwise. Settings window (right-click the minimap/DataBroker/compartment icon, `/mss settings`):

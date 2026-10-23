@@ -10,6 +10,7 @@ import json
 import re
 import os
 import shutil
+import socket
 import subprocess
 import sys
 import threading
@@ -74,7 +75,7 @@ def run(*args, timeout=120):
     return p.returncode, (p.stdout + p.stderr).decode("utf-8", "replace")
 
 
-def login(expect_browser=True, retry=None):
+def login(expect_browser=True, retry=None, idle=0):
     """Run --google-login; play the browser: open the logged URL, follow Google's redirect to 127.0.0.1.
     retry: called after the first page; then the page's «Попробовать ещё раз» link is followed (pages: both)."""
     if os.path.exists(BROWSER_LOG):
@@ -92,7 +93,18 @@ def login(expect_browser=True, retry=None):
     while time.time() < deadline and proc.poll() is None:
         if os.path.exists(BROWSER_LOG) and open(BROWSER_LOG, encoding="utf-8").read().strip():
             url = open(BROWSER_LOG, encoding="utf-8").read().strip().splitlines()[-1]
+            spare = []
+            if idle:
+                # like Chrome: spare connections to the redirect address that never carry a request
+                port = urllib.parse.urlparse(urllib.parse.parse_qs(urllib.parse.urlparse(url).query)["redirect_uri"][0]).port
+                for _ in range(idle):
+                    spare.append(socket.create_connection(("127.0.0.1", port)))
+                time.sleep(0.3)
+            started = time.time()
             page = get(url)
+            LAST_GET[0] = time.time() - started
+            for sock in spare:
+                sock.close()
             if retry is not None:
                 retry()
                 m = re.search(r'href="(/retry)"', page)
@@ -102,6 +114,9 @@ def login(expect_browser=True, retry=None):
         time.sleep(0.2)
     out = proc.communicate(timeout=60)[0].decode("utf-8", "replace")
     return proc.returncode, out, page
+
+
+LAST_GET = [0.0]
 
 
 def sheet_cells(book, title):
@@ -164,6 +179,9 @@ try:
     check("--google-login exits 0", code == 0, out[-800:])
     check("the browser page says sign-in is done", page and "Вход выполнен" in page, page)
     check("log names the account", "Вход в Google выполнен: tester@example.com" in out, out[-500:])
+    code, out, page = login(idle=3)
+    check("spare idle browser connections do not hold up sign-in", code == 0 and page and "Вход выполнен" in page
+          and LAST_GET[0] < 5, (code, LAST_GET[0], page and page[:200]))
     tok = os.path.join(DATA, "google-token.dat")
     check("refresh token stored, not in plain text", os.path.exists(tok) and b"refresh" not in open(tok, "rb").read()
           and b"1//refresh" not in open(tok, "rb").read())
