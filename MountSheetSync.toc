@@ -9,6 +9,8 @@
 ## Notes-ruRU: Отмечает убитых боссов и новые маунты в Google-таблице маунтов, запоминает персонажей и коллекцию для новой таблицы и показывает, что осталось на неделе.
 ## Version: 2.3.0
 ## SavedVariables: MountSheetSyncDB
+## X-Curse-Project-ID: 1761349
+## X-Website: https://zlodyaga.github.io/
 ## IconTexture: Interface\Icons\Ability_Mount_RidingHorse
 ## AddonCompartmentFunc: MountSheetSync_OnAddonCompartmentClick
 ## AddonCompartmentFuncOnEnter: MountSheetSync_OnAddonCompartmentEnter
