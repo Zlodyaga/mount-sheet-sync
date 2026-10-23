@@ -33,14 +33,21 @@ jobs:
   tests:
     name: Tests (addon, program under mono, Code.gs, UI)
     runs-on: ubuntu-24.04
+    # usually about 15 minutes; a stuck apt mirror should fail the run instead of holding it for six hours
+    timeout-minutes: 40
     env:
       MSS_TEST_TMP: ${{ github.workspace }}/test-output
     steps:
       - uses: actions/checkout@v6
       - name: Install tools
         run: |
+          # man-db rebuilds its index after every package with man pages (mono has many): minutes for nothing
+          sudo rm -f /var/lib/man-db/auto-update
           sudo apt-get update
-          sudo apt-get install -y mono-devel xvfb xdotool stalonetray imagemagick
+          # only what the tests use: mono with Windows Forms (+ libgdiplus for System.Drawing), a font for the
+          # windows, Xvfb + xdotool + a tray for the UI walk-throughs, ImageMagick's `import` for screenshots
+          sudo apt-get install -y --no-install-recommends mono-devel libmono-system-windows-forms4.0-cil libgdiplus \
+            fonts-dejavu-core xvfb xdotool stalonetray imagemagick
           pip install --break-system-packages lupa
       - name: Run tests
         run: tools/run_tests.sh
