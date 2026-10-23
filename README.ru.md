@@ -1,6 +1,6 @@
 # Mount Sheet Sync
 
-[English](README.md)
+[English](README.md) · [Сайт](https://zlodyaga.github.io/) · [Политика конфиденциальности](https://zlodyaga.github.io/privacy.html#ru)
 
 Аддон для World of Warcraft и небольшая программа в трее Windows, которые сами ведут Google-таблицу фарма маунтов:
 каких боссов каждый персонаж убил на этой неделе, какие маунты уже собраны и что ещё осталось.

@@ -1,6 +1,6 @@
 # Mount Sheet Sync
 
-[Русский](README.ru.md)
+[Русский](README.ru.md) · [Home page](https://zlodyaga.github.io/) · [Privacy policy](https://zlodyaga.github.io/privacy.html)
 
 A World of Warcraft addon and a small Windows tray program that keep a Google Sheet of mount farming up to date for you:
 which bosses each character has killed this week, which mounts you already own, and what is still left to farm.
@@ -33,6 +33,9 @@ The full step-by-step guide (in Russian) is in [docs/README.ru.txt](docs/README.
 release archive.
 
 ## Privacy
+
+Full text: [privacy policy](https://zlodyaga.github.io/privacy.html).
+
 
 - The program asks Google only for `drive.file` (plus your e-mail address to show which account is signed in).
   With `drive.file` it can open **only the spreadsheets it created itself** — nothing else on your Google Drive.
