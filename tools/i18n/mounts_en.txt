@@ -1,0 +1,166 @@
+# English mount names by mountID (C_MountJournal) for the catalog rows.
+# Taken from SimpleArmory (https://github.com/kevinclement/SimpleArmory, MIT license), static/data/mounts.json.
+69	Rivendare's Deathcharger
+117	Blue Qiraji Battle Tank
+118	Red Qiraji Battle Tank
+119	Yellow Qiraji Battle Tank
+120	Green Qiraji Battle Tank
+168	Fiery Warhorse
+183	Ashes of Al'ar
+185	Raven Lord
+199	Amani War Bear
+213	Swift White Hawkstrider
+246	Azure Drake
+247	Blue Drake
+248	Bronze Drake
+250	Twilight Drake
+253	Black Drake
+262	Red Proto-Drake
+263	Black Proto-Drake
+264	Blue Proto-Drake
+266	Plagued Proto-Drake
+287	Grand Black War Mammoth
+304	Mimiron's Head
+306	Ironbound Proto-Drake
+307	Rusted Proto-Drake
+342	Swift Horde Wolf
+343	Swift Alliance Steed
+344	Crusader's White Warhorse
+345	Crusader's Black Warhorse
+349	Onyxian Drake
+363	Invincible
+364	Icebound Frostbrood Vanquisher
+365	Bloodbathed Frostbrood Vanquisher
+391	Volcanic Stone Drake
+392	Drake of the East Wind
+395	Drake of the North Wind
+396	Drake of the South Wind
+397	Vitreous Stone Drake
+410	Armored Razzashi Raptor
+411	Swift Zulian Panther
+415	Pureblood Fire Hawk
+417	Corrupted Fire Hawk
+419	Amani Battle Bear
+425	Flametalon of Alysrazor
+442	Blazing Drake
+443	Twilight Harbinger
+444	Life-Binder's Handmaiden
+445	Experiment 12-B
+466	Thundering Jade Cloud Serpent
+472	Crimson Cloud Serpent
+473	Heavenly Onyx Cloud Serpent
+474	Heavenly Crimson Cloud Serpent
+478	Astral Cloud Serpent
+503	Crimson Pandaren Phoenix
+515	Son of Galleon
+518	Ashen Pandaren Phoenix
+519	Emerald Pandaren Phoenix
+520	Violet Pandaren Phoenix
+530	Armored Skyscreamer
+531	Spawn of Horridon
+533	Cobalt Primordial Direhorn
+542	Thundering Cobalt Cloud Serpent
+543	Clutch of Ji-Kun
+557	Spawn of Galakras
+558	Kor'kron War Wolf
+559	Kor'kron Juggernaut
+607	Gorestrider Gronnling
+613	Ironhoof Destroyer
+619	Blacksteel Battleboar
+623	Frostplains Battleboar
+633	Hellfire Infernal
+634	Solar Spirehawk
+654	Challenger's War Yeti
+751	Felsteel Annihilator
+758	Infernal Direwolf
+764	Grove Warden
+773	Grove Defiler
+781	Infinite Timereaver
+791	Felblaze Infernal
+846	Leyfeather Hippogryph
+875	Midnight
+883	Smoldering Ember Wyrm
+899	Abyss Worm
+933	Obsidian Krolusk
+954	Shackled Ur'zul
+963	Bloodgorged Crawg
+971	Antoran Charhound
+972	Antoran Gloomhound
+978	Violet Spellwing
+995	Sharkbait
+1040	Tomb Stalker
+1053	Underrot Crawg
+1217	G.M.O.D.
+1218	Dazar'alor Windreaver
+1219	Glacial Tidestorm
+1227	Aerial Unit R-21/X
+1232	Azshari Bloatray
+1250	Mollie
+1252	Mechagon Peacekeeper
+1265	Uncorrupted Voidwing
+1293	Ny'alotha Allseer
+1314	Drake of the Four Winds
+1322	Wriggling Parasite
+1326	Awakened Mindborer
+1377	Rampart Screecher
+1405	Restoration Deathwalker
+1406	Marrowfang
+1417	Hand of Hrestimorak
+1419	Sintouched Deathwalker
+1443	Voracious Gorger
+1445	Slime Serpent
+1446	Tazavesh Gearglider
+1471	Vengeance
+1481	Cartel Master's Gearglider
+1500	Sanctum Gloomcharger
+1520	Soultwisted Deathwalker
+1544	Wastewarped Deathwalker
+1549	Shimmering Aurelid
+1552	Carcinized Zerethsteed
+1564	Colossal Soulshredder Mawrat
+1565	Colossal Umbrahide Mawrat
+1587	Zereth Overseer
+1626	Shellack
+1644	Raging Magmammoth
+1681	Hailstorm Armoredon
+1725	Inferno Armoredon
+1734	Shadowflame Shalewing
+1774	Valiance
+1801	Verdant Armoredon
+1814	Shadow Dusk Dreamsaber
+1818	Anu'relos, Flame's Guidance
+2055	Infinite Armoredon
+2091	Voyaging Wilderling
+2119	Stonevault Mechsuit
+2180	Shadowed Swarmite
+2204	Wick
+2219	Sureki Skyrazor
+2223	Ascendant Skyrazor
+2244	Diamond Mechsuit
+2313	Junkmaestro's Magnetomech
+2480	Crimson Shreddertank
+2487	The Big G
+2507	Prototype A.S.M.R.
+2508	Enterprising Shreddertank
+2549	Umbral K'arroc
+2569	Unbound Star-Eater
+2607	Ashes of Belo'ren
+2631	Scarlet Void Flyer
+2633	Azure Void Flyer
+2733	Calamitous Carrion
+2734	Convalescent Carrion
+2805	Spectral Hawkstrider
+2817	Lucent Hawkstrider
+2831	Tenebrous Harrower
+2950	Luminous Sporeglider
+3005	Cerulean Deathwalker
+3006	Amethyst Mechsuit
+3007	Blue-Chip Shreddertank
+3008	Profit-Green Shreddertank
+3009	Speculative Shreddertank
+3010	High-Yield Shreddertank
+3021	Crimson Venomfang
+3030	Primeval Skyfriend
+3058	The Writhing Brood
+3063	Breath of Blight
+3064	Breath of Ruin

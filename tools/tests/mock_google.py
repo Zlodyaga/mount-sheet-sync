@@ -291,12 +291,13 @@ class Handler(BaseHTTPRequestHandler):
         raise ApiError(400, "INVALID_ARGUMENT", "Unable to parse range: " + title)
 
     def check_formula(self, book, formula):
-        # in ru_RU formulas use ';' — a ',' outside quotes is an error, like in the real Sheets
-        if book["locale"] == "ru_RU":
+        # with a decimal comma (ru_RU, de_DE, fr_FR, es_ES, pt_BR) formulas use ';' — a ',' outside quotes is an
+        # error, like in the real Sheets
+        if book["locale"] in ("ru_RU", "de_DE", "fr_FR", "es_ES", "pt_BR"):
             outside = re.sub(r'"[^"]*"', "", formula)
             outside = re.sub(r"'[^']*'", "", outside)
             if "," in outside:
-                raise ApiError(400, "INVALID_ARGUMENT", "Invalid formula for ru_RU locale: " + formula)
+                raise ApiError(400, "INVALID_ARGUMENT", "Invalid formula for %s locale: %s" % (book["locale"], formula))
 
     def batch_update(self, book, body):
         reqs = body.get("requests") or []

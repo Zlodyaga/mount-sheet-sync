@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 2.3.1 — персонажи и коллекция маунтов
+Mount Sheet Sync 2.4.0 — персонажи и коллекция маунтов
 ====================================================
 По этим данным программа Mount Sheet Sync строит новую Google-таблицу
 («Создать таблицу»): листы «Рейды <Имя>» / «Подземелья <Имя>» на каждого
@@ -11,7 +11,7 @@ Mount Sheet Sync 2.3.1 — персонажи и коллекция маунто
 
 В SavedVariables (MountSheetSyncDB):
   chars["Имя-Сервер"] = { name, realm, class, classFile, level, guid, seen }
-  collection = { updated, journal, collected,
+  collection = { updated, locale, journal, collected,
                  names  = { имена собранных маунтов },
                  ids    = { их mountID },
                  mounts = { { id, name, type, from, got, faction }, … } }   -- весь журнал маунтов
@@ -207,6 +207,7 @@ function ns.ScanCollection()
   end
   db.collection = {
     updated = time(),
+    locale = GetLocale and GetLocale() or nil,   -- язык названий (программа берёт их для таблицы на этом языке)
     journal = #ids,
     collected = #got,
     names = names,
@@ -295,14 +296,88 @@ function ns.ForgetCommand(text)
 end
 
 ---------------------------------------------------------------------------
+-- Журнал подземелий: боссы и подземелья на языке клиента
+---------------------------------------------------------------------------
+-- journal = { locale, build, updated,
+--             instances  = { { id, name, raid, map }, … },          -- journalInstanceID, mapID
+--             encounters = { { id, j, name, i }, … } }              -- dungeonEncounterID, journalEncounterID
+-- По dungeonEncounterID (его же дают ENCOUNTER_END и BOSS_KILL) программа пишет в таблицу имена боссов
+-- и подземелий на языке игры и узнаёт убийства, как бы босс ни назывался.
+function ns.ScanJournal(force)
+  local db = DB()
+  if not db or not EJ_GetNumTiers or not EJ_SelectTier or not EJ_GetInstanceByIndex or not EJ_GetEncounterInfoByIndex then
+    return 0
+  end
+  local locale = GetLocale and GetLocale() or nil
+  local build = GetBuildInfo and select(2, GetBuildInfo()) or nil
+  local old = db.journal
+  if not force and type(old) == "table" and old.locale == locale and old.build == build and type(old.encounters) == "table"
+      and #old.encounters > 0 then
+    return #old.encounters
+  end
+  if EncounterJournal and EncounterJournal.IsShown and EncounterJournal:IsShown() then
+    return 0   -- не трогаем журнал, пока игрок в нём что-то смотрит; прочитаем в следующий раз
+  end
+  local tierBefore = EJ_GetCurrentTier and EJ_GetCurrentTier() or nil
+  local instances, encounters, seenInstance, seenEncounter = {}, {}, {}, {}
+  local ok = pcall(function()
+    for tier = 1, EJ_GetNumTiers() do
+      EJ_SelectTier(tier)
+      for _, raid in ipairs({ true, false }) do
+        local index = 1
+        while true do
+          local instanceID, name, _, _, _, _, _, _, _, _, mapID = EJ_GetInstanceByIndex(index, raid)
+          instanceID = Num(instanceID)
+          if not instanceID then
+            break
+          end
+          if not seenInstance[instanceID] then
+            seenInstance[instanceID] = true
+            instances[#instances + 1] = { id = instanceID, name = Text(name), raid = raid or nil, map = Num(mapID) }
+            local e = 1
+            while true do
+              local ename, _, journalEncounterID, _, _, _, dungeonEncounterID = EJ_GetEncounterInfoByIndex(e, instanceID)
+              if not Text(ename) then
+                break
+              end
+              local key = (Num(dungeonEncounterID) or 0) .. ":" .. (Num(journalEncounterID) or 0)
+              if not seenEncounter[key] then
+                seenEncounter[key] = true
+                encounters[#encounters + 1] = { id = Num(dungeonEncounterID), j = Num(journalEncounterID),
+                                                name = Text(ename), i = instanceID }
+              end
+              e = e + 1
+            end
+          end
+          index = index + 1
+        end
+      end
+    end
+  end)
+  if tierBefore then
+    pcall(EJ_SelectTier, tierBefore)
+  end
+  if not ok or #encounters == 0 then
+    return 0
+  end
+  db.journal = { locale = locale, build = build, updated = time(), instances = instances, encounters = encounters }
+  return #encounters
+end
+
+---------------------------------------------------------------------------
 -- Вызывает ядро
 ---------------------------------------------------------------------------
 local function ScanLater()
   ns.ScanCollection()
 end
 
+local function ScanJournalLater()
+  ns.ScanJournal()
+end
+
 function ns.OnLoginCollection()
   ns.RememberCharacter()
   -- журнал маунтов к PLAYER_LOGIN бывает ещё не готов — читаем чуть позже
   C_Timer.After(5, ScanLater)
+  C_Timer.After(12, ScanJournalLater)
 end

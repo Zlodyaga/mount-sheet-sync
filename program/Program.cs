@@ -10,6 +10,7 @@
 //   --test        только проверить связь с таблицей;
 //   --google-login  войти через Google без окна настроек;
 //   --create-sheet [название]  создать таблицу для всех персонажей из аддона;
+//   --sheet-lang <ru|en|de|fr|es|pt>  язык новой таблицы (по умолчанию — язык игры, иначе язык программы);
 //   --add-chars   добавить в таблицу персонажей, которых в ней ещё нет;
 //   --sync-collection  сверить таблицу с коллекцией маунтов из игры;
 //   --set-chars <файл.json>  персонажи таблицы как в файле: [{"name":"Эйра","raids":true,"dungeons":false,"world":true}, …];
@@ -28,7 +29,7 @@ namespace MountSheetSync
 {
     static class Program
     {
-        public const string Version = "2.3.1";
+        public const string Version = "2.4.0";
         public const string Title = "Mount Sheet Sync";
 
         [STAThread]
@@ -63,7 +64,7 @@ namespace MountSheetSync
             }
             if (opts.CreateSheet)
             {
-                return RunCreateSheet(opts.SheetTitle);
+                return RunCreateSheet(opts.SheetTitle, opts.SheetLang);
             }
             if (opts.AddChars)
             {
@@ -226,7 +227,7 @@ namespace MountSheetSync
             return GameData.Read(WowLocator.GetAddonFiles(WowLocator.FindRetailDirs(settings.WowPath)));
         }
 
-        static int RunCreateSheet(string title)
+        static int RunCreateSheet(string title, string lang)
         {
             Settings settings = Settings.Load(AppPaths.SettingsFile);
             GameSnapshot game = ReadGame(settings);
@@ -236,10 +237,9 @@ namespace MountSheetSync
                 return 1;
             }
             BuildPlan plan = new BuildPlan();
-            if (!string.IsNullOrWhiteSpace(title))
-            {
-                plan.Title = title.Trim();
-            }
+            plan.Lang = string.IsNullOrWhiteSpace(lang) ? SheetLang.DefaultFor(game) : SheetLang.Get(lang);
+            plan.Game = GameNames.From(game);
+            plan.Title = string.IsNullOrWhiteSpace(title) ? plan.Lang.Title : title.Trim();
             foreach (GameCharacter c in game.Characters)
             {
                 plan.Characters.Add(new BuildCharacter(c.Name, true, true));
@@ -434,6 +434,7 @@ namespace MountSheetSync
         public bool SyncCollection;
         public string SetCharsFile;
         public string SheetTitle;
+        public string SheetLang;
         public string DataDir;
 
         public static Options Parse(string[] args)
@@ -465,6 +466,10 @@ namespace MountSheetSync
                     {
                         o.SheetTitle = args[++i];
                     }
+                }
+                else if (a == "sheet-lang" && i + 1 < args.Length)
+                {
+                    o.SheetLang = args[++i];
                 }
                 else if (a == "add-chars")
                 {

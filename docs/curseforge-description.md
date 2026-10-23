@@ -14,6 +14,7 @@ Keep track of mount farming across all your characters: which bosses each charac
 
 The addon is built to work with a free, open-source Windows tray program from the same project. The program reads what the addon recorded, creates a spreadsheet in **your own** Google Drive and marks kills and collected mounts there automatically — and sends the "Remaining" list back into the game.
 
+- The spreadsheet can be in English, Russian, German, French, Spanish or Portuguese; mount, boss and instance names come from your game when it runs in that language.
 - The program asks Google only for access to the files it creates itself (`drive.file`).
 - It runs on your computer and talks to Google directly: no server in between, no tracking.
 - The addon itself never sends anything anywhere — WoW addons cannot use the network.

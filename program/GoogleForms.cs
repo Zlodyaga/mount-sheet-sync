@@ -221,6 +221,9 @@ namespace MountSheetSync
         readonly bool addMode;
         readonly Settings settings;
         readonly TextBox titleBox = new TextBox();
+        readonly ComboBox langBox = new ComboBox();
+        Label langHint;
+        bool langChosen;
         readonly DataGridView grid = new DataGridView();
         readonly TextBox nameBox = new TextBox();
         readonly Button addNameButton = new Button();
@@ -260,8 +263,36 @@ namespace MountSheetSync
             {
                 table.Controls.Add(UiStyle.Text(Tr._("Название таблицы на Google Диске:"), width, SystemColors.ControlText));
                 titleBox.Width = unit * 20;
-                titleBox.Text = Tr._("Маунты WoW");
+                titleBox.Text = SheetLang.Get(Tr.Lang).Title;
                 table.Controls.Add(titleBox);
+
+                FlowLayoutPanel langRow = new FlowLayoutPanel();
+                langRow.AutoSize = true;
+                langRow.Margin = new Padding(0, unit / 2, 0, 0);
+                Label langLabel = UiStyle.Text(Tr._("Язык таблицы:"), width, SystemColors.ControlText);
+                langLabel.AutoSize = true;
+                langLabel.MaximumSize = new Size(width / 2, 0);
+                langLabel.Margin = new Padding(3, 6, 3, 0);
+                langRow.Controls.Add(langLabel);
+                langBox.DropDownStyle = ComboBoxStyle.DropDownList;
+                langBox.Width = unit * 12;
+                foreach (string code in SheetLang.Codes)
+                {
+                    langBox.Items.Add(SheetLang.Names[code]);
+                }
+                SelectLang(Tr.Lang);
+                langBox.SelectedIndexChanged += delegate
+                {
+                    if (!settingLang)
+                    {
+                        langChosen = true;
+                    }
+                    LangChanged();
+                };
+                langRow.Controls.Add(langBox);
+                table.Controls.Add(langRow);
+                langHint = UiStyle.Text("", width, SystemColors.GrayText);
+                table.Controls.Add(langHint);
             }
             Label charsLabel = UiStyle.Text(addMode
                 ? Tr._("Галочки — какие листы есть у персонажа. Поставьте — лист появится, снимите — лист удалится; снимите все — персонаж уйдёт из таблицы. Ниже в списке — персонажи из аддона, которых в таблице ещё нет:")
@@ -397,6 +428,11 @@ namespace MountSheetSync
                 return;
             }
             game = snap;
+            if (!addMode && !langChosen)
+            {
+                SelectLang(SheetLang.DefaultFor(game).Code);   // язык игры, иначе язык программы
+            }
+            LangChanged();
             if (book != null)
             {
                 loadedBook = book;
@@ -444,6 +480,53 @@ namespace MountSheetSync
                 ShowStatus(Tr._("В таблице пока нет персонажей. Отметьте их галочками или впишите вручную ниже."), UiStyle.Warn);
             }
             okButton.Enabled = true;
+        }
+
+        bool settingLang;
+        string shownTitle;
+
+        SheetLang ChosenLang()
+        {
+            int i = langBox.SelectedIndex;
+            return SheetLang.Get(i >= 0 && i < SheetLang.Codes.Length ? SheetLang.Codes[i] : Tr.Lang);
+        }
+
+        void SelectLang(string code)
+        {
+            settingLang = true;
+            langBox.SelectedIndex = Array.IndexOf(SheetLang.Codes, SheetLang.Normalize(code));
+            settingLang = false;
+        }
+
+        /// <summary>Название по умолчанию — на языке таблицы; подсказка, откуда возьмутся названия.</summary>
+        void LangChanged()
+        {
+            if (addMode || langHint == null)
+            {
+                return;
+            }
+            SheetLang lang = ChosenLang();
+            string title = titleBox.Text.Trim();
+            if (title.Length == 0 || title == shownTitle || SheetLang.Codes.Any(c => SheetLang.Get(c).Title == title))
+            {
+                titleBox.Text = lang.Title;
+            }
+            shownTitle = titleBox.Text;
+            GameNames names = GameNames.From(game);
+            string hint = "";
+            if (!lang.IsRussian)
+            {
+                hint = names.JournalIn(lang) || names.MountsIn(lang)
+                    ? Tr._("Маунты, боссы и подземелья будут названы как в вашей игре.")
+                    : lang.Code == "en" ? ""
+                    : Tr._("Маунты, боссы и подземелья — по-английски: игра на другом языке или аддон ещё не прочитал журнал (зайдите в игру с аддоном 2.4).");
+                if (lang.Code != "en")
+                {
+                    hint = (hint + " " + Tr._("Советы по фарму и описания скипов — по-английски.")).Trim();
+                }
+            }
+            langHint.Text = hint;
+            langHint.Visible = hint.Length > 0;
         }
 
         void AddManual()
@@ -519,7 +602,9 @@ namespace MountSheetSync
                 }
             }
             BuildPlan plan = new BuildPlan();
-            plan.Title = titleBox.Text.Trim().Length > 0 ? titleBox.Text.Trim() : Tr._("Маунты WoW");
+            plan.Lang = addMode ? SheetLang.Russian : ChosenLang();
+            plan.Game = GameNames.From(game);
+            plan.Title = titleBox.Text.Trim().Length > 0 ? titleBox.Text.Trim() : plan.Lang.Title;
             plan.Characters = chars;
             plan.CollectedMounts = game != null ? game.CollectedMounts : new List<string>();
             plan.CollectedIds = game != null ? game.CollectedIds : new HashSet<long>();
@@ -591,6 +676,7 @@ namespace MountSheetSync
             cancelButton.Enabled = !on;
             grid.Enabled = !on;
             titleBox.Enabled = !on;
+            langBox.Enabled = !on;
             nameBox.Enabled = !on;
             addNameButton.Enabled = !on;
             UseWaitCursor = on;

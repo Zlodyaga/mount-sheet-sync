@@ -1,0 +1,475 @@
+@ Рейды
+en: Raids
+de: Schlachtzüge
+fr: Raids
+es: Bandas
+pt: Raides
+
+@ Подземелья
+en: Dungeons
+de: Dungeons
+fr: Donjons
+es: Mazmorras
+pt: Masmorras
+
+@ Мировые боссы
+en: World Bosses
+de: Weltbosse
+fr: Boss mondiaux
+es: Jefes del mundo
+pt: Chefes Mundiais
+
+@ Сводка
+en: Summary
+de: Übersicht
+fr: Résumé
+es: Resumen
+pt: Resumo
+
+@ Да
+en: Yes
+de: Ja
+fr: Oui
+es: Sí
+pt: Sim
+
+@ Нет
+en: No
+de: Nein
+fr: Non
+es: No
+pt: Não
+
+@ Собрано?
+en: Collected?
+de: Gesammelt?
+fr: Obtenue ?
+es: ¿Conseguida?
+pt: Obtida?
+
+@ Аддон
+en: Expansion
+de: Erweiterung
+fr: Extension
+es: Expansión
+pt: Expansão
+
+@ Рейд
+en: Raid
+de: Schlachtzug
+fr: Raid
+es: Banda
+pt: Raide
+
+@ Маунт
+en: Mount
+de: Reittier
+fr: Monture
+es: Montura
+pt: Montaria
+
+@ Тип источника
+en: Source type
+de: Quellentyp
+fr: Type de source
+es: Tipo de fuente
+pt: Tipo de fonte
+
+@ Босс / достижение / сундук
+en: Boss / achievement / chest
+de: Boss / Erfolg / Truhe
+fr: Boss / haut fait / coffre
+es: Jefe / logro / cofre
+pt: Chefe / conquista / baú
+
+@ Сложность / режим
+en: Difficulty / mode
+de: Schwierigkeit / Modus
+fr: Difficulté / mode
+es: Dificultad / modo
+pt: Dificuldade / modo
+
+@ Сброс / частота
+en: Reset / frequency
+de: Zurücksetzung / Häufigkeit
+fr: Réinitialisation / fréquence
+es: Reinicio / frecuencia
+pt: Reinício / frequência
+
+@ Осталось попыток выбить
+en: Attempts left
+de: Verbleibende Versuche
+fr: Tentatives restantes
+es: Intentos restantes
+pt: Tentativas restantes
+
+@ Скип есть?
+en: Skip available?
+de: Skip vorhanden?
+fr: Skip disponible ?
+es: ¿Hay skip?
+pt: Tem skip?
+
+@ Как работает скип
+en: How the skip works
+de: Wie der Skip funktioniert
+fr: Fonctionnement du skip
+es: Cómo funciona el skip
+pt: Como funciona o skip
+
+@ Совет по фарму
+en: Farming tip
+de: Farmtipp
+fr: Conseil de farm
+es: Consejo de farmeo
+pt: Dica de farm
+
+@ Статус
+en: Status
+de: Status
+fr: Statut
+es: Estado
+pt: Situação
+
+@ Источник
+en: Source
+de: Quelle
+fr: Source
+es: Fuente
+pt: Fonte
+
+@ Шанс выпадения
+en: Drop chance
+de: Dropchance
+fr: Chance de butin
+es: Probabilidad de botín
+pt: Chance de drop
+
+@ ID в игре
+en: Game ID
+de: Spiel-ID
+fr: ID en jeu
+es: ID en el juego
+pt: ID no jogo
+
+@ Подземелье / активность
+en: Dungeon / activity
+de: Dungeon / Aktivität
+fr: Donjon / activité
+es: Mazmorra / actividad
+pt: Masmorra / atividade
+
+@ Босс / достижение / условие
+en: Boss / achievement / condition
+de: Boss / Erfolg / Bedingung
+fr: Boss / haut fait / condition
+es: Jefe / logro / condición
+pt: Chefe / conquista / condição
+
+@ Скип / маршрут
+en: Skip / route
+de: Skip / Route
+fr: Skip / itinéraire
+es: Skip / ruta
+pt: Skip / rota
+
+@ Локация
+en: Zone
+de: Gebiet
+fr: Zone
+es: Zona
+pt: Zona
+
+@ Пытался на этой неделе?
+en: Tried this week?
+de: Diese Woche versucht?
+fr: Tenté cette semaine ?
+es: ¿Intentado esta semana?
+pt: Tentou nesta semana?
+
+@ Фармлю
+en: Farming
+de: Farme ich
+fr: Je farme
+es: Lo farmeo
+pt: Farmando
+
+@ Фармится
+en: Farmable
+de: Farmbar
+fr: Farmable
+es: Farmeable
+pt: Farmável
+
+@ Фармится / нужен контент-группинг
+en: Farmable / needs a current-content group
+de: Farmbar / braucht eine aktuelle Gruppe
+fr: Farmable / groupe à jour requis
+es: Farmeable / requiere un grupo actual
+pt: Farmável / precisa de um grupo atual
+
+@ Текущий контент
+en: Current content
+de: Aktueller Inhalt
+fr: Contenu actuel
+es: Contenido actual
+pt: Conteúdo atual
+
+@ Фармится через Timelost Saddle
+en: Farmable via Timelost Saddle
+de: Farmbar über Timelost Saddle
+fr: Farmable via Timelost Saddle
+es: Farmeable con Timelost Saddle
+pt: Farmável via Timelost Saddle
+
+@ Проверь доступность
+en: Check availability
+de: Verfügbarkeit prüfen
+fr: Vérifier la disponibilité
+es: Comprobar disponibilidad
+pt: Verificar disponibilidade
+
+@ Недоступен
+en: Unavailable
+de: Nicht verfügbar
+fr: Indisponible
+es: No disponible
+pt: Indisponível
+
+@ Недоступен / BMAH
+en: Unavailable / BMAH
+de: Nicht verfügbar / BMAH
+fr: Indisponible / BMAH
+es: No disponible / BMAH
+pt: Indisponível / BMAH
+
+@ Недоступ
+en: Unavailable
+de: Nicht verfügbar
+fr: Indisponible
+es: No disponible
+pt: Indisponível
+
+@ Текущий
+en: Current content
+de: Aktueller Inhalt
+fr: Contenu actuel
+es: Contenido actual
+pt: Conteúdo atual
+
+@ Частично
+en: Partial
+de: Teilweise
+fr: Partiel
+es: Parcial
+pt: Parcial
+
+@ Да, но не для этого
+en: Yes, but not for this
+de: Ja, aber nicht hierfür
+fr: Oui, mais pas pour ceci
+es: Sí, pero no para esto
+pt: Sim, mas não para isto
+
+@ Да, Mythic-only
+en: Yes, Mythic only
+de: Ja, nur mythisch
+fr: Oui, mythique uniquement
+es: Sí, solo mítico
+pt: Sim, só mítico
+
+@ Не указано
+en: Not specified
+de: Nicht angegeben
+fr: Non précisé
+es: No indicado
+pt: Não informado
+
+@ Еженедельно
+en: Weekly
+de: Wöchentlich
+fr: Hebdomadaire
+es: Semanal
+pt: Semanal
+
+@ Ежедневно
+en: Daily
+de: Täglich
+fr: Quotidien
+es: Diario
+pt: Diário
+
+@ Разово
+en: Once
+de: Einmalig
+fr: Une fois
+es: Una vez
+pt: Uma vez
+
+@ Сезонно
+en: Seasonal
+de: Saisonal
+fr: Saisonnier
+es: Por temporada
+pt: Por temporada
+
+@ Недоступно
+en: Not available
+de: Nicht erhältlich
+fr: Non disponible
+es: No obtenible
+pt: Não disponível
+
+@ Недоступно в рейде
+en: Not available in the raid
+de: Im Schlachtzug nicht erhältlich
+fr: Non disponible dans le raid
+es: No obtenible en la banda
+pt: Não disponível na raide
+
+@ Еженедельно / внутри рейда
+en: Weekly / inside the raid
+de: Wöchentlich / im Schlachtzug
+fr: Hebdomadaire / dans le raid
+es: Semanal / dentro de la banda
+pt: Semanal / dentro da raide
+
+@ Достижение
+en: Achievement
+de: Erfolg
+fr: Haut fait
+es: Logro
+pt: Conquista
+
+@ Гарантированно
+en: Guaranteed
+de: Garantiert
+fr: Garanti
+es: Garantizado
+pt: Garantido
+
+@ 100% (Покупка)
+en: 100% (purchase)
+de: 100% (Kauf)
+fr: 100% (achat)
+es: 100% (compra)
+pt: 100% (compra)
+
+@ Босс-дроп
+en: Boss drop
+de: Bossbeute
+fr: Butin de boss
+es: Botín de jefe
+pt: Saque de chefe
+
+@ WoW Retail / Midnight — фарм маунтов в рейдах и подземельях
+en: WoW Retail / Midnight — mount farming in raids and dungeons
+de: WoW Retail / Midnight — Reittiere farmen in Schlachtzügen und Dungeons
+fr: WoW Retail / Midnight — farm de montures en raids et donjons
+es: WoW Retail / Midnight — farmeo de monturas en bandas y mazmorras
+pt: WoW Retail / Midnight — farm de montarias em raides e masmorras
+
+@ Создано
+en: Created
+de: Erstellt
+fr: Créé le
+es: Creada
+pt: Criada em
+
+@ Как отмечается
+en: How it is marked
+de: So wird markiert
+fr: Comment c'est coché
+es: Cómo se marca
+pt: Como é marcado
+
+@ Убили босса в игре — программа Mount Sheet Sync сама ставит «Да» на листе персонажа. Выпал маунт — «Собрано?» = «Да». Можно править и вручную.
+en: Kill a boss in the game and Mount Sheet Sync puts “Yes” on the character's sheet by itself. Got the mount — “Collected?” = “Yes”. You can also edit by hand.
+de: Boss im Spiel besiegt — Mount Sheet Sync trägt auf dem Blatt des Charakters selbst „Ja“ ein. Reittier erhalten — „Gesammelt?“ = „Ja“. Von Hand ändern geht auch.
+fr: Boss tué en jeu : Mount Sheet Sync met lui-même « Oui » sur la feuille du personnage. Monture obtenue : « Obtenue ? » = « Oui ». Vous pouvez aussi modifier à la main.
+es: Matas un jefe en el juego y Mount Sheet Sync pone «Sí» en la hoja del personaje por sí solo. Conseguiste la montura: «¿Conseguida?» = «Sí». También se puede editar a mano.
+pt: Derrotou um chefe no jogo — o Mount Sheet Sync marca “Sim” na aba do personagem sozinho. Conseguiu a montaria — “Obtida?” = “Sim”. Também dá para editar à mão.
+
+@ Лист
+en: Sheet
+de: Blatt
+fr: Feuille
+es: Hoja
+pt: Aba
+
+@ Всего строк
+en: Rows
+de: Zeilen
+fr: Lignes
+es: Filas
+pt: Linhas
+
+@ Собрано
+en: Collected
+de: Gesammelt
+fr: Obtenues
+es: Conseguidas
+pt: Obtidas
+
+@ Осталось
+en: Left
+de: Übrig
+fr: Restantes
+es: Restantes
+pt: Restantes
+
+@ Статусы в таблице
+en: Statuses in the spreadsheet
+de: Status in der Tabelle
+fr: Statuts dans le tableau
+es: Estados en la hoja
+pt: Situações na planilha
+
+@ Можно целенаправленно фармить сейчас в Retail.
+en: Can be farmed on purpose in Retail right now.
+de: Kann jetzt in Retail gezielt gefarmt werden.
+fr: Peut être farmée volontairement dans Retail dès maintenant.
+es: Se puede farmear a propósito en Retail ahora mismo.
+pt: Pode ser farmada de propósito no Retail agora.
+
+@ Маунт доступен, но обычно нужен актуальный/не совсем legacy raid group.
+en: The mount is obtainable, but usually needs a current (not quite legacy) raid group.
+de: Das Reittier ist erhältlich, braucht aber meist eine aktuelle (nicht ganz Legacy-)Schlachtzugsgruppe.
+fr: La monture est obtenable, mais il faut généralement un groupe de raid à jour (pas tout à fait du legacy).
+es: La montura se puede conseguir, pero suele requerir un grupo de banda actual (no del todo legacy).
+pt: A montaria é obtível, mas geralmente precisa de um grupo de raide atual (não tão legacy).
+
+@ Midnight или свежий контент: обычно нужна группа и актуальные лут-правила.
+en: Midnight or recent content: usually needs a group and the current loot rules.
+de: Midnight oder neuer Inhalt: meist mit Gruppe und den aktuellen Beuteregeln.
+fr: Midnight ou contenu récent : il faut généralement un groupe et les règles de butin actuelles.
+es: Midnight o contenido reciente: suele requerir grupo y las reglas de botín actuales.
+pt: Midnight ou conteúdo recente: geralmente precisa de grupo e das regras de saque atuais.
+
+@ M+ seasonal mount, покупается через Timelost Saddle после Keystone Myth (3400+). Седло одно за сезон на весь Warband.
+en: A seasonal M+ mount, bought with the Timelost Saddle after Keystone Myth (3400+). One saddle per season for the whole Warband.
+de: Saisonales M+-Reittier, mit dem Timelost Saddle nach Keystone Myth (3400+) gekauft. Ein Sattel pro Saison für die ganze Kriegsmeute.
+fr: Monture M+ saisonnière, achetée avec la Timelost Saddle après Keystone Myth (3400+). Une selle par saison pour tout le bataillon.
+es: Montura de M+ de temporada, se compra con la Timelost Saddle tras Keystone Myth (3400+). Una silla por temporada para toda la banda guerrera.
+pt: Montaria sazonal de M+, comprada com a Timelost Saddle após Keystone Myth (3400+). Uma sela por temporada para todo o Bando de Guerra.
+
+@ Исторический/удалённый маунт, оставлен для проверки коллекции.
+en: A historical/removed mount, kept to check the collection.
+de: Historisches/entferntes Reittier, für den Abgleich der Sammlung behalten.
+fr: Monture historique/retirée, conservée pour vérifier la collection.
+es: Montura histórica/retirada, se mantiene para revisar la colección.
+pt: Montaria histórica/removida, mantida para conferir a coleção.
+
+@ Основные источники
+en: Main sources
+de: Hauptquellen
+fr: Sources principales
+es: Fuentes principales
+pt: Fontes principais
+
+@ Маунты WoW
+en: WoW Mounts
+de: WoW-Reittiere
+fr: Montures WoW
+es: Monturas de WoW
+pt: Montarias do WoW

@@ -59,6 +59,7 @@ namespace MountSheetSync
                 {
                     RemoveCollected(book);   // новые маунты из этой отправки
                 }
+                book.Lang.Response(resp);   // названия листов — как в таблице
             }
             catch (SyncException)
             {
@@ -148,6 +149,9 @@ namespace MountSheetSync
         string url = "";
         string locale = "";
         string creatorApp = "";
+        SheetLang lang = SheetLang.Russian;
+        /// <summary>Настоящие названия листов нерусской таблицы (в Entries — русские, см. SheetLang).</summary>
+        readonly Dictionary<SheetEntry, string> realNames = new Dictionary<SheetEntry, string>();
         readonly List<SheetEntry> entries = new List<SheetEntry>();
         readonly List<CellRun.Cell> pending = new List<CellRun.Cell>();
         readonly Dictionary<string, KeyValuePair<long, string>> properties =
@@ -167,6 +171,15 @@ namespace MountSheetSync
         public string Id { get { return id; } }
         public string Locale { get { return locale; } }
         public string CreatorApp { get { return creatorApp; } }
+        /// <summary>Язык таблицы (таблицы до 2.4 — русские).</summary>
+        public SheetLang Lang { get { return lang; } }
+
+        /// <summary>Название листа в самой таблице.</summary>
+        public string RealName(SheetEntry entry)
+        {
+            string name;
+            return realNames.TryGetValue(entry, out name) ? name : lang.SheetName(entry.Name);
+        }
 
         public static string A1Sheet(string name)
         {
@@ -184,6 +197,7 @@ namespace MountSheetSync
             b.title = J.Str(J.Obj(J.Get(meta, "properties")), "title");
             b.locale = J.Str(J.Obj(J.Get(meta, "properties")), "locale");
             b.url = J.Str(meta, "spreadsheetUrl");
+            string metaLang = null;
             if (b.url.Length == 0)
             {
                 b.url = "https://docs.google.com/spreadsheets/d/" + spreadsheetId + "/edit";
@@ -201,7 +215,12 @@ namespace MountSheetSync
                 {
                     try
                     {
-                        b.creatorApp = J.Str(Json.Parse(J.Str(m, "metadataValue")) as Dictionary<string, object>, "app");
+                        Dictionary<string, object> mark = Json.Parse(J.Str(m, "metadataValue")) as Dictionary<string, object>;
+                        b.creatorApp = J.Str(mark, "app");
+                        if (J.Get(mark, "lang") != null)
+                        {
+                            metaLang = J.Str(mark, "lang");
+                        }
                     }
                     catch (Exception)
                     {
@@ -224,6 +243,7 @@ namespace MountSheetSync
             }
             if (b.entries.Count == 0)
             {
+                b.lang = SheetLang.Detect(metaLang, new string[0]);
                 return b;
             }
             List<string> ranges = b.entries.Select(e => A1Sheet(e.Name)).ToList();
@@ -234,6 +254,17 @@ namespace MountSheetSync
                 List<object> rows = i < values.Count ? J.Arr(J.Get(J.Obj(values[i]), "values")) : new List<object>();
                 List<object> frows = i < formulas.Count ? J.Arr(J.Get(J.Obj(formulas[i]), "values")) : new List<object>();
                 Fill(b.entries[i], rows, frows);
+            }
+            b.lang = SheetLang.Detect(metaLang, b.entries.Select(e => e.Name));
+            if (!b.lang.IsRussian)
+            {
+                // внутри программы таблица «русская»: названия листов, заголовки и значения списков
+                foreach (SheetEntry e in b.entries)
+                {
+                    b.realNames[e] = e.Name;
+                    e.Name = b.lang.SheetNameToRu(e.Name);
+                    b.lang.ToRussian(e);
+                }
             }
             return b;
         }
@@ -293,12 +324,12 @@ namespace MountSheetSync
             foreach (CellRun run in CellRun.Group(pending))
             {
                 string col = SheetBuilder.ColumnName(run.Col);
-                string range = A1Sheet(run.Entry.Name) + "!" + col + (run.Row + 1).ToString(CultureInfo.InvariantCulture)
+                string range = A1Sheet(RealName(run.Entry)) + "!" + col + (run.Row + 1).ToString(CultureInfo.InvariantCulture)
                     + ":" + col + (run.Row + run.Rows).ToString(CultureInfo.InvariantCulture);
                 List<object> rows = new List<object>();
                 for (int i = 0; i < run.Rows; i++)
                 {
-                    rows.Add(new List<object> { run.Entry.Data[run.Row + i][run.Col] });
+                    rows.Add(new List<object> { lang.ValueOut(run.Entry.Data[run.Row + i][run.Col]) });
                 }
                 Dictionary<string, object> d = new Dictionary<string, object>();
                 d["range"] = range;
@@ -316,7 +347,9 @@ namespace MountSheetSync
             Flush();
             int col = entry.Data.Count > 0 ? entry.Data[0].Length : 0;
             int grid = entry.GridColumns > 0 ? entry.GridColumns : col;
-            GoogleSheets.BatchUpdate(id, SheetBuilder.AppendColumnRequests((int)entry.SheetId, col, grid, values, hidden));
+            List<object> req = SheetBuilder.AppendColumnRequests((int)entry.SheetId, col, grid, values, hidden);
+            lang.Outgoing(req);
+            GoogleSheets.BatchUpdate(id, req);
             WriteCalls++;
             if (col >= grid)
             {
@@ -349,6 +382,7 @@ namespace MountSheetSync
         {
             Flush();
             List<object> req = new List<object>(requests);
+            lang.Outgoing(req);
             SheetBuilder.LocalizeFormulas(req, locale);
             if (propertyKey != null)
             {

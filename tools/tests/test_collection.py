@@ -73,6 +73,40 @@ C_MountJournal = {
     return 12345, "Описание", m and m[5], false, 230, 4, 0, 0, false
   end,
 }
+-- Encounter Journal: { journalInstanceID, name, mapID, { { name, journalEncounterID, dungeonEncounterID }, … } }
+MOCK.build = "66192"
+function GetBuildInfo() return "12.0.5", MOCK.build, "Oct 1 2026", 120005 end
+EJ_TIER, EJ_CALLS = 2, 0
+MOCK.ej = {
+  { raids = { { 78, "Огненные Просторы", 720, { { "Рагнарос", 198, 1203 }, { "Алисразор", 194, 1206 } } } },
+    dungeons = { { 65, "Вершина Утгард", 575, { { "Скади Безжалостный", 643, 2029 } } } } },
+  { raids = { { 1193, "Святилище Господства", 2450, { { "Сильвана Ветрокрылая", 2441, 2435 } } },
+              { 78, "Огненные Просторы", 720, {} } },
+    dungeons = {} },
+}
+function EJ_GetNumTiers() return #MOCK.ej end
+function EJ_GetCurrentTier() return EJ_TIER end
+function EJ_SelectTier(t) EJ_TIER = t end
+function EJ_GetInstanceByIndex(index, raid)
+  local i = MOCK.ej[EJ_TIER][raid and "raids" or "dungeons"][index]
+  if not i then return nil end
+  return i[1], i[2], "описание", 0, 0, 0, 0, 0, "link", true, i[3]
+end
+function EJ_GetEncounterInfoByIndex(index, instanceID)
+  for _, tier in ipairs(MOCK.ej) do
+    for _, kind in ipairs({ "raids", "dungeons" }) do
+      for _, i in ipairs(tier[kind]) do
+        if i[1] == instanceID and #i[4] > 0 then
+          local e = i[4][index]
+          if not e then return nil end
+          EJ_CALLS = EJ_CALLS + 1
+          return e[1], "описание", e[2], 0, "link", instanceID, e[3], i[3]
+        end
+      end
+    end
+  end
+  return nil
+end
 MountSheetSyncDB = nil
 """ % NOW)
 g = L.globals()
@@ -81,12 +115,12 @@ toc = open(os.path.join(ADDON_DIR, "MountSheetSync.toc"), encoding="utf-8").read
 files = [ln.strip().replace("\\", "/") for ln in toc if ln.strip() and not ln.startswith("#")]
 check("Collection.lua in the toc after the core, before the window",
       files.index("MountSheetSync.lua") < files.index("Collection.lua") < files.index("UI.lua"), files)
-check("toc version 2.3.1", "## Version: 2.3.1" in toc)
+check("toc version 2.4.0", "## Version: 2.4.0" in toc)
 ns = L.table()
 loader = L.eval("function(src, name) return assert(loadstring(src, '@' .. name)) end")
 for name in files:
     loader(open(os.path.join(ADDON_DIR, name), encoding="utf-8").read(), name)("MountSheetSync", ns)
-check("core version 2.3.1", ns.VERSION == "2.3.1")
+check("core version 2.4.0", ns.VERSION == "2.4.0")
 
 
 def chat_all():
@@ -158,6 +192,29 @@ chars = py(db.chars)
 check("relogin updates level and time, no duplicate", len(chars) == 2 and chars["Мирна-Ревущий фьорд"]["level"] == 72
       and chars["Мирна-Ревущий фьорд"]["seen"] == NOW + 7200)
 check("full rescan follows the journal (363 learned in game)", py(db.collection)["ids"] == [6, 69, 363], py(db.collection)["ids"])
+
+# ---- Encounter Journal dump (2.4): bosses and instances in the client's language for the program
+j = py(db.journal)
+check("journal read after the timer, with locale and build", isinstance(j, dict) and j.get("locale") == "ruRU"
+      and j.get("build") == "66192" and j.get("updated") == NOW, j)
+check("journal instances: each once, with map IDs and the raid flag",
+      sorted((i["id"], i["map"], i.get("raid", False)) for i in j["instances"]) == [(65, 575, False), (78, 720, True), (1193, 2450, True)],
+      j.get("instances"))
+check("journal encounters: dungeonEncounterID, journalEncounterID, name, instance",
+      sorted((e["id"], e["j"], e["name"], e["i"]) for e in j["encounters"]) == [(1203, 198, "Рагнарос", 78), (1206, 194, "Алисразор", 78),
+      (2029, 643, "Скади Безжалостный", 65), (2435, 2441, "Сильвана Ветрокрылая", 1193)], j.get("encounters"))
+check("the journal's tier is restored after the scan", g.EJ_TIER == 2, g.EJ_TIER)
+check("mount names carry the client language", py(db.collection).get("locale") == "ruRU", py(db.collection).get("locale"))
+calls = g.EJ_CALLS
+g.Fire("PLAYER_LOGIN"); g.RunTimers()
+check("same client build and language: the journal is not read again", g.EJ_CALLS == calls, (calls, g.EJ_CALLS))
+g.MOCK.build = "66300"
+g.EncounterJournal = L.eval("{ IsShown = function() return true end }")
+g.Fire("PLAYER_LOGIN"); g.RunTimers()
+check("journal window open: not touched", g.EJ_CALLS == calls and py(db.journal)["build"] == "66192")
+g.EncounterJournal = None
+g.Fire("PLAYER_LOGIN"); g.RunTimers()
+check("new client build: the journal is read again", g.EJ_CALLS > calls and py(db.journal)["build"] == "66300", py(db.journal)["build"])
 
 # same name on another realm
 g.MOCK.realm = "Гордунни"

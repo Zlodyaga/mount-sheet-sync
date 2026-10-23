@@ -32,3 +32,31 @@ de: Installieren Sie es (CurseForge oder der Ordner aus dem Archiv) und loggen S
 fr: Installez-le (CurseForge ou le dossier de l'archive) et connectez-vous au jeu
 es: Instálelo (CurseForge o la carpeta del archivo) y entre al juego
 pt: Instale-o (CurseForge ou a pasta do arquivo) e entre no jogo
+
+@ Язык таблицы:
+en: Spreadsheet language:
+de: Sprache der Tabelle:
+fr: Langue du tableau :
+es: Idioma de la hoja:
+pt: Idioma da planilha:
+
+@ Маунты, боссы и подземелья будут названы как в вашей игре.
+en: Mounts, bosses and instances will be named as in your game.
+de: Reittiere, Bosse und Instanzen heißen wie in Ihrem Spiel.
+fr: Les montures, boss et instances porteront les noms de votre jeu.
+es: Las monturas, jefes y estancias tendrán los nombres de su juego.
+pt: Montarias, chefes e instâncias terão os nomes do seu jogo.
+
+@ Маунты, боссы и подземелья — по-английски: игра на другом языке или аддон ещё не прочитал журнал (зайдите в игру с аддоном 2.4).
+en: Mounts, bosses and instances will be in English: the game is in another language or the addon has not read the journal yet (log in to the game with addon 2.4).
+de: Reittiere, Bosse und Instanzen auf Englisch: Das Spiel hat eine andere Sprache oder das Addon hat das Abenteuerhandbuch noch nicht gelesen (mit Addon 2.4 ins Spiel einloggen).
+fr: Montures, boss et instances en anglais : le jeu est dans une autre langue ou l'addon n'a pas encore lu le journal (connectez-vous au jeu avec l'addon 2.4).
+es: Monturas, jefes y estancias en inglés: el juego está en otro idioma o el addon aún no ha leído la guía (entre en el juego con el addon 2.4).
+pt: Montarias, chefes e instâncias em inglês: o jogo está em outro idioma ou o addon ainda não leu o guia (entre no jogo com o addon 2.4).
+
+@ Советы по фарму и описания скипов — по-английски.
+en: Farming tips and skip notes are in English.
+de: Farmtipps und Skip-Hinweise sind auf Englisch.
+fr: Les conseils de farm et les notes sur les skips sont en anglais.
+es: Los consejos de farmeo y las notas de skips están en inglés.
+pt: As dicas de farm e as notas de skip estão em inglês.

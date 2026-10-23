@@ -1,0 +1,1097 @@
+@ Трэш-дроп / рейдовый маунт
+en: Trash drop / raid mount
+
+@ Редкий трэш-дроп / рейдовый маунт
+en: Rare trash drop / raid mount
+
+@ Timed-run награда
+en: Timed-run reward
+
+@ Босс / секретный Naxxramas источник
+en: Boss / secret Naxxramas source
+
+@ Босс-дроп / предмет
+en: Boss drop / item
+
+@ Обычные NPC внутри AQ40
+en: Regular NPCs inside AQ40
+
+@ Ловчий Аттумен
+en: Attumen the Huntsman
+
+@ Кель'тас Солнечный Скиталец
+en: Kael'thas Sunstrider
+
+@ Старый тайм-ран в Зул'Амане
+en: Old Zul'Aman timed run
+
+@ Малигос
+en: Malygos
+
+@ Сартарион
+en: Sartharion
+
+@ Любой босс Склепа Аркавона
+en: Any boss of Vault of Archavon
+
+@ Ониксия
+en: Onyxia
+
+@ Йогг-Сарон
+en: Yogg-Saron
+
+@ Король-лич
+en: The Lich King
+
+@ Испытание великого крестоносца
+en: Trial of the Grand Crusader
+
+@ Слава рейдеру (10 игроков)
+en: Glory of the Raider (10 player)
+
+@ Слава рейдеру (25 игроков)
+en: Glory of the Raider (25 player)
+
+@ Слава рейдеру Ульдуара
+en: Glory of the Ulduar Raider
+
+@ Слава рейдеру Ледяной Короны (10 игроков)
+en: Glory of the Icecrown Raider (10 player)
+
+@ Слава рейдеру Ледяной Короны (25 игроков)
+en: Glory of the Icecrown Raider (25 player)
+
+@ Дань бессмертию
+en: A Tribute to Immortality
+
+@ Инструктор Разувий (секрет с конём Храбрецом)
+en: Instructor Razuvious (the Valiance horse secret)
+
+@ Ал'акир
+en: Al'Akir
+
+@ Рагнарос
+en: Ragnaros
+
+@ Алисразор
+en: Alysrazor
+
+@ Ультраксион
+en: Ultraxion
+
+@ Безумие Смертокрыла
+en: Madness of Deathwing
+
+@ Слава рейдеру Катаклизма
+en: Glory of the Cataclysm Raider
+
+@ Слава рейдеру Огненных Просторов
+en: Glory of the Firelands Raider
+
+@ Слава рейдеру Души Дракона
+en: Glory of the Dragon Soul Raider
+
+@ Элегон
+en: Elegon
+
+@ Хорридон
+en: Horridon
+
+@ Цзи-Кунь
+en: Ji-Kun
+
+@ Гаррош Адский Крик
+en: Garrosh Hellscream
+
+@ Слава рейдеру Пандарии
+en: Glory of the Pandaria Raider
+
+@ Слава рейдеру Громового Престола
+en: Glory of the Thundering Raider
+
+@ Слава рейдеру Оргриммара
+en: Glory of the Orgrimmar Raider
+
+@ Слава рейдеру Пандарии (гильдия)
+en: Glory of the Pandaria Raider (guild)
+
+@ Герой своего времени: Гаррош Адский Крик
+en: Ahead of the Curve: Garrosh Hellscream
+
+@ Чернорук
+en: Blackhand
+
+@ Архимонд
+en: Archimonde
+
+@ Слава рейдеру Дренора
+en: Glory of the Draenor Raider
+
+@ Слава рейдеру Дренора (гильдия)
+en: Glory of the Draenor Raider (guild)
+
+@ Слава рейдеру Цитадели Адского Пламени
+en: Glory of the Hellfire Raider
+
+@ Герой своего времени: Архимонд
+en: Ahead of the Curve: Archimonde
+
+@ Гул'дан
+en: Gul'dan
+
+@ Госпожа Сашж'ин
+en: Mistress Sassz'ine
+
+@ Гончие Саргераса / Шатуг
+en: Felhounds of Sargeras / Shatug
+
+@ Аргус Порабощенный
+en: Argus the Unmaker
+
+@ Слава рейдеру Legion
+en: Glory of the Legion Raider
+
+@ Слава рейдеру Аргуса
+en: Glory of the Argus Raider
+
+@ Герой своего времени: Аргус Порабощенный
+en: Ahead of the Curve: Argus the Unmaker
+
+@ Главный механик Меггакрут
+en: High Tinker Mekkatorque
+
+@ Леди Джайна Праудмур
+en: Lady Jaina Proudmoore
+
+@ Н'Зот Заразитель
+en: N'Zoth the Corruptor
+
+@ Слава рейдеру Ульдира
+en: Glory of the Uldir Raider
+
+@ Слава рейдеру Дазар'алора
+en: Glory of the Dazar'alor Raider
+
+@ Слава рейдеру Вечного дворца
+en: Glory of the Eternal Raider
+
+@ Слава рейдеру Ни'алоты
+en: Glory of the Ny'alotha Raider
+
+@ Герой своего времени: Н'Зот Заразитель
+en: Ahead of the Curve: N'Zoth the Corruptor
+
+@ Сильвана Ветрокрылая
+en: Sylvanas Windrunner
+
+@ Девятка
+en: The Nine
+
+@ Тюремщик
+en: The Jailer
+
+@ Слава рейдеру Замка Нафрия
+en: Glory of the Nathria Raider
+
+@ Слава рейдеру Господства
+en: Glory of the Dominant Raider
+
+@ Слава рейдеру Гробницы
+en: Glory of the Sepulcher Raider
+
+@ Герой своего времени: Тюремщик
+en: Ahead of the Curve: The Jailer
+
+@ Фиракк
+en: Fyrakk the Blazing
+
+@ Слава рейдеру Хранилища
+en: Glory of the Vault Raider
+
+@ Слава рейдеру Аберрия
+en: Glory of the Aberrus Raider
+
+@ Слава рейдеру Сна
+en: Glory of the Dream Raider
+
+@ Пробуждение рейдов Dragonflight
+en: Dragonflight Awakened raids
+
+@ Королева Ансурек
+en: Queen Ansurek
+
+@ Слава рейдеру Неруб'арского дворца
+en: Glory of the Nerub-ar Palace Raider
+
+@ Хромовый король Галливикс
+en: Chrome King Gallywix
+
+@ Слава рейдеру Освобождения Нижней Шахты
+en: Glory of the Liberation of Undermine Raider
+
+@ Дименсий
+en: Dimensius, the All-Devouring
+
+@ Слава рейдеру Манагорна Омега
+en: Glory of the Omega Raider
+
+@ Бой «Падение Полночи»
+en: Midnight Falls
+
+@ Вкусный споролакомец из Гнилотопи
+en: Tasty sporegrazer from Rotmire
+
+@ Слава рейдеру Полночи
+en: Glory of the Midnight Raider
+
+@ Ула'тек
+en: Ula'tek
+
+@ Слава рейдеру Отравленной бездны
+en: Glory of the Venomous Abyss Raider
+
+@ Любая
+en: Any
+
+@ Обычный рейд
+en: Normal raid
+
+@ Удалённая TBC-версия
+en: Removed TBC version
+
+@ Удалённая награда Retail
+en: Reward removed in Retail
+
+@ Удалённая награда
+en: Removed reward
+
+@ 10 игроков
+en: 10 player
+
+@ Для Classic, TBC и Cataclysm официальных raid-skip нет
+en: No official raid skips for Classic, TBC and Cataclysm
+
+@ Официального скипа нет
+en: No official skip
+
+@ Для TBC официальных raid-skip нет
+en: No official raid skips for TBC
+
+@ Скипа нет; рейд состоит из одного босса
+en: No skip; the raid is a single boss
+
+@ Скипа нет; рейд короткий
+en: No skip; the raid is short
+
+@ Naxxramas имеет Orb skip, но сама награда в Retail удалена из Glory
+en: Naxxramas has the Orb skip, but the reward itself was removed from Glory in Retail
+
+@ Orb of Naxxramas после входа скипает к Sapphiron / Kel'Thuzad wing
+en: The Orb of Naxxramas near the entrance skips to the Sapphiron / Kel'Thuzad wing
+
+@ Для Cataclysm официальных raid-skip нет
+en: No official raid skips for Cataclysm
+
+@ Официального скипа нет; есть неофициальный перелёт через перья Alysrazor
+en: No official skip; there is an unofficial flight with Alysrazor's feathers
+
+@ Официальных скипов нет
+en: No official skips
+
+@ Убей Garrosh один раз; затем жми scroll у входа рядом с Lorewalker Cho, скип к Garrosh. Warband-wide.
+en: Kill Garrosh once; then click the scroll near Lorewalker Cho at the entrance to skip to Garrosh. Warband-wide.
+
+@ Официальных скипов для этих рейдов нет
+en: No official skips for these raids
+
+@ Скип к Garrosh есть, но для Glory обычно нужны разные боссы, поэтому скип не всегда использовать.
+en: There is a skip to Garrosh, but Glory usually needs several different bosses, so the skip is not always worth using.
+
+@ SoO скип существует, но AOTC-награда удалена
+en: The SoO skip exists, but the AOTC reward was removed
+
+@ Quest: Sigil of the Black Hand; Warband-wide; скип к последнему боссу.
+en: Quest: Sigil of the Black Hand; Warband-wide; skips to the last boss.
+
+@ Quests: Well of Souls + The Fel Spire; Warband-wide; скип к Upper Citadel / Destructor's Rise.
+en: Quests: Well of Souls + The Fel Spire; Warband-wide; skips to the Upper Citadel / Destructor's Rise.
+
+@ Blackrock Foundry имеет скип, но Glory требует разные боссы.
+en: Blackrock Foundry has a skip, but Glory needs different bosses.
+
+@ Blackrock Foundry имеет скип, но guild-achievement требует условия.
+en: Blackrock Foundry has a skip, but the guild achievement has its own conditions.
+
+@ HFC имеет два скипа, но для Glory обычно нужны разные боссы.
+en: HFC has two skips, but Glory usually needs different bosses.
+
+@ HFC скип существует, но AOTC-награда удалена
+en: The HFC skip exists, but the AOTC reward was removed
+
+@ Quest: Talisman of the Shal'dorei; скип к последним двум зонам.
+en: Quest: Talisman of the Shal'dorei; skips to the last two areas.
+
+@ Quest: Aegwynn's Path; скипает боссов 2-6.
+en: Quest: Aegwynn's Path; skips bosses 2-6.
+
+@ Quests: Dark Passage + The Heart of Argus; есть два скипа.
+en: Quests: Dark Passage + The Heart of Argus; there are two skips.
+
+@ The Heart of Argus скипает к поздней части рейда; Warband-wide.
+en: The Heart of Argus skips to the late part of the raid; Warband-wide.
+
+@ Emerald Nightmare и Nighthold имеют скипы; Glory требует разные боссы.
+en: Emerald Nightmare and Nighthold have skips; Glory needs different bosses.
+
+@ Antorus имеет два скипа; Glory часто требует разных боссов.
+en: Antorus has two skips; Glory often needs different bosses.
+
+@ Antorus skip существует, но AOTC-награда удалена
+en: The Antorus skip exists, but the AOTC reward was removed
+
+@ Mythic-only скип к Jaina после полного Mythic clear.
+en: Mythic-only skip to Jaina after a full Mythic clear.
+
+@ Mythic-only: после полного Mythic clear поговори с Otoye / Ensign Roberst у входа.
+en: Mythic-only: after a full Mythic clear, talk to Otoye / Ensign Roberst at the entrance.
+
+@ Quest: MOTHER's Guidance; скипает боссов 2-10.
+en: Quest: MOTHER's Guidance; skips bosses 2-10.
+
+@ Скип к Jaina есть только на Mythic и не заменяет achievement-run.
+en: The skip to Jaina is Mythic-only and does not replace an achievement run.
+
+@ MOTHER's Guidance есть, но Glory требует разные боссы.
+en: MOTHER's Guidance exists, but Glory needs different bosses.
+
+@ Ny'alotha skip существует, но AOTC-награда удалена
+en: The Ny'alotha skip exists, but the AOTC reward was removed
+
+@ Quest: Damned If You Don't; скипает боссов 2-8.
+en: Quest: Damned If You Don't; skips bosses 2-8.
+
+@ Sanctum skip ведёт далеко вперёд и может проскочить The Nine.
+en: The Sanctum skip goes far ahead and can skip past The Nine.
+
+@ Quest: Heavy is the Crown; скипает боссов 2-7.
+en: Quest: Heavy is the Crown; skips bosses 2-7.
+
+@ Quest: Getting a Head; скипает боссов 2-6.
+en: Quest: Getting a Head; skips bosses 2-6.
+
+@ Sanctum skip есть, но Glory требует разные боссы.
+en: The Sanctum skip exists, but Glory needs different bosses.
+
+@ Sepulcher skip есть, но Glory требует разные боссы.
+en: The Sepulcher skip exists, but Glory needs different bosses.
+
+@ Sepulcher skip существует, но AOTC-награда удалена
+en: The Sepulcher skip exists, but the AOTC reward was removed
+
+@ Quest: Up in Smoke; скипает боссов 3-6.
+en: Quest: Up in Smoke; skips bosses 3-6.
+
+@ Quest: Break a Few Eggs; скипает боссов 2-6.
+en: Quest: Break a Few Eggs; skips bosses 2-6.
+
+@ Quest: Echoes of the Earth-Warder; скипает боссов 2-7.
+en: Quest: Echoes of the Earth-Warder; skips bosses 2-7.
+
+@ Awakened-режим был только в 4-м сезоне Dragonflight.
+en: The Awakened mode was only in Dragonflight Season 4.
+
+@ У March on Quel'Danas скипа нет.
+en: March on Quel'Danas has no skip.
+
+@ Скип для Sporefall в актуальном skip-списке не указан.
+en: No skip for Sporefall in the current skip list.
+
+@ The Voidspire: Quest: Flicker in the Hollow; у The Dreamrift и March on Quel'Danas скипов нет.
+en: The Voidspire: Quest: Flicker in the Hollow; The Dreamrift and March on Quel'Danas have no skips.
+
+@ Считай как коллекционный AQ-маунт; обычно используется только внутри Temple of Ahn'Qiraj.
+en: Count it as a collectible AQ mount; it is usually only usable inside Temple of Ahn'Qiraj.
+
+@ Самый редкий из AQ battle tank дропов; проверь, нужен ли он тебе именно для коллекции.
+en: The rarest of the AQ battle tank drops; check whether you really need it for the collection.
+
+@ Очень быстрый забег: Attumen находится в начале Karazhan.
+en: A very quick run: Attumen is at the start of Karazhan.
+
+@ Один из самых приоритетных старых рейдовых маунтов; убивай Kael'thas на каждом альте.
+en: One of the top-priority old raid mounts; kill Kael'thas on every alt.
+
+@ В Retail больше не фармится; оставлено в таблице как исторический/коллекционный пункт.
+en: No longer farmable in Retail; kept in the sheet as a historical/collection entry.
+
+@ Быстрый еженедельный килл.
+en: A quick weekly kill.
+
+@ Также есть dungeon-источник через Oculus cache; см. лист Подземелья.
+en: There is also a dungeon source through the Oculus cache; see the Dungeons sheet.
+
+@ Оставь трёх драконов живыми и убей Sartharion.
+en: Leave the three drakes alive and kill Sartharion.
+
+@ Нужен доступ к Wintergrasp / старой зоне; шанс с любого босса.
+en: Needs access to Wintergrasp / the old zone; a chance from any boss.
+
+@ Быстрый еженедельный килл; маунт иногда бывает и на BMAH.
+en: A quick weekly kill; the mount sometimes shows up on the BMAH too.
+
+@ Один из самых долгих старых забегов без скипа.
+en: One of the longest old runs without a skip.
+
+@ Длинный забег; проверь lockout, если ведёшь много альтов.
+en: A long run; check the lockout if you play many alts.
+
+@ В Retail больше не фармится; историческая строка.
+en: No longer farmable in Retail; historical row.
+
+@ В Retail не фармится через достижение; может появляться на Black Market Auction House.
+en: Not farmable through the achievement in Retail; may appear on the Black Market Auction House.
+
+@ В Retail не фармится через достижение; историческая строка.
+en: Not farmable through the achievement in Retail; historical row.
+
+@ Многие ачивы соло, но отдельные механики могут требовать аккуратности/группы.
+en: Many achievements are soloable, but some mechanics may need care or a group.
+
+@ Можно делать отдельно от фарма Invincible.
+en: Can be done separately from farming Invincible.
+
+@ Проверь, открыт ли у персонажа/аккаунта актуальный доступ к старым Naxxramas-секретам.
+en: Check that the character/account has current access to the old Naxxramas secrets.
+
+@ Рейд короткий; один из удобных еженедельных маршрутов.
+en: A short raid; one of the handy weekly routes.
+
+@ Если нужен только Ragnaros, после Alysrazor можно ускорить маршрут перьями.
+en: If you only need Ragnaros, the feathers after Alysrazor make the route faster.
+
+@ Не пропускай Alysrazor, если фармишь именно Flametalon.
+en: Do not skip Alysrazor if you are farming the Flametalon.
+
+@ Длинный забег с RP/сценами; хорош для мульти-маунт фарма.
+en: A long run with RP/cutscenes; good for farming several mounts at once.
+
+@ Фармится вместе с Life-Binder's Handmaiden.
+en: Farmed together with Life-Binder's Handmaiden.
+
+@ Ставь Heroic, если нужен этот маунт.
+en: Set Heroic if you need this mount.
+
+@ Часть достижений может требовать контроля урона, чтобы не убить босса слишком быстро.
+en: Some achievements may need damage control so the boss does not die too fast.
+
+@ Лучше делать отдельным achievement-run, а не в скоростном маунт-забеге.
+en: Better done as a separate achievement run rather than in a fast mount run.
+
+@ Достижения лучше закрывать группой, если соло-механики ломаются.
+en: Better to do the achievements in a group if the mechanics break solo.
+
+@ До Elegon идти недолго; один из лучших быстрых MoP-забегов.
+en: Elegon is not far in; one of the best quick MoP runs.
+
+@ Horridon ранний босс, поэтому фарм быстрый.
+en: Horridon is an early boss, so the farm is quick.
+
+@ Нужно дойти до Ji-Kun; рейд без скипа.
+en: You have to get to Ji-Kun; the raid has no skip.
+
+@ Главный полезный скип MoP для маунт-фарма.
+en: The most useful MoP skip for mount farming.
+
+@ Achievement-run; не путать с прямым босс-дропом.
+en: Achievement run; not to be confused with a direct boss drop.
+
+@ Лучше делать отдельным забегом, потому что часть ачивок мешает speed-clear.
+en: Better done as a separate run, because some achievements get in the way of a speed clear.
+
+@ Не используй скип, пока не закрыты нужные боссы/ачивки.
+en: Do not use the skip until the bosses/achievements you need are done.
+
+@ Нужны условия guild achievement.
+en: Needs the guild achievement conditions.
+
+@ Историческая строка; в Retail не фармится.
+en: Historical row; not farmable in Retail.
+
+@ Один из самых полезных raid-skip для старого маунт-фарма.
+en: One of the most useful raid skips for old mount farming.
+
+@ Открыть оба HFC-скипа — высокий приоритет.
+en: Unlocking both HFC skips is a high priority.
+
+@ Achievement-run; не нажимай скип, пока не закрыты нужные достижения.
+en: Achievement run; do not use the skip until the achievements you need are done.
+
+@ Проверь требования guild group.
+en: Check the guild group requirements.
+
+@ Не используй скип до закрытия нужных боссов.
+en: Do not use the skip until the bosses you need are done.
+
+@ Скип полезен, если нужен только Gul'dan. На Mythic шанс есть сразу на оба инфернала.
+en: The skip helps if you only need Gul'dan. On Mythic there is a chance for both infernals at once.
+
+@ Скип полезен для Mythic Gul'dan.
+en: The skip helps for Mythic Gul'dan.
+
+@ Не используй скип, если идёшь за Abyss Worm: Mistress Sassz'ine можно проскочить.
+en: Do not use the skip if you are after the Abyss Worm: you can skip past Mistress Sassz'ine.
+
+@ Не используй skip-to-Argus, если фармишь Felhounds.
+en: Do not use the skip to Argus if you are farming the Felhounds.
+
+@ Один из главных Legion-скипов для маунт-фарма.
+en: One of the main Legion skips for mount farming.
+
+@ Achievement-run отдельно от speed-clear.
+en: Achievement run, separate from a speed clear.
+
+@ Не используй скип до закрытия нужных достижений.
+en: Do not use the skip until the achievements you need are done.
+
+@ Не используй Jaina skip, если цель — Mekkatorque.
+en: Do not use the Jaina skip if you are after Mekkatorque.
+
+@ Очень полезный скип для Mythic Jaina.
+en: A very useful skip for Mythic Jaina.
+
+@ Один из главных BfA-скипов.
+en: One of the main BfA skips.
+
+@ Achievement-run; некоторые условия проще в группе.
+en: Achievement run; some conditions are easier in a group.
+
+@ Сначала закрывай ачивки, потом используй скип для Jaina.
+en: Do the achievements first, then use the skip for Jaina.
+
+@ Achievement-run; не прямой босс-дроп.
+en: Achievement run; not a direct boss drop.
+
+@ Высокий приоритет: скип сильно сокращает путь к Sylvanas.
+en: High priority: the skip cuts the way to Sylvanas a lot.
+
+@ Не используй скип, если цель — Sanctum Gloomcharger.
+en: Do not use the skip if you are after the Sanctum Gloomcharger.
+
+@ Полезен, если фармишь Mythic Jailer.
+en: Useful if you are farming Mythic Jailer.
+
+@ Для Glory не спеши использовать скип.
+en: For Glory, do not hurry to use the skip.
+
+@ Главный DF raid-skip для маунт-фарма.
+en: The main DF raid skip for mount farming.
+
+@ Для Glory часть боссов нужна, поэтому скип включай осознанно.
+en: Glory needs some of the bosses, so use the skip deliberately.
+
+@ Теперь это подвиг (Feat of Strength): маунт больше не получить; историческая строка.
+en: Now a Feat of Strength: the mount can no longer be obtained; historical row.
+
+@ Можно фармить на любой сложности, где доступен лут.
+en: Farmable on any difficulty where the loot is available.
+
+@ Mythic-only; в Midnight это ещё не совсем legacy-фарм.
+en: Mythic-only; in Midnight it is not quite a legacy farm yet.
+
+@ Achievement-run; не используйте скип, пока нужны ранние боссы.
+en: Achievement run; do not use the skip while you still need the early bosses.
+
+@ Фармить вместе с The Big G, если есть Mythic-группа.
+en: Farm together with The Big G if you have a Mythic group.
+
+@ Mythic-only; после TWW drop rate обычно понижается.
+en: Mythic-only; after TWW the drop rate is usually lower.
+
+@ Achievement-run; скип использовать только после закрытия нужных боссов.
+en: Achievement run; use the skip only after the bosses you need are done.
+
+@ Mythic-only; в Midnight это ещё свежий контент.
+en: Mythic-only; in Midnight this is still recent content.
+
+@ Achievement-run; скип использовать аккуратно.
+en: Achievement run; use the skip carefully.
+
+@ Текущий Mythic-гейт; нужна рейдовая группа.
+en: Current Mythic gate; needs a raid group.
+
+@ Проверь сложность и лут-правила в Adventure Guide на своём персонаже.
+en: Check the difficulty and loot rules in the Adventure Guide on your character.
+
+@ Требует группу и выполнение условий в трёх Midnight рейдах.
+en: Needs a group and the conditions in three Midnight raids.
+
+@ Рейд 2-го сезона Midnight; пока аддон актуален — 3 маунта за килл (персональный лут), нужна Mythic-группа.
+en: Midnight Season 2 raid; while the expansion is current, 3 mounts per kill (personal loot), needs a Mythic group.
+
+@ Achievement-run; скип включай только после закрытия нужных боссов.
+en: Achievement run; turn the skip on only after the bosses you need are done.
+
+@ 3 за килл (пока Midnight актуален)
+en: 3 per kill (while Midnight is current)
+
+@ Сундук / cache
+en: Chest / cache
+
+@ Секретный timed boss
+en: Secret timed boss
+
+@ Босс-дроп / cache
+en: Boss drop / cache
+
+@ Dungeon summon / условие
+en: Dungeon summon / condition
+
+@ Босс-дроп / quest item
+en: Boss drop / quest item
+
+@ Любой босс подземелий путешествий во времени
+en: Any boss of Timewalking dungeons
+
+@ Лорд Аурий Ривендер
+en: Lord Aurius Rivendare
+
+@ Анзу
+en: Anzu
+
+@ Осквернитель из рода Бесконечности
+en: Infinite Corruptor
+
+@ Скади Безжалостный
+en: Skadi the Ruthless
+
+@ Сундук хранителя силовых линий
+en: Cache of the Ley-Guardian
+
+@ Слава герою
+en: Glory of the Hero
+
+@ Камнедроб
+en: Slabhide
+
+@ Альтаирий
+en: Altairus
+
+@ Мандокир Повелитель Крови
+en: Bloodlord Mandokir
+
+@ Верховная жрица Килнара
+en: High Priestess Kilnara
+
+@ Мешок Каши
+en: Kasha's Bag
+
+@ Слава герою Катастрофы
+en: Glory of the Cataclysm Hero
+
+@ Слава герою Пандарии
+en: Glory of the Pandaria Hero
+
+@ Завоеватель испытаний: серебро
+en: Challenge Conqueror: Silver
+
+@ Слава герою Дренора
+en: Glory of the Draenor Hero
+
+@ Владыка испытаний: серебро
+en: Challenge Warlord: Silver
+
+@ Ночная Погибель
+en: Nightbane
+
+@ Слава герою Legion
+en: Glory of the Legion Hero
+
+@ Король Дазар / Сундук претендента
+en: Dazar, The First King / Challenger's Cache
+
+@ Неупокоенное чудовище / Сундук претендента
+en: Unbound Abomination / Challenger's Cache
+
+@ Красавчик Харлан / Сундук претендента
+en: Harlan Sweete / Challenger's Cache
+
+@ Король Мехагон
+en: King Mechagon
+
+@ Воздушное судно подавления HK-8
+en: HK-8 Aerial Oppression Unit
+
+@ Слава герою, пережившему войну
+en: Glory of the Wartorn Hero
+
+@ Мастер ключей 4-го сезона BfA / Затерянное во времени седло
+en: Keystone Master: BfA Season Four / Timelost Saddle
+
+@ Налтор Призыватель Зимы
+en: Nalthor the Rimebinder
+
+@ Любопытный слизневый змей
+en: The curious Slime Serpent
+
+@ Со'лея
+en: So'leah
+
+@ Притворяйся, пока не получится
+en: Fake It 'Til You Make It
+
+@ Слава герою Темных Земель
+en: Glory of the Shadowlands Hero
+
+@ Мастер ключей 1-го сезона Shadowlands / Затерянное во времени седло
+en: Keystone Master: Shadowlands Season One / Timelost Saddle
+
+@ Мастер ключей 2-го сезона Shadowlands / Затерянное во времени седло
+en: Keystone Master: Shadowlands Season Two / Timelost Saddle
+
+@ Мастер ключей 3-го сезона Shadowlands / Затерянное во времени седло
+en: Keystone Master: Shadowlands Season Three / Timelost Saddle
+
+@ Мастер ключей 4-го сезона Shadowlands / Затерянное во времени седло
+en: Keystone Master: Shadowlands Season Four / Timelost Saddle
+
+@ Безупречный мастер (16-й этаж)
+en: Flawless Master (Layer 16)
+
+@ Боссы Торгаста
+en: Any boss of Torghast
+
+@ Слава герою Dragonflight
+en: Glory of the Dragonflight Hero
+
+@ Мастер ключей 1-го сезона Dragonflight / Затерянное во времени седло
+en: Keystone Master: Dragonflight Season One / Timelost Saddle
+
+@ Мастер ключей 2-го сезона Dragonflight / Затерянное во времени седло
+en: Keystone Master: Dragonflight Season Two / Timelost Saddle
+
+@ Мастер ключей 3-го сезона Dragonflight / Затерянное во времени седло
+en: Keystone Master: Dragonflight Season Three / Timelost Saddle
+
+@ Мастер ключей 4-го сезона Dragonflight / Затерянное во времени седло
+en: Keystone Master: Dragonflight Season Four / Timelost Saddle
+
+@ Верховный оратор Эйрих
+en: Void Speaker Eirich
+
+@ Тьма
+en: The Darkness
+
+@ Мастер ключей 1-го сезона The War Within / Затерянное во времени седло
+en: Keystone Master: The War Within Season One / Timelost Saddle
+
+@ Мастер ключей 2-го сезона The War Within / Затерянное во времени седло
+en: Keystone Master: The War Within Season Two / Timelost Saddle
+
+@ Легенда ключей 2-го сезона The War Within / Затерянное во времени седло
+en: Keystone Legend: The War Within Season Two / Timelost Saddle
+
+@ Мастер ключей 3-го сезона The War Within / Затерянное во времени седло
+en: Keystone Master: The War Within Season Three / Timelost Saddle
+
+@ Легенда ключей 3-го сезона The War Within / Затерянное во времени седло
+en: Keystone Legend: The War Within Season Three / Timelost Saddle
+
+@ Дегентрий
+en: Degentrius
+
+@ Неспокойное Сердце
+en: Restless Heart
+
+@ Зул'джан
+en: Zul'jan
+
+@ Мастер ключей Midnight: 1-й сезон / Затерянное во времени седло
+en: Keystone Master: Midnight Season 1 / Timelost Saddle
+
+@ Легенда ключей Midnight: 1-й сезон / Затерянное во времени седло
+en: Keystone Legend: Midnight Season 1 / Timelost Saddle
+
+@ Мастер ключей Midnight: 2-й сезон
+en: Keystone Master: Midnight Season 2
+
+@ Легенда ключей Midnight: 2-й сезон
+en: Keystone Legend: Midnight Season 2
+
+@ Мифик ключей → Затерянное во времени седло
+en: Keystone Myth → Timelost Saddle
+
+@ Только во время Timewalking
+en: Only during Timewalking
+
+@ До 10 инстансов/час
+en: Up to 10 instances/hour
+
+@ Ежедневно / random queue
+en: Daily / random queue
+
+@ Normal можно сбрасывать; Heroic daily
+en: Normal can be reset; Heroic daily
+
+@ Сезонно / через Timelost Saddle
+en: Seasonal / via Timelost Saddle
+
+@ Можно повторять по условиям
+en: Repeatable if the conditions are met
+
+@ Еженедельно / daily зависит от режима
+en: Weekly / daily depending on the mode
+
+@ По lockout/ротации Torghast
+en: By Torghast lockout/rotation
+
+@ Еженедельно / M+ по сезону
+en: Weekly / M+ per season
+
+@ Нет постоянного маршрута
+en: No fixed route
+
+@ Короткий маршрут к Baron/Rivendare
+en: Short route to Baron Rivendare
+
+@ Беги к Anzu
+en: Run to Anzu
+
+@ Финальный босс
+en: Final boss
+
+@ Успей в таймер
+en: Beat the timer
+
+@ Маршрут до Skadi
+en: Route to Skadi
+
+@ Нужен random dungeon reward cache
+en: Needs the random dungeon reward cache
+
+@ Разные подземелья WotLK
+en: Various WotLK dungeons
+
+@ Беги до Slabhide
+en: Run to Slabhide
+
+@ Беги до Altairus
+en: Run to Altairus
+
+@ Маршрут до Mandokir
+en: Route to Mandokir
+
+@ Маршрут до Kilnara
+en: Route to Kilnara
+
+@ Успей спасти пленников
+en: Save the prisoners in time
+
+@ Разные Cataclysm dungeons
+en: Various Cataclysm dungeons
+
+@ Разные MoP dungeons
+en: Various MoP dungeons
+
+@ Удалённый режим
+en: Removed mode
+
+@ Разные WoD dungeons
+en: Various WoD dungeons
+
+@ Собери кристаллы для Nightbane
+en: Collect the crystals for Nightbane
+
+@ Разные Legion dungeons
+en: Various Legion dungeons
+
+@ Финальная часть Mechagon
+en: The final part of Mechagon
+
+@ Разные BfA dungeons
+en: Various BfA dungeons
+
+@ M+ рейтинг → Keystone Myth → Timelost Saddle
+en: M+ rating → Keystone Myth → Timelost Saddle
+
+@ Обычно нужен solo-kill последних двух боссов
+en: Usually needs a solo kill of the last two bosses
+
+@ Финальный босс Tazavesh
+en: Tazavesh final boss
+
+@ Разные Shadowlands dungeons
+en: Various Shadowlands dungeons
+
+@ Фарм Torghast bosses
+en: Farm the Torghast bosses
+
+@ Разные Dragonflight dungeons
+en: Various Dragonflight dungeons
+
+@ Финальный/указанный босс
+en: Final/named boss
+
+@ Указанный босс
+en: Named boss
+
+@ M+ рейтинг
+en: M+ rating
+
+@ 20% на игрока без маунта (до 100% группой из 5)
+en: 20% per player without the mount (up to 100% with a group of 5)
+
+@ Просто спамь Timewalking dungeons во время события.
+en: Just spam Timewalking dungeons during the event.
+
+@ Один из классических ежедневных/массовых фармов; удобно на быстрых классах.
+en: One of the classic daily/mass farms; handy on fast classes.
+
+@ Heroic reset daily; удобно прогонять альтами.
+en: Heroic resets daily; handy to run on alts.
+
+@ Быстрый ежедневный забег.
+en: A quick daily run.
+
+@ Обычно 100% при выполнении timed run.
+en: Usually 100% when the timed run is done.
+
+@ Heroic reset daily; фармится альтами.
+en: Heroic resets daily; farmed on alts.
+
+@ Этот же маунт есть с Malygos в рейде Eye of Eternity.
+en: The same mount also drops from Malygos in the Eye of Eternity raid.
+
+@ Многие ачивки легко закрываются соло, но проверь механики.
+en: Many achievements are easy solo, but check the mechanics.
+
+@ Один из удобных dungeon spam фармов.
+en: One of the handy dungeon spam farms.
+
+@ Можно фармить чаще на Normal, если дроп доступен в текущей версии.
+en: Can be farmed more often on Normal if the drop is available in the current version.
+
+@ Фармить вместе с Swift Zulian Panther.
+en: Farm together with the Swift Zulian Panther.
+
+@ Фармить вместе с Armored Razzashi Raptor.
+en: Farm together with the Armored Razzashi Raptor.
+
+@ В отличие от старого Amani War Bear, этот фармится.
+en: Unlike the old Amani War Bear, this one is farmable.
+
+@ Achievement-run; часть условий проще с контролем урона.
+en: Achievement run; some conditions are easier with damage control.
+
+@ Achievement-run; обычно быстро закрывается на высоком уровне.
+en: Achievement run; usually quick at a high level.
+
+@ Achievement-run; часть условий проще группой.
+en: Achievement run; some conditions are easier in a group.
+
+@ Нужен правильный маршрут и таймер; соло шанс 20%, полная группа без маунта — 100%.
+en: Needs the right route and timer; 20% solo, 100% with a full group without the mount.
+
+@ Фармить вместе с Nightbane, если делаешь полный Kara-run.
+en: Farm together with Nightbane if you do a full Kara run.
+
+@ Achievement-run; некоторые условия требуют не убивать босса слишком быстро.
+en: Achievement run; some conditions need you not to kill the boss too fast.
+
+@ Kings' Rest есть в пуле M+ 2-го сезона Midnight: маунт падает с Дазара на Mythic и в ключах.
+en: Kings' Rest is in the Midnight Season 2 M+ pool: the mount drops from Dazar on Mythic and in keys.
+
+@ Mythic lockout weekly; проверь, доступен ли M+ источник в текущем сезоне.
+en: Weekly Mythic lockout; check whether the M+ source is available this season.
+
+@ Mythic lockout weekly; Freehold часто удобен на быстрых персонажах.
+en: Weekly Mythic lockout; Freehold is often handy on fast characters.
+
+@ 100% только на hard mode Короля Мехагона в Mythic; фармить вместе с Mechagon Peacekeeper.
+en: 100% only from the hard mode of King Mechagon on Mythic; farm together with the Mechagon Peacekeeper.
+
+@ Фармить вместе с Aerial Unit R-21/X.
+en: Farm together with the Aerial Unit R-21/X.
+
+@ Achievement-run; некоторые ачивки проще в группе.
+en: Achievement run; some achievements are easier in a group.
+
+@ С Patch 12.0.5 старые KSM/KSL маунты возвращены через Timelost Saddle.
+en: Since patch 12.0.5 the old KSM/KSL mounts are back through the Timelost Saddle.
+
+@ Проверь актуальные условия: важно пройти последние бои корректно.
+en: Check the current conditions: the last fights must be done correctly.
+
+@ Фармить вместе с achievement-маунтом Tazavesh Gearglider.
+en: Farm together with the Tazavesh Gearglider achievement mount.
+
+@ Не босс-дроп; делай отдельным run под достижение.
+en: Not a boss drop; do a separate run for the achievement.
+
+@ Achievement-run; часть условий может требовать 2+ игроков.
+en: Achievement run; some conditions may need 2+ players.
+
+@ Можно выбрать через Timelost Saddle, когда заработан текущий Keystone Myth.
+en: Can be picked with the Timelost Saddle once the current Keystone Myth is earned.
+
+@ Можно выбрать через Timelost Saddle.
+en: Can be picked with the Timelost Saddle.
+
+@ Не 5-player dungeon, но инстансовый Shadowlands-фарм; оставлено для полноты.
+en: Not a 5-player dungeon, but an instanced Shadowlands farm; kept for completeness.
+
+@ Дропает предмет, который запускает короткую цепочку.
+en: Drops an item that starts a short quest chain.
+
+@ Фармь на Mythic/M+ когда доступно.
+en: Farm on Mythic/M+ when available.
+
+@ KSL-уровень; можно выбрать через Timelost Saddle.
+en: KSL level; can be picked with the Timelost Saddle.
+
+@ Midnight dungeon drop; актуальный контент.
+en: Midnight dungeon drop; current content.
+
+@ Новый маунт патча 12.1; Altar of Fangs есть в пуле M+ 2-го сезона.
+en: A new mount of patch 12.1; Altar of Fangs is in the Season 2 M+ pool.
+
+@ 1-й сезон закончился 18.08.2026; по гайдам маунт добавлен в пул Timelost Saddle — проверь у Lindormi.
+en: Season 1 ended on 2026-08-18; according to the guides the mount was added to the Timelost Saddle pool — check with Lindormi.
+
+@ Текущий KSM-маунт Midnight Season 2.
+en: The current KSM mount of Midnight Season 2.
+
+@ Текущий KSL-маунт Midnight Season 2.
+en: The current KSL mount of Midnight Season 2.
+
+@ Новый Midnight recolor из Timelost Saddle pool.
+en: A new Midnight recolor from the Timelost Saddle pool.
+
+@ Ша Злости
+en: Sha of Anger
+
+@ Галлеон
+en: Galleon
+
+@ Ундаста
+en: Oondasta
+
+@ Налак
+en: Nalak
+
+@ Рухмар
+en: Rukhmar
+
+@ Песчаный проглот Кролок
+en: Dunegorger Kraulok
+
+@ Исхак Повелитель Четырех Ветров
+en: Ishak of the Four Winds
+
+@ Респ 15 минут
+en: Respawns in 15 minutes
+
+@ Ротация ворлд боссов BfA
+en: BfA world boss rotation
+
+@ Рар в Ульдуме, появляется во время нападений Н'Зота; лут раз в день на персонажа.
+en: A rare in Uldum during N'Zoth assaults; loot once a day per character.

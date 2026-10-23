@@ -254,6 +254,14 @@ namespace MountSheetSync
             }
             HashSet<string> charKeys = CharacterKeys(kill);
             List<string> names = BossNames(J.Get(kill, "boss"));
+            // по номеру боя — имена из каталога и журнала игры (таблица на другом языке, «Галеон» / «Галлеон»)
+            foreach (string n in Encounters.NamesFor(J.Get(kill, "encounterID")))
+            {
+                if (!names.Contains(n))
+                {
+                    names.Add(n);
+                }
+            }
             MarkContext ctx = new MarkContext();
             ctx.Cells = (List<object>)o["cells"];
 
@@ -1332,6 +1340,11 @@ namespace MountSheetSync
                         names.Add(Norm(kv.Key));
                     }
                 }
+                // тот же бой на других языках (аддон узнаёт убийство по имени из игры)
+                foreach (string n in Encounters.RelatedNames(alt))
+                {
+                    names.Add(Norm(n));
+                }
             }
             Dictionary<string, object> item = new Dictionary<string, object>();
             item["kind"] = kind;
@@ -1600,7 +1613,7 @@ namespace MountSheetSync
         }
 
         /// <summary>Как Number(value) в JavaScript (для чисел и строк с числом); иначе NaN.</summary>
-        static double Number(object value)
+        public static double Number(object value)
         {
             if (value == null)
             {

@@ -492,6 +492,26 @@ namespace MountSheetSync
         public bool Collected;
     }
 
+    /// <summary>Бой из журнала приключений (аддон 2.4+).</summary>
+    sealed class JournalEncounter
+    {
+        /// <summary>dungeonEncounterID — как в ENCOUNTER_END и в записях убийств.</summary>
+        public long EncounterId;
+        public long JournalId;
+        public long InstanceId;
+        public string Name = "";
+    }
+
+    /// <summary>Подземелье или рейд из журнала приключений.</summary>
+    sealed class JournalInstance
+    {
+        public long Id;
+        /// <summary>instance mapID (как в catalog.json, «ID места»).</summary>
+        public long Map;
+        public bool Raid;
+        public string Name = "";
+    }
+
     /// <summary>Всё, что аддоны всех WoW-аккаунтов знают о персонажах и коллекции.</summary>
     sealed class GameSnapshot
     {
@@ -506,6 +526,13 @@ namespace MountSheetSync
         /// <summary>Когда аддон последний раз читал журнал маунтов (0 — ни разу: аддон старше 2.0 или не было входа).</summary>
         public long CollectionUpdated;
         public int JournalSize;
+        /// <summary>GetLocale() клиента, на котором читался журнал маунтов (аддон 2.4+; "" — неизвестно).</summary>
+        public string CollectionLocale = "";
+        /// <summary>Журнал приключений: язык, бои и подземелья (аддон 2.4+).</summary>
+        public string JournalLocale = "";
+        public long JournalUpdated;
+        public List<JournalEncounter> JournalEncounters = new List<JournalEncounter>();
+        public List<JournalInstance> JournalInstances = new List<JournalInstance>();
         public List<string> Problems = new List<string>();
     }
 
@@ -603,8 +630,10 @@ namespace MountSheetSync
                     {
                         snap.CollectionUpdated = updated;
                         snap.JournalSize = (int)J.Long(col, "journal");
+                        snap.CollectionLocale = J.Str(col, "locale").Trim();
                     }
                 }
+                ReadJournal(snap, J.Obj(J.Get(db, "journal")));
             }
             snap.Characters = chars.Values
                 .OrderBy(c => c.Name, StringComparer.CurrentCultureIgnoreCase)
@@ -620,7 +649,61 @@ namespace MountSheetSync
                 }
             }
             snap.Drops = snap.Mounts.Where(d => d.Type == 1).ToList();
+            Encounters.Use(GameNames.From(snap));
             return snap;
+        }
+
+        /// <summary>db.journal (аддон 2.4+): берём самый свежий из всех аккаунтов.</summary>
+        static void ReadJournal(GameSnapshot snap, Dictionary<string, object> journal)
+        {
+            if (journal == null)
+            {
+                return;
+            }
+            long updated = J.Long(journal, "updated");
+            List<JournalEncounter> encounters = new List<JournalEncounter>();
+            foreach (object o in Items(J.Get(journal, "encounters")))
+            {
+                Dictionary<string, object> e = J.Obj(o);
+                if (e == null)
+                {
+                    continue;
+                }
+                JournalEncounter je = new JournalEncounter();
+                je.EncounterId = J.Long(e, "id");
+                je.JournalId = J.Long(e, "j");
+                je.InstanceId = J.Long(e, "i");
+                je.Name = J.Str(e, "name").Trim();
+                if (je.Name.Length > 0 && (je.EncounterId > 0 || je.JournalId > 0))
+                {
+                    encounters.Add(je);
+                }
+            }
+            if (encounters.Count == 0 || (snap.JournalEncounters.Count > 0 && updated <= snap.JournalUpdated))
+            {
+                return;
+            }
+            snap.JournalUpdated = updated;
+            snap.JournalLocale = J.Str(journal, "locale").Trim();
+            snap.JournalEncounters = encounters;
+            snap.JournalInstances = new List<JournalInstance>();
+            foreach (object o in Items(J.Get(journal, "instances")))
+            {
+                Dictionary<string, object> i = J.Obj(o);
+                if (i == null)
+                {
+                    continue;
+                }
+                JournalInstance ji = new JournalInstance();
+                ji.Id = J.Long(i, "id");
+                ji.Map = J.Long(i, "map");
+                ji.Raid = J.Truthy(i, "raid");
+                ji.Name = J.Str(i, "name").Trim();
+                if (ji.Name.Length > 0)
+                {
+                    snap.JournalInstances.Add(ji);
+                }
+            }
         }
 
         static long AsLong(object o)

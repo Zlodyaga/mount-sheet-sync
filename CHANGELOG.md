@@ -1,9 +1,19 @@
 # Changelog
 
+## 2.4.0
+- A new spreadsheet can be in any of the six languages: “Spreadsheet language” in “Create spreadsheet…”
+  (`--sheet-lang` on the command line); by default the game's language, otherwise the program's. Sheet names,
+  headers, “Yes”/“No”, statuses, drop-down lists, the summary and the formulas are in that language. Mount, boss
+  and instance names come from the game when it runs in that language (the addon now also notes the Encounter
+  Journal), English otherwise; farming tips and skip notes are in English for German, French, Spanish and
+  Portuguese spreadsheets. Existing spreadsheets stay as they are.
+- Kills are recognised by the encounter ID as well as by the boss name: a spreadsheet in one language works with a
+  game client in another, and bosses the game names a little differently are found too.
+- The addon's icon (minimap button, addon list, Data Broker) is now the horseshoe of the tray program.
+
 ## 2.3.1
 - Google sign-in no longer stalls (and sometimes fails the first time) when the browser opens spare
   connections to the program: every connection is now read on its own.
-- The addon's icon (minimap button, addon list, Data Broker) is now the horseshoe of the tray program.
 
 ## 2.3.0
 - Addon in six languages (English, Russian, German, French, Spanish, Portuguese): the game language when known,

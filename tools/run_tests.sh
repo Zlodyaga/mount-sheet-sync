@@ -11,6 +11,7 @@ EXE=$MSS_TEST_TMP/mss.exe
 bash tools/build_test_exe.sh "$EXE" || exit 1
 bash tools/cs_host/build.sh || exit 1
 python3 tools/i18n/build.py --check || exit 1
+python3 tools/i18n/build_sheet.py --check || exit 1
 cd tools/tests
 F=fixtures
 failed=0
@@ -36,6 +37,7 @@ run e2e_google.py "$EXE"
 run e2e_collection.py "$EXE" "$F/MountSheetSync-2.0-test.exe"
 run e2e_chars.py "$EXE" "$F/MountSheetSync-2.1-test.exe"
 run e2e_script.py "$EXE"
+run e2e_lang.py "$EXE"
 if [ "${1:-}" != "--no-ui" ]; then
   run ui_google.py "$EXE"
   run ui_lang.py "$EXE"

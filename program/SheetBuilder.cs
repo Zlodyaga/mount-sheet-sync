@@ -148,6 +148,10 @@ namespace MountSheetSync
         /// <summary>Время снимка коллекции, по которому отмечено «Собрано?» (0 — нет снимка).</summary>
         public long CollectionStamp;
         public Catalog Catalog;
+        /// <summary>Язык таблицы: названия листов, заголовки, списки; тексты каталога — по-английски, если не русский.</summary>
+        public SheetLang Lang = SheetLang.Russian;
+        /// <summary>Имена из игры (маунты, боссы, подземелья) — если игра на языке таблицы.</summary>
+        public GameNames Game;
     }
 
     static class SheetBuilder
@@ -279,9 +283,10 @@ namespace MountSheetSync
             List<MasterRow> rows = new List<MasterRow>();
             int cMount = sheet.Col("Маунт");
             int cId = sheet.Col(IdColumn);
-            foreach (object[] src in sheet.Rows)
+            foreach (object[] catalogRow in sheet.Rows)
             {
-                bool got = IsCollected(cId >= 0 ? MountIndex.IdOf(src[cId]) : 0, src[cMount], plan.CollectedIds, plan.CollectedMounts);
+                bool got = IsCollected(cId >= 0 ? MountIndex.IdOf(catalogRow[cId]) : 0, catalogRow[cMount], plan.CollectedIds, plan.CollectedMounts);
+                object[] src = LocalRow(sheet, catalogRow, plan);
                 object[] cells = new object[header.Length];
                 for (int i = 0; i < header.Length; i++)
                 {
@@ -296,6 +301,79 @@ namespace MountSheetSync
                 rows.Add(new MasterRow { Cells = cells, IsCollected = got });
             }
             return rows;
+        }
+
+        /// <summary>
+        /// Строка каталога на языке таблицы. Слова списков («Да», статусы…) остаются русскими — их переводит
+        /// SheetLang.Outgoing вместе с заголовками; здесь — тексты каталога, маунты, боссы и подземелья.
+        /// </summary>
+        static object[] LocalRow(CatalogSheet sheet, object[] src, BuildPlan plan)
+        {
+            SheetLang lang = plan.Lang ?? SheetLang.Russian;
+            if (lang.IsRussian)
+            {
+                return src;
+            }
+            GameNames game = plan.Game;
+            bool journal = game != null && game.JournalIn(lang);
+            bool mounts = game != null && game.MountsIn(lang);
+            int cId = sheet.Col(IdColumn);
+            int cJournal = sheet.Col("ID в журнале");
+            int cMap = sheet.Col("ID места");
+            object[] row = (object[])src.Clone();
+            for (int c = 0; c < row.Length && c < sheet.Columns.Count; c++)
+            {
+                string text = src[c] as string;
+                if (text == null || text.Length == 0)
+                {
+                    continue;
+                }
+                string column = sheet.Columns[c];
+                if (column == "Маунт")
+                {
+                    long id = cId >= 0 ? MountIndex.IdOf(src[cId]) : 0;
+                    string local;
+                    if (!(mounts && game.Mounts.TryGetValue(id, out local)))
+                    {
+                        local = SheetLang.EnglishMount(id);
+                    }
+                    row[c] = local ?? lang.Content(text);
+                }
+                else if (column.StartsWith("Босс", StringComparison.Ordinal))
+                {
+                    string value = lang.Content(text);
+                    List<long> journalIds = cJournal >= 0 ? Encounters.Ids(src[cJournal]) : new List<long>();
+                    string local;
+                    if (journal && journalIds.Count == 1 && game.Bosses.TryGetValue(journalIds[0], out local))
+                    {
+                        // «Король Дазар / Сундук претендента»: из игры — имя босса, остальное как в каталоге
+                        string[] parts = value.Split(new[] { " / " }, StringSplitOptions.None);
+                        parts[0] = local;
+                        value = string.Join(" / ", parts);
+                    }
+                    row[c] = value;
+                }
+                else if (c == 1 && journal && cMap >= 0)
+                {
+                    List<long> maps = Encounters.Ids(src[cMap]);
+                    string local;
+                    if (maps.Count == 1 && game.Instances.TryGetValue(maps[0], out local))
+                    {
+                        // «Magisters' Terrace (Midnight)»: пометка в скобках остаётся
+                        int paren = text.LastIndexOf(" (", StringComparison.Ordinal);
+                        row[c] = local + (paren > 0 && text.EndsWith(")", StringComparison.Ordinal) ? text.Substring(paren) : "");
+                    }
+                    else
+                    {
+                        row[c] = lang.Content(text);
+                    }
+                }
+                else
+                {
+                    row[c] = lang.Content(text);
+                }
+            }
+            return row;
         }
 
         /// <summary>
@@ -397,13 +475,16 @@ namespace MountSheetSync
         // Запросы
         // ------------------------------------------------------------------
 
-        /// <summary>Тело spreadsheets.create: только название. Формулы пишем в en_US, потом ставим ru_RU.</summary>
+        /// <summary>Тело spreadsheets.create: только название. Формулы пишем в en_US, потом ставим локаль языка таблицы.</summary>
         public static Dictionary<string, object> CreateBody(string title)
         {
             return O("properties", O("title", title, "locale", "en_US"));
         }
 
-        /// <summary>Последний шаг: русская локаль (запятая в числах, «;» в формулах) и метка программы.</summary>
+        /// <summary>
+        /// Последний шаг: локаль языка таблицы (ru_RU — запятая в числах и «;» в формулах, en_US — точка и «,»)
+        /// и метка программы (с языком таблицы — по нему программа читает таблицу).
+        /// </summary>
         public static List<object> FinishRequests(Catalog catalog)
         {
             return FinishRequests(catalog, 0);
@@ -411,12 +492,18 @@ namespace MountSheetSync
 
         public static List<object> FinishRequests(Catalog catalog, long collectionStamp)
         {
+            return FinishRequests(catalog, collectionStamp, SheetLang.Russian);
+        }
+
+        public static List<object> FinishRequests(Catalog catalog, long collectionStamp, SheetLang lang)
+        {
+            lang = lang ?? SheetLang.Russian;
             List<object> req = new List<object>
             {
-                O("updateSpreadsheetProperties", O("properties", O("locale", "ru_RU"), "fields", "locale")),
+                O("updateSpreadsheetProperties", O("properties", O("locale", lang.Locale), "fields", "locale")),
                 O("createDeveloperMetadata", O("developerMetadata", O(
                     "metadataKey", MetadataKey,
-                    "metadataValue", Json.Write(O("app", Program.Version, "catalog", catalog.Version), false),
+                    "metadataValue", Json.Write(O("app", Program.Version, "catalog", catalog.Version, "lang", lang.Code), false),
                     "location", O("spreadsheet", true),
                     "visibility", "DOCUMENT"))),
             };
@@ -494,6 +581,7 @@ namespace MountSheetSync
 
             req.AddRange(late);
             req.Add(O("deleteSheet", O("sheetId", defaultSheetId)));
+            (plan.Lang ?? SheetLang.Russian).Outgoing(req);
             return req;
         }
 

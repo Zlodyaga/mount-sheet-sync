@@ -17,7 +17,10 @@ WoW addon ──(SavedVariables file)──► tray program ──(Google Sheets
 ```
 
 The addon and the program speak English, Russian, German, French, Spanish and Portuguese (the addon follows the game
-language, the program follows Windows; both can be switched). The spreadsheet itself is currently Russian.
+language, the program follows Windows; both can be switched). The spreadsheet can be in any of these languages
+too — you choose when you create it (the game's language by default). Mount, boss and instance names then come
+from your game when it runs in that language; farming tips are in English for German, French, Spanish and
+Portuguese spreadsheets.
 
 ## Screenshots
 
@@ -46,7 +49,8 @@ sample marks (`tools/screens/program.py`).
 2. **Program:** download `MountSheetSync-<version>.zip` from [Releases](../../releases), extract it to a normal folder
    (for example, Documents) and run `2-program\MountSheetSync.exe`. Windows SmartScreen may warn about an unknown
    publisher: “More info” → “Run anyway” (the program is not code-signed; its full source is in this repository).
-3. In the settings window: **Sign in with Google…** → **Create spreadsheet…** → tick your characters. Done — log in to
+3. In the settings window: **Sign in with Google…** → **Create spreadsheet…** → pick the spreadsheet language and tick
+   your characters. Done — log in to
    the game, kill a boss, go back to character selection, and the row turns “Yes”.
 
 The full step-by-step guide (in Russian) is in [docs/README.ru.txt](docs/README.ru.txt); it is also `README.txt` in the
@@ -78,6 +82,10 @@ That still works (“Your own spreadsheet with the Code.gs script” in the sett
 - **Translations of the program:** texts in the code are the Russian originals and serve as keys
   (`Tr._("…")`). Translations live in `tools/i18n/ui*.txt` (all languages) and `tools/i18n/log.txt`
   (English for the activity log); `python3 tools/i18n/build.py` checks them and writes `program/i18n.json`.
+- **Translations of the spreadsheet:** `tools/i18n/sheet_words.txt` (sheet names, headers, list values, summary —
+  all languages), `sheet_content.txt` (catalog texts → English) and `mounts_en.txt` (English mount names, from
+  SimpleArmory); `python3 tools/i18n/build_sheet.py` checks them and writes `program/sheet-i18n.json`. The
+  catalog's boss and instance IDs come from the BigWigs / LittleWigs boss modules: `tools/catalog/encounter_ids.py`.
 
 ## Tests
 

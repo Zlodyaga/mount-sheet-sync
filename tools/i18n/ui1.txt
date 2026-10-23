@@ -453,13 +453,6 @@ fr: Nom du tableau dans Google Drive :
 es: Nombre de la tabla en Google Drive:
 pt: Nome da planilha no Google Drive:
 
-@ Маунты WoW
-en: WoW mounts
-de: WoW-Reittiere
-fr: Montures WoW
-es: Monturas de WoW
-pt: Montarias do WoW
-
 @ Галочки — какие листы есть у персонажа. Поставьте — лист появится, снимите — лист удалится; снимите все — персонаж уйдёт из таблицы. Ниже в списке — персонажи из аддона, которых в таблице ещё нет:
 en: Ticks show which sheets a character has. Tick one and the sheet appears; untick it and the sheet is deleted; untick all and the character leaves the spreadsheet. Further down the list are characters from the addon who are not in the spreadsheet yet:
 de: Häkchen zeigen, welche Blätter ein Charakter hat. Häkchen setzen — das Blatt erscheint; entfernen — das Blatt wird gelöscht; alle entfernen — der Charakter verschwindet aus der Tabelle. Weiter unten stehen Charaktere aus dem Addon, die noch nicht in der Tabelle sind:

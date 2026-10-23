@@ -55,7 +55,7 @@ namespace MountSheetSync
                 progress(Tr._("Заполняю листы…"));
                 GoogleSheets.BatchUpdate(result.Id, SheetBuilder.Requests(plan, firstSheet));
                 progress(Tr._("Последние штрихи…"));
-                GoogleSheets.BatchUpdate(result.Id, SheetBuilder.FinishRequests(plan.Catalog, plan.CollectionStamp));
+                GoogleSheets.BatchUpdate(result.Id, SheetBuilder.FinishRequests(plan.Catalog, plan.CollectionStamp, plan.Lang));
             }
             catch (Exception ex)
             {
@@ -346,10 +346,11 @@ namespace MountSheetSync
             }
 
             req.AddRange(late);
+            book.Lang.Outgoing(req);
             SheetBuilder.LocalizeFormulas(req, book.Locale);
             progress(Tr._("Меняю листы…"));
             GoogleSheets.BatchUpdate(book.Id, req);
-            Log.Write(Tr.L("Персонажи в таблице: {0}.", ch.Summary()));
+            Log.Write(Tr.L("Персонажи в таблице: {0}.", ch.Summary(book.Lang)));
             return ch;
         }
     }
@@ -384,10 +385,16 @@ namespace MountSheetSync
 
         public string Summary()
         {
+            return Summary(SheetLang.Russian);
+        }
+
+        /// <summary>Что поменялось; названия листов — как в таблице (lang — её язык).</summary>
+        public string Summary(SheetLang lang)
+        {
             List<string> parts = new List<string>();
             if (AddedSheets.Count > 0)
             {
-                parts.Add(Tr.F("новые листы: {0}", string.Join(", ", AddedSheets.ToArray())));
+                parts.Add(Tr.F("новые листы: {0}", string.Join(", ", AddedSheets.Select(n => lang.SheetName(n)).ToArray())));
             }
             if (AddedWorld.Count > 0)
             {
@@ -395,7 +402,7 @@ namespace MountSheetSync
             }
             if (RemovedSheets.Count > 0)
             {
-                parts.Add(Tr.F("удалены листы: {0}", string.Join(", ", RemovedSheets.ToArray())));
+                parts.Add(Tr.F("удалены листы: {0}", string.Join(", ", RemovedSheets.Select(n => lang.SheetName(n)).ToArray())));
             }
             if (RemovedWorld.Count > 0)
             {

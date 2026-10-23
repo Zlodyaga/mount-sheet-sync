@@ -41,7 +41,7 @@ $icon = [System.IO.MemoryStream]::new([System.IO.File]::ReadAllBytes((Join-Path 
 $win32 = $comp.CreateDefaultWin32Resources($true, $false, $manifest, $icon)
 
 $res = [System.Collections.Generic.List[Microsoft.CodeAnalysis.ResourceDescription]]::new()
-foreach ($pair in @(@('app-small.ico', 'MountSheetSync.app.ico'), @('warn-small.ico', 'MountSheetSync.warn.ico'), @('catalog.json', 'MountSheetSync.catalog.json'), @('i18n.json', 'MountSheetSync.i18n.json'))) {
+foreach ($pair in @(@('app-small.ico', 'MountSheetSync.app.ico'), @('warn-small.ico', 'MountSheetSync.warn.ico'), @('catalog.json', 'MountSheetSync.catalog.json'), @('i18n.json', 'MountSheetSync.i18n.json'), @('sheet-i18n.json', 'MountSheetSync.sheet-i18n.json'))) {
     $bytes = [System.IO.File]::ReadAllBytes((Join-Path $Src $pair[0]))
     $res.Add([Microsoft.CodeAnalysis.ResourceDescription]::new($pair[1], [MssStreamFactory]::From($bytes), $true))
 }
