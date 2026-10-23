@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  windows:
+    name: Build on Windows (built-in csc)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build with the C# compiler that ships with Windows (.NET Framework 4.8)
+        shell: cmd
+        run: program\build.cmd
+      - name: Smoke test — the exe starts and reads its translations
+        shell: pwsh
+        run: |
+          $d = Join-Path $env:RUNNER_TEMP 'mss'
+          New-Item -ItemType Directory -Force $d | Out-Null
+          Set-Content -Path (Join-Path $d 'settings.json') -Value '{"language":"de"}' -Encoding utf8
+          $p = Start-Process -FilePath program\MountSheetSync.exe -ArgumentList '--test', '--data', $d -Wait -PassThru
+          $log = Get-Content -Path (Join-Path $d 'sync.log') -Raw -Encoding utf8
+          Write-Output $log
+          if ($p.ExitCode -ne 1 -or $log -notmatch 'Nicht bei Google angemeldet') { throw 'smoke test failed' }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MountSheetSync-exe
+          path: program/MountSheetSync.exe
+
+  tests:
+    name: Tests (addon, program under mono, Code.gs, UI)
+    runs-on: ubuntu-24.04
+    env:
+      MSS_TEST_TMP: ${{ github.workspace }}/../mss-tests
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mono-devel xvfb xdotool stalonetray imagemagick
+          pip install --break-system-packages lupa
+      - name: Run tests
+        run: tools/run_tests.sh
+      - name: Screenshots of the UI tests
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ui-screenshots
+          path: ${{ env.MSS_TEST_TMP }}/ui_*/*.png
+          if-no-files-found: ignore

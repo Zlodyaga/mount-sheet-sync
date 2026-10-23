@@ -1,0 +1,25 @@
+## Interface: 120105, 120100, 120007
+## Title: Mount Sheet Sync
+## Notes: Records boss kills, characters and the mount collection for a Google Sheets mount tracker and shows what is left this week.
+## Notes-deDE: Trägt besiegte Bosse und neue Reittiere in eine Google-Tabelle für Reittiere ein, merkt sich Charaktere und Sammlung und zeigt, was diese Woche übrig ist.
+## Notes-frFR: Note les boss tués et les nouvelles montures dans un tableau Google de montures, retient les personnages et la collection, et montre ce qu'il reste cette semaine.
+## Notes-esES: Marca los jefes derrotados y las monturas nuevas en una tabla de Google de monturas, recuerda los personajes y la colección y muestra lo que queda esta semana.
+## Notes-esMX: Marca los jefes derrotados y las monturas nuevas en una tabla de Google de monturas, recuerda los personajes y la colección y muestra lo que queda esta semana.
+## Notes-ptBR: Marca os chefes derrotados e as montarias novas numa planilha Google de montarias, lembra os personagens e a coleção e mostra o que falta nesta semana.
+## Notes-ruRU: Отмечает убитых боссов и новые маунты в Google-таблице маунтов, запоминает персонажей и коллекцию для новой таблицы и показывает, что осталось на неделе.
+## Version: 2.3.0
+## SavedVariables: MountSheetSyncDB
+## IconTexture: Interface\Icons\Ability_Mount_RidingHorse
+## AddonCompartmentFunc: MountSheetSync_OnAddonCompartmentClick
+## AddonCompartmentFuncOnEnter: MountSheetSync_OnAddonCompartmentEnter
+## AddonCompartmentFuncOnLeave: MountSheetSync_OnAddonCompartmentLeave
+
+Libs\LibStub\LibStub.lua
+Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
+Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
+SheetData.lua
+Locales.lua
+MountSheetSync.lua
+Collection.lua
+Remaining.lua
+UI.lua

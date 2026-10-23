@@ -1,0 +1,734 @@
+@ «Собрано?» = «Да»: {0} ({1})
+en: “Collected?” = “Yes”: {0} ({1})
+de: „Gesammelt?“ = „Ja“: {0} ({1})
+fr: « Obtenue ? » = « Oui » : {0} ({1})
+es: «¿Conseguida?» = «Sí»: {0} ({1})
+pt: “Coletada?” = “Sim”: {0} ({1})
+
+@ исправлено на «Нет» (другой маунт с тем же названием): {0}
+en: changed back to “No” (another mount with the same name): {0}
+de: auf „Nein“ zurückgesetzt (anderes Reittier mit demselben Namen): {0}
+fr: remis à « Non » (autre monture du même nom) : {0}
+es: corregido a «No» (otra montura con el mismo nombre): {0}
+pt: corrigido para “Não” (outra montaria com o mesmo nome): {0}
+
+@ убрано строк с листов персонажей: {0}
+en: rows removed from character sheets: {0}
+de: Zeilen von Charakterblättern entfernt: {0}
+fr: lignes retirées des feuilles de personnages : {0}
+es: filas quitadas de las hojas de personajes: {0}
+pt: linhas removidas das abas de personagens: {0}
+
+@ названий «как в игре»: {0}
+en: names “as in the game”: {0}
+de: Namen „wie im Spiel“: {0}
+fr: noms « comme dans le jeu » : {0}
+es: nombres «como en el juego»: {0}
+pt: nomes “como no jogo”: {0}
+
+@ колонка «ID в игре» на листах {0}
+en: “In-game ID” column on the sheets {0}
+de: Spalte „Spiel-ID“ auf den Blättern {0}
+fr: colonne « ID en jeu » sur les feuilles {0}
+es: columna «ID en el juego» en las hojas {0}
+pt: coluna “ID no jogo” nas abas {0}
+
+@ всё уже совпадает с коллекцией
+en: everything already matches the collection
+de: alles stimmt bereits mit der Sammlung überein
+fr: tout correspond déjà à la collection
+es: todo coincide ya con la colección
+pt: tudo já confere com a coleção
+
+@ что фармить
+en: what to farm
+de: was farmen
+fr: quoi farmer
+es: qué farmear
+pt: o que farmar
+
+@ Галочки — что этот персонаж фармит каждую неделю. Снимите — строки не будет в «Осталось» (в игре и в меню значка) и в «Осталось попыток выбить». Отметки убийств ставятся как обычно.
+en: Ticks show what this character farms every week. Untick a row and it leaves “Remaining” (in the game and in the icon menu) and “Attempts left”. Kills are still marked as usual.
+de: Häkchen zeigen, was dieser Charakter jede Woche farmt. Ohne Häkchen fehlt die Zeile in „Übrig“ (im Spiel und im Symbolmenü) und in „Verbleibende Versuche“. Kills werden weiter wie gewohnt markiert.
+fr: Les cases indiquent ce que ce personnage farme chaque semaine. Décochez une ligne : elle disparaît de « Restant » (dans le jeu et dans le menu de l'icône) et de « Essais restants ». Les victoires sont marquées comme d'habitude.
+es: Las casillas indican qué farmea este personaje cada semana. Desmarque una fila y desaparecerá de «Pendiente» (en el juego y en el menú del icono) y de «Intentos restantes». Las muertes se siguen marcando como siempre.
+pt: As caixas mostram o que este personagem farma toda semana. Desmarque uma linha e ela sai de “Restante” (no jogo e no menu do ícone) e de “Tentativas restantes”. As mortes continuam sendo marcadas normalmente.
+
+@ Персонаж:
+en: Character:
+de: Charakter:
+fr: Personnage :
+es: Personaje:
+pt: Personagem:
+
+@ Отметить всё
+en: Tick all
+de: Alle markieren
+fr: Tout cocher
+es: Marcar todo
+pt: Marcar tudo
+
+@ Снять всё
+en: Untick all
+de: Alle entfernen
+fr: Tout décocher
+es: Desmarcar todo
+pt: Desmarcar tudo
+
+@ Читаю таблицу…
+en: Reading the spreadsheet…
+de: Lese die Tabelle…
+fr: Lecture du tableau…
+es: Leyendo la tabla…
+pt: Lendo a planilha…
+
+@ Отмена
+en: Cancel
+de: Abbrechen
+fr: Annuler
+es: Cancelar
+pt: Cancelar
+
+@ Сохранить
+en: Save
+de: Speichern
+fr: Enregistrer
+es: Guardar
+pt: Salvar
+
+@ ошибка: {0}
+en: error: {0}
+de: Fehler: {0}
+fr: erreur : {0}
+es: error: {0}
+pt: erro: {0}
+
+@ Не получилось: {0}.
+en: That did not work: {0}.
+de: Das hat nicht geklappt: {0}.
+fr: Échec : {0}.
+es: No funcionó: {0}.
+pt: Não deu certo: {0}.
+
+@ В таблице нет листов персонажей.
+en: The spreadsheet has no character sheets.
+de: Die Tabelle hat keine Charakterblätter.
+fr: Le tableau n'a aucune feuille de personnage.
+es: La tabla no tiene hojas de personajes.
+pt: A planilha não tem abas de personagens.
+
+@ Рейды
+en: Raids
+de: Schlachtzüge
+fr: Raids
+es: Bandas
+pt: Raides
+
+@ Подземелья
+en: Dungeons
+de: Dungeons
+fr: Donjons
+es: Mazmorras
+pt: Masmorras
+
+@ Без дополнения
+en: No expansion
+de: Ohne Erweiterung
+fr: Sans extension
+es: Sin expansión
+pt: Sem expansão
+
+@ Без названия
+en: Untitled
+de: Ohne Namen
+fr: Sans nom
+es: Sin nombre
+pt: Sem nome
+
+@ частично
+en: partly
+de: teilweise
+fr: en partie
+es: en parte
+pt: em parte
+
+@ Изменено строк: {0} — нажмите «Сохранить».
+en: Rows changed: {0} — press “Save”.
+de: Geänderte Zeilen: {0} — klicken Sie auf „Speichern“.
+fr: Lignes modifiées : {0} — cliquez sur « Enregistrer ».
+es: Filas cambiadas: {0} — pulse «Guardar».
+pt: Linhas alteradas: {0} — clique em “Salvar”.
+
+@ Сохраняю…
+en: Saving…
+de: Speichere…
+fr: Enregistrement…
+es: Guardando…
+pt: Salvando…
+
+@ Google не дал программе доступ к файлам: на странице разрешений не стояла галочка у пункта про файлы Google Диска, которые использует это приложение. Без него программа не сможет создать и вести таблицу.
+en: Google did not give the program access to files: on the permissions page the box for the Google Drive files used by this app was not ticked. Without it the program cannot create and keep the spreadsheet.
+de: Google hat dem Programm keinen Zugriff auf Dateien gegeben: Auf der Berechtigungsseite war das Häkchen bei den Google-Drive-Dateien, die diese App verwendet, nicht gesetzt. Ohne diesen Zugriff kann das Programm die Tabelle weder anlegen noch führen.
+fr: Google n'a pas donné au programme l'accès aux fichiers : sur la page des autorisations, la case des fichiers Google Drive utilisés par cette application n'était pas cochée. Sans elle, le programme ne peut ni créer ni tenir le tableau.
+es: Google no dio al programa acceso a los archivos: en la página de permisos no estaba marcada la casilla de los archivos de Google Drive que usa esta aplicación. Sin ella el programa no puede crear ni llevar la tabla.
+pt: O Google não deu ao programa acesso aos arquivos: na página de permissões, a caixa dos arquivos do Google Drive usados por este app não estava marcada. Sem ela o programa não consegue criar nem manter a planilha.
+
+@ Жду, пока вы разрешите доступ на странице Google.
+en: Waiting for you to allow access on the Google page.
+de: Warte, bis Sie den Zugriff auf der Google-Seite erlauben.
+fr: En attente de votre autorisation sur la page Google.
+es: Esperando a que permita el acceso en la página de Google.
+pt: Aguardando você permitir o acesso na página do Google.
+
+@ Не найдено.
+en: Not found.
+de: Nicht gefunden.
+fr: Introuvable.
+es: No encontrado.
+pt: Não encontrado.
+
+@ Эта страница от прошлой попытки входа. Вернитесь к Mount Sheet Sync.
+en: This page is from an earlier sign-in attempt. Go back to Mount Sheet Sync.
+de: Diese Seite stammt von einem früheren Anmeldeversuch. Kehren Sie zu Mount Sheet Sync zurück.
+fr: Cette page vient d'une tentative de connexion précédente. Revenez à Mount Sheet Sync.
+es: Esta página es de un intento de inicio de sesión anterior. Vuelva a Mount Sheet Sync.
+pt: Esta página é de uma tentativa de login anterior. Volte ao Mount Sheet Sync.
+
+@ Вход не выполнен. Вернитесь к Mount Sheet Sync и попробуйте ещё раз.
+en: Sign-in failed. Go back to Mount Sheet Sync and try again.
+de: Anmeldung fehlgeschlagen. Kehren Sie zu Mount Sheet Sync zurück und versuchen Sie es erneut.
+fr: Échec de la connexion. Revenez à Mount Sheet Sync et réessayez.
+es: No se inició sesión. Vuelva a Mount Sheet Sync e inténtelo de nuevo.
+pt: O login falhou. Volte ao Mount Sheet Sync e tente de novo.
+
+@ вход отменён: на странице Google не дали разрешение
+en: sign-in cancelled: permission was not given on the Google page
+de: Anmeldung abgebrochen: Auf der Google-Seite wurde keine Erlaubnis erteilt
+fr: connexion annulée : l'autorisation n'a pas été donnée sur la page Google
+es: inicio de sesión cancelado: no se dio permiso en la página de Google
+pt: login cancelado: a permissão não foi dada na página do Google
+
+@ Google не пустил: {0}
+en: Google refused: {0}
+de: Google hat abgelehnt: {0}
+fr: Google a refusé : {0}
+es: Google lo rechazó: {0}
+pt: O Google recusou: {0}
+
+@ Вход не выполнен: Google не прислал код входа. Попробуйте ещё раз.
+en: Sign-in failed: Google did not send a sign-in code. Please try again.
+de: Anmeldung fehlgeschlagen: Google hat keinen Anmeldecode geschickt. Bitte versuchen Sie es erneut.
+fr: Échec de la connexion : Google n'a pas envoyé de code de connexion. Réessayez.
+es: No se inició sesión: Google no envió el código de inicio de sesión. Inténtelo de nuevo.
+pt: O login falhou: o Google não enviou o código de login. Tente de novo.
+
+@ Вход не выполнен: {0}.
+en: Sign-in failed: {0}.
+de: Anmeldung fehlgeschlagen: {0}.
+fr: Échec de la connexion : {0}.
+es: No se inició sesión: {0}.
+pt: O login falhou: {0}.
+
+@ Вход не выполнен: {0}. На странице в браузере можно нажать «Попробовать ещё раз».
+en: Sign-in failed: {0}. You can press “Try again” on the page in the browser.
+de: Anmeldung fehlgeschlagen: {0}. Auf der Seite im Browser können Sie „Erneut versuchen“ drücken.
+fr: Échec de la connexion : {0}. Sur la page du navigateur, vous pouvez cliquer sur « Réessayer ».
+es: No se inició sesión: {0}. En la página del navegador puede pulsar «Intentar de nuevo».
+pt: O login falhou: {0}. Na página do navegador você pode clicar em “Tentar de novo”.
+
+@ Нажмите «Попробовать ещё раз» и на странице Google поставьте все галочки (или «Выбрать все»).
+en: Press “Try again” and tick every box on the Google page (or “Select all”).
+de: Drücken Sie „Erneut versuchen“ und setzen Sie auf der Google-Seite alle Häkchen (oder „Alle auswählen“).
+fr: Cliquez sur « Réessayer » et cochez toutes les cases sur la page Google (ou « Tout sélectionner »).
+es: Pulse «Intentar de nuevo» y marque todas las casillas en la página de Google (o «Seleccionar todo»).
+pt: Clique em “Tentar de novo” e marque todas as caixas na página do Google (ou “Selecionar tudo”).
+
+@ Не поставлена галочка доступа к файлам. В браузере нажмите «Попробовать ещё раз» и отметьте все пункты на странице Google.
+en: The file access box was not ticked. In the browser press “Try again” and tick every item on the Google page.
+de: Das Häkchen für den Dateizugriff fehlt. Drücken Sie im Browser „Erneut versuchen“ und markieren Sie auf der Google-Seite alle Punkte.
+fr: La case d'accès aux fichiers n'est pas cochée. Dans le navigateur, cliquez sur « Réessayer » et cochez tous les éléments de la page Google.
+es: No se marcó la casilla de acceso a archivos. En el navegador pulse «Intentar de nuevo» y marque todas las opciones de la página de Google.
+pt: A caixa de acesso aos arquivos não foi marcada. No navegador, clique em “Tentar de novo” e marque todos os itens na página do Google.
+
+@ Вход выполнен. Эту вкладку можно закрыть и вернуться к Mount Sheet Sync.
+en: Signed in. You can close this tab and go back to Mount Sheet Sync.
+de: Angemeldet. Sie können diesen Tab schließen und zu Mount Sheet Sync zurückkehren.
+fr: Connecté. Vous pouvez fermer cet onglet et revenir à Mount Sheet Sync.
+es: Sesión iniciada. Puede cerrar esta pestaña y volver a Mount Sheet Sync.
+pt: Login feito. Você pode fechar esta aba e voltar ao Mount Sheet Sync.
+
+@ вход отменён
+en: sign-in cancelled
+de: Anmeldung abgebrochen
+fr: connexion annulée
+es: inicio de sesión cancelado
+pt: login cancelado
+
+@ вход не завершён за 5 минут — попробуйте ещё раз
+en: sign-in was not finished within 5 minutes — please try again
+de: Anmeldung nicht innerhalb von 5 Minuten abgeschlossen — bitte erneut versuchen
+fr: connexion non terminée en 5 minutes — réessayez
+es: el inicio de sesión no terminó en 5 minutos — inténtelo de nuevo
+pt: o login não terminou em 5 minutos — tente de novo
+
+@ Что-то пошло не так. Вернитесь к Mount Sheet Sync.
+en: Something went wrong. Go back to Mount Sheet Sync.
+de: Etwas ist schiefgelaufen. Kehren Sie zu Mount Sheet Sync zurück.
+fr: Un problème est survenu. Revenez à Mount Sheet Sync.
+es: Algo salió mal. Vuelva a Mount Sheet Sync.
+pt: Algo deu errado. Volte ao Mount Sheet Sync.
+
+@ Попробовать ещё раз
+en: Try again
+de: Erneut versuchen
+fr: Réessayer
+es: Intentar de nuevo
+pt: Tentar de novo
+
+@ Google не выдал ключ для работы без вас — попробуйте войти ещё раз
+en: Google did not issue a key for working while you are away — try signing in again
+de: Google hat keinen Schlüssel für die Arbeit ohne Sie ausgegeben — melden Sie sich erneut an
+fr: Google n'a pas fourni de clé pour travailler en votre absence — reconnectez-vous
+es: Google no dio la clave para trabajar sin usted — intente iniciar sesión de nuevo
+pt: O Google não forneceu a chave para trabalhar sem você — tente fazer login de novo
+
+@ вход в Google больше не действует — войдите снова (меню значка → «Войти через Google»)
+en: Google sign-in is no longer valid — sign in again (icon menu → “Sign in with Google”)
+de: Google-Anmeldung ist nicht mehr gültig — melden Sie sich erneut an (Symbolmenü → „Mit Google anmelden“)
+fr: connexion Google expirée — reconnectez-vous (menu de l'icône → « Se connecter avec Google »)
+es: inicio de sesión de Google ya no es válido — vuelva a iniciar sesión (menú del icono → «Iniciar sesión con Google»)
+pt: login do Google não vale mais — faça login de novo (menu do ícone → “Entrar com o Google”)
+
+@ не выполнен вход в Google (меню значка → «Войти через Google»)
+en: not signed in to Google (icon menu → “Sign in with Google”)
+de: nicht bei Google angemeldet (Symbolmenü → „Mit Google anmelden“)
+fr: non connecté à Google (menu de l'icône → « Se connecter avec Google »)
+es: sesión no iniciada en Google (menú del icono → «Iniciar sesión con Google»)
+pt: sessão não iniciada no Google (menu do ícone → “Entrar com o Google”)
+
+@ внутренняя ошибка: неверный адрес Google ({0})
+en: internal error: wrong Google address ({0})
+de: interner Fehler: falsche Google-Adresse ({0})
+fr: erreur interne : adresse Google incorrecte ({0})
+es: error interno: dirección de Google incorrecta ({0})
+pt: erro interno: endereço do Google incorreto ({0})
+
+@ нет связи с Google: {0}
+en: no connection to Google: {0}
+de: keine Verbindung zu Google: {0}
+fr: pas de connexion à Google : {0}
+es: sin conexión con Google: {0}
+pt: sem conexão com o Google: {0}
+
+@ Google прислал не JSON (код {0})
+en: Google did not send JSON (code {0})
+de: Google hat kein JSON geschickt (Code {0})
+fr: Google n'a pas envoyé de JSON (code {0})
+es: Google no envió JSON (código {0})
+pt: O Google não enviou JSON (código {0})
+
+@ таблица не найдена — возможно, её удалили (или она создана не этой программой)
+en: spreadsheet not found — it may have been deleted (or it was not created by this program)
+de: Tabelle nicht gefunden — vielleicht wurde sie gelöscht (oder nicht von diesem Programm angelegt)
+fr: tableau introuvable — il a peut-être été supprimé (ou n'a pas été créé par ce programme)
+es: no se encontró la tabla — quizá se borró (o no la creó este programa)
+pt: planilha não encontrada — talvez tenha sido apagada (ou não foi criada por este programa)
+
+@ нет доступа к таблице: программа видит только таблицы, которые создала сама
+en: no access to the spreadsheet: the program only sees spreadsheets it created itself
+de: kein Zugriff auf die Tabelle: Das Programm sieht nur Tabellen, die es selbst angelegt hat
+fr: pas d'accès au tableau : le programme ne voit que les tableaux qu'il a créés lui-même
+es: sin acceso a la tabla: el programa solo ve las tablas que creó él mismo
+pt: sem acesso à planilha: o programa só vê as planilhas que ele mesmo criou
+
+@ Google просит подождать: слишком много запросов
+en: Google asks to wait: too many requests
+de: Google bittet um Geduld: zu viele Anfragen
+fr: Google demande d'attendre : trop de requêtes
+es: Google pide esperar: demasiadas solicitudes
+pt: O Google pede para esperar: pedidos demais
+
+@ у Google временный сбой ({0})
+en: Google has a temporary problem ({0})
+de: Google hat eine vorübergehende Störung ({0})
+fr: Google a un problème temporaire ({0})
+es: Google tiene un fallo temporal ({0})
+pt: O Google está com uma falha temporária ({0})
+
+@ Google ответил ошибкой {0}
+en: Google answered with error {0}
+de: Google hat mit Fehler {0} geantwortet
+fr: Google a répondu par l'erreur {0}
+es: Google respondió con el error {0}
+pt: O Google respondeu com o erro {0}
+
+@ внутренняя ошибка при работе с таблицей: {0}
+en: internal error while working with the spreadsheet: {0}
+de: interner Fehler bei der Arbeit mit der Tabelle: {0}
+fr: erreur interne en travaillant avec le tableau : {0}
+es: error interno al trabajar con la tabla: {0}
+pt: erro interno ao trabalhar com a planilha: {0}
+
+@ таблица не приняла запрос: {0}
+en: the spreadsheet rejected the request: {0}
+de: die Tabelle hat die Anfrage abgelehnt: {0}
+fr: le tableau a refusé la requête : {0}
+es: la tabla rechazó la solicitud: {0}
+pt: a planilha recusou o pedido: {0}
+
+@ внутренняя ошибка при сверке с коллекцией: {0}
+en: internal error while checking against the collection: {0}
+de: interner Fehler beim Abgleich mit der Sammlung: {0}
+fr: erreur interne pendant la comparaison avec la collection : {0}
+es: error interno al cotejar con la colección: {0}
+pt: erro interno ao conferir com a coleção: {0}
+
+@ вход через Google
+en: sign in with Google
+de: Mit Google anmelden
+fr: connexion avec Google
+es: iniciar sesión con Google
+pt: entrar com o Google
+
+@ В браузере открылась страница Google.
+en: A Google page has opened in the browser.
+de: Im Browser hat sich eine Google-Seite geöffnet.
+fr: Une page Google s'est ouverte dans le navigateur.
+es: Se abrió una página de Google en el navegador.
+pt: Uma página do Google foi aberta no navegador.
+
+@ Войдите в свой аккаунт и разрешите доступ. На странице разрешений поставьте все галочки (или «Выбрать все») — особенно у пункта про файлы Google Диска: без него программа не сможет вести таблицу. Программа увидит только таблицы, которые создаст сама, — остальные файлы на Google Диске ей недоступны.
+en: Sign in to your account and allow access. On the permissions page tick every box (or “Select all”) — especially the one about Google Drive files: without it the program cannot keep the spreadsheet. The program will only see spreadsheets it creates itself — the other files on your Google Drive stay out of its reach.
+de: Melden Sie sich bei Ihrem Konto an und erlauben Sie den Zugriff. Setzen Sie auf der Berechtigungsseite alle Häkchen (oder „Alle auswählen“) — vor allem beim Punkt zu Google-Drive-Dateien: ohne ihn kann das Programm die Tabelle nicht führen. Das Programm sieht nur Tabellen, die es selbst anlegt — andere Dateien in Ihrem Google Drive sind für es nicht zugänglich.
+fr: Connectez-vous à votre compte et autorisez l'accès. Sur la page des autorisations, cochez toutes les cases (ou « Tout sélectionner ») — surtout celle des fichiers Google Drive : sans elle, le programme ne peut pas tenir le tableau. Le programme ne verra que les tableaux qu'il crée lui-même — vos autres fichiers Google Drive lui restent inaccessibles.
+es: Inicie sesión en su cuenta y permita el acceso. En la página de permisos marque todas las casillas (o «Seleccionar todo»), sobre todo la de los archivos de Google Drive: sin ella el programa no puede llevar la tabla. El programa solo verá las tablas que cree él mismo; el resto de archivos de su Google Drive le son inaccesibles.
+pt: Entre na sua conta e permita o acesso. Na página de permissões marque todas as caixas (ou “Selecionar tudo”) — principalmente a dos arquivos do Google Drive: sem ela o programa não consegue manter a planilha. O programa só verá as planilhas que ele mesmo criar — os outros arquivos do seu Google Drive ficam fora do alcance dele.
+
+@ Если Google напишет, что не проверял это приложение, — это нормально для новой программы: нажмите «Продолжить».
+en: If Google says it has not verified this app, that is normal for a new program: press “Continue”.
+de: Wenn Google meldet, dass es diese App nicht überprüft hat, ist das bei einem neuen Programm normal: Klicken Sie auf „Weiter“.
+fr: Si Google indique qu'il n'a pas validé cette application, c'est normal pour un nouveau programme : cliquez sur « Continuer ».
+es: Si Google dice que no ha verificado esta aplicación, es normal en un programa nuevo: pulse «Continuar».
+pt: Se o Google disser que não verificou este app, é normal para um programa novo: clique em “Continuar”.
+
+@ Пароль вводится только на странице Google, программа его не видит.
+en: You type your password only on the Google page; the program never sees it.
+de: Das Passwort geben Sie nur auf der Google-Seite ein; das Programm sieht es nicht.
+fr: Le mot de passe se saisit uniquement sur la page Google ; le programme ne le voit pas.
+es: La contraseña solo se escribe en la página de Google; el programa no la ve.
+pt: A senha é digitada só na página do Google; o programa não a vê.
+
+@ Открыть страницу ещё раз
+en: Open the page again
+de: Seite erneut öffnen
+fr: Rouvrir la page
+es: Abrir la página otra vez
+pt: Abrir a página de novo
+
+@ Браузер не открылся ({0}). Скопируйте адрес вручную:
+en: The browser did not open ({0}). Copy the address by hand:
+de: Der Browser hat sich nicht geöffnet ({0}). Kopieren Sie die Adresse von Hand:
+fr: Le navigateur ne s'est pas ouvert ({0}). Copiez l'adresse à la main :
+es: El navegador no se abrió ({0}). Copie la dirección a mano:
+pt: O navegador não abriu ({0}). Copie o endereço manualmente:
+
+@ персонажи в таблице
+en: characters in the spreadsheet
+de: Charaktere in der Tabelle
+fr: personnages du tableau
+es: personajes de la tabla
+pt: personagens na planilha
+
+@ новая таблица
+en: new spreadsheet
+de: neue Tabelle
+fr: nouveau tableau
+es: tabla nueva
+pt: planilha nova
+
+@ Название таблицы на Google Диске:
+en: Spreadsheet name on Google Drive:
+de: Name der Tabelle in Google Drive:
+fr: Nom du tableau dans Google Drive :
+es: Nombre de la tabla en Google Drive:
+pt: Nome da planilha no Google Drive:
+
+@ Маунты WoW
+en: WoW mounts
+de: WoW-Reittiere
+fr: Montures WoW
+es: Monturas de WoW
+pt: Montarias do WoW
+
+@ Галочки — какие листы есть у персонажа. Поставьте — лист появится, снимите — лист удалится; снимите все — персонаж уйдёт из таблицы. Ниже в списке — персонажи из аддона, которых в таблице ещё нет:
+en: Ticks show which sheets a character has. Tick one and the sheet appears; untick it and the sheet is deleted; untick all and the character leaves the spreadsheet. Further down the list are characters from the addon who are not in the spreadsheet yet:
+de: Häkchen zeigen, welche Blätter ein Charakter hat. Häkchen setzen — das Blatt erscheint; entfernen — das Blatt wird gelöscht; alle entfernen — der Charakter verschwindet aus der Tabelle. Weiter unten stehen Charaktere aus dem Addon, die noch nicht in der Tabelle sind:
+fr: Les cases indiquent les feuilles de chaque personnage. Cochez : la feuille apparaît ; décochez : la feuille est supprimée ; tout décocher : le personnage quitte le tableau. Plus bas, les personnages de l'addon qui ne sont pas encore dans le tableau :
+es: Las casillas indican qué hojas tiene cada personaje. Márquela y aparece la hoja; desmárquela y la hoja se borra; desmarque todas y el personaje sale de la tabla. Más abajo están los personajes del addon que aún no están en la tabla:
+pt: As caixas mostram quais abas cada personagem tem. Marque e a aba aparece; desmarque e a aba é apagada; desmarque todas e o personagem sai da planilha. Mais abaixo estão os personagens do addon que ainda não estão na planilha:
+
+@ Персонажи (их запомнил аддон). Галочки — для каких листов завести персонажа:
+en: Characters (remembered by the addon). Ticks choose the sheets to create for each character:
+de: Charaktere (vom Addon gemerkt). Häkchen wählen, welche Blätter für den Charakter angelegt werden:
+fr: Personnages (mémorisés par l'addon). Les cases choisissent les feuilles à créer pour chacun :
+es: Personajes (los recuerda el addon). Las casillas eligen qué hojas crear para cada personaje:
+pt: Personagens (lembrados pelo addon). As caixas escolhem quais abas criar para cada personagem:
+
+@ Персонаж
+en: Character
+de: Charakter
+fr: Personnage
+es: Personaje
+pt: Personagem
+
+@ Сервер
+en: Realm
+de: Realm
+fr: Royaume
+es: Reino
+pt: Reino
+
+@ Класс
+en: Class
+de: Klasse
+fr: Classe
+es: Clase
+pt: Classe
+
+@ Мир. боссы
+en: World bosses
+de: Weltbosse
+fr: Boss mondiaux
+es: Jefes del mundo
+pt: Chefes mundiais
+
+@ Нет в списке? Имя:
+en: Not in the list? Name:
+de: Nicht in der Liste? Name:
+fr: Absent de la liste ? Nom :
+es: ¿No está en la lista? Nombre:
+pt: Não está na lista? Nome:
+
+@ Добавить в список
+en: Add to the list
+de: Zur Liste hinzufügen
+fr: Ajouter à la liste
+es: Añadir a la lista
+pt: Adicionar à lista
+
+@ Читаю файлы аддона…
+en: Reading the addon files…
+de: Lese die Addon-Dateien…
+fr: Lecture des fichiers de l'addon…
+es: Leyendo los archivos del addon…
+pt: Lendo os arquivos do addon…
+
+@ Создать таблицу
+en: Create spreadsheet
+de: Tabelle anlegen
+fr: Créer le tableau
+es: Crear tabla
+pt: Criar planilha
+
+@ Не получилось: {0}
+en: That did not work: {0}
+de: Das hat nicht geklappt: {0}
+fr: Échec : {0}
+es: No funcionó: {0}
+pt: Não deu certo: {0}
+
+@ есть в таблице
+en: in the spreadsheet
+de: in der Tabelle
+fr: dans le tableau
+es: en la tabla
+pt: na planilha
+
+@ из журнала убийств
+en: from the kill log
+de: aus dem Kill-Protokoll
+fr: du journal des victoires
+es: del registro de muertes
+pt: do registro de mortes
+
+@ Собранных маунтов в игре: {0} из {1} (на {2}).
+en: Mounts collected in the game: {0} of {1} (as of {2}).
+de: Im Spiel gesammelte Reittiere: {0} von {1} (Stand {2}).
+fr: Montures obtenues dans le jeu : {0} sur {1} (au {2}).
+es: Monturas conseguidas en el juego: {0} de {1} (a {2}).
+pt: Montarias coletadas no jogo: {0} de {1} (em {2}).
+
+@ Собранных маунтов в игре: {0} (на {1}).
+en: Mounts collected in the game: {0} (as of {1}).
+de: Im Spiel gesammelte Reittiere: {0} (Stand {1}).
+fr: Montures obtenues dans le jeu : {0} (au {1}).
+es: Monturas conseguidas en el juego: {0} (a {1}).
+pt: Montarias coletadas no jogo: {0} (em {1}).
+
+@ У них «Собрано?» сразу будет «Да».
+en: Their “Collected?” will be “Yes” right away.
+de: Bei ihnen steht „Gesammelt?“ sofort auf „Ja“.
+fr: Leur « Obtenue ? » sera tout de suite à « Oui ».
+es: Su «¿Conseguida?» estará en «Sí» desde el principio.
+pt: Para elas, “Coletada?” já começa como “Sim”.
+
+@ Аддон ещё не прочитал коллекцию маунтов (нужна версия аддона 2.0 и один вход в игру).
+en: The addon has not read the mount collection yet (it needs addon version 2.0 and one login).
+de: Das Addon hat die Reittiersammlung noch nicht gelesen (nötig sind Addon-Version 2.0 und ein Einloggen).
+fr: L'addon n'a pas encore lu la collection de montures (il faut la version 2.0 de l'addon et une connexion au jeu).
+es: El addon aún no ha leído la colección de monturas (hace falta la versión 2.0 del addon y una entrada al juego).
+pt: O addon ainda não leu a coleção de montarias (precisa da versão 2.0 do addon e de uma entrada no jogo).
+
+@ Таблицу можно создать и так — «Собрано?» будет «Нет» и станет «Да» по мере новых маунтов.
+en: You can create the spreadsheet anyway — “Collected?” starts as “No” and turns “Yes” as new mounts come in.
+de: Die Tabelle lässt sich trotzdem anlegen — „Gesammelt?“ steht dann auf „Nein“ und wird mit neuen Reittieren zu „Ja“.
+fr: Vous pouvez créer le tableau quand même — « Obtenue ? » sera à « Non » et passera à « Oui » au fil des nouvelles montures.
+es: Puede crear la tabla igualmente: «¿Conseguida?» empezará en «No» y pasará a «Sí» con cada montura nueva.
+pt: Dá para criar a planilha mesmo assim — “Coletada?” começa como “Não” e vira “Sim” a cada montaria nova.
+
+@ Аддон пока не знает ни одного персонажа. Зайдите в игру с аддоном Mount Sheet Sync 2.0 и выйдите на выбор персонажа (или наберите /reload) — или впишите имена вручную ниже.
+en: The addon does not know any characters yet. Log in with the Mount Sheet Sync 2.0 addon and go back to character selection (or type /reload) — or enter the names by hand below.
+de: Das Addon kennt noch keinen Charakter. Loggen Sie sich mit dem Addon Mount Sheet Sync 2.0 ein und gehen Sie zur Charakterauswahl (oder geben Sie /reload ein) — oder tragen Sie die Namen unten von Hand ein.
+fr: L'addon ne connaît encore aucun personnage. Connectez-vous avec l'addon Mount Sheet Sync 2.0 et revenez à la sélection des personnages (ou tapez /reload) — ou saisissez les noms à la main ci-dessous.
+es: El addon aún no conoce ningún personaje. Entre al juego con el addon Mount Sheet Sync 2.0 y vuelva a la selección de personaje (o escriba /reload), o escriba los nombres a mano abajo.
+pt: O addon ainda não conhece nenhum personagem. Entre no jogo com o addon Mount Sheet Sync 2.0 e volte à seleção de personagem (ou digite /reload) — ou digite os nomes manualmente abaixo.
+
+@ В таблице пока нет персонажей. Отметьте их галочками или впишите вручную ниже.
+en: The spreadsheet has no characters yet. Tick them or enter them by hand below.
+de: Die Tabelle hat noch keine Charaktere. Markieren Sie sie oder tragen Sie sie unten von Hand ein.
+fr: Le tableau n'a encore aucun personnage. Cochez-les ou saisissez-les à la main ci-dessous.
+es: La tabla aún no tiene personajes. Márquelos o escríbalos a mano abajo.
+pt: A planilha ainda não tem personagens. Marque-os ou digite-os manualmente abaixo.
+
+@ «{0}» уже в списке.
+en: “{0}” is already in the list.
+de: „{0}“ steht schon in der Liste.
+fr: « {0} » est déjà dans la liste.
+es: «{0}» ya está en la lista.
+pt: “{0}” já está na lista.
+
+@ вписан вручную
+en: entered by hand
+de: von Hand eingetragen
+fr: saisi à la main
+es: escrito a mano
+pt: digitado manualmente
+
+@ Отметьте хотя бы одного персонажа (галочки «Рейды», «Подземелья» или «Мир. боссы»).
+en: Tick at least one character (“Raids”, “Dungeons” or “World bosses”).
+de: Markieren Sie mindestens einen Charakter („Schlachtzüge“, „Dungeons“ oder „Weltbosse“).
+fr: Cochez au moins un personnage (« Raids », « Donjons » ou « Boss mondiaux »).
+es: Marque al menos un personaje («Bandas», «Mazmorras» o «Jefes del mundo»).
+pt: Marque pelo menos um personagem (“Raides”, “Masmorras” ou “Chefes mundiais”).
+
+@ Ничего не поменялось.
+en: Nothing has changed.
+de: Nichts hat sich geändert.
+fr: Rien n'a changé.
+es: No ha cambiado nada.
+pt: Nada mudou.
+
+@ лист «{0}»
+en: sheet “{0}”
+de: Blatt „{0}“
+fr: feuille « {0} »
+es: hoja «{0}»
+pt: aba “{0}”
+
+@ колонка «{0}» на «Мировых боссах»
+en: column “{0}” on “World bosses”
+de: Spalte „{0}“ auf „Weltbosse“
+fr: colonne « {0} » sur « Boss mondiaux »
+es: columna «{0}» en «Jefes del mundo»
+pt: coluna “{0}” em “Chefes mundiais”
+
+@ Будут удалены вместе с отметками:
+en: These will be deleted along with their marks:
+de: Diese werden samt Markierungen gelöscht:
+fr: Seront supprimés avec leurs marques :
+es: Se borrarán junto con sus marcas:
+pt: Serão apagados junto com as marcações:
+
+@ Вернуть можно: поставить галочку снова (лист создастся заново, без старых отметок) или «Файл» → «История версий» в Google Таблицах. Удалить?
+en: To bring them back: tick again (the sheet is created anew, without the old marks) or use “File” → “Version history” in Google Sheets. Delete?
+de: Zurückholen: Häkchen erneut setzen (das Blatt wird neu angelegt, ohne alte Markierungen) oder „Datei“ → „Versionsverlauf“ in Google Tabellen. Löschen?
+fr: Pour les récupérer : recochez la case (la feuille est recréée, sans les anciennes marques) ou « Fichier » → « Historique des versions » dans Google Sheets. Supprimer ?
+es: Para recuperarlos: vuelva a marcar la casilla (la hoja se crea de nuevo, sin las marcas antiguas) o use «Archivo» → «Historial de versiones» en Hojas de cálculo de Google. ¿Borrar?
+pt: Para recuperar: marque a caixa de novo (a aba é criada de novo, sem as marcações antigas) ou use “Arquivo” → “Histórico de versões” no Planilhas Google. Apagar?
+
+@ Создаю таблицу…
+en: Creating the spreadsheet…
+de: Lege die Tabelle an…
+fr: Création du tableau…
+es: Creando la tabla…
+pt: Criando a planilha…
+
+@ Не удалось создать папку для настроек: {0}
+en: Could not create the settings folder: {0}
+de: Der Ordner für die Einstellungen konnte nicht angelegt werden: {0}
+fr: Impossible de créer le dossier des paramètres : {0}
+es: No se pudo crear la carpeta de ajustes: {0}
+pt: Não foi possível criar a pasta de configurações: {0}
+
+@ Mount Sheet Sync уже запущен — его значок в трее, возле часов.
+en: Mount Sheet Sync is already running — its icon is in the tray, next to the clock.
+de: Mount Sheet Sync läuft bereits — sein Symbol ist im Infobereich neben der Uhr.
+fr: Mount Sheet Sync est déjà lancé — son icône est dans la zone de notification, près de l'horloge.
+es: Mount Sheet Sync ya está en marcha: su icono está en la bandeja del sistema, junto al reloj.
+pt: O Mount Sheet Sync já está aberto — o ícone dele fica na bandeja do sistema, perto do relógio.
+
+@ Не выполнен вход в Google
+en: Not signed in to Google
+de: Nicht bei Google angemeldet
+fr: Non connecté à Google
+es: Sesión no iniciada en Google
+pt: Sessão não iniciada no Google
+
+@ Таблица ещё не создана
+en: The spreadsheet has not been created yet
+de: Die Tabelle ist noch nicht angelegt
+fr: Le tableau n'est pas encore créé
+es: La tabla aún no se ha creado
+pt: A planilha ainda não foi criada
+
+@ Не указан адрес таблицы
+en: The spreadsheet address is not set
+de: Die Adresse der Tabelle fehlt
+fr: L'adresse du tableau n'est pas indiquée
+es: No se indicó la dirección de la tabla
+pt: O endereço da planilha não foi informado
+
+@ настройки
+en: settings
+de: Einstellungen
+fr: paramètres
+es: ajustes
+pt: configurações
+
+@ Войдите через Google и создайте таблицу — остальное программа сделает сама.
+en: Sign in with Google and create a spreadsheet — the program does the rest.
+de: Melden Sie sich mit Google an und legen Sie eine Tabelle an — den Rest erledigt das Programm.
+fr: Connectez-vous avec Google et créez un tableau — le programme fait le reste.
+es: Inicie sesión con Google y cree una tabla: el programa hará el resto.
+pt: Entre com o Google e crie uma planilha — o programa faz o resto.
+
+@ Где таблица:
+en: Where the spreadsheet is:
+de: Wo die Tabelle liegt:
+fr: Où se trouve le tableau :
+es: Dónde está la tabla:
+pt: Onde está a planilha:
+
+@ Таблица, которую создаёт программа (вход через Google) — рекомендуется
+en: A spreadsheet the program creates (sign in with Google) — recommended
+de: Eine Tabelle, die das Programm anlegt (Anmeldung mit Google) — empfohlen
+fr: Un tableau créé par le programme (connexion avec Google) — recommandé
+es: Una tabla que crea el programa (inicio de sesión con Google) — recomendado
+pt: Uma planilha criada pelo programa (login com o Google) — recomendado
+
+@ Своя таблица со скриптом Code.gs (как в версиях 1.x)
+en: Your own spreadsheet with the Code.gs script (as in versions 1.x)
+de: Eigene Tabelle mit dem Skript Code.gs (wie in Version 1.x)
+fr: Votre propre tableau avec le script Code.gs (comme dans les versions 1.x)
+es: Tabla propia con el script Code.gs (como en las versiones 1.x)
+pt: Planilha própria com o script Code.gs (como nas versões 1.x)

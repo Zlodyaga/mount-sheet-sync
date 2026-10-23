@@ -1,0 +1,741 @@
+@ Войти через Google…
+en: Sign in with Google…
+de: Mit Google anmelden…
+fr: Se connecter avec Google…
+es: Iniciar sesión con Google…
+pt: Entrar com o Google…
+
+@ Выйти
+en: Sign out
+de: Abmelden
+fr: Se déconnecter
+es: Cerrar sesión
+pt: Sair
+
+@ Создать таблицу…
+en: Create spreadsheet…
+de: Tabelle anlegen…
+fr: Créer un tableau…
+es: Crear tabla…
+pt: Criar planilha…
+
+@ Персонажи…
+en: Characters…
+de: Charaktere…
+fr: Personnages…
+es: Personajes…
+pt: Personagens…
+
+@ Открыть
+en: Open
+de: Öffnen
+fr: Ouvrir
+es: Abrir
+pt: Abrir
+
+@ Программа видит только таблицы, которые создала сама. Остальные файлы на вашем Google Диске ей недоступны.
+en: The program only sees spreadsheets it created itself. The other files on your Google Drive stay out of its reach.
+de: Das Programm sieht nur Tabellen, die es selbst angelegt hat. Andere Dateien in Ihrem Google Drive sind für es nicht zugänglich.
+fr: Le programme ne voit que les tableaux qu'il a créés lui-même. Vos autres fichiers Google Drive lui restent inaccessibles.
+es: El programa solo ve las tablas que creó él mismo. El resto de archivos de su Google Drive le son inaccesibles.
+pt: O programa só vê as planilhas que ele mesmo criou. Os outros arquivos do seu Google Drive ficam fora do alcance dele.
+
+@ Адрес веб-приложения (URL, оканчивается на /exec):
+en: Web app address (URL ending in /exec):
+de: Adresse der Web-App (URL, endet auf /exec):
+fr: Adresse de l'application web (URL se terminant par /exec) :
+es: Dirección de la aplicación web (URL que termina en /exec):
+pt: Endereço do app da web (URL que termina em /exec):
+
+@ Apps Script → «Развертывание» → «Новое развертывание» → скопируйте «URL веб-приложения».
+en: Apps Script → “Deploy” → “New deployment” → copy the “Web app URL”.
+de: Apps Script → „Bereitstellen“ → „Neue Bereitstellung“ → kopieren Sie die „Web-App-URL“.
+fr: Apps Script → « Déployer » → « Nouveau déploiement » → copiez l'« URL de l'application Web ».
+es: Apps Script → «Implementar» → «Nueva implementación» → copie la «URL de la aplicación web».
+pt: Apps Script → “Implantar” → “Nova implantação” → copie o “URL do app da Web”.
+
+@ Ключ — SECRET из Code.gs (уже вписан, менять не нужно):
+en: Key — SECRET from Code.gs (already filled in, no need to change it):
+de: Schlüssel — SECRET aus Code.gs (schon eingetragen, nicht ändern):
+fr: Clé — SECRET de Code.gs (déjà saisie, inutile de la changer) :
+es: Clave — SECRET de Code.gs (ya está escrita, no hace falta cambiarla):
+pt: Chave — SECRET do Code.gs (já preenchida, não precisa mudar):
+
+@ Папка World of Warcraft (если пусто — ищется сама):
+en: World of Warcraft folder (leave empty to find it automatically):
+de: World-of-Warcraft-Ordner (leer lassen, um ihn automatisch zu finden):
+fr: Dossier World of Warcraft (laissez vide pour le trouver automatiquement) :
+es: Carpeta de World of Warcraft (si se deja vacía, se busca sola):
+pt: Pasta do World of Warcraft (deixe vazio para encontrar sozinho):
+
+@ Обзор…
+en: Browse…
+de: Durchsuchen…
+fr: Parcourir…
+es: Examinar…
+pt: Procurar…
+
+@ Ищу папку игры…
+en: Looking for the game folder…
+de: Suche den Spielordner…
+fr: Recherche du dossier du jeu…
+es: Buscando la carpeta del juego…
+pt: Procurando a pasta do jogo…
+
+@ Запускать вместе с Windows (значок будет в трее)
+en: Start with Windows (the icon will be in the tray)
+de: Mit Windows starten (das Symbol erscheint im Infobereich)
+fr: Lancer avec Windows (l'icône sera dans la zone de notification)
+es: Iniciar con Windows (el icono estará en la bandeja del sistema)
+pt: Iniciar com o Windows (o ícone ficará na bandeja do sistema)
+
+@ Программа запущена прямо из архива. Распакуйте его в обычную папку (например, «Документы») и запустите MountSheetSync.exe оттуда, иначе автозапуск не сработает.
+en: The program is running straight from the archive. Extract it to a normal folder (for example, “Documents”) and run MountSheetSync.exe from there, otherwise start with Windows will not work.
+de: Das Programm läuft direkt aus dem Archiv. Entpacken Sie es in einen normalen Ordner (zum Beispiel „Dokumente“) und starten Sie MountSheetSync.exe von dort, sonst funktioniert der Autostart nicht.
+fr: Le programme est lancé directement depuis l'archive. Extrayez-la dans un dossier ordinaire (par exemple « Documents ») et lancez MountSheetSync.exe depuis celui-ci, sinon le lancement avec Windows ne fonctionnera pas.
+es: El programa se está ejecutando directamente desde el archivo comprimido. Extráigalo en una carpeta normal (por ejemplo, «Documentos») y ejecute MountSheetSync.exe desde allí; si no, el inicio con Windows no funcionará.
+pt: O programa está rodando direto do arquivo compactado. Extraia-o para uma pasta comum (por exemplo, “Documentos”) e execute o MountSheetSync.exe de lá; senão a inicialização com o Windows não vai funcionar.
+
+@ Проверить связь
+en: Test connection
+de: Verbindung prüfen
+fr: Tester la connexion
+es: Probar conexión
+pt: Testar conexão
+
+@ Аккаунт Google: {0}
+en: Google account: {0}
+de: Google-Konto: {0}
+fr: Compte Google : {0}
+es: Cuenta de Google: {0}
+pt: Conta do Google: {0}
+
+@ вход выполнен
+en: signed in
+de: angemeldet
+fr: connecté
+es: sesión iniciada
+pt: login feito
+
+@ Аккаунт Google: вход не выполнен
+en: Google account: not signed in
+de: Google-Konto: nicht angemeldet
+fr: Compte Google : non connecté
+es: Cuenta de Google: sesión no iniciada
+pt: Conta do Google: sessão não iniciada
+
+@ Таблица: «{0}»
+en: Spreadsheet: “{0}”
+de: Tabelle: „{0}“
+fr: Tableau : « {0} »
+es: Tabla: «{0}»
+pt: Planilha: “{0}”
+
+@ Таблица: ещё не создана
+en: Spreadsheet: not created yet
+de: Tabelle: noch nicht angelegt
+fr: Tableau : pas encore créé
+es: Tabla: aún no creada
+pt: Planilha: ainda não criada
+
+@ Создать новую…
+en: Create a new one…
+de: Neue anlegen…
+fr: En créer un nouveau…
+es: Crear una nueva…
+pt: Criar uma nova…
+
+@ Адрес вставлен из буфера обмена. Нажмите «Сохранить» (или сначала «Проверить связь»).
+en: The address was pasted from the clipboard. Press “Save” (or “Test connection” first).
+de: Die Adresse wurde aus der Zwischenablage eingefügt. Klicken Sie auf „Speichern“ (oder zuerst auf „Verbindung prüfen“).
+fr: L'adresse a été collée depuis le presse-papiers. Cliquez sur « Enregistrer » (ou d'abord sur « Tester la connexion »).
+es: La dirección se pegó desde el portapapeles. Pulse «Guardar» (o antes «Probar conexión»).
+pt: O endereço foi colado da área de transferência. Clique em “Salvar” (ou antes em “Testar conexão”).
+
+@ Вход выполнен. Теперь нажмите «Создать таблицу…».
+en: Signed in. Now press “Create spreadsheet…”.
+de: Angemeldet. Klicken Sie jetzt auf „Tabelle anlegen…“.
+fr: Connecté. Cliquez maintenant sur « Créer un tableau… ».
+es: Sesión iniciada. Ahora pulse «Crear tabla…».
+pt: Login feito. Agora clique em “Criar planilha…”.
+
+@ Вход выполнен.
+en: Signed in.
+de: Angemeldet.
+fr: Connecté.
+es: Sesión iniciada.
+pt: Login feito.
+
+@ Выйти из аккаунта Google? Программа перестанет отмечать боссов в таблице, пока вы не войдёте снова. Сама таблица останется на Google Диске.
+en: Sign out of your Google account? The program will stop marking bosses in the spreadsheet until you sign in again. The spreadsheet itself stays on Google Drive.
+de: Vom Google-Konto abmelden? Das Programm markiert keine Bosse in der Tabelle mehr, bis Sie sich wieder anmelden. Die Tabelle selbst bleibt in Google Drive.
+fr: Se déconnecter du compte Google ? Le programme cessera de marquer les boss dans le tableau jusqu'à votre prochaine connexion. Le tableau lui-même reste sur Google Drive.
+es: ¿Cerrar la sesión de Google? El programa dejará de marcar jefes en la tabla hasta que vuelva a iniciar sesión. La tabla en sí se queda en Google Drive.
+pt: Sair da conta do Google? O programa deixará de marcar chefes na planilha até você entrar de novo. A planilha em si continua no Google Drive.
+
+@ Вы вышли из аккаунта Google.
+en: You have signed out of your Google account.
+de: Sie haben sich vom Google-Konto abgemeldet.
+fr: Vous êtes déconnecté du compte Google.
+es: Ha cerrado la sesión de Google.
+pt: Você saiu da conta do Google.
+
+@ Сначала поправьте папку World of Warcraft ниже — по ней программа находит персонажей.
+en: First fix the World of Warcraft folder below — the program finds the characters through it.
+de: Korrigieren Sie zuerst den World-of-Warcraft-Ordner unten — darüber findet das Programm die Charaktere.
+fr: Corrigez d'abord le dossier World of Warcraft ci-dessous — c'est par lui que le programme trouve les personnages.
+es: Primero corrija la carpeta de World of Warcraft de abajo: con ella el programa encuentra los personajes.
+pt: Primeiro corrija a pasta do World of Warcraft abaixo — é por ela que o programa encontra os personagens.
+
+@ Создать ещё одну таблицу? Отметки пойдут в новую, а нынешняя «{0}» останется на Google Диске как есть.
+en: Create another spreadsheet? Marks will go to the new one, and the current “{0}” stays on Google Drive as it is.
+de: Noch eine Tabelle anlegen? Markierungen gehen dann in die neue, die bisherige „{0}“ bleibt unverändert in Google Drive.
+fr: Créer un autre tableau ? Les marques iront dans le nouveau, et l'actuel « {0} » reste tel quel sur Google Drive.
+es: ¿Crear otra tabla? Las marcas irán a la nueva y la actual «{0}» se quedará en Google Drive tal cual.
+pt: Criar outra planilha? As marcações vão para a nova, e a atual “{0}” fica no Google Drive como está.
+
+@ без изменений
+en: no changes
+de: keine Änderungen
+fr: aucun changement
+es: sin cambios
+pt: sem mudanças
+
+@ Таблица «{0}» создана. Убийства этой недели из журнала аддона сейчас уйдут в неё.
+en: Spreadsheet “{0}” created. This week's kills from the addon log go there now.
+de: Tabelle „{0}“ angelegt. Die Kills dieser Woche aus dem Addon-Protokoll gehen jetzt hinein.
+fr: Tableau « {0} » créé. Les victoires de la semaine du journal de l'addon y partent maintenant.
+es: Tabla «{0}» creada. Las muertes de esta semana del registro del addon se envían a ella ahora.
+pt: Planilha “{0}” criada. As mortes desta semana do registro do addon vão para ela agora.
+
+@ Не удалось открыть браузер: {0}
+en: Could not open the browser: {0}
+de: Der Browser konnte nicht geöffnet werden: {0}
+fr: Impossible d'ouvrir le navigateur : {0}
+es: No se pudo abrir el navegador: {0}
+pt: Não foi possível abrir o navegador: {0}
+
+@ Ок, файлы аддона ищутся в {0}.
+en: OK, the addon files are looked up in {0}.
+de: OK, die Addon-Dateien werden in {0} gesucht.
+fr: OK, les fichiers de l'addon sont cherchés dans {0}.
+es: Bien, los archivos del addon se buscan en {0}.
+pt: OK, os arquivos do addon são procurados em {0}.
+
+@ В этой папке нет _retail_\WTF\Account. Нужна папка World of Warcraft (в ней лежит _retail_).
+en: This folder has no _retail_\WTF\Account. You need the World of Warcraft folder (the one that contains _retail_).
+de: In diesem Ordner gibt es kein _retail_\WTF\Account. Nötig ist der World-of-Warcraft-Ordner (der _retail_ enthält).
+fr: Ce dossier ne contient pas _retail_\WTF\Account. Il faut le dossier World of Warcraft (celui qui contient _retail_).
+es: En esta carpeta no hay _retail_\WTF\Account. Hace falta la carpeta de World of Warcraft (la que contiene _retail_).
+pt: Esta pasta não tem _retail_\WTF\Account. É preciso a pasta do World of Warcraft (a que contém _retail_).
+
+@ Нашлась сама: {0}
+en: Found automatically: {0}
+de: Automatisch gefunden: {0}
+fr: Trouvé automatiquement : {0}
+es: Encontrada sola: {0}
+pt: Encontrada sozinha: {0}
+
+@ Сама не нашлась — нажмите «Обзор…» и выберите папку World of Warcraft.
+en: Not found automatically — press “Browse…” and pick the World of Warcraft folder.
+de: Nicht automatisch gefunden — klicken Sie auf „Durchsuchen…“ und wählen Sie den World-of-Warcraft-Ordner.
+fr: Introuvable automatiquement — cliquez sur « Parcourir… » et choisissez le dossier World of Warcraft.
+es: No se encontró sola: pulse «Examinar…» y elija la carpeta de World of Warcraft.
+pt: Não foi encontrada sozinha — clique em “Procurar…” e escolha a pasta do World of Warcraft.
+
+@ Выберите папку World of Warcraft (в ней лежит папка _retail_)
+en: Pick the World of Warcraft folder (the one that contains the _retail_ folder)
+de: Wählen Sie den World-of-Warcraft-Ordner (der den Ordner _retail_ enthält)
+fr: Choisissez le dossier World of Warcraft (celui qui contient le dossier _retail_)
+es: Elija la carpeta de World of Warcraft (la que contiene la carpeta _retail_)
+pt: Escolha a pasta do World of Warcraft (a que contém a pasta _retail_)
+
+@ В указанной папке нет _retail_\WTF\Account. Выберите папку World of Warcraft или оставьте поле пустым.
+en: The folder you gave has no _retail_\WTF\Account. Pick the World of Warcraft folder or leave the field empty.
+de: Im angegebenen Ordner gibt es kein _retail_\WTF\Account. Wählen Sie den World-of-Warcraft-Ordner oder lassen Sie das Feld leer.
+fr: Le dossier indiqué ne contient pas _retail_\WTF\Account. Choisissez le dossier World of Warcraft ou laissez le champ vide.
+es: En la carpeta indicada no hay _retail_\WTF\Account. Elija la carpeta de World of Warcraft o deje el campo vacío.
+pt: A pasta informada não tem _retail_\WTF\Account. Escolha a pasta do World of Warcraft ou deixe o campo vazio.
+
+@ Вставьте адрес веб-приложения (Ctrl+V в поле адреса).
+en: Paste the web app address (Ctrl+V in the address field).
+de: Fügen Sie die Adresse der Web-App ein (Strg+V im Adressfeld).
+fr: Collez l'adresse de l'application web (Ctrl+V dans le champ d'adresse).
+es: Pegue la dirección de la aplicación web (Ctrl+V en el campo de dirección).
+pt: Cole o endereço do app da web (Ctrl+V no campo de endereço).
+
+@ Это тестовый адрес (/dev). Нужен адрес из «Новое развертывание» — он оканчивается на /exec.
+en: This is a test address (/dev). You need the address from “New deployment” — it ends in /exec.
+de: Das ist eine Testadresse (/dev). Nötig ist die Adresse aus „Neue Bereitstellung“ — sie endet auf /exec.
+fr: C'est une adresse de test (/dev). Il faut l'adresse de « Nouveau déploiement » — elle se termine par /exec.
+es: Es una dirección de prueba (/dev). Hace falta la de «Nueva implementación», que termina en /exec.
+pt: Este é um endereço de teste (/dev). É preciso o endereço de “Nova implantação” — ele termina em /exec.
+
+@ Не похоже на адрес веб-приложения. Скопируйте его из окна развертывания: он начинается с https://script.google.com/ и оканчивается на /exec.
+en: This does not look like a web app address. Copy it from the deployment window: it starts with https://script.google.com/ and ends in /exec.
+de: Das sieht nicht nach einer Web-App-Adresse aus. Kopieren Sie sie aus dem Bereitstellungsfenster: Sie beginnt mit https://script.google.com/ und endet auf /exec.
+fr: Ce n'est pas une adresse d'application web. Copiez-la depuis la fenêtre de déploiement : elle commence par https://script.google.com/ et se termine par /exec.
+es: No parece la dirección de una aplicación web. Cópiela de la ventana de implementación: empieza por https://script.google.com/ y termina en /exec.
+pt: Não parece um endereço de app da web. Copie-o da janela de implantação: ele começa com https://script.google.com/ e termina em /exec.
+
+@ Ключ не может быть пустым: он должен совпадать с SECRET в Code.gs.
+en: The key cannot be empty: it must match SECRET in Code.gs.
+de: Der Schlüssel darf nicht leer sein: Er muss mit SECRET in Code.gs übereinstimmen.
+fr: La clé ne peut pas être vide : elle doit correspondre à SECRET dans Code.gs.
+es: La clave no puede estar vacía: debe coincidir con SECRET de Code.gs.
+pt: A chave não pode ficar vazia: ela precisa ser igual ao SECRET do Code.gs.
+
+@ Проверяю связь с таблицей…
+en: Checking the connection to the spreadsheet…
+de: Prüfe die Verbindung zur Tabelle…
+fr: Vérification de la connexion au tableau…
+es: Comprobando la conexión con la tabla…
+pt: Verificando a conexão com a planilha…
+
+@ Связь есть: таблица «{0}».
+en: Connected: spreadsheet “{0}”.
+de: Verbunden: Tabelle „{0}“.
+fr: Connecté : tableau « {0} ».
+es: Conectado: tabla «{0}».
+pt: Conectado: planilha “{0}”.
+
+@ Листы найдены: {0}.
+en: Sheets found: {0}.
+de: Gefundene Blätter: {0}.
+fr: Feuilles trouvées : {0}.
+es: Hojas encontradas: {0}.
+pt: Abas encontradas: {0}.
+
+@ Нет листов для: {0} — их отметки не сохранятся.
+en: No sheets for: {0} — their marks will not be saved.
+de: Keine Blätter für: {0} — ihre Markierungen werden nicht gespeichert.
+fr: Pas de feuilles pour : {0} — leurs marques ne seront pas enregistrées.
+es: No hay hojas para: {0}; sus marcas no se guardarán.
+pt: Sem abas para: {0} — as marcações deles não serão salvas.
+
+@ Добавьте их: «Персонажи…».
+en: Add them: “Characters…”.
+de: Fügen Sie sie hinzu: „Charaktere…“.
+fr: Ajoutez-les : « Personnages… ».
+es: Añádalos: «Personajes…».
+pt: Adicione-os: “Personagens…”.
+
+@ Файла аддона пока нет — он появится, когда вы выйдете из игры с аддоном на выбор персонажа.
+en: There is no addon file yet — it appears when you go back to character selection with the addon on.
+de: Es gibt noch keine Addon-Datei — sie erscheint, wenn Sie mit aktivem Addon zur Charakterauswahl gehen.
+fr: Il n'y a pas encore de fichier de l'addon — il apparaît quand vous revenez à la sélection des personnages avec l'addon activé.
+es: Aún no hay archivo del addon: aparece cuando vuelve a la selección de personaje con el addon activado.
+pt: Ainda não há arquivo do addon — ele aparece quando você volta à seleção de personagem com o addon ativo.
+
+@ Ошибка: {0}
+en: Error: {0}
+de: Fehler: {0}
+fr: Erreur : {0}
+es: Error: {0}
+pt: Erro: {0}
+
+@ Создаю таблицу в Google…
+en: Creating the spreadsheet in Google…
+de: Lege die Tabelle bei Google an…
+fr: Création du tableau chez Google…
+es: Creando la tabla en Google…
+pt: Criando a planilha no Google…
+
+@ Google не вернул номер новой таблицы
+en: Google did not return the new spreadsheet's ID
+de: Google hat die ID der neuen Tabelle nicht zurückgegeben
+fr: Google n'a pas renvoyé l'identifiant du nouveau tableau
+es: Google no devolvió el identificador de la tabla nueva
+pt: O Google não devolveu o ID da planilha nova
+
+@ Заполняю листы…
+en: Filling in the sheets…
+de: Fülle die Blätter…
+fr: Remplissage des feuilles…
+es: Rellenando las hojas…
+pt: Preenchendo as abas…
+
+@ Последние штрихи…
+en: Finishing touches…
+de: Letzte Handgriffe…
+fr: Dernières retouches…
+es: Últimos retoques…
+pt: Últimos ajustes…
+
+@ имя «{0}» не подходит для названия листа
+en: the name “{0}” cannot be used as a sheet name
+de: der Name „{0}“ eignet sich nicht als Blattname
+fr: le nom « {0} » ne convient pas comme nom de feuille
+es: el nombre «{0}» no sirve como nombre de hoja
+pt: o nome “{0}” não serve como nome de aba
+
+@ в таблице нет листа «{0}» — персонажей добавить не к чему
+en: the spreadsheet has no “{0}” sheet — there is nothing to add the characters to
+de: die Tabelle hat kein Blatt „{0}“ — es gibt nichts, wozu Charaktere hinzugefügt werden könnten
+fr: le tableau n'a pas de feuille « {0} » — impossible d'y ajouter des personnages
+es: la tabla no tiene la hoja «{0}»: no hay dónde añadir personajes
+pt: a planilha não tem a aba “{0}” — não há onde adicionar personagens
+
+@ Меняю листы…
+en: Changing the sheets…
+de: Ändere die Blätter…
+fr: Modification des feuilles…
+es: Cambiando las hojas…
+pt: Alterando as abas…
+
+@ новые листы: {0}
+en: new sheets: {0}
+de: neue Blätter: {0}
+fr: nouvelles feuilles : {0}
+es: hojas nuevas: {0}
+pt: abas novas: {0}
+
+@ колонки на «Мировых боссах»: {0}
+en: columns on “World bosses”: {0}
+de: Spalten auf „Weltbosse“: {0}
+fr: colonnes sur « Boss mondiaux » : {0}
+es: columnas en «Jefes del mundo»: {0}
+pt: colunas em “Chefes mundiais”: {0}
+
+@ удалены листы: {0}
+en: sheets deleted: {0}
+de: gelöschte Blätter: {0}
+fr: feuilles supprimées : {0}
+es: hojas borradas: {0}
+pt: abas apagadas: {0}
+
+@ убраны колонки на «Мировых боссах»: {0}
+en: columns removed from “World bosses”: {0}
+de: Spalten von „Weltbosse“ entfernt: {0}
+fr: colonnes retirées de « Boss mondiaux » : {0}
+es: columnas quitadas de «Jefes del mundo»: {0}
+pt: colunas removidas de “Chefes mundiais”: {0}
+
+@ …и ещё {0}
+en: …and {0} more
+de: …und {0} weitere
+fr: …et {0} de plus
+es: …y {0} más
+pt: …e mais {0}
+
+@ На этой неделе «Сброс недели» не нажимали
+en: “Weekly reset” was not pressed this week
+de: „Wochenreset“ wurde diese Woche nicht gedrückt
+fr: « Nouvelle semaine » n'a pas été cliqué cette semaine
+es: Esta semana no se pulsó «Reinicio semanal»
+pt: “Reinício semanal” não foi clicado nesta semana
+
+@ в записи нет id, персонажа или босса
+en: the record has no id, character or boss
+de: dem Eintrag fehlen ID, Charakter oder Boss
+fr: l'entrée n'a pas d'id, de personnage ou de boss
+es: al registro le falta el id, el personaje o el jefe
+pt: o registro não tem id, personagem ou chefe
+
+@ убийство до еженедельного сброса — пропущено
+en: kill from before the weekly reset — skipped
+de: Kill vor dem wöchentlichen Reset — übersprungen
+fr: victoire antérieure à la réinitialisation hebdomadaire — ignorée
+es: muerte anterior al reinicio semanal — omitida
+pt: morte anterior ao reinício semanal — ignorada
+
+@ обновите программу синхронизации и нажмите «Сброс недели» ещё раз
+en: update the sync program and press “Weekly reset” again
+de: aktualisieren Sie das Sync-Programm und drücken Sie „Wochenreset“ erneut
+fr: mettez à jour le programme de synchronisation et cliquez à nouveau sur « Nouvelle semaine »
+es: actualice el programa de sincronización y pulse «Reinicio semanal» otra vez
+pt: atualize o programa de sincronização e clique em “Reinício semanal” de novo
+
+@ в таблице этот босс только для сложности: {0}
+en: in the spreadsheet this boss is only for difficulty: {0}
+de: in der Tabelle gibt es diesen Boss nur für den Schwierigkeitsgrad: {0}
+fr: dans le tableau, ce boss n'existe que pour la difficulté : {0}
+es: en la tabla este jefe solo está en la dificultad: {0}
+pt: na planilha este chefe só existe na dificuldade: {0}
+
+@ такого босса нет на листах персонажа
+en: there is no such boss on the character's sheets
+de: diesen Boss gibt es auf den Blättern des Charakters nicht
+fr: ce boss n'est pas sur les feuilles du personnage
+es: ese jefe no está en las hojas del personaje
+pt: esse chefe não está nas abas do personagem
+
+@ «Нет» поставлено, ячеек: {0}
+en: set to “No”, cells: {0}
+de: auf „Nein“ gesetzt, Zellen: {0}
+fr: mis à « Non », cellules : {0}
+es: puesto en «No», celdas: {0}
+pt: marcado como “Não”, células: {0}
+
+@ маунта «{0}» нет в колонке «Маунт» — отметьте «Собрано?» вручную
+en: the mount “{0}” is not in the “Mount” column — mark “Collected?” by hand
+de: das Reittier „{0}“ steht nicht in der Spalte „Reittier“ — markieren Sie „Gesammelt?“ von Hand
+fr: la monture « {0} » n'est pas dans la colonne « Monture » — cochez « Obtenue ? » à la main
+es: la montura «{0}» no está en la columna «Montura»; marque «¿Conseguida?» a mano
+pt: a montaria “{0}” não está na coluna “Montaria” — marque “Coletada?” manualmente
+
+@ на листе персонажа нет колонки «Фармлю»
+en: the character sheet has no “Farming” column
+de: das Charakterblatt hat keine Spalte „Farme“
+fr: la feuille du personnage n'a pas de colonne « Je farme »
+es: la hoja del personaje no tiene la columna «Farmeo»
+pt: a aba do personagem não tem a coluna “Farmo”
+
+@ строки «{0}» нет на листах персонажа
+en: there is no “{0}” row on the character's sheets
+de: auf den Blättern des Charakters gibt es keine Zeile „{0}“
+fr: il n'y a pas de ligne « {0} » sur les feuilles du personnage
+es: no hay ninguna fila «{0}» en las hojas del personaje
+pt: não há linha “{0}” nas abas do personagem
+
+@ нет листа «{0}»
+en: no “{0}” sheet
+de: kein Blatt „{0}“
+fr: pas de feuille « {0} »
+es: no hay hoja «{0}»
+pt: não há aba “{0}”
+
+@ нет колонки «{0}» на листе «{1}»
+en: no “{0}” column on the “{1}” sheet
+de: keine Spalte „{0}“ auf dem Blatt „{1}“
+fr: pas de colonne « {0} » sur la feuille « {1} »
+es: no hay columna «{0}» en la hoja «{1}»
+pt: não há coluna “{0}” na aba “{1}”
+
+@ нет листов для персонажа «{0}»
+en: no sheets for the character “{0}”
+de: keine Blätter für den Charakter „{0}“
+fr: pas de feuilles pour le personnage « {0} »
+es: no hay hojas para el personaje «{0}»
+pt: não há abas para o personagem “{0}”
+
+@ скрипт в таблице старой версии — вставьте Code.gs из архива заново и опубликуйте новую версию (раздел «Своя таблица со скриптом» в README)
+en: the script in the spreadsheet is an old version — paste Code.gs from the archive again and publish a new version (section “Your own spreadsheet with a script” in the README)
+de: das Skript in der Tabelle ist veraltet — fügen Sie Code.gs aus dem Archiv neu ein und veröffentlichen Sie eine neue Version (Abschnitt „Eigene Tabelle mit Skript“ in der README)
+fr: le script du tableau est une ancienne version — recollez Code.gs depuis l'archive et publiez une nouvelle version (section « Votre propre tableau avec un script » du README)
+es: el script de la tabla es de una versión antigua: vuelva a pegar Code.gs del archivo y publique una versión nueva (sección «Tabla propia con script» del README)
+pt: o script da planilha é de uma versão antiga — cole o Code.gs do arquivo de novo e publique uma versão nova (seção “Planilha própria com script” do README)
+
+@ неверный адрес веб-приложения ({0})
+en: wrong web app address ({0})
+de: falsche Web-App-Adresse ({0})
+fr: adresse d'application web incorrecte ({0})
+es: dirección de aplicación web incorrecta ({0})
+pt: endereço do app da web incorreto ({0})
+
+@ адрес не найден (404). Проверьте адрес веб-приложения в настройках.
+en: address not found (404). Check the web app address in the settings.
+de: Adresse nicht gefunden (404). Prüfen Sie die Web-App-Adresse in den Einstellungen.
+fr: adresse introuvable (404). Vérifiez l'adresse de l'application web dans les paramètres.
+es: dirección no encontrada (404). Revise la dirección de la aplicación web en los ajustes.
+pt: endereço não encontrado (404). Confira o endereço do app da web nas configurações.
+
+@ нет доступа ({0}). В развертывании нужно «У кого есть доступ: Все».
+en: no access ({0}). The deployment needs “Who has access: Anyone”.
+de: kein Zugriff ({0}). In der Bereitstellung muss „Wer hat Zugriff: Jeder“ stehen.
+fr: pas d'accès ({0}). Le déploiement doit avoir « Qui a accès : Tout le monde ».
+es: sin acceso ({0}). En la implementación hace falta «Quién tiene acceso: Cualquier usuario».
+pt: sem acesso ({0}). A implantação precisa de “Quem pode acessar: Qualquer pessoa”.
+
+@ нет связи с таблицей: {0}
+en: no connection to the spreadsheet: {0}
+de: keine Verbindung zur Tabelle: {0}
+fr: pas de connexion au tableau : {0}
+es: sin conexión con la tabla: {0}
+pt: sem conexão com a planilha: {0}
+
+@ Google вернул страницу вместо ответа скрипта. Проверьте развертывание: тип «Веб-приложение», доступ «Все».
+en: Google returned a page instead of the script's answer. Check the deployment: type “Web app”, access “Anyone”.
+de: Google hat statt der Antwort des Skripts eine Seite geliefert. Prüfen Sie die Bereitstellung: Typ „Web-App“, Zugriff „Jeder“.
+fr: Google a renvoyé une page au lieu de la réponse du script. Vérifiez le déploiement : type « Application Web », accès « Tout le monde ».
+es: Google devolvió una página en lugar de la respuesta del script. Revise la implementación: tipo «Aplicación web», acceso «Cualquier usuario».
+pt: O Google devolveu uma página em vez da resposta do script. Confira a implantação: tipo “App da Web”, acesso “Qualquer pessoa”.
+
+@ таблица ответила ошибкой: {0}
+en: the spreadsheet answered with an error: {0}
+de: die Tabelle hat mit einem Fehler geantwortet: {0}
+fr: le tableau a répondu par une erreur : {0}
+es: la tabla respondió con un error: {0}
+pt: a planilha respondeu com um erro: {0}
+
+@ {0}: «не фармлю» {1} — {2}
+en: {0}: “not farming” {1} — {2}
+de: {0}: „farme ich nicht“ {1} — {2}
+fr: {0} : « pas farmé » {1} — {2}
+es: {0}: «no lo farmeo» {1} — {2}
+pt: {0}: “não farmo” {1} — {2}
+
+@ {0}: {1} — {2}
+en: {0}: {1} — {2}
+de: {0}: {1} — {2}
+fr: {0} : {1} — {2}
+es: {0}: {1} — {2}
+pt: {0}: {1} — {2}
+
+@ маунт «{0}»: обновите Code.gs в таблице
+en: mount “{0}”: update Code.gs in the spreadsheet
+de: Reittier „{0}“: aktualisieren Sie Code.gs in der Tabelle
+fr: monture « {0} » : mettez à jour Code.gs dans le tableau
+es: montura «{0}»: actualice Code.gs en la tabla
+pt: montaria “{0}”: atualize o Code.gs na planilha
+
+@ маунт «{0}» не найден в таблице
+en: mount “{0}” not found in the spreadsheet
+de: Reittier „{0}“ nicht in der Tabelle gefunden
+fr: monture « {0} » introuvable dans le tableau
+es: no se encontró la montura «{0}» en la tabla
+pt: montaria “{0}” não encontrada na planilha
+
+@ внутренняя ошибка: {0}
+en: internal error: {0}
+de: interner Fehler: {0}
+fr: erreur interne : {0}
+es: error interno: {0}
+pt: erro interno: {0}
+
+@ ПКМ по значку → «Настройки…».
+en: Right-click the icon → “Settings…”.
+de: Rechtsklick auf das Symbol → „Einstellungen…“.
+fr: Clic droit sur l'icône → « Paramètres… ».
+es: Clic derecho en el icono → «Ajustes…».
+pt: Clique com o botão direito no ícone → “Configurações…”.
+
+@ Сверить с коллекцией пока нельзя
+en: Cannot check against the collection yet
+de: Abgleich mit der Sammlung ist noch nicht möglich
+fr: Impossible de comparer avec la collection pour l'instant
+es: Aún no se puede cotejar con la colección
+pt: Ainda não dá para conferir com a coleção
+
+@ Нет связи с таблицей — программа повторит попытку в {0}. Потом выберите «Сверить с коллекцией» ещё раз.
+en: No connection to the spreadsheet — the program will try again at {0}. Then choose “Check against collection” once more.
+de: Keine Verbindung zur Tabelle — das Programm versucht es um {0} erneut. Wählen Sie danach noch einmal „Mit Sammlung abgleichen“.
+fr: Pas de connexion au tableau — le programme réessaiera à {0}. Choisissez ensuite à nouveau « Comparer avec la collection ».
+es: Sin conexión con la tabla: el programa lo intentará de nuevo a las {0}. Después elija otra vez «Cotejar con la colección».
+pt: Sem conexão com a planilha — o programa tentará de novo às {0}. Depois escolha “Conferir com a coleção” mais uma vez.
+
+@ Mount Sheet Sync работает
+en: Mount Sheet Sync is running
+de: Mount Sheet Sync läuft
+fr: Mount Sheet Sync fonctionne
+es: Mount Sheet Sync está funcionando
+pt: O Mount Sheet Sync está funcionando
+
+@ Связь с таблицей «{0}» есть. Отметки уйдут сами, когда выйдете на выбор персонажа, из игры или сделаете /reload.
+en: Connected to the spreadsheet “{0}”. Marks go out by themselves when you go to character selection, log out or type /reload.
+de: Verbindung zur Tabelle „{0}“ steht. Markierungen gehen von selbst raus, wenn Sie zur Charakterauswahl gehen, das Spiel verlassen oder /reload eingeben.
+fr: Connecté au tableau « {0} ». Les marques partent d'elles-mêmes quand vous revenez à la sélection des personnages, quittez le jeu ou tapez /reload.
+es: Hay conexión con la tabla «{0}». Las marcas se envían solas cuando vuelve a la selección de personaje, sale del juego o escribe /reload.
+pt: Conectado à planilha “{0}”. As marcações vão sozinhas quando você volta à seleção de personagem, sai do jogo ou digita /reload.
+
+@ Нет листов для: {0}
+en: No sheets for: {0}
+de: Keine Blätter für: {0}
+fr: Pas de feuilles pour : {0}
+es: No hay hojas para: {0}
+pt: Sem abas para: {0}
+
+@ Добавьте их в таблицу: меню значка → «Персонажи в таблице…».
+en: Add them to the spreadsheet: icon menu → “Characters in the spreadsheet…”.
+de: Fügen Sie sie der Tabelle hinzu: Symbolmenü → „Charaktere in der Tabelle…“.
+fr: Ajoutez-les au tableau : menu de l'icône → « Personnages du tableau… ».
+es: Añádalos a la tabla: menú del icono → «Personajes de la tabla…».
+pt: Adicione-os à planilha: menu do ícone → “Personagens na planilha…”.
+
+@ Отметки этих персонажей сохраняться не будут. Проверьте названия листов в таблице.
+en: Marks for these characters will not be saved. Check the sheet names in the spreadsheet.
+de: Markierungen dieser Charaktere werden nicht gespeichert. Prüfen Sie die Blattnamen in der Tabelle.
+fr: Les marques de ces personnages ne seront pas enregistrées. Vérifiez les noms des feuilles dans le tableau.
+es: Las marcas de estos personajes no se guardarán. Revise los nombres de las hojas de la tabla.
+pt: As marcações desses personagens não serão salvas. Confira os nomes das abas na planilha.
+
+@ Не найдена папка World of Warcraft
+en: World of Warcraft folder not found
+de: World-of-Warcraft-Ordner nicht gefunden
+fr: Dossier World of Warcraft introuvable
+es: No se encontró la carpeta de World of Warcraft
+pt: Pasta do World of Warcraft não encontrada
+
+@ Укажите её: ПКМ по значку → «Настройки…».
+en: Set it: right-click the icon → “Settings…”.
+de: Geben Sie ihn an: Rechtsklick auf das Symbol → „Einstellungen…“.
+fr: Indiquez-le : clic droit sur l'icône → « Paramètres… ».
+es: Indíquela: clic derecho en el icono → «Ajustes…».
+pt: Informe-a: clique com o botão direito no ícone → “Configurações…”.
+
+@ Файла аддона пока нет
+en: No addon file yet
+de: Noch keine Addon-Datei
+fr: Pas encore de fichier de l'addon
+es: Aún no hay archivo del addon
+pt: Ainda não há arquivo do addon
+
+@ Зайдите в игру с включённым аддоном и выйдите на выбор персонажа (или наберите /reload).
+en: Log in with the addon enabled and go back to character selection (or type /reload).
+de: Loggen Sie sich mit aktiviertem Addon ein und gehen Sie zur Charakterauswahl (oder geben Sie /reload ein).
+fr: Connectez-vous avec l'addon activé et revenez à la sélection des personnages (ou tapez /reload).
+es: Entre al juego con el addon activado y vuelva a la selección de personaje (o escriba /reload).
+pt: Entre no jogo com o addon ativado e volte à seleção de personagem (ou digite /reload).
+
+@ Сверка — для таблицы, созданной программой
+en: The check is for a spreadsheet created by the program
+de: Der Abgleich gilt nur für eine vom Programm angelegte Tabelle
+fr: La comparaison concerne un tableau créé par le programme
+es: El cotejo es para una tabla creada por el programa
+pt: A conferência é para uma planilha criada pelo programa
+
+@ В таблице со скриптом отметьте «Собрано?» вручную или создайте новую таблицу (вход через Google).
+en: In a spreadsheet with a script, mark “Collected?” by hand or create a new spreadsheet (sign in with Google).
+de: In einer Tabelle mit Skript markieren Sie „Gesammelt?“ von Hand oder legen eine neue Tabelle an (Anmeldung mit Google).
+fr: Dans un tableau avec script, cochez « Obtenue ? » à la main ou créez un nouveau tableau (connexion avec Google).
+es: En una tabla con script, marque «¿Conseguida?» a mano o cree una tabla nueva (inicio de sesión con Google).
+pt: Numa planilha com script, marque “Coletada?” manualmente ou crie uma planilha nova (login com o Google).
+
+@ Аддон ещё не прочитал коллекцию маунтов
+en: The addon has not read the mount collection yet
+de: Das Addon hat die Reittiersammlung noch nicht gelesen
+fr: L'addon n'a pas encore lu la collection de montures
+es: El addon aún no ha leído la colección de monturas
+pt: O addon ainda não leu a coleção de montarias
+
+@ Зайдите в игру с аддоном Mount Sheet Sync и сделайте /reload — потом сверьте ещё раз.
+en: Log in with the Mount Sheet Sync addon and type /reload — then check again.
+de: Loggen Sie sich mit dem Addon Mount Sheet Sync ein und geben Sie /reload ein — dann gleichen Sie erneut ab.
+fr: Connectez-vous avec l'addon Mount Sheet Sync et tapez /reload — puis comparez à nouveau.
+es: Entre al juego con el addon Mount Sheet Sync y escriba /reload; luego coteje otra vez.
+pt: Entre no jogo com o addon Mount Sheet Sync e digite /reload — depois confira de novo.
+
+@ Сверить с коллекцией не получилось
+en: Checking against the collection failed
+de: Abgleich mit der Sammlung fehlgeschlagen
+fr: La comparaison avec la collection a échoué
+es: No se pudo cotejar con la colección
+pt: Não deu para conferir com a coleção
+
+@ Сверка с коллекцией: {0}
+en: Collection check: {0}
+de: Abgleich mit der Sammlung: {0}
+fr: Comparaison avec la collection : {0}
+es: Cotejo con la colección: {0}
+pt: Conferência com a coleção: {0}
+
+@ Таблица сверена с коллекцией
+en: Spreadsheet checked against the collection
+de: Tabelle mit der Sammlung abgeglichen
+fr: Tableau comparé à la collection
+es: Tabla cotejada con la colección
+pt: Planilha conferida com a coleção
+
+@ Всё уже совпадает: собранные маунты отмечены, лишних строк нет.
+en: Everything already matches: collected mounts are marked, no extra rows.
+de: Alles stimmt bereits: Gesammelte Reittiere sind markiert, keine überflüssigen Zeilen.
+fr: Tout correspond déjà : les montures obtenues sont marquées, aucune ligne en trop.
+es: Todo coincide ya: las monturas conseguidas están marcadas y no sobran filas.
+pt: Tudo já confere: as montarias coletadas estão marcadas, sem linhas sobrando.
+
+@ Обновите Code.gs в таблице
+en: Update Code.gs in the spreadsheet
+de: Aktualisieren Sie Code.gs in der Tabelle
+fr: Mettez à jour Code.gs dans le tableau
+es: Actualice Code.gs en la tabla
+pt: Atualize o Code.gs na planilha

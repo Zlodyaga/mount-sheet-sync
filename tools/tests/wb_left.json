@@ -1,0 +1,1023 @@
+{
+ "name": "Таблица для выбивания маунтов",
+ "sheets": [
+  {
+   "name": "Рейды",
+   "values": [
+    [
+     "Собрано?",
+     "Аддон",
+     "Рейд",
+     "Маунт",
+     "Тип источника",
+     "Босс / достижение / сундук",
+     "Сложность / режим",
+     "Сброс / частота",
+     "Осталось попыток выбить",
+     "Скип есть?"
+    ],
+    [
+     "Да",
+     "The Burning Crusade",
+     "The Eye, Tempest Keep",
+     "Пепел Ал'ара",
+     "Босс-дроп",
+     "Кель'тас Солнечный Скиталец",
+     "Обычный рейд",
+     "Еженедельно",
+     0,
+     "Нет"
+    ],
+    [
+     "Нет",
+     "Wrath of the Lich King",
+     "Eye of Eternity",
+     "Лазурный дракон",
+     "Босс-дроп",
+     "Малигос",
+     "10/25",
+     "Еженедельно",
+     0,
+     "Нет"
+    ],
+    [
+     "Нет",
+     "Cataclysm",
+     "Firelands",
+     "Пламенное крыло Алисразор",
+     "Босс-дроп",
+     "Алисразор",
+     "Normal/Heroic",
+     "Еженедельно",
+     0,
+     "Нет"
+    ],
+    [
+     "Нет",
+     "Battle for Azeroth",
+     "Ny'alotha, the Waking City",
+     "Всевидец из Ни'алоты",
+     "Босс-дроп",
+     "Н'Зот Заразитель",
+     "Mythic",
+     "Еженедельно",
+     5,
+     "Да"
+    ]
+   ]
+  },
+  {
+   "name": "Рейды Эйра",
+   "values": [
+    [
+     "Пытался на этой неделе?",
+     "Аддон",
+     "Рейд",
+     "Маунт",
+     "Босс / достижение / сундук",
+     "Сложность / режим",
+     "Скип есть?"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Firelands",
+     "Пламенное крыло Алисразор",
+     "Алисразор",
+     "Normal/Heroic",
+     "Нет"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Dragon Soul",
+     "Эксперимент 12-Б",
+     "Ультраксион",
+     "Normal/Heroic",
+     "Нет"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Dragon Soul",
+     "Пылающий дракон",
+     "Безумие Смертокрыла",
+     "Normal/Heroic",
+     "Нет"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Dragon Soul",
+     "Служанка Хранительницы Жизни",
+     "Безумие Смертокрыла",
+     "Heroic",
+     "Нет"
+    ],
+    [
+     "Да",
+     "Battle for Azeroth",
+     "Ny'alotha, the Waking City",
+     "Всевидец из Ни'алоты",
+     "Н'Зот Заразитель",
+     "Mythic",
+     "Да"
+    ],
+    [
+     "Нет",
+     "Shadowlands",
+     "Sanctum of Domination",
+     "Месть",
+     "Сильвана Ветрокрылая",
+     "Mythic",
+     "Да"
+    ],
+    [
+     "Нет",
+     "Shadowlands",
+     "Sanctum of Domination",
+     "Темный скакун Святилища",
+     "Девятка",
+     "Normal/Heroic/Mythic",
+     "Да, но не для этого"
+    ],
+    [
+     "Нет",
+     "Shadowlands",
+     "Sepulcher of the First Ones",
+     "Смотритель Зерета",
+     "Тюремщик",
+     "Mythic",
+     "Да"
+    ],
+    [
+     "Нет",
+     "Dragonflight",
+     "Amirdrassil, the Dream's Hope",
+     "Ану'релос, Наставление Пламени",
+     "Фиракк",
+     "Mythic",
+     "Да"
+    ]
+   ]
+  },
+  {
+   "name": "Рейды Элтара",
+   "values": [
+    [
+     "Пытался на этой неделе?",
+     "Аддон",
+     "Рейд",
+     "Маунт",
+     "Босс / достижение / сундук",
+     "Сложность / режим",
+     "Скип есть?"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Firelands",
+     "Пламенное крыло Алисразор",
+     "Алисразор",
+     "Normal/Heroic",
+     "Нет"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Dragon Soul",
+     "Эксперимент 12-Б",
+     "Ультраксион",
+     "Normal/Heroic",
+     "Нет"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Dragon Soul",
+     "Пылающий дракон",
+     "Безумие Смертокрыла",
+     "Normal/Heroic",
+     "Нет"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Dragon Soul",
+     "Служанка Хранительницы Жизни",
+     "Безумие Смертокрыла",
+     "Heroic",
+     "Нет"
+    ],
+    [
+     "Нет",
+     "Battle for Azeroth",
+     "Ny'alotha, the Waking City",
+     "Всевидец из Ни'алоты",
+     "Н'Зот Заразитель",
+     "Mythic",
+     "Да"
+    ],
+    [
+     "Нет",
+     "Shadowlands",
+     "Sanctum of Domination",
+     "Месть",
+     "Сильвана Ветрокрылая",
+     "Mythic",
+     "Да"
+    ],
+    [
+     "Нет",
+     "Shadowlands",
+     "Sanctum of Domination",
+     "Темный скакун Святилища",
+     "Девятка",
+     "Normal/Heroic/Mythic",
+     "Да, но не для этого"
+    ],
+    [
+     "Нет",
+     "Shadowlands",
+     "Sepulcher of the First Ones",
+     "Смотритель Зерета",
+     "Тюремщик",
+     "Mythic",
+     "Да"
+    ],
+    [
+     "Нет",
+     "Dragonflight",
+     "Amirdrassil, the Dream's Hope",
+     "Ану'релос, Наставление Пламени",
+     "Фиракк",
+     "Mythic",
+     "Да"
+    ]
+   ]
+  },
+  {
+   "name": "Рейды Эллин",
+   "values": [
+    [
+     "Пытался на этой неделе?",
+     "Аддон",
+     "Рейд",
+     "Маунт",
+     "Босс / достижение / сундук",
+     "Сложность / режим",
+     "Скип есть?"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Firelands",
+     "Пламенное крыло Алисразор",
+     "Алисразор",
+     "Normal/Heroic",
+     "Нет"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Dragon Soul",
+     "Эксперимент 12-Б",
+     "Ультраксион",
+     "Normal/Heroic",
+     "Нет"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Dragon Soul",
+     "Пылающий дракон",
+     "Безумие Смертокрыла",
+     "Normal/Heroic",
+     "Нет"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Dragon Soul",
+     "Служанка Хранительницы Жизни",
+     "Безумие Смертокрыла",
+     "Heroic",
+     "Нет"
+    ],
+    [
+     "Нет",
+     "Battle for Azeroth",
+     "Ny'alotha, the Waking City",
+     "Всевидец из Ни'алоты",
+     "Н'Зот Заразитель",
+     "Mythic",
+     "Да"
+    ],
+    [
+     "Нет",
+     "Shadowlands",
+     "Sanctum of Domination",
+     "Месть",
+     "Сильвана Ветрокрылая",
+     "Mythic",
+     "Да"
+    ],
+    [
+     "Нет",
+     "Shadowlands",
+     "Sanctum of Domination",
+     "Темный скакун Святилища",
+     "Девятка",
+     "Normal/Heroic/Mythic",
+     "Да, но не для этого"
+    ],
+    [
+     "Нет",
+     "Shadowlands",
+     "Sepulcher of the First Ones",
+     "Смотритель Зерета",
+     "Тюремщик",
+     "Mythic",
+     "Да"
+    ],
+    [
+     "Нет",
+     "Dragonflight",
+     "Amirdrassil, the Dream's Hope",
+     "Ану'релос, Наставление Пламени",
+     "Фиракк",
+     "Mythic",
+     "Да"
+    ]
+   ]
+  },
+  {
+   "name": "Рейды Каэлия (Лок)",
+   "values": [
+    [
+     "Пытался на этой неделе?",
+     "Аддон",
+     "Рейд",
+     "Маунт",
+     "Босс / достижение / сундук",
+     "Сложность / режим",
+     "Скип есть?"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Firelands",
+     "Пламенное крыло Алисразор",
+     "Алисразор",
+     "Normal/Heroic",
+     "Нет"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Dragon Soul",
+     "Эксперимент 12-Б",
+     "Ультраксион",
+     "Normal/Heroic",
+     "Нет"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Dragon Soul",
+     "Пылающий дракон",
+     "Безумие Смертокрыла",
+     "Normal/Heroic",
+     "Нет"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Dragon Soul",
+     "Служанка Хранительницы Жизни",
+     "Безумие Смертокрыла",
+     "Heroic",
+     "Нет"
+    ],
+    [
+     "Нет",
+     "Battle for Azeroth",
+     "Ny'alotha, the Waking City",
+     "Всевидец из Ни'алоты",
+     "Н'Зот Заразитель",
+     "Mythic",
+     "Да"
+    ],
+    [
+     "Нет",
+     "Shadowlands",
+     "Sanctum of Domination",
+     "Месть",
+     "Сильвана Ветрокрылая",
+     "Mythic",
+     "Да"
+    ],
+    [
+     "Нет",
+     "Shadowlands",
+     "Sanctum of Domination",
+     "Темный скакун Святилища",
+     "Девятка",
+     "Normal/Heroic/Mythic",
+     "Да, но не для этого"
+    ],
+    [
+     "Нет",
+     "Shadowlands",
+     "Sepulcher of the First Ones",
+     "Смотритель Зерета",
+     "Тюремщик",
+     "Mythic",
+     "Да"
+    ],
+    [
+     "Нет",
+     "Dragonflight",
+     "Amirdrassil, the Dream's Hope",
+     "Ану'релос, Наставление Пламени",
+     "Фиракк",
+     "Mythic",
+     "Да"
+    ]
+   ]
+  },
+  {
+   "name": "Рейды Каэлиия (ДК)",
+   "values": [
+    [
+     "Пытался на этой неделе?",
+     "Аддон",
+     "Рейд",
+     "Маунт",
+     "Босс / достижение / сундук",
+     "Сложность / режим",
+     "Скип есть?"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Firelands",
+     "Пламенное крыло Алисразор",
+     "Алисразор",
+     "Normal/Heroic",
+     "Нет"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Dragon Soul",
+     "Эксперимент 12-Б",
+     "Ультраксион",
+     "Normal/Heroic",
+     "Нет"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Dragon Soul",
+     "Пылающий дракон",
+     "Безумие Смертокрыла",
+     "Normal/Heroic",
+     "Нет"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Dragon Soul",
+     "Служанка Хранительницы Жизни",
+     "Безумие Смертокрыла",
+     "Heroic",
+     "Нет"
+    ],
+    [
+     "Нет",
+     "Battle for Azeroth",
+     "Ny'alotha, the Waking City",
+     "Всевидец из Ни'алоты",
+     "Н'Зот Заразитель",
+     "Mythic",
+     "Да"
+    ],
+    [
+     "Нет",
+     "Shadowlands",
+     "Sanctum of Domination",
+     "Месть",
+     "Сильвана Ветрокрылая",
+     "Mythic",
+     "Да"
+    ],
+    [
+     "Нет",
+     "Shadowlands",
+     "Sanctum of Domination",
+     "Темный скакун Святилища",
+     "Девятка",
+     "Normal/Heroic/Mythic",
+     "Да, но не для этого"
+    ],
+    [
+     "Нет",
+     "Shadowlands",
+     "Sepulcher of the First Ones",
+     "Смотритель Зерета",
+     "Тюремщик",
+     "Mythic",
+     "Да"
+    ],
+    [
+     "Нет",
+     "Dragonflight",
+     "Amirdrassil, the Dream's Hope",
+     "Ану'релос, Наставление Пламени",
+     "Фиракк",
+     "Mythic",
+     "Да"
+    ]
+   ]
+  },
+  {
+   "name": "Рейды Мирна",
+   "values": [
+    [
+     "Пытался на этой неделе?",
+     "Аддон",
+     "Рейд",
+     "Маунт",
+     "Босс / достижение / сундук",
+     "Сложность / режим",
+     "Скип есть?"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Firelands",
+     "Пламенное крыло Алисразор",
+     "Алисразор",
+     "Normal/Heroic",
+     "Нет"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Dragon Soul",
+     "Эксперимент 12-Б",
+     "Ультраксион",
+     "Normal/Heroic",
+     "Нет"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Dragon Soul",
+     "Пылающий дракон",
+     "Безумие Смертокрыла",
+     "Normal/Heroic",
+     "Нет"
+    ],
+    [
+     "Да",
+     "Cataclysm",
+     "Dragon Soul",
+     "Служанка Хранительницы Жизни",
+     "Безумие Смертокрыла",
+     "Heroic",
+     "Нет"
+    ],
+    [
+     "Нет",
+     "Battle for Azeroth",
+     "Ny'alotha, the Waking City",
+     "Всевидец из Ни'алоты",
+     "Н'Зот Заразитель",
+     "Mythic",
+     "Да"
+    ],
+    [
+     "Нет",
+     "Shadowlands",
+     "Sanctum of Domination",
+     "Месть",
+     "Сильвана Ветрокрылая",
+     "Mythic",
+     "Да"
+    ],
+    [
+     "Нет",
+     "Shadowlands",
+     "Sanctum of Domination",
+     "Темный скакун Святилища",
+     "Девятка",
+     "Normal/Heroic/Mythic",
+     "Да, но не для этого"
+    ],
+    [
+     "Нет",
+     "Shadowlands",
+     "Sepulcher of the First Ones",
+     "Смотритель Зерета",
+     "Тюремщик",
+     "Mythic",
+     "Да"
+    ],
+    [
+     "Нет",
+     "Dragonflight",
+     "Amirdrassil, the Dream's Hope",
+     "Ану'релос, Наставление Пламени",
+     "Фиракк",
+     "Mythic",
+     "Да"
+    ]
+   ]
+  },
+  {
+   "name": "Подземелья",
+   "values": [
+    [
+     "Собрано?",
+     "Аддон",
+     "Подземелье / активность",
+     "Маунт",
+     "Тип источника",
+     "Босс / достижение / условие",
+     "Сложность / режим"
+    ],
+    [
+     "Нет",
+     "Wrath of the Lich King",
+     "Utgarde Pinnacle",
+     "Поводья синего протодракона",
+     "Босс-дроп",
+     "Скади Безжалостный",
+     "Heroic"
+    ]
+   ]
+  },
+  {
+   "name": "Подземелья Эйра",
+   "values": [
+    [
+     "Пытался на этой неделе?",
+     "Аддон",
+     "Подземелье / активность",
+     "Маунт",
+     "Босс / достижение / условие",
+     "Сложность / режим",
+     "Скип / маршрут"
+    ],
+    [
+     "Нет",
+     "Timewalking",
+     "Any Timewalking Dungeon",
+     "Попиратель времен из рода Бесконечности",
+     "Любой босс подземелий путешествий во времени",
+     "Timewalking",
+     "Нет постоянного маршрута"
+    ],
+    [
+     "Нет",
+     "Classic",
+     "Stratholme",
+     "Поводья коня смерти",
+     "Лорд Аурий Ривендер",
+     "Normal",
+     "Короткий маршрут к Baron/Rivendare"
+    ],
+    [
+     "Нет",
+     "The Burning Crusade",
+     "Sethekk Halls",
+     "Поводья Повелителя воронов",
+     "Анзу",
+     "Heroic",
+     "Беги к Anzu"
+    ],
+    [
+     "Нет",
+     "Wrath of the Lich King",
+     "The Culling of Stratholme",
+     "Поводья бронзового дракона",
+     "Осквернитель из рода Бесконечности",
+     "Heroic timed run",
+     "Успей в таймер"
+    ],
+    [
+     "Нет",
+     "Wrath of the Lich King",
+     "Utgarde Pinnacle",
+     "Поводья синего протодракона",
+     "Скади Безжалостный",
+     "Heroic",
+     "Маршрут до Skadi"
+    ],
+    [
+     "Нет",
+     "Wrath of the Lich King",
+     "WotLK Heroic Dungeons",
+     "Поводья красного протодракона",
+     "Слава герою",
+     "Heroic achievements",
+     "Разные подземелья WotLK"
+    ],
+    [
+     "Нет",
+     "Cataclysm",
+     "The Stonecore",
+     "Поводья камнекожего дракона",
+     "Камнедроб",
+     "Normal/Heroic",
+     "Беги до Slabhide"
+    ],
+    [
+     "Нет",
+     "Cataclysm",
+     "The Vortex Pinnacle",
+     "Поводья дракона северного ветра",
+     "Альтаирий",
+     "Normal/Heroic",
+     "Беги до Altairus"
+    ],
+    [
+     "Нет",
+     "Cataclysm",
+     "Zul'Gurub",
+     "Бронированный ящер Раззаши",
+     "Мандокир Повелитель Крови",
+     "Heroic",
+     "Маршрут до Mandokir"
+    ],
+    [
+     "Нет",
+     "Cataclysm",
+     "Zul'Gurub",
+     "Стремительная зулианская пантера",
+     "Верховная жрица Килнара",
+     "Heroic",
+     "Маршрут до Kilnara"
+    ],
+    [
+     "Нет",
+     "Cataclysm",
+     "Zul'Aman",
+     "Аманийский боевой медведь (Cataclysm)",
+     "Мешок Каши",
+     "Heroic timed run",
+     "Успей спасти пленников"
+    ],
+    [
+     "Нет",
+     "Legion",
+     "Return to Karazhan",
+     "Пылающий угольный змей",
+     "Ночная Погибель",
+     "Mythic",
+     "Собери кристаллы для Nightbane"
+    ],
+    [
+     "Нет",
+     "Legion",
+     "Return to Karazhan",
+     "Полночь",
+     "Ловчий Аттумен",
+     "Mythic",
+     "Attumen early route"
+    ],
+    [
+     "Нет",
+     "Battle for Azeroth",
+     "King's Rest",
+     "Подкрадывающийся к гробницам",
+     "Король Дазар / Сундук претендента",
+     "Mythic / Mythic+",
+     "Финальный босс"
+    ],
+    [
+     "Нет",
+     "Battle for Azeroth",
+     "The Underrot",
+     "Крог Подгнилья",
+     "Неупокоенное чудовище / Сундук претендента",
+     "Mythic / Challenge cache",
+     "Финальный босс"
+    ],
+    [
+     "Нет",
+     "Battle for Azeroth",
+     "Operation: Mechagon",
+     "Воздушное судно R-21/X",
+     "Король Мехагон",
+     "Mythic, hard mode",
+     "Финальная часть Mechagon"
+    ],
+    [
+     "Нет",
+     "Shadowlands",
+     "Torghast, Tower of the Damned",
+     "Исполинская темная утробная крыса",
+     "Боссы Торгаста",
+     "Layers 13+",
+     "Фарм Torghast bosses"
+    ],
+    [
+     "Нет",
+     "Midnight",
+     "Magisters' Terrace (Midnight)",
+     "Светящийся крылобег",
+     "Дегентрий",
+     "Mythic / Mythic+",
+     "Финальный/указанный босс"
+    ],
+    [
+     "Нет",
+     "Midnight",
+     "Windrunner Spire",
+     "Призрачный крылобег",
+     "Неспокойное Сердце",
+     "Mythic / Mythic+",
+     "Указанный босс"
+    ],
+    [
+     "Нет",
+     "Midnight",
+     "Mythic+ Season 2",
+     "Дыхание Чумы",
+     "Мастер ключей Midnight: 2-й сезон",
+     "2000+ M+ rating",
+     "M+ рейтинг"
+    ]
+   ]
+  },
+  {
+   "name": "Сводка",
+   "values": [
+    [
+     "WoW Retail / Midnight — импорт",
+     "",
+     "",
+     ""
+    ],
+    [
+     "Обновлено",
+     "2026-10-01",
+     "",
+     ""
+    ]
+   ]
+  },
+  {
+   "name": "Мировые боссы",
+   "values": [
+    [
+     "Собрано?",
+     "Аддон",
+     "Локация",
+     "Маунт",
+     "Босс / достижение / сундук",
+     "Сброс / частота",
+     "Осталось попыток выбить",
+     "Совет по фарму",
+     "Шанс выпадения",
+     "Источник",
+     "Эйра",
+     "Элтара",
+     "Эллин",
+     "Каэлия (Лок)",
+     "Каэлиия (ДК)",
+     "Мирна"
+    ],
+    [
+     "Нет",
+     "Mists of Pandaria",
+     "Kun-Lai Summit",
+     "Небесный ониксовый облачный змей",
+     "Ша Злости",
+     "Еженедельно",
+     "6",
+     "Респ 15 минут",
+     "1%",
+     "https://www.warcraftmounts.com/loot.php",
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    [
+     "Нет",
+     "Mists of Pandaria",
+     "Valley of the Four Winds",
+     "Сын Галлеона",
+     "Галлеон",
+     "Еженедельно",
+     "6",
+     "Респ 15 минут",
+     "1%",
+     "https://www.warcraftmounts.com/loot.php",
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    [
+     "Нет",
+     "Mists of Pandaria",
+     "Isle of Giants",
+     "Кобальтовый изначальный дикорог",
+     "Ундаста",
+     "Еженедельно",
+     "6",
+     "Респ 15 минут",
+     "1%",
+     "https://www.warcraftmounts.com/loot.php",
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    [
+     "Нет",
+     "Mists of Pandaria",
+     "Isle of Thunder",
+     "Грозовой кобальтовый облачный змей",
+     "Налак",
+     "Еженедельно",
+     "6",
+     "Респ 15 минут",
+     "1%",
+     "https://www.warcraftmounts.com/loot.php",
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    [
+     "Нет",
+     "Warlords of Draenor",
+     "Spires of Arak",
+     "Солнечный ястреб пиков",
+     "Рухмар",
+     "Еженедельно",
+     "6",
+     "Респ 15 минут",
+     "1%",
+     "https://www.warcraftmounts.com/loot.php",
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    [
+     "Нет",
+     "Battle for Azeroth",
+     "Vol'dun",
+     "Молли",
+     "Песчаный проглот Кролок",
+     "Еженедельно",
+     "6",
+     "Респ 15 минут",
+     "1%",
+     "https://www.warcraftmounts.com/loot.php",
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ],
+    [
+     "Нет",
+     "Battle for Azeroth",
+     "Uldum",
+     "Дракон Четырех Ветров",
+     "Исхак Повелитель Четырех Ветров",
+     "Еженедельно",
+     "6",
+     "Респ 15 минут",
+     "1%",
+     "https://www.warcraftmounts.com/loot.php",
+     false,
+     false,
+     false,
+     false,
+     false,
+     false
+    ]
+   ]
+  }
+ ]
+}

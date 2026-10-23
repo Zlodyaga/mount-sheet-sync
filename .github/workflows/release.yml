@@ -1,0 +1,66 @@
+name: Release
+
+# Push a tag like v2.3.0 (it must match "## Version:" in MountSheetSync.toc):
+#   - the program is built on Windows with the built-in C# compiler,
+#   - the full archive (addon + program + sources + guide) goes to a GitHub release,
+#   - the addon alone is packaged by the BigWigs packager and uploaded to CurseForge
+#     (only when the CF_API_KEY secret is set and the .toc has "## X-Curse-Project-ID").
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  exe:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check that the tag matches the addon version
+        shell: bash
+        run: |
+          v=$(sed -n 's/^## Version: *//p' MountSheetSync.toc | tr -d '\r')
+          [ "v$v" = "$GITHUB_REF_NAME" ] || { echo "tag $GITHUB_REF_NAME, toc $v"; exit 1; }
+          grep -q "public const string Version = \"$v\"" program/Program.cs || { echo "Program.cs version differs"; exit 1; }
+      - name: Build
+        shell: cmd
+        run: program\build.cmd
+      - uses: actions/upload-artifact@v4
+        with:
+          name: exe
+          path: program/MountSheetSync.exe
+
+  archive:
+    needs: exe
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: exe
+          path: built
+      - name: Package
+        run: tools/package.sh built/MountSheetSync.exe dist
+      - name: Release notes from CHANGELOG.md
+        run: |
+          v=${GITHUB_REF_NAME#v}
+          awk -v h="## $v" '$0==h{on=1;next} /^## /{on=0} on' CHANGELOG.md > notes.md
+          cat notes.md
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.zip
+          body_path: notes.md
+
+  addon:
+    needs: archive
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: BigWigsMods/packager@v2
+        env:
+          CF_API_KEY: ${{ secrets.CF_API_KEY }}
+          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}

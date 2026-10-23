@@ -1,0 +1,16 @@
+# BigWigs packager: the repository root is the addon; everything else stays out of the CurseForge zip.
+package-as: MountSheetSync
+
+manual-changelog:
+  filename: CHANGELOG.md
+  markup-type: markdown
+
+ignore:
+  - program
+  - script
+  - tools
+  - docs
+  - dist
+  - README.md
+  - README.ru.md
+  - CHANGELOG.md

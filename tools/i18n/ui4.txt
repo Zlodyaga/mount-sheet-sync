@@ -1,0 +1,34 @@
+@ Что-то пошло не так: {0}\n\nПодробности — в журнале работы (меню значка → «Журнал работы»). Программа продолжает работать.
+en: Something went wrong: {0}\n\nDetails are in the activity log (icon menu → “Activity log”). The program keeps running.
+de: Etwas ist schiefgelaufen: {0}\n\nDetails stehen im Protokoll (Symbolmenü → „Protokoll“). Das Programm läuft weiter.
+fr: Un problème est survenu : {0}\n\nLes détails sont dans le journal d'activité (menu de l'icône → « Journal d'activité »). Le programme continue de fonctionner.
+es: Algo salió mal: {0}\n\nLos detalles están en el registro de actividad (menú del icono → «Registro de actividad»). El programa sigue funcionando.
+pt: Algo deu errado: {0}\n\nOs detalhes estão no registro de atividade (menu do ícone → “Registro de atividade”). O programa continua funcionando.
+
+@ Аддон Mount Sheet Sync не установлен
+en: The Mount Sheet Sync addon is not installed
+de: Das Addon Mount Sheet Sync ist nicht installiert
+fr: L'addon Mount Sheet Sync n'est pas installé
+es: El addon Mount Sheet Sync no está instalado
+pt: O addon Mount Sheet Sync não está instalado
+
+@ Установите аддон из CurseForge (или скопируйте папку MountSheetSync из архива в World of Warcraft\_retail_\Interface\AddOns), включите его в игре и выйдите на выбор персонажа.
+en: Install the addon from CurseForge (or copy the MountSheetSync folder from the archive to World of Warcraft\_retail_\Interface\AddOns), enable it in the game and go back to character selection.
+de: Installieren Sie das Addon über CurseForge (oder kopieren Sie den Ordner MountSheetSync aus dem Archiv nach World of Warcraft\_retail_\Interface\AddOns), aktivieren Sie es im Spiel und gehen Sie zur Charakterauswahl.
+fr: Installez l'addon depuis CurseForge (ou copiez le dossier MountSheetSync de l'archive dans World of Warcraft\_retail_\Interface\AddOns), activez-le dans le jeu et revenez à la sélection des personnages.
+es: Instale el addon desde CurseForge (o copie la carpeta MountSheetSync del archivo en World of Warcraft\_retail_\Interface\AddOns), actívelo en el juego y vuelva a la selección de personaje.
+pt: Instale o addon pelo CurseForge (ou copie a pasta MountSheetSync do arquivo para World of Warcraft\_retail_\Interface\AddOns), ative-o no jogo e volte à seleção de personagem.
+
+@ аддон не установлен
+en: addon not installed
+de: Addon nicht installiert
+fr: addon non installé
+es: addon no instalado
+pt: addon não instalado
+
+@ Установите его (CurseForge или папка из архива) и зайдите в игру
+en: Install it (CurseForge or the folder from the archive) and log in to the game
+de: Installieren Sie es (CurseForge oder der Ordner aus dem Archiv) und loggen Sie sich ins Spiel ein
+fr: Installez-le (CurseForge ou le dossier de l'archive) et connectez-vous au jeu
+es: Instálelo (CurseForge o la carpeta del archivo) y entre al juego
+pt: Instale-o (CurseForge ou a pasta do arquivo) e entre no jogo

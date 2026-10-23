@@ -1,0 +1,2 @@
+# Keep files byte for byte: the addon is CRLF, the program sources LF (packaging converts them).
+* -text

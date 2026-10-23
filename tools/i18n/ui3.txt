@@ -1,0 +1,783 @@
+@ {0} мин.
+en: {0} min
+de: {0} Min.
+fr: {0} min
+es: {0} min
+pt: {0} min
+
+@ {0} с
+en: {0} s
+de: {0} s
+fr: {0} s
+es: {0} s
+pt: {0} s
+
+@ {0} Повторю через {1}
+en: {0} Retrying in {1}
+de: {0} Neuer Versuch in {1}
+fr: {0} Nouvel essai dans {1}
+es: {0} Reintento en {1}
+pt: {0} Nova tentativa em {1}
+
+@ нет связи
+en: no connection
+de: keine Verbindung
+fr: pas de connexion
+es: sin conexión
+pt: sem conexão
+
+@ Нет связи с таблицей
+en: No connection to the spreadsheet
+de: Keine Verbindung zur Tabelle
+fr: Pas de connexion au tableau
+es: Sin conexión con la tabla
+pt: Sem conexão com a planilha
+
+@ внутренняя ошибка
+en: internal error
+de: interner Fehler
+fr: erreur interne
+es: error interno
+pt: erro interno
+
+@ Сбой программы — подробности в журнале
+en: Program failure — details in the log
+de: Programmfehler — Details im Protokoll
+fr: Défaillance du programme — détails dans le journal
+es: Fallo del programa: detalles en el registro
+pt: Falha do programa — detalhes no registro
+
+@ вход в Google
+en: Google sign-in
+de: Google-Anmeldung
+fr: connexion Google
+es: inicio de sesión de Google
+pt: login do Google
+
+@ не выполнен вход
+en: not signed in
+de: nicht bei Google angemeldet
+fr: non connecté
+es: sesión no iniciada
+pt: sessão não iniciada
+
+@ Нужно снова войти в Google
+en: You need to sign in to Google again
+de: Sie müssen sich erneut bei Google anmelden
+fr: Reconnectez-vous à Google
+es: Hay que volver a iniciar sesión en Google
+pt: É preciso entrar no Google de novo
+
+@ Таблица не приняла запрос
+en: The spreadsheet rejected the request
+de: Die Tabelle hat die Anfrage abgelehnt
+fr: Le tableau a refusé la requête
+es: La tabla rechazó la solicitud
+pt: A planilha recusou o pedido
+
+@ Связь восстановлена
+en: Connection restored
+de: Verbindung wiederhergestellt
+fr: Connexion rétablie
+es: Conexión restablecida
+pt: Conexão restabelecida
+
+@ Связь с таблицей восстановлена
+en: Connection to the spreadsheet restored
+de: Verbindung zur Tabelle wiederhergestellt
+fr: Connexion au tableau rétablie
+es: Conexión con la tabla restablecida
+pt: Conexão com a planilha restabelecida
+
+@ Всё, что накопилось, отправлено.
+en: Everything that piled up has been sent.
+de: Alles Angesammelte wurde gesendet.
+fr: Tout ce qui était en attente a été envoyé.
+es: Todo lo acumulado se ha enviado.
+pt: Tudo o que estava acumulado foi enviado.
+
+@ Новых записей нет
+en: No new records
+de: Keine neuen Einträge
+fr: Aucune nouvelle entrée
+es: No hay registros nuevos
+pt: Nenhum registro novo
+
+@ Всё уже в таблице. Свежие убийства игра записывает в файл, когда вы выходите на выбор персонажа, из игры или делаете /reload.
+en: Everything is already in the spreadsheet. The game writes new kills to the file when you go to character selection, log out or type /reload.
+de: Alles ist schon in der Tabelle. Neue Kills schreibt das Spiel in die Datei, wenn Sie zur Charakterauswahl gehen, das Spiel verlassen oder /reload eingeben.
+fr: Tout est déjà dans le tableau. Le jeu écrit les nouvelles victoires dans le fichier quand vous revenez à la sélection des personnages, quittez le jeu ou tapez /reload.
+es: Todo está ya en la tabla. El juego escribe las muertes nuevas en el archivo cuando vuelve a la selección de personaje, sale del juego o escribe /reload.
+pt: Tudo já está na planilha. O jogo grava as mortes novas no arquivo quando você volta à seleção de personagem, sai do jogo ou digita /reload.
+
+@ Сброс недели ({0}): {1}
+en: Weekly reset ({0}): {1}
+de: Wochenreset ({0}): {1}
+fr: Nouvelle semaine ({0}) : {1}
+es: Reinicio semanal ({0}): {1}
+pt: Reinício semanal ({0}): {1}
+
+@ {0} → «Да»
+en: {0} → “Yes”
+de: {0} → „Ja“
+fr: {0} → « Oui »
+es: {0} → «Sí»
+pt: {0} → “Sim”
+
+@ Собрано: {0}
+en: Collected: {0}
+de: Gesammelt: {0}
+fr: Obtenue : {0}
+es: Conseguida: {0}
+pt: Coletada: {0}
+
+@ ! маунта «{0}» нет в таблице
+en: ! mount “{0}” is not in the spreadsheet
+de: ! Reittier „{0}“ ist nicht in der Tabelle
+fr: ! la monture « {0} » n'est pas dans le tableau
+es: ! la montura «{0}» no está en la tabla
+pt: ! a montaria “{0}” não está na planilha
+
+@ Не фармлю — {0}
+en: Not farming — {0}
+de: Farme ich nicht — {0}
+fr: Pas farmé — {0}
+es: No lo farmeo — {0}
+pt: Não farmo — {0}
+
+@ сброс недели
+en: weekly reset
+de: Wochenreset
+fr: nouvelle semaine
+es: reinicio semanal
+pt: reinício semanal
+
+@ отмечено {0}
+en: {0} marked
+de: {0} markiert
+fr: {0} marqué(s)
+es: {0} marcado(s)
+pt: {0} marcado(s)
+
+@ новый маунт
+en: new mount
+de: neues Reittier
+fr: nouvelle monture
+es: montura nueva
+pt: montaria nova
+
+@ не фармлю: {0}
+en: not farming: {0}
+de: farme ich nicht: {0}
+fr: pas farmé : {0}
+es: no lo farmeo: {0}
+pt: não farmo: {0}
+
+@ новых отметок нет
+en: no new marks
+de: keine neuen Markierungen
+fr: aucune nouvelle marque
+es: no hay marcas nuevas
+pt: nenhuma marcação nova
+
+@ Сброс недели выполнен
+en: Weekly reset done
+de: Wochenreset erledigt
+fr: Nouvelle semaine effectuée
+es: Reinicio semanal hecho
+pt: Reinício semanal feito
+
+@ Заново отмечено убийств этой недели: {0}.
+en: This week's kills marked again: {0}.
+de: Kills dieser Woche erneut markiert: {0}.
+fr: Victoires de la semaine marquées à nouveau : {0}.
+es: Muertes de esta semana marcadas de nuevo: {0}.
+pt: Mortes desta semana marcadas de novo: {0}.
+
+@ Отмечено в таблице: {0}
+en: Marked in the spreadsheet: {0}
+de: In der Tabelle markiert: {0}
+fr: Marqué dans le tableau : {0}
+es: Marcado en la tabla: {0}
+pt: Marcado na planilha: {0}
+
+@ Новый маунт: {0}
+en: New mount: {0}
+de: Neues Reittier: {0}
+fr: Nouvelle monture : {0}
+es: Montura nueva: {0}
+pt: Montaria nova: {0}
+
+@ Новые маунты: {0}
+en: New mounts: {0}
+de: Neue Reittiere: {0}
+fr: Nouvelles montures : {0}
+es: Monturas nuevas: {0}
+pt: Montarias novas: {0}
+
+@ «Собрано?» в таблице отмечено.
+en: “Collected?” is marked in the spreadsheet.
+de: „Gesammelt?“ ist in der Tabelle markiert.
+fr: « Obtenue ? » est coché dans le tableau.
+es: «¿Conseguida?» está marcado en la tabla.
+pt: “Coletada?” está marcado na planilha.
+
+@ «Собрано?» в таблице отмечено: {0}.
+en: “Collected?” marked in the spreadsheet: {0}.
+de: „Gesammelt?“ in der Tabelle markiert: {0}.
+fr: « Obtenue ? » coché dans le tableau : {0}.
+es: «¿Conseguida?» marcado en la tabla: {0}.
+pt: “Coletada?” marcado na planilha: {0}.
+
+@ Не фармлю: {0}
+en: Not farming: {0}
+de: Farme ich nicht: {0}
+fr: Pas farmé : {0}
+es: No lo farmeo: {0}
+pt: Não farmo: {0}
+
+@ Галочка «Фармлю» в таблице снята — в «Осталось» этих строк больше нет.
+en: The “Farming” tick is off in the spreadsheet — these rows are no longer in “Remaining”.
+de: Das Häkchen „Farme“ in der Tabelle ist entfernt — diese Zeilen stehen nicht mehr in „Übrig“.
+fr: La case « Je farme » est décochée dans le tableau — ces lignes ne sont plus dans « Restant ».
+es: La casilla «Farmeo» de la tabla está desmarcada: estas filas ya no están en «Pendiente».
+pt: A caixa “Farmo” foi desmarcada na planilha — essas linhas não estão mais em “Restante”.
+
+@ Маунт не нашёлся в таблице
+en: Mount not found in the spreadsheet
+de: Reittier nicht in der Tabelle gefunden
+fr: Monture introuvable dans le tableau
+es: La montura no está en la tabla
+pt: Montaria não encontrada na planilha
+
+@ {0} — отметьте «Собрано?» вручную.
+en: {0} — mark “Collected?” by hand.
+de: {0} — markieren Sie „Gesammelt?“ von Hand.
+fr: {0} — cochez « Obtenue ? » à la main.
+es: {0}: marque «¿Conseguida?» a mano.
+pt: {0} — marque “Coletada?” manualmente.
+
+@ Есть замечания
+en: There are warnings
+de: Es gibt Hinweise
+fr: Il y a des remarques
+es: Hay avisos
+pt: Há avisos
+
+@ Новых отметок нет
+en: No new marks
+de: Keine neuen Markierungen
+fr: Aucune nouvelle marque
+es: No hay marcas nuevas
+pt: Nenhuma marcação nova
+
+@ Собрано: {0}.
+en: Collected: {0}.
+de: Gesammelt: {0}.
+fr: Obtenue : {0}.
+es: Conseguida: {0}.
+pt: Coletada: {0}.
+
+@ Не нашёлся в таблице: {0} — отметьте «Собрано?» вручную.
+en: Not found in the spreadsheet: {0} — mark “Collected?” by hand.
+de: Nicht in der Tabelle gefunden: {0} — markieren Sie „Gesammelt?“ von Hand.
+fr: Introuvable dans le tableau : {0} — cochez « Obtenue ? » à la main.
+es: No está en la tabla: {0}; marque «¿Conseguida?» a mano.
+pt: Não encontrado na planilha: {0} — marque “Coletada?” manualmente.
+
+@ Замечаний: {0} — подробности в журнале.
+en: Warnings: {0} — details in the log.
+de: Hinweise: {0} — Details im Protokoll.
+fr: Remarques : {0} — détails dans le journal.
+es: Avisos: {0}; detalles en el registro.
+pt: Avisos: {0} — detalhes no registro.
+
+@ уже «Да»: {0}
+en: already “Yes”: {0}
+de: schon „Ja“: {0}
+fr: déjà « Oui » : {0}
+es: ya en «Sí»: {0}
+pt: já “Sim”: {0}
+
+@ другая сложность: {0}
+en: other difficulty: {0}
+de: anderer Schwierigkeitsgrad: {0}
+fr: autre difficulté : {0}
+es: otra dificultad: {0}
+pt: outra dificuldade: {0}
+
+@ нет на листах: {0}
+en: not on the sheets: {0}
+de: nicht auf den Blättern: {0}
+fr: absent des feuilles : {0}
+es: no está en las hojas: {0}
+pt: não está nas abas: {0}
+
+@ до сброса недели: {0}
+en: before the weekly reset: {0}
+de: vor dem Wochenreset: {0}
+fr: avant la réinitialisation hebdomadaire : {0}
+es: antes del reinicio semanal: {0}
+pt: antes do reinício semanal: {0}
+
+@ Записи обработаны.
+en: Records processed.
+de: Einträge verarbeitet.
+fr: Entrées traitées.
+es: Registros procesados.
+pt: Registros processados.
+
+@ запуск…
+en: starting…
+de: startet…
+fr: démarrage…
+es: iniciando…
+pt: iniciando…
+
+@ ПКМ по значку Mount Sheet Sync → «Настройки…».
+en: Right-click the Mount Sheet Sync icon → “Settings…”.
+de: Rechtsklick auf das Symbol von Mount Sheet Sync → „Einstellungen…“.
+fr: Clic droit sur l'icône de Mount Sheet Sync → « Paramètres… ».
+es: Clic derecho en el icono de Mount Sheet Sync → «Ajustes…».
+pt: Clique com o botão direito no ícone do Mount Sheet Sync → “Configurações…”.
+
+@ Запуск…
+en: Starting…
+de: Startet…
+fr: Démarrage…
+es: Iniciando…
+pt: Iniciando…
+
+@ Отправить сейчас
+en: Send now
+de: Jetzt senden
+fr: Envoyer maintenant
+es: Enviar ahora
+pt: Enviar agora
+
+@ Последние события
+en: Recent events
+de: Letzte Ereignisse
+fr: Derniers événements
+es: Últimos eventos
+pt: Eventos recentes
+
+@ Пока ничего не отправлялось
+en: Nothing has been sent yet
+de: Bisher wurde nichts gesendet
+fr: Rien n'a encore été envoyé
+es: Aún no se ha enviado nada
+pt: Nada foi enviado ainda
+
+@ Осталось на неделе
+en: Remaining this week
+de: Übrig diese Woche
+fr: Restant cette semaine
+es: Pendiente esta semana
+pt: Restante nesta semana
+
+@ Список ещё не получен из таблицы
+en: The list has not come from the spreadsheet yet
+de: Die Liste kam noch nicht aus der Tabelle
+fr: La liste n'est pas encore arrivée du tableau
+es: La lista aún no ha llegado de la tabla
+pt: A lista ainda não veio da planilha
+
+@ Открыть таблицу
+en: Open spreadsheet
+de: Tabelle öffnen
+fr: Ouvrir le tableau
+es: Abrir tabla
+pt: Abrir planilha
+
+@ Персонажи в таблице…
+en: Characters in the spreadsheet…
+de: Charaktere in der Tabelle…
+fr: Personnages du tableau…
+es: Personajes de la tabla…
+pt: Personagens na planilha…
+
+@ Что фармить…
+en: What to farm…
+de: Was farmen…
+fr: Quoi farmer…
+es: Qué farmear…
+pt: O que farmar…
+
+@ Сверить с коллекцией
+en: Check against collection
+de: Mit Sammlung abgleichen
+fr: Comparer avec la collection
+es: Cotejar con la colección
+pt: Conferir com a coleção
+
+@ Отметить «Собрано?» у маунтов, которые уже есть в игре, и убрать их с листов персонажей
+en: Mark “Collected?” for mounts you already have in the game and remove them from the character sheets
+de: „Gesammelt?“ bei Reittieren markieren, die Sie im Spiel schon haben, und sie von den Charakterblättern entfernen
+fr: Cocher « Obtenue ? » pour les montures déjà obtenues dans le jeu et les retirer des feuilles de personnages
+es: Marcar «¿Conseguida?» en las monturas que ya tiene en el juego y quitarlas de las hojas de personajes
+pt: Marcar “Coletada?” nas montarias que você já tem no jogo e tirá-las das abas de personagens
+
+@ Запускать вместе с Windows
+en: Start with Windows
+de: Mit Windows starten
+fr: Lancer avec Windows
+es: Iniciar con Windows
+pt: Iniciar com o Windows
+
+@ Показывать уведомления
+en: Show notifications
+de: Benachrichtigungen anzeigen
+fr: Afficher les notifications
+es: Mostrar notificaciones
+pt: Mostrar notificações
+
+@ Язык
+en: Language
+de: Sprache
+fr: Langue
+es: Idioma
+pt: Idioma
+
+@ Как в Windows ({0})
+en: Same as Windows ({0})
+de: Wie in Windows ({0})
+fr: Comme Windows ({0})
+es: Como en Windows ({0})
+pt: Igual ao Windows ({0})
+
+@ Настройки…
+en: Settings…
+de: Einstellungen…
+fr: Paramètres…
+es: Ajustes…
+pt: Configurações…
+
+@ Журнал работы
+en: Activity log
+de: Protokoll
+fr: Journal d'activité
+es: Registro de actividad
+pt: Registro de atividade
+
+@ Выход
+en: Exit
+de: Beenden
+fr: Quitter
+es: Salir
+pt: Sair
+
+@ создайте таблицу
+en: create a spreadsheet
+de: legen Sie eine Tabelle an
+fr: créez un tableau
+es: cree una tabla
+pt: crie uma planilha
+
+@ войдите через Google
+en: sign in with Google
+de: melden Sie sich mit Google an
+fr: connectez-vous avec Google
+es: inicie sesión con Google
+pt: entre com o Google
+
+@ укажите адрес таблицы
+en: set the spreadsheet address
+de: geben Sie die Tabellenadresse an
+fr: indiquez l'adresse du tableau
+es: indique la dirección de la tabla
+pt: informe o endereço da planilha
+
+@ проверяю связь…
+en: checking connection…
+de: prüfe Verbindung…
+fr: vérification…
+es: comprobando conexión…
+pt: verificando conexão…
+
+@ не найдена папка WoW
+en: WoW folder not found
+de: WoW-Ordner nicht gefunden
+fr: dossier WoW introuvable
+es: carpeta de WoW no encontrada
+pt: pasta do WoW não encontrada
+
+@ связь есть, жду файл аддона
+en: connected, waiting for the addon file
+de: verbunden, warte auf Addon-Datei
+fr: connecté, en attente du fichier de l'addon
+es: conectado, esperando el archivo del addon
+pt: conectado, aguardando o arquivo do addon
+
+@ связь есть, отправлено {0}
+en: connected, sent {0}
+de: verbunden, gesendet {0}
+fr: connecté, envoyé {0}
+es: conectado, enviado {0}
+pt: conectado, enviado {0}
+
+@ связь есть
+en: connected
+de: verbunden
+fr: connecté
+es: conectado
+pt: conectado
+
+@ ошибка
+en: error
+de: Fehler
+fr: erreur
+es: error
+pt: erro
+
+@ , повтор в {0}
+en: , retry at {0}
+de: , neuer Versuch um {0}
+fr: , nouvel essai à {0}
+es: , reintento a las {0}
+pt: , nova tentativa às {0}
+
+@ Нажмите «Создать таблицу…» ниже
+en: Press “Create spreadsheet…” below
+de: Klicken Sie unten auf „Tabelle anlegen…“
+fr: Cliquez sur « Créer un tableau… » ci-dessous
+es: Pulse «Crear tabla…» abajo
+pt: Clique em “Criar planilha…” abaixo
+
+@ Нажмите «Войти через Google…» ниже
+en: Press “Sign in with Google…” below
+de: Klicken Sie unten auf „Mit Google anmelden…“
+fr: Cliquez sur « Se connecter avec Google… » ci-dessous
+es: Pulse «Iniciar sesión con Google…» abajo
+pt: Clique em “Entrar com o Google…” abaixo
+
+@ Откройте «Настройки…» и вставьте адрес веб-приложения
+en: Open “Settings…” and paste the web app address
+de: Öffnen Sie „Einstellungen…“ und fügen Sie die Web-App-Adresse ein
+fr: Ouvrez « Paramètres… » et collez l'adresse de l'application web
+es: Abra «Ajustes…» y pegue la dirección de la aplicación web
+pt: Abra “Configurações…” e cole o endereço do app da web
+
+@ Укажите её в «Настройках…»
+en: Set it in “Settings…”
+de: Geben Sie ihn in „Einstellungen…“ an
+fr: Indiquez-le dans « Paramètres… »
+es: Indíquela en «Ajustes…»
+pt: Informe-a em “Configurações…”
+
+@ Связь с таблицей есть
+en: Connected to the spreadsheet
+de: Verbindung zur Tabelle steht
+fr: Connecté au tableau
+es: Hay conexión con la tabla
+pt: Conectado à planilha
+
+@ Жду файл аддона: зайдите в игру и выйдите на выбор персонажа
+en: Waiting for the addon file: log in and go back to character selection
+de: Warte auf die Addon-Datei: Loggen Sie sich ein und gehen Sie zur Charakterauswahl
+fr: En attente du fichier de l'addon : connectez-vous puis revenez à la sélection des personnages
+es: Esperando el archivo del addon: entre al juego y vuelva a la selección de personaje
+pt: Aguardando o arquivo do addon: entre no jogo e volte à seleção de personagem
+
+@ Таблица «{0}» — связь есть
+en: Spreadsheet “{0}” — connected
+de: Tabelle „{0}“ — verbunden
+fr: Tableau « {0} » — connecté
+es: Tabla «{0}»: conectado
+pt: Planilha “{0}” — conectado
+
+@ Последняя отправка: {0}
+en: Last sent: {0}
+de: Zuletzt gesendet: {0}
+fr: Dernier envoi : {0}
+es: Último envío: {0}
+pt: Último envio: {0}
+
+@ Новых записей пока не было
+en: No new records yet
+de: Noch keine neuen Einträge
+fr: Pas encore de nouvelles entrées
+es: Aún no hay registros nuevos
+pt: Ainda não há registros novos
+
+@  · повтор в {0}
+en:  · retry at {0}
+de:  · neuer Versuch um {0}
+fr:  · nouvel essai à {0}
+es:  · reintento a las {0}
+pt:  · nova tentativa às {0}
+
+@ {0} — всё отмечено
+en: {0} — all marked
+de: {0} — alles markiert
+fr: {0} — tout est marqué
+es: {0}: todo marcado
+pt: {0} — tudo marcado
+
+@ {0} — {1} из {2}
+en: {0} — {1} of {2}
+de: {0} — {1} von {2}
+fr: {0} — {1} sur {2}
+es: {0}: {1} de {2}
+pt: {0} — {1} de {2}
+
+@ Из таблицы {0}
+en: From the spreadsheet {0}
+de: Aus der Tabelle {0}
+fr: Depuis le tableau {0}
+es: De la tabla {0}
+pt: Da planilha {0}
+
+@ Не удалось сохранить настройки: {0}
+en: Could not save the settings: {0}
+de: Die Einstellungen konnten nicht gespeichert werden: {0}
+fr: Impossible d'enregistrer les paramètres : {0}
+es: No se pudieron guardar los ajustes: {0}
+pt: Não foi possível salvar as configurações: {0}
+
+@ Когда будете готовы: ПКМ по значку Mount Sheet Sync → «Настройки…».
+en: When you are ready: right-click the Mount Sheet Sync icon → “Settings…”.
+de: Wenn Sie so weit sind: Rechtsklick auf das Symbol von Mount Sheet Sync → „Einstellungen…“.
+fr: Quand vous serez prêt : clic droit sur l'icône de Mount Sheet Sync → « Paramètres… ».
+es: Cuando esté listo: clic derecho en el icono de Mount Sheet Sync → «Ajustes…».
+pt: Quando estiver pronto: clique com o botão direito no ícone do Mount Sheet Sync → “Configurações…”.
+
+@ Вход в Google выполнен
+en: Signed in to Google
+de: Bei Google angemeldet
+fr: Connecté à Google
+es: Sesión iniciada en Google
+pt: Login no Google feito
+
+@ Отметки снова уходят в таблицу «{0}».
+en: Marks go to the spreadsheet “{0}” again.
+de: Markierungen gehen wieder in die Tabelle „{0}“.
+fr: Les marques repartent vers le tableau « {0} ».
+es: Las marcas vuelven a enviarse a la tabla «{0}».
+pt: As marcações voltam a ir para a planilha “{0}”.
+
+@ Что фармить: сохранено
+en: What to farm: saved
+de: Was farmen: gespeichert
+fr: Quoi farmer : enregistré
+es: Qué farmear: guardado
+pt: O que farmar: salvo
+
+@ Изменено строк: {0}. Список «Осталось» в игре обновится после входа персонажем или /reload.
+en: Rows changed: {0}. The “Remaining” list in the game updates after the next login or /reload.
+de: Geänderte Zeilen: {0}. Die Liste „Übrig“ im Spiel wird nach dem nächsten Einloggen oder /reload aktualisiert.
+fr: Lignes modifiées : {0}. La liste « Restant » du jeu sera mise à jour après la prochaine connexion ou /reload.
+es: Filas cambiadas: {0}. La lista «Pendiente» del juego se actualizará tras la próxima entrada o /reload.
+pt: Linhas alteradas: {0}. A lista “Restante” no jogo será atualizada depois da próxima entrada ou /reload.
+
+@ Персонажи в таблице
+en: Characters in the spreadsheet
+de: Charaktere in der Tabelle
+fr: Personnages du tableau
+es: Personajes de la tabla
+pt: Personagens na planilha
+
+@ Таблица создана
+en: Spreadsheet created
+de: Tabelle angelegt
+fr: Tableau créé
+es: Tabla creada
+pt: Planilha criada
+
+@ «{0}» — открываю в браузере. Отметки этой недели уйдут в неё сами.
+en: “{0}” — opening it in the browser. This week's marks go there by themselves.
+de: „{0}“ — öffne sie im Browser. Die Markierungen dieser Woche gehen von selbst hinein.
+fr: « {0} » — ouverture dans le navigateur. Les marques de la semaine y partent d'elles-mêmes.
+es: «{0}»: abriéndola en el navegador. Las marcas de esta semana se envían a ella solas.
+pt: “{0}” — abrindo no navegador. As marcações desta semana vão para ela sozinhas.
+
+@ Не удалось изменить автозапуск: {0}
+en: Could not change start with Windows: {0}
+de: Autostart konnte nicht geändert werden: {0}
+fr: Impossible de modifier le lancement avec Windows : {0}
+es: No se pudo cambiar el inicio con Windows: {0}
+pt: Não foi possível alterar a inicialização com o Windows: {0}
+
+@ Программа запущена прямо из архива
+en: The program is running straight from the archive
+de: Das Programm läuft direkt aus dem Archiv
+fr: Le programme est lancé directement depuis l'archive
+es: El programa se ejecuta directamente desde el archivo comprimido
+pt: O programa está rodando direto do arquivo compactado
+
+@ Распакуйте архив в обычную папку (например, «Документы») и запустите MountSheetSync.exe оттуда — иначе автозапуск не сработает.
+en: Extract the archive to a normal folder (for example, “Documents”) and run MountSheetSync.exe from there — otherwise start with Windows will not work.
+de: Entpacken Sie das Archiv in einen normalen Ordner (zum Beispiel „Dokumente“) und starten Sie MountSheetSync.exe von dort — sonst funktioniert der Autostart nicht.
+fr: Extrayez l'archive dans un dossier ordinaire (par exemple « Documents ») et lancez MountSheetSync.exe depuis celui-ci — sinon le lancement avec Windows ne fonctionnera pas.
+es: Extraiga el archivo en una carpeta normal (por ejemplo, «Documentos») y ejecute MountSheetSync.exe desde allí; si no, el inicio con Windows no funcionará.
+pt: Extraia o arquivo para uma pasta comum (por exemplo, “Documentos”) e execute o MountSheetSync.exe de lá — senão a inicialização com o Windows não vai funcionar.
+
+@ Уведомления выключены
+en: Notifications are off
+de: Benachrichtigungen sind aus
+fr: Notifications désactivées
+es: Notificaciones desactivadas
+pt: Notificações desativadas
+
+@ Что отправлено, видно в меню значка: «Последние события» и «Журнал работы».
+en: What was sent is shown in the icon menu: “Recent events” and “Activity log”.
+de: Was gesendet wurde, steht im Symbolmenü: „Letzte Ereignisse“ und „Protokoll“.
+fr: Ce qui a été envoyé est visible dans le menu de l'icône : « Derniers événements » et « Journal d'activité ».
+es: Lo enviado se ve en el menú del icono: «Últimos eventos» y «Registro de actividad».
+pt: O que foi enviado aparece no menu do ícone: “Eventos recentes” e “Registro de atividade”.
+
+@ Не удалось открыть журнал: {0}\n\nОн лежит здесь: {1}
+en: Could not open the log: {0}\n\nIt is here: {1}
+de: Das Protokoll konnte nicht geöffnet werden: {0}\n\nEs liegt hier: {1}
+fr: Impossible d'ouvrir le journal : {0}\n\nIl se trouve ici : {1}
+es: No se pudo abrir el registro: {0}\n\nEstá aquí: {1}
+pt: Não foi possível abrir o registro: {0}\n\nEle fica aqui: {1}
+
+@ Mount Sheet Sync уже запущен
+en: Mount Sheet Sync is already running
+de: Mount Sheet Sync läuft bereits
+fr: Mount Sheet Sync est déjà lancé
+es: Mount Sheet Sync ya está en marcha
+pt: O Mount Sheet Sync já está aberto
+
+@ Его значок — в трее у часов (если не видно, нажмите ^). Меню — по правой кнопке мыши.
+en: Its icon is in the tray next to the clock (if you cannot see it, press ^). Right-click it for the menu.
+de: Sein Symbol ist im Infobereich neben der Uhr (falls nicht sichtbar, klicken Sie auf ^). Das Menü öffnet ein Rechtsklick.
+fr: Son icône est dans la zone de notification près de l'horloge (si elle n'est pas visible, cliquez sur ^). Clic droit pour le menu.
+es: Su icono está en la bandeja del sistema junto al reloj (si no se ve, pulse ^). El menú se abre con el botón derecho.
+pt: O ícone dele fica na bandeja do sistema perto do relógio (se não aparecer, clique em ^). O menu abre com o botão direito.
+
+@  и ещё {0}
+en:  and {0} more
+de:  und {0} weitere
+fr:  et {0} de plus
+es:  y {0} más
+pt:  e mais {0}
+
+@ сегодня в {0}
+en: today at {0}
+de: heute um {0}
+fr: aujourd'hui à {0}
+es: hoy a las {0}
+pt: hoje às {0}
+
+@ вчера в {0}
+en: yesterday at {0}
+de: gestern um {0}
+fr: hier à {0}
+es: ayer a las {0}
+pt: ontem às {0}
+
+@ {0} в {1}
+en: {0} at {1}
+de: {0} um {1}
+fr: le {0} à {1}
+es: el {0} a las {1}
+pt: {0} às {1}
+
+@ вчера {0}
+en: yesterday {0}
+de: gestern {0}
+fr: hier {0}
+es: ayer {0}
+pt: ontem {0}
