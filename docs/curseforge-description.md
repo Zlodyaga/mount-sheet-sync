@@ -1,35 +1,33 @@
 # Mount Sheet Sync
 
-Keep track of mount farming across all your characters: which bosses each character has already killed this week, which mounts you already own, and what is still left to farm.
+**Farm mounts on all your alts without losing track.** The addon records every boss kill of every character and shows, right in the game, what is still worth killing this week — only the bosses whose mount you don't have yet. A free companion program keeps it all in a Google Sheet for you.
 
-## What the addon does
+![The "Remaining" list in the game](https://media.forgecdn.net/attachments/2096/836/addon-remaining-png.png)
 
-- **Records boss kills** of raids, dungeons and world bosses for every character, with difficulty, as they happen. Bosses you killed before installing the addon can be picked up from your instance lockouts with one click.
-- **Remembers your characters and your mount collection**, and notices new mounts the moment you learn them.
-- **"Remaining" tab** (with the companion program, see below): what is still left this week for the current character — bosses not killed yet whose mount you do not own. Right-click a row to say you are not farming it on this character.
-- **Window, chat commands and a minimap / Data Broker button** (for Data Broker displays such as Titan Panel); `/mss` opens the window, `/mss help` lists the commands.
-- **Six languages:** English, Russian, German, French, Spanish and Portuguese — follows your game language, switchable in the settings (right-click the button).
+## Why it's handy
 
-## Google Sheets (optional companion program)
+- **"Remaining" list in the game.** Log in on an alt and see at once which raid, dungeon and world bosses are still worth a run this week. Kills are ticked off as they happen.
+- **Nothing to type.** Kills are recorded automatically, with difficulty. New mounts are noticed the moment you learn them. Kills from before you installed the addon are picked up from your lockouts with one click.
+- **A spreadsheet that fills itself.** With the companion Windows program: a sheet per character in your own Google Drive, about 165 mounts from raids, dungeons and world bosses with skip and farming tips. A kill turns "Yes" on its own, collected mounts drop off the list.
+- **Six languages.** English, Russian, German, French, Spanish and Portuguese — the addon, the program and the spreadsheet.
+- **Light and private.** The addon never sends anything anywhere (WoW addons can't). The program can open only the spreadsheets it created itself.
 
-The addon is built to work with a free, open-source Windows tray program from the same project. The program reads what the addon recorded, creates a spreadsheet in **your own** Google Drive and marks kills and collected mounts there automatically — and sends the "Remaining" list back into the game.
-
-- The spreadsheet can be in English, Russian, German, French, Spanish or Portuguese; mount, boss and instance names come from your game when it runs in that language.
-- The program asks Google only for access to the files it creates itself (`drive.file`).
-- It runs on your computer and talks to Google directly: no server in between, no tracking.
-- The addon itself never sends anything anywhere — WoW addons cannot use the network.
-
-Without the program, the addon still records kills, characters and mounts in its log in the game; the "Remaining" list and the spreadsheet need the program.
+![The spreadsheet the program keeps](https://media.forgecdn.net/attachments/2096/846/sheet-png.png)
 
 ## Getting started
 
-1. Install the addon and log in. Kill a boss, or press "Find in lockouts" in the `/mss` window.
-2. For the spreadsheet: get the Windows program from the project website (link below), sign in with Google and press "Create spreadsheet…".
+1. Install the addon and log in. Kill a boss, or press **Find in lockouts** in the `/mss` window.
+2. For the spreadsheet, get the free program from [GitHub](https://github.com/Zlodyaga/mount-sheet-sync/releases) (Windows 10/11, nothing to install), sign in with Google and press **Create spreadsheet…**
+3. Play as usual. Back at character select the sheet is updated, and the "Remaining" list comes back into the game.
 
-## Privacy and source
+Without the program the addon still records kills, characters and mounts; the "Remaining" list and the spreadsheet need the program.
 
-The full source code (addon and program) is public under the MIT license. Privacy policy and the program: see the project website.
+![Every kill in the log](https://media.forgecdn.net/attachments/2096/847/addon-log-png.png)
+
+## Commands
+
+`/mss` opens the window, `/mss help` lists the commands. Right-click the minimap or Data Broker button for the settings: language, chat messages, the minimap button.
 
 ---
 
-Project website: https://zlodyaga.github.io/ · Source code: https://github.com/Zlodyaga/mount-sheet-sync · Bugs and ideas: GitHub Issues or the comments here.
+Open source, MIT license · [Source and the program](https://github.com/Zlodyaga/mount-sheet-sync) · [Website and privacy policy](https://zlodyaga.github.io/)
