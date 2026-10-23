@@ -221,6 +221,60 @@ check("killed rows go to the bottom of their group with a check mark", raid[0].s
 check("selected tab is remembered", g.MountSheetSyncDB.tab == "left" and win.selectedTab == 2)
 check("list scrolled to the top on tab switch", g.ALL_REGIONS and [x for x in regions("ScrollFrame") if under_window(x)][0]._vscroll == 0)
 
+LUA_RAWGET = L.eval("rawget")
+
+
+# ---- layouts for the screenshots (tools/screens): the window on both tabs and the settings window
+def dump_layout(root, path):
+    def under(x):
+        p = x._parent
+        while p is not None:
+            if p._uid == root._uid:
+                return True
+            p = p._parent
+        return False
+    export = [x for x in regions() if under(x)]
+
+    def ref(x):
+        if x is None:
+            return None
+        if x._uid == root._uid:
+            return 0
+        for i, y in enumerate(export):
+            if x._uid == y._uid:
+                return i + 1
+        return "UIParent"
+
+    layout = []
+    for i, x in enumerate([root] + export):
+        pts = []
+        for j in range(1, len(x._points) + 1):
+            p = x._points[j]
+            pts.append({"point": p.point, "rel": ref(p.rel), "relPoint": p.relPoint, "x": p.x, "y": p.y})
+        layout.append({"i": i, "type": x._type, "template": x._template, "font": x._font if x._type == "FontString" else None,
+                       "text": str(x._text) if x._text is not None else None, "w": x._w, "h": x._h, "shown": x._shown,
+                       "checked": bool(x._checked) if x._type == "CheckButton" else None,
+                       "title": str(x._title) if x._title is not None else None,
+                       "radio": x._type == "CheckButton" and LUA_RAWGET(x, "code") is not None,
+                       "parent": ref(x._parent) if i else "UIParent", "points": pts, "scrollChildOf": None})
+    for i, x in enumerate(export):
+        if x._type == "ScrollFrame" and x._scrollChild is not None:
+            layout[ref(x._scrollChild)]["scrollChildOf"] = i + 1
+    json.dump(layout, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+
+
+tabs[1].MockClick(tabs[1]); g.RunTimers()
+dump_layout(win, OUT_LAYOUT)
+LAYOUT_DIR = os.path.dirname(os.path.abspath(OUT_LAYOUT))
+tabs[0].MockClick(tabs[0]); g.RunTimers()
+dump_layout(win, os.path.join(LAYOUT_DIR, "layout_log.json"))
+g.SlashCmdList["MOUNTSHEETSYNC"]("settings"); g.RunTimers()
+sf = g.MountSheetSyncSettingsFrame
+check("settings window opens for the screenshots", sf is not None and sf._shown)
+dump_layout(sf, os.path.join(LAYOUT_DIR, "layout_settings.json"))
+sf.Hide(sf)
+tabs[1].MockClick(tabs[1]); g.RunTimers()
+
 kill("Кто-то совсем другой", "Святилище Господства", "raid", 16)
 check("odd boss name does not tick anything new", remaining().left == 24, remaining().left)
 kill("Сильвана Ветрокрылая", "Святилище Господства", "raid", 16)
@@ -448,36 +502,6 @@ for _ in range(200):
     ns.GetRemaining()
 ms = (time.perf_counter() - t0) / 200 * 1000
 check("unchanged journal: cached list, %.3f ms" % ms, ms < 0.5)
-
-# ---- layout of the window on the «Осталось» tab
-tabs[1].MockClick(tabs[1]); g.RunTimers()
-export = [x for x in regions() if under_window(x)]
-
-
-def ref(x):
-    if x is None:
-        return None
-    if x._uid == win._uid:
-        return 0
-    for i, y in enumerate(export):
-        if x._uid == y._uid:
-            return i + 1
-    return "UIParent"
-
-
-layout = []
-for i, x in enumerate([win] + export):
-    pts = []
-    for j in range(1, len(x._points) + 1):
-        p = x._points[j]
-        pts.append({"point": p.point, "rel": ref(p.rel), "relPoint": p.relPoint, "x": p.x, "y": p.y})
-    layout.append({"i": i, "type": x._type, "template": x._template, "font": x._font if x._type == "FontString" else None,
-                   "text": str(x._text) if x._text is not None else None, "w": x._w, "h": x._h, "shown": x._shown,
-                   "parent": ref(x._parent) if i else "UIParent", "points": pts, "scrollChildOf": None})
-for i, x in enumerate(export):
-    if x._type == "ScrollFrame" and x._scrollChild is not None:
-        layout[ref(x._scrollChild)]["scrollChildOf"] = i + 1
-json.dump(layout, open(OUT_LAYOUT, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
 check("no Lua errors reported in chat", "ошибка" not in chat_all())
 failed = [nm for nm, ok in checks if not ok]

@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Mount Sheet Sync screens</title>
+<style>
+  :root {
+    --gold: #f2c45a;
+    --gold-soft: rgba(242, 196, 90, .16);
+    --text: #ecebe8;
+    --muted: #9aa0ab;
+    --panel: rgba(17, 20, 28, .94);
+    --line: rgba(255, 255, 255, .09);
+  }
+  html, body { margin: 0; }
+  body {
+    font-family: "Inter", "DejaVu Sans", sans-serif;
+    background:
+      radial-gradient(1200px 700px at 15% 10%, rgba(64, 120, 170, .35), transparent 60%),
+      radial-gradient(900px 600px at 90% 85%, rgba(170, 110, 60, .30), transparent 60%),
+      linear-gradient(160deg, #0d1220, #1a2030 55%, #141823);
+    width: var(--w); height: var(--h); position: relative; overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  .r { position: absolute; box-sizing: border-box; }
+  .panel {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, .55), 0 0 0 1px rgba(0, 0, 0, .35);
+    backdrop-filter: blur(8px);
+  }
+  .panel > .titlebar {
+    position: absolute; left: 0; right: 0; top: 0; height: 24px; border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(255, 255, 255, .05), transparent);
+    border-radius: 14px 14px 0 0;
+    color: var(--gold); font-weight: 600; font-size: 12.5px; line-height: 24px; text-align: center; letter-spacing: .2px;
+  }
+  .close {
+    color: var(--muted); font-size: 16px; line-height: 22px; text-align: center; border-radius: 6px;
+  }
+  .inset { background: rgba(0, 0, 0, .28); border: 1px solid rgba(255, 255, 255, .06); border-radius: 10px; }
+  .tab {
+    border-radius: 9px 9px 0 0; color: var(--muted); font-size: 12px; font-weight: 500;
+    display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, .04);
+    border: 1px solid var(--line); border-bottom: none;
+  }
+  .tab.on { color: var(--gold); background: linear-gradient(180deg, var(--gold-soft), rgba(242, 196, 90, .04)); }
+  .btn {
+    border-radius: 8px; background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .13);
+    color: var(--text); font-size: 11px; font-weight: 500;
+    display: flex; align-items: center; justify-content: center; white-space: nowrap;
+  }
+  .btn.primary { background: linear-gradient(180deg, #f3c862, #d9a83a); color: #1b1406; border-color: rgba(0, 0, 0, .2); font-weight: 600; }
+  .edit { border-radius: 7px; background: rgba(0, 0, 0, .35); border: 1px solid rgba(255, 255, 255, .14); }
+  .check { display: flex; align-items: center; justify-content: center; }
+  .check i {
+    width: 15px; height: 15px; border-radius: 4px; border: 1.5px solid rgba(255, 255, 255, .35); box-sizing: border-box;
+    display: flex; align-items: center; justify-content: center; font-style: normal; font-size: 11px; color: #1b1406;
+  }
+  .check.radio i { border-radius: 50%; }
+  .check.on i { background: var(--gold); border-color: var(--gold); }
+  .check.radio.on i { background: transparent; }
+  .check.radio.on i::after { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
+  .scroll { overflow: hidden; }
+  .bar { border-radius: 4px; background: rgba(255, 255, 255, .06); }
+  .bar::after { content: ""; position: absolute; left: 1px; right: 1px; top: 2px; height: 34%; border-radius: 4px; background: rgba(255, 255, 255, .22); }
+  .fs { white-space: pre; line-height: 1.25; }
+  .f-GameFontHighlight { color: #fff; font-size: 12.5px; font-weight: 600; }
+  .f-GameFontHighlightSmall { color: #e4e2de; font-size: 10.5px; }
+  .f-GameFontNormal { color: var(--gold); font-size: 12px; font-weight: 600; }
+  .f-GameFontNormalSmall { color: #d9c68e; font-size: 10.5px; }
+  .f-GameFontDisableSmall { color: var(--muted); font-size: 9.6px; }
+  .f-none { color: var(--text); font-size: 11.5px; }
+  .tick {
+    display: inline-flex; width: 12px; height: 12px; border-radius: 50%; background: #3fb36b; color: #08140c;
+    font-size: 9px; font-weight: 700; align-items: center; justify-content: center; vertical-align: -1px;
+  }
+</style>
+</head>
+<body>
+<script>
+// Renders a layout dumped from the addon running in the mock WoW API (tools/tests/test_addon_left.py):
+// every frame, button and line of text with the size and anchors the addon gave it, in a modern skin.
+const L = window.LAYOUT, OPT = window.OPT;
+document.body.style.setProperty("--w", OPT.w + "px");
+document.body.style.setProperty("--h", OPT.h + "px");
+const SCREEN = { l: 0, t: 0, r: OPT.w, b: OPT.h };
+
+function visible(i) {
+  for (let x = L[i]; ; x = L[x.parent]) {
+    if (!x.shown) return false;
+    if (x.parent === "UIParent" || x.parent === null || x.parent === undefined) return true;
+  }
+}
+
+function esc(s) { return s.replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[c]); }
+
+// WoW escape codes: |cffRRGGBB…|r colours, |T…|t textures, |n line breaks
+function markup(t) {
+  let out = "", open = 0, i = 0;
+  while (i < t.length) {
+    if (t[i] === "|" && t[i + 1] === "c" && /^[0-9a-fA-F]{8}$/.test(t.substr(i + 2, 8))) {
+      out += '<span style="color:#' + t.substr(i + 4, 6) + '">'; open++; i += 10; continue;
+    }
+    if (t[i] === "|" && t[i + 1] === "r") { if (open) { out += "</span>"; open--; } i += 2; continue; }
+    if (t[i] === "|" && t[i + 1] === "n") { out += "\n"; i += 2; continue; }
+    if (t[i] === "|" && t[i + 1] === "T") {
+      const end = t.indexOf("|t", i);
+      const path = t.substring(i + 2, end);
+      out += /ReadyCheck-Ready/.test(path) ? '<span class="tick">✓</span>' : "";
+      i = end + 2; continue;
+    }
+    out += esc(t[i]); i++;
+  }
+  while (open--) out += "</span>";
+  return out;
+}
+
+function fontClass(x) { return "f-" + (x.font || "none"); }
+
+const measurer = document.createElement("div");
+measurer.style.cssText = "position:absolute;left:-9999px;top:0";
+document.body.appendChild(measurer);
+function measure(x) {
+  const s = document.createElement("span");
+  s.className = "fs " + fontClass(x);
+  if (x.w) { s.style.width = x.w + "px"; s.style.whiteSpace = "pre-wrap"; s.style.display = "inline-block"; }
+  s.innerHTML = markup(x.text || "");
+  measurer.appendChild(s);
+  const r = s.getBoundingClientRect();
+  measurer.removeChild(s);
+  return { w: x.w || Math.ceil(r.width), h: x.h || Math.ceil(r.height) };
+}
+
+const rects = {};
+function px(rect, point) {
+  const p = point.toUpperCase();
+  return { x: p.includes("LEFT") ? rect.l : p.includes("RIGHT") ? rect.r : (rect.l + rect.r) / 2,
+           y: p.includes("TOP") ? rect.t : p.includes("BOTTOM") ? rect.b : (rect.t + rect.b) / 2 };
+}
+function relRect(x, rel) {
+  if (rel === "UIParent") return SCREEN;
+  const k = rel === null || rel === undefined ? x.parent : rel;
+  return k === "UIParent" ? SCREEN : rect(k);
+}
+function rect(i) {
+  if (i in rects) return rects[i];
+  rects[i] = null;  // cycle guard
+  const x = L[i];
+  let size = { w: x.w || 0, h: x.h || 0 };
+  if (x.type === "FontString") size = measure(x);
+  let res = null;
+  if (x.scrollChildOf !== null) {
+    const s = rect(x.scrollChildOf);
+    res = { l: s.l, t: s.t, r: s.l + (x.w || (s.r - s.l)), b: s.t + (x.h || 2000) };
+  } else if (!x.points.length) {
+    if (x.parent === "UIParent") return null;
+    const p = rect(x.parent);
+    if (!p) return null;
+    if (x.type === "FontString") {
+      const cx = (p.l + p.r) / 2, cy = (p.t + p.b) / 2;
+      res = { l: cx - size.w / 2, r: cx + size.w / 2, t: cy - size.h / 2, b: cy + size.h / 2 };
+    } else return null;
+  } else {
+    let L_ = null, R_ = null, T_ = null, B_ = null, CX = null, CY = null;
+    for (const pt of x.points) {
+      const base = relRect(x, pt.rel);
+      if (!base) continue;
+      const a = px(base, pt.relPoint);
+      const X = a.x + pt.x, Y = a.y - pt.y;
+      const me = pt.point.toUpperCase();
+      if (me.includes("LEFT")) L_ = X; else if (me.includes("RIGHT")) R_ = X; else CX = X;
+      if (me.includes("TOP")) T_ = Y; else if (me.includes("BOTTOM")) B_ = Y; else CY = Y;
+    }
+    let l, r, t, b;
+    if (L_ !== null && R_ !== null) { l = L_; r = R_; }
+    else if (L_ !== null) { l = L_; r = L_ + size.w; }
+    else if (R_ !== null) { r = R_; l = R_ - size.w; }
+    else { l = (CX ?? 0) - size.w / 2; r = l + size.w; }
+    if (T_ !== null && B_ !== null) { t = T_; b = B_; }
+    else if (T_ !== null) { t = T_; b = T_ + size.h; }
+    else if (B_ !== null) { b = B_; t = B_ - size.h; }
+    else { t = (CY ?? 0) - size.h / 2; b = t + size.h; }
+    res = { l, r, t, b };
+  }
+  rects[i] = res;
+  return res;
+}
+
+// build the DOM along the parent chain, so scroll frames clip their content
+const nodes = {};
+function domParent(x) {
+  if (x.scrollChildOf !== null) return x.scrollChildOf;
+  return x.parent === "UIParent" ? null : x.parent;
+}
+function originOf(k) { return k === null ? { l: 0, t: 0 } : rect(k) || { l: 0, t: 0 }; }
+
+function build(i) {
+  if (i in nodes) return nodes[i];
+  const x = L[i];
+  const pk = domParent(x);
+  const host = pk === null ? document.body : build(pk);
+  const re = rect(i);
+  if (!host || !re || !visible(i)) { nodes[i] = null; return null; }
+  const el = document.createElement("div");
+  el.className = "r";
+  const o = originOf(pk);
+  el.style.left = (re.l - o.l) + "px"; el.style.top = (re.t - o.t) + "px";
+  el.style.width = (re.r - re.l) + "px"; el.style.height = (re.b - re.t) + "px";
+  const tmpl = x.template || "";
+  if (tmpl === "DefaultPanelTemplate" || (i === 0 && x.type === "Frame")) {
+    el.classList.add("panel");
+    const tb = document.createElement("div"); tb.className = "titlebar"; tb.textContent = x.title || "";
+    el.appendChild(tb);
+  } else if (tmpl === "InsetFrameTemplate") el.classList.add("inset");
+  else if (tmpl === "UIPanelCloseButtonDefaultAnchors") { el.classList.add("close"); el.textContent = "×"; }
+  else if (tmpl === "PanelTopTabButtonTemplate") {
+    el.classList.add("tab"); if ((x.text || "").startsWith(OPT.tab)) el.classList.add("on");
+    el.textContent = x.text || "";
+  } else if (x.type === "Button" && x.text) {
+    el.classList.add("btn"); if (OPT.primary.includes(x.text)) el.classList.add("primary");
+    el.textContent = x.text;
+  } else if (x.type === "EditBox") el.classList.add("edit");
+  else if (x.type === "CheckButton") {
+    el.classList.add("check"); if (x.radio) el.classList.add("radio"); if (x.checked) el.classList.add("on");
+    const box = document.createElement("i"); if (x.checked && !x.radio) box.textContent = "✓"; el.appendChild(box);
+  } else if (x.type === "ScrollFrame") el.classList.add("scroll");
+  else if (x.type === "Slider") el.classList.add("bar");
+  else if (x.type === "FontString") {
+    // a button's own label is drawn by the button
+    const p = L[x.parent];
+    if (p && p.type === "Button" && p.text && !x.points.length) { nodes[i] = null; return null; }
+    el.classList.add("fs", fontClass(x));
+    if (x.w) el.style.whiteSpace = "pre-wrap";
+    el.innerHTML = markup(x.text || "");
+  }
+  host.appendChild(el);
+  nodes[i] = el;
+  return el;
+}
+for (let i = 0; i < L.length; i++) build(i);
+window.WINDOW_RECT = rect(0);
+</script>
+</body>
+</html>

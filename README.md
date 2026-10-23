@@ -19,6 +19,15 @@ WoW addon ──(SavedVariables file)──► tray program ──(Google Sheets
 The addon and the program speak English, Russian, German, French, Spanish and Portuguese (the addon follows the game
 language, the program follows Windows; both can be switched). The spreadsheet itself is currently Russian.
 
+## Screenshots
+
+| “Remaining” this week | Log | Settings |
+| --- | --- | --- |
+| ![Remaining](docs/screens/addon-remaining.png) | ![Log](docs/screens/addon-log.png) | ![Settings](docs/screens/addon-settings.png) |
+
+The addon window (Russian game client, sample characters). Drawn from the addon's real layout — the same frames,
+sizes and texts it creates in the game — with `tools/screens/render.py`; the in-game look follows your UI.
+
 ## Install
 
 1. **Addon:** install *Mount Sheet Sync* from CurseForge, or copy the `MountSheetSync` folder from the release archive
