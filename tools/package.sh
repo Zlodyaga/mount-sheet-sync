@@ -55,7 +55,7 @@ for f in sorted(os.listdir(prog)):
         put(os.path.join(src, f), read(p), True)
     elif f in ("build.cmd", "app.manifest"):
         put(os.path.join(src, f), read(p), False)
-    elif f.endswith(".ico") or f in ("catalog.json", "i18n.json"):
+    elif f.endswith(".ico") or f in ("catalog.json", "i18n.json", "sheet-i18n.json"):
         shutil.copyfile(p, os.path.join(src, f))
     elif f != "MountSheetSync.exe":
         raise SystemExit("unexpected file in program/: " + f)

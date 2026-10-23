@@ -51,6 +51,10 @@ jobs:
           pip install --break-system-packages lupa
       - name: Run tests
         run: tools/run_tests.sh
+      # the same packaging as the release (with the test build of the exe): an unlisted file in program/
+      # or a broken archive shows up here, not after the tag is pushed
+      - name: Package the release archive (dry run)
+        run: tools/package.sh "$MSS_TEST_TMP/mss.exe" "$MSS_TEST_TMP/dist"
       - name: Screenshots of the UI tests
         if: always()
         uses: actions/upload-artifact@v6
