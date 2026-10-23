@@ -28,6 +28,17 @@ language, the program follows Windows; both can be switched). The spreadsheet it
 The addon window (Russian game client, sample characters). Drawn from the addon's real layout — the same frames,
 sizes and texts it creates in the game — with `tools/screens/render.py`; the in-game look follows your UI.
 
+| The tray program | Its settings |
+| --- | --- |
+| ![Tray menu](docs/screens/program-menu.png) | ![Settings](docs/screens/program-settings.png) |
+
+The spreadsheet — the top of a character's raid sheet:
+
+![Spreadsheet](docs/screens/sheet.png)
+
+The program's own texts and menu, drawn in a Windows 11 style, and the sheet as the program creates it, with a few
+sample marks (`tools/screens/program.py`).
+
 ## Install
 
 1. **Addon:** install *Mount Sheet Sync* from CurseForge, or copy the `MountSheetSync` folder from the release archive
