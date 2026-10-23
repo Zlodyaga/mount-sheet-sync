@@ -13,7 +13,7 @@ mkdir -p "$OUTDIR"
 python3 - "$ROOT" "$EXE" "$OUTDIR" "$VERSION" <<'PY'
 import os, shutil, sys, tempfile, time, zipfile
 root, exe, outdir, version = sys.argv[1:5]
-short = ".".join(version.split(".")[:2])
+short = version
 name = "MountSheetSync-" + short
 st = tempfile.mkdtemp()
 r = os.path.join(st, name)
