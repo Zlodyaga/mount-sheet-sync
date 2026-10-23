@@ -11,7 +11,7 @@ jobs:
     name: Build on Windows (built-in csc)
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Build with the C# compiler that ships with Windows (.NET Framework 4.8)
         shell: cmd
         run: program\build.cmd
@@ -25,7 +25,7 @@ jobs:
           $log = Get-Content -Path (Join-Path $d 'sync.log') -Raw -Encoding utf8
           Write-Output $log
           if ($p.ExitCode -ne 1 -or $log -notmatch 'Nicht bei Google angemeldet') { throw 'smoke test failed' }
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: MountSheetSync-exe
           path: program/MountSheetSync.exe
@@ -36,7 +36,7 @@ jobs:
     env:
       MSS_TEST_TMP: ${{ github.workspace }}/.mss-tests
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Install tools
         run: |
           sudo apt-get update
@@ -46,7 +46,7 @@ jobs:
         run: tools/run_tests.sh
       - name: Screenshots of the UI tests
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: ui-screenshots
           path: ${{ env.MSS_TEST_TMP }}/ui_*/*.png

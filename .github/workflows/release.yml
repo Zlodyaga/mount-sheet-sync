@@ -18,7 +18,7 @@ jobs:
   exe:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Check that the tag matches the addon version
         shell: bash
         run: |
@@ -30,7 +30,7 @@ jobs:
         run: program\build.cmd
       - name: Upload the unsigned exe
         id: unsigned
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: exe-unsigned
           path: program/MountSheetSync.exe
@@ -56,7 +56,7 @@ jobs:
           $sig = Get-AuthenticodeSignature program\MountSheetSync.exe
           Write-Output "$($sig.Status): $($sig.SignerCertificate.Subject)"
           if ($sig.Status -ne 'Valid') { throw 'the exe is not signed' }
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: exe
           path: program/MountSheetSync.exe
@@ -65,8 +65,8 @@ jobs:
     needs: exe
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/download-artifact@v4
+      - uses: actions/checkout@v6
+      - uses: actions/download-artifact@v7
         with:
           name: exe
           path: built
@@ -77,7 +77,7 @@ jobs:
           v=${GITHUB_REF_NAME#v}
           awk -v h="## $v" '$0==h{on=1;next} /^## /{on=0} on' CHANGELOG.md > notes.md
           cat notes.md
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@v3
         with:
           files: dist/*.zip
           body_path: notes.md
@@ -86,7 +86,7 @@ jobs:
     needs: archive
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - uses: BigWigsMods/packager@v2
