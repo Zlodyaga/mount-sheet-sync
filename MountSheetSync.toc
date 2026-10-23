@@ -11,7 +11,7 @@
 ## SavedVariables: MountSheetSyncDB
 ## X-Curse-Project-ID: 1761349
 ## X-Website: https://zlodyaga.github.io/
-## IconTexture: Interface\Icons\Ability_Mount_RidingHorse
+## IconTexture: Interface\AddOns\MountSheetSync\Media\Icon
 ## AddonCompartmentFunc: MountSheetSync_OnAddonCompartmentClick
 ## AddonCompartmentFuncOnEnter: MountSheetSync_OnAddonCompartmentEnter
 ## AddonCompartmentFuncOnLeave: MountSheetSync_OnAddonCompartmentLeave

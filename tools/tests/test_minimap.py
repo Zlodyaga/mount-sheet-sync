@@ -59,7 +59,7 @@ check("fits HidingBar's grab rule (square, 16 < size < half of the minimap, OnCl
 regions = [x for x in [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)] if x._parent is not None and x._parent._uid == b._uid]
 textures = {x._texture for x in regions if x._type == "Texture"}
 check("standard minimap look: border 136430, background 136467, horse icon",
-      136430 in textures and 136467 in textures and "Interface\\Icons\\Ability_Mount_RidingHorse" in textures, textures)
+      136430 in textures and 136467 in textures and "Interface\\AddOns\\MountSheetSync\\Media\\Icon" in textures, textures)
 check("icon reachable as .icon (HidingBar/Masque find it)", L.eval("rawget(MountSheetSyncMinimapButton, 'icon') ~= nil"))
 
 g.Fire("ADDON_LOADED", "MountSheetSync")

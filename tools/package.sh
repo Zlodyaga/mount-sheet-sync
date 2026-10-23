@@ -42,6 +42,9 @@ for line in toc.splitlines():
         dst = os.path.join(addon, rel)
         os.makedirs(os.path.dirname(dst), exist_ok=True)
         put(dst, read(os.path.join(root, rel)), False)
+os.makedirs(os.path.join(addon, "Media"))
+for f in sorted(os.listdir(os.path.join(root, "Media"))):
+    shutil.copyfile(os.path.join(root, "Media", f), os.path.join(addon, "Media", f))
 shutil.copyfile(os.path.join(root, "Libs", "CallbackHandler-1.0", "LICENSE.txt"),
                 os.path.join(addon, "Libs", "CallbackHandler-1.0", "LICENSE.txt"))
 assert "MountSheetSyncSheet = nil" in read(os.path.join(addon, "SheetData.lua")), "SheetData.lua must ship empty"

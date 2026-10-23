@@ -159,7 +159,7 @@ check("name sanitised", kills()[-1]["boss"] == "Злой босс x Конец")
 # =================================================================== LibDataBroker icon (HidingBar)
 ldb = L.eval('(LibStub("LibDataBroker-1.1"))')
 obj = ldb.GetDataObjectByName(ldb, "MountSheetSync")
-check("LibDataBroker launcher registered", obj is not None and obj.type == "launcher" and "RidingHorse" in obj.icon)
+check("LibDataBroker launcher registered", obj is not None and obj.type == "launcher" and "MountSheetSync\\Media\\Icon" in obj.icon)
 check("label for display addons", obj.label == "Mount Sheet Sync")
 
 g.GameTooltip.lines = L.table()

@@ -12,7 +12,7 @@ Mount Sheet Sync 2.3.1 — окно, иконка и настройки
 
 local ADDON_NAME, ns = ...
 
-local ICON = "Interface\\Icons\\Ability_Mount_RidingHorse"
+local ICON = "Interface\\AddOns\\MountSheetSync\\Media\\Icon"   -- the horseshoe, same as the tray program
 local WINDOW_NAME = "MountSheetSyncFrame"
 local WIDTH, HEIGHT = 600, 520
 local ROW_HEIGHT = 16
