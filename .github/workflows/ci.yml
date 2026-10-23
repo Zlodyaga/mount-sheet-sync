@@ -34,7 +34,7 @@ jobs:
     name: Tests (addon, program under mono, Code.gs, UI)
     runs-on: ubuntu-24.04
     env:
-      MSS_TEST_TMP: ${{ github.workspace }}/../mss-tests
+      MSS_TEST_TMP: ${{ github.workspace }}/.mss-tests
     steps:
       - uses: actions/checkout@v4
       - name: Install tools
