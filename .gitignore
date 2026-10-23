@@ -5,4 +5,4 @@ __pycache__/
 tools/i18n/keys.json
 tools/tests/sv_collection.lua.bak
 tools/layout_left.json
-.mss-tests/
+test-output/
