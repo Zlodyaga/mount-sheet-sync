@@ -1,11 +1,6 @@
 # Changelog
 
-## 2.5.0
-- The program updates itself: once a day it looks for a new release on GitHub, says so in a notification and in
-  the icon menu (“Update to version…”), and one click downloads it, checks its checksum, replaces the program and
-  restarts it. An addon installed from the release archive is updated with it (from 2.5.0 the archive marks such an
-  addon); an addon from CurseForge is left to the CurseForge app. “Check for updates” in the icon menu turns the check
-  off; `--check-update` and `--update` on the command line.
+## 2.6.0
 - The program is also published on its own, as `MountSheetSync.exe` (the home page links to the latest one), and
   installs itself: started from Downloads, the desktop or an archive, it offers to copy itself to
   `%LOCALAPPDATA%\Programs\MountSheetSync` (no administrator rights), adds a Start menu shortcut and registers in
@@ -13,6 +8,13 @@
   is remembered. `--install`, `--uninstall [--yes]` on the command line.
 - The addon says where to get the program when it has nothing to show yet: in the empty “Remaining” tab (with the
   address in a box to copy) and in the `/mss left` reply.
+
+## 2.5.0
+- The program updates itself: once a day it looks for a new release on GitHub, says so in a notification and in
+  the icon menu (“Update to version…”), and one click downloads it, checks its checksum, replaces the program and
+  restarts it. An addon installed from the release archive is updated with it (from 2.5.0 the archive marks such an
+  addon); an addon from CurseForge is left to the CurseForge app. “Check for updates” in the icon menu turns the check
+  off; `--check-update` and `--update` on the command line.
 
 ## 2.4.0
 - A new spreadsheet can be in any of the six languages: “Spreadsheet language” in “Create spreadsheet…”
