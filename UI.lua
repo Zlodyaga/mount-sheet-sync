@@ -33,7 +33,7 @@ local TAB_LOG, TAB_LEFT = 1, 2
 local UI = {}
 local L = ns.L
 local relabel = {}      -- функции, которые заново ставят надписи (смена языка)
-local frame, scroll, content, emptyText, header1, header2, quietCheck, editBox
+local frame, scroll, content, emptyText, header1, header2, quietCheck, editBox, urlBox
 local tabs = {}
 local rows = {}
 local rowButtons = {}   -- невидимые кнопки поверх строк: правый щелчок по строке «Осталось»
@@ -249,7 +249,7 @@ end
 -- Вкладка «Осталось»: строки «Нет» из таблицы, убитые после обновления списка — с галочкой внизу группы.
 local function RemainingLines(r, entries)
   if r.state == "nodata" then
-    return {}, L.left_nodata
+    return {}, L.left_nodata .. "\n\n" .. L.left_getprogram, true
   end
   if r.state == "nochar" then
     local name = r.name or "?"
@@ -312,10 +312,10 @@ function UI.Refresh()
 
   local remaining = ns.GetRemaining()
   UpdateTabTitle(remaining)
-  local lines, empty
+  local lines, empty, showUrl
   local entries = {}
   if frame.selectedTab == TAB_LEFT then
-    lines, empty = RemainingLines(remaining, entries)
+    lines, empty, showUrl = RemainingLines(remaining, entries)
   else
     lines, empty = JournalLines(db)
   end
@@ -333,6 +333,7 @@ function UI.Refresh()
   content:SetHeight(math.max(1, #lines * ROW_HEIGHT))
   emptyText:SetText(empty or "")
   emptyText:SetShown(#lines == 0)
+  urlBox:SetShown(#lines == 0 and showUrl and true or false)
   quietCheck:SetChecked(db.quiet and true or false)
 end
 
@@ -414,8 +415,27 @@ local function CreateWindow()
   scroll:SetScrollChild(content)
 
   emptyText = inset:CreateFontString(nil, "OVERLAY", "GameFontDisable")
-  emptyText:SetPoint("CENTER")
+  emptyText:SetPoint("CENTER", 0, 14)
   emptyText:SetWidth(WIDTH - 80)
+
+  -- адрес сайта с программой: только выделить и скопировать (Ctrl+C), изменить нельзя
+  urlBox = CreateFrame("EditBox", nil, inset, "InputBoxTemplate")
+  urlBox:SetSize(240, 22)
+  urlBox:SetPoint("TOP", emptyText, "BOTTOM", 0, -10)
+  urlBox:SetAutoFocus(false)
+  urlBox:SetText(ns.PROGRAM_URL)
+  urlBox:SetCursorPosition(0)
+  urlBox:SetScript("OnTextChanged", function(self, userInput)
+    if userInput and self:GetText() ~= ns.PROGRAM_URL then
+      self:SetText(ns.PROGRAM_URL)
+      self:HighlightText()
+    end
+  end)
+  urlBox:SetScript("OnEditFocusGained", function(self) self:HighlightText() end)
+  urlBox:SetScript("OnMouseUp", function(self) self:HighlightText() end)
+  urlBox:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
+  urlBox:SetScript("OnEnterPressed", function(self) self:ClearFocus() end)
+  urlBox:Hide()
 
   -- Отметить вручную
   local manualLabel = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")

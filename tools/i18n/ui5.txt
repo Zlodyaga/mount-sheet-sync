@@ -228,3 +228,73 @@ de: Addon konnte nicht aktualisiert werden ({0}): {1}
 fr: impossible de mettre à jour l'addon ({0}) : {1}
 es: no se pudo actualizar el addon ({0}): {1}
 pt: não foi possível atualizar o addon ({0}): {1}
+
+@ Обновить установленный Mount Sheet Sync этой версией?
+en: Update the installed Mount Sheet Sync with this version?
+de: Das installierte Mount Sheet Sync mit dieser Version aktualisieren?
+fr: Mettre à jour le Mount Sheet Sync installé avec cette version ?
+es: ¿Actualizar el Mount Sheet Sync instalado con esta versión?
+pt: Atualizar o Mount Sheet Sync instalado com esta versão?
+
+@ Установить Mount Sheet Sync на этот компьютер?
+en: Install Mount Sheet Sync on this computer?
+de: Mount Sheet Sync auf diesem Computer installieren?
+fr: Installer Mount Sheet Sync sur cet ordinateur ?
+es: ¿Instalar Mount Sheet Sync en este equipo?
+pt: Instalar o Mount Sheet Sync neste computador?
+
+@ Программа скопирует себя в {0}, появится в меню «Пуск» и в списке установленных приложений Windows (оттуда её можно удалить). Права администратора не нужны.
+en: The program copies itself to {0} and appears in the Start menu and in Windows' list of installed apps (you can uninstall it there). No administrator rights are needed.
+de: Das Programm kopiert sich nach {0} und erscheint im Startmenü und in der Liste der installierten Apps von Windows (dort lässt es sich deinstallieren). Administratorrechte sind nicht nötig.
+fr: Le programme se copie dans {0} et apparaît dans le menu Démarrer et dans la liste des applications installées de Windows (on peut le désinstaller de là). Aucun droit d'administrateur n'est nécessaire.
+es: El programa se copia en {0} y aparece en el menú Inicio y en la lista de aplicaciones instaladas de Windows (desde ahí se puede desinstalar). No hacen falta permisos de administrador.
+pt: O programa se copia para {0} e aparece no menu Iniciar e na lista de aplicativos instalados do Windows (dá para desinstalá-lo de lá). Não é preciso ser administrador.
+
+@ «Да» — установить и запустить. «Нет» — запустить без установки, прямо отсюда.
+en: “Yes” installs and starts it. “No” starts it without installing, right from here.
+de: „Ja“ installiert und startet es. „Nein“ startet es ohne Installation direkt von hier.
+fr: « Oui » l'installe et le lance. « Non » le lance sans l'installer, directement d'ici.
+es: «Sí» lo instala y lo inicia. «No» lo inicia sin instalarlo, directamente desde aquí.
+pt: “Sim” instala e inicia. “Não” inicia sem instalar, direto daqui.
+
+@ Установить не получилось: {0}\n\nПрограмма запустится прямо отсюда.
+en: Could not install: {0}\n\nThe program will start right from here.
+de: Installation fehlgeschlagen: {0}\n\nDas Programm startet direkt von hier.
+fr: Impossible d'installer : {0}\n\nLe programme va démarrer directement d'ici.
+es: No se pudo instalar: {0}\n\nEl programa se iniciará directamente desde aquí.
+pt: Não foi possível instalar: {0}\n\nO programa vai iniciar direto daqui.
+
+@ Google-таблица фарма маунтов для World of Warcraft
+en: A Google Sheet of mount farming for World of Warcraft
+de: Eine Google-Tabelle zum Reittierfarmen in World of Warcraft
+fr: Un tableau Google du farm de montures pour World of Warcraft
+es: Una hoja de Google del farmeo de monturas para World of Warcraft
+pt: Uma planilha Google de farm de montarias para World of Warcraft
+
+@ Удалить Mount Sheet Sync с этого компьютера?
+en: Uninstall Mount Sheet Sync from this computer?
+de: Mount Sheet Sync von diesem Computer deinstallieren?
+fr: Désinstaller Mount Sheet Sync de cet ordinateur ?
+es: ¿Desinstalar Mount Sheet Sync de este equipo?
+pt: Desinstalar o Mount Sheet Sync deste computador?
+
+@ Таблица на Google Диске останется. Аддон в игре не удаляется.
+en: The spreadsheet on Google Drive stays. The addon in the game is not removed.
+de: Die Tabelle auf Google Drive bleibt. Das Addon im Spiel wird nicht entfernt.
+fr: Le tableau sur Google Drive reste. L'addon dans le jeu n'est pas supprimé.
+es: La hoja de Google Drive se conserva. El addon del juego no se elimina.
+pt: A planilha no Google Drive continua lá. O addon no jogo não é removido.
+
+@ Удалить и настройки программы — вход в Google, журнал, список отправленного ({0})?
+en: Also delete the program's settings — the Google sign-in, the log, the list of sent records ({0})?
+de: Auch die Einstellungen des Programms löschen — Google-Anmeldung, Protokoll, Liste der gesendeten Einträge ({0})?
+fr: Supprimer aussi les réglages du programme — connexion Google, journal, liste des envois ({0}) ?
+es: ¿Eliminar también los ajustes del programa: inicio de sesión de Google, registro, lista de envíos ({0})?
+pt: Apagar também as configurações do programa — login do Google, registro, lista do que foi enviado ({0})?
+
+@ Mount Sheet Sync удалён.
+en: Mount Sheet Sync has been uninstalled.
+de: Mount Sheet Sync wurde deinstalliert.
+fr: Mount Sheet Sync a été désinstallé.
+es: Mount Sheet Sync se ha desinstalado.
+pt: O Mount Sheet Sync foi desinstalado.

@@ -14,6 +14,8 @@
 //   --add-chars   добавить в таблицу персонажей, которых в ней ещё нет;
 //   --sync-collection  сверить таблицу с коллекцией маунтов из игры;
 //   --set-chars <файл.json>  персонажи таблицы как в файле: [{"name":"Эйра","raids":true,"dungeons":false,"world":true}, …];
+//   --install     установить программу в %LOCALAPPDATA%\Programs\MountSheetSync (ярлык, «Установленные приложения»);
+//   --uninstall [--yes]  удалить её (с --yes — без вопросов, настройки остаются);
 //   --check-update  проверить, есть ли новая версия на GitHub;
 //   --update      скачать и поставить новую версию (и аддон, если его ставили из архива), без перезапуска;
 //   --data <папка>  хранить настройки и журнал в другой папке (вместо %APPDATA%\MountSheetSync).
@@ -50,7 +52,7 @@ namespace MountSheetSync
                 return 1;
             }
             bool console = opts.Once || opts.Test || opts.GoogleLogin || opts.CreateSheet || opts.AddChars || opts.SyncCollection
-                || opts.SetCharsFile != null || opts.CheckUpdate || opts.Update;
+                || opts.SetCharsFile != null || opts.CheckUpdate || opts.Update || opts.Install || (opts.Uninstall && opts.Yes);
             Tr.Use(Settings.Load(AppPaths.SettingsFile).Language);
             Log.Init(AppPaths.LogFile, console);
             ConfigureNetwork();
@@ -84,19 +86,46 @@ namespace MountSheetSync
             {
                 return RunUpdate(opts.Update);
             }
+            // Отдельные папки данных (для проверок) — отдельные экземпляры.
+            string suffix = opts.DataDir == null ? "" : "." + ShortHash(AppPaths.DataDir);
+            if (opts.Install)
+            {
+                try
+                {
+                    Installer.Install();
+                    return 0;
+                }
+                catch (Exception ex)
+                {
+                    Log.Write(Tr.L("Установка не удалась: {0}", ex.Message));
+                    return 1;
+                }
+            }
+            if (opts.Uninstall)
+            {
+                return Installer.Uninstall(opts.Yes, suffix);
+            }
+            if (!opts.Once && !opts.Autostart && opts.WaitPid == 0 && !opts.WaitInstance && Installer.ShouldOffer())
+            {
+                // первый запуск из «Загрузок»: установиться и запуститься из своей папки
+                Application.EnableVisualStyles();
+                if (Installer.OfferAndInstall(suffix))
+                {
+                    return 0;
+                }
+            }
             if (opts.WaitPid > 0)
             {
                 Updater.WaitFor(opts.WaitPid);   // перезапуск после обновления: прежний экземпляр ещё выходит
             }
 
-            // Отдельные папки данных (для проверок) — отдельные экземпляры.
-            string suffix = opts.DataDir == null ? "" : "." + ShortHash(AppPaths.DataDir);
-            using (Mutex mutex = new Mutex(false, "Local\\MountSheetSync.WoW" + suffix))
+            using (Mutex mutex = new Mutex(false, MutexName(suffix)))
             {
                 bool owned;
                 try
                 {
-                    owned = mutex.WaitOne(0);
+                    // после установки: прежний экземпляр (из «Загрузок» или старая установленная копия) ещё выходит
+                    owned = mutex.WaitOne(opts.WaitInstance ? 20000 : 0);
                 }
                 catch (AbandonedMutexException)
                 {
@@ -121,6 +150,11 @@ namespace MountSheetSync
                     mutex.ReleaseMutex();
                 }
             }
+        }
+
+        public static string MutexName(string suffix)
+        {
+            return "Local\\MountSheetSync.WoW" + suffix;
         }
 
         static int RunTray(bool autostart, string suffix, string updatedFrom)
@@ -500,6 +534,10 @@ namespace MountSheetSync
         public bool Update;
         public int WaitPid;
         public string UpdatedFrom;
+        public bool Install;
+        public bool Uninstall;
+        public bool Yes;
+        public bool WaitInstance;
 
         public static Options Parse(string[] args)
         {
@@ -546,6 +584,22 @@ namespace MountSheetSync
                 else if (a == "set-chars" && i + 1 < args.Length)
                 {
                     o.SetCharsFile = Path.GetFullPath(args[++i]);
+                }
+                else if (a == "install")
+                {
+                    o.Install = true;
+                }
+                else if (a == "uninstall")
+                {
+                    o.Uninstall = true;
+                }
+                else if (a == "yes")
+                {
+                    o.Yes = true;
+                }
+                else if (a == "wait-instance")
+                {
+                    o.WaitInstance = true;
                 }
                 else if (a == "check-update")
                 {
@@ -637,6 +691,50 @@ namespace MountSheetSync
                 MessageBox.Show(Tr._("Mount Sheet Sync уже запущен — его значок в трее, возле часов."),
                     Program.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        static string ExitEventName(string suffix)
+        {
+            return "Local\\MountSheetSync.Exit" + suffix;
+        }
+
+        static EventWaitHandle exitEvent;
+
+        /// <summary>Попросить работающий экземпляр выйти (установка, удаление). false — он не запущен.</summary>
+        public static bool RequestExit(string suffix)
+        {
+            try
+            {
+                using (EventWaitHandle e = EventWaitHandle.OpenExisting(ExitEventName(suffix)))
+                {
+                    e.Set();
+                    return true;
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public static void ListenExit(string suffix, Action onSignal)
+        {
+            try
+            {
+                exitEvent = new EventWaitHandle(false, EventResetMode.AutoReset, ExitEventName(suffix));
+            }
+            catch (Exception)
+            {
+                return;
+            }
+            Thread thread = new Thread(delegate()
+            {
+                exitEvent.WaitOne();
+                onSignal();
+            });
+            thread.IsBackground = true;
+            thread.Name = "MountSheetSync exit";
+            thread.Start();
         }
 
         public static void Listen(string suffix, Action onSignal)

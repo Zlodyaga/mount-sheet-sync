@@ -29,6 +29,15 @@ namespace MountSheetSync
             Rotate();
         }
 
+        /// <summary>Больше не писать в файл (папку настроек сейчас удалят).</summary>
+        public static void Close()
+        {
+            lock (Gate)
+            {
+                path = null;
+            }
+        }
+
         public static void Write(string message)
         {
             string line = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + "  " + message;

@@ -7,7 +7,7 @@ which bosses each character has killed this week, which mounts you already own, 
 
 - **The addon** (WoW Retail, Midnight 12.x) records boss kills, your characters and your mount collection, and shows
   the “Remaining” list for the current character right in the game.
-- **The program** (Windows 10/11, nothing to install) watches the addon's saved data, creates the spreadsheet in your
+- **The program** (Windows 10/11, one file, no administrator rights) watches the addon's saved data, creates the spreadsheet in your
   own Google Drive and marks kills and collected mounts there. It also brings the “Remaining” list back into the game.
 
 ```
@@ -44,11 +44,15 @@ sample marks (`tools/screens/program.py`).
 
 ## Install
 
-1. **Addon:** install *Mount Sheet Sync* from CurseForge, or copy the `MountSheetSync` folder from the release archive
-   to `World of Warcraft\_retail_\Interface\AddOns`.
-2. **Program:** download `MountSheetSync-<version>.zip` from [Releases](../../releases), extract it to a normal folder
-   (for example, Documents) and run `2-program\MountSheetSync.exe`. Windows SmartScreen may warn about an unknown
-   publisher: “More info” → “Run anyway” (the program is not code-signed; its full source is in this repository).
+1. **Addon:** install *Mount Sheet Sync* from CurseForge, or copy the `MountSheetSync` folder from the full release
+   archive (`MountSheetSync-<version>.zip` in [Releases](../../releases)) to `World of Warcraft\_retail_\Interface\AddOns`.
+2. **Program:** download
+   [MountSheetSync.exe](https://github.com/Zlodyaga/mount-sheet-sync/releases/latest/download/MountSheetSync.exe) and
+   run it. Windows SmartScreen may warn about an unknown publisher: “More info” → “Run anyway” (the program is not
+   code-signed; its full source is in this repository). On the first start it offers to install itself: it copies
+   itself to `%LOCALAPPDATA%\Programs\MountSheetSync` (no administrator rights), adds a Start menu shortcut and appears
+   in Windows' “Installed apps”, where it can be uninstalled. “No” runs it from where it is. The program from the full
+   archive (`2-program\MountSheetSync.exe`) works the same way.
 3. In the settings window: **Sign in with Google…** → **Create spreadsheet…** → pick the spreadsheet language and tick
    your characters. Done — log in to
    the game, kill a boss, go back to character selection, and the row turns “Yes”.

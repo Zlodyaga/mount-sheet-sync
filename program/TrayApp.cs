@@ -80,6 +80,8 @@ namespace MountSheetSync
                 worker.Start(settings, true, TimeSpan.Zero, TimeSpan.Zero);
             }
             SingleInstance.Listen(instanceSuffix, delegate { Post(OnSecondInstance); });
+            SingleInstance.ListenExit(instanceSuffix, delegate { Post(ExitApp); });   // установка или удаление
+            Installer.Refresh();
 
             Updater.CleanupOld();
             if (!string.IsNullOrEmpty(updatedFrom))

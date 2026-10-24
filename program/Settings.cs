@@ -28,6 +28,8 @@ namespace MountSheetSync
         public bool CheckUpdates = true;
         /// <summary>О какой версии уже напомнили уведомлением (второй раз о ней не напоминаем).</summary>
         public string UpdateNotified = "";
+        /// <summary>Отсюда ставить программу не захотели («Нет» на вопросе об установке) — больше не спрашивать.</summary>
+        public string InstallDeclined = "";
         /// <summary>Язык программы: "auto" (как в Windows) или "en", "ru", "de", "fr", "es", "pt".</summary>
         public string Language = "auto";
         public int PollSeconds = 5;
@@ -140,6 +142,7 @@ namespace MountSheetSync
                     s.CheckUpdates = J.Truthy(d, "checkUpdates");
                 }
                 s.UpdateNotified = J.Str(d, "updateNotified").Trim();
+                s.InstallDeclined = J.Str(d, "installDeclined").Trim();
                 long n = J.Long(d, "pollSeconds");
                 if (n >= 2 && n <= 3600)
                 {
@@ -173,6 +176,10 @@ namespace MountSheetSync
             if (UpdateNotified.Length > 0)
             {
                 d["updateNotified"] = UpdateNotified;
+            }
+            if (InstallDeclined.Length > 0)
+            {
+                d["installDeclined"] = InstallDeclined;
             }
             d["language"] = Language;
             d["pollSeconds"] = PollSeconds;

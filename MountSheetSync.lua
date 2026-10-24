@@ -55,6 +55,9 @@ local scanQueued = false
 local manualScanPending = false
 
 ns.VERSION = VERSION
+-- Сайт проекта: там программа Mount Sheet Sync (список «Осталось» и таблицу ведёт она). Аддон показывает адрес
+-- только там, где без программы чего-то нет (пустая вкладка «Осталось», ответ на /mss left), — не в чат сам по себе.
+ns.PROGRAM_URL = "https://zlodyaga.github.io/"
 
 local function Print(msg)
   DEFAULT_CHAT_FRAME:AddMessage(PREFIX .. msg)

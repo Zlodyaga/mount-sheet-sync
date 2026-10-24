@@ -43,5 +43,6 @@ if [ "${1:-}" != "--no-ui" ]; then
   run ui_google.py "$EXE"
   run ui_lang.py "$EXE"
   run ui_update.py "$EXE"
+  run e2e_install.py "$EXE"
 fi
 exit $failed

@@ -360,8 +360,18 @@ g.MountSheetSyncSheet = None
 win.Hide(win); win.Show(win)
 check("no list yet: explained", remaining().state == "nodata" and "Списка пока нет" in str(empty._text) and empty._shown)
 g.SlashCmdList["MOUNTSHEETSYNC"]("left")
-check("/mss left without a list", "Списка «Осталось» пока нет" in chat_all().split("\n")[-1])
+check("/mss left without a list: explained, with the address of the program's site",
+      "Списка «Осталось» пока нет" in chat_all().split("\n")[-2]
+      and "Программы ещё нет? Она бесплатная: https://zlodyaga.github.io/" in chat_all().split("\n")[-1], chat_all()[-300:])
+urls = [r for r in regions("EditBox") if r._text == "https://zlodyaga.github.io/"]
+check("no list yet: the site address in a box to copy, under the text", len(urls) == 1 and urls[0]._shown
+      and "Программы ещё нет" in str(empty._text), [(r._text, r._shown) for r in urls])
+urls[0]._text = "что-то другое"
+urls[0]._scripts.OnTextChanged(urls[0], True)
+check("…the address cannot be changed", urls[0]._text == "https://zlodyaga.github.io/")
 g.MountSheetSyncSheet = sheet_table
+win.Hide(win); win.Show(win)
+check("with a list: no address box", not [r for r in regions("EditBox") if r._text == "https://zlodyaga.github.io/" and r._shown])
 
 # ---- text from the sheet is shown literally
 item = None

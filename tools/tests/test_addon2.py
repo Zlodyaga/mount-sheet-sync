@@ -225,7 +225,8 @@ check("newest record first", "Злой босс x Конец" in str(shown_rows[
 check("rows are colored by kind", "|cff8cff8c" in str([r for r in shown_rows if "Галлеон" in str(r._text)][0]._text))
 
 # manual add from the window
-edit = [r for r in regions("EditBox") if under_window(r)][0]
+edit = [r for r in regions("EditBox") if under_window(r) and r._maxLetters == 60][0]   # «Отметить вручную»
+url = [r for r in regions("EditBox") if under_window(r) and r._maxLetters != 60][0]
 edit._text = "  Ша Злости "
 cnt = len(kills())
 click(button("Отметить"))

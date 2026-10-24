@@ -3,7 +3,7 @@ name: Release
 # Push a tag like v2.3.0 (it must match "## Version:" in MountSheetSync.toc):
 #   - the program is built on Windows with the built-in C# compiler (and signed through SignPath
 #     once that is set up — see the "Sign with SignPath" step),
-#   - the full archive (addon + program + sources + guide) goes to a GitHub release,
+#   - the full archive (addon + program + sources + guide) and MountSheetSync.exe on its own go to a GitHub release,
 #   - the addon alone is packaged by the BigWigs packager and uploaded to CurseForge
 #     (only when the CF_API_KEY secret is set and the .toc has "## X-Curse-Project-ID").
 
@@ -77,9 +77,13 @@ jobs:
           v=${GITHUB_REF_NAME#v}
           awk -v h="## $v" '$0==h{on=1;next} /^## /{on=0} on' CHANGELOG.md > notes.md
           cat notes.md
+      # MountSheetSync.exe on its own, always under this name: the website's "Download" button is
+      # releases/latest/download/MountSheetSync.exe; on first start the program offers to install itself
       - uses: softprops/action-gh-release@v3
         with:
-          files: dist/*.zip
+          files: |
+            dist/*.zip
+            built/MountSheetSync.exe
           body_path: notes.md
 
   addon:

@@ -503,6 +503,7 @@ function ns.PrintRemaining()
   local r = ns.GetRemaining()
   if r.state == "nodata" then
     ns.Print(L.print_nodata)
+    ns.Print(string.format(L.print_getprogram, ns.PROGRAM_URL))
     return
   end
   if r.state == "nochar" then

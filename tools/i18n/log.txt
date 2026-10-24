@@ -354,3 +354,15 @@ en: Update error: {0}
 
 @ Не удалось перезапустить программу: {0}
 en: Could not restart the program: {0}
+
+@ Установка не удалась: {0}
+en: Installation failed: {0}
+
+@ Программа установлена: {0}
+en: Program installed: {0}
+
+@ Ярлык в меню «Пуск» не создан: {0}
+en: The Start menu shortcut was not created: {0}
+
+@ Программа удалена; настройки остались в {0}.
+en: Program uninstalled; the settings stay in {0}.
