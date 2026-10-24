@@ -121,6 +121,15 @@ try:
     # --autostart: no settings window over the menu (the program is not set up)
     tray = subprocess.Popen(["mono", app_exe, "--data", data, "--autostart"], env=env, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     check("the tray program finds the new version on its own", wait_log("A new version is available: 9.9.9"), log_text()[-600:])
+    mark_path = os.path.join(addon, "Program.lua")
+    end = time.time() + 30   # --autostart: the sync loop starts 15 s after the program
+    while time.time() < end and not os.path.exists(mark_path):
+        time.sleep(0.5)
+    mark = open(mark_path, encoding="utf-8").read() if os.path.exists(mark_path) else ""
+    import re
+    m = re.search(r"MountSheetSyncProgram = \{ seen = (\d+), sheet = (true|false)", mark)
+    check("while it runs, the program marks itself for the addon (Program.lua: seen = now, no sheet yet)",
+          m is not None and abs(int(m.group(1)) - time.time()) < 90 and m.group(2) == "false", mark)
     time.sleep(1.5)
     shot("v1_notice")
     st = json.load(open(os.path.join(data, "settings.json"), encoding="utf-8-sig"))
@@ -148,6 +157,10 @@ try:
     running = subprocess.run(["pgrep", "-f", "MountSheetSync.exe --wait-pid"], capture_output=True, text=True).stdout.split()
     check("the new version runs in the tray", len(running) == 1, running)
     check("the new version removed MountSheetSync.exe.old", not os.path.exists(app_exe + ".old"), os.listdir(app))
+    mark = open(os.path.join(addon, "Program.lua"), encoding="utf-8").read() if os.path.exists(os.path.join(addon, "Program.lua")) else ""
+    m = re.search(r"seen = (\d+)", mark)
+    check("…and after the addon update the mark is there again (fresh, from the new version)",
+          m is not None and abs(int(m.group(1)) - time.time()) < 90, mark)
     shot("v4_after_restart")
 finally:
     subprocess.run(["pkill", "-f", app_exe], capture_output=True)

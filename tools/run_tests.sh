@@ -28,6 +28,7 @@ run() {
 run test_addon2.py
 run test_addon_left.py
 run test_minimap.py
+run test_offline.py
 run test_collection.py
 run test_locale.py
 run test_gamedata.py

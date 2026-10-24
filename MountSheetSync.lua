@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 2.6.0 — ядро
+Mount Sheet Sync 2.7.0 — ядро
 =============================
 Записывает убийства боссов на текущем персонаже и новые маунты, чтобы программа
 Mount Sheet Sync (MountSheetSync.exe в трее Windows) отметила их в Google-таблице маунтов:
@@ -26,7 +26,7 @@ SavedVariables. Игра сохраняет файл
 
 local ADDON_NAME, ns = ...
 
-local VERSION = "2.6.0"
+local VERSION = "2.7.0"
 local MAX_RECORDS = 400               -- храним не больше стольких записей
 local MAX_AGE = 21 * 24 * 60 * 60     -- и не старше трёх недель
 local DUPLICATE_WINDOW = 120          -- ENCOUNTER_END и BOSS_KILL об одном бое, сек
@@ -58,6 +58,31 @@ ns.VERSION = VERSION
 -- Сайт проекта: там программа Mount Sheet Sync (список «Осталось» и таблицу ведёт она). Аддон показывает адрес
 -- только там, где без программы чего-то нет (пустая вкладка «Осталось», ответ на /mss left), — не в чат сам по себе.
 ns.PROGRAM_URL = "https://zlodyaga.github.io/"
+
+-- Запущена ли программа: пока она работает, она раз в минуту переписывает Program.lua
+-- (MountSheetSyncProgram.seen — время записи, 0 — программа закрылась). Игра читает файл при входе и /reload,
+-- так что ответ верен на момент загрузки интерфейса и до следующего /reload не меняется.
+--   "online"  — программа работает и подключена к таблице;
+--   "nosheet" — работает, но таблица ещё не настроена;
+--   "offline" — программы нет (или она закрыта): убийства запоминаются и уйдут в таблицу, когда она запустится.
+local PROGRAM_FRESH = 150   -- секунд: программа пишет раз в минуту, с запасом на паузу
+local loadedAt = time()
+local programState
+
+function ns.ProgramState()
+  if not programState then
+    local p = MountSheetSyncProgram
+    local seen = type(p) == "table" and tonumber(p.seen) or nil
+    if not seen or seen <= 0 or loadedAt - seen > PROGRAM_FRESH then
+      programState = "offline"
+    elseif p.sheet == false then
+      programState = "nosheet"
+    else
+      programState = "online"
+    end
+  end
+  return programState
+end
 
 local function Print(msg)
   DEFAULT_CHAT_FRAME:AddMessage(PREFIX .. msg)
@@ -231,7 +256,11 @@ local function Announce(rec)
   Print(string.format(L.announce, Describe(rec), rec.char))
   if not hintShown then
     hintShown = true
-    Print(string.format(L.announce_hint, CMD .. "/mss|r"))
+    if ns.ProgramState() == "online" then
+      Print(string.format(L.announce_hint, CMD .. "/mss|r"))
+    else
+      Print("|cff8c8c8c" .. L.announce_offline .. "|r")
+    end
   end
 end
 

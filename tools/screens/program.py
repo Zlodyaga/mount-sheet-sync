@@ -89,7 +89,7 @@ def icon_url():
 def menu_html(w, h):
     ic = icon_url()
     main = [
-        ("title", "Mount Sheet Sync 2.6.0"),
+        ("title", "Mount Sheet Sync 2.7.0"),
         ("dis", "Таблица «Маунты WoW» — связь есть"),
         ("dis", "Последняя отправка: сегодня в 18:42 — Отмечено в таблице: 2"),
         ("sep", None),

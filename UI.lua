@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 2.6.0 — окно, иконка и настройки
+Mount Sheet Sync 2.7.0 — окно, иконка и настройки
 ==================================================
   * окно (ЛКМ по иконке или /mss): вкладки «Журнал» (записи аддона) и «Осталось»
     (что текущему персонажу ещё убить на этой неделе — из таблицы), все действия кнопками;
@@ -146,6 +146,9 @@ local function FillBrokerTooltip(tooltip)
     if last then
       tooltip:AddLine(string.format(L.tip_last, ns.Describe(last), last.char or "?"), 0.8, 0.8, 0.8)
     end
+  end
+  if ns.ProgramState() ~= "online" then
+    tooltip:AddLine(L.tip_offline_short, 0.6, 0.6, 0.6, true)
   end
   tooltip:AddLine(L.tip_left_click, 0.6, 0.6, 0.6)
   tooltip:AddLine(L.tip_right_click, 0.6, 0.6, 0.6)
@@ -482,7 +485,19 @@ local function CreateWindow()
   hint:SetPoint("BOTTOMLEFT", 18, 12)
   hint:SetPoint("BOTTOMRIGHT", -18, 12)
   hint:SetJustifyH("LEFT")
-  Label(hint, "window_hint")
+  -- Без программы (или пока она не подключена к таблице) — та же неброская строка, но о том, что аддон
+  -- работает сам по себе; подробности — при наведении.
+  local state = ns.ProgramState()
+  if state == "online" then
+    Label(hint, "window_hint")
+  else
+    Label(hint, state == "nosheet" and "window_nosheet" or "window_offline")
+    local hover = CreateFrame("Frame", nil, frame)
+    hover:SetPoint("TOPLEFT", hint, "TOPLEFT", 0, 2)
+    hover:SetPoint("BOTTOMRIGHT", hint, "BOTTOMRIGHT", 0, -2)
+    hover:EnableMouse(true)
+    AttachTooltip(hover, "offline_title", state == "nosheet" and "tip_nosheet" or "tip_offline")
+  end
 
   frame:SetScript("OnShow", UI.Refresh)
   local elapsedTotal = 0

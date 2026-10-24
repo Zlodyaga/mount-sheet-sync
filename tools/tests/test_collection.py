@@ -115,12 +115,12 @@ toc = open(os.path.join(ADDON_DIR, "MountSheetSync.toc"), encoding="utf-8").read
 files = [ln.strip().replace("\\", "/") for ln in toc if ln.strip() and not ln.startswith("#")]
 check("Collection.lua in the toc after the core, before the window",
       files.index("MountSheetSync.lua") < files.index("Collection.lua") < files.index("UI.lua"), files)
-check("toc version 2.6.0", "## Version: 2.6.0" in toc)
+check("toc version 2.7.0", "## Version: 2.7.0" in toc)
 ns = L.table()
 loader = L.eval("function(src, name) return assert(loadstring(src, '@' .. name)) end")
 for name in files:
     loader(open(os.path.join(ADDON_DIR, name), encoding="utf-8").read(), name)("MountSheetSync", ns)
-check("core version 2.6.0", ns.VERSION == "2.6.0")
+check("core version 2.7.0", ns.VERSION == "2.7.0")
 
 
 def chat_all():

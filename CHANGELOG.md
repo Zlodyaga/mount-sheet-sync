@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.7.0
+- The addon says, quietly, when the tray program is not running: a grey line at the bottom of its window (details on
+  hover), one grey line in the Data Broker tooltip, and after the first kill of the session “the kill is remembered and
+  goes to the sheet once the program starts” instead of the usual hint. Kills are recorded as always. While it runs,
+  the program writes `Program.lua` into the addon folder once a minute; the game reads it at login and `/reload`.
+
 ## 2.6.0
 - The program is also published on its own, as `MountSheetSync.exe` (the home page links to the latest one), and
   installs itself: started from Downloads, the desktop or an archive, it offers to copy itself to

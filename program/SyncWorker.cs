@@ -101,6 +101,7 @@ namespace MountSheetSync
         long collectionSeen = -1;
         bool networkBack;
         volatile bool stopping;
+        readonly ProgramMark mark = new ProgramMark();   // Program.lua: «программа запущена» для аддона
         bool announce;
         DateTime quietUntil = DateTime.MinValue;
         string lastSignature;
@@ -327,6 +328,7 @@ namespace MountSheetSync
         {
             stopping = true;
             wake.Set();
+            mark.Stop();
         }
 
         void Loop()
@@ -405,6 +407,7 @@ namespace MountSheetSync
             {
                 statusDirty = true;
             }
+            mark.Beat(engine.Settings);
 
             if (!engine.Settings.IsConfigured)
             {

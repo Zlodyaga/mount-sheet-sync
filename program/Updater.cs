@@ -375,7 +375,7 @@ namespace MountSheetSync
 
         /// <summary>
         /// Аддон из архива: новые файлы собираются рядом (Interface\MountSheetSync.update), потом папки меняются
-        /// местами. SheetData.lua (список «Осталось», его пишет программа) переносится в новую папку.
+        /// местами. SheetData.lua (список «Осталось») и Program.lua (их пишет программа) переносятся в новую папку.
         /// </summary>
         static void ReplaceAddon(string addonDir, Dictionary<string, byte[]> files)
         {
@@ -392,10 +392,13 @@ namespace MountSheetSync
                     Directory.CreateDirectory(Path.GetDirectoryName(path));
                     File.WriteAllBytes(path, kv.Value);
                 }
-                string sheet = Path.Combine(addonDir, SheetData.FileName);
-                if (File.Exists(sheet))
+                foreach (string keep in new[] { SheetData.FileName, ProgramMark.FileName })
                 {
-                    File.Copy(sheet, Path.Combine(staging, SheetData.FileName), true);
+                    string kept = Path.Combine(addonDir, keep);
+                    if (File.Exists(kept))
+                    {
+                        File.Copy(kept, Path.Combine(staging, keep), true);
+                    }
                 }
                 File.WriteAllText(Path.Combine(staging, MarkerFile), MarkerText(), FileUtil.Utf8NoBom);
                 Directory.Move(addonDir, previous);
