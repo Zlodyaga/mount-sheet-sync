@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 2.4.0 — languages / языки
+Mount Sheet Sync 2.5.0 — languages / языки
 ==========================================
 The addon speaks the game client's language when it knows it (Russian, German,
 French, Spanish, Portuguese) and English otherwise. The choice can be changed

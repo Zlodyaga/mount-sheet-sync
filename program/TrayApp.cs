@@ -32,12 +32,19 @@ namespace MountSheetSync
         ToolStripMenuItem autostartItem;
         ToolStripMenuItem notifyItem;
         ToolStripMenuItem languageItem;
+        ToolStripMenuItem updateItem;
+        ToolStripMenuItem checkUpdatesItem;
+        /// <summary>Новая версия на GitHub (null — нет или ещё не проверяли).</summary>
+        UpdateInfo available;
+        bool updating;
+        bool balloonIsUpdate;
+        System.Threading.Timer updateTimer;
         Settings settings;
         WorkerStatus last = new WorkerStatus();
         SettingsForm settingsForm;
         bool exiting;
 
-        public TrayApp(bool autostart, string instanceSuffix)
+        public TrayApp(bool autostart, string instanceSuffix, string updatedFrom)
         {
             GC.KeepAlive(invoker.Handle);   // окно для передачи событий из фонового потока
             settings = Settings.Load(AppPaths.SettingsFile);
@@ -46,6 +53,13 @@ namespace MountSheetSync
             tray.Icon = okIcon;
             tray.ContextMenuStrip = menu;
             tray.MouseUp += OnTrayMouseUp;
+            tray.BalloonTipClicked += delegate
+            {
+                if (balloonIsUpdate && available != null)
+                {
+                    StartUpdate();
+                }
+            };
             SetTooltip(Program.Title + " — " + Tr._("запуск…"));
             tray.Visible = true;
 
@@ -66,6 +80,24 @@ namespace MountSheetSync
                 worker.Start(settings, true, TimeSpan.Zero, TimeSpan.Zero);
             }
             SingleInstance.Listen(instanceSuffix, delegate { Post(OnSecondInstance); });
+
+            Updater.CleanupOld();
+            if (!string.IsNullOrEmpty(updatedFrom))
+            {
+                Log.Write(Tr.L("Обновление установлено: {0} → {1}.", updatedFrom, Program.Version));
+                ShowNote(MakeNote(Tr.F("Mount Sheet Sync обновлён до версии {0}", Program.Version),
+                    Tr._("Что нового — на странице выпуска на GitHub. Если обновился и аддон, наберите в игре /reload."), false));
+            }
+            // новая версия: через минуту после запуска, потом раз в сутки
+            TimeSpan firstCheck = TimeSpan.FromMinutes(1);
+#if TESTS
+            int testDelay;
+            if (int.TryParse(Environment.GetEnvironmentVariable("MSS_UPDATE_DELAY"), out testDelay))
+            {
+                firstCheck = TimeSpan.FromSeconds(testDelay);
+            }
+#endif
+            updateTimer = new System.Threading.Timer(delegate { CheckForUpdate(false); }, null, firstCheck, TimeSpan.FromHours(24));
 
             if (!settings.IsConfigured)
             {
@@ -97,6 +129,10 @@ namespace MountSheetSync
             menu.ShowCheckMargin = true;
             ToolStripMenuItem title = Disabled(Program.Title + " " + Program.Version);
             title.Font = new Font(menu.Font, FontStyle.Bold);
+            updateItem = Item("", delegate { StartUpdate(); });
+            updateItem.Font = new Font(menu.Font, FontStyle.Bold);
+            updateItem.Visible = false;
+            checkUpdatesItem = Item(Tr._("Проверять обновления"), delegate { ToggleUpdates(); });
             statusItem = Disabled(Tr._("Запуск…"));
             detailItem = Disabled("");
             detailItem.Visible = false;
@@ -126,11 +162,11 @@ namespace MountSheetSync
             }
             menu.Items.AddRange(new ToolStripItem[]
             {
-                title, statusItem, detailItem, new ToolStripSeparator(),
+                title, updateItem, statusItem, detailItem, new ToolStripSeparator(),
                 syncItem, recentItem, leftItem, openSheetItem, signInItem, createItem, addCharsItem, farmItem, collectionItem, new ToolStripSeparator(),
                 Item(Tr._("Настройки…"), delegate { OpenSettings(false); }),
                 Item(Tr._("Журнал работы"), delegate { OpenLog(); }),
-                autostartItem, notifyItem, languageItem, new ToolStripSeparator(),
+                autostartItem, notifyItem, checkUpdatesItem, languageItem, new ToolStripSeparator(),
                 Item(Tr._("Выход"), delegate { ExitApp(); }),
             });
         }
@@ -305,6 +341,14 @@ namespace MountSheetSync
             farmItem.Visible = haveSheet;
             autostartItem.Checked = Autostart.IsEnabled();
             notifyItem.Checked = settings.Notifications;
+            checkUpdatesItem.Checked = settings.CheckUpdates;
+            updateItem.Visible = available != null;
+            updateItem.Enabled = !updating;
+            if (available != null)
+            {
+                updateItem.Text = MenuText(updating ? Tr.F("Обновляю до версии {0}…", available.Version)
+                    : Tr.F("Обновить до версии {0}…", available.Version));
+            }
             ClearItems(recentItem);
             if (last.Recent.Count == 0)
             {
@@ -371,6 +415,7 @@ namespace MountSheetSync
             {
                 return;
             }
+            balloonIsUpdate = n.IsUpdate;
             string title = TextUtil.Shorten(string.IsNullOrEmpty(n.Title) ? Program.Title : n.Title, 63);
             string text = TextUtil.Shorten(string.IsNullOrEmpty(n.Text) ? title : n.Text, 255);
             try
@@ -593,6 +638,161 @@ namespace MountSheetSync
             SetAutostart(!Autostart.IsEnabled());
         }
 
+        // ------------------------------------------------------------------
+        // Обновления
+        // ------------------------------------------------------------------
+
+        void ToggleUpdates()
+        {
+            settings.CheckUpdates = !settings.CheckUpdates;
+            SaveSettings();
+            if (settings.CheckUpdates)
+            {
+                CheckForUpdate(true);
+            }
+            else
+            {
+                available = null;
+            }
+        }
+
+        void SaveSettings()
+        {
+            try
+            {
+                settings.Save(AppPaths.SettingsFile);
+            }
+            catch (Exception ex)
+            {
+                Log.Write(Tr.L("Не удалось сохранить настройки: {0}", ex.Message));
+            }
+        }
+
+        /// <summary>Фоном спросить GitHub. manual — по галочке в меню: ответ показывается всегда.</summary>
+        void CheckForUpdate(bool manual)
+        {
+            if (!manual && !settings.CheckUpdates)
+            {
+                return;
+            }
+            System.Threading.ThreadPool.QueueUserWorkItem(delegate
+            {
+                UpdateInfo info = null;
+                string error = null;
+                try
+                {
+                    info = Updater.Check();
+                }
+                catch (SyncException ex)
+                {
+                    error = ex.Message;
+                }
+                catch (Exception ex)
+                {
+                    error = ex.Message;
+                }
+                Post(delegate { UpdateChecked(info, error, manual); });
+            });
+        }
+
+        void UpdateChecked(UpdateInfo info, string error, bool manual)
+        {
+            if (error != null)
+            {
+                Log.Write(Tr.L("Проверить обновления не получилось: {0}", error));
+                return;
+            }
+            available = info;
+            if (info == null)
+            {
+                if (manual)
+                {
+                    ShowNote(MakeNote(Tr._("Обновлений нет"), Tr.F("У вас последняя версия: {0}.", Program.Version), false));
+                }
+                return;
+            }
+            Log.Write(Tr.L("Есть новая версия: {0} ({1}).", info.Version, info.PageUrl));
+            if (manual || settings.UpdateNotified != info.Version)
+            {
+                settings.UpdateNotified = info.Version;
+                SaveSettings();
+                Note n = MakeNote(Tr.F("Вышла версия {0}", info.Version),
+                    Tr._("Нажмите, чтобы обновить, — или меню значка → «Обновить до версии…»."), false);
+                n.IsUpdate = true;
+                ShowNote(n);
+            }
+        }
+
+        void StartUpdate()
+        {
+            UpdateInfo info = available;
+            if (info == null || updating)
+            {
+                return;
+            }
+            string notes = Updater.ShortNotes(info.Notes);
+            DialogResult answer = MessageBox.Show(
+                Tr.F("Обновить Mount Sheet Sync до версии {0}?", info.Version)
+                + (notes.Length > 0 ? "\n\n" + notes : "")
+                + "\n\n" + Tr._("Программа скачает новую версию с GitHub, проверит контрольную сумму и перезапустится. Аддон, поставленный из архива, обновится тоже (в игре — /reload); аддон из CurseForge обновляет приложение CurseForge."),
+                Program.Title, MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+            if (answer != DialogResult.OK)
+            {
+                return;
+            }
+            updating = true;
+            Log.Write(Tr.L("Обновление до {0}…", info.Version));
+            Settings s = settings.Clone();
+            System.Threading.ThreadPool.QueueUserWorkItem(delegate
+            {
+                UpdateResult result = null;
+                string error = null;
+                try
+                {
+                    result = Updater.Install(info, WowLocator.FindRetailDirs(s.WowPath), delegate(string text) { Log.Write(text); });
+                }
+                catch (SyncException ex)
+                {
+                    error = ex.Message;
+                }
+                catch (Exception ex)
+                {
+                    Log.Write(Tr.L("Ошибка обновления: {0}", ex));
+                    error = ex.Message;
+                }
+                Post(delegate { UpdateInstalled(info, result, error); });
+            });
+        }
+
+        void UpdateInstalled(UpdateInfo info, UpdateResult result, string error)
+        {
+            updating = false;
+            if (error != null)
+            {
+                Log.Write(Tr.L("Обновление не установлено: {0}", error));
+                DialogResult answer = MessageBox.Show(Tr.F("Обновление не установлено: {0}.", error) + "\n\n"
+                    + Tr._("Открыть страницу выпуска, чтобы скачать новую версию вручную?"),
+                    Program.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
+                if (answer == DialogResult.Yes)
+                {
+                    Browser.Open(info.PageUrl);
+                }
+                return;
+            }
+            Program.LogUpdate(info, result);
+            try
+            {
+                Updater.Restart(Program.Version);
+            }
+            catch (Exception ex)
+            {
+                Log.Write(Tr.L("Не удалось перезапустить программу: {0}", ex.Message));
+                ShowNote(MakeNote(Tr.F("Версия {0} установлена", info.Version), Tr._("Перезапустите программу, чтобы она заработала."), false));
+                return;
+            }
+            ExitApp();
+        }
+
         void ToggleNotifications()
         {
             settings.Notifications = !settings.Notifications;
@@ -674,6 +874,10 @@ namespace MountSheetSync
             }
             exiting = true;
             Log.Write(Tr.L("Выход."));
+            if (updateTimer != null)
+            {
+                updateTimer.Dispose();
+            }
             worker.Stop();
             tray.Visible = false;
             ExitThread();

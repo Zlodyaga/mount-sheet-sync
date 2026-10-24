@@ -8,7 +8,7 @@ MountSheetSyncDB = {
 			["level"] = 72,
 			["name"] = "Мирна",
 			["realm"] = "Ревущий фьорд",
-			["seen"] = 1792797198,
+			["seen"] = 1792835802,
 		},
 		["Эйра-Ревущий фьорд"] = {
 			["class"] = "Жрица",
@@ -17,7 +17,7 @@ MountSheetSyncDB = {
 			["level"] = 72,
 			["name"] = "Эйра",
 			["realm"] = "Ревущий фьорд",
-			["seen"] = 1792797198,
+			["seen"] = 1792835802,
 		},
 	},
 	["collection"] = {
@@ -70,7 +70,7 @@ MountSheetSyncDB = {
 			"Пепел Ал'ара", -- [2]
 			"Синий протодракон", -- [3]
 		},
-		["updated"] = 1792797198,
+		["updated"] = 1792835802,
 	},
 	["journal"] = {
 		["build"] = "66300",
@@ -120,7 +120,7 @@ MountSheetSyncDB = {
 			}, -- [3]
 		},
 		["locale"] = "ruRU",
-		["updated"] = 1792797198,
+		["updated"] = 1792835802,
 	},
 	["kills"] = {
 		{
@@ -135,7 +135,7 @@ MountSheetSyncDB = {
 			["realm"] = "Ревущий фьорд",
 			["source"] = "mount",
 			["spellID"] = 59996,
-			["time"] = 1792790028,
+			["time"] = 1792828632,
 		}, -- [1]
 	},
 	["minimap"] = {

@@ -14,6 +14,8 @@
 //   --add-chars   добавить в таблицу персонажей, которых в ней ещё нет;
 //   --sync-collection  сверить таблицу с коллекцией маунтов из игры;
 //   --set-chars <файл.json>  персонажи таблицы как в файле: [{"name":"Эйра","raids":true,"dungeons":false,"world":true}, …];
+//   --check-update  проверить, есть ли новая версия на GitHub;
+//   --update      скачать и поставить новую версию (и аддон, если его ставили из архива), без перезапуска;
 //   --data <папка>  хранить настройки и журнал в другой папке (вместо %APPDATA%\MountSheetSync).
 
 using System;
@@ -29,7 +31,7 @@ namespace MountSheetSync
 {
     static class Program
     {
-        public const string Version = "2.4.0";
+        public const string Version = "2.5.0";
         public const string Title = "Mount Sheet Sync";
 
         [STAThread]
@@ -48,7 +50,7 @@ namespace MountSheetSync
                 return 1;
             }
             bool console = opts.Once || opts.Test || opts.GoogleLogin || opts.CreateSheet || opts.AddChars || opts.SyncCollection
-                || opts.SetCharsFile != null;
+                || opts.SetCharsFile != null || opts.CheckUpdate || opts.Update;
             Tr.Use(Settings.Load(AppPaths.SettingsFile).Language);
             Log.Init(AppPaths.LogFile, console);
             ConfigureNetwork();
@@ -78,6 +80,14 @@ namespace MountSheetSync
             {
                 return RunSetChars(opts.SetCharsFile);
             }
+            if (opts.CheckUpdate || opts.Update)
+            {
+                return RunUpdate(opts.Update);
+            }
+            if (opts.WaitPid > 0)
+            {
+                Updater.WaitFor(opts.WaitPid);   // перезапуск после обновления: прежний экземпляр ещё выходит
+            }
 
             // Отдельные папки данных (для проверок) — отдельные экземпляры.
             string suffix = opts.DataDir == null ? "" : "." + ShortHash(AppPaths.DataDir);
@@ -104,7 +114,7 @@ namespace MountSheetSync
                 }
                 try
                 {
-                    return opts.Once ? RunOnce() : RunTray(opts.Autostart, suffix);
+                    return opts.Once ? RunOnce() : RunTray(opts.Autostart, suffix, opts.UpdatedFrom);
                 }
                 finally
                 {
@@ -113,7 +123,7 @@ namespace MountSheetSync
             }
         }
 
-        static int RunTray(bool autostart, string suffix)
+        static int RunTray(bool autostart, string suffix, string updatedFrom)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
@@ -134,11 +144,61 @@ namespace MountSheetSync
             {
                 Log.Write(Tr.L("Необработанная ошибка: {0}", e.ExceptionObject));
             };
-            using (TrayApp app = new TrayApp(autostart, suffix))
+            using (TrayApp app = new TrayApp(autostart, suffix, updatedFrom))
             {
                 Application.Run(app);
             }
             return 0;
+        }
+
+        static int RunUpdate(bool install)
+        {
+            UpdateInfo info;
+            try
+            {
+                info = Updater.Check();
+            }
+            catch (SyncException ex)
+            {
+                Log.Write(Tr.L("Проверить обновления не получилось: {0}", ex.Message));
+                return 1;
+            }
+            if (info == null)
+            {
+                Log.Write(Tr.L("Обновлений нет: {0} — последняя версия.", Version));
+                return 0;
+            }
+            Log.Write(Tr.L("Есть новая версия: {0} ({1}).", info.Version, info.PageUrl));
+            if (!install)
+            {
+                return 0;
+            }
+            try
+            {
+                Settings settings = Settings.Load(AppPaths.SettingsFile);
+                UpdateResult r = Updater.Install(info, WowLocator.FindRetailDirs(settings.WowPath), Log.Write);
+                LogUpdate(info, r);
+                return 0;
+            }
+            catch (SyncException ex)
+            {
+                Log.Write(Tr.L("Обновление не установлено: {0}", ex.Message));
+                return 1;
+            }
+        }
+
+        /// <summary>Что сделало обновление — в журнал.</summary>
+        public static void LogUpdate(UpdateInfo info, UpdateResult r)
+        {
+            Log.Write(Tr.L("Программа обновлена до {0}: {1}", info.Version, r.ExePath));
+            foreach (string d in r.AddonsUpdated)
+            {
+                Log.Write(Tr.L("Аддон обновлён: {0} (в игре — /reload).", d));
+            }
+            foreach (string d in r.AddonsLeft)
+            {
+                Log.Write(Tr.L("Аддон в {0} поставлен не из архива (CurseForge?) — его обновляет CurseForge.", d));
+            }
         }
 
         static int RunOnce()
@@ -436,6 +496,10 @@ namespace MountSheetSync
         public string SheetTitle;
         public string SheetLang;
         public string DataDir;
+        public bool CheckUpdate;
+        public bool Update;
+        public int WaitPid;
+        public string UpdatedFrom;
 
         public static Options Parse(string[] args)
         {
@@ -483,6 +547,22 @@ namespace MountSheetSync
                 {
                     o.SetCharsFile = Path.GetFullPath(args[++i]);
                 }
+                else if (a == "check-update")
+                {
+                    o.CheckUpdate = true;
+                }
+                else if (a == "update")
+                {
+                    o.Update = true;
+                }
+                else if (a == "wait-pid" && i + 1 < args.Length)
+                {
+                    int.TryParse(args[++i], System.Globalization.NumberStyles.Integer, System.Globalization.CultureInfo.InvariantCulture, out o.WaitPid);
+                }
+                else if (a == "updated-from" && i + 1 < args.Length)
+                {
+                    o.UpdatedFrom = args[++i];
+                }
                 else if (a == "data" && i + 1 < args.Length)
                 {
                     o.DataDir = Path.GetFullPath(args[++i]);
@@ -513,6 +593,8 @@ namespace MountSheetSync
         }
 
         public static string DataDir;
+        /// <summary>Папка из --data (null — обычная); её передаёт и перезапуск после обновления.</summary>
+        public static string CustomDataDir;
         public static string SettingsFile;
         public static string SentFile;
         public static string StateFile;
@@ -520,6 +602,7 @@ namespace MountSheetSync
 
         public static void Init(string overrideDir)
         {
+            CustomDataDir = overrideDir;
             DataDir = overrideDir ?? Path.Combine(
                 Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MountSheetSync");
             Directory.CreateDirectory(DataDir);

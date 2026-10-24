@@ -24,6 +24,10 @@ namespace MountSheetSync
         public string Secret = DefaultSecret;
         public string WowPath = "";
         public bool Notifications = true;
+        /// <summary>Раз в сутки смотреть, нет ли новой версии на GitHub.</summary>
+        public bool CheckUpdates = true;
+        /// <summary>О какой версии уже напомнили уведомлением (второй раз о ней не напоминаем).</summary>
+        public string UpdateNotified = "";
         /// <summary>Язык программы: "auto" (как в Windows) или "en", "ru", "de", "fr", "es", "pt".</summary>
         public string Language = "auto";
         public int PollSeconds = 5;
@@ -131,6 +135,11 @@ namespace MountSheetSync
                 {
                     s.Notifications = J.Truthy(d, "notifications");
                 }
+                if (d.ContainsKey("checkUpdates"))
+                {
+                    s.CheckUpdates = J.Truthy(d, "checkUpdates");
+                }
+                s.UpdateNotified = J.Str(d, "updateNotified").Trim();
                 long n = J.Long(d, "pollSeconds");
                 if (n >= 2 && n <= 3600)
                 {
@@ -160,6 +169,11 @@ namespace MountSheetSync
             d["secret"] = Secret;
             d["wowPath"] = WowPath;
             d["notifications"] = Notifications;
+            d["checkUpdates"] = CheckUpdates;
+            if (UpdateNotified.Length > 0)
+            {
+                d["updateNotified"] = UpdateNotified;
+            }
             d["language"] = Language;
             d["pollSeconds"] = PollSeconds;
             if (RetrySeconds != 60)

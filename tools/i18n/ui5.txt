@@ -1,0 +1,230 @@
+@ Mount Sheet Sync обновлён до версии {0}
+en: Mount Sheet Sync updated to version {0}
+de: Mount Sheet Sync auf Version {0} aktualisiert
+fr: Mount Sheet Sync mis à jour en version {0}
+es: Mount Sheet Sync actualizado a la versión {0}
+pt: Mount Sheet Sync atualizado para a versão {0}
+
+@ Что нового — на странице выпуска на GitHub. Если обновился и аддон, наберите в игре /reload.
+en: What's new is on the release page on GitHub. If the addon was updated too, type /reload in the game.
+de: Was neu ist, steht auf der Release-Seite auf GitHub. Wurde auch das Addon aktualisiert, im Spiel /reload eingeben.
+fr: Les nouveautés sont sur la page de la version sur GitHub. Si l'addon a aussi été mis à jour, tapez /reload dans le jeu.
+es: Las novedades están en la página de la versión en GitHub. Si el addon también se actualizó, escriba /reload en el juego.
+pt: As novidades estão na página da versão no GitHub. Se o addon também foi atualizado, digite /reload no jogo.
+
+@ Проверять обновления
+en: Check for updates
+de: Nach Updates suchen
+fr: Rechercher les mises à jour
+es: Buscar actualizaciones
+pt: Procurar atualizações
+
+@ Обновляю до версии {0}…
+en: Updating to version {0}…
+de: Aktualisiere auf Version {0}…
+fr: Mise à jour vers la version {0}…
+es: Actualizando a la versión {0}…
+pt: Atualizando para a versão {0}…
+
+@ Обновить до версии {0}…
+en: Update to version {0}…
+de: Auf Version {0} aktualisieren…
+fr: Mettre à jour vers la version {0}…
+es: Actualizar a la versión {0}…
+pt: Atualizar para a versão {0}…
+
+@ Обновлений нет
+en: No updates
+de: Keine Updates
+fr: Aucune mise à jour
+es: No hay actualizaciones
+pt: Nenhuma atualização
+
+@ У вас последняя версия: {0}.
+en: You have the latest version: {0}.
+de: Sie haben die neueste Version: {0}.
+fr: Vous avez la dernière version : {0}.
+es: Tiene la última versión: {0}.
+pt: Você tem a versão mais recente: {0}.
+
+@ Вышла версия {0}
+en: Version {0} is out
+de: Version {0} ist erschienen
+fr: La version {0} est disponible
+es: Ya está la versión {0}
+pt: Saiu a versão {0}
+
+@ Нажмите, чтобы обновить, — или меню значка → «Обновить до версии…».
+en: Click to update — or icon menu → “Update to version…”.
+de: Zum Aktualisieren klicken — oder Symbolmenü → „Auf Version … aktualisieren“.
+fr: Cliquez pour mettre à jour — ou menu de l'icône → « Mettre à jour vers la version… ».
+es: Haga clic para actualizar, o menú del icono → «Actualizar a la versión…».
+pt: Clique para atualizar — ou menu do ícone → “Atualizar para a versão…”.
+
+@ Обновить Mount Sheet Sync до версии {0}?
+en: Update Mount Sheet Sync to version {0}?
+de: Mount Sheet Sync auf Version {0} aktualisieren?
+fr: Mettre à jour Mount Sheet Sync vers la version {0} ?
+es: ¿Actualizar Mount Sheet Sync a la versión {0}?
+pt: Atualizar o Mount Sheet Sync para a versão {0}?
+
+@ Программа скачает новую версию с GitHub, проверит контрольную сумму и перезапустится. Аддон, поставленный из архива, обновится тоже (в игре — /reload); аддон из CurseForge обновляет приложение CurseForge.
+en: The program downloads the new version from GitHub, checks its checksum and restarts. An addon installed from the archive is updated too (type /reload in the game); an addon from CurseForge is updated by the CurseForge app.
+de: Das Programm lädt die neue Version von GitHub, prüft die Prüfsumme und startet neu. Ein aus dem Archiv installiertes Addon wird mit aktualisiert (im Spiel /reload); ein Addon aus CurseForge aktualisiert die CurseForge-App.
+fr: Le programme télécharge la nouvelle version depuis GitHub, vérifie la somme de contrôle et redémarre. Un addon installé depuis l'archive est aussi mis à jour (tapez /reload dans le jeu) ; un addon de CurseForge est mis à jour par l'application CurseForge.
+es: El programa descarga la nueva versión de GitHub, comprueba la suma de verificación y se reinicia. Un addon instalado desde el archivo también se actualiza (escriba /reload en el juego); un addon de CurseForge lo actualiza la aplicación de CurseForge.
+pt: O programa baixa a nova versão do GitHub, confere a soma de verificação e reinicia. Um addon instalado pelo arquivo também é atualizado (digite /reload no jogo); um addon do CurseForge é atualizado pelo aplicativo do CurseForge.
+
+@ Обновление не установлено: {0}.
+en: The update was not installed: {0}.
+de: Das Update wurde nicht installiert: {0}.
+fr: La mise à jour n'a pas été installée : {0}.
+es: La actualización no se instaló: {0}.
+pt: A atualização não foi instalada: {0}.
+
+@ Открыть страницу выпуска, чтобы скачать новую версию вручную?
+en: Open the release page to download the new version by hand?
+de: Release-Seite öffnen, um die neue Version von Hand herunterzuladen?
+fr: Ouvrir la page de la version pour télécharger la nouvelle version à la main ?
+es: ¿Abrir la página de la versión para descargarla a mano?
+pt: Abrir a página da versão para baixar a nova versão manualmente?
+
+@ Версия {0} установлена
+en: Version {0} installed
+de: Version {0} installiert
+fr: Version {0} installée
+es: Versión {0} instalada
+pt: Versão {0} instalada
+
+@ Перезапустите программу, чтобы она заработала.
+en: Restart the program to start using it.
+de: Starten Sie das Programm neu, damit sie wirkt.
+fr: Redémarrez le programme pour l'utiliser.
+es: Reinicie el programa para usarla.
+pt: Reinicie o programa para usá-la.
+
+@ нет связи с GitHub: {0}
+en: no connection to GitHub: {0}
+de: keine Verbindung zu GitHub: {0}
+fr: pas de connexion à GitHub : {0}
+es: sin conexión con GitHub: {0}
+pt: sem conexão com o GitHub: {0}
+
+@ GitHub ответил непонятно: {0}
+en: GitHub sent an odd reply: {0}
+de: GitHub hat unverständlich geantwortet: {0}
+fr: GitHub a renvoyé une réponse incompréhensible : {0}
+es: GitHub respondió algo incomprensible: {0}
+pt: O GitHub deu uma resposta estranha: {0}
+
+@ в выпуске {0} нет архива программы
+en: release {0} has no program archive
+de: Release {0} enthält kein Programmarchiv
+fr: la version {0} n'a pas d'archive du programme
+es: la versión {0} no tiene archivo del programa
+pt: a versão {0} não tem o arquivo do programa
+
+@ GitHub не дал контрольную сумму архива — обновите программу вручную
+en: GitHub gave no checksum for the archive — update the program by hand
+de: GitHub hat keine Prüfsumme des Archivs geliefert — Programm bitte von Hand aktualisieren
+fr: GitHub n'a pas fourni la somme de contrôle de l'archive — mettez le programme à jour à la main
+es: GitHub no dio la suma de verificación del archivo; actualice el programa a mano
+pt: o GitHub não deu a soma de verificação do arquivo — atualize o programa manualmente
+
+@ Скачиваю {0}…
+en: Downloading {0}…
+de: Lade {0} herunter…
+fr: Téléchargement de {0}…
+es: Descargando {0}…
+pt: Baixando {0}…
+
+@ не удалось скачать обновление: {0}
+en: could not download the update: {0}
+de: Update konnte nicht heruntergeladen werden: {0}
+fr: impossible de télécharger la mise à jour : {0}
+es: no se pudo descargar la actualización: {0}
+pt: não foi possível baixar a atualização: {0}
+
+@ контрольная сумма скачанного архива не совпала — обновление не установлено
+en: the checksum of the downloaded archive does not match — the update was not installed
+de: die Prüfsumme des heruntergeladenen Archivs stimmt nicht — Update nicht installiert
+fr: la somme de contrôle de l'archive téléchargée ne correspond pas — mise à jour non installée
+es: la suma de verificación del archivo descargado no coincide; la actualización no se instaló
+pt: a soma de verificação do arquivo baixado não confere — a atualização não foi instalada
+
+@ Обновляю аддон…
+en: Updating the addon…
+de: Aktualisiere das Addon…
+fr: Mise à jour de l'addon…
+es: Actualizando el addon…
+pt: Atualizando o addon…
+
+@ Ставлю новую версию программы…
+en: Installing the new version of the program…
+de: Installiere die neue Programmversion…
+fr: Installation de la nouvelle version du programme…
+es: Instalando la nueva versión del programa…
+pt: Instalando a nova versão do programa…
+
+@ не удалось заменить программу ({0}) — в папку программы нельзя писать? Скачайте новую версию вручную
+en: could not replace the program ({0}) — is its folder read-only? Download the new version by hand
+de: Programm konnte nicht ersetzt werden ({0}) — ist sein Ordner schreibgeschützt? Neue Version bitte von Hand herunterladen
+fr: impossible de remplacer le programme ({0}) — son dossier est-il en lecture seule ? Téléchargez la nouvelle version à la main
+es: no se pudo reemplazar el programa ({0}); ¿su carpeta es de solo lectura? Descargue la nueva versión a mano
+pt: não foi possível substituir o programa ({0}) — a pasta dele é somente leitura? Baixe a nova versão manualmente
+
+@ не удалось заменить программу: {0}
+en: could not replace the program: {0}
+de: Programm konnte nicht ersetzt werden: {0}
+fr: impossible de remplacer le programme : {0}
+es: no se pudo reemplazar el programa: {0}
+pt: não foi possível substituir o programa: {0}
+
+@ в архиве обновления странные пути — обновление не установлено
+en: the update archive has odd paths — the update was not installed
+de: das Update-Archiv enthält seltsame Pfade — Update nicht installiert
+fr: l'archive de mise à jour contient des chemins étranges — mise à jour non installée
+es: el archivo de actualización tiene rutas extrañas; la actualización no se instaló
+pt: o arquivo de atualização tem caminhos estranhos — a atualização não foi instalada
+
+@ архив обновления повреждён: {0}
+en: the update archive is damaged: {0}
+de: das Update-Archiv ist beschädigt: {0}
+fr: l'archive de mise à jour est endommagée : {0}
+es: el archivo de actualización está dañado: {0}
+pt: o arquivo de atualização está danificado: {0}
+
+@ в архиве обновления нет программы
+en: the update archive has no program in it
+de: im Update-Archiv fehlt das Programm
+fr: l'archive de mise à jour ne contient pas le programme
+es: el archivo de actualización no contiene el programa
+pt: o arquivo de atualização não contém o programa
+
+@ в архиве обновления нет аддона
+en: the update archive has no addon in it
+de: im Update-Archiv fehlt das Addon
+fr: l'archive de mise à jour ne contient pas l'addon
+es: el archivo de actualización no contiene el addon
+pt: o arquivo de atualização não contém o addon
+
+@ новая версия подписана не тем издателем ({0}) — обновление не установлено
+en: the new version is signed by a different publisher ({0}) — the update was not installed
+de: die neue Version ist von einem anderen Herausgeber signiert ({0}) — Update nicht installiert
+fr: la nouvelle version est signée par un autre éditeur ({0}) — mise à jour non installée
+es: la nueva versión está firmada por otro editor ({0}); la actualización no se instaló
+pt: a nova versão está assinada por outro editor ({0}) — a atualização não foi instalada
+
+@ без подписи
+en: not signed
+de: nicht signiert
+fr: non signée
+es: sin firmar
+pt: sem assinatura
+
+@ не удалось обновить аддон ({0}): {1}
+en: could not update the addon ({0}): {1}
+de: Addon konnte nicht aktualisiert werden ({0}): {1}
+fr: impossible de mettre à jour l'addon ({0}) : {1}
+es: no se pudo actualizar el addon ({0}): {1}
+pt: não foi possível atualizar o addon ({0}): {1}

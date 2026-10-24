@@ -321,3 +321,36 @@ en: Start with Windows path updated: {0}
 
 @ Аддон Mount Sheet Sync не установлен: нет папки {0}.
 en: The Mount Sheet Sync addon is not installed: there is no folder {0}.
+
+@ Проверить обновления не получилось: {0}
+en: Could not check for updates: {0}
+
+@ Обновлений нет: {0} — последняя версия.
+en: No updates: {0} is the latest version.
+
+@ Есть новая версия: {0} ({1}).
+en: A new version is available: {0} ({1}).
+
+@ Обновление не установлено: {0}
+en: The update was not installed: {0}
+
+@ Программа обновлена до {0}: {1}
+en: Program updated to {0}: {1}
+
+@ Аддон обновлён: {0} (в игре — /reload).
+en: Addon updated: {0} (type /reload in the game).
+
+@ Аддон в {0} поставлен не из архива (CurseForge?) — его обновляет CurseForge.
+en: The addon in {0} was not installed from the archive (CurseForge?) — CurseForge updates it.
+
+@ Обновление установлено: {0} → {1}.
+en: Update installed: {0} → {1}.
+
+@ Обновление до {0}…
+en: Updating to {0}…
+
+@ Ошибка обновления: {0}
+en: Update error: {0}
+
+@ Не удалось перезапустить программу: {0}
+en: Could not restart the program: {0}

@@ -10,7 +10,7 @@ if not exist "%CSC%" (
   if not defined CI pause
   exit /b 1
 )
-"%CSC%" /nologo /target:winexe /optimize+ /codepage:65001 /out:MountSheetSync.exe /win32icon:app.ico /win32manifest:app.manifest /resource:app-small.ico,MountSheetSync.app.ico /resource:warn-small.ico,MountSheetSync.warn.ico /resource:catalog.json,MountSheetSync.catalog.json /resource:i18n.json,MountSheetSync.i18n.json /resource:sheet-i18n.json,MountSheetSync.sheet-i18n.json /reference:System.dll /reference:System.Core.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll /reference:System.Security.dll *.cs
+"%CSC%" /nologo /target:winexe /optimize+ /codepage:65001 /out:MountSheetSync.exe /win32icon:app.ico /win32manifest:app.manifest /resource:app-small.ico,MountSheetSync.app.ico /resource:warn-small.ico,MountSheetSync.warn.ico /resource:catalog.json,MountSheetSync.catalog.json /resource:i18n.json,MountSheetSync.i18n.json /resource:sheet-i18n.json,MountSheetSync.sheet-i18n.json /reference:System.dll /reference:System.Core.dll /reference:System.Drawing.dll /reference:System.Windows.Forms.dll /reference:System.Security.dll /reference:System.IO.Compression.dll *.cs
 if errorlevel 1 (
   echo Build failed.
   if not defined CI pause

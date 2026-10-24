@@ -68,6 +68,8 @@ namespace MountSheetSync
         public bool Warning;
         /// <summary>Ответ на действие человека — показывать, даже если уведомления выключены.</summary>
         public bool Manual;
+        /// <summary>Уведомление о новой версии: щелчок по нему запускает обновление.</summary>
+        public bool IsUpdate;
     }
 
     /// <summary>

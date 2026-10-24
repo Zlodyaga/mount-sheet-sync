@@ -64,6 +64,7 @@ Full text: [privacy policy](https://zlodyaga.github.io/privacy.html).
 - The program asks Google only for `drive.file` (plus your e-mail address to show which account is signed in).
   With `drive.file` it can open **only the spreadsheets it created itself** — nothing else on your Google Drive.
 - Everything runs on your computer. There is no server of ours in between: the program talks to Google directly.
+- Once a day it asks GitHub whether a new version is out (icon menu → “Check for updates” turns that off).
 - The sign-in key is stored in `%APPDATA%\MountSheetSync\google-token.dat`, encrypted by Windows (DPAPI) for your
   Windows user only. “Sign out” in the settings revokes it.
 - The addon never sends anything anywhere: WoW addons cannot use the network. It only writes its SavedVariables file.

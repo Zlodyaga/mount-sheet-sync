@@ -48,6 +48,12 @@ for f in sorted(os.listdir(os.path.join(root, "Media"))):
 shutil.copyfile(os.path.join(root, "Libs", "CallbackHandler-1.0", "LICENSE.txt"),
                 os.path.join(addon, "Libs", "CallbackHandler-1.0", "LICENSE.txt"))
 assert "MountSheetSyncSheet = nil" in read(os.path.join(addon, "SheetData.lua")), "SheetData.lua must ship empty"
+# the program updates an addon only when it was installed from this archive (Updater.cs: MarkerFile, MarkerText);
+# the CurseForge build of the addon has no such file, so the CurseForge app keeps updating that one
+put(os.path.join(addon, "installed-from-archive.txt"),
+    "This copy of the addon was installed from the Mount Sheet Sync release archive.\n"
+    "The Mount Sheet Sync program updates it together with itself. Delete this file to stop that\n"
+    "(for example, if you switch to the CurseForge app).\n", False)
 prog = os.path.join(root, "program")
 for f in sorted(os.listdir(prog)):
     p = os.path.join(prog, f)

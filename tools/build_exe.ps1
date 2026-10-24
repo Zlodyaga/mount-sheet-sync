@@ -28,7 +28,7 @@ foreach ($f in (Get-ChildItem -Path $Src -Filter '*.cs' | Sort-Object Name)) {
 }
 
 $refs = [System.Collections.Generic.List[Microsoft.CodeAnalysis.MetadataReference]]::new()
-foreach ($n in 'mscorlib', 'System', 'System.Core', 'System.Drawing', 'System.Windows.Forms', 'System.Security') {
+foreach ($n in 'mscorlib', 'System', 'System.Core', 'System.Drawing', 'System.Windows.Forms', 'System.Security', 'System.IO.Compression') {
     $refs.Add([Microsoft.CodeAnalysis.MetadataReference]::CreateFromFile((Join-Path $RefDir "$n.dll")))
 }
 
