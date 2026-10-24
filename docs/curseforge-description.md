@@ -17,7 +17,7 @@
 ## Getting started
 
 1. Install the addon and log in. Kill a boss, or press **Find in lockouts** in the `/mss` window.
-2. For the spreadsheet, get the free companion program for Windows 10/11 from the project website (link at the bottom of this page), sign in with Google and press **Create spreadsheet…**
+2. For the spreadsheet, get the free companion program for Windows 10/11 from the project website (link at the bottom of this page; the addon shows the address too), install it, sign in with Google and press **Create spreadsheet…**
 3. Play as usual. Back at character select the sheet is updated, and the "Remaining" list comes back into the game.
 
 Without the program the addon still records kills, characters and mounts; the "Remaining" list and the spreadsheet need the program.
@@ -30,4 +30,4 @@ Without the program the addon still records kills, characters and mounts; the "R
 
 ---
 
-Open source, MIT license · [Website and privacy policy](https://zlodyaga.github.io/) · [Source code](https://github.com/Zlodyaga/mount-sheet-sync)
+Open source, MIT license · [Get the Windows program — project website](https://zlodyaga.github.io/) · [Privacy policy](https://zlodyaga.github.io/privacy.html) · [Source code](https://github.com/Zlodyaga/mount-sheet-sync)
