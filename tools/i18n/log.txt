@@ -166,11 +166,23 @@ en: Could not move the unfinished spreadsheet to the trash: {0}
 @ Персонажи в таблице: {0}.
 en: Characters in the spreadsheet: {0}.
 
-@ Таблица обновлена: «Да»/«Нет» цветом, колонка «Фармлю» на листах персонажей ({0}).
-en: Spreadsheet updated: coloured “Yes”/“No”, “Farming” column on character sheets ({0}).
+@ Таблица обновлена: {0}.
+en: Spreadsheet updated: {0}.
 
-@ Таблица обновлена: «Да»/«Нет» цветом.
-en: Spreadsheet updated: coloured “Yes”/“No”.
+@ «Да»/«Нет» цветом, колонка «Фармлю» на листах персонажей ({0})
+en: coloured “Yes”/“No”, “Farming” column on character sheets ({0})
+
+@ «Да»/«Нет» цветом
+en: coloured “Yes”/“No”
+
+@ счётчик попыток на общих листах ({0})
+en: attempt counter on the main sheets ({0})
+
+@ [#] {0}: {1} — попытка {2}, шанс за все попытки {3}
+en: [#] {0}: {1} — attempt {2}, chance over all attempts {3}
+
+@ [#] {0}: {1} — попытка {2}
+en: [#] {0}: {1} — attempt {2}
 
 @ Таблица «{0}» — связь есть.
 en: Spreadsheet “{0}” — connected.

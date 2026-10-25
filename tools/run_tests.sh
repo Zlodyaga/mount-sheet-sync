@@ -29,11 +29,13 @@ run test_addon2.py
 run test_addon_left.py
 run test_minimap.py
 run test_offline.py
+run test_attempts_addon.py
 run test_collection.py
 run test_locale.py
 run test_gamedata.py
 run test_collection_sync.py
 run test_layout22.py
+run test_attempts.py
 run e2e_google.py "$EXE"
 run e2e_collection.py "$EXE" "$F/MountSheetSync-2.0-test.exe"
 run e2e_chars.py "$EXE" "$F/MountSheetSync-2.1-test.exe"

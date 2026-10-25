@@ -8,6 +8,7 @@
 
 - **"Remaining" list in the game.** Log in on an alt and see at once which raid, dungeon and world bosses are still worth a run this week. Kills are ticked off as they happen.
 - **Nothing to type.** Kills are recorded automatically, with difficulty. New mounts are noticed the moment you learn them. Kills from before you installed the addon are picked up from your lockouts with one click.
+- **Attempt counter.** After a kill that could drop a mount you still need, the chat says which attempt it was and the chance over all attempts ("attempt 37 · 31%"); the boss tooltip shows the same and how many of your characters still have that boss this week. Counted in the spreadsheet, all characters together.
 - **A spreadsheet that fills itself.** With the companion Windows program: a sheet per character in your own Google Drive, about 165 mounts from raids, dungeons and world bosses with skip and farming tips. A kill turns "Yes" on its own, collected mounts drop off the list.
 - **Six languages.** English, Russian, German, French, Spanish and Portuguese — the addon, the program and the spreadsheet.
 - **Light and private.** The addon never sends anything anywhere (WoW addons can't). The program can open only the spreadsheets it created itself.

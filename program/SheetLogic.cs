@@ -38,7 +38,7 @@ namespace MountSheetSync
         void SetProperty(string key, string value);
     }
 
-    static class SheetLogic
+    static partial class SheetLogic
     {
         public const string Yes = "Да";
         public const string No = "Нет";
@@ -238,6 +238,10 @@ namespace MountSheetSync
             double weekEnd = Number(J.Get(kill, "weekEnd"));
             if (weekEnd > 0 && weekEnd * 1000 <= NowMs())
             {
+                if (kind != "reset")
+                {
+                    CountAttempts(book, kill, kind, KillNames(kill), o);   // отметка недели устарела, а попытка была
+                }
                 o["status"] = "stale";
                 o["message"] = Tr._("убийство до еженедельного сброса — пропущено");
                 return o;
@@ -253,15 +257,7 @@ namespace MountSheetSync
                 return ResetWeek(book, o);
             }
             HashSet<string> charKeys = CharacterKeys(kill);
-            List<string> names = BossNames(J.Get(kill, "boss"));
-            // по номеру боя — имена из каталога и журнала игры (таблица на другом языке, «Галеон» / «Галлеон»)
-            foreach (string n in Encounters.NamesFor(J.Get(kill, "encounterID")))
-            {
-                if (!names.Contains(n))
-                {
-                    names.Add(n);
-                }
-            }
+            List<string> names = KillNames(kill);
             MarkContext ctx = new MarkContext();
             ctx.Cells = (List<object>)o["cells"];
 
@@ -283,6 +279,7 @@ namespace MountSheetSync
             {
                 worldFound = MarkInWorld(book, kill, charKeys, names, ctx);
             }
+            CountAttempts(book, kill, kind, names, o);   // «Попыток» на общих листах (SheetAttempts.cs)
 
             if (ctx.Cells.Any(c => (bool)((Dictionary<string, object>)c)["changed"]))
             {
@@ -307,6 +304,20 @@ namespace MountSheetSync
                 o["message"] = Tr._("такого босса нет на листах персонажа");
             }
             return o;
+        }
+
+        /// <summary>Имена босса записи и, по номеру боя, имена из каталога и журнала игры (таблица на другом языке, «Галеон» / «Галлеон»).</summary>
+        static List<string> KillNames(Dictionary<string, object> kill)
+        {
+            List<string> names = BossNames(J.Get(kill, "boss"));
+            foreach (string n in Encounters.NamesFor(J.Get(kill, "encounterID")))
+            {
+                if (!names.Contains(n))
+                {
+                    names.Add(n);
+                }
+            }
+            return names;
         }
 
         /// <summary>«ps-1.0.0» и старше не поддерживают сброс недели.</summary>
@@ -1318,6 +1329,11 @@ namespace MountSheetSync
             }
             reply["known"] = KnownDifficultyIds();
             reply["chars"] = order.Select(k => (object)chars[k]).ToList();
+            List<object> mounts = StatusMounts(book, collected);
+            if (mounts.Count > 0)
+            {
+                reply["mounts"] = mounts;   // счётчик попыток (таблица программы 2.8+)
+            }
             return reply;
         }
 

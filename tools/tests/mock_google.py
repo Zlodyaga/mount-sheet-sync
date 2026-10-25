@@ -45,7 +45,7 @@ SEQ = [0]
 KNOWN_REQUESTS = {
     "addSheet", "deleteSheet", "updateCells", "repeatCell", "updateDimensionProperties", "addBanding",
     "setDataValidation", "addConditionalFormatRule", "setBasicFilter", "mergeCells", "updateSpreadsheetProperties",
-    "createDeveloperMetadata", "updateDeveloperMetadata", "appendDimension", "deleteDimension",
+    "createDeveloperMetadata", "updateDeveloperMetadata", "appendDimension", "deleteDimension", "insertDimension",
 }
 
 
@@ -381,6 +381,34 @@ class Handler(BaseHTTPRequestHandler):
                 for i in range(rg["startIndex"], rg["endIndex"]):
                     if x["properties"].get("hiddenByUser") and i not in hidden[rg["dimension"]]:
                         hidden[rg["dimension"]].append(i)
+            return {}
+        if kind == "insertDimension":
+            rg = x["range"]
+            s = self.sheet_by_id(book, rg["sheetId"])
+            a, b = rg["startIndex"], rg["endIndex"]
+            if rg["dimension"] != "COLUMNS" or a >= b or a > s["cols"]:
+                raise ApiError(400, "INVALID_ARGUMENT", "Invalid dimension range")
+            if a == 0 and x.get("inheritFromBefore"):
+                raise ApiError(400, "INVALID_ARGUMENT", "Cannot inherit from before at index 0")
+            n = b - a
+            cells = {}
+            for k, v in s["cells"].items():
+                r, c = map(int, k.split(","))
+                cells["%d,%d" % (r, c + n if c >= a else c)] = v
+            s["cells"] = cells
+            s["cols"] += n
+            for band in book["bandings"]:
+                o = band["range"]
+                if o["sheetId"] != s["sheetId"]:
+                    continue
+                if o["startColumnIndex"] >= a:
+                    o["startColumnIndex"] += n
+                if o["endColumnIndex"] > a:
+                    o["endColumnIndex"] += n
+            hidden = s.get("hidden")
+            if hidden:
+                hidden["COLUMNS"] = [i + n if i >= a else i for i in hidden["COLUMNS"]]
+            book.setdefault("insertedCols", []).append([s["title"], a, b])
             return {}
         if kind == "deleteDimension":
             rg = x["range"]

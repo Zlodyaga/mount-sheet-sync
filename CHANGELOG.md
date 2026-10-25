@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.8.0
+- Attempt counter: “Attempts” and “Chance over all attempts” next to “Drop chance” on the Raids, Dungeons and World
+  Bosses sheets (existing spreadsheets get them on their own, counting from 0; a number typed by hand is continued).
+  Every kill with a fitting difficulty of a boss whose mount is not collected yet adds one attempt, all characters
+  together; mounts without a random chance (achievements, purchases, guaranteed) have no counter.
+- In the game: after such a kill the chat says “<mount> could drop: attempt 37 · chance over all attempts 31%”
+  (kills the program has not sent yet are counted too), and the boss tooltip — and the boss page of the Adventure
+  Guide — shows the attempts and on how many characters the boss is still alive this week.
+- The addon settings (right click) have “Bug report info…”: versions and state of the addon and the program as text to
+  copy into a bug report, without character names, realm or spreadsheet.
+- The program refreshes the “Remaining” list on its 30-minute schedule only while the game is running (and right when
+  it starts), so it asks Google much less often; after sending kills it refreshes as before.
+
 ## 2.7.0
 - The addon says, quietly, when the tray program is not running: a grey line at the bottom of its window (details on
   hover), one grey line in the Data Broker tooltip, and after the first kill of the session “the kill is remembered and

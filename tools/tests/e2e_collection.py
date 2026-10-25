@@ -198,7 +198,8 @@ try:
     book = state()["spreadsheets"][sid]
     rows, raid_sheet = cells(book, "Рейды")
     idc = column(rows, ID)
-    check("hidden «ID в игре» column appended to «Рейды»", idc == [width_before] and idc[0] in raid_sheet.get("hidden", {}).get("COLUMNS", []),
+    check("hidden «ID в игре» column appended to «Рейды»", idc == [width_before + 2] and   # + the two 2.8 attempt columns
+          idc[0] in raid_sheet.get("hidden", {}).get("COLUMNS", []),
           (idc, raid_sheet.get("hidden")))
     check("…and to «Подземелья»", column(cells(book, "Подземелья")[0], ID))
     check("IDs written for the catalog rows", rows[a_row].get(idc[0]) == A["id"] and rows[b_row].get(idc[0]) == B["id"],

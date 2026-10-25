@@ -1,6 +1,7 @@
 // Готовая таблица программы — к виду новой версии (один раз, свойство таблицы «layout»):
 //   2 — «Да»/«Нет» цветом в «Собрано?» и «Пытался на этой неделе?», колонка «Фармлю» на листах персонажей,
 //       «Осталось попыток выбить» без строк, которые персонаж не фармит.
+//   3 — счётчик попыток: «Попыток» и «Шанс за все попытки» справа от «Шанса выпадения» на общих листах (2.8).
 // Колонку «ID в игре» добавляет CollectionSync — ей нужна коллекция из игры.
 
 using System;
@@ -12,7 +13,7 @@ namespace MountSheetSync
 {
     static class SheetUpgrade
     {
-        public const int Current = 2;
+        public const int Current = 3;
         public const string Property = "layout";
 
         static readonly string[] Masters = { SheetBuilder.RaidsSheet, SheetBuilder.DungeonsSheet, SheetBuilder.WorldSheet };
@@ -66,12 +67,38 @@ namespace MountSheetSync
         /// <summary>Обновить таблицу до текущего вида. true — что-то поменялось.</summary>
         public static bool Ensure(IStructuredBook book)
         {
-            if (LayoutOf(book) >= Current)
+            int layout = LayoutOf(book);
+            if (layout >= Current)
             {
                 return false;
             }
             List<object> req = new List<object>();
             List<Action> memory = new List<Action>();
+            List<string> done = new List<string>();
+            if (layout < 2)
+            {
+                done.Add(Layout2(book, req, memory));
+            }
+            int attempts = AttemptColumns(book, req, memory);
+            if (attempts > 0)
+            {
+                done.Add(Tr.L("счётчик попыток на общих листах ({0})", attempts));
+            }
+            book.Apply(req, Property, Current.ToString(CultureInfo.InvariantCulture));
+            foreach (Action a in memory)
+            {
+                a();
+            }
+            if (done.Count > 0)
+            {
+                Log.Write(Tr.L("Таблица обновлена: {0}.", string.Join("; ", done.ToArray())));
+            }
+            return true;
+        }
+
+        /// <summary>Вид 2: «Да»/«Нет» цветом, «Фармлю» на листах персонажей, новая «Осталось попыток выбить».</summary>
+        static string Layout2(IStructuredBook book, List<object> req, List<Action> memory)
+        {
             int farmAdded = 0;
             foreach (SheetEntry e in book.Entries)
             {
@@ -133,15 +160,52 @@ namespace MountSheetSync
             {
                 req.Add(leftFormula);
             }
-            book.Apply(req, Property, Current.ToString(CultureInfo.InvariantCulture));
-            foreach (Action a in memory)
+            return farmAdded > 0
+                ? Tr.L("«Да»/«Нет» цветом, колонка «Фармлю» на листах персонажей ({0})", farmAdded)
+                : Tr.L("«Да»/«Нет» цветом");
+        }
+
+        /// <summary>
+        /// Вид 3: на «Рейдах», «Подземельях» и «Мировых боссах» две колонки сразу за «Шансом выпадения» (на «Мировых
+        /// боссах» — перед колонками персонажей, как в новой таблице). Возвращает, на скольких листах они появились.
+        /// </summary>
+        static int AttemptColumns(IStructuredBook book, List<object> req, List<Action> memory)
+        {
+            int count = 0;
+            foreach (string name in Masters)
             {
-                a();
+                SheetEntry e = SheetLogic.ByName(book, name);
+                if (e == null || e.Data.Count == 0)
+                {
+                    continue;
+                }
+                object[] header = e.Data[0];
+                int cDrop = SheetLogic.FindCol(header, "^шанс выпадения", -1);
+                if (cDrop < 0 || SheetLogic.FindCol(header, SheetLogic.AttemptsPattern, -1) >= 0)
+                {
+                    continue;
+                }
+                int at = cDrop + 1;
+                int sid = (int)e.SheetId;
+                int cMount = SheetLogic.FindCol(header, "маунт", 3);
+                List<object[]> values = new List<object[]> { new object[] { SheetBuilder.AttemptsColumn, SheetBuilder.ChanceColumn } };
+                for (int r = 1; r < e.Data.Count; r++)
+                {
+                    object[] row = e.Data[r];
+                    bool filled = SheetLogic.CellText(row.Length > cMount ? row[cMount] : "").Length > 0;
+                    values.Add(filled ? SheetLogic.AttemptCells(row[cDrop], at, r) : new object[] { "", "" });
+                }
+                req.Add(SheetBuilder.O("insertDimension", SheetBuilder.O(
+                    "range", SheetBuilder.O("sheetId", sid, "dimension", "COLUMNS", "startIndex", at, "endIndex", at + 2),
+                    "inheritFromBefore", true)));
+                req.Add(SheetBuilder.UpdateCells(sid, 0, at, values));
+                req.AddRange(SheetBuilder.AttemptFormats(sid, at, e.Data.Count, name == SheetBuilder.RaidsSheet));
+                req.AddRange(SheetBuilder.ColumnWidths(sid, at, new[] { 90, 110 }));
+                SheetEntry entry = e;
+                memory.Add(delegate { BookEdit.InsertColumns(entry, at, values); });
+                count++;
             }
-            Log.Write(farmAdded > 0
-                ? Tr.L("Таблица обновлена: «Да»/«Нет» цветом, колонка «Фармлю» на листах персонажей ({0}).", farmAdded)
-                : Tr.L("Таблица обновлена: «Да»/«Нет» цветом."));
-            return true;
+            return count;
         }
 
         /// <summary>Новая формула «Осталось попыток выбить» на «Рейдах» (null — формулы там нет).</summary>

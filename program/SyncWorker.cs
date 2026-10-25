@@ -671,12 +671,34 @@ namespace MountSheetSync
         /// Список «Осталось на этой неделе» из таблицы → SheetData.lua в папке аддона.
         /// Обновляется после отправки, по «Отправить сейчас» и раз в 30 минут (правки в таблице руками).
         /// </summary>
+        bool wowWasRunning;
+        bool wowCached;
+        DateTime wowCheckedAt = DateTime.MinValue;
+
+        /// <summary>Запущена ли игра (Wow.exe и её варианты); проверка не чаще раза в 15 секунд.</summary>
+        bool WowRunning(DateTime now)
+        {
+            if (now - wowCheckedAt < TimeSpan.FromSeconds(15) && now >= wowCheckedAt)
+            {
+                return wowCached;
+            }
+            wowCheckedAt = now;
+            wowCached = GameProcess.Running();
+            return wowCached;
+        }
+
         void RefreshStatusIfDue()
         {
             DateTime now = DateTime.Now;
-            if (!statusDirty && now < nextStatusAt)
+            bool wow = WowRunning(now);
+            if (wow && !wowWasRunning)
             {
-                return;
+                statusDirty = true;   // игра только что запустилась — свежий список к первому входу персонажем
+            }
+            wowWasRunning = wow;
+            if (!statusDirty && (now < nextStatusAt || !wow))
+            {
+                return;   // по расписанию (правки в таблице руками) — только пока игра запущена
             }
             if (statusUnsupported && !statusDirty)
             {
@@ -1179,6 +1201,52 @@ namespace MountSheetSync
                 note.Manual = manual;
                 handler(note);
             }
+        }
+    }
+}
+
+namespace MountSheetSync
+{
+    /// <summary>Процесс игры: «Осталось» по расписанию обновляется, только пока он есть (меньше обращений к Google).</summary>
+    static class GameProcess
+    {
+#if !TESTS
+        static readonly string[] Names = { "Wow", "WowT", "WowB", "Wow-ARM64", "WowT-ARM64", "WowB-ARM64" };
+#endif
+
+        public static bool Running()
+        {
+#if TESTS
+            // проверки под mono: игры нет, поэтому по умолчанию «запущена» (как раньше); MSS_WOW_RUNNING=0 — нет
+            string test = Environment.GetEnvironmentVariable("MSS_WOW_RUNNING");
+            if (test != null)
+            {
+                return test == "1";
+            }
+            return true;
+#else
+            foreach (string name in Names)
+            {
+                try
+                {
+                    System.Diagnostics.Process[] found = System.Diagnostics.Process.GetProcessesByName(name);
+                    bool any = found.Length > 0;
+                    foreach (System.Diagnostics.Process p in found)
+                    {
+                        p.Dispose();
+                    }
+                    if (any)
+                    {
+                        return true;
+                    }
+                }
+                catch (Exception)
+                {
+                    return true;   // не смогли проверить — ведём себя как раньше
+                }
+            }
+            return false;
+#endif
         }
     }
 }

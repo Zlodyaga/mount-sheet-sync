@@ -137,7 +137,7 @@ namespace MountSheetSync
             if (world != null && world.Data.Count > 0)
             {
                 object[] wh = world.Data[0];
-                for (int i = SheetBuilder.WorldFixedColumns; i < wh.Length; i++)
+                for (int i = SheetBuilder.WorldFirstCharColumn(wh); i < wh.Length; i++)
                 {
                     string name = SheetLogic.CellText(wh[i]);
                     if (name.Length > 0)
@@ -324,8 +324,9 @@ namespace MountSheetSync
             if (world != null && world.Data.Count > 0 && (ch.AddedWorld.Count > 0 || dropCols.Count > 0))
             {
                 string[] wh = world.Data[0].Select(v => SheetLogic.CellText(v)).ToArray();
+                int firstChar = SheetBuilder.WorldFirstCharColumn(world.Data[0]);
                 int width = wh.Length;
-                while (width > SheetBuilder.WorldFixedColumns && wh[width - 1].Length == 0)
+                while (width > firstChar && wh[width - 1].Length == 0)
                 {
                     width--;
                 }
@@ -334,13 +335,13 @@ namespace MountSheetSync
                 int grid = (world.GridColumns > 0 ? world.GridColumns : world.Data[0].Length) - dropCols.Count;
                 int cLeft = Array.IndexOf(wh, SheetBuilder.Left);
                 SheetBuilder.AddWorldColumns(late, (int)world.SheetId, width, grid, rowCount,
-                    SheetBuilder.WorldFixedColumns, -1, ch.AddedWorld);
+                    firstChar, -1, ch.AddedWorld);
                 if (cLeft >= 0)
                 {
-                    int count = width + ch.AddedWorld.Count - SheetBuilder.WorldFixedColumns;
+                    int count = width + ch.AddedWorld.Count - firstChar;
                     late.Add(SheetBuilder.UpdateCells((int)world.SheetId, 1, cLeft, new List<object[]>
                     {
-                        new object[] { new SheetBuilder.Formula(SheetBuilder.WorldLeftFormula(SheetBuilder.WorldFixedColumns, count)) },
+                        new object[] { new SheetBuilder.Formula(SheetBuilder.WorldLeftFormula(firstChar, count)) },
                     }));
                 }
             }

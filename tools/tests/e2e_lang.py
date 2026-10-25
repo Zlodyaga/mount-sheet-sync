@@ -196,17 +196,17 @@ try:
     check("de: the program's marker names the language", mark and json.loads(mark[0]["metadataValue"]).get("lang") == "de", mark)
     raids = sheet_cells(book, "Schlachtzüge")
     check("de: German headers", raids[0][0] == "Gesammelt?" and raids[0][3] == "Reittier" and raids[0][12] == "Status"
-          and raids[0][15] == "Spiel-ID", raids[0])
-    r = find_row(raids, 15, 1471)
+          and raids[0][17] == "Spiel-ID", raids[0])
+    r = find_row(raids, 17, 1471)
     check("de: mount, boss and raid named as in the German game", r is not None and raids[r][3] == "Rache"
           and raids[r][5] == "Sylvanas Windläufer" and raids[r][2] == "Sanktum der Herrschaft", raids.get(r))
     check("de: «Gesammelt?» = Nein, status Farmbar", raids[r][0] == "Nein" and raids[r][12] == "Farmbar", raids.get(r))
-    r = find_row(raids, 15, 183)
+    r = find_row(raids, 17, 183)
     check("de: collected mount «Ja»", r is not None and raids[r][0] == "Ja" and raids[r][3] == "Asche von Al'ar", raids.get(r))
-    r = find_row(raids, 15, 117)
+    r = find_row(raids, 17, 117)
     check("de: a mount the German journal did not list — English name; texts English",
           r is not None and raids[r][3] == "Blue Qiraji Battle Tank" and raids[r][5] == "Regular NPCs inside AQ40", raids.get(r))
-    r = find_row(raids, 15, 1554) or find_row(raids, 15, 1552)
+    r = find_row(raids, 17, 1554) or find_row(raids, 17, 1552)
     check("de: removed reward — «Nicht verfügbar» status, reset «Nicht erhältlich»",
           r is not None and raids[r][12] == "Nicht verfügbar" and raids[r][7] == "Nicht erhältlich", raids.get(r))
     left = raids[1][8]
@@ -245,7 +245,7 @@ try:
     raids = sheet_cells(book, "Schlachtzüge")
     rr = find_row(mirna, 3, "Reinblütiger Feuerfalke")
     check("de: a Russian-named kill finds «Ragnaros» by encounter ID → «Ja»", rr is not None and mirna[rr][0] == "Ja", mirna.get(rr))
-    check("de: new mount «Gesammelt?» = Ja (by mount ID)", raids[find_row(raids, 15, 1471)][0] == "Ja")
+    check("de: new mount «Gesammelt?» = Ja (by mount ID)", raids[find_row(raids, 17, 1471)][0] == "Ja")
     check("de: …and its row left Eira's sheet", find_row(eira, 3, "Rache") is None)
     check("de: written values are German", not [t for w, t in all_texts(book) if CYR.search(t)])
     sd = de.sheet_data()
@@ -278,7 +278,7 @@ try:
     check("de: «left» formula with three German sheets", raids[1][8].count("COUNTIFS") == 3 and "'Schlachtzüge Kaelia'" in raids[1][8],
           raids[1][8])
     world = sheet_cells(book, "Weltbosse")
-    check("de: world bosses: a new column", world[0].get(12) == "Kaelia" and world[1].get(12) is False, world[0])
+    check("de: world bosses: a new column", world[0].get(14) == "Kaelia" and world[1].get(14) is False, world[0])
     check("de: still no Russian", not [t for w, t in all_texts(book) if CYR.search(t)],
           [t for w, t in all_texts(book) if CYR.search(t)][:10])
     code, out = de.run("--add-chars")
@@ -308,10 +308,10 @@ try:
     check("en: English sheet names, title, locale", titles == ["Raids", "Raids Эйра", "Dungeons", "Dungeons Эйра", "Summary",
           "World Bosses"] and book["title"] == "WoW Mounts" and book["locale"] == "en_US", (titles, book["title"], book["locale"]))
     raids = sheet_cells(book, "Raids")
-    r = find_row(raids, 15, 1471)
+    r = find_row(raids, 17, 1471)
     check("en: the Russian game's names are not used: English mount, boss, raid", r is not None and raids[r][3] == "Vengeance"
           and raids[r][5] == "Sylvanas Windrunner" and raids[r][2] == "Sanctum of Domination" and raids[r][0] == "No", raids.get(r))
-    check("en: collected mount «Yes»", raids[find_row(raids, 15, 183)][0] == "Yes")
+    check("en: collected mount «Yes»", raids[find_row(raids, 17, 183)][0] == "Yes")
     check("en: formulas with commas", "," in raids[1][8] and "'Raids Эйра'" in raids[1][8] and '"No"' in raids[1][8], raids[1][8])
     russian = [(w, t) for w, t in all_texts(book) if CYR.search(t.replace("Эйра", ""))]
     check("en: no Russian apart from the character's name", not russian, russian[:20])
@@ -344,7 +344,7 @@ try:
     book = state()["spreadsheets"][book["id"]]
     world = sheet_cells(book, "Мировые боссы")
     r = find_row(world, 4, "Галлеон")
-    check("ru: «Галеон» from the game ticks «Галлеон» (encounter 1563)", code == 0 and r is not None and world[r].get(10) is True,
+    check("ru: «Галеон» from the game ticks «Галлеон» (encounter 1563)", code == 0 and r is not None and world[r].get(12) is True,
           (world.get(r), out[-800:]))
 finally:
     mock.terminate()

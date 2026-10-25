@@ -58,8 +58,8 @@ OLD = [
 
 # ---------------------------------------------------------------- upgrade 2.0/2.1 → 2.2
 up = run({"catalog": None, "sheets": OLD, "mode": "upgrade"})
-check("upgrade ran once, layout=2 stored in the same batch", up["changed"] is True and up["properties"].get("layout") == "2"
-      and len(up["applied"]) == 1 and "apply" in up["structure"][0] and "layout=2" in up["structure"][0], up["structure"])
+check("upgrade ran once, layout=3 stored in the same batch", up["changed"] is True and up["properties"].get("layout") == "3"
+      and len(up["applied"]) == 1 and "apply" in up["structure"][0] and "layout=3" in up["structure"][0], up["structure"])
 reqs = up["applied"][0]
 cf = [r["addConditionalFormatRule"]["rule"] for r in reqs if "addConditionalFormatRule" in r]
 texteq = [(c["ranges"][0]["sheetId"], c["ranges"][0]["startColumnIndex"], c["booleanRule"]["condition"]["values"][0]["userEnteredValue"])
@@ -83,8 +83,8 @@ check("checkbox validation on the new column", all(v["rule"]["condition"]["type"
 left = [r["updateCells"] for r in reqs if "updateCells" in r and r["updateCells"]["start"]["sheetId"] == ids["Рейды"]]
 f = left[0]["rows"][0]["values"][0]["userEnteredValue"]["formulaValue"] if left else ""
 check("«Осталось попыток выбить» counts only rows ticked «Фармлю»", "COUNTIFS('Рейды Эйра'!D:D, m, 'Рейды Эйра'!A:A, \"Нет\", 'Рейды Эйра'!H:H, TRUE)" in f, f)
-again = run({"catalog": None, "sheets": up["sheets"], "mode": "upgrade", "properties": {"layout": "2"}})
-check("already 2.2: nothing to do", again["changed"] is False and again["applied"] == [])
+again = run({"catalog": None, "sheets": up["sheets"], "mode": "upgrade", "properties": {"layout": "3"}})
+check("already current: nothing to do", again["changed"] is False and again["applied"] == [])
 mixed = copy.deepcopy(OLD)
 mixed[1]["rows"][0].append("Фармлю")
 for r in mixed[1]["rows"][1:]:
@@ -170,7 +170,7 @@ d = run({"catalog": None, "sheets": book, "mode": "diff", "desired": [
     {"name": "Мирна", "raids": False, "dungeons": False, "world": False},
     {"name": "Элтара", "raids": True, "dungeons": True, "world": False}]})
 check("table characters: sheets and world columns", sorted((t["name"], t["raid"], t["dungeon"], t["world"]) for t in d["table"])
-      == sorted([("Эйра", True, True, 10), ("Мирна", False, True, 11)]), d["table"])
+      == sorted([("Эйра", True, True, 12), ("Мирна", False, True, 13)]), d["table"])   # 2.8: two attempt columns before the characters
 df = d["diff"]
 check("diff: Эйра loses dungeons; Мирна leaves completely; Элтара gets raid + dungeon sheets, no world column",
       df["removedSheets"] == ["Подземелья Эйра", "Подземелья Мирна"] and df["removedWorld"] == ["Мирна"] and df["removedCharacters"] == ["Мирна"]

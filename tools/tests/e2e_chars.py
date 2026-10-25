@@ -133,7 +133,7 @@ try:
     raids, _ = cells(book, "Рейды")
     check("raid «left» formula now asks for «Фармлю» = TRUE (in ru_RU form)", "'Рейды Эйра'!H:H; TRUE" in raids[1][8] and "'Рейды Мирна'!H:H; TRUE" in raids[1][8], raids[1][8])
     meta = {m["metadataKey"]: m["metadataValue"] for m in book["devmeta"]}
-    check("layout 2 remembered in the table", meta.get("mountSheetSync.layout") == "2", meta)
+    check("layout 3 remembered in the table", meta.get("mountSheetSync.layout") == "3", meta)
     code, out = run(EXE, "--once")
     check("second run: no second upgrade", "Таблица обновлена" not in out and cells(state()["spreadsheets"][sid], "Рейды Эйра")[1]["cols"] == 8)
 
@@ -152,7 +152,7 @@ try:
 
     # ---------------------------------------------------------------- characters: remove / change / add
     world0, wsh = cells(state()["spreadsheets"][sid], "Мировые боссы")
-    check("world bosses: a column per character", [world0[0].get(c) for c in (10, 11)] == ["Мирна", "Эйра"], world0[0])
+    check("world bosses: a column per character", [world0[0].get(c) for c in (12, 13)] == ["Мирна", "Эйра"], world0[0])
     code, out = set_chars([{"name": "Эйра", "raids": True, "dungeons": False, "world": True},
                            {"name": "Мирна", "raids": False, "dungeons": False, "world": False},
                            {"name": "Элтара", "raids": True, "dungeons": True, "world": False}])
@@ -165,8 +165,8 @@ try:
           t == ["Рейды", "Рейды Эйра", "Рейды Элтара", "Подземелья", "Подземелья Элтара", "Сводка", "Мировые боссы"], t)
     world, wsh = cells(book, "Мировые боссы")
     check("world: Мирна's column deleted, Эйра' column (with its ticks) kept, no column for Элтара",
-          world[0].get(10) == "Эйра" and 11 not in world[0] and wsh["cols"] == 11, (world[0], wsh["cols"]))
-    check("world «left» formula covers the one remaining column", "K2:K" in world[1][6] and "L2:L" not in world[1][6], world[1][6])
+          world[0].get(12) == "Эйра" and 13 not in world[0] and wsh["cols"] == 13, (world[0], wsh["cols"]))
+    check("world «left» formula covers the one remaining column", "M2:M" in world[1][6] and "N2:N" not in world[1][6], world[1][6])
     raids, _ = cells(book, "Рейды")
     check("raid «left» formula: Эйра and Элтара, not Мирна", "'Рейды Эйра'" in raids[1][8] and "'Рейды Элтара'" in raids[1][8]
           and "Мирна" not in raids[1][8], raids[1][8])
@@ -180,8 +180,8 @@ try:
                            {"name": "Мирна", "raids": True, "dungeons": False, "world": True}])
     book = state()["spreadsheets"][sid]
     world, wsh = cells(book, "Мировые боссы")
-    check("adding back: world columns for Элтара and Мирна at the right, formula over three", code == 0 and [world[0].get(c) for c in (10, 11, 12)] == ["Эйра", "Элтара", "Мирна"]
-          and "M2:M" in world[1][6] and world[1].get(11) is False, (world[0], world[1].get(6)))
+    check("adding back: world columns for Элтара and Мирна at the right, formula over three", code == 0 and [world[0].get(c) for c in (12, 13, 14)] == ["Эйра", "Элтара", "Мирна"]
+          and "O2:O" in world[1][6] and world[1].get(13) is False, (world[0], world[1].get(6)))
     check("…Мирна's raid sheet created again after the others", titles(book)[:4] == ["Рейды", "Рейды Эйра", "Рейды Элтара", "Рейды Мирна"], titles(book))
     code, out = set_chars([{"name": "Эйра", "raids": True, "dungeons": False, "world": True},
                            {"name": "Элтара", "raids": True, "dungeons": True, "world": True},
@@ -195,7 +195,7 @@ try:
     rows, sh = cells(nb, "Подземелья Мирна")
     check("new table: «Фармлю» on character sheets", code == 0 and rows[0].get(7) == "Фармлю" and sh["cols"] == 8, rows[0])
     meta = {m["metadataKey"]: m["metadataValue"] for m in nb["devmeta"]}
-    check("new table: layout 2 written at creation", meta.get("mountSheetSync.layout") == "2", meta)
+    check("new table: layout 3 written at creation", meta.get("mountSheetSync.layout") == "3", meta)
     settings = json.load(open(os.path.join(DATA, "settings.json"), encoding="utf-8-sig"))
     code, out = run(EXE, "--once")
     check("…so the sync loop does not «upgrade» it", code == 0 and "Таблица обновлена" not in out, out[-600:])

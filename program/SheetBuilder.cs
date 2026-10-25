@@ -169,29 +169,32 @@ namespace MountSheetSync
         public const string IdColumn = "ID в игре";
         /// <summary>Галочка на листе персонажа: эту строку персонаж фармит (снята — строки нет в «Осталось»).</summary>
         public const string FarmColumn = "Фармлю";
+        /// <summary>Счётчик попыток (SheetAttempts.cs): число и формула шанса — справа от «Шанса выпадения».</summary>
+        public const string AttemptsColumn = "Попыток";
+        public const string ChanceColumn = "Шанс за все попытки";
 
         static readonly string[] RaidMaster =
         {
             Collected, "Аддон", "Рейд", "Маунт", "Тип источника", "Босс / достижение / сундук", "Сложность / режим",
             "Сброс / частота", Left, "Скип есть?", "Как работает скип", "Совет по фарму", "Статус", "Источник", "Шанс выпадения",
-            IdColumn,
+            AttemptsColumn, ChanceColumn, IdColumn,
         };
-        static readonly int[] RaidWidths = { 79, 159, 223, 245, 191, 239, 159, 143, 153, 111, 335, 351, 159, 335, 120, 90 };
+        static readonly int[] RaidWidths = { 79, 159, 223, 245, 191, 239, 159, 143, 153, 111, 335, 351, 159, 335, 120, 90, 110, 90 };
 
         static readonly string[] DungeonMaster =
         {
             Collected, "Аддон", "Подземелье / активность", "Маунт", "Тип источника", "Босс / достижение / условие",
-            "Сложность / режим", "Сброс / частота", "Скип / маршрут", "Шанс выпадения", "Совет по фарму", "Статус", "Источник",
-            IdColumn,
+            "Сложность / режим", "Сброс / частота", "Скип / маршрут", "Шанс выпадения", AttemptsColumn, ChanceColumn,
+            "Совет по фарму", "Статус", "Источник", IdColumn,
         };
-        static readonly int[] DungeonWidths = { 79, 159, 239, 223, 223, 255, 175, 159, 271, 144, 351, 175, 335, 90 };
+        static readonly int[] DungeonWidths = { 79, 159, 239, 223, 223, 255, 175, 159, 271, 144, 90, 110, 351, 175, 335, 90 };
 
         static readonly string[] WorldMaster =
         {
             Collected, "Аддон", "Локация", "Маунт", "Босс / достижение / сундук", "Сброс / частота", Left,
-            "Совет по фарму", "Шанс выпадения", "Источник",
+            "Совет по фарму", "Шанс выпадения", AttemptsColumn, ChanceColumn, "Источник",
         };
-        static readonly int[] WorldWidths = { 71, 134, 160, 216, 132, 97, 195, 185, 83, 279 };
+        static readonly int[] WorldWidths = { 71, 134, 160, 216, 132, 97, 195, 185, 83, 90, 110, 279 };
 
         static readonly string[] RaidChar =
         {
@@ -283,8 +286,13 @@ namespace MountSheetSync
             List<MasterRow> rows = new List<MasterRow>();
             int cMount = sheet.Col("Маунт");
             int cId = sheet.Col(IdColumn);
+            int cDrop = sheet.Col("Шанс выпадения");
+            int cAttempts = Array.IndexOf(header, AttemptsColumn);
             foreach (object[] catalogRow in sheet.Rows)
             {
+                object[] attempt = cAttempts >= 0 && cDrop >= 0
+                    ? SheetLogic.AttemptCells(catalogRow[cDrop], cAttempts, rows.Count + 1)
+                    : new object[] { "", "" };
                 bool got = IsCollected(cId >= 0 ? MountIndex.IdOf(catalogRow[cId]) : 0, catalogRow[cMount], plan.CollectedIds, plan.CollectedMounts);
                 object[] src = LocalRow(sheet, catalogRow, plan);
                 object[] cells = new object[header.Length];
@@ -293,6 +301,11 @@ namespace MountSheetSync
                     if (header[i] == Collected)
                     {
                         cells[i] = got ? SheetLogic.Yes : SheetLogic.No;
+                        continue;
+                    }
+                    if (header[i] == AttemptsColumn || header[i] == ChanceColumn)
+                    {
+                        cells[i] = attempt[header[i] == AttemptsColumn ? 0 : 1];
                         continue;
                     }
                     int c = sheet.Col(header[i]);
@@ -719,6 +732,16 @@ namespace MountSheetSync
             get { return WorldMaster.Length; }
         }
 
+        /// <summary>
+        /// Первая колонка персонажа на «Мировых боссах»: сразу за «Источником» (последняя общая колонка и в таблицах
+        /// до 2.8, где ещё не было колонок счётчика попыток).
+        /// </summary>
+        public static int WorldFirstCharColumn(object[] header)
+        {
+            int c = SheetLogic.FindCol(header, SheetLogic.SourcePattern, -1);
+            return c >= 0 ? c + 1 : WorldFixedColumns;
+        }
+
         /// <summary>Лист нового персонажа в готовой таблице: строки берутся из текущего общего листа.</summary>
         public static int AddCharacterSheet(List<object> req, int sheetId, int index, string name, bool raid,
             string[] masterHeader, List<object[]> masterRows)
@@ -908,6 +931,7 @@ namespace MountSheetSync
             }
             req.Add(RepeatFormat(sheetId, 1, end, cCollected, cCollected + 1, O("horizontalAlignment", "CENTER"),
                 "userEnteredFormat.horizontalAlignment"));
+            req.AddRange(AttemptFormats(sheetId, Array.IndexOf(header, AttemptsColumn), end, raid));
             int cId = Array.IndexOf(header, IdColumn);
             if (cId >= 0)
             {
@@ -1079,6 +1103,41 @@ namespace MountSheetSync
             int cChance = header.IndexOf("Шанс выпадения");
             req.Add(RepeatFormat(sheetId, 1, end, cChance, cChance + 1, O("numberFormat", O("type", "PERCENT", "pattern", "0%")),
                 "userEnteredFormat.numberFormat"));
+            req.AddRange(AttemptFormats(sheetId, header.IndexOf(AttemptsColumn), end, false));
+        }
+
+        /// <summary>«Попыток» и «Шанс за все попытки»: по центру, шанс — в процентах (на «Рейдах» — на цвете полосы).</summary>
+        public static List<object> AttemptFormats(int sheetId, int cAttempts, int end, bool band)
+        {
+            List<object> req = new List<object>();
+            if (cAttempts < 0 || end <= 1)
+            {
+                return req;
+            }
+            Dictionary<string, object> center = band
+                ? O("backgroundColor", Color(BandFirst), "horizontalAlignment", "CENTER")
+                : O("horizontalAlignment", "CENTER");
+            string fields = band ? "userEnteredFormat.backgroundColor,userEnteredFormat.horizontalAlignment" : "userEnteredFormat.horizontalAlignment";
+            req.Add(RepeatFormat(sheetId, 1, end, cAttempts, cAttempts + 2, center, fields));
+            req.Add(RepeatFormat(sheetId, 1, end, cAttempts, cAttempts + 1, O("numberFormat", O("type", "NUMBER", "pattern", "0")),
+                "userEnteredFormat.numberFormat"));
+            req.Add(RepeatFormat(sheetId, 1, end, cAttempts + 1, cAttempts + 2, O("numberFormat", O("type", "PERCENT", "pattern", "0.0%")),
+                "userEnteredFormat.numberFormat"));
+            return req;
+        }
+
+        /// <summary>Ширина колонок с start подряд (пиксели).</summary>
+        public static List<object> ColumnWidths(int sheetId, int start, int[] widths)
+        {
+            List<object> req = new List<object>();
+            for (int i = 0; i < widths.Length; i++)
+            {
+                req.Add(O("updateDimensionProperties", O(
+                    "range", O("sheetId", sheetId, "dimension", "COLUMNS", "startIndex", start + i, "endIndex", start + i + 1),
+                    "properties", O("pixelSize", widths[i]),
+                    "fields", "pixelSize")));
+            }
+            return req;
         }
 
         static void AddSummary(List<object> req, List<object> late, int sheetId, int index, DateTime today)

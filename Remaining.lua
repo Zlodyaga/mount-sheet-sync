@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 2.7.0 — «Осталось на этой неделе»
+Mount Sheet Sync 2.8.0 — «Осталось на этой неделе»
 ==================================================
 Список приходит из Google-таблицы: программа MountSheetSync.exe записывает его
 в SheetData.lua (глобальная MountSheetSyncSheet), а игра читает этот файл при
@@ -394,6 +394,173 @@ function ns.BuildRemaining(data, player, weekEnd, kills)
   result.left = left
   result.total = total
   return result
+end
+
+---------------------------------------------------------------------------
+-- Счётчик попыток (таблица программы 2.8+: строки «mounts» в списке)
+---------------------------------------------------------------------------
+-- В строке: те же поля, что у строк «Осталось» (имена босса, d — сложности), n — попыток по таблице на момент
+-- списка, p — шанс за попытку. Убийства после списка аддон досчитывает сам — так в чате и в подсказке
+-- уже есть попытка, которую программа ещё не отправила.
+
+-- Попытка ли эта запись для строки: ручная отметка (без сложности) — только для мировых боссов, как в программе.
+local function IsAttempt(m, rec, recName, known)
+  if rec.kind == "manual" and m.kind ~= "world" then
+    return false
+  end
+  return Fits(m, rec, recName, known)
+end
+
+-- Маунт уже собран (игра знает его ID) — счётчик ему больше не нужен.
+local function Collected(m)
+  local id = tonumber(m.id)
+  if not id or not C_MountJournal or not C_MountJournal.GetMountInfoByID then
+    return false
+  end
+  local ok, _, _, _, _, _, _, _, _, _, _, isCollected = pcall(C_MountJournal.GetMountInfoByID, id)
+  return ok and isCollected == true
+end
+
+-- Имя маунта на языке игры (по ID), иначе — как в таблице.
+local function MountName(m)
+  local id = tonumber(m.id)
+  if id and C_MountJournal and C_MountJournal.GetMountInfoByID then
+    local ok, name = pcall(C_MountJournal.GetMountInfoByID, id)
+    if ok and type(name) == "string" and name ~= "" and not (issecretvalue and issecretvalue(name)) then
+      return name
+    end
+  end
+  return tostring(m.mount or "?")
+end
+
+local function AttemptRows()
+  local data = MountSheetSyncSheet
+  if type(data) ~= "table" or type(data.mounts) ~= "table" then
+    return nil
+  end
+  return data
+end
+
+-- Сколько попыток у строки сейчас: из таблицы плюс подходящие убийства после списка.
+local function CountNow(m, data, kills, known)
+  local generated = tonumber(data.generated) or 0
+  local n = tonumber(m.n) or 0
+  for _, rec in ipairs(kills) do
+    if (tonumber(rec.time) or 0) > generated and IsAttempt(m, rec, RecordName(rec), known) then
+      n = n + 1
+    end
+  end
+  return n
+end
+
+-- 1 − (1 − p)^n: «31%», «4,9%» (меньше 10 % — с десятой; десятичный знак — L.decimal языка аддона).
+function ns.FormatChance(n, p)
+  local v = (1 - (1 - p) ^ n) * 100
+  local text = v < 10 and string.format("%.1f", v) or string.format("%d", math.floor(v + 0.5))
+  text = text:gsub("%.0$", "")
+  if L.decimal == "," then
+    text = text:gsub("%.", ",")
+  end
+  return text .. "%"
+end
+
+-- Убийство rec (уже в журнале): строки, для которых оно попытка, — { name, n, p } (n — вместе с этой попыткой).
+function ns.AttemptsFor(rec)
+  local data = AttemptRows()
+  if not data or type(rec) ~= "table" then
+    return {}
+  end
+  local known = KnownIds(data)
+  local db = ns.GetDB()
+  local kills = db and db.kills or {}
+  local recName = RecordName(rec)
+  local out = {}
+  for _, m in ipairs(data.mounts) do
+    local p = type(m) == "table" and tonumber(m.p)
+    if p and p > 0 and p < 1 and IsAttempt(m, rec, recName, known) and not Collected(m) then
+      local n = CountNow(m, data, kills, known)
+      if (tonumber(rec.time) or 0) <= (tonumber(data.generated) or 0) then
+        n = n + 1   -- запись старше списка (часы?) — эту попытку таблица ещё не видела
+      end
+      out[#out + 1] = { name = MountName(m), n = n, p = p }
+    end
+  end
+  return out
+end
+
+-- Персонаж из списка — тот, кто сделал запись.
+local function RecordBy(ch, rec)
+  local keys = type(ch.keys) == "table" and ch.keys or {}
+  local who = { [Norm(rec.char)] = true }
+  if rec.realm then
+    who[Norm(tostring(rec.char) .. "-" .. tostring(rec.realm))] = true
+  end
+  for _, k in ipairs(keys) do
+    if who[k] then
+      return true
+    end
+  end
+  return false
+end
+
+-- Сколько персонажей из таблицы ещё не убивали этого босса на этой неделе (строка с этим маунтом у них есть).
+local function CharactersLeft(m, data, kills, known, weekEnd)
+  local resetT = ResetTime(kills, weekEnd)
+  local afterReset = resetT ~= nil and (not tonumber(data.generated) or tonumber(data.generated) < resetT)
+  local want = Norm(m.mount)
+  local left = 0
+  for _, ch in ipairs(type(data.chars) == "table" and data.chars or {}) do
+    for _, item in ipairs(type(ch) == "table" and type(ch.items) == "table" and ch.items or {}) do
+      if type(item) == "table" and item.kind == m.kind and Norm(item.mount) == want then
+        local done = item.y and not afterReset
+        if not done and weekEnd then
+          for _, rec in ipairs(kills) do
+            if rec.weekEnd == weekEnd and RecordBy(ch, rec) and Fits(item, rec, RecordName(rec), known) then
+              done = true
+              break
+            end
+          end
+        end
+        if not done then
+          left = left + 1
+        end
+        break
+      end
+    end
+  end
+  return left
+end
+
+-- Подсказка о боссе по имени из игры (подсказка юнита, Атлас приключений):
+-- { { name, n, p, left } … } — несобранные маунты со счётчиком, которые с него падают.
+function ns.BossHint(bossName)
+  local data = AttemptRows()
+  if not data or type(bossName) ~= "string" or bossName == "" then
+    return {}
+  end
+  local want = Prepare(Norm(bossName))
+  local db = ns.GetDB()
+  local kills = db and db.kills or {}
+  local known = KnownIds(data)
+  local weekEnd = ns.WeekEnd and ns.WeekEnd()
+  local out = {}
+  for _, m in ipairs(data.mounts) do
+    local p = type(m) == "table" and tonumber(m.p)
+    if p and p > 0 and p < 1 and not Collected(m) then
+      local named = false
+      for _, n in ipairs(type(m.names) == "table" and m.names or {}) do
+        if MatchPrepared(want, Prepare(n), false) then
+          named = true
+          break
+        end
+      end
+      if named then
+        out[#out + 1] = { name = MountName(m), n = CountNow(m, data, kills, known), p = p,
+          left = CharactersLeft(m, data, kills, known, weekEnd), diff = m.diff }
+      end
+    end
+  end
+  return out
 end
 
 ---------------------------------------------------------------------------

@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 2.7.0 — окно, иконка и настройки
+Mount Sheet Sync 2.8.0 — окно, иконка и настройки
 ==================================================
   * окно (ЛКМ по иконке или /mss): вкладки «Журнал» (записи аддона) и «Осталось»
     (что текущему персонажу ещё убить на этой неделе — из таблицы), все действия кнопками;
@@ -579,12 +579,167 @@ local function SettingsCheck(parent, y, key, onClick)
   return c
 end
 
+---------------------------------------------------------------------------
+-- Сведения для отчёта об ошибке (кнопка в настройках): текст, который можно скопировать в сообщение на GitHub.
+-- Без личного: ни имён персонажей, ни сервера, ни таблицы — только версии, состояние и числа.
+---------------------------------------------------------------------------
+local REPORT_NAME = "MountSheetSyncReportFrame"
+local reportFrame, reportBox
+
+local function Ago(stamp)
+  local t = tonumber(stamp)
+  if not t or t <= 0 then
+    return "never"
+  end
+  local s = time() - t
+  if s < 120 then
+    return string.format("%d s ago", s)
+  elseif s < 7200 then
+    return string.format("%d min ago", math.floor(s / 60))
+  elseif s < 172800 then
+    return string.format("%d h ago", math.floor(s / 3600))
+  end
+  return string.format("%d days ago", math.floor(s / 86400))
+end
+
+local function Count(t)
+  local n = 0
+  if type(t) == "table" then
+    for _ in pairs(t) do
+      n = n + 1
+    end
+  end
+  return n
+end
+
+function ns.BugReport()
+  local db = ns.GetDB() or {}
+  local lines = {}
+  local function add(fmt, ...)
+    lines[#lines + 1] = string.format(fmt, ...)
+  end
+  add("Mount Sheet Sync bug report")
+  local version, build, _, toc = "?", "?", nil, "?"
+  if GetBuildInfo then
+    version, build, _, toc = GetBuildInfo()
+  end
+  add("Game: %s (build %s, interface %s), client %s", tostring(version), tostring(build), tostring(toc), tostring(GetLocale and GetLocale() or "?"))
+  local mm = type(db.minimap) == "table" and db.minimap or {}
+  add("Addon: %s, language %s (setting %s), chat messages %s, minimap button %s", tostring(ns.VERSION), tostring(ns.CurrentLanguage()),
+    tostring(ns.LanguageSetting()), db.quiet and "off" or "on", mm.hide and "hidden" or "shown")
+  local p = type(MountSheetSyncProgram) == "table" and MountSheetSyncProgram or nil
+  add("Program: %s%s", ns.ProgramState(), p and string.format(" (version %s, sheet %s, last mark %s)", tostring(p.version),
+    p.sheet == false and "not set up" or "connected", Ago(p.seen)) or " (no mark from the program)")
+  local data = type(MountSheetSyncSheet) == "table" and MountSheetSyncSheet or nil
+  if data then
+    local rows = 0
+    for _, ch in ipairs(type(data.chars) == "table" and data.chars or {}) do
+      rows = rows + (type(ch) == "table" and type(ch.items) == "table" and #ch.items or 0)
+    end
+    add("List from the sheet: %s by program %s, characters %d, rows %d, attempt rows %s", Ago(data.generated), tostring(data.version),
+      type(data.chars) == "table" and #data.chars or 0, rows, type(data.mounts) == "table" and tostring(#data.mounts) or "none")
+  else
+    add("List from the sheet: none")
+  end
+  local kills = type(db.kills) == "table" and db.kills or {}
+  local kinds = {}
+  for _, rec in ipairs(kills) do
+    local k = tostring(rec.kind or "?")
+    kinds[k] = (kinds[k] or 0) + 1
+  end
+  local parts = {}
+  for k, n in pairs(kinds) do
+    parts[#parts + 1] = k .. " " .. n
+  end
+  table.sort(parts)
+  local last = kills[#kills]
+  add("Journal: %d records (%s), this week %d, last %s", #kills, #parts > 0 and table.concat(parts, ", ") or "-",
+    ns.CountThisWeek(), last and string.format("%s, %s", tostring(last.kind), Ago(last.time)) or "-")
+  local col = type(db.collection) == "table" and db.collection or {}
+  add("Characters remembered: %d; collection: %s mounts, %s", Count(db.chars), tostring(col.collected or "?"),
+    col.updated and ("read " .. Ago(col.updated)) or "not read yet")
+  local loaded = 0
+  local getNum = C_AddOns and C_AddOns.GetNumAddOns or GetNumAddOns
+  local isLoaded = C_AddOns and C_AddOns.IsAddOnLoaded or IsAddOnLoaded
+  if getNum and isLoaded then
+    for i = 1, getNum() do
+      if isLoaded(i) then
+        loaded = loaded + 1
+      end
+    end
+  end
+  add("Addons loaded: %d", loaded)
+  local err = ns.lastError
+  add("Last addon error: %s", err and string.format("%s (%s)", err.text, Ago(err.time)) or "none this session")
+  return table.concat(lines, "\n")
+end
+
+local function ShowReport()
+  if not reportFrame then
+    reportFrame = CreateFrame("Frame", REPORT_NAME, UIParent, "DefaultPanelTemplate")
+    reportFrame:SetSize(520, 300)
+    reportFrame:SetFrameStrata("DIALOG")
+    reportFrame:SetToplevel(true)
+    reportFrame:SetClampedToScreen(true)
+    reportFrame:SetMovable(true)
+    reportFrame:EnableMouse(true)
+    reportFrame:RegisterForDrag("LeftButton")
+    reportFrame:SetScript("OnDragStart", reportFrame.StartMoving)
+    reportFrame:SetScript("OnDragStop", reportFrame.StopMovingOrSizing)
+    reportFrame:SetPoint("CENTER", 0, 40)
+    local function title()
+      if reportFrame.SetTitle then
+        reportFrame:SetTitle(L.report_title)
+      elseif reportFrame.TitleContainer and reportFrame.TitleContainer.TitleText then
+        reportFrame.TitleContainer.TitleText:SetText(L.report_title)
+      end
+    end
+    title()
+    relabel[#relabel + 1] = title
+    CreateFrame("Button", nil, reportFrame, "UIPanelCloseButtonDefaultAnchors")
+    tinsert(UISpecialFrames, REPORT_NAME)
+    local hint = reportFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    hint:SetPoint("TOPLEFT", 18, -32)
+    hint:SetPoint("TOPRIGHT", -18, -32)
+    hint:SetJustifyH("LEFT")
+    local function hintText()
+      hint:SetText(string.format(L.report_hint, ns.ISSUES_URL))
+    end
+    hintText()
+    relabel[#relabel + 1] = hintText
+    local scroll = CreateFrame("ScrollFrame", nil, reportFrame, "UIPanelScrollFrameTemplate")
+    scroll:SetPoint("TOPLEFT", 16, -70)
+    scroll:SetPoint("BOTTOMRIGHT", -34, 16)
+    reportBox = CreateFrame("EditBox", nil, scroll)
+    reportBox:SetMultiLine(true)
+    reportBox:SetFontObject(ChatFontNormal)
+    reportBox:SetWidth(460)
+    reportBox:SetAutoFocus(false)
+    reportBox:SetScript("OnEscapePressed", function()
+      reportFrame:Hide()
+    end)
+    reportBox:SetScript("OnTextChanged", function(self, userInput)
+      if userInput then
+        self:SetText(reportFrame.text or "")   -- только для чтения: правка возвращается
+        self:HighlightText()
+      end
+    end)
+    scroll:SetScrollChild(reportBox)
+  end
+  reportFrame.text = ns.BugReport()
+  reportBox:SetText(reportFrame.text)
+  reportFrame:Show()
+  reportBox:SetFocus()
+  reportBox:HighlightText()
+end
+UI.ShowReport = ShowReport
+
 local function CreateSettings()
   local codes = { "auto" }
   for _, code in ipairs(ns.LANGUAGES) do
     codes[#codes + 1] = code
   end
-  local height = 92 + #codes * 24 + 70
+  local height = 92 + #codes * 24 + 70 + 36
   settingsFrame = CreateFrame("Frame", SETTINGS_NAME, UIParent, "DefaultPanelTemplate")
   settingsFrame:SetSize(330, height)
   settingsFrame:SetFrameStrata("DIALOG")
@@ -647,6 +802,11 @@ local function CreateSettings()
       ns.ToggleMinimapButton()
     end
   end)
+
+  local reportButton = MakeButton(settingsFrame, "button_report", 200, "tip_report", function()
+    ns.SafeCall(ShowReport)
+  end)
+  reportButton:SetPoint("BOTTOMLEFT", 20, 16)
 
   settingsFrame:SetScript("OnShow", RefreshSettings)
   settingsFrame:Hide()

@@ -343,9 +343,16 @@ namespace MountSheetSync
                 }
                 bool isNew = !sent.Contains(Id(r));
                 bool sameWeek = hasWeek && r.ContainsKey("weekEnd") && J.Long(r, "weekEnd") == week;
-                if (isNew || sameWeek)
+                if (isNew)
                 {
                     list.Add(r);
+                }
+                else if (sameWeek)
+                {
+                    // уже отправлено: снова ставим «Да», но попыткой второй раз не считаем
+                    Dictionary<string, object> again = new Dictionary<string, object>(r);
+                    again["again"] = true;
+                    list.Add(again);
                 }
             }
             return list;
@@ -461,6 +468,15 @@ namespace MountSheetSync
                         sum.Warnings.Add(Tr.F("{0}: «не фармлю» {1} — {2}", who, boss, message));
                     }
                     continue;
+                }
+                foreach (object ao in J.Arr(J.Get(r, "attempts")))
+                {
+                    Dictionary<string, object> a = J.Obj(ao);
+                    double n = SheetLogic.Number(J.Get(a, "n"));
+                    double p = SheetLogic.Number(J.Get(a, "p"));
+                    Log.Write(p > 0
+                        ? Tr.L("[#] {0}: {1} — попытка {2}, шанс за все попытки {3}", who, J.Str(a, "mount"), n, SheetLogic.ChancePercent(n, p))
+                        : Tr.L("[#] {0}: {1} — попытка {2}", who, J.Str(a, "mount"), n));
                 }
                 if (status == "marked")
                 {

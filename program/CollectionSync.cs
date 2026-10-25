@@ -84,6 +84,51 @@ namespace MountSheetSync
             entry.Formulas.UnionWith(formulas);
         }
 
+        /// <summary>
+        /// Колонки, вставленные перед колонкой at (insertDimension): values[r] — значения строки r (Formula — формула,
+        /// в памяти её значение пока 0); формулы правее сдвигаются.
+        /// </summary>
+        public static void InsertColumns(SheetEntry entry, int at, List<object[]> values)
+        {
+            int width = values.Count > 0 ? values[0].Length : 0;
+            if (width == 0)
+            {
+                return;
+            }
+            HashSet<long> formulas = new HashSet<long>();
+            foreach (long key in entry.Formulas)
+            {
+                int r = (int)(key / 100000);
+                int c = (int)(key % 100000);
+                formulas.Add(SheetLogic.Key(r, c >= at ? c + width : c));
+            }
+            for (int r = 0; r < entry.Data.Count; r++)
+            {
+                object[] row = entry.Data[r];
+                object[] wider = new object[row.Length + width];
+                int cut = Math.Min(at, row.Length);
+                Array.Copy(row, wider, cut);
+                for (int i = 0; i < width; i++)
+                {
+                    object v = r < values.Count ? values[r][i] : "";
+                    if (v is SheetBuilder.Formula)
+                    {
+                        formulas.Add(SheetLogic.Key(r, cut + i));
+                        v = 0.0;
+                    }
+                    wider[cut + i] = v ?? "";
+                }
+                Array.Copy(row, cut, wider, cut + width, row.Length - cut);
+                entry.Data[r] = wider;
+            }
+            entry.Formulas.Clear();
+            entry.Formulas.UnionWith(formulas);
+            if (entry.GridColumns > 0)
+            {
+                entry.GridColumns += width;
+            }
+        }
+
         /// <summary>deleteDimension для строк листа: подряд идущие — одним запросом, снизу вверх.</summary>
         public static List<object> DeleteRequests(SheetEntry entry, IEnumerable<int> rows)
         {

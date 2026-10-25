@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 2.7.0 — ядро
+Mount Sheet Sync 2.8.0 — ядро
 =============================
 Записывает убийства боссов на текущем персонаже и новые маунты, чтобы программа
 Mount Sheet Sync (MountSheetSync.exe в трее Windows) отметила их в Google-таблице маунтов:
@@ -26,7 +26,7 @@ SavedVariables. Игра сохраняет файл
 
 local ADDON_NAME, ns = ...
 
-local VERSION = "2.7.0"
+local VERSION = "2.8.0"
 local MAX_RECORDS = 400               -- храним не больше стольких записей
 local MAX_AGE = 21 * 24 * 60 * 60     -- и не старше трёх недель
 local DUPLICATE_WINDOW = 120          -- ENCOUNTER_END и BOSS_KILL об одном бое, сек
@@ -58,6 +58,7 @@ ns.VERSION = VERSION
 -- Сайт проекта: там программа Mount Sheet Sync (список «Осталось» и таблицу ведёт она). Аддон показывает адрес
 -- только там, где без программы чего-то нет (пустая вкладка «Осталось», ответ на /mss left), — не в чат сам по себе.
 ns.PROGRAM_URL = "https://zlodyaga.github.io/"
+ns.ISSUES_URL = "https://github.com/Zlodyaga/mount-sheet-sync/issues"
 
 -- Запущена ли программа: пока она работает, она раз в минуту переписывает Program.lua
 -- (MountSheetSyncProgram.seen — время записи, 0 — программа закрылась). Игра читает файл при входе и /reload,
@@ -91,6 +92,9 @@ ns.Print = Print
 
 local function SafeCall(fn, ...)
   local ok, err = pcall(fn, ...)
+  if not ok then
+    ns.lastError = { text = tostring(err), time = time() }   -- для «Сведений для отчёта об ошибке»
+  end
   if not ok and not errorShown then
     errorShown = true
     Print("|cffff5555" .. L.error .. "|r " .. tostring(err))
@@ -254,6 +258,12 @@ local function Announce(rec)
     return
   end
   Print(string.format(L.announce, Describe(rec), rec.char))
+  -- маунт мог выпасть: какая это попытка и шанс за все попытки (таблица программы 2.8+)
+  if ns.AttemptsFor then
+    for _, a in ipairs(ns.AttemptsFor(rec)) do
+      Print(string.format(L.announce_attempt, "|cffc9a0ff" .. tostring(a.name):gsub("|", "||") .. "|r", a.n, ns.FormatChance(a.n, a.p)))
+    end
+  end
   if not hintShown then
     hintShown = true
     if ns.ProgramState() == "online" then

@@ -211,13 +211,13 @@ try:
     r3 = find_row(dung, 3, "Синий протодракон")
     check("names as in the game: «Синий протодракон» (was «Поводья синего протодракона»), «Да»",
           r3 is not None and dung[r3][0] == "Да" and find_row(dung, 3, "Поводья синего протодракона") is None, dung.get(r3))
-    check("hidden «ID в игре» column with the mount IDs", raids[0].get(15) == "ID в игре" and raids[find_row(raids, 3, "Пепел Ал'ара")].get(15) == 183
-          and 15 in [x for x in book["sheets"] if x["title"] == "Рейды"][0].get("hidden", {}).get("COLUMNS", []), raids[0])
+    check("hidden «ID в игре» column with the mount IDs", raids[0].get(17) == "ID в игре" and raids[find_row(raids, 3, "Пепел Ал'ара")].get(17) == 183
+          and 17 in [x for x in book["sheets"] if x["title"] == "Рейды"][0].get("hidden", {}).get("COLUMNS", []), raids[0])
     eira = sheet_cells(book, "Рейды Эйра")
     check("character sheet: header and «Нет» rows", eira[0][0] == "Пытался на этой неделе?" and all(v[0] == "Нет" for k, v in eira.items() if k > 0) and len(eira) > 10, len(eira))
     check("character sheet skips collected mounts", find_row(eira, 3, "Пепел Ал'ара") is None and find_row(eira, 3, "Отмщение") is not None)
     world = sheet_cells(book, "Мировые боссы")
-    check("world bosses: a checkbox column per character", world[0].get(10) == "Мирна" and world[0].get(11) == "Эйра" and world[1].get(10) is False)
+    check("world bosses: a checkbox column per character", world[0].get(12) == "Мирна" and world[0].get(13) == "Эйра" and world[1].get(12) is False)
     check("raid «left» formula counts both characters", "'Рейды Мирна'" in raids[1][8] and "'Рейды Эйра'" in raids[1][8], raids[1].get(8))
     check("program marker in developer metadata", any(m["metadataKey"] == "mountSheetSync" for m in book["devmeta"]))
     st = json.load(open(os.path.join(DATA, "settings.json"), encoding="utf-8-sig"))
@@ -302,8 +302,8 @@ try:
     raids = sheet_cells(book, "Рейды")
     check("raid «left» formula now has three characters", raids[1][8].count("COUNTIFS") == 3 and "'Рейды Каэлия'" in raids[1][8], raids[1][8])
     world = sheet_cells(book, "Мировые боссы")
-    check("world bosses: new checkbox column", world[0].get(12) == "Каэлия" and world[1].get(12) is False, world[0])
-    check("world «left» formula covers three columns", "K2:K" in world[1][6] and "M2:M" in world[1][6], world[1][6])
+    check("world bosses: new checkbox column", world[0].get(14) == "Каэлия" and world[1].get(14) is False, world[0])
+    check("world «left» formula covers three columns", "M2:M" in world[1][6] and "O2:O" in world[1][6], world[1][6])
     code, out = run("--add-chars")
     check("--add-chars again: nothing to add", code == 0 and "Все персонажи уже есть" in out, out[-500:])
 
@@ -332,7 +332,7 @@ try:
     world = sheet_cells(book, "Мировые боссы")
     r = find_row(world, 4, "Галлеон")
     check("after signing in again the pending world boss kill is sent (Эйра' checkbox)", code == 0 and r is not None
-          and world[r].get(11) is True and world[r].get(10) is False, (out[-800:], world.get(r)))
+          and world[r].get(13) is True and world[r].get(12) is False, (out[-800:], world.get(r)))
 finally:
     mock.terminate()
 

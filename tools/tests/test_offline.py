@@ -1,4 +1,4 @@
-"""Mount Sheet Sync 2.7.0: the addon says, softly, when the tray program is not running.
+"""Mount Sheet Sync 2.8.0: the addon says, softly, when the tray program is not running.
 
 The program rewrites Program.lua (MountSheetSyncProgram.seen) every minute while it runs and sets seen = 0 on exit.
 Without a fresh mark the window's grey bottom line says the addon works offline (details on hover), the Data Broker
@@ -61,7 +61,7 @@ def new_game(program_src=None, lang=None):
 def mark(seen, sheet=True):
     # the same text ProgramMark.Text writes (C#)
     return ("-- Mount Sheet Sync: MountSheetSync.exe rewrites this file every minute while it runs,\r\n"
-            "MountSheetSyncProgram = { seen = %d, sheet = %s, version = \"2.7.0\" }\r\n" % (seen, "true" if sheet else "false"))
+            "MountSheetSyncProgram = { seen = %d, sheet = %s, version = \"2.8.0\" }\r\n" % (seen, "true" if sheet else "false"))
 
 
 def window_bits(L, g):

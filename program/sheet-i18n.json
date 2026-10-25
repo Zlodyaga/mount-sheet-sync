@@ -838,6 +838,13 @@
    "fr": "Donjons",
    "pt": "Masmorras"
   },
+  "Попыток": {
+   "de": "Versuche",
+   "en": "Attempts",
+   "es": "Intentos",
+   "fr": "Tentatives",
+   "pt": "Tentativas"
+  },
   "Проверь доступность": {
    "de": "Verfügbarkeit prüfen",
    "en": "Check availability",
@@ -1019,6 +1026,13 @@
    "es": "Probabilidad de botín",
    "fr": "Chance de butin",
    "pt": "Chance de drop"
+  },
+  "Шанс за все попытки": {
+   "de": "Chance über alle Versuche",
+   "en": "Chance over all attempts",
+   "es": "Probabilidad en todos los intentos",
+   "fr": "Chance sur toutes les tentatives",
+   "pt": "Chance em todas as tentativas"
   }
  }
 }

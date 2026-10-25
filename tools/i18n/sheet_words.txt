@@ -145,6 +145,20 @@ fr: Chance de butin
 es: Probabilidad de botín
 pt: Chance de drop
 
+@ Попыток
+en: Attempts
+de: Versuche
+fr: Tentatives
+es: Intentos
+pt: Tentativas
+
+@ Шанс за все попытки
+en: Chance over all attempts
+de: Chance über alle Versuche
+fr: Chance sur toutes les tentatives
+es: Probabilidad en todos los intentos
+pt: Chance em todas as tentativas
+
 @ ID в игре
 en: Game ID
 de: Spiel-ID

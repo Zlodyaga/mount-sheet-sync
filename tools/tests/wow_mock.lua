@@ -113,6 +113,9 @@ function Region:SetMaxLetters(n) self._maxLetters = n end
 function Region:ClearFocus() self._focus = false end
 function Region:HighlightText(a, b) self._highlighted = true end
 function Region:SetCursorPosition(n) self._cursor = n end
+function Region:SetMultiLine(v) self._multiline = v end
+function Region:SetFontObject(f) self._fontObject = f end
+function Region:SetFocus() self._focus = true end
 function Region:SetFrameLevel(v) self._level = v end
 function Region:RegisterForClicks(...) self._clicks = { ... } end
 function Region:SetHighlightTexture(t) self._highlight = t end
@@ -204,6 +207,16 @@ Minimap._center = { 1800, 950 }
 CURSOR = { 0, 0 }
 function GetCursorPosition() return CURSOR[1], CURSOR[2] end
 UISpecialFrames = {}
+ChatFontNormal = {}
+function GetBuildInfo() return "12.1.5", "65000", "Oct 1 2026", 120105 end
+-- hooksecurefunc: the original runs first, then the hook (like the game)
+function hooksecurefunc(a, b, c)
+  local t, name, hook = _G, a, b
+  if type(a) == "table" then t, name, hook = a, b, c end
+  local orig = t[name]
+  assert(type(orig) == "function", "mock hooksecurefunc: no function " .. tostring(name))
+  t[name] = function(...) local r = { orig(...) }; hook(...); return unpack(r) end
+end
 tinsert = table.insert
 CANCEL = "Отмена"
 MOCK_LOCALE = "ruRU"   -- tests of the Russian texts; test_locale.py switches it
