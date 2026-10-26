@@ -384,3 +384,6 @@ en: Updates: test versions (alpha, beta) too.
 
 @ Обновления: только обычные выпуски.
 en: Updates: regular releases only.
+
+@ Список «Осталось» записан заново: {0} (файл заменили — например, CurseForge обновил аддон).
+en: The “Remaining” list written again: {0} (the file was replaced — for example, CurseForge updated the addon).

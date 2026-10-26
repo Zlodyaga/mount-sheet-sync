@@ -155,6 +155,18 @@ try:
                 ok = cells.get("%d,0" % r, {}).get("stringValue") == "Да"
         time.sleep(1)
     check("the tray app sends this week's kill to the new sheet", ok)
+    sd = os.path.join(ADDON, "SheetData.lua")
+    end = time.time() + 30
+    while time.time() < end and not (os.path.exists(sd) and "MountSheetSyncSheet = {" in open(sd, encoding="utf-8").read()):
+        time.sleep(0.5)
+    check("the «Remaining» list is in SheetData.lua", os.path.exists(sd) and "MountSheetSyncSheet = {" in open(sd, encoding="utf-8").read())
+    # CurseForge updates the addon: its SheetData.lua is the empty one from the package
+    open(sd, "w", encoding="utf-8").write("MountSheetSyncSheet = nil\n")
+    end = time.time() + 20
+    while time.time() < end and "MountSheetSyncSheet = nil" in open(sd, encoding="utf-8").read():
+        time.sleep(0.5)
+    check("an addon update that empties SheetData.lua: the program writes the list back within seconds",
+          "MountSheetSyncSheet = {" in open(sd, encoding="utf-8").read())
     shot("u6_after")
     subprocess.run(["xdotool", "mousemove", "1112", "12", "click", "3"], env=env)   # меню значка в трее
     time.sleep(1.5)

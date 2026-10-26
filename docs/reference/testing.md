@@ -15,7 +15,7 @@ xdotool, stalonetray, imagemagick. В CI — то же (`.github/workflows/ci.ym
 | `e2e_script.py` | режим со скриптом: Code.gs в Node (`gas_harness.js`) |
 | `e2e_update.py`, `ui_update.py` | обновление с имитации GitHub (вкл. пробные версии), меню и перезапуск в трее |
 | `e2e_install.py` | самоустановка, «Установленные приложения», удаление |
-| `ui_google.py`, `ui_lang.py` | окна программы под Xvfb |
+| `ui_google.py`, `ui_lang.py` | окна программы под Xvfb; в ui_google ещё — `SheetData.lua` возвращается сам после «обновления аддона» |
 
 Особенности: тесты переписывают `tools/tests/sv_collection.lua` и `status_left.json` (метки времени) — перед
 коммитом вернуть (`git checkout`), версию в `status_left.json` оставлять актуальной. Под mono нет общих между

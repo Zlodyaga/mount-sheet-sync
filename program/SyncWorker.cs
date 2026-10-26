@@ -432,6 +432,7 @@ namespace MountSheetSync
             {
                 Rescan(now);
             }
+            KeepSheetFiles();
 
             if (retryAt.HasValue && now < retryAt.Value && !force)
             {
@@ -783,6 +784,45 @@ namespace MountSheetSync
             return Tr._("Установите аддон из CurseForge (или скопируйте папку MountSheetSync из архива в World of Warcraft\\_retail_\\Interface\\AddOns), включите его в игре и выйдите на выбор персонажа.");
         }
 
+        /// <summary>Время изменения SheetData.lua после нашей записи (или проверки) — по папкам аддона.</summary>
+        readonly Dictionary<string, DateTime> sheetStamps = new Dictionary<string, DateTime>(StringComparer.OrdinalIgnoreCase);
+
+        /// <summary>
+        /// SheetData.lua тронул кто-то другой — обычно приложение CurseForge, поставившее новую версию аддона с пустым
+        /// списком, — вернуть наш сразу (проверка — время изменения файла, каждые несколько секунд), а не через 10 минут.
+        /// </summary>
+        void KeepSheetFiles()
+        {
+            if (sheetLua == null)
+            {
+                return;
+            }
+            foreach (string dir in dirs)
+            {
+                string addonDir = SheetData.AddonDir(dir);
+                if (!Directory.Exists(addonDir))
+                {
+                    continue;
+                }
+                string path = Path.Combine(addonDir, SheetData.FileName);
+                DateTime known;
+                DateTime now;
+                try
+                {
+                    now = File.Exists(path) ? File.GetLastWriteTimeUtc(path) : DateTime.MinValue;
+                }
+                catch (Exception)
+                {
+                    continue;
+                }
+                if (!sheetStamps.TryGetValue(path, out known) || known != now)
+                {
+                    WriteSheetFiles();
+                    return;
+                }
+            }
+        }
+
         /// <summary>SheetData.lua во все найденные папки аддона, где он другой (или его нет).</summary>
         void WriteSheetFiles()
         {
@@ -804,9 +844,17 @@ namespace MountSheetSync
                 {
                     if (File.Exists(path) && File.ReadAllText(path, Encoding.UTF8) == sheetLua)
                     {
+                        sheetStamps[path] = File.GetLastWriteTimeUtc(path);
                         continue;
                     }
+                    DateTime ours;
+                    bool replaced = sheetStamps.TryGetValue(path, out ours) && (!File.Exists(path) || File.GetLastWriteTimeUtc(path) != ours);
                     FileUtil.WriteAtomic(path, sheetLua);
+                    sheetStamps[path] = File.GetLastWriteTimeUtc(path);
+                    if (replaced)
+                    {
+                        Log.Write(Tr.L("Список «Осталось» записан заново: {0} (файл заменили — например, CurseForge обновил аддон).", path));
+                    }
                     sheetProblems.Remove(path);
                     if (sheetWritten.Add(path))
                     {

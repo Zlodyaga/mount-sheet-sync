@@ -729,6 +729,7 @@
   "Сохранить": "Save",
   "Сохраняю…": "Saving…",
   "Список «Осталось» записан для аддона: {0} (в игре он появится после входа или /reload).": "“Remaining” list written for the addon: {0} (it appears in the game after login or /reload).",
+  "Список «Осталось» записан заново: {0} (файл заменили — например, CurseForge обновил аддон).": "The “Remaining” list written again: {0} (the file was replaced — for example, CurseForge updated the addon).",
   "Список «Осталось» недоступен: {0}.": "The “Remaining” list is unavailable: {0}.",
   "Список «Осталось» обновлён: {0}.": "“Remaining” list updated: {0}.",
   "Список ещё не получен из таблицы": "The list has not come from the spreadsheet yet",
