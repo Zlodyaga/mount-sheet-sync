@@ -81,6 +81,9 @@ That still works (“Your own spreadsheet with the Code.gs script” in the sett
 
 ## Building
 
+How everything works inside (addon, program, sheet, releases, tests, decisions), in Russian: [docs/reference](docs/reference/README.md).
+
+
 - **Program:** on Windows run `program\build.cmd`. It uses the C# compiler that ships with Windows (.NET Framework 4.8),
   nothing to install. The code is C# 5 for that reason.
 - **Addon:** no build step; the repository root *is* the addon (`MountSheetSync.toc`).
