@@ -34,6 +34,7 @@ namespace MountSheetSync
         ToolStripMenuItem languageItem;
         ToolStripMenuItem updateItem;
         ToolStripMenuItem checkUpdatesItem;
+        ToolStripMenuItem testVersionsItem;
         /// <summary>Новая версия на GitHub (null — нет или ещё не проверяли).</summary>
         UpdateInfo available;
         bool updating;
@@ -64,8 +65,8 @@ namespace MountSheetSync
             tray.Visible = true;
 
             Log.Write(autostart
-                ? Tr.L("{0} {1} запущен вместе с Windows. Настройки и журнал: {2}", Program.Title, Program.Version, AppPaths.DataDir)
-                : Tr.L("{0} {1} запущен. Настройки и журнал: {2}", Program.Title, Program.Version, AppPaths.DataDir));
+                ? Tr.L("{0} {1} запущен вместе с Windows. Настройки и журнал: {2}", Program.Title, Program.FullVersion, AppPaths.DataDir)
+                : Tr.L("{0} {1} запущен. Настройки и журнал: {2}", Program.Title, Program.FullVersion, AppPaths.DataDir));
             Autostart.Repair();
 
             worker = new SyncWorker(AppPaths.StateFile);
@@ -86,8 +87,8 @@ namespace MountSheetSync
             Updater.CleanupOld();
             if (!string.IsNullOrEmpty(updatedFrom))
             {
-                Log.Write(Tr.L("Обновление установлено: {0} → {1}.", updatedFrom, Program.Version));
-                ShowNote(MakeNote(Tr.F("Mount Sheet Sync обновлён до версии {0}", Program.Version),
+                Log.Write(Tr.L("Обновление установлено: {0} → {1}.", updatedFrom, Program.FullVersion));
+                ShowNote(MakeNote(Tr.F("Mount Sheet Sync обновлён до версии {0}", Program.FullVersion),
                     Tr._("Что нового — на странице выпуска на GitHub. Если обновился и аддон, наберите в игре /reload."), false));
             }
             // новая версия: через минуту после запуска, потом раз в сутки
@@ -129,12 +130,14 @@ namespace MountSheetSync
             menu.Items.Clear();
             menu.ShowImageMargin = false;
             menu.ShowCheckMargin = true;
-            ToolStripMenuItem title = Disabled(Program.Title + " " + Program.Version);
+            ToolStripMenuItem title = Disabled(Program.Title + " " + Program.FullVersion);
             title.Font = new Font(menu.Font, FontStyle.Bold);
             updateItem = Item("", delegate { StartUpdate(); });
             updateItem.Font = new Font(menu.Font, FontStyle.Bold);
             updateItem.Visible = false;
             checkUpdatesItem = Item(Tr._("Проверять обновления"), delegate { ToggleUpdates(); });
+            testVersionsItem = Item(Tr._("Обновляться до пробных версий (альфа, бета)"), delegate { ToggleTestVersions(); });
+            testVersionsItem.ToolTipText = Tr._("Пробные версии выходят раньше обычных, но могут быть с ошибками. Снимите галочку — программа снова будет предлагать только обычные выпуски.");
             statusItem = Disabled(Tr._("Запуск…"));
             detailItem = Disabled("");
             detailItem.Visible = false;
@@ -168,7 +171,7 @@ namespace MountSheetSync
                 syncItem, recentItem, leftItem, openSheetItem, signInItem, createItem, addCharsItem, farmItem, collectionItem, new ToolStripSeparator(),
                 Item(Tr._("Настройки…"), delegate { OpenSettings(false); }),
                 Item(Tr._("Журнал работы"), delegate { OpenLog(); }),
-                autostartItem, notifyItem, checkUpdatesItem, languageItem, new ToolStripSeparator(),
+                autostartItem, notifyItem, checkUpdatesItem, testVersionsItem, languageItem, new ToolStripSeparator(),
                 Item(Tr._("Выход"), delegate { ExitApp(); }),
             });
         }
@@ -344,11 +347,14 @@ namespace MountSheetSync
             autostartItem.Checked = Autostart.IsEnabled();
             notifyItem.Checked = settings.Notifications;
             checkUpdatesItem.Checked = settings.CheckUpdates;
+            testVersionsItem.Checked = settings.TestVersions;
+            testVersionsItem.Enabled = settings.CheckUpdates;
             updateItem.Visible = available != null;
             updateItem.Enabled = !updating;
             if (available != null)
             {
                 updateItem.Text = MenuText(updating ? Tr.F("Обновляю до версии {0}…", available.Version)
+                    : available.Prerelease ? Tr.F("Обновить до пробной версии {0}…", available.Version)
                     : Tr.F("Обновить до версии {0}…", available.Version));
             }
             ClearItems(recentItem);
@@ -658,6 +664,24 @@ namespace MountSheetSync
             }
         }
 
+        /// <summary>Пробные версии: включили — сразу спросить GitHub; выключили — пробное предложение убрать.</summary>
+        void ToggleTestVersions()
+        {
+            settings.TestVersions = !settings.TestVersions;
+            SaveSettings();
+            Log.Write(settings.TestVersions
+                ? Tr.L("Обновления: и пробные версии (альфа, бета).")
+                : Tr.L("Обновления: только обычные выпуски."));
+            if (!settings.TestVersions && available != null && available.Prerelease)
+            {
+                available = null;
+            }
+            if (settings.CheckUpdates)
+            {
+                CheckForUpdate(true);
+            }
+        }
+
         void SaveSettings()
         {
             try
@@ -683,7 +707,7 @@ namespace MountSheetSync
                 string error = null;
                 try
                 {
-                    info = Updater.Check();
+                    info = Updater.Check(settings.TestVersions);
                 }
                 catch (SyncException ex)
                 {
@@ -709,7 +733,7 @@ namespace MountSheetSync
             {
                 if (manual)
                 {
-                    ShowNote(MakeNote(Tr._("Обновлений нет"), Tr.F("У вас последняя версия: {0}.", Program.Version), false));
+                    ShowNote(MakeNote(Tr._("Обновлений нет"), Tr.F("У вас последняя версия: {0}.", Program.FullVersion), false));
                 }
                 return;
             }
@@ -718,7 +742,7 @@ namespace MountSheetSync
             {
                 settings.UpdateNotified = info.Version;
                 SaveSettings();
-                Note n = MakeNote(Tr.F("Вышла версия {0}", info.Version),
+                Note n = MakeNote(info.Prerelease ? Tr.F("Вышла пробная версия {0}", info.Version) : Tr.F("Вышла версия {0}", info.Version),
                     Tr._("Нажмите, чтобы обновить, — или меню значка → «Обновить до версии…»."), false);
                 n.IsUpdate = true;
                 ShowNote(n);
@@ -784,7 +808,7 @@ namespace MountSheetSync
             Program.LogUpdate(info, result);
             try
             {
-                Updater.Restart(Program.Version);
+                Updater.Restart(Program.FullVersion);
             }
             catch (Exception ex)
             {

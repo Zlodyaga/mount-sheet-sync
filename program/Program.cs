@@ -34,6 +34,21 @@ namespace MountSheetSync
     static class Program
     {
         public const string Version = "2.8.0";
+        /// <summary>Пробная сборка: «alpha1», «beta2» (подставляет release.yml по тегу v2.8.0-alpha1); "" — обычная.</summary>
+        public const string Prerelease = "";
+
+        /// <summary>Версия с пометкой пробной сборки: «2.8.0-alpha1» или просто «2.8.0».</summary>
+        public static string FullVersion
+        {
+            get
+            {
+                string pre = Prerelease;
+#if TESTS
+                pre = Environment.GetEnvironmentVariable("MSS_TEST_PRERELEASE") ?? pre;   // как сборка по тегу v…-alpha1
+#endif
+                return pre.Length > 0 ? Version + "-" + pre : Version;
+            }
+        }
         public const string Title = "Mount Sheet Sync";
 
         [STAThread]
@@ -190,7 +205,7 @@ namespace MountSheetSync
             UpdateInfo info;
             try
             {
-                info = Updater.Check();
+                info = Updater.Check(Settings.Load(AppPaths.SettingsFile).TestVersions);
             }
             catch (SyncException ex)
             {
@@ -199,7 +214,7 @@ namespace MountSheetSync
             }
             if (info == null)
             {
-                Log.Write(Tr.L("Обновлений нет: {0} — последняя версия.", Version));
+                Log.Write(Tr.L("Обновлений нет: {0} — последняя версия.", FullVersion));
                 return 0;
             }
             Log.Write(Tr.L("Есть новая версия: {0} ({1}).", info.Version, info.PageUrl));

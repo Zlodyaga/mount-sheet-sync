@@ -263,7 +263,7 @@ namespace MountSheetSync
             using (RegistryKey k = Registry.CurrentUser.CreateSubKey(UninstallKey))
             {
                 k.SetValue("DisplayName", Program.Title, RegistryValueKind.String);
-                k.SetValue("DisplayVersion", Program.Version, RegistryValueKind.String);
+                k.SetValue("DisplayVersion", Program.FullVersion, RegistryValueKind.String);
                 k.SetValue("Publisher", "Zlodyaga", RegistryValueKind.String);
                 k.SetValue("DisplayIcon", exe + ",0", RegistryValueKind.String);
                 k.SetValue("InstallLocation", Path.GetDirectoryName(exe), RegistryValueKind.String);

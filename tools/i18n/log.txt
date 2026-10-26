@@ -378,3 +378,9 @@ en: The Start menu shortcut was not created: {0}
 
 @ Программа удалена; настройки остались в {0}.
 en: Program uninstalled; the settings stay in {0}.
+
+@ Обновления: и пробные версии (альфа, бета).
+en: Updates: test versions (alpha, beta) too.
+
+@ Обновления: только обычные выпуски.
+en: Updates: regular releases only.

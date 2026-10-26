@@ -26,6 +26,8 @@ namespace MountSheetSync
         public bool Notifications = true;
         /// <summary>Раз в сутки смотреть, нет ли новой версии на GitHub.</summary>
         public bool CheckUpdates = true;
+        /// <summary>Обновляться и до пробных версий (альфа, бета — пре-релизы на GitHub).</summary>
+        public bool TestVersions;
         /// <summary>О какой версии уже напомнили уведомлением (второй раз о ней не напоминаем).</summary>
         public string UpdateNotified = "";
         /// <summary>Отсюда ставить программу не захотели («Нет» на вопросе об установке) — больше не спрашивать.</summary>
@@ -142,6 +144,7 @@ namespace MountSheetSync
                     s.CheckUpdates = J.Truthy(d, "checkUpdates");
                 }
                 s.UpdateNotified = J.Str(d, "updateNotified").Trim();
+                s.TestVersions = J.Truthy(d, "testVersions");
                 s.InstallDeclined = J.Str(d, "installDeclined").Trim();
                 long n = J.Long(d, "pollSeconds");
                 if (n >= 2 && n <= 3600)
@@ -173,6 +176,10 @@ namespace MountSheetSync
             d["wowPath"] = WowPath;
             d["notifications"] = Notifications;
             d["checkUpdates"] = CheckUpdates;
+            if (TestVersions)
+            {
+                d["testVersions"] = true;
+            }
             if (UpdateNotified.Length > 0)
             {
                 d["updateNotified"] = UpdateNotified;

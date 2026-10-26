@@ -12,6 +12,9 @@
   copy into a bug report, without character names, realm or spreadsheet.
 - The program refreshes the “Remaining” list on its 30-minute schedule only while the game is running (and right when
   it starts), so it asks Google much less often; after sending kills it refreshes as before.
+- Test versions: icon menu → “Update to test versions (alpha, beta)” — the program then also offers GitHub
+  pre-releases (tags like v2.8.0-alpha1) and updates to them like to a release; untick it to get only releases again.
+  A test build shows its full number (2.8.0-alpha1) and moves on to the release with the same number when it is out.
 
 ## 2.7.0
 - The addon says, quietly, when the tray program is not running: a grey line at the bottom of its window (details on

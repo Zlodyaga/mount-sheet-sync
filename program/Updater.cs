@@ -1,6 +1,8 @@
 // Обновление программы (и аддона, если его ставили вручную из архива) с GitHub Releases.
 //
 // Проверка: api.github.com/…/releases/latest — номер последнего выпуска и архив MountSheetSync-<версия>.zip.
+// С галочкой «Пробные версии» — список …/releases: самый новый выпуск, в том числе пре-релиз (тег v2.8.0-alpha1).
+// Номера сравниваются как в semver: 2.8.0-alpha1 < 2.8.0-alpha2 < 2.8.0-beta1 < 2.8.0.
 // Установка — только по кнопке: архив скачивается, его SHA-256 сверяется с контрольной суммой, которую
 // GitHub сам считает для каждого файла выпуска (без неё ничего не ставится), из архива берётся
 // 2-program\MountSheetSync.exe. Работающий exe Windows не даёт удалить, но даёт переименовать: старый
@@ -37,6 +39,8 @@ namespace MountSheetSync
         public string AssetUrl = "";
         /// <summary>SHA-256 архива (hex, нижний регистр) из выпуска GitHub; "" — GitHub его не дал.</summary>
         public string Sha256 = "";
+        /// <summary>Пре-релиз (альфа, бета).</summary>
+        public bool Prerelease;
     }
 
     sealed class UpdateResult
@@ -55,32 +59,27 @@ namespace MountSheetSync
         /// <summary>Файл в папке аддона из архива выпуска: «этот аддон обновляет программа».</summary>
         public const string MarkerFile = "installed-from-archive.txt";
 
-        static string ApiUrl
+        static string ApiUrl(string path)
         {
-            get
-            {
 #if TESTS
-                string test = Environment.GetEnvironmentVariable("MSS_UPDATE_TEST");
-                if (!string.IsNullOrEmpty(test))
-                {
-                    return test.TrimEnd('/') + "/repos/" + Repo + "/releases/latest";
-                }
-#endif
-                return "https://api.github.com/repos/" + Repo + "/releases/latest";
+            string test = Environment.GetEnvironmentVariable("MSS_UPDATE_TEST");
+            if (!string.IsNullOrEmpty(test))
+            {
+                return test.TrimEnd('/') + "/repos/" + Repo + path;
             }
+#endif
+            return "https://api.github.com/repos/" + Repo + path;
         }
 
         // ------------------------------------------------------------------
         // Проверка
         // ------------------------------------------------------------------
 
-        /// <summary>Новый выпуск на GitHub или null (версия та же или старше). Ошибка сети — SyncException.</summary>
-        public static UpdateInfo Check()
+        static object Api(string path)
         {
-            Dictionary<string, object> rel;
             try
             {
-                rel = Json.Parse(Encoding.UTF8.GetString(Download(ApiUrl, "application/vnd.github+json"))) as Dictionary<string, object>;
+                return Json.Parse(Encoding.UTF8.GetString(Download(ApiUrl(path), "application/vnd.github+json")));
             }
             catch (WebException ex)
             {
@@ -90,11 +89,42 @@ namespace MountSheetSync
             {
                 throw new SyncException(Tr.F("GitHub ответил непонятно: {0}", ex.Message));
             }
-            if (rel == null || J.Truthy(rel, "draft") || J.Truthy(rel, "prerelease"))
+        }
+
+        /// <summary>Новый выпуск на GitHub или null (версия та же или старше). Ошибка сети — SyncException.</summary>
+        public static UpdateInfo Check()
+        {
+            return Check(false);
+        }
+
+        /// <summary>tests — и пробные версии (пре-релизы): берётся самый новый выпуск из списка.</summary>
+        public static UpdateInfo Check(bool tests)
+        {
+            if (!tests)
+            {
+                return FromRelease(Api("/releases/latest") as Dictionary<string, object>, false);
+            }
+            UpdateInfo best = null;
+            foreach (object o in J.Arr(Api("/releases?per_page=30")))
+            {
+                UpdateInfo info = FromRelease(J.Obj(o), true);
+                if (info != null && info.AssetUrl.Length > 0 && (best == null || IsNewer(info.Version, best.Version)))
+                {
+                    best = info;
+                }
+            }
+            return best;
+        }
+
+        /// <summary>Выпуск → UpdateInfo, если он новее этой программы (и не черновик; пре-релиз — только с tests).</summary>
+        static UpdateInfo FromRelease(Dictionary<string, object> rel, bool tests)
+        {
+            if (rel == null || J.Truthy(rel, "draft") || (J.Truthy(rel, "prerelease") && !tests))
             {
                 return null;
             }
             UpdateInfo info = new UpdateInfo();
+            info.Prerelease = J.Truthy(rel, "prerelease");
             info.Tag = J.Str(rel, "tag_name").Trim();
             info.Version = info.Tag.TrimStart('v', 'V');
             info.Notes = J.Str(rel, "body").Trim();
@@ -103,7 +133,7 @@ namespace MountSheetSync
             {
                 info.PageUrl = ReleasesPage;
             }
-            if (!IsNewer(info.Version, Program.Version))
+            if (!IsNewer(info.Version, Program.FullVersion))
             {
                 return null;
             }
@@ -128,7 +158,10 @@ namespace MountSheetSync
             return info;
         }
 
-        /// <summary>«2.10.0» новее «2.9.3»; «2.4.0» не новее «2.4».</summary>
+        /// <summary>
+        /// «2.10.0» новее «2.9.3»; «2.4.0» не новее «2.4»; пробные — раньше выпуска: 2.8.0-alpha1 &lt; 2.8.0-alpha2 &lt;
+        /// 2.8.0-beta1 &lt; 2.8.0.
+        /// </summary>
         public static bool IsNewer(string candidate, string current)
         {
             int[] a = Parts(candidate);
@@ -146,7 +179,22 @@ namespace MountSheetSync
                     return x > y;
                 }
             }
-            return false;
+            int[] sa = Stage(candidate);
+            int[] sb = Stage(current);
+            return sa[0] != sb[0] ? sa[0] > sb[0] : sa[1] > sb[1];
+        }
+
+        /// <summary>Ступень сборки: alpha → 0, beta → 1, выпуск → 2; и её номер (alpha2 → 2).</summary>
+        static int[] Stage(string v)
+        {
+            Match m = Regex.Match(v ?? "", @"-(alpha|beta)(\d*)", RegexOptions.IgnoreCase);
+            if (!m.Success)
+            {
+                return new[] { 2, 0 };
+            }
+            int n;
+            int.TryParse(m.Groups[2].Value, NumberStyles.Integer, CultureInfo.InvariantCulture, out n);
+            return new[] { m.Groups[1].Value.ToLowerInvariant() == "alpha" ? 0 : 1, n };
         }
 
         static int[] Parts(string v)
@@ -166,7 +214,7 @@ namespace MountSheetSync
         static byte[] Download(string url, string accept)
         {
             HttpWebRequest req = (HttpWebRequest)WebRequest.Create(url);
-            req.UserAgent = Program.Title.Replace(" ", "") + "/" + Program.Version;
+            req.UserAgent = Program.Title.Replace(" ", "") + "/" + Program.FullVersion;
             req.Accept = accept;
             req.Timeout = 60000;
             req.ReadWriteTimeout = 120000;

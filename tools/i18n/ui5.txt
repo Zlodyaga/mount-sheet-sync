@@ -298,3 +298,31 @@ de: Mount Sheet Sync wurde deinstalliert.
 fr: Mount Sheet Sync a été désinstallé.
 es: Mount Sheet Sync se ha desinstalado.
 pt: O Mount Sheet Sync foi desinstalado.
+
+@ Обновляться до пробных версий (альфа, бета)
+en: Update to test versions (alpha, beta)
+de: Auf Testversionen aktualisieren (Alpha, Beta)
+fr: Mettre à jour vers les versions de test (alpha, bêta)
+es: Actualizar a versiones de prueba (alfa, beta)
+pt: Atualizar para versões de teste (alfa, beta)
+
+@ Пробные версии выходят раньше обычных, но могут быть с ошибками. Снимите галочку — программа снова будет предлагать только обычные выпуски.
+en: Test versions come out earlier but may have bugs. Untick it and the program offers only regular releases again.
+de: Testversionen erscheinen früher, können aber Fehler haben. Ohne Haken bietet das Programm wieder nur normale Versionen an.
+fr: Les versions de test sortent plus tôt mais peuvent contenir des bugs. Décochez et le programme ne proposera de nouveau que les versions normales.
+es: Las versiones de prueba salen antes, pero pueden tener errores. Desmárquelo y el programa volverá a ofrecer solo las versiones normales.
+pt: As versões de teste saem antes, mas podem ter erros. Desmarque e o programa volta a oferecer só as versões normais.
+
+@ Обновить до пробной версии {0}…
+en: Update to test version {0}…
+de: Auf Testversion {0} aktualisieren…
+fr: Mettre à jour vers la version de test {0}…
+es: Actualizar a la versión de prueba {0}…
+pt: Atualizar para a versão de teste {0}…
+
+@ Вышла пробная версия {0}
+en: Test version {0} is out
+de: Testversion {0} ist erschienen
+fr: La version de test {0} est disponible
+es: Ya está la versión de prueba {0}
+pt: Saiu a versão de teste {0}

@@ -49,7 +49,13 @@ names = zipfile.ZipFile(ZIP).namelist()
 check("the release archive carries the 'installed from the archive' marker in the addon folder",
       any(n.endswith("/1-addon/MountSheetSync/installed-from-archive.txt") for n in names), names[:5])
 
-STATE = {"tag": "v9.9.9", "digest": "sha256:" + hashlib.sha256(zip_bytes).hexdigest(), "downloads": 0}
+STATE = {"tag": "v9.9.9", "digest": "sha256:" + hashlib.sha256(zip_bytes).hexdigest(), "downloads": 0, "list": []}
+
+
+def release(tag, pre):
+    return {"tag_name": tag, "html_url": BASE + "/release/" + tag, "draft": False, "prerelease": pre, "body": "- " + tag,
+            "assets": [{"name": os.path.basename(ZIP), "browser_download_url": BASE + "/download/" + os.path.basename(ZIP),
+                        "digest": "sha256:" + hashlib.sha256(zip_bytes).hexdigest()}]}
 
 
 class Handler(BaseHTTPRequestHandler):
@@ -69,6 +75,12 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header("Content-Type", "application/json")
             self.end_headers()
             self.wfile.write(body if ok else b'{"message":"User-Agent required"}')
+        elif self.path == "/repos/Zlodyaga/mount-sheet-sync/releases?per_page=30":
+            body = json.dumps(STATE["list"]).encode()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.end_headers()
+            self.wfile.write(body)
         elif self.path.startswith("/download/"):
             STATE["downloads"] += 1
             self.send_response(302)
@@ -109,8 +121,8 @@ def setup(name, marker):
     return app, data, addon
 
 
-def run(app, data, *args):
-    env = dict(os.environ, MSS_UPDATE_TEST=BASE, MSS_SYSTEM_LANG="en", LANG="C.UTF-8")
+def run(app, data, *args, **extra):
+    env = dict(os.environ, MSS_UPDATE_TEST=BASE, MSS_SYSTEM_LANG="en", LANG="C.UTF-8", **extra)
     for k in ("http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY", "no_proxy", "NO_PROXY"):
         env.pop(k, None)
     p = subprocess.run(["mono", os.path.join(app, "MountSheetSync.exe"), "--data", data] + list(args), env=env,
@@ -172,6 +184,32 @@ try:
     code, out = run(app3, data3, "--update")
     check("older tag: 'no updates', nothing downloaded", code == 0 and "No updates" in out and STATE["downloads"] == n
           and open(os.path.join(app3, "MountSheetSync.exe"), "rb").read() == old_bytes, out[-400:])
+
+    # ---------------------------------------------------------------- test versions (alpha, beta)
+    STATE["list"] = [release("v2.9.0-alpha1", True), release("v2.9.0-alpha2", True), release("v1.0.0", False)]
+    app4, data4, addon4 = setup("tests", True)
+    code, out = run(app4, data4, "--check-update")
+    check("pre-releases are not offered by default (the latest stable is older)", code == 0 and "No updates" in out, out[-400:])
+    settings4 = json.load(open(os.path.join(data4, "settings.json")))
+    settings4["testVersions"] = True
+    json.dump(settings4, open(os.path.join(data4, "settings.json"), "w"))
+    code, out = run(app4, data4, "--check-update")
+    check("with «test versions» on: the newest pre-release (2.9.0-alpha2 > alpha1)", code == 0 and "A new version is available: 2.9.0-alpha2" in out, out[-400:])
+    code, out = run(app4, data4, "--update")
+    check("…and it installs like a release", code == 0 and "Program updated to 2.9.0-alpha2" in out
+          and open(os.path.join(app4, "MountSheetSync.exe"), "rb").read() == new_bytes, out[-600:])
+    STATE["list"] = [release("v2.8.0-alpha1", True), release("v2.8.0-beta3", True), release("v1.0.0", False)]
+    app5, data5, addon5 = setup("tests-older", True)
+    json.dump(dict(json.load(open(os.path.join(data5, "settings.json"))), testVersions=True), open(os.path.join(data5, "settings.json"), "w"))
+    code, out = run(app5, data5, "--check-update")
+    check("2.8.0-alpha1 / beta3 are older than the 2.8.0 release this exe is", code == 0 and "No updates" in out, out[-400:])
+    # an alpha build (tag v2.8.0-alpha1) with test versions off: the 2.8.0 release is newer
+    STATE["tag"] = "v2.8.0"
+    app6, data6, addon6 = setup("alpha-build", True)
+    code, out = run(app6, data6, "--check-update", MSS_TEST_PRERELEASE="alpha1")
+    check("an alpha build is offered the 2.8.0 release (same number, no suffix = newer)", code == 0 and "A new version is available: 2.8.0" in out, out[-400:])
+    code, out = run(app6, data6, "--check-update")
+    check("…while the 2.8.0 release build itself is up to date", code == 0 and "No updates: 2.8.0" in out, out[-400:])
 finally:
     srv.shutdown()
 
