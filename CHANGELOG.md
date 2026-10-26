@@ -12,6 +12,10 @@
   copy into a bug report, without character names, realm or spreadsheet.
 - The program refreshes the “Remaining” list on its 30-minute schedule only while the game is running (and right when
   it starts), so it asks Google much less often; after sending kills it refreshes as before.
+- Rares count too: killing a rare is not an encounter and leaves no lockout (Ishak of the Four Winds), so the addon
+  records it when you loot its corpse (if its mount is on the World Bosses sheet and not collected yet) — with the
+  attempt line in chat. A kill whose name the game hides is found in the lockouts a few seconds later and also gets
+  its attempt line.
 - When the CurseForge app updates the addon, it puts back an empty “Remaining” list (`SheetData.lua`); the
   program now notices that within seconds and writes the list again (before, it took up to 10 minutes).
 - Test versions: icon menu → “Update to test versions (alpha, beta)” — the program then also offers GitHub

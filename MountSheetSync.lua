@@ -52,6 +52,7 @@ local lastKillAt = {}
 local hintShown = false
 local errorShown = false
 local scanQueued = false
+local killScanUntil = 0   -- GetTime(): до этого момента скан сохранений — сразу после убийства (пишем попытку)
 local manualScanPending = false
 
 ns.VERSION = VERSION
@@ -253,17 +254,22 @@ local function Describe(rec)
 end
 ns.Describe = Describe
 
+-- Маунт мог выпасть: какая это попытка и шанс за все попытки (таблица программы 2.8+).
+local function AnnounceAttempts(rec)
+  if db.quiet or not ns.AttemptsFor then
+    return
+  end
+  for _, a in ipairs(ns.AttemptsFor(rec)) do
+    Print(string.format(L.announce_attempt, "|cffc9a0ff" .. tostring(a.name):gsub("|", "||") .. "|r", a.n, ns.FormatChance(a.n, a.p)))
+  end
+end
+
 local function Announce(rec)
   if db.quiet then
     return
   end
   Print(string.format(L.announce, Describe(rec), rec.char))
-  -- маунт мог выпасть: какая это попытка и шанс за все попытки (таблица программы 2.8+)
-  if ns.AttemptsFor then
-    for _, a in ipairs(ns.AttemptsFor(rec)) do
-      Print(string.format(L.announce_attempt, "|cffc9a0ff" .. tostring(a.name):gsub("|", "||") .. "|r", a.n, ns.FormatChance(a.n, a.p)))
-    end
-  end
+  AnnounceAttempts(rec)
   if not hintShown then
     hintShown = true
     if ns.ProgramState() == "online" then
@@ -307,6 +313,7 @@ local function OnBossKilled(source, encounterID, encounterName, difficultyID, gr
   -- Через несколько секунд перечитаем сохранения подземелий: так босс
   -- попадёт в журнал, даже если имя в событии оказалось скрытым.
   if C_Timer then
+    killScanUntil = GetTime() + 30
     C_Timer.After(5, RequestLockouts)
   end
 
@@ -342,6 +349,79 @@ local function OnBossKilled(source, encounterID, encounterName, difficultyID, gr
 end
 
 ---------------------------------------------------------------------------
+-- Рары (Исхак Повелитель Четырех Ветров и т. п.): это не бои — ни ENCOUNTER_END, ни BOSS_KILL, ни сохранений.
+-- Попытка — когда открылась добыча с трупа НИП, с которого падает несобранный маунт со строки «Мировые боссы»
+-- (ns.RareRow, по списку из таблицы). Имя берём у цели или существа под курсором с тем же GUID, что у трупа.
+-- Если этот же босс уже записан за последние 15 минут (убийство, сохранения), второй раз не пишем.
+---------------------------------------------------------------------------
+local LOOT_REPEAT = 15 * 60
+local lootedGuids = {}
+
+local function NameOfGuid(guid)
+  for _, unit in ipairs({ "target", "mouseover" }) do
+    local g = UnitGUID and UnitGUID(unit)
+    if g and not issecretvalue(g) and g == guid then
+      local name = UnitName(unit)
+      if name and not issecretvalue(name) then
+        return name
+      end
+      return nil
+    end
+  end
+  return nil
+end
+
+local function RecentlyRecorded(player, boss, stamp)
+  local want = ns.Norm and ns.Norm(boss) or boss
+  for i = #db.kills, 1, -1 do
+    local rec = db.kills[i]
+    if (tonumber(rec.time) or 0) < stamp - LOOT_REPEAT then
+      break
+    end
+    if rec.charKey == player.key and rec.kind == "world" and (ns.Norm and ns.Norm(rec.boss) or rec.boss) == want then
+      return true
+    end
+  end
+  return false
+end
+
+local function OnLootReady()
+  if not GetNumLootItems or not GetLootSourceInfo or not ns.RareRow then
+    return
+  end
+  local guids = {}
+  for slot = 1, (ToNumber(GetNumLootItems()) or 0) do
+    local sources = { GetLootSourceInfo(slot) }   -- guid, количество, guid, количество…
+    for i = 1, #sources, 2 do
+      local g = sources[i]
+      if type(g) == "string" and not issecretvalue(g) and g:find("^Creature%-") and not lootedGuids[g] then
+        guids[g] = true
+      end
+    end
+  end
+  local player = GetPlayer()
+  for guid in pairs(guids) do
+    lootedGuids[guid] = true
+    local name = Clean(NameOfGuid(guid))
+    local stamp = time()
+    if name and player.name and ns.RareRow(name) and not RecentlyRecorded(player, name, stamp) then
+      local npc = guid:match("^Creature%-%d+%-%d+%-%d+%-%d+%-(%d+)%-") or "0"
+      local rec = BaseRecord(player, stamp)
+      rec.id = string.format("D-%s-%s-%d", player.key, npc, stamp)
+      rec.source = "loot"
+      rec.boss = name
+      rec.npcID = tonumber(npc)
+      rec.kind = "world"
+      rec.difficultyID = 0
+      rec.weekEnd = WeekEnd()
+      if AddRecord(rec) then
+        Announce(rec)
+      end
+    end
+  end
+end
+
+---------------------------------------------------------------------------
 -- Сохранения подземелий и мировых боссов этой недели
 ---------------------------------------------------------------------------
 local function WeekKey(kind, difficultyID, boss)
@@ -368,6 +448,7 @@ local function ScanLockouts()
   local weekEnd = WeekEnd()
   local stamp = time()
   local added = 0
+  local found = {}
   local seen = WeekIndex(player, weekEnd)
 
   local count = ToNumber(GetNumSavedInstances and GetNumSavedInstances()) or 0
@@ -399,6 +480,7 @@ local function ScanLockouts()
           rec.weekEnd = weekEnd or lockEnd
           if AddRecord(rec) then
             added = added + 1
+            found[#found + 1] = rec
           end
         end
       end
@@ -423,15 +505,23 @@ local function ScanLockouts()
       rec.weekEnd = weekEnd or lockEnd
       if AddRecord(rec) then
         added = added + 1
+        found[#found + 1] = rec
       end
     end
   end
 
-  return added
+  return added, found
 end
 
 local function RunScan()
-  local added = ScanLockouts()
+  local added, found = ScanLockouts()
+  if added > 0 and not manualScanPending and GetTime() <= killScanUntil then
+    -- босса только что убили, но событие пришло без имени (Midnight прячет его) или его не было вовсе
+    -- (мировые боссы) — запись нашлась в сохранениях: про попытку говорим так же, как после обычного убийства
+    for _, rec in ipairs(found) do
+      AnnounceAttempts(rec)
+    end
+  end
   if manualScanPending then
     manualScanPending = false
     if added > 0 then
@@ -790,6 +880,7 @@ frame:SetScript("OnEvent", function(self, event, ...)
       self:RegisterEvent("BOSS_KILL")
       self:RegisterEvent("UPDATE_INSTANCE_INFO")
       self:RegisterEvent("NEW_MOUNT_ADDED")
+      self:RegisterEvent("LOOT_READY")
     end
   elseif event == "PLAYER_LOGIN" then
     if ns.SetupMinimapButton then
@@ -809,6 +900,8 @@ frame:SetScript("OnEvent", function(self, event, ...)
     SafeCall(OnBossKilled, "bosskill", encounterID, encounterName)
   elseif event == "UPDATE_INSTANCE_INFO" then
     QueueScan()
+  elseif event == "LOOT_READY" then
+    SafeCall(OnLootReady)
   elseif event == "NEW_MOUNT_ADDED" then
     SafeCall(OnMountAdded, ...)
   end

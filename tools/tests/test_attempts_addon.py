@@ -39,14 +39,15 @@ SHEETS = [
         ["Нет", "Legion", "Antorus", "Кругомер", "Достижение", "Аргус Освободитель", "Любая", "", "", "", "", "", "Фармится", "", "Достижение", ""]]},
     {"name": "Рейды Эйра", "rows": [CH, ["Нет", "SL", "Sanctum of Domination", "Отмщение", "Сильвана Ветрокрылая", "Mythic", "Да", True]]},
     {"name": "Рейды Мирна", "rows": [CH, ["Нет", "SL", "Sanctum of Domination", "Отмщение", "Сильвана Ветрокрылая", "Mythic", "Да", True]]},
-    {"name": "Мировые боссы", "rows": [WH, ["Нет", "MoP", "Valley of the Four Winds", "Сын Галеона", "Галеон", "", "", "", 0.01, "", False, False]]},
+    {"name": "Мировые боссы", "rows": [WH, ["Нет", "MoP", "Valley of the Four Winds", "Сын Галеона", "Галеон", "", "", "", 0.01, "", False, False],
+                                       ["Нет", "BfA", "Uldum", "Дракон Четырех Ветров", "Исхак Повелитель Четырех Ветров", "Ежедневно", "", "", 0.03, "", False, False]]},
 ]
 up = host({"catalog": None, "sheets": SHEETS, "mode": "upgrade", "properties": {"layout": "2"}})
 sheets = [{"name": s["name"], "rows": s["rows"], "formulas": s["formulas"]} for s in up["sheets"]]
 [s for s in sheets if s["name"] == "Рейды"][0]["rows"][1][15] = 36   # 36 attempts so far
 status = host({"catalog": None, "sheets": sheets, "mode": "handle", "properties": {"layout": "3"}, "request": {"action": "status"}})["reply"]
 status["generated"] = NOW - 3600
-check("the program's status carries the attempt rows", [m["mount"] for m in status.get("mounts", [])] == ["Отмщение", "Сын Галеона"], status.get("mounts"))
+check("the program's status carries the attempt rows", [m["mount"] for m in status.get("mounts", [])] == ["Отмщение", "Сын Галеона", "Дракон Четырех Ветров"], status.get("mounts"))
 
 
 def lua_str(s):
@@ -85,7 +86,17 @@ def new_game(quiet=False):
     function RequestRaidInfo() end
     function ReloadUI() end
     function GetNumSavedInstances() return 0 end
-    function GetNumSavedWorldBosses() return 0 end
+    MOCK.wb = {}
+    function GetNumSavedWorldBosses() return #MOCK.wb end
+    function GetSavedWorldBossInfo(i) local w = MOCK.wb[i]; return w[1], w[2], 3 * 86400 end
+    -- loot: MOCK.loot = { guid, … }; the corpse is the target
+    MOCK.loot = {}
+    TARGET = { guid = nil, name = nil }
+    function GetNumLootItems() return #MOCK.loot end
+    function GetLootSourceInfo(slot) return MOCK.loot[slot], 1 end
+    function UnitGUID(u) if u == "target" then return TARGET.guid end if u == "player" then return "Player-1602-0ABCDEF1" end end
+    _UnitName = UnitName
+    function UnitName(u) if u == "target" then return TARGET.name end return "Эйра" end
     C_MountJournal = { GetMountInfoByID = function(id)
       if id == 1471 then return "Отмщение", 351195, 1, false, true, 0, false, false, nil, false, false, id, false end
     end }
@@ -175,6 +186,59 @@ L2, g2, ns2, _, _ = new_game(quiet=True)
 out = kill(L2, g2, "Сильвана Ветрокрылая", 16, 2435)
 check("chat messages off: no attempt line either", not any("мог выпасть" in c for c in out), out)
 
+# ---- a rare (no encounter, no lockout): the attempt counts when its corpse is looted
+L4, g4, ns4, _, _ = new_game()
+
+
+def loot(L, g, guid, name):
+    L.execute("MOCK.now = MOCK.now + 120")
+    L.execute('TARGET = { guid = "%s", name = %s }; MOCK.loot = { "%s" }' % (guid, '"%s"' % name if name else "nil", guid))
+    n = len(g.CHAT)
+    g.Fire("LOOT_READY", False)
+    g.RunTimers()
+    return chat(g, n)
+
+
+ISHAK = "Creature-0-3767-1-41-157134-00004A2B3C"
+out = loot(L4, g4, ISHAK, "Исхак Повелитель Четырех Ветров")
+recs = g4.MountSheetSyncDB.kills
+last = recs[len(recs)]
+check("looting Ishak: recorded as a world kill (source loot, NPC ID from the GUID)", last.kind == "world" and last.source == "loot"
+      and last.boss == "Исхак Повелитель Четырех Ветров" and last.npcID == 157134 and str(last.id).startswith("D-Player-1602-0ABCDEF1-157134-"),
+      (last.kind, last.source, last.boss, last.npcID, last.id))
+check("…chat: recorded + «Дракон Четырех Ветров мог выпасть: попытка 1 · шанс за все попытки 3%»",
+      any("записано" in c for c in out) and any("Дракон Четырех Ветров" in c and "попытка 1 " in c and "3%" in c for c in out), out)
+n = len(recs)
+out = loot(L4, g4, ISHAK, "Исхак Повелитель Четырех Ветров")
+check("the same corpse looted again: nothing new", len(g4.MountSheetSyncDB.kills) == n and not any("мог выпасть" in c for c in out), out)
+out = loot(L4, g4, "Creature-0-3767-1-41-12345-0000AAAA", "Песчаный скорпид")
+check("an ordinary mob: nothing", len(g4.MountSheetSyncDB.kills) == n, out)
+out = loot(L4, g4, "Creature-0-3767-1-41-157134-0000BBBB", None)
+check("a corpse that is not the target (name unknown): nothing, no error", len(g4.MountSheetSyncDB.kills) == n and not any("Ошибка" in c for c in out), out)
+out = kill(L4, g4, "Галеон", 0, 725, inst=("Долина Четырех Ветров", "none"))
+out = loot(L4, g4, "Creature-0-3767-1-41-62346-0000CCCC", "Галеон")
+check("a world boss looted right after its kill: not counted twice", not any("мог выпасть" in c for c in out)
+      and sum(1 for i in range(1, len(g4.MountSheetSyncDB.kills) + 1) if g4.MountSheetSyncDB.kills[i].boss == "Галеон") == 1, out)
+
+# ---- a kill whose name the game hides: the lockout scan right after it finds it and still says the attempt
+L5, g5, ns5, _, _ = new_game()
+L5.execute("MOCK.now = MOCK.now + 300")
+L5.execute('MOCK.inst = { "Долина Четырех Ветров", "none", 0, 0 }')
+n0 = len(g5.CHAT)
+g5.Fire("BOSS_KILL", 725, "SECRET")
+L5.execute('MOCK.wb = { { "Галеон", 725 } }')
+g5.Fire("UPDATE_INSTANCE_INFO")
+g5.RunTimers()
+out = chat(g5, n0)
+check("hidden name: found in the world boss lockouts a moment later — «Сын Галеона мог выпасть: попытка 1»",
+      any("Сын Галеона" in c and "попытка 1 " in c for c in out), out)
+L5.execute('MOCK.wb = { { "Галеон", 725 }, { "Ундаста", 826 } }')
+L5.execute("MOCK.now = MOCK.now + 3600")
+n0 = len(g5.CHAT)
+g5.Fire("UPDATE_INSTANCE_INFO")
+g5.RunTimers()
+check("…a later scan (login) without a kill: no attempt lines", not any("мог выпасть" in c for c in chat(g5, n0)), chat(g5, n0))
+
 # ---- English
 L3, g3, ns3, _, _ = new_game()
 L3.execute('MountSheetSyncDB.language = "enUS"; MSS_SET = true')
@@ -194,7 +258,7 @@ boxes = [r for r in regs + [g.ALL_REGIONS[i] for i in range(len(regs) + 1, len(g
 text = str(boxes[0]._text) if boxes else ""
 check("report window: the text selected for Ctrl+C", rep is not None and rep._shown and boxes and boxes[0]._highlighted, text)
 check("…versions, program state and counts", "Mount Sheet Sync bug report" in text and "Addon: 2.8.0" in text and "Game: 12.1.5 (build 65000" in text
-      and "Program: online (version 2.8.0, sheet connected" in text and "attempt rows 2" in text and "Journal: 4 records" in text, text)
+      and "Program: online (version 2.8.0, sheet connected" in text and "attempt rows 3" in text and "Journal: 4 records" in text, text)
 check("…no character names, realm or spreadsheet title", "Эйра" not in text and "Ревущий" not in text and "Мирна" not in text, text)
 boxes[0]._scripts.OnTextChanged(boxes[0], True)
 check("…read-only: typing restores the text", str(boxes[0]._text) == text)

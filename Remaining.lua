@@ -488,6 +488,25 @@ function ns.AttemptsFor(rec)
   return out
 end
 
+-- Труп с таким именем роняет несобранный маунт со строки «Мировые боссы» (рар без боя и сохранений).
+function ns.RareRow(name)
+  local data = AttemptRows()
+  if not data or type(name) ~= "string" or name == "" then
+    return false
+  end
+  local want = Prepare(Norm(name))
+  for _, m in ipairs(data.mounts) do
+    if type(m) == "table" and m.kind == "world" and not Collected(m) then
+      for _, n in ipairs(type(m.names) == "table" and m.names or {}) do
+        if MatchPrepared(want, Prepare(n), false) then
+          return true
+        end
+      end
+    end
+  end
+  return false
+end
+
 -- Персонаж из списка — тот, кто сделал запись.
 local function RecordBy(ch, rec)
   local keys = type(ch.keys) == "table" and ch.keys or {}
