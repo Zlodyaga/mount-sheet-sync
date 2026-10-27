@@ -88,7 +88,8 @@ namespace MountSheetSync
             sb.Append("-- so the addon knows whether kills go to the sheet right away. There is no need to edit it.\r\n");
             sb.Append("MountSheetSyncProgram = { seen = ").Append(seen)
               .Append(", sheet = ").Append(sheet ? "true" : "false")
-              .Append(", version = \"").Append(Program.Version).Append("\" }\r\n");
+              .Append(", version = \"").Append(Program.Version)
+              .Append("\", addon = \"").Append(Program.MinAddon).Append("\" }\r\n");
             return sb.ToString();
         }
 

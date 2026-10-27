@@ -1,45 +1,78 @@
 name: Release
 
-# Push a tag like v2.3.0 (it must match "## Version:" in MountSheetSync.toc), or v2.3.0-alpha1 / v2.3.0-beta1 for a
-# test version: then the GitHub release is a pre-release (the program's auto-update and the website's "Download"
-# button keep the latest stable one) and CurseForge gets the file as Alpha / Beta (BigWigs packager reads the tag):
-#   - the program is built on Windows with the built-in C# compiler (and signed through SignPath
-#     once that is set up — see the "Sign with SignPath" step),
-#   - the full archive (addon + program + sources + guide) and MountSheetSync.exe on its own go to a GitHub release,
-#   - the addon alone is packaged by the BigWigs packager and uploaded to CurseForge
-#     (only when the CF_API_KEY secret is set and the .toc has "## X-Curse-Project-ID").
+# The program and the addon are released separately (see docs/reference/release.md).
+#
+# Usually: Actions → Release → "Run workflow": what = program / addon / both, type = release / alpha / beta.
+# The versions come from the files — the program's from Program.Version (program/Program.cs), the addon's from
+# "## Version" in MountSheetSync.toc; tools/release_plan.sh picks the tags:
+#   - program → tag v<version>: the exe is built on Windows with the built-in C# compiler (and signed through
+#     SignPath once that is set up), the full archive and MountSheetSync.exe go to a GitHub release (the program's
+#     auto-update and the website's "Download" button use it). CurseForge is not touched.
+#   - addon → tag addon-v<version> (no GitHub release, so "latest" stays a program release): BigWigs packager uploads
+#     the addon to CurseForge (CF_API_KEY secret, "## X-Curse-Project-ID" in the toc).
+#   - alpha / beta → the next free …-alphaN / -betaN: a GitHub pre-release / an Alpha or Beta file on CurseForge.
+# Pushing such a tag by hand works too (v… — program, addon-v… — addon).
 
 on:
+  workflow_dispatch:
+    inputs:
+      what:
+        description: What to release
+        type: choice
+        options: [program, addon, both]
+        default: program
+      kind:
+        description: Release or a test version
+        type: choice
+        options: [release, alpha, beta]
+        default: release
   push:
-    tags: ['v*']
+    tags: ['v*', 'addon-v*']
 
 permissions:
   contents: write
 
 jobs:
+  plan:
+    runs-on: ubuntu-24.04
+    outputs:
+      program: ${{ steps.plan.outputs.program }}
+      addon: ${{ steps.plan.outputs.addon }}
+      program_tag: ${{ steps.plan.outputs.program_tag }}
+      addon_tag: ${{ steps.plan.outputs.addon_tag }}
+      suffix: ${{ steps.plan.outputs.suffix }}
+      prerelease: ${{ steps.plan.outputs.prerelease }}
+      program_version: ${{ steps.plan.outputs.program_version }}
+      addon_version: ${{ steps.plan.outputs.addon_version }}
+      sha: ${{ steps.plan.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - id: plan
+        env:
+          WHAT: ${{ inputs.what }}
+          KIND: ${{ inputs.kind }}
+        run: bash tools/release_plan.sh
+
   exe:
+    needs: plan
+    if: ${{ needs.plan.outputs.program == 'true' }}
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Check that the tag matches the addon version
-        shell: bash
-        run: |
-          v=$(sed -n 's/^## Version: *//p' MountSheetSync.toc | tr -d '\r')
-          base=${GITHUB_REF_NAME%%-*}   # v2.8.0-alpha1 → v2.8.0
-          [ "v$v" = "$base" ] || { echo "tag $GITHUB_REF_NAME, toc $v"; exit 1; }
-          if [ "$base" != "$GITHUB_REF_NAME" ]; then
-            echo "${GITHUB_REF_NAME#*-}" | grep -Eq '^(alpha|beta)[0-9]*$' || { echo "a test tag ends in -alphaN or -betaN"; exit 1; }
-          fi
-          grep -q "public const string Version = \"$v\"" program/Program.cs || { echo "Program.cs version differs"; exit 1; }
-      # v2.8.0-alpha1: the program knows it is a test build (Program.Prerelease = "alpha1") — it shows 2.8.0-alpha1
-      # and updates to alpha2, beta1 or the 2.8.0 release when those come out
+        with:
+          ref: ${{ needs.plan.outputs.sha }}
+      # a test build knows its suffix (Program.Prerelease = "alpha1"): it shows 2.8.0-alpha1 and is offered
+      # alpha2, beta1 or the 2.8.0 release when those come out
       - name: Mark a test build
-        if: ${{ contains(github.ref_name, '-') }}
+        if: ${{ needs.plan.outputs.suffix != '' }}
         shell: bash
+        env:
+          SUFFIX: ${{ needs.plan.outputs.suffix }}
         run: |
-          s=${GITHUB_REF_NAME#*-}
-          sed -i "s/public const string Prerelease = \"\";/public const string Prerelease = \"$s\";/" program/Program.cs
-          grep -q "public const string Prerelease = \"$s\";" program/Program.cs || { echo "Prerelease not set in Program.cs"; exit 1; }
+          sed -i "s/public const string Prerelease = \"\";/public const string Prerelease = \"$SUFFIX\";/" program/Program.cs
+          grep -q "public const string Prerelease = \"$SUFFIX\";" program/Program.cs || { echo "Prerelease not set in Program.cs"; exit 1; }
       - name: Build
         shell: cmd
         run: program\build.cmd
@@ -77,10 +110,12 @@ jobs:
           path: program/MountSheetSync.exe
 
   archive:
-    needs: exe
+    needs: [plan, exe]
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.plan.outputs.sha }}
       - uses: actions/download-artifact@v7
         with:
           name: exe
@@ -88,34 +123,51 @@ jobs:
       - name: Package
         run: tools/package.sh built/MountSheetSync.exe dist
       - name: Release notes from CHANGELOG.md
+        env:
+          V: ${{ needs.plan.outputs.program_version }}
+          SUFFIX: ${{ needs.plan.outputs.suffix }}
         run: |
-          v=${GITHUB_REF_NAME#v}
-          v=${v%%-*}
-          if [ "$v" != "${GITHUB_REF_NAME#v}" ]; then
-            printf '**Test version (%s).** The program does not update to it by itself, and the website keeps offering the latest stable version.\n\n' "${GITHUB_REF_NAME#*-}" > notes.md
+          : > notes.md
+          if [ -n "$SUFFIX" ]; then
+            printf '**Test version (%s).** The program does not update to it by itself, and the website keeps offering the latest stable version.\n\n' "$SUFFIX" > notes.md
           fi
-          awk -v h="## $v" '$0==h{on=1;next} /^## /{on=0} on' CHANGELOG.md >> notes.md
+          awk -v h="## $V" '$0==h{on=1;next} /^## /{on=0} on' CHANGELOG.md >> notes.md
           cat notes.md
       # MountSheetSync.exe on its own, always under this name: the website's "Download" button is
       # releases/latest/download/MountSheetSync.exe; on first start the program offers to install itself
       - uses: softprops/action-gh-release@v3
         with:
+          tag_name: ${{ needs.plan.outputs.program_tag }}
+          target_commitish: ${{ needs.plan.outputs.sha }}
           files: |
             dist/*.zip
             built/MountSheetSync.exe
           body_path: notes.md
-          prerelease: ${{ contains(github.ref_name, '-') }}
+          prerelease: ${{ needs.plan.outputs.prerelease == 'true' }}
 
   addon:
-    needs: archive
+    needs: plan
+    if: ${{ needs.plan.outputs.addon == 'true' }}
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v6
         with:
+          ref: ${{ needs.plan.outputs.sha }}
           fetch-depth: 0
+      # the packager takes the version and Release/Alpha/Beta from the tag on this commit: only the addon tag stays
+      - name: Tag the addon release
+        env:
+          TAG: ${{ needs.plan.outputs.addon_tag }}
+        run: |
+          for t in $(git tag --points-at HEAD); do [ "$t" = "$TAG" ] || git tag -d "$t"; done
+          if ! git rev-parse -q --verify "refs/tags/$TAG" >/dev/null; then
+            git tag "$TAG"
+            git push origin "refs/tags/$TAG"
+          fi
+          git tag --points-at HEAD
+      # no GITHUB_OAUTH: the addon gets no GitHub release (the program's auto-update and the website use "latest")
       - uses: BigWigsMods/packager@v2
         with:
-          args: -n "{package-name}-addon-only-{project-version}"
+          args: -n "{package-name}-{project-version}"
         env:
           CF_API_KEY: ${{ secrets.CF_API_KEY }}
-          GITHUB_OAUTH: ${{ secrets.GITHUB_TOKEN }}

@@ -326,3 +326,17 @@ de: Testversion {0} ist erschienen
 fr: La version de test {0} est disponible
 es: Ya está la versión de prueba {0}
 pt: Saiu a versão de teste {0}
+
+@ Аддон {0} устарел — обновите его в CurseForge (программе нужна {1} или новее)
+en: Addon {0} is out of date — update it in CurseForge (the program needs {1} or newer)
+de: Addon {0} ist veraltet — aktualisiere es in CurseForge (das Programm braucht {1} oder neuer)
+fr: L'addon {0} n'est plus à jour — mettez-le à jour dans CurseForge (le programme demande {1} ou plus récent)
+es: El addon {0} está desactualizado: actualícelo en CurseForge (el programa necesita {1} o más nuevo)
+pt: O addon {0} está desatualizado — atualize-o no CurseForge (o programa precisa da {1} ou mais nova)
+
+@ Обновите аддон Mount Sheet Sync
+en: Update the Mount Sheet Sync addon
+de: Aktualisiere das Addon Mount Sheet Sync
+fr: Mettez à jour l'addon Mount Sheet Sync
+es: Actualice el addon Mount Sheet Sync
+pt: Atualize o addon Mount Sheet Sync

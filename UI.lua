@@ -147,7 +147,10 @@ local function FillBrokerTooltip(tooltip)
       tooltip:AddLine(string.format(L.tip_last, ns.Describe(last), last.char or "?"), 0.8, 0.8, 0.8)
     end
   end
-  if ns.ProgramState() ~= "online" then
+  local state = ns.ProgramState()
+  if state == "oldaddon" or state == "oldprogram" then
+    tooltip:AddLine(L["window_" .. state], 0.6, 0.6, 0.6, true)
+  elseif state ~= "online" then
     tooltip:AddLine(L.tip_offline_short, 0.6, 0.6, 0.6, true)
   end
   tooltip:AddLine(L.tip_left_click, 0.6, 0.6, 0.6)
@@ -491,12 +494,13 @@ local function CreateWindow()
   if state == "online" then
     Label(hint, "window_hint")
   else
-    Label(hint, state == "nosheet" and "window_nosheet" or "window_offline")
+    Label(hint, "window_" .. state)
     local hover = CreateFrame("Frame", nil, frame)
     hover:SetPoint("TOPLEFT", hint, "TOPLEFT", 0, 2)
     hover:SetPoint("BOTTOMRIGHT", hint, "BOTTOMRIGHT", 0, -2)
     hover:EnableMouse(true)
-    AttachTooltip(hover, "offline_title", state == "nosheet" and "tip_nosheet" or "tip_offline")
+    local old = state == "oldaddon" or state == "oldprogram"
+    AttachTooltip(hover, old and "update_title" or "offline_title", "tip_" .. state)
   end
 
   frame:SetScript("OnShow", UI.Refresh)

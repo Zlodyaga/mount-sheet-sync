@@ -20,6 +20,7 @@ namespace MountSheetSync
         readonly SyncWorker worker;
         ToolStripMenuItem statusItem;
         ToolStripMenuItem detailItem;
+        ToolStripMenuItem addonItem;
         ToolStripMenuItem syncItem;
         ToolStripMenuItem recentItem;
         ToolStripMenuItem leftItem;
@@ -141,6 +142,8 @@ namespace MountSheetSync
             statusItem = Disabled(Tr._("Запуск…"));
             detailItem = Disabled("");
             detailItem.Visible = false;
+            addonItem = Disabled("");
+            addonItem.Visible = false;
             syncItem = Item(Tr._("Отправить сейчас"), delegate { worker.SyncNow(); });
             recentItem = new ToolStripMenuItem(Tr._("Последние события"));
             recentItem.DropDownItems.Add(Disabled(Tr._("Пока ничего не отправлялось")));
@@ -167,7 +170,7 @@ namespace MountSheetSync
             }
             menu.Items.AddRange(new ToolStripItem[]
             {
-                title, updateItem, statusItem, detailItem, new ToolStripSeparator(),
+                title, updateItem, statusItem, detailItem, addonItem, new ToolStripSeparator(),
                 syncItem, recentItem, leftItem, openSheetItem, signInItem, createItem, addCharsItem, farmItem, collectionItem, new ToolStripSeparator(),
                 Item(Tr._("Настройки…"), delegate { OpenSettings(false); }),
                 Item(Tr._("Журнал работы"), delegate { OpenLog(); }),
@@ -333,6 +336,8 @@ namespace MountSheetSync
             statusItem.Text = MenuText(TextUtil.Shorten(status, 90));
             detailItem.Text = MenuText(detail);
             detailItem.Visible = detail.Length > 0;
+            addonItem.Text = MenuText(last.AddonNote);
+            addonItem.Visible = last.AddonNote.Length > 0;
             syncItem.Enabled = settings.IsConfigured;
             openSheetItem.Visible = SheetUrl().Length > 0;
             bool google = settings.UseGoogle;

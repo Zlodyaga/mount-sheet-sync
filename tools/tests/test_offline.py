@@ -148,6 +148,29 @@ broker, hint, tip = window_bits(L, g)
 check("English: «Offline: the Mount Sheet Sync program isn't running…»", hint is not None and hint.startswith("Offline:")
       and any(t.startswith("Offline:") for t in broker), (hint, broker))
 
+# ---- separate releases: the program wants a newer addon, or the addon a newer program
+def prog(seen, version, addon=None):
+    return 'MountSheetSyncProgram = { seen = %d, sheet = true, version = "%s"%s }\n' % (seen, version, ', addon = "%s"' % addon if addon else "")
+
+
+L, g, ns, _ = new_game(prog(NOW - 20, "2.9.4", addon="2.9.1"))
+check("program 2.9.4 needs addon ≥ 2.9.1 → oldaddon", ns.ProgramState() == "oldaddon" and not ns.ProgramOffline())
+chat = first_kill_chat(L, g)
+check("…kills still go to the sheet: the usual hint after the first kill", any("В таблицу попадёт" in c for c in chat), chat)
+broker, hint, tip = window_bits(L, g)
+check("…window and tooltip: «нужен аддон новее — обновите его в CurseForge», hover explains", hint is not None and "аддон новее" in hint
+      and any("аддон новее" in t for t in broker) and tip is not None and tip[0] == "Нужно обновление" and any("/reload" in t for t in tip), (hint, broker, tip))
+L, g, ns, _ = new_game(prog(NOW - 20, "2.7.0"))
+check("program 2.7.0 (older than the addon needs) → oldprogram", ns.ProgramState() == "oldprogram")
+broker, hint, tip = window_bits(L, g)
+check("…«Программа … устарела — обновите её»", hint is not None and "устарела" in hint, hint)
+L, g, ns, _ = new_game(prog(NOW - 20, "2.8.0", addon="2.8.0"))
+check("same versions → online", ns.ProgramState() == "online")
+vl = ns.VersionLess
+check("version order like the program: 2.9 < 2.10, 2.9.0-alpha1 < alpha2 < beta1 < 2.9.0, 2.9.0 = 2.9",
+      vl("2.9.0", "2.10.0") and vl("2.9.0-alpha1", "2.9.0-alpha2") and vl("2.9.0-alpha2", "2.9.0-beta1") and vl("2.9.0-beta1", "2.9.0")
+      and not vl("2.9.0", "2.9") and not vl("2.9", "2.9.0") and not vl("2.10.0", "2.9.9"))
+
 failed = [n for n, ok in checks if not ok]
 print("%d/%d checks passed" % (len(checks) - len(failed), len(checks)))
 raise SystemExit(1 if failed else 0)

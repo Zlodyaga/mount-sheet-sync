@@ -1,5 +1,7 @@
 # Changelog
 
+The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [CHANGELOG-addon.md](CHANGELOG-addon.md).
+
 ## 2.8.0
 - Attempt counter: “Attempts” and “Chance over all attempts” next to “Drop chance” on the Raids, Dungeons and World
   Bosses sheets (existing spreadsheets get them on their own, counting from 0; a number typed by hand is continued).
@@ -21,6 +23,9 @@
 - Test versions: icon menu → “Update to test versions (alpha, beta)” — the program then also offers GitHub
   pre-releases (tags like v2.8.0-alpha1) and updates to them like to a release; untick it to get only releases again.
   A test build shows its full number (2.8.0-alpha1) and moves on to the release with the same number when it is out.
+- From now on the program and the addon are released separately, each with its own version: a program update no
+  longer means an addon update in CurseForge, and the other way round. If one of them needs a newer other half, it
+  says so: the icon menu (and one notification) “update the addon in CurseForge”, or a grey line in the addon window.
 
 ## 2.7.0
 - The addon says, quietly, when the tray program is not running: a grey line at the bottom of its window (details on

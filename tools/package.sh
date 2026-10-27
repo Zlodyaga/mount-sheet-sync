@@ -8,7 +8,8 @@ set -euo pipefail
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 EXE=$(realpath "$1")
 OUTDIR=$(realpath -m "${2:-$ROOT/dist}")
-VERSION=$(sed -n 's/^## Version: *//p' "$ROOT/MountSheetSync.toc" | tr -d '\r')
+# the archive is a program release: named by Program.Version (the addon inside has its own version in the toc)
+VERSION=$(sed -n 's/.*public const string Version = "\([^"]*\)";.*/\1/p' "$ROOT/program/Program.cs" | head -1)
 mkdir -p "$OUTDIR"
 python3 - "$ROOT" "$EXE" "$OUTDIR" "$VERSION" <<'PY'
 import os, shutil, sys, tempfile, time, zipfile

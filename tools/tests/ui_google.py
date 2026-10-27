@@ -167,6 +167,8 @@ try:
         time.sleep(0.5)
     check("an addon update that empties SheetData.lua: the program writes the list back within seconds",
           "MountSheetSyncSheet = {" in open(sd, encoding="utf-8").read())
+    mark = open(os.path.join(ADDON, "Program.lua"), encoding="utf-8").read()
+    check("Program.lua tells the addon which version the program needs", 'addon = "' in mark, mark)
     shot("u6_after")
     subprocess.run(["xdotool", "mousemove", "1112", "12", "click", "3"], env=env)   # меню значка в трее
     time.sleep(1.5)
@@ -217,6 +219,16 @@ try:
     key(pid, "Escape")
     time.sleep(1)
     check("…and closes with Esc", wait_window("персонажи в таблице", 1) is None)
+    # the game saved data of an older addon (2.0.0): the program says to update it
+    svp = os.path.join(SV_DIR, "MountSheetSync.lua")
+    old = open(svp, encoding="utf-8").read().replace("MountSheetSyncDB = {\n", 'MountSheetSyncDB = {\n\t["addonVersion"] = "2.0.0",\n', 1)
+    open(svp, "w", encoding="utf-8").write(old)
+    end = time.time() + 30
+    log = ""
+    while time.time() < end and "Аддон 2.0.0 старше" not in log:
+        time.sleep(0.5)
+        log = open(os.path.join(DATA, "sync.log"), encoding="utf-8-sig").read()
+    check("addon 2.0.0 in the saved data: the program says to update it", "Аддон 2.0.0 старше, чем нужно программе" in log, log[-800:])
 finally:
     for p in reversed(procs):
         p.terminate()

@@ -10,23 +10,35 @@
 | Выпуски программы | GitHub Releases: `MountSheetSync-<версия>.zip` (всё), `MountSheetSync.exe` (одна программа), `MountSheetSync-addon-only-<тег>.zip` |
 | Google | проект Google Cloud `mount-sheet-sync`: OAuth-клиент (Desktop), экран согласия External / In production |
 
-## Как выпустить
+## Как выпустить (программа и аддон — отдельно, с 2.8.0)
 
-1. Версия одна на всё: `## Version` в toc, `VERSION` в MountSheetSync.lua (и шапки .lua), `Program.Version`,
-   `AssemblyInfo.cs`, тесты (`test_collection.py`, `e2e_install.py`, `status_left.json`, `tools/screens/program.py`).
-2. Раздел `## <версия>` в CHANGELOG.md — он станет описанием выпуска.
-3. Тег (создаёт пользователь сам, обычно через GitHub → Releases → Draft a new release):
-   - `v2.8.0` — обычный выпуск: «Latest» на GitHub, Release на CurseForge, на него обновляются все.
-   - `v2.8.0-alpha1` / `v2.8.0-beta1` — пробный: пре-релиз на GitHub (галочка «Set as a pre-release»),
-     Alpha / Beta на CurseForge (BigWigs packager читает слово в теге), автообновление и сайт его не видят,
-     кроме программ с «Обновляться до пробных версий». Сборка знает свой суффикс (`Program.Prerelease`).
+У программы и аддона свои версии и свои выпуски:
 
-`.github/workflows/release.yml` по тегу `v*`: **exe** (Windows: проверка тег = toc и Program.cs, суффикс в
-Prerelease, `program\build.cmd`, подпись SignPath — включится сама, когда будут переменные
-`SIGNPATH_ORGANIZATION_ID`, `SIGNPATH_PROJECT_SLUG` и секрет `SIGNPATH_API_TOKEN`) → **archive** (`tools/package.sh`:
-README.txt, 1-addon с меткой `installed-from-archive.txt`, 2-program с исходниками, 3-old-way-script; выпуск
-GitHub с заметками из CHANGELOG, `prerelease` по «-» в теге) → **addon** (BigWigs packager, `.pkgmeta`, секрет
-`CF_API_KEY`). `ci.yml` — тесты на каждый push (около 3 мин).
+| Что | Версия в файле | Тег | Куда уходит |
+| --- | --- | --- | --- |
+| программа | `Program.Version` (+ `AssemblyInfo.cs`, тесты: `e2e_install.py`, `tools/screens/program.py`) | `v<версия>` | выпуск GitHub: exe + полный архив `MountSheetSync-<версия программы>.zip` → автообновление, кнопка сайта. CurseForge не трогается |
+| аддон | `## Version` в toc и `VERSION` в MountSheetSync.lua (+ шапки .lua, `test_collection.py`, `status_left.json`) | `addon-v<версия>` | только CurseForge (выпуска GitHub нет — «latest» остаётся выпуском программы) |
+
+1. Поднять версию той части, что меняется, и написать раздел `## <версия>`: программа — в `CHANGELOG.md` (станет
+   описанием выпуска GitHub), аддон — в `CHANGELOG-addon.md` (его показывает CurseForge, `.pkgmeta`).
+2. Выпуск — кнопкой: GitHub → **Actions → Release → Run workflow**: `what` = program / addon / both,
+   `kind` = release / alpha / beta. Номера и теги подбирает `tools/release_plan.sh`: обычный — `v2.9.3` /
+   `addon-v2.9.0` (уже выпущенный номер — отказ, «поднимите версию»), пробный — следующий свободный
+   `…-alphaN` / `-betaN` (пре-релиз на GitHub, Alpha/Beta на CurseForge; сборка программы знает суффикс —
+   `Program.Prerelease`). Можно и тегом руками (`git push origin v2.9.3` / `addon-v2.9.0`).
+   Через «Releases → Draft a new release» аддон **не** выпускать: так появится выпуск GitHub без exe.
+3. Совместимость: программа пишет в `Program.lua` `addon = Program.MinAddon`, аддон пишет `db.addonVersion`; аддон
+   знает `MIN_PROGRAM`. Новой возможности нужна свежая другая половина — поднять `MinAddon` / `MIN_PROGRAM`:
+   аддон покажет серую строку «нужен аддон новее» / «программа устарела», программа — строку в меню и одно
+   уведомление «обновите аддон в CurseForge».
+
+`.github/workflows/release.yml`: **plan** (`release_plan.sh`) → **exe** (Windows: суффикс в Prerelease,
+`program\build.cmd`, подпись SignPath — включится сама, когда будут переменные `SIGNPATH_ORGANIZATION_ID`,
+`SIGNPATH_PROJECT_SLUG` и секрет `SIGNPATH_API_TOKEN`) → **archive** (`tools/package.sh`: README.txt, 1-addon с
+меткой `installed-from-archive.txt`, 2-program с исходниками, 3-old-way-script; выпуск GitHub с заметками из
+CHANGELOG.md, тег ставит softprops); отдельно **addon** (ставит тег `addon-v…`, убирает с коммита остальные теги,
+BigWigs packager без `GITHUB_OAUTH`, секрет `CF_API_KEY`). `ci.yml` — тесты на каждый push (около 3 мин).
+2.8.0 — последняя общая версия (теги `v2.8.0` и `addon-v2.8.0` на одном коммите).
 
 ## Подпись и доверие
 

@@ -50,6 +50,8 @@ namespace MountSheetSync
         public DateTime? LeftAt;
         /// <summary>Почему списка нет (например, скрипт таблицы старой версии).</summary>
         public string LeftNote = "";
+        /// <summary>«Обновите аддон»: аддон в игре старше Program.MinAddon ("" — всё в порядке).</summary>
+        public string AddonNote = "";
 
         public WorkerStatus Clone()
         {
@@ -593,7 +595,50 @@ namespace MountSheetSync
                 statusDirty = true;   // таблица изменилась — список «Осталось» тоже
             }
             CheckCollection(current.Keys.ToList(), collectionNow);
+            CheckAddonVersion(current.Keys.ToList());
             RefreshStatusIfDue();
+        }
+
+        static readonly System.Text.RegularExpressions.Regex AddonVersionField =
+            new System.Text.RegularExpressions.Regex(@"\[""addonVersion""\]\s*=\s*""([^""]+)""");
+        string addonNoted = "";
+
+        /// <summary>
+        /// Версия аддона из файлов сохранений (аддон 2.8+ пишет её при входе). Старше Program.MinAddon — строка в
+        /// меню и одно уведомление на эту версию: программа и аддон выходят отдельно.
+        /// </summary>
+        void CheckAddonVersion(List<string> addonFiles)
+        {
+            string newest = null;
+            foreach (string f in addonFiles)
+            {
+                try
+                {
+                    System.Text.RegularExpressions.Match m = AddonVersionField.Match(File.ReadAllText(f, Encoding.UTF8));
+                    if (m.Success && (newest == null || Updater.IsNewer(m.Groups[1].Value, newest)))
+                    {
+                        newest = m.Groups[1].Value;
+                    }
+                }
+                catch (Exception)
+                {
+                }
+            }
+            string note = newest != null && Updater.IsNewer(Program.MinAddon, newest)
+                ? Tr.F("Аддон {0} устарел — обновите его в CurseForge (программе нужна {1} или новее)", newest, Program.MinAddon)
+                : "";
+            if (note == status.AddonNote)
+            {
+                return;
+            }
+            status.AddonNote = note;
+            Publish();
+            if (note.Length > 0 && addonNoted != newest)
+            {
+                addonNoted = newest;
+                Log.Write(Tr.L("Аддон {0} старше, чем нужно программе ({1}): обновите его в CurseForge.", newest, Program.MinAddon));
+                Send(Tr._("Обновите аддон Mount Sheet Sync"), note + ".", true, false);
+            }
         }
 
         /// <summary>

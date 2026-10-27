@@ -66,10 +66,44 @@ ns.ISSUES_URL = "https://github.com/Zlodyaga/mount-sheet-sync/issues"
 -- так что ответ верен на момент загрузки интерфейса и до следующего /reload не меняется.
 --   "online"  — программа работает и подключена к таблице;
 --   "nosheet" — работает, но таблица ещё не настроена;
---   "offline" — программы нет (или она закрыта): убийства запоминаются и уйдут в таблицу, когда она запустится.
+--   "offline" — программы нет (или она закрыта): убийства запоминаются и уйдут в таблицу, когда она запустится;
+--   "oldaddon" / "oldprogram" — программа работает, но ей нужен аддон новее (MountSheetSyncProgram.addon) или
+--   аддону — программа новее (MIN_PROGRAM): у программы и аддона свои выпуски, они могут разойтись.
 local PROGRAM_FRESH = 150   -- секунд: программа пишет раз в минуту, с запасом на паузу
+local MIN_PROGRAM = "2.8.0"  -- с какой версии программы аддону хватает всего, что он умеет
 local loadedAt = time()
 local programState
+
+-- «2.10.0» > «2.9.3»; пробные раньше выпуска: 2.9.0-alpha1 < 2.9.0-beta1 < 2.9.0 (как Updater.IsNewer в программе).
+local function VersionParts(v)
+  local nums = {}
+  local text = tostring(v or "")
+  for n in (text:match("^v?([%d%.]+)") or ""):gmatch("%d+") do
+    nums[#nums + 1] = tonumber(n)
+  end
+  local stage, sn = text:match("%-(%a+)(%d*)")
+  local rank = 2
+  if stage then
+    stage = stage:lower()
+    rank = stage == "alpha" and 0 or stage == "beta" and 1 or 2
+  end
+  return nums, rank, tonumber(sn) or 0
+end
+
+function ns.VersionLess(a, b)
+  local na, ra, sa = VersionParts(a)
+  local nb, rb, sb = VersionParts(b)
+  for i = 1, math.max(#na, #nb) do
+    local x, y = na[i] or 0, nb[i] or 0
+    if x ~= y then
+      return x < y
+    end
+  end
+  if ra ~= rb then
+    return ra < rb
+  end
+  return sa < sb
+end
 
 function ns.ProgramState()
   if not programState then
@@ -79,11 +113,21 @@ function ns.ProgramState()
       programState = "offline"
     elseif p.sheet == false then
       programState = "nosheet"
+    elseif type(p.addon) == "string" and ns.VersionLess(VERSION, p.addon) then
+      programState = "oldaddon"
+    elseif type(p.version) == "string" and ns.VersionLess(p.version, MIN_PROGRAM) then
+      programState = "oldprogram"
     else
       programState = "online"
     end
   end
   return programState
+end
+
+-- Программа не отправит убийства прямо сейчас (её нет или нет таблицы).
+function ns.ProgramOffline()
+  local s = ns.ProgramState()
+  return s == "offline" or s == "nosheet"
 end
 
 local function Print(msg)
@@ -272,7 +316,7 @@ local function Announce(rec)
   AnnounceAttempts(rec)
   if not hintShown then
     hintShown = true
-    if ns.ProgramState() == "online" then
+    if not ns.ProgramOffline() then
       Print(string.format(L.announce_hint, CMD .. "/mss|r"))
     else
       Print("|cff8c8c8c" .. L.announce_offline .. "|r")
@@ -859,6 +903,7 @@ local function Init()
   end
   db = MountSheetSyncDB
   db.version = 1
+  db.addonVersion = VERSION   -- программа читает: не нужна ли ей версия аддона новее
   if type(db.kills) ~= "table" then
     db.kills = {}
   end

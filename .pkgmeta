@@ -2,7 +2,7 @@
 package-as: MountSheetSync
 
 manual-changelog:
-  filename: CHANGELOG.md
+  filename: CHANGELOG-addon.md
   markup-type: markdown
 
 ignore:
@@ -14,3 +14,4 @@ ignore:
   - README.md
   - README.ru.md
   - CHANGELOG.md
+  - CHANGELOG-addon.md
