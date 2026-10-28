@@ -13,7 +13,7 @@ namespace MountSheetSync
 {
     static class SheetUpgrade
     {
-        public const int Current = 3;
+        public const int Current = 4;
         public const string Property = "layout";
 
         static readonly string[] Masters = { SheetBuilder.RaidsSheet, SheetBuilder.DungeonsSheet, SheetBuilder.WorldSheet };
@@ -83,6 +83,14 @@ namespace MountSheetSync
             if (attempts > 0)
             {
                 done.Add(Tr.L("счётчик попыток на общих листах ({0})", attempts));
+            }
+            else if (layout == 3)
+            {
+                int fixedSheets = AttemptFormatsAgain(book, req);
+                if (fixedSheets > 0)
+                {
+                    done.Add(Tr.L("формат «Попыток» и «Шанса за все попытки» в строках, скрытых фильтром ({0})", fixedSheets));
+                }
             }
             book.Apply(req, Property, Current.ToString(CultureInfo.InvariantCulture));
             foreach (Action a in memory)
@@ -203,6 +211,31 @@ namespace MountSheetSync
                 req.AddRange(SheetBuilder.ColumnWidths(sid, at, new[] { 90, 110 }));
                 SheetEntry entry = e;
                 memory.Add(delegate { BookEdit.InsertColumns(entry, at, values); });
+                count++;
+            }
+            return count;
+        }
+
+        /// <summary>
+        /// Вид 4: таблица, получившая счётчик в 2.8, оформила его через repeatCell — строки, скрытые фильтром (собранные
+        /// маунты), остались без формата (шанс дробью 0,0394 вместо 3,9 %). Оформить ещё раз, по ячейкам.
+        /// </summary>
+        static int AttemptFormatsAgain(IStructuredBook book, List<object> req)
+        {
+            int count = 0;
+            foreach (string name in Masters)
+            {
+                SheetEntry e = SheetLogic.ByName(book, name);
+                if (e == null || e.Data.Count < 2)
+                {
+                    continue;
+                }
+                int at = SheetLogic.FindCol(e.Data[0], SheetLogic.AttemptsPattern, -1);
+                if (at < 0)
+                {
+                    continue;
+                }
+                req.AddRange(SheetBuilder.AttemptFormats((int)e.SheetId, at, e.Data.Count, name == SheetBuilder.RaidsSheet));
                 count++;
             }
             return count;

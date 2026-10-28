@@ -11,6 +11,8 @@ The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [C
   Invincible cost you (kills after it dropped are in that number too); after that their number stays. Each character adds its kills once it has logged in with the new
   addon. About 50 mounts have such a statistic; bosses without one of their own (Attumen, Anzu, Skadi, rares such as
   Ishak, trash in Ahn'Qiraj, Torghast…) keep counting from the addon's kills only.
+- “Chance over all attempts” showed a fraction (0.0394) instead of 3.9% in rows the sheet's filter hid when 2.8 added
+  the counter (collected mounts): the sheet gets the format again, cell by cell, on its own.
 - The program needs the addon 2.9.0 for this and says so in the icon menu while an older addon is installed.
 
 ## 2.8.0

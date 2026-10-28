@@ -393,3 +393,6 @@ en: Addon {0} is older than the program needs ({1}): update it in CurseForge.
 
 @ «{0}»: «Попыток» {1} → {2} по статистике убийств игры (персонажей со статистикой: {3}).
 en: “{0}”: “Attempts” {1} → {2} from the game's kill statistics (characters with statistics: {3}).
+
+@ формат «Попыток» и «Шанса за все попытки» в строках, скрытых фильтром ({0})
+en: format of “Attempts” and “Chance over all attempts” in rows hidden by the filter ({0})

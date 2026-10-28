@@ -133,7 +133,7 @@ try:
     raids, _ = cells(book, "Рейды")
     check("raid «left» formula now asks for «Фармлю» = TRUE (in ru_RU form)", "'Рейды Эйра'!H:H; TRUE" in raids[1][8] and "'Рейды Мирна'!H:H; TRUE" in raids[1][8], raids[1][8])
     meta = {m["metadataKey"]: m["metadataValue"] for m in book["devmeta"]}
-    check("layout 3 remembered in the table", meta.get("mountSheetSync.layout") == "3", meta)
+    check("layout 4 remembered in the table", meta.get("mountSheetSync.layout") == "4", meta)
     code, out = run(EXE, "--once")
     check("second run: no second upgrade", "Таблица обновлена" not in out and cells(state()["spreadsheets"][sid], "Рейды Эйра")[1]["cols"] == 8)
 
@@ -195,7 +195,7 @@ try:
     rows, sh = cells(nb, "Подземелья Мирна")
     check("new table: «Фармлю» on character sheets", code == 0 and rows[0].get(7) == "Фармлю" and sh["cols"] == 8, rows[0])
     meta = {m["metadataKey"]: m["metadataValue"] for m in nb["devmeta"]}
-    check("new table: layout 3 written at creation", meta.get("mountSheetSync.layout") == "3", meta)
+    check("new table: layout 4 written at creation", meta.get("mountSheetSync.layout") == "4", meta)
     settings = json.load(open(os.path.join(DATA, "settings.json"), encoding="utf-8-sig"))
     code, out = run(EXE, "--once")
     check("…so the sync loop does not «upgrade» it", code == 0 and "Таблица обновлена" not in out, out[-600:])

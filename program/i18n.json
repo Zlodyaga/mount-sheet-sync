@@ -893,6 +893,7 @@
   "удалены листы: {0}": "sheets deleted: {0}",
   "уже «Да»: {0}": "already “Yes”: {0}",
   "укажите адрес таблицы": "set the spreadsheet address",
+  "формат «Попыток» и «Шанса за все попытки» в строках, скрытых фильтром ({0})": "format of “Attempts” and “Chance over all attempts” in rows hidden by the filter ({0})",
   "частично": "partly",
   "что фармить": "what to farm",
   "…и ещё {0}": "…and {0} more"

@@ -58,8 +58,8 @@ OLD = [
 
 # ---------------------------------------------------------------- upgrade 2.0/2.1 → 2.2
 up = run({"catalog": None, "sheets": OLD, "mode": "upgrade"})
-check("upgrade ran once, layout=3 stored in the same batch", up["changed"] is True and up["properties"].get("layout") == "3"
-      and len(up["applied"]) == 1 and "apply" in up["structure"][0] and "layout=3" in up["structure"][0], up["structure"])
+check("upgrade ran once, layout=4 stored in the same batch", up["changed"] is True and up["properties"].get("layout") == "4"
+      and len(up["applied"]) == 1 and "apply" in up["structure"][0] and "layout=4" in up["structure"][0], up["structure"])
 reqs = up["applied"][0]
 cf = [r["addConditionalFormatRule"]["rule"] for r in reqs if "addConditionalFormatRule" in r]
 texteq = [(c["ranges"][0]["sheetId"], c["ranges"][0]["startColumnIndex"], c["booleanRule"]["condition"]["values"][0]["userEnteredValue"])
@@ -80,10 +80,10 @@ appends = [r for r in reqs if "appendDimension" in r]
 check("grid widened where needed (7 → 8 columns)", len(appends) == 3 and all(a["appendDimension"]["length"] == 1 for a in appends))
 checkbox = [r["setDataValidation"] for r in reqs if "setDataValidation" in r]
 check("checkbox validation on the new column", all(v["rule"]["condition"]["type"] == "BOOLEAN" and v["range"]["startColumnIndex"] == 7 for v in checkbox) and len(checkbox) == 3)
-left = [r["updateCells"] for r in reqs if "updateCells" in r and r["updateCells"]["start"]["sheetId"] == ids["Рейды"]]
+left = [r["updateCells"] for r in reqs if "updateCells" in r and r["updateCells"].get("start", {}).get("sheetId") == ids["Рейды"]]
 f = left[0]["rows"][0]["values"][0]["userEnteredValue"]["formulaValue"] if left else ""
 check("«Осталось попыток выбить» counts only rows ticked «Фармлю»", "COUNTIFS('Рейды Эйра'!D:D, m, 'Рейды Эйра'!A:A, \"Нет\", 'Рейды Эйра'!H:H, TRUE)" in f, f)
-again = run({"catalog": None, "sheets": up["sheets"], "mode": "upgrade", "properties": {"layout": "3"}})
+again = run({"catalog": None, "sheets": up["sheets"], "mode": "upgrade", "properties": {"layout": "4"}})
 check("already current: nothing to do", again["changed"] is False and again["applied"] == [])
 mixed = copy.deepcopy(OLD)
 mixed[1]["rows"][0].append("Фармлю")

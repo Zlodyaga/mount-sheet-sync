@@ -340,6 +340,18 @@ class Handler(BaseHTTPRequestHandler):
                 raise ApiError(400, "INVALID_ARGUMENT", "You can't remove all the sheets in a document.")
             book["sheets"].remove(s)
             return {}
+        if kind == "updateCells" and "range" in x:
+            # formats only, cell by cell (AttemptFormats): check the range and that no values are written
+            rg = x["range"]
+            s = self.sheet_by_id(book, rg["sheetId"])
+            if not str(x.get("fields", "")).startswith("userEnteredFormat"):
+                raise ApiError(400, "INVALID_ARGUMENT", "unexpected fields " + str(x.get("fields")))
+            if rg["endRowIndex"] > s["rows"] or rg["endColumnIndex"] > s["cols"]:
+                raise ApiError(400, "INVALID_ARGUMENT", "Range exceeds grid limits")
+            if len(x["rows"]) != rg["endRowIndex"] - rg["startRowIndex"]:
+                raise ApiError(400, "INVALID_ARGUMENT", "rows do not match the range")
+            s.setdefault("formats", []).append(x)
+            return {}
         if kind == "updateCells":
             st = x["start"]
             s = self.sheet_by_id(book, st["sheetId"])

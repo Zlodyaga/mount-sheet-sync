@@ -1118,12 +1118,33 @@ namespace MountSheetSync
                 ? O("backgroundColor", Color(BandFirst), "horizontalAlignment", "CENTER")
                 : O("horizontalAlignment", "CENTER");
             string fields = band ? "userEnteredFormat.backgroundColor,userEnteredFormat.horizontalAlignment" : "userEnteredFormat.horizontalAlignment";
-            req.Add(RepeatFormat(sheetId, 1, end, cAttempts, cAttempts + 2, center, fields));
-            req.Add(RepeatFormat(sheetId, 1, end, cAttempts, cAttempts + 1, O("numberFormat", O("type", "NUMBER", "pattern", "0")),
+            // updateCells с каждой ячейкой, а не repeatCell: repeatCell пропускает строки, скрытые фильтром листа
+            // (в 2.8 собранные маунты так остались без формата процента)
+            req.Add(CellsFormat(sheetId, 1, end, cAttempts, cAttempts + 2, center, fields));
+            req.Add(CellsFormat(sheetId, 1, end, cAttempts, cAttempts + 1, O("numberFormat", O("type", "NUMBER", "pattern", "0")),
                 "userEnteredFormat.numberFormat"));
-            req.Add(RepeatFormat(sheetId, 1, end, cAttempts + 1, cAttempts + 2, O("numberFormat", O("type", "PERCENT", "pattern", "0.0%")),
+            req.Add(CellsFormat(sheetId, 1, end, cAttempts + 1, cAttempts + 2, O("numberFormat", O("type", "PERCENT", "pattern", "0.0%")),
                 "userEnteredFormat.numberFormat"));
             return req;
+        }
+
+        /// <summary>Одно оформление на каждую ячейку диапазона (updateCells) — в том числе в строках, скрытых фильтром.</summary>
+        static Dictionary<string, object> CellsFormat(int sheetId, int r0, int r1, int c0, int c1, Dictionary<string, object> format, string fields)
+        {
+            List<object> rows = new List<object>();
+            for (int r = r0; r < r1; r++)
+            {
+                List<object> cells = new List<object>();
+                for (int c = c0; c < c1; c++)
+                {
+                    cells.Add(O("userEnteredFormat", format));
+                }
+                rows.Add(O("values", cells));
+            }
+            return O("updateCells", O(
+                "range", Range(sheetId, r0, r1, c0, c1),
+                "rows", rows,
+                "fields", fields));
         }
 
         /// <summary>Ширина колонок с start подряд (пиксели).</summary>
