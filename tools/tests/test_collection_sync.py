@@ -216,6 +216,7 @@ SCAT = {"version": "test", "aliases": {}, "sheets": [
     {"key": "raids", "sheet": "Рейды", "columns": ["Аддон", "Рейд", "Маунт", "Босс / достижение / сундук", ID, ST], "rows": [
         ["Cata", "Firelands", "Пламенное Крыло Алисразор", "Алисразор", 425, "5970/5971"],
         ["TBC", "Tempest Keep", "Пепел Ал'ара", "Кель'тас Солнечный Скиталец", 183, "1088"],
+        ["WotLK", "Eye of Eternity", "Синий дракон", "Малигос", 247, "1391/1394"],
         ["Cata", "Dragon Soul", "Эксперимент 12-Б", "Ультраксион", 445, "6161/6162"],
         ["TBC", "Karazhan", "Огненный боевой конь", "Ловчий Аттумен", 168, ""],
         ["Cata", "Dragon Soul", "Пылающий дракон", "Безумие Смертокрыла", 442, "6167/6168"],
@@ -231,11 +232,12 @@ SSHEETS = [
     {"name": "Рейды", "rows": [AH,
         ["Нет", "Пламенное Крыло Алисразор", "Алисразор", "1%", 3, "", 425],
         ["Да", "Пепел Ал'ара", "Кель'тас Солнечный Скиталец", "1%", 5, "", 183],
+        ["Да", "Синий дракон", "Малигос", "1%", 0, "", 247],
         ["Нет", "Эксперимент 12-Б", "Ультраксион", "1%", 40, "", 445],
         ["Нет", "Огненный боевой конь", "Ловчий Аттумен", "1%", 2, "", 168],
         ["Нет", "Пылающий дракон", "Безумие Смертокрыла", "1%", 0, "", 442],
         ["Нет", "Сумеречный предвестник", "Слава рейдеру", "Достижение", "", "", 443],
-    ], "formulas": [[5, 4]]},
+    ], "formulas": [[6, 4]]},
     {"name": "Мировые боссы", "rows": [
         ["Собрано?", "Маунт", "Босс / достижение / сундук", "Шанс выпадения", "Попыток", "Шанс за все попытки", "Источник", "Эйра"],
         ["Нет", "Небесный ониксовый облачный змей", "Ша Злости", 0.01, 0, "", "", False],
@@ -243,7 +245,7 @@ SSHEETS = [
 ]
 SGAME = {"ids": [], "names": [], "updated": 1792657686, "chars": [
     {"name": "Эйра", "realm": "Ревущий фьорд", "statsAt": 1792657600,
-     "stats": {"5970": 10, "5971": 2, "1088": 50, "6161": 7, "6167": 9, "6168": 4, "6989": 6}},
+     "stats": {"5970": 10, "5971": 2, "1088": 50, "6161": 7, "6167": 9, "6168": 4, "6989": 6, "1391": 20, "1394": 5}},
     {"name": "Мирна", "realm": "Ревущий фьорд", "statsAt": 1792657000, "stats": {"5970": 4, "6989": 1}},
     {"name": "Старый", "realm": "Ревущий фьорд"},
 ]}
@@ -251,21 +253,23 @@ st = run({"catalog": SCAT, "sheets": SSHEETS, "game": SGAME})
 sr = {r[1]: r[4] for r in sheet(st, "Рейды")["rows"][1:]}
 check("statistics: Alysrazor (Normal + Heroic) of both characters added up, more than the sheet had → 16",
       sr["Пламенное Крыло Алисразор"] == 16, sr)
-check("collected mount, a bigger number in the sheet, a mount without statistics: untouched",
+check("collected mount with 0: filled once from the statistics (how many attempts it took) → 25",
+      sr["Синий дракон"] == 25, sr)
+check("collected mount that already has a number, a bigger number in the sheet, a mount without statistics: untouched",
       sr["Пепел Ал'ара"] == 5 and sr["Эксперимент 12-Б"] == 40 and sr["Огненный боевой конь"] == 2, sr)
 check("formula in «Попыток» and an empty cell (no counter) are not touched",
       sr["Пылающий дракон"] == 0 and sr["Сумеречный предвестник"] == "", sr)
 sw = sheet(st, "Мировые боссы")["rows"]
 check("world bosses: found by name and boss (no ID column), 6 + 1 kills", sw[1][4] == 7, sw[1])
-check("summary names the attempts", st["result"]["attempts"] == ["Пламенное Крыло Алисразор", "Небесный ониксовый облачный змей"]
-      and "«Попыток» по статистике игры: 2" in st["result"]["summary"], st["result"])
+check("summary names the attempts", st["result"]["attempts"] == ["Пламенное Крыло Алисразор", "Синий дракон", "Небесный ониксовый облачный змей"]
+      and "«Попыток» по статистике игры: 3" in st["result"]["summary"], st["result"])
 st2 = run({"catalog": SCAT, "sheets": st["sheets"], "game": SGAME})
 check("statistics: second run changes nothing", st2["writes"] == [] and st2["result"]["attempts"] == [], st2["result"])
 nost = run({"catalog": SCAT, "sheets": SSHEETS, "game": dict(SGAME, chars=[{"name": "Эйра", "realm": "Ревущий фьорд"}])})
 check("no character sent statistics (old addon): nothing changes", nost["result"]["attempts"] == [] and nost["writes"] == [], nost["result"])
 emb = run({"catalog": None, "sheets": SSHEETS, "game": SGAME})
 check("embedded catalog knows the statistics of Alysrazor and the Sha of Anger",
-      emb["result"]["attempts"] == ["Пламенное Крыло Алисразор", "Небесный ониксовый облачный змей"], emb["result"])
+      emb["result"]["attempts"] == ["Пламенное Крыло Алисразор", "Синий дракон", "Небесный ониксовый облачный змей"], emb["result"])
 
 # 11. the embedded catalog parses and every ID row is unique per sheet
 emb = run({"catalog": None, "sheets": [], "game": GAME})

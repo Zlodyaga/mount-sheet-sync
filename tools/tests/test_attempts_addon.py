@@ -113,6 +113,7 @@ def new_game(quiet=False):
     EJ = L.eval("CreateFrame('Frame', nil, UIParent)")
     L.globals().EncounterJournal = L.table_from({"encounter": L.table_from({"info": EJ})})
     EJ.encounterTitle = L.eval("UIParent:CreateFontString()")
+    EJ.difficulty = L.eval("CreateFrame('Button', nil, UIParent)")
     g = L.globals()
     toc = open(os.path.join(ADDON_DIR, "MountSheetSync.toc"), encoding="utf-8").read().splitlines()
     files = [ln.strip().replace("\\", "/") for ln in toc if ln.strip() and not ln.startswith("#")]
@@ -157,8 +158,10 @@ check("no Lua errors", not any("Ошибка" in c or "error" in c.lower() for c
 g.GameTooltip.lines = L.table()
 g.UNIT_POSTCALL(g.GameTooltip)
 tip = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
-check("tooltip on Sylvanas: attempts 38 (32%) and one character left this week (Мирна; Эйра killed her)",
-      any("Отмщение" in t and "попыток 38" in t and "(32%)" in t and "персонажей: 1" in t and "Media\\Icon" in t for t in tip), tip)
+check("tooltip on Sylvanas: one short line per mount — attempts 38, chance 32%",
+      any("Отмщение" in t and "попыток: 38, шанс 32%" in t and "Media\\Icon" in t for t in tip), tip)
+check("…and one line for the boss first: not killed this week on 1 character (Мирна; Эйра killed her)",
+      tip and "ещё не убит у персонажей: 1" in tip[0] and "Отмщение" not in tip[0], tip)
 L.execute('TIP_UNIT = { "SECRET", "target" }')
 g.GameTooltip.lines = L.table()
 g.UNIT_POSTCALL(g.GameTooltip)
@@ -175,11 +178,20 @@ check("any other NPC: nothing", len(g.GameTooltip.lines) == 0)
 # ---- the Adventure Guide
 g.Fire("ADDON_LOADED", "Blizzard_EncounterJournal")
 g.EncounterJournal_DisplayEncounter(2435)
-texts = [r for r in [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)] if r._type == "FontString" and r._parent is not None and r._parent._uid == EJ._uid]
-check("Adventure Guide: Blizzard's function still runs, a line under the boss title", g.EJ_SHOWN == 2435 and texts
-      and "Отмщение" in str(texts[0]._text) and texts[0]._shown and texts[0]._points[1].rel._uid == EJ.encounterTitle._uid, [str(t._text) for t in texts])
+regions = [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
+texts = [r for r in regions if r._type == "FontString" and r._parent is not None and r._parent._uid == EJ._uid]
+buttons = [r for r in regions if r._type == "Button" and r._parent is not None and r._parent._uid == EJ._uid]
+check("Adventure Guide: Blizzard's function still runs; no text on the page, an icon left of the difficulty menu",
+      g.EJ_SHOWN == 2435 and not texts and len(buttons) == 1 and buttons[0]._shown
+      and buttons[0]._points[1].rel._uid == EJ.difficulty._uid, (len(texts), len(buttons)))
+buttons[0]._scripts.OnEnter(buttons[0])
+gt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
+check("…its tooltip: the boss line and the mount line", g.GameTooltip.shown and any("Отмщение" in t and "попыток: 38" in t for t in gt)
+      and any("ещё не убит у персонажей: 1" in t for t in gt), gt)
+buttons[0]._scripts.OnLeave(buttons[0])
+check("…and it hides again", not g.GameTooltip.shown)
 g.EncounterJournal_DisplayEncounter(1)
-check("…another boss: the line is hidden", texts and not texts[0]._shown)
+check("…another boss: the icon is hidden", not buttons[0]._shown)
 
 # ---- quiet: no chat at all
 L2, g2, ns2, _, _ = new_game(quiet=True)

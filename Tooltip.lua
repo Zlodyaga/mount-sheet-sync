@@ -1,8 +1,9 @@
 --[[
 Mount Sheet Sync 2.9.0 — подсказка о боссе
 ==========================================
-При наведении на босса (и на странице босса в Атласе приключений) — строка о несобранном маунте с него:
-сколько попыток, шанс за все попытки и у скольких персонажей из таблицы этот босс на этой неделе ещё не убит.
+При наведении на босса — у скольких персонажей из таблицы он на этой неделе ещё не убит и по строке на
+несобранный маунт с него: сколько попыток и шанс за все попытки. В Атласе приключений — значок-подкова слева
+от выбора сложности, те же строки — в его подсказке (на странице ничего не перекрываем).
 Данные — из списка таблицы (ns.BossHint, Remaining.lua); без таблицы программы 2.8+ подсказки нет. Имена,
 которые игра прячет («секретные» значения в бою), не трогаем.
 ]]
@@ -17,26 +18,28 @@ local function Secret(v)
   return issecretvalue ~= nil and issecretvalue(v)
 end
 
--- Строки подсказки для босса с таким именем (пусто — ничего не показываем).
-function ns.BossHintLines(name)
+-- Строки подсказки для босса с таким именем (пусто — ничего не показываем): сначала «ещё не убит у N
+-- персонажей», потом по строке на маунт.
+function ns.BossHintLines(name, maxLines)
   if type(name) ~= "string" or Secret(name) or name == "" or not ns.BossHint then
     return {}
   end
   local ok, hints = pcall(ns.BossHint, name)
-  if not ok or type(hints) ~= "table" then
+  if not ok or type(hints) ~= "table" or #hints == 0 then
     return {}
   end
-  local lines = {}
+  local lines, left = {}, 0
   for i, h in ipairs(hints) do
-    if i > MAX_LINES then
-      break
+    left = math.max(left, h.left or 0)
+    if i <= (maxLines or MAX_LINES) then
+      local mount = "|cffc9a0ff" .. tostring(h.name):gsub("|", "||") .. "|r"
+      local n = h.n or 0
+      local tail = n > 0 and string.format(L.boss_hint, n, ns.FormatChance(n, h.p)) or L.boss_hint_none
+      lines[#lines + 1] = ICON .. mount .. " — " .. tail
     end
-    local mount = "|cffc9a0ff" .. tostring(h.name):gsub("|", "||") .. "|r"
-    local text = string.format(L.boss_hint, mount, h.n, ns.FormatChance(h.n, h.p))
-    if (h.left or 0) > 0 then
-      text = text .. string.format(L.boss_hint_left, h.left)
-    end
-    lines[#lines + 1] = ICON .. text
+  end
+  if left > 0 then
+    table.insert(lines, 1, "|cff9d9d9d" .. string.format(L.boss_hint_left, left) .. "|r")
   end
   return lines
 end
@@ -69,30 +72,53 @@ if TooltipDataProcessor and TooltipDataProcessor.AddTooltipPostCall and Enum and
 end
 
 ---------------------------------------------------------------------------
--- Атлас приключений: строка под названием босса
+-- Атлас приключений: значок слева от выбора сложности, строки — в его подсказке
 ---------------------------------------------------------------------------
-local journalText
+local journalButton
+local journalLines = {}
 local journalHooked = false
+
+local function JournalButton(info)
+  if journalButton then
+    return journalButton
+  end
+  local b = CreateFrame("Button", nil, info)
+  b:SetSize(20, 20)
+  if info.difficulty then
+    b:SetPoint("RIGHT", info.difficulty, "LEFT", -6, 0)
+  else
+    b:SetPoint("TOPRIGHT", info, "TOPRIGHT", -60, -12)
+  end
+  local icon = b:CreateTexture(nil, "ARTWORK")
+  icon:SetPoint("TOPLEFT", b, "TOPLEFT", 0, 0)
+  icon:SetPoint("BOTTOMRIGHT", b, "BOTTOMRIGHT", 0, 0)
+  icon:SetTexture("Interface\\AddOns\\MountSheetSync\\Media\\Icon")
+  b:SetScript("OnEnter", function(self)
+    GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+    GameTooltip:SetText("Mount Sheet Sync")
+    for _, line in ipairs(journalLines) do
+      GameTooltip:AddLine(line, 1, 1, 1, true)
+    end
+    GameTooltip:Show()
+  end)
+  b:SetScript("OnLeave", function()
+    GameTooltip:Hide()
+  end)
+  journalButton = b
+  return b
+end
 
 local function OnEncounter(encounterID)
   local info = EncounterJournal and EncounterJournal.encounter and EncounterJournal.encounter.info
-  if not info or not info.CreateFontString or not EJ_GetEncounterInfo then
+  if not info or not EJ_GetEncounterInfo then
     return
   end
   local name = EJ_GetEncounterInfo(encounterID)
-  if not journalText then
-    journalText = info:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-    local title = info.encounterTitle
-    if title then
-      journalText:SetPoint("TOPLEFT", title, "BOTTOMLEFT", 0, -4)
-    else
-      journalText:SetPoint("TOPLEFT", info, "TOPLEFT", 20, -48)
-    end
-    journalText:SetJustifyH("LEFT")
+  journalLines = ns.BossHintLines(name, 6)
+  if #journalLines == 0 and not journalButton then
+    return
   end
-  local lines = ns.BossHintLines(name)
-  journalText:SetText(table.concat(lines, "\n"))
-  journalText:SetShown(#lines > 0)
+  JournalButton(info):SetShown(#journalLines > 0)
 end
 
 local function HookJournal()
