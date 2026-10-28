@@ -2,6 +2,16 @@
 
 The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [CHANGELOG-addon.md](CHANGELOG-addon.md).
 
+## 2.9.0
+- Attempts made before you installed the addon now count too. The game keeps kill statistics for every character
+  (Achievements → Statistics); the addon 2.9.0 reads them for the bosses of the sheet's random-drop mounts each time a
+  character logs in, and “Check against collection” (it also runs by itself after a login) raises “Attempts” of the
+  mounts you don't have yet to the sum over all characters — only upwards, so a bigger number typed by hand stays and
+  kills counted already are not counted twice. Each character adds its kills once it has logged in with the new
+  addon. About 50 mounts have such a statistic; bosses without one of their own (Attumen, Anzu, Skadi, rares such as
+  Ishak, trash in Ahn'Qiraj, Torghast…) keep counting from the addon's kills only.
+- The program needs the addon 2.9.0 for this and says so in the icon menu while an older addon is installed.
+
 ## 2.8.0
 - Attempt counter: “Attempts” and “Chance over all attempts” next to “Drop chance” on the Raids, Dungeons and World
   Bosses sheets (existing spreadsheets get them on their own, counting from 0; a number typed by hand is continued).

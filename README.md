@@ -7,7 +7,8 @@ which bosses each character has killed this week, which mounts you already own, 
 
 - **The addon** (WoW Retail, Midnight 12.x) records boss kills, your characters and your mount collection, and shows
   the “Remaining” list for the current character right in the game. After a kill that could drop a mount you still
-  need it says which attempt that was and the chance over all attempts; the boss tooltip says the same.
+  need it says which attempt that was and the chance over all attempts; the boss tooltip says the same. Attempts from
+  before the addon come from the game's own kill statistics.
 - **The program** (Windows 10/11, one file, no administrator rights) watches the addon's saved data, creates the spreadsheet in your
   own Google Drive and marks kills and collected mounts there. It also brings the “Remaining” list back into the game.
 

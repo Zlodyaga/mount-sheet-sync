@@ -107,6 +107,17 @@ function EJ_GetEncounterInfoByIndex(index, instanceID)
   end
   return nil
 end
+-- kill statistics per character name: "--" for none, a number as text (with a thousands separator) or a secret
+MOCK.stats = {
+  ["Эйра"] = { [5970] = "12", [5971] = "--", [6168] = "1 234", [6989] = "SECRET", [99999] = "7" },
+  ["Мирна"] = { [5970] = "3" },
+}
+function GetStatistic(id)
+  local t = MOCK.stats[MOCK.name]
+  local v = t and t[id]
+  if v == nil then return "--" end
+  return S(v)
+end
 MountSheetSyncDB = nil
 """ % NOW)
 g = L.globals()
@@ -115,12 +126,13 @@ toc = open(os.path.join(ADDON_DIR, "MountSheetSync.toc"), encoding="utf-8").read
 files = [ln.strip().replace("\\", "/") for ln in toc if ln.strip() and not ln.startswith("#")]
 check("Collection.lua in the toc after the core, before the window",
       files.index("MountSheetSync.lua") < files.index("Collection.lua") < files.index("UI.lua"), files)
-check("toc version 2.8.0", "## Version: 2.8.0" in toc)
+check("toc version 2.9.0", "## Version: 2.9.0" in toc)
+check("Statistics.lua (the statistic IDs) loads before Collection.lua", files.index("Statistics.lua") < files.index("Collection.lua"), files)
 ns = L.table()
 loader = L.eval("function(src, name) return assert(loadstring(src, '@' .. name)) end")
 for name in files:
     loader(open(os.path.join(ADDON_DIR, name), encoding="utf-8").read(), name)("MountSheetSync", ns)
-check("core version 2.8.0", ns.VERSION == "2.8.0")
+check("core version 2.9.0", ns.VERSION == "2.9.0")
 
 
 def chat_all():
@@ -161,6 +173,22 @@ check("secret «collected» counts as not collected", mounts[777].get("got") is 
 check("vendor mount has its source too", mounts[6].get("from"), mounts[6])
 check("faction only for one-faction mounts (0 = Horde)", mounts[1471].get("faction") == 0 and "faction" not in mounts[6], (mounts[1471], mounts[6]))
 
+# kill statistics (2.9): read with the collection, per character
+st = py(db.chars)["Эйра-Ревущий фьорд"]
+check("statistics: kills of the listed bosses, «--» and secret values skipped, «1 234» read as 1234",
+      st.get("stats") == {5970: 12, 6168: 1234} and st.get("statsAt") == NOW, st)
+check("statistics outside Statistics.lua are not read", 99999 not in (st.get("stats") or {}), st.get("stats"))
+check("Statistics.lua lists Alysrazor and the Sha of Anger", 5970 in list(ns.STATISTIC_IDS.values()) and 6989 in list(ns.STATISTIC_IDS.values()))
+g.MOCK.stats["Эйра"] = L.table()
+g.MOCK.now = NOW + 10
+g.Fire("PLAYER_LOGIN"); g.RunTimers()
+st = py(db.chars)["Эйра-Ревущий фьорд"]
+check("statistics not loaded yet (all «--»): the old numbers stay", st.get("stats") == {5970: 12, 6168: 1234} and st.get("statsAt") == NOW, st)
+g.MOCK.stats["Эйра"] = L.table_from({5970: "13", 6168: "1 234"})
+g.MOCK.now = NOW
+g.Fire("PLAYER_LOGIN"); g.RunTimers()
+check("next login: the new numbers", py(db.chars)["Эйра-Ревущий фьорд"]["stats"] == {5970: 13, 6168: 1234})
+
 # new mount
 n_kills = len(db.kills)
 g.MOCK.now = NOW + 30
@@ -185,6 +213,8 @@ g.Fire("PLAYER_LOGIN"); g.RunTimers()
 chars = py(db.chars)
 check("second character remembered, first kept", sorted(chars) == ["Мирна-Ревущий фьорд", "Эйра-Ревущий фьорд"], sorted(chars))
 check("first character's data untouched", chars["Эйра-Ревущий фьорд"]["seen"] == NOW and chars["Мирна-Ревущий фьорд"]["level"] == 71)
+check("second character: its own statistics, the first one's kept", chars["Мирна-Ревущий фьорд"].get("stats") == {5970: 3}
+      and chars["Эйра-Ревущий фьорд"]["stats"] == {5970: 13, 6168: 1234}, (chars["Мирна-Ревущий фьорд"], chars["Эйра-Ревущий фьорд"].get("stats")))
 g.MOCK.level = 72
 g.MOCK.now = NOW + 7200
 g.Fire("PLAYER_LOGIN"); g.RunTimers()

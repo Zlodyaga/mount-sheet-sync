@@ -27,7 +27,9 @@ namespace MountSheetSync
             {
                 GameSnapshot g = GameData.Read(args);
                 outp["chars"] = g.Characters.Select(c => (object)new Dictionary<string, object> {
-                    { "name", c.Name }, { "realm", c.Realm }, { "class", c.Class }, { "level", (double)c.Level }, { "seen", (double)c.Seen }, { "fromKills", c.FromKills } }).ToList();
+                    { "name", c.Name }, { "realm", c.Realm }, { "class", c.Class }, { "level", (double)c.Level }, { "seen", (double)c.Seen }, { "fromKills", c.FromKills },
+                    { "statsAt", (double)c.StatsAt },
+                    { "stats", c.Stats.ToDictionary(kv => kv.Key.ToString(), kv => (object)(double)kv.Value) } }).ToList();
                 outp["mounts"] = g.CollectedMounts.Cast<object>().ToList();
                 outp["drops"] = g.Drops.Select(d => (object)new Dictionary<string, object> {
                     { "id", (double)d.Id }, { "name", d.Name }, { "from", d.From }, { "got", d.Collected } }).ToList();

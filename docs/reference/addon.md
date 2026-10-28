@@ -12,7 +12,8 @@
 | `Program.lua` | `MountSheetSyncProgram = { seen, sheet, version }` — «программа запущена»; **пишет программа** раз в минуту, в выпуске `= nil` |
 | `Locales.lua` | Тексты на 6 языках (`T.enUS`, `ruRU`, `deDE`, `frFR`, `esES`, `ptBR`), `ns.L`, выбор языка |
 | `MountSheetSync.lua` | Ядро: события, запись убийств, сохранения подземелий, ручные отметки, `/mss`, `ns.ProgramState()` |
-| `Collection.lua` | Персонажи (`db.chars`), коллекция маунтов (`db.collection`), снимок Атласа приключений для программы |
+| `Statistics.lua` | `ns.STATISTIC_IDS` — статистики убийств, которые читает аддон (**генерирует** `tools/catalog/statistic_ids.py`, не править руками) |
+| `Collection.lua` | Персонажи (`db.chars`), их статистика убийств (`ns.ScanStatistics`), коллекция маунтов (`db.collection`), снимок Атласа приключений для программы |
 | `Remaining.lua` | Список «Осталось» и сравнение имён/сложностей (порт `norm_`/`rowMatch_` из Code.gs), счётчик попыток (`ns.AttemptsFor`, `ns.BossHint`) |
 | `UI.lua` | Окно, вкладки, кнопка у миникарты, Data Broker, Addon Compartment, окно настроек, «Сведения для отчёта об ошибке» |
 | `Tooltip.lua` | Подсказка о боссе: подсказка юнита (`TooltipDataProcessor`) и строка в Атласе приключений |
@@ -99,8 +100,17 @@ Midnight (`issecretvalue`) не читаются — имя босса тогд�
 Аддон берёт язык игры, если он из шести, иначе английский; `db.language` — выбор пользователя. Все ключи
 должны быть во всех языках (`test_locale.py`). Названия боссов/маунтов во «Осталось» — из таблицы (её язык).
 
+## Статистика убийств (2.9)
+
+Через 5 с после входа (вместе с коллекцией) `ns.ScanStatistics(key)` читает `GetStatistic(id)` для каждого
+`ns.STATISTIC_IDS` (≈90 штук): «--» и секретные значения пропускаются, разделители тысяч убираются, хранятся
+только ненулевые. Если всё «--», а раньше числа были — статистика ещё не загрузилась, прежние не затираются.
+Игра считает убийства по персонажу (и только с этого клиента), поэтому каждый персонаж приносит свои при входе.
+Считает и складывает программа (`CollectionSync.ImportAttempts`, см. [sheet.md](sheet.md)).
+
 ## Где что хранится
 
-`MountSheetSyncDB`: `addonVersion` (для программы: не нужен ли аддон новее), `kills`, `chars` (имя-сервер → класс, уровень, GUID, seen), `collection` (`ids`,
+`MountSheetSyncDB`: `addonVersion` (для программы: не нужен ли аддон новее), `kills`, `chars` (имя-сервер → класс, уровень, GUID, seen;
+с 2.9 — `stats` = { [statisticID] = убийств } только ненулевые и `statsAt`), `collection` (`ids`,
 `collected`, `journal`, `updated`), `notFarmed` (ещё не учтённые таблицей «Не фармлю»), `quiet`, `minimap`,
 `language`, позиция окна. Только SavedVariables — аддоны WoW не выходят в сеть.

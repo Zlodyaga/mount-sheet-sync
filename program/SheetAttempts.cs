@@ -72,7 +72,7 @@ namespace MountSheetSync
         }
 
         /// <summary>Число попыток в ячейке (пустая ячейка — строка без счётчика).</summary>
-        static bool AttemptCount(object value, out double n)
+        public static bool AttemptCount(object value, out double n)
         {
             n = 0;
             if (value is double)

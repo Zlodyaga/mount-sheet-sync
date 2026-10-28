@@ -474,6 +474,10 @@ namespace MountSheetSync
         public long Seen;
         /// <summary>Известен только по журналу убийств (аддон старше 2.0).</summary>
         public bool FromKills;
+        /// <summary>Статистика убийств игры (аддон 2.9+): statisticID → сколько раз этот персонаж убил босса.</summary>
+        public Dictionary<long, long> Stats = new Dictionary<long, long>();
+        /// <summary>Когда аддон читал статистику (0 — не читал).</summary>
+        public long StatsAt;
 
         public string Key
         {
@@ -534,6 +538,31 @@ namespace MountSheetSync
         public List<JournalEncounter> JournalEncounters = new List<JournalEncounter>();
         public List<JournalInstance> JournalInstances = new List<JournalInstance>();
         public List<string> Problems = new List<string>();
+
+        /// <summary>Сколько персонажей прислали статистику убийств (аддон 2.9+).</summary>
+        public int CharactersWithStats
+        {
+            get { return Characters.Count(c => c.StatsAt > 0); }
+        }
+
+        /// <summary>Убийств по этим статистикам у всех персонажей вместе.</summary>
+        public long StatTotal(IEnumerable<long> ids)
+        {
+            List<long> list = ids.Distinct().ToList();
+            long total = 0;
+            foreach (GameCharacter c in Characters)
+            {
+                foreach (long id in list)
+                {
+                    long n;
+                    if (c.Stats.TryGetValue(id, out n) && n > 0)
+                    {
+                        total += n;
+                    }
+                }
+            }
+            return total;
+        }
     }
 
     static class GameData
@@ -771,10 +800,33 @@ namespace MountSheetSync
                 ch.ClassFile = J.Str(c, "classFile").Trim();
                 ch.Level = (int)J.Long(c, "level");
                 ch.Seen = J.Long(c, "seen");
+                ch.StatsAt = J.Long(c, "statsAt");
+                Dictionary<string, object> stats = J.Obj(J.Get(c, "stats"));
+                if (stats != null)
+                {
+                    foreach (KeyValuePair<string, object> s in stats)
+                    {
+                        long id, n = AsLong(s.Value);
+                        if (long.TryParse(s.Key, NumberStyles.Integer, CultureInfo.InvariantCulture, out id) && id > 0 && n > 0)
+                        {
+                            ch.Stats[id] = n;
+                        }
+                    }
+                }
                 GameCharacter old;
                 if (!chars.TryGetValue(ch.Key, out old) || old.FromKills || old.Seen < ch.Seen)
                 {
+                    if (old != null && old.StatsAt > ch.StatsAt)
+                    {
+                        ch.Stats = old.Stats;     // тот же персонаж в другом файле: статистика свежее там
+                        ch.StatsAt = old.StatsAt;
+                    }
                     chars[ch.Key] = ch;
+                }
+                else if (ch.StatsAt > old.StatsAt)
+                {
+                    old.Stats = ch.Stats;
+                    old.StatsAt = ch.StatsAt;
                 }
             }
         }

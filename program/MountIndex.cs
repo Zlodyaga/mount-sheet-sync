@@ -23,6 +23,10 @@ namespace MountSheetSync
         readonly List<Item> items = new List<Item>();
         readonly Dictionary<long, string> names = new Dictionary<long, string>();
         readonly Dictionary<long, HashSet<string>> aliasKeys = new Dictionary<long, HashSet<string>>();
+        /// <summary>«вид:mountID» → статистики убийств игры, в которых считаются попытки (колонка каталога «ID статистики»).</summary>
+        readonly Dictionary<string, List<long>> statistics = new Dictionary<string, List<long>>();
+
+        public const string StatisticsColumn = "ID статистики";
 
         public static MountIndex For(Catalog catalog)
         {
@@ -32,6 +36,7 @@ namespace MountSheetSync
                 int cMount = sheet.Col("Маунт");
                 int cBoss = sheet.Columns.FindIndex(x => x.StartsWith("Босс", StringComparison.Ordinal));
                 int cId = sheet.Col(SheetBuilder.IdColumn);
+                int cStats = sheet.Col(StatisticsColumn);
                 if (cMount < 0)
                 {
                     continue;
@@ -53,6 +58,14 @@ namespace MountSheetSync
                     {
                         continue;
                     }
+                    if (it.Id > 0 && cStats >= 0)
+                    {
+                        List<long> stats = Encounters.Ids(row[cStats]);
+                        if (stats.Count > 0)
+                        {
+                            index.statistics[sheet.Key + ":" + it.Id.ToString(CultureInfo.InvariantCulture)] = stats;
+                        }
+                    }
                     index.items.Add(it);
                     if (it.Id > 0)
                     {
@@ -71,6 +84,17 @@ namespace MountSheetSync
                 }
             }
             return index;
+        }
+
+        /// <summary>Статистики убийств для маунта на листе этого вида (raids / dungeons / world); пусто — нет.</summary>
+        public List<long> StatisticsOf(string kind, long id)
+        {
+            List<long> list;
+            if (kind == null || id <= 0 || !statistics.TryGetValue(kind + ":" + id.ToString(CultureInfo.InvariantCulture), out list))
+            {
+                return new List<long>();
+            }
+            return list;
         }
 
         /// <summary>mountID из ячейки (число или текст с числом); 0 — нет.</summary>

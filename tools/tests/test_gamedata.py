@@ -38,6 +38,14 @@ check("file: whole journal with types (vendor mount too)", [d["id"] for d in g["
       and [d for d in g["all"] if d["id"] == 6][0]["type"] == 3, g["all"])
 check("file: collected mount ids", g["ids"] == [6, 69, 363], g["ids"])
 check("file: journal size and time", g["journal"] == 7 and g["updated"] > 1700000000)
+st = {c["name"]: c["stats"] for c in g["chars"]}
+check("file: kill statistics per character (addon 2.9)", st == {"Мирна": {"5970": 3}, "Эйра": {"5970": 13, "6168": 1234}}
+      and all(c["statsAt"] > 1700000000 for c in g["chars"]), g["chars"])
+two = file("two.lua", 'MountSheetSyncDB = { ["chars"] = { ["Эйра-Ревущий фьорд"] = { ["name"] = "Эйра", ["realm"] = "Ревущий фьорд",'
+           ' ["seen"] = 9999999999, ["statsAt"] = 500, ["stats"] = { [5970] = 99 } } } }\n')
+g2 = host(os.path.join(HERE, "sv_collection.lua"), two)
+e = [c for c in g2["chars"] if c["name"] == "Эйра"][0]
+check("two files, same character: the newer statistics win (not the newer «seen»)", e["stats"] == {"5970": 13, "6168": 1234}, e)
 v20 = file("v20.lua", 'MountSheetSyncDB = {\n["collection"] = {\n["updated"] = 1792657686,\n["journal"] = 9,\n["collected"] = 1,\n'
            '["names"] = { "Пепел Ал\'ара" },\n["ids"] = { 69 },\n'
            '["drops"] = { { ["id"] = 69, ["name"] = "Пепел Ал\'ара", ["from"] = "Добыча: Кель\'тас", ["got"] = true },'

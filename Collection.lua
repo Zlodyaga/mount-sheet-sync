@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 2.8.0 — персонажи и коллекция маунтов
+Mount Sheet Sync 2.9.0 — персонажи и коллекция маунтов
 ====================================================
 По этим данным программа Mount Sheet Sync строит новую Google-таблицу
 («Создать таблицу»): листы «Рейды <Имя>» / «Подземелья <Имя>» на каждого
@@ -10,7 +10,8 @@ Mount Sheet Sync 2.8.0 — персонажи и коллекция маунто
 на аккаунт — её хватает прочитать одним персонажем.
 
 В SavedVariables (MountSheetSyncDB):
-  chars["Имя-Сервер"] = { name, realm, class, classFile, level, guid, seen }
+  chars["Имя-Сервер"] = { name, realm, class, classFile, level, guid, seen,
+                          stats = { [statisticID] = убийств, … }, statsAt }   -- 2.9: статистика убийств
   collection = { updated, locale, journal, collected,
                  names  = { имена собранных маунтов },
                  ids    = { их mountID },
@@ -18,6 +19,11 @@ Mount Sheet Sync 2.8.0 — персонажи и коллекция маунто
     type — sourceType из журнала (1 — добыча), from — источник без цветовых кодов,
     faction — только у маунтов одной фракции: 0 — Орда, 1 — Альянс.
     По mountID программа узнаёт маунты таблицы, даже если имя в таблице другое.
+
+Статистика убийств (2.9): игра сама считает, сколько раз персонаж убил каждого босса (Достижения →
+Статистика). Аддон при входе читает счётчики боссов из Statistics.lua (ns.STATISTIC_IDS) — по ним программа
+при «Сверить с коллекцией» поднимает «Попыток» до суммы всех персонажей, если в таблице меньше: попытки,
+сделанные до установки аддона, тоже засчитываются.
 
 Команды: /mss chars — список, /mss forget <имя> — убрать персонажа.
 ]]
@@ -252,6 +258,46 @@ function ns.CollectionAdd(mountID, name)
 end
 
 ---------------------------------------------------------------------------
+-- Статистика убийств
+---------------------------------------------------------------------------
+local function StatValue(id)
+  if not GetStatistic then
+    return nil
+  end
+  local ok, value = pcall(GetStatistic, id)
+  if not ok or value == nil or issecretvalue(value) then
+    return nil
+  end
+  -- «--» — ни одного убийства; большие числа игра может писать с разделителем («1 234»)
+  local digits = tostring(value):gsub("%D", "")
+  return tonumber(digits)
+end
+
+--- Прочитать счётчики убийств текущего персонажа. Возвращает число ненулевых или nil.
+function ns.ScanStatistics(key)
+  local db = DB()
+  local ids = ns.STATISTIC_IDS
+  if not db or type(ids) ~= "table" or not key or type(db.chars) ~= "table" or type(db.chars[key]) ~= "table" then
+    return nil
+  end
+  local stats, count = {}, 0
+  for _, id in ipairs(ids) do
+    local n = StatValue(id)
+    if n and n > 0 then
+      stats[id] = n
+      count = count + 1
+    end
+  end
+  local c = db.chars[key]
+  if count == 0 and type(c.stats) == "table" and next(c.stats) ~= nil then
+    return 0   -- статистика ещё не загрузилась: прежние числа не затираем
+  end
+  c.stats = stats
+  c.statsAt = time()
+  return count
+end
+
+---------------------------------------------------------------------------
 -- Чат: /mss chars, /mss forget
 ---------------------------------------------------------------------------
 function ns.PrintCharacters()
@@ -368,6 +414,7 @@ end
 -- Вызывает ядро
 ---------------------------------------------------------------------------
 local function ScanLater()
+  ns.ScanStatistics(ns.RememberCharacter())
   ns.ScanCollection()
 end
 

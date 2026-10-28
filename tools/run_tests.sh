@@ -12,6 +12,7 @@ bash tools/build_test_exe.sh "$EXE" || exit 1
 bash tools/cs_host/build.sh || exit 1
 python3 tools/i18n/build.py --check || exit 1
 python3 tools/i18n/build_sheet.py --check || exit 1
+python3 tools/catalog/statistic_ids.py || exit 1   # catalog «ID статистики» and Statistics.lua match the list
 cd tools/tests
 F=fixtures
 failed=0

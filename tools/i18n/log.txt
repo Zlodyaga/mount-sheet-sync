@@ -390,3 +390,6 @@ en: The “Remaining” list written again: {0} (the file was replaced — for e
 
 @ Аддон {0} старше, чем нужно программе ({1}): обновите его в CurseForge.
 en: Addon {0} is older than the program needs ({1}): update it in CurseForge.
+
+@ «{0}»: «Попыток» {1} → {2} по статистике убийств игры (персонажей со статистикой: {3}).
+en: “{0}”: “Attempts” {1} → {2} from the game's kill statistics (characters with statistics: {3}).

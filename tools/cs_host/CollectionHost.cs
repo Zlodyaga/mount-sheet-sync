@@ -1,6 +1,6 @@
 // Test host: CollectionSync on a MemoryBook. Reads a JSON job from the file in args[0], prints JSON.
 //   job = { catalog: {...} | null (embedded), sheets: [{name, rows, formulas: [[r,c]]}],
-//           game: {ids, names, updated}, mode: "run" | "remove" | "handle", request: {...} }
+//           game: {ids, names, updated, chars: [{name, realm, statsAt, stats: {"id": n}}]}, mode: "run" | "remove" | "handle", request: {...} }
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -64,6 +64,19 @@ namespace MountSheetSync
             }
             game.CollectedMounts = J.Arr(J.Get(g, "names")).Select(n => SheetLogic.JsString(n)).ToList();
             game.CollectionUpdated = J.Long(g, "updated");
+            foreach (object o in J.Arr(J.Get(g, "chars")))
+            {
+                Dictionary<string, object> c = J.Obj(o);
+                GameCharacter ch = new GameCharacter();
+                ch.Name = J.Str(c, "name");
+                ch.Realm = J.Str(c, "realm");
+                ch.StatsAt = J.Long(c, "statsAt");
+                foreach (KeyValuePair<string, object> kv in J.Obj(J.Get(c, "stats")) ?? new Dictionary<string, object>())
+                {
+                    ch.Stats[long.Parse(kv.Key)] = (long)(double)kv.Value;
+                }
+                game.Characters.Add(ch);
+            }
 
             Dictionary<string, object> outp = new Dictionary<string, object>();
             string mode = J.Str(job, "mode");
@@ -108,6 +121,7 @@ namespace MountSheetSync
                 {
                     { "marked", res.Marked.Cast<object>().ToList() }, { "removed", (double)res.Removed },
                     { "renamed", (double)res.Renamed }, { "idColumns", res.IdColumnsAdded.Cast<object>().ToList() },
+                    { "attempts", res.Attempts.Cast<object>().ToList() },
                     { "changed", res.Changed }, { "summary", res.Summary() },
                 };
             }

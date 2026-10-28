@@ -3,7 +3,9 @@
 //  2) прежние названия маунтов из каталога меняются на названия «как в игре» (и на листах персонажей);
 //  3) «Собрано?» = «Да» для маунтов, которые есть в коллекции (по mountID, без ID — по имени);
 //     обратно в «Нет» программа ничего не ставит;
-//  4) с листов «Рейды <Имя>» / «Подземелья <Имя>» убираются строки маунтов, которые уже собраны
+//  4) «Попыток» несобранных маунтов поднимается до статистики убийств игры (сумма по всем персонажам, аддон 2.9+),
+//     если в таблице меньше: так засчитываются и попытки до установки аддона; вниз программа не правит;
+//  5) с листов «Рейды <Имя>» / «Подземелья <Имя>» убираются строки маунтов, которые уже собраны
 //     («Собрано?» = «Да» на общем листе) — это же делается после каждой отправки записей.
 
 using System;
@@ -164,10 +166,12 @@ namespace MountSheetSync
         public List<string> IdColumnsAdded = new List<string>();
         /// <summary>«Да» → «Нет»: таблица 2.0 спутала маунты с одним названием.</summary>
         public List<string> Unmarked = new List<string>();
+        /// <summary>Маунты, у которых «Попыток» поднято до статистики убийств игры.</summary>
+        public List<string> Attempts = new List<string>();
 
         public bool Changed
         {
-            get { return Marked.Count > 0 || Removed > 0 || Renamed > 0 || IdColumnsAdded.Count > 0 || Unmarked.Count > 0; }
+            get { return Marked.Count > 0 || Removed > 0 || Renamed > 0 || IdColumnsAdded.Count > 0 || Unmarked.Count > 0 || Attempts.Count > 0; }
         }
 
         public string Summary()
@@ -180,6 +184,10 @@ namespace MountSheetSync
             if (Unmarked.Count > 0)
             {
                 parts.Add(Tr.F("исправлено на «Нет» (другой маунт с тем же названием): {0}", TextUtil.ShortList(Unmarked, 4)));
+            }
+            if (Attempts.Count > 0)
+            {
+                parts.Add(Tr.F("«Попыток» по статистике игры: {0} ({1})", Attempts.Count, TextUtil.ShortList(Attempts, 4)));
             }
             if (Removed > 0)
             {
@@ -211,6 +219,7 @@ namespace MountSheetSync
             FixOldNameMixUps(book, index, game, res);
             Rename(book, index, res);
             Mark(book, game, index, res);
+            ImportAttempts(book, game, index, res);
             book.Flush();
             res.Removed = RemoveCollected(book);
             return res;
@@ -482,6 +491,74 @@ namespace MountSheetSync
                     {
                         res.Marked.Add(mount);
                     }
+                }
+            }
+        }
+
+        /// <summary>
+        /// «Попыток» по статистике убийств игры: сумма по всем персонажам (каждый присылает свою, когда входит в игру с
+        /// аддоном 2.9+). Только вверх: в ячейке больше — оставляем (поправлено руками или персонаж ещё не входил).
+        /// Убийства, которые программа уже посчитала сама, в статистике тоже есть — дважды они не считаются.
+        /// Собранные маунты, формулы и строки без счётчика не трогаем.
+        /// </summary>
+        static void ImportAttempts(IStructuredBook book, GameSnapshot game, MountIndex index, CollectionResult res)
+        {
+            if (game == null || game.CharactersWithStats == 0)
+            {
+                return;
+            }
+            foreach (string name in Masters)
+            {
+                SheetEntry entry = SheetLogic.ByName(book, name);
+                if (entry == null || entry.Data.Count < 2)
+                {
+                    continue;
+                }
+                object[] header = entry.Data[0];
+                int cAttempts = SheetLogic.FindCol(header, SheetLogic.AttemptsPattern, -1);
+                int cMount = SheetLogic.FindCol(header, "маунт", -1);
+                if (cAttempts < 0 || cMount < 0)
+                {
+                    continue;
+                }
+                int cCollected = SheetLogic.FindCol(header, "собрано", -1);
+                int cBoss = SheetLogic.FindCol(header, "босс", -1);
+                int cId = IdCol(header);
+                string kind = MountIndex.KindOfSheet(name);
+                for (int r = 1; r < entry.Data.Count; r++)
+                {
+                    object[] row = entry.Data[r];
+                    double n;
+                    if (cAttempts >= row.Length || !SheetLogic.AttemptCount(row[cAttempts], out n)
+                        || entry.Formulas.Contains(SheetLogic.Key(r, cAttempts)))
+                    {
+                        continue;
+                    }
+                    if (cCollected >= 0 && cCollected < row.Length && SheetLogic.IsYes(row[cCollected]))
+                    {
+                        continue;
+                    }
+                    long id = cId >= 0 && cId < row.Length ? MountIndex.IdOf(row[cId]) : 0;
+                    if (id == 0)
+                    {
+                        id = index.Find(kind, row[cMount], cBoss >= 0 && cBoss < row.Length ? row[cBoss] : "");
+                    }
+                    List<long> stats = index.StatisticsOf(kind, id);
+                    if (stats.Count == 0)
+                    {
+                        continue;
+                    }
+                    long total = game.StatTotal(stats);
+                    double was = Math.Max(0, Math.Floor(n));
+                    if (total <= was)
+                    {
+                        continue;
+                    }
+                    book.Set(entry, r, cAttempts, (double)total);
+                    string mount = SheetLogic.CellText(row[cMount]);
+                    res.Attempts.Add(mount);
+                    Log.Write(Tr.L("«{0}»: «Попыток» {1} → {2} по статистике убийств игры (персонажей со статистикой: {3}).",
+                        mount, was, total, game.CharactersWithStats));
                 }
             }
         }

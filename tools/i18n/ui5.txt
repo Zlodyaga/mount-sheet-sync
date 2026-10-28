@@ -340,3 +340,10 @@ de: Aktualisiere das Addon Mount Sheet Sync
 fr: Mettez à jour l'addon Mount Sheet Sync
 es: Actualice el addon Mount Sheet Sync
 pt: Atualize o addon Mount Sheet Sync
+
+@ «Попыток» по статистике игры: {0} ({1})
+en: “Attempts” from the game's statistics: {0} ({1})
+de: „Versuche“ aus der Spielstatistik: {0} ({1})
+fr: « Tentatives » d'après les statistiques du jeu : {0} ({1})
+es: «Intentos» según las estadísticas del juego: {0} ({1})
+pt: “Tentativas” pelas estatísticas do jogo: {0} ({1})

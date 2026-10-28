@@ -2,12 +2,13 @@
 
 `bash tools/run_tests.sh` (или `--no-ui` без Xvfb) — всё; временные файлы в `$MSS_TEST_TMP`. Перед тестами
 собираются тестовый exe (`tools/build_test_exe.sh`, `-define:TESTS`) и хосты `tools/cs_host/*.exe`, проверяются
-переводы (`tools/i18n/build.py --check`, `build_sheet.py --check`). Нужны mono, python3 + lupa, node, Xvfb,
+переводы (`tools/i18n/build.py --check`, `build_sheet.py --check`) и список статистик (`tools/catalog/statistic_ids.py`:
+колонка каталога и `Statistics.lua` совпадают с ним). Нужны mono, python3 + lupa, node, Xvfb,
 xdotool, stalonetray, imagemagick. В CI — то же (`.github/workflows/ci.yml`).
 
 | Тест | Что проверяет |
 | --- | --- |
-| `test_addon2.py`, `test_addon_left.py`, `test_minimap.py`, `test_collection.py`, `test_locale.py` | аддон в имитации WoW (`wow_mock.lua`, lupa): окно, «Осталось», кнопки, коллекция, все ключи во всех языках |
+| `test_addon2.py`, `test_addon_left.py`, `test_minimap.py`, `test_collection.py`, `test_locale.py` | аддон в имитации WoW (`wow_mock.lua`, lupa): окно, «Осталось», кнопки, коллекция и статистика убийств, все ключи во всех языках |
 | `test_offline.py` | пометка «офлайн» по `Program.lua`, «нужен аддон новее» / «программа устарела», порядок версий |
 | `test_release_plan.py` | какие теги и выпуски делает `tools/release_plan.sh` (программа / аддон / оба, release / alpha / beta) |
 | `test_attempts_addon.py` | строка попытки в чате, подсказка босса, Атлас, «Сведения для отчёта» |

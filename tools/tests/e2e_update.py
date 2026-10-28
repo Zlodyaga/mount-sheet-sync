@@ -186,7 +186,7 @@ try:
           and open(os.path.join(app3, "MountSheetSync.exe"), "rb").read() == old_bytes, out[-400:])
 
     # ---------------------------------------------------------------- test versions (alpha, beta)
-    STATE["list"] = [release("v2.9.0-alpha1", True), release("v2.9.0-alpha2", True), release("v1.0.0", False)]
+    STATE["list"] = [release("v2.10.0-alpha1", True), release("v2.10.0-alpha2", True), release("v1.0.0", False)]
     app4, data4, addon4 = setup("tests", True)
     code, out = run(app4, data4, "--check-update")
     check("pre-releases are not offered by default (the latest stable is older)", code == 0 and "No updates" in out, out[-400:])
@@ -194,22 +194,22 @@ try:
     settings4["testVersions"] = True
     json.dump(settings4, open(os.path.join(data4, "settings.json"), "w"))
     code, out = run(app4, data4, "--check-update")
-    check("with «test versions» on: the newest pre-release (2.9.0-alpha2 > alpha1)", code == 0 and "A new version is available: 2.9.0-alpha2" in out, out[-400:])
+    check("with «test versions» on: the newest pre-release (2.10.0-alpha2 > alpha1)", code == 0 and "A new version is available: 2.10.0-alpha2" in out, out[-400:])
     code, out = run(app4, data4, "--update")
-    check("…and it installs like a release", code == 0 and "Program updated to 2.9.0-alpha2" in out
+    check("…and it installs like a release", code == 0 and "Program updated to 2.10.0-alpha2" in out
           and open(os.path.join(app4, "MountSheetSync.exe"), "rb").read() == new_bytes, out[-600:])
-    STATE["list"] = [release("v2.8.0-alpha1", True), release("v2.8.0-beta3", True), release("v1.0.0", False)]
+    STATE["list"] = [release("v2.9.0-alpha1", True), release("v2.9.0-beta3", True), release("v1.0.0", False)]
     app5, data5, addon5 = setup("tests-older", True)
     json.dump(dict(json.load(open(os.path.join(data5, "settings.json"))), testVersions=True), open(os.path.join(data5, "settings.json"), "w"))
     code, out = run(app5, data5, "--check-update")
-    check("2.8.0-alpha1 / beta3 are older than the 2.8.0 release this exe is", code == 0 and "No updates" in out, out[-400:])
-    # an alpha build (tag v2.8.0-alpha1) with test versions off: the 2.8.0 release is newer
-    STATE["tag"] = "v2.8.0"
+    check("2.9.0-alpha1 / beta3 are older than the 2.9.0 release this exe is", code == 0 and "No updates" in out, out[-400:])
+    # an alpha build (tag v2.9.0-alpha1) with test versions off: the 2.9.0 release is newer
+    STATE["tag"] = "v2.9.0"
     app6, data6, addon6 = setup("alpha-build", True)
     code, out = run(app6, data6, "--check-update", MSS_TEST_PRERELEASE="alpha1")
-    check("an alpha build is offered the 2.8.0 release (same number, no suffix = newer)", code == 0 and "A new version is available: 2.8.0" in out, out[-400:])
+    check("an alpha build is offered the 2.9.0 release (same number, no suffix = newer)", code == 0 and "A new version is available: 2.9.0" in out, out[-400:])
     code, out = run(app6, data6, "--check-update")
-    check("…while the 2.8.0 release build itself is up to date", code == 0 and "No updates: 2.8.0" in out, out[-400:])
+    check("…while the 2.9.0 release build itself is up to date", code == 0 and "No updates: 2.9.0" in out, out[-400:])
 finally:
     srv.shutdown()
 
