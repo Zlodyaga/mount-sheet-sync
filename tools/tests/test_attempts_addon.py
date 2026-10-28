@@ -114,6 +114,10 @@ def new_game(quiet=False):
     L.globals().EncounterJournal = L.table_from({"encounter": L.table_from({"info": EJ})})
     EJ.encounterTitle = L.eval("UIParent:CreateFontString()")
     EJ.difficulty = L.eval("CreateFrame('Button', nil, UIParent)")
+    EJ.lootTab = L.eval("CreateFrame('Button', nil, UIParent)")
+    EJ.modelTab = L.eval("CreateFrame('Button', nil, UIParent)")
+    EJ.model = L.eval("CreateFrame('Frame', nil, UIParent)")
+    EJ.model.Hide(EJ.model)
     g = L.globals()
     toc = open(os.path.join(ADDON_DIR, "MountSheetSync.toc"), encoding="utf-8").read().splitlines()
     files = [ln.strip().replace("\\", "/") for ln in toc if ln.strip() and not ln.startswith("#")]
@@ -181,9 +185,13 @@ g.EncounterJournal_DisplayEncounter(2435)
 regions = [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
 texts = [r for r in regions if r._type == "FontString" and r._parent is not None and r._parent._uid == EJ._uid]
 buttons = [r for r in regions if r._type == "Button" and r._parent is not None and r._parent._uid == EJ._uid]
-check("Adventure Guide: Blizzard's function still runs; no text on the page, an icon left of the difficulty menu",
+check("Adventure Guide: Blizzard's function still runs; no text on the page, an icon under the tabs on the right (not by the filters)",
       g.EJ_SHOWN == 2435 and not texts and len(buttons) == 1 and buttons[0]._shown
-      and buttons[0]._points[1].rel._uid == EJ.difficulty._uid, (len(texts), len(buttons)))
+      and buttons[0]._points[1].rel._uid == EJ.modelTab._uid, (len(texts), len(buttons)))
+EJ.model.Show(EJ.model)
+check("…«Model» tab open: the icon hides (it would hang over the boss)", not buttons[0]._shown)
+EJ.model.Hide(EJ.model)
+check("…back to another tab: shown again", buttons[0]._shown)
 buttons[0]._scripts.OnEnter(buttons[0])
 gt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
 check("…its tooltip: the boss line and the mount line", g.GameTooltip.shown and any("Отмщение" in t and "попыток: 38" in t for t in gt)

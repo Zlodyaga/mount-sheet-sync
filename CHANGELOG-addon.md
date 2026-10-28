@@ -6,8 +6,8 @@ The addon and the Windows program are released separately; the program's changes
 - Attempts from before the addon: at login the addon reads the game's kill statistics (Achievements → Statistics) of the
   bosses whose mounts the sheet counts; the program 2.9.0 adds them up over all characters and raises “Attempts” in
   the sheet. Log in once with each character to bring in its kills.
-- Boss hints are shorter and no longer cover the Adventure Guide: the boss page gets a small horseshoe icon next to
-  the difficulty menu, and its tooltip has the lines — “Not killed this week on 6 characters”, then per mount
+- Boss hints are shorter and no longer cover the Adventure Guide: the boss page gets a small horseshoe icon under the
+  tabs on the right (hidden on the Model tab), and its tooltip has the lines — “Not killed this week on 6 characters”, then per mount
   “12 attempts, chance 11%” (“no attempts yet” at 0). The boss tooltip in the world uses the same lines.
 
 ## 2.8.0

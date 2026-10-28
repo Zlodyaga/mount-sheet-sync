@@ -86,6 +86,10 @@ function Region:SetWordWrap(v) self._wrap = v end
 -- frames
 function Region:SetScript(k, fn) self._scripts[k] = fn end
 function Region:GetScript(k) return self._scripts[k] end
+function Region:HookScript(k, fn)
+  local old = self._scripts[k]
+  self._scripts[k] = function(...) if old then old(...) end fn(...) end
+end
 function Region:RegisterEvent(e) self._events = self._events or {}; self._events[e] = true end
 function Region:UnregisterEvent(e) if self._events then self._events[e] = nil end end
 function Region:CreateFontString(name, layer, font)

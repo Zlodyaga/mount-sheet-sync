@@ -2,8 +2,9 @@
 Mount Sheet Sync 2.9.0 — подсказка о боссе
 ==========================================
 При наведении на босса — у скольких персонажей из таблицы он на этой неделе ещё не убит и по строке на
-несобранный маунт с него: сколько попыток и шанс за все попытки. В Атласе приключений — значок-подкова слева
-от выбора сложности, те же строки — в его подсказке (на странице ничего не перекрываем).
+несобранный маунт с него: сколько попыток и шанс за все попытки. В Атласе приключений — значок-подкова под
+вкладками страницы босса (справа, «Обзор / Добыча / Модель»), те же строки — в его подсказке; на вкладке «Модель»
+значка нет. Так он не перекрывает ни текст, ни фильтры добычи, ни модель.
 Данные — из списка таблицы (ns.BossHint, Remaining.lua); без таблицы программы 2.8+ подсказки нет. Имена,
 которые игра прячет («секретные» значения в бою), не трогаем.
 ]]
@@ -77,17 +78,34 @@ end
 local journalButton
 local journalLines = {}
 local journalHooked = false
+local journalInfo
+
+-- Значок виден, если про босса есть что сказать и открыта не вкладка «Модель».
+local function JournalRefresh()
+  if not journalButton then
+    return
+  end
+  local model = journalInfo and journalInfo.model
+  local onModel = model and model.IsShown and model:IsShown()
+  journalButton:SetShown(#journalLines > 0 and not onModel)
+end
 
 local function JournalButton(info)
   if journalButton then
     return journalButton
   end
   local b = CreateFrame("Button", nil, info)
-  b:SetSize(20, 20)
-  if info.difficulty then
-    b:SetPoint("RIGHT", info.difficulty, "LEFT", -6, 0)
+  b:SetSize(22, 22)
+  -- под последней вкладкой справа (Модель); в клиенте без вкладок — у правого верхнего края страницы
+  local tab = info.modelTab or info.lootTab or info.bossTab or info.overviewTab
+  if tab then
+    b:SetPoint("TOP", tab, "BOTTOM", 0, -8)
   else
-    b:SetPoint("TOPRIGHT", info, "TOPRIGHT", -60, -12)
+    b:SetPoint("TOPRIGHT", info, "TOPRIGHT", -12, -12)
+  end
+  if info.model and info.model.HookScript then
+    info.model:HookScript("OnShow", JournalRefresh)
+    info.model:HookScript("OnHide", JournalRefresh)
   end
   local icon = b:CreateTexture(nil, "ARTWORK")
   icon:SetPoint("TOPLEFT", b, "TOPLEFT", 0, 0)
@@ -114,11 +132,13 @@ local function OnEncounter(encounterID)
     return
   end
   local name = EJ_GetEncounterInfo(encounterID)
+  journalInfo = info
   journalLines = ns.BossHintLines(name, 6)
   if #journalLines == 0 and not journalButton then
     return
   end
-  JournalButton(info):SetShown(#journalLines > 0)
+  JournalButton(info)
+  JournalRefresh()
 end
 
 local function HookJournal()
