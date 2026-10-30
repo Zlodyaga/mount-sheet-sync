@@ -190,6 +190,26 @@ g.GameTooltip.lines = L.table()
 g.UNIT_POSTCALL(g.GameTooltip)
 check("«is it a player» hidden by the game: the boss hint still shows", len(g.GameTooltip.lines) > 0)
 L.execute('UnitIsPlayer = _UIP')
+# in an instance the game hides names even before the pull: a boss-level unit gets the instance's mounts
+L.execute('TIP_UNIT = { "SECRET", "target" }; UNIT_LEVEL = -1; function UnitLevel() return UNIT_LEVEL end; '
+          'function UnitClassification() return "SECRET" end; function IsInInstance() return true, "raid" end; '
+          'C_Map = { GetBestMapForUnit = function() return 1998 end }; function EJ_GetInstanceForMap(m) return m == 1998 and 1193 or 0 end')
+g.GameTooltip.lines = L.table()
+n2 = len(g.CHAT)
+g.UNIT_POSTCALL(g.GameTooltip)
+it = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
+check("hidden name of a boss (level ??) inside a raid: the mounts of this raid's bosses, by boss",
+      any("Сильвана Ветрокрылая" in t for t in it) and any("Отмщение" in t for t in it), it)
+check("…/mss tip says what it saw (level −1, class hidden) and what it did", any("level -1, class secret" in c and "instance 1193" in c for c in chat(g, n2)), chat(g, n2))
+L.execute('UNIT_LEVEL = 60')
+g.GameTooltip.lines = L.table()
+g.UNIT_POSTCALL(g.GameTooltip)
+check("…an ordinary mob with a hidden name: nothing", len(g.GameTooltip.lines) == 0)
+L.execute('UNIT_LEVEL = -1; function IsInInstance() return false end')
+g.GameTooltip.lines = L.table()
+g.UNIT_POSTCALL(g.GameTooltip)
+check("…outside an instance: nothing", len(g.GameTooltip.lines) == 0)
+L.execute('UnitLevel = nil; UnitClassification = nil; IsInInstance = nil; C_Map = nil; EJ_GetInstanceForMap = nil')
 g.SlashCmdList["MOUNTSHEETSYNC"]("tip")
 n1 = len(g.CHAT)
 L.execute('TIP_UNIT = { "SECRET", "target" }')

@@ -63,6 +63,75 @@ local function Plain(v)
   return v
 end
 
+local MAX_INSTANCE_LINES = 24
+local MAX_UNIT_INSTANCE_LINES = 12
+
+-- Маунты всех боссов подземелья (journalInstanceID): имя босса заголовком, под ним его строки.
+local function InstanceLines(instanceID, limit)
+  local lines = {}
+  if EJ_GetEncounterInfoByIndex and instanceID then
+    local index = 1
+    while #lines < limit do
+      local name = EJ_GetEncounterInfoByIndex(index, instanceID)
+      if type(name) ~= "string" or Secret(name) or name == "" then
+        break
+      end
+      local boss = ns.BossHintLines(name, 6)
+      if #boss > 0 then
+        lines[#lines + 1] = "|cffffd100" .. name:gsub("|", "||") .. "|r"
+        for _, line in ipairs(boss) do
+          lines[#lines + 1] = line
+        end
+      end
+      index = index + 1
+    end
+  end
+  return lines
+end
+
+-- Подземелье, где стоит игрок, по данным Атласа (journalInstanceID) или nil.
+local function CurrentInstance()
+  if not (IsInInstance and EJ_GetInstanceForMap and C_Map and C_Map.GetBestMapForUnit) then
+    return nil
+  end
+  local inside = IsInInstance()
+  if Secret(inside) or not inside then
+    return nil
+  end
+  local map = C_Map.GetBestMapForUnit("player")
+  if not map or Secret(map) then
+    return nil
+  end
+  local id = EJ_GetInstanceForMap(map)
+  if not id or Secret(id) or id == 0 then
+    return nil
+  end
+  return id
+end
+
+-- Босс ли это (уровень «??» или «мировой босс»), если игра это не прячет.
+local function LooksLikeBoss(unit)
+  if not unit then
+    return false
+  end
+  local level = UnitLevel and UnitLevel(unit)
+  if level ~= nil and not Secret(level) and level == -1 then
+    return true
+  end
+  local class = UnitClassification and UnitClassification(unit)
+  return class ~= nil and not Secret(class) and class == "worldboss"
+end
+
+local function Shown(v)
+  if v == nil then
+    return "nil"
+  end
+  if Secret(v) then
+    return "secret"
+  end
+  return tostring(v)
+end
+
 local function OnUnitTooltip(tooltip, data)
   if not tooltip then
     return
@@ -91,7 +160,17 @@ local function OnUnitTooltip(tooltip, data)
     end
   end
   if not plain then
-    Debug("the game hides this name (secret value)")
+    -- в подземельях игра прячет имена: у босса показываем маунты всех боссов этого подземелья
+    local boss = LooksLikeBoss(unit)
+    local instance = boss and CurrentInstance()
+    Debug(string.format("the game hides this name (secret value); level %s, class %s, guid %s → %s",
+      Shown(unit and UnitLevel and UnitLevel(unit)), Shown(unit and UnitClassification and UnitClassification(unit)),
+      Shown(unit and UnitGUID and UnitGUID(unit)), instance and ("mounts of instance " .. instance) or "nothing"))
+    if instance then
+      for _, line in ipairs(InstanceLines(instance, MAX_UNIT_INSTANCE_LINES)) do
+        tooltip:AddLine(line, 1, 1, 1, true)
+      end
+    end
     return
   end
   if unit and UnitIsPlayer then
@@ -199,29 +278,9 @@ local function OnEncounter(encounterID)
   JournalShow(ns.BossHintLines(EJ_GetEncounterInfo(encounterID), 6))
 end
 
-local MAX_INSTANCE_LINES = 24
-
 -- Страница рейда / подземелья (ещё до выбора босса): маунты всех его боссов, по боссу заголовком.
 local function OnInstance(instanceID)
-  local lines = {}
-  if EJ_GetEncounterInfoByIndex and instanceID then
-    local index = 1
-    while #lines < MAX_INSTANCE_LINES do
-      local name = EJ_GetEncounterInfoByIndex(index, instanceID)
-      if type(name) ~= "string" or Secret(name) or name == "" then
-        break
-      end
-      local boss = ns.BossHintLines(name, 6)
-      if #boss > 0 then
-        lines[#lines + 1] = "|cffffd100" .. name:gsub("|", "||") .. "|r"
-        for _, line in ipairs(boss) do
-          lines[#lines + 1] = line
-        end
-      end
-      index = index + 1
-    end
-  end
-  JournalShow(lines)
+  JournalShow(InstanceLines(instanceID, MAX_INSTANCE_LINES))
 end
 
 local function HookJournal()
