@@ -17,6 +17,7 @@ SCREENS = [
     # file, layout, selected tab, buttons drawn as primary
     ("addon-remaining.png", "layout_left.json", "Осталось", ["Отправить в таблицу"]),
     ("addon-all.png", "layout_all.json", "Все персонажи", ["Отправить в таблицу"]),
+    ("addon-attempts.png", "layout_attempts.json", "Попытки", ["Отправить в таблицу"]),
     ("addon-log.png", "layout_log.json", "Журнал", ["Отправить в таблицу"]),
     ("addon-settings.png", "layout_settings.json", "", []),
 ]

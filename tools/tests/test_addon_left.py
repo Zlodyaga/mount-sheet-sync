@@ -369,6 +369,28 @@ tabs[1].MockClick(tabs[1]); g.RunTimers()
 dump_layout(win, os.path.join(LAYOUT_DIR, "layout_all.json"))
 tabs[3].MockClick(tabs[3]); g.RunTimers()
 dump_layout(win, os.path.join(LAYOUT_DIR, "layout_log.json"))
+# «Попытки» for the picture: the fixture's sheet is older than the counter — rows like a real player's (2.9 program)
+L.execute(r"""SCREEN_MOUNTS = {
+  {p = 0.01, mount = "Пламенное Крыло Алисразор", d = {1, 2, 3, 4, 5, 6, 9, 14, 15, 150}, sheet = "Рейды", id = 425, boss = "Алисразор", diff = "Normal/Heroic", place = "Firelands", names = {"алисразор", "alysrazor"}, kind = "raid", row = 30, n = 105},
+  {p = 0.01, mount = "Эксперимент 12-Б", d = {1, 2, 3, 4, 5, 6, 9, 14, 15, 150}, sheet = "Рейды", id = 445, boss = "Ультраксион", diff = "Normal/Heroic", place = "Dragon Soul", names = {"ультраксион", "ultraxion"}, kind = "raid", row = 31, n = 96},
+  {p = 0.01, mount = "Пылающий дракон", d = {1, 2, 3, 4, 5, 6, 9, 14, 15, 150}, sheet = "Рейды", id = 442, boss = "Безумие Смертокрыла", diff = "Normal/Heroic", place = "Dragon Soul", names = {"безумие смертокрыла", "madness of deathwing"}, kind = "raid", row = 32, n = 95},
+  {p = 0.01, mount = "Служанка Хранительницы жизни", d = {2, 5, 6, 15}, sheet = "Рейды", id = 444, boss = "Безумие Смертокрыла", diff = "Heroic", place = "Dragon Soul", names = {"безумие смертокрыла", "madness of deathwing"}, kind = "raid", row = 33, n = 92},
+  {p = 0.01, mount = "Грозовой кобальтовый облачный змей", d = {}, sheet = "Мировые боссы", boss = "Налак", diff = "", place = "Isle of Thunder", names = {"налак", "nalak"}, kind = "world", row = 5, n = 59},
+  {p = 0.01, mount = "Небесный ониксовый облачный змей", d = {}, sheet = "Мировые боссы", boss = "Ша Злости", diff = "", place = "Kun-Lai Summit", names = {"ша злости", "sha of anger"}, kind = "world", row = 2, n = 55},
+  {p = 0.01, mount = "Конь смерти Ривендера", d = {1, 3, 4, 9, 14, 150}, sheet = "Подземелья", id = 69, boss = "Лорд Аурий Ривендер", diff = "Normal", place = "Stratholme", names = {"лорд аурий ривендер", "lord aurius rivendare"}, kind = "dungeon", row = 3, n = 40},
+  {p = 0.01, mount = "Сын Галеона", d = {}, sheet = "Мировые боссы", boss = "Галлеон", diff = "", place = "Valley of the Four Winds", names = {"галлеон", "galleon"}, kind = "world", row = 3, n = 32},
+  {p = 0.01, mount = "Призрачный крылобег", d = {8, 16, 23}, sheet = "Подземелья", id = 2805, boss = "Неспокойное Сердце", diff = "Mythic / Mythic+", place = "Windrunner Spire", names = {"неспокойное сердце", "restless heart"}, kind = "dungeon", row = 57, n = 18},
+}
+SCREEN_OLD = MountSheetSyncSheet
+local copy = {}
+for k, v in pairs(MountSheetSyncSheet) do copy[k] = v end
+copy.mounts = SCREEN_MOUNTS
+MountSheetSyncSheet = copy""")
+tabs[2].MockClick(tabs[2]); g.RunTimers()
+check("«Попытки» with rows (for the picture): most expected drops first", ns.GetAttemptsList()[1].name == "Пламенное Крыло Алисразор", ns.GetAttemptsList()[1].name)
+dump_layout(win, os.path.join(LAYOUT_DIR, "layout_attempts.json"))
+L.execute("MountSheetSyncSheet = SCREEN_OLD")
+tabs[0].MockClick(tabs[0]); g.RunTimers()
 g.SlashCmdList["MOUNTSHEETSYNC"]("settings"); g.RunTimers()
 sf = g.MountSheetSyncSettingsFrame
 check("settings window opens for the screenshots", sf is not None and sf._shown)

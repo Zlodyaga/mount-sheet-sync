@@ -15,7 +15,7 @@
 | [decisions.md](decisions.md) | Принятые решения и ограничения (правила CurseForge/Blizzard, квоты Google и т. п.) |
 
 Картинки — в [docs/screens](../screens): `sheet.png`, `program-menu.png`, `program-settings.png`,
-`addon-log.png`, `addon-remaining.png`, `addon-settings.png` (их же использует README и страница CurseForge).
+`addon-log.png`, `addon-remaining.png`, `addon-all.png`, `addon-attempts.png`, `addon-settings.png` (их же использует README и страница CurseForge).
 
 ## Правила ведения
 

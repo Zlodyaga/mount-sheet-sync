@@ -30,6 +30,10 @@ Portuguese spreadsheets.
 | --- | --- | --- |
 | ![Remaining](docs/screens/addon-remaining.png) | ![All characters](docs/screens/addon-all.png) | ![Settings](docs/screens/addon-settings.png) |
 
+| Attempts | Kill log |
+| --- | --- |
+| ![Attempts](docs/screens/addon-attempts.png) | ![Kill log](docs/screens/addon-log.png) |
+
 The addon window (Russian game client, sample characters). Drawn from the addon's real layout — the same frames,
 sizes and texts it creates in the game — with `tools/screens/render.py`; the in-game look follows your UI.
 

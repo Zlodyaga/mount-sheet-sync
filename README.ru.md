@@ -24,6 +24,10 @@
 | --- | --- | --- |
 | ![Осталось](docs/screens/addon-remaining.png) | ![Все персонажи](docs/screens/addon-all.png) | ![Настройки](docs/screens/addon-settings.png) |
 
+| Попытки | Журнал убийств |
+| --- | --- |
+| ![Попытки](docs/screens/addon-attempts.png) | ![Журнал](docs/screens/addon-log.png) |
+
 Окно аддона (русский клиент, примерные персонажи). Нарисовано по настоящей разметке аддона — те же окна, размеры и
 тексты, что он создаёт в игре, — скриптом `tools/screens/render.py`; в игре окно выглядит в стиле вашего интерфейса.
 
