@@ -126,19 +126,51 @@ local function JournalButton(info)
   return b
 end
 
-local function OnEncounter(encounterID)
+-- Новые строки для значка: пустой список прячет значок (другой рейд или босс без маунтов — не старая подсказка).
+local function JournalShow(lines)
   local info = EncounterJournal and EncounterJournal.encounter and EncounterJournal.encounter.info
-  if not info or not EJ_GetEncounterInfo then
+  if not info then
     return
   end
-  local name = EJ_GetEncounterInfo(encounterID)
   journalInfo = info
-  journalLines = ns.BossHintLines(name, 6)
+  journalLines = lines
   if #journalLines == 0 and not journalButton then
     return
   end
   JournalButton(info)
   JournalRefresh()
+end
+
+local function OnEncounter(encounterID)
+  if not EJ_GetEncounterInfo then
+    return
+  end
+  JournalShow(ns.BossHintLines(EJ_GetEncounterInfo(encounterID), 6))
+end
+
+local MAX_INSTANCE_LINES = 24
+
+-- Страница рейда / подземелья (ещё до выбора босса): маунты всех его боссов, по боссу заголовком.
+local function OnInstance(instanceID)
+  local lines = {}
+  if EJ_GetEncounterInfoByIndex and instanceID then
+    local index = 1
+    while #lines < MAX_INSTANCE_LINES do
+      local name = EJ_GetEncounterInfoByIndex(index, instanceID)
+      if type(name) ~= "string" or Secret(name) or name == "" then
+        break
+      end
+      local boss = ns.BossHintLines(name, 6)
+      if #boss > 0 then
+        lines[#lines + 1] = "|cffffd100" .. name:gsub("|", "||") .. "|r"
+        for _, line in ipairs(boss) do
+          lines[#lines + 1] = line
+        end
+      end
+      index = index + 1
+    end
+  end
+  JournalShow(lines)
 end
 
 local function HookJournal()
@@ -149,6 +181,11 @@ local function HookJournal()
   hooksecurefunc("EncounterJournal_DisplayEncounter", function(encounterID)
     pcall(OnEncounter, encounterID)
   end)
+  if type(EncounterJournal_DisplayInstance) == "function" then
+    hooksecurefunc("EncounterJournal_DisplayInstance", function(instanceID)
+      pcall(OnInstance, instanceID)
+    end)
+  end
 end
 
 -- Атлас грузится по требованию: ждём его загрузки (или он уже загружен).

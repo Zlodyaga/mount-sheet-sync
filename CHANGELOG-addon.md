@@ -3,6 +3,8 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.0
+- Adventure Guide: the horseshoe icon is there already on the raid or dungeon page, before you pick a boss, with the
+  mounts of all its bosses; on a raid without such mounts it goes away instead of keeping the previous raid's hint.
 - New window. On the left — every character from the sheet in class colour with how much is left this week (a tick
   when everything is done); click one to see its “Remaining” list. The window now opens on “Remaining”.
 - “All characters” tab: what is still to kill this week across all characters, one line per boss, with who still

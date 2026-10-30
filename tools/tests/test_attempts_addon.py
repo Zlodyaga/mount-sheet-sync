@@ -108,6 +108,9 @@ def new_game(quiet=False):
     -- the Adventure Guide (load-on-demand)
     function EncounterJournal_DisplayEncounter(id) EJ_SHOWN = id end
     function EJ_GetEncounterInfo(id) if id == 2435 then return "Сильвана Ветрокрылая" end return "Кто-то" end
+    function EncounterJournal_DisplayInstance(id) EJ_INST = id end
+    EJ_BOSSES = { [1193] = { "Кто-то", "Сильвана Ветрокрылая" }, [999] = { "Кто-то", "Никто" } }
+    function EJ_GetEncounterInfoByIndex(i, inst) local b = EJ_BOSSES[inst]; return b and b[i] end
     MountSheetSyncDB = { version = 1, kills = {}, quiet = %s }
     """ % (NOW, "true" if quiet else "false"))
     EJ = L.eval("CreateFrame('Frame', nil, UIParent)")
@@ -200,6 +203,16 @@ buttons[0]._scripts.OnLeave(buttons[0])
 check("…and it hides again", not g.GameTooltip.shown)
 g.EncounterJournal_DisplayEncounter(1)
 check("…another boss: the icon is hidden", not buttons[0]._shown)
+g.EncounterJournal_DisplayInstance(1193)
+buttons[0]._scripts.OnEnter(buttons[0])
+gt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
+check("raid page (before any boss): the icon shows the mounts of all its bosses, by boss", g.EJ_INST == 1193 and buttons[0]._shown
+      and any("Сильвана Ветрокрылая" in t for t in gt) and any("Отмщение" in t for t in gt) and not any("Кто-то" in t for t in gt), gt)
+g.EncounterJournal_DisplayInstance(999)
+check("…another raid without such mounts: the icon goes away (no old hint left over)", not buttons[0]._shown)
+g.EncounterJournal_DisplayEncounter(2435)
+g.EncounterJournal_DisplayInstance(999)
+check("…also after a boss page with mounts", not buttons[0]._shown)
 
 # ---- hint cache (2.9.1): the answer is remembered per name, but a kill or a new mount shows at once
 Lc, gc, nsc, _, _ = new_game()
