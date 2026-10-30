@@ -48,27 +48,78 @@ end
 ---------------------------------------------------------------------------
 -- Подсказка юнита
 ---------------------------------------------------------------------------
-local function OnUnitTooltip(tooltip)
-  if not tooltip or not tooltip.GetUnit then
+-- /mss tip — в чат, почему подсказка о боссе появилась или нет (проверка в игре; не сохраняется).
+local function Debug(text)
+  if ns.tipDebug and DEFAULT_CHAT_FRAME then
+    DEFAULT_CHAT_FRAME:AddMessage("|cff33ff99Mount Sheet Sync|r tooltip: " .. text)
+  end
+end
+
+-- Обычная строка, которую можно сравнивать (не «секретная» и не пустая).
+local function Plain(v)
+  if v == nil or Secret(v) or type(v) ~= "string" or v == "" then
+    return nil
+  end
+  return v
+end
+
+local function OnUnitTooltip(tooltip, data)
+  if not tooltip then
     return
   end
-  local name, unit = tooltip:GetUnit()
-  if not unit or Secret(unit) or Secret(name) then
+  local name, unit
+  if tooltip.GetUnit then
+    name, unit = tooltip:GetUnit()
+  end
+  if Secret(unit) then
+    unit = nil
+  end
+  -- имя: из подсказки, из юнита или из первой строки данных подсказки — что игра отдаст не «секретным»
+  local candidates = { name }
+  if unit and UnitName then
+    candidates[#candidates + 1] = UnitName(unit)
+  end
+  local lines = type(data) == "table" and not Secret(data.lines) and data.lines
+  if type(lines) == "table" and type(lines[1]) == "table" then
+    candidates[#candidates + 1] = lines[1].leftText
+  end
+  local plain
+  for _, c in ipairs(candidates) do
+    plain = Plain(c)
+    if plain then
+      break
+    end
+  end
+  if not plain then
+    Debug("the game hides this name (secret value)")
     return
   end
-  local isPlayer = UnitIsPlayer and UnitIsPlayer(unit)
-  if Secret(isPlayer) or isPlayer then
+  if unit and UnitIsPlayer then
+    local isPlayer = UnitIsPlayer(unit)
+    if not Secret(isPlayer) and isPlayer then
+      return
+    end
+  end
+  local hint = ns.BossHintLines(plain)
+  if #hint == 0 then
+    local data0 = MountSheetSyncSheet
+    Debug(string.format("«%s» — no uncollected mount with a chance (list from the sheet: %s)", plain,
+      type(data0) == "table" and type(data0.mounts) == "table" and (#data0.mounts .. " rows") or "none"))
     return
   end
-  for _, line in ipairs(ns.BossHintLines(name)) do
+  Debug(string.format("«%s» — %d lines", plain, #hint))
+  for _, line in ipairs(hint) do
     tooltip:AddLine(line, 1, 1, 1, true)
   end
 end
 
 if TooltipDataProcessor and TooltipDataProcessor.AddTooltipPostCall and Enum and Enum.TooltipDataType
   and Enum.TooltipDataType.Unit then
-  TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, function(tooltip)
-    pcall(OnUnitTooltip, tooltip)
+  TooltipDataProcessor.AddTooltipPostCall(Enum.TooltipDataType.Unit, function(tooltip, data)
+    local ok, err = pcall(OnUnitTooltip, tooltip, data)
+    if not ok then
+      Debug("error: " .. tostring(err))
+    end
   end)
 end
 

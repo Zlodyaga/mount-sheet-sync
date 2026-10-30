@@ -840,6 +840,10 @@ SlashCmdList["MOUNTSHEETSYNC"] = function(msg)
     end
   elseif cmd == "help" or cmd == "?" then
     ShowHelp()
+  elseif cmd == "tip" then
+    -- проверка подсказки о боссе: пишет в чат, что видит аддон при наведении (до /reload)
+    ns.tipDebug = not ns.tipDebug
+    Print("tooltip check " .. (ns.tipDebug and "on — hover a boss" or "off"))
   elseif cmd == "sync" or cmd == "reload" then
     ns.SyncNow()
   elseif cmd == "left" or cmd == "осталось" then

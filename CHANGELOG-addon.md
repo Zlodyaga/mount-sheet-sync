@@ -3,6 +3,9 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.0
+- Boss tooltip in the world: the name is now also taken from the tooltip's own data when the game does not give it
+  directly, and a hidden “is it a player” no longer stops the hint (it did not show on Ultraxion). `/mss tip` writes
+  to chat what the addon sees when you hover a boss — to check it in the game.
 - Adventure Guide: the horseshoe icon is there already on the raid or dungeon page, before you pick a boss, with the
   mounts of all its bosses; on a raid without such mounts it goes away instead of keeping the previous raid's hint.
 - New window. On the left — every character from the sheet in class colour with how much is left this week (a tick
