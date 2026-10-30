@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 2.9.0 — подсказка о боссе
+Mount Sheet Sync 2.9.1 — подсказка о боссе
 ==========================================
 При наведении на босса — у скольких персонажей из таблицы он на этой неделе ещё не убит и по строке на
 несобранный маунт с него: сколько попыток и шанс за все попытки. В Атласе приключений — значок-подкова под
@@ -154,9 +154,15 @@ end
 -- Атлас грузится по требованию: ждём его загрузки (или он уже загружен).
 local watcher = CreateFrame("Frame")
 watcher:RegisterEvent("ADDON_LOADED")
-watcher:SetScript("OnEvent", function(_, _, name)
+watcher:SetScript("OnEvent", function(self, _, name)
   if name == "Blizzard_EncounterJournal" then
     pcall(HookJournal)
   end
+  if journalHooked then
+    self:UnregisterEvent("ADDON_LOADED")
+  end
 end)
 pcall(HookJournal)
+if journalHooked then
+  watcher:UnregisterEvent("ADDON_LOADED")
+end

@@ -2,6 +2,12 @@
 
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
+## 2.9.1
+- Lighter: the boss tooltip remembers its answer per boss until something changes (a kill, a new mount, the weekly
+  reset), so hovering a boss no longer re-reads the whole kill journal on every tooltip refresh (about 150× less work
+  in a test with real data). The mount journal read after login no longer stores the source text of every mount —
+  the program never used it, and it was half of the saved file — so that read takes about 5× less time.
+
 ## 2.9.0
 - Attempts from before the addon: at login the addon reads the game's kill statistics (Achievements → Statistics) of the
   bosses whose mounts the sheet counts; the program 2.9.0 adds them up over all characters and raises “Attempts” in

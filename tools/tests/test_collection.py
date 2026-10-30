@@ -126,13 +126,13 @@ toc = open(os.path.join(ADDON_DIR, "MountSheetSync.toc"), encoding="utf-8").read
 files = [ln.strip().replace("\\", "/") for ln in toc if ln.strip() and not ln.startswith("#")]
 check("Collection.lua in the toc after the core, before the window",
       files.index("MountSheetSync.lua") < files.index("Collection.lua") < files.index("UI.lua"), files)
-check("toc version 2.9.0", "## Version: 2.9.0" in toc)
+check("toc version 2.9.1", "## Version: 2.9.1" in toc)
 check("Statistics.lua (the statistic IDs) loads before Collection.lua", files.index("Statistics.lua") < files.index("Collection.lua"), files)
 ns = L.table()
 loader = L.eval("function(src, name) return assert(loadstring(src, '@' .. name)) end")
 for name in files:
     loader(open(os.path.join(ADDON_DIR, name), encoding="utf-8").read(), name)("MountSheetSync", ns)
-check("core version 2.9.0", ns.VERSION == "2.9.0")
+check("core version 2.9.1", ns.VERSION == "2.9.1")
 
 
 def chat_all():
@@ -166,11 +166,10 @@ check("counts: journal size and collected", col["journal"] == 7 and col["collect
 mounts = {d["id"]: d for d in col["mounts"]}
 check("whole journal exported once per mount, secret names skipped", sorted(mounts) == [6, 69, 363, 777, 1471], sorted(mounts))
 check("old drops list is not written any more", "drops" not in col, list(col))
-check("source text without colour codes", mounts[363]["from"] == "Добыча: Скади Безжалостный / Подземелье: Вершина Утгард / Сложность: Героический", mounts[363])
+check("no source texts stored (2.9.1: the program does not need them, they were half the file)", all("from" not in d for d in col["mounts"]), mounts[363])
 check("source type kept (1 = drop, vendor mount too)", mounts[363]["type"] == 1 and mounts[6]["type"] != 1 and mounts[6]["type"] is not None, (mounts[363], mounts[6]))
 check("collected flag only when collected", mounts[69].get("got") is True and mounts[363].get("got") is None, (mounts[69], mounts[363]))
 check("secret «collected» counts as not collected", mounts[777].get("got") is None and 777 not in col["ids"])
-check("vendor mount has its source too", mounts[6].get("from"), mounts[6])
 check("faction only for one-faction mounts (0 = Horde)", mounts[1471].get("faction") == 0 and "faction" not in mounts[6], (mounts[1471], mounts[6]))
 
 # kill statistics (2.9): read with the collection, per character

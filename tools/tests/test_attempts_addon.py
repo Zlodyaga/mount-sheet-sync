@@ -201,6 +201,23 @@ check("…and it hides again", not g.GameTooltip.shown)
 g.EncounterJournal_DisplayEncounter(1)
 check("…another boss: the icon is hidden", not buttons[0]._shown)
 
+# ---- hint cache (2.9.1): the answer is remembered per name, but a kill or a new mount shows at once
+Lc, gc, nsc, _, _ = new_game()
+def tipc():
+    gc.GameTooltip.lines = Lc.table()
+    gc.UNIT_POSTCALL(gc.GameTooltip)
+    return [str(gc.GameTooltip.lines[i]) for i in range(1, len(gc.GameTooltip.lines) + 1)]
+t1 = tipc()
+kill(Lc, gc, "Сильвана Ветрокрылая", 16, 2435)
+t2 = tipc()
+check("hint cache: after a kill the hint changes at once (36 → 37 attempts)",
+      any("попыток: 36" in t for t in t1) and any("попыток: 37" in t for t in t2), (t1, t2))
+Lc.execute('local f = C_MountJournal.GetMountInfoByID; C_MountJournal.GetMountInfoByID = function(id) '
+           'if id == 1471 then return "Отмщение", 351195, 1, false, true, 0, false, false, nil, false, true, id, false end return f(id) end')
+gc.Fire("NEW_MOUNT_ADDED", 1471)
+t3 = tipc()
+check("…and a mount just learned leaves the hint", not any("Отмщение" in t for t in t3), t3)
+
 # ---- quiet: no chat at all
 L2, g2, ns2, _, _ = new_game(quiet=True)
 out = kill(L2, g2, "Сильвана Ветрокрылая", 16, 2435)
@@ -277,7 +294,7 @@ rep = g.MountSheetSyncReportFrame
 boxes = [r for r in regs + [g.ALL_REGIONS[i] for i in range(len(regs) + 1, len(g.ALL_REGIONS) + 1)] if r._type == "EditBox" and r._multiline]
 text = str(boxes[0]._text) if boxes else ""
 check("report window: the text selected for Ctrl+C", rep is not None and rep._shown and boxes and boxes[0]._highlighted, text)
-check("…versions, program state and counts", "Mount Sheet Sync bug report" in text and "Addon: 2.9.0" in text and "Game: 12.1.5 (build 65000" in text
+check("…versions, program state and counts", "Mount Sheet Sync bug report" in text and "Addon: 2.9.1" in text and "Game: 12.1.5 (build 65000" in text
       and "Program: online (version 2.8.0, sheet connected" in text and "attempt rows 3" in text and "Journal: 4 records" in text, text)
 check("…no character names, realm or spreadsheet title", "Эйра" not in text and "Ревущий" not in text and "Мирна" not in text, text)
 boxes[0]._scripts.OnTextChanged(boxes[0], True)

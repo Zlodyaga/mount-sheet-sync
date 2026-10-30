@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 2.9.0 — персонажи и коллекция маунтов
+Mount Sheet Sync 2.9.1 — персонажи и коллекция маунтов
 ====================================================
 По этим данным программа Mount Sheet Sync строит новую Google-таблицу
 («Создать таблицу»): листы «Рейды <Имя>» / «Подземелья <Имя>» на каждого
@@ -15,9 +15,9 @@ Mount Sheet Sync 2.9.0 — персонажи и коллекция маунто
   collection = { updated, locale, journal, collected,
                  names  = { имена собранных маунтов },
                  ids    = { их mountID },
-                 mounts = { { id, name, type, from, got, faction }, … } }   -- весь журнал маунтов
-    type — sourceType из журнала (1 — добыча), from — источник без цветовых кодов,
-    faction — только у маунтов одной фракции: 0 — Орда, 1 — Альянс.
+                 mounts = { { id, name, type, got, faction }, … } }   -- весь журнал маунтов
+    type — sourceType из журнала (1 — добыча), faction — только у маунтов одной фракции: 0 — Орда, 1 — Альянс.
+    Текст источника (from) с 2.9.1 не пишем: программе он не нужен, а это была половина файла сохранений.
     По mountID программа узнаёт маунты таблицы, даже если имя в таблице другое.
 
 Статистика убийств (2.9): игра сама считает, сколько раз персонаж убил каждого босса (Достижения →
@@ -182,7 +182,6 @@ function ns.ScanCollection()
   end
   local names, got, mounts = {}, {}, {}
   local seen = {}
-  local extra = journal.GetMountInfoExtraByID
   for _, id in ipairs(ids) do
     id = Num(id)
     if id and not seen[id] then
@@ -195,19 +194,11 @@ function ns.ScanCollection()
           names[#names + 1] = name
           got[#got + 1] = id
         end
-        local from
-        if extra then
-          local okExtra, _, _, sourceText = pcall(extra, id)
-          if okExtra then
-            from = ns.CleanSource and ns.CleanSource(sourceText) or nil
-          end
-        end
         local side
         if not issecretvalue(isFactionSpecific) and isFactionSpecific == true then
           side = Num(faction)   -- 0 — Орда, 1 — Альянс
         end
-        mounts[#mounts + 1] = { id = id, name = name, type = Num(sourceType), from = from, got = collected or nil,
-                                faction = side }
+        mounts[#mounts + 1] = { id = id, name = name, type = Num(sourceType), got = collected or nil, faction = side }
       end
     end
   end

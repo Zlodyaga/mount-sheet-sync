@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 2.9.0 — «Осталось на этой неделе»
+Mount Sheet Sync 2.9.1 — «Осталось на этой неделе»
 ==================================================
 Список приходит из Google-таблицы: программа MountSheetSync.exe записывает его
 в SheetData.lua (глобальная MountSheetSyncSheet), а игра читает этот файл при
@@ -550,6 +550,17 @@ local function CharactersLeft(m, data, kills, known, weekEnd)
   return left
 end
 
+-- Подсказка юнита обновляется много раз, пока на НИП наведена мышь: ответ по имени запоминаем, пока не
+-- поменялись список из таблицы, журнал убийств, коллекция или неделя (иначе на каждый показ — проход по журналу).
+local hintCache, hintStamp = {}, {}
+local hintCount = 0
+
+local function SameStamp(data, kills, weekEnd, collected)
+  local last = kills[#kills]
+  return hintStamp.data == data and hintStamp.generated == data.generated and hintStamp.kills == #kills
+    and hintStamp.last == last and hintStamp.weekEnd == weekEnd and hintStamp.collected == collected
+end
+
 -- Подсказка о боссе по имени из игры (подсказка юнита, Атлас приключений):
 -- { { name, n, p, left } … } — несобранные маунты со счётчиком, которые с него падают.
 function ns.BossHint(bossName)
@@ -557,6 +568,28 @@ function ns.BossHint(bossName)
   if not data or type(bossName) ~= "string" or bossName == "" then
     return {}
   end
+  local db0 = ns.GetDB()
+  local kills0 = db0 and db0.kills or {}
+  local weekEnd0 = ns.WeekEnd and ns.WeekEnd()
+  local collected = db0 and type(db0.collection) == "table" and db0.collection.collected or nil
+  if not SameStamp(data, kills0, weekEnd0, collected) then
+    hintCache, hintCount = {}, 0
+    hintStamp = { data = data, generated = data.generated, kills = #kills0, last = kills0[#kills0], weekEnd = weekEnd0,
+                  collected = collected }
+  end
+  local cached = hintCache[bossName]
+  if cached then
+    return cached
+  end
+  local out = ns.BossHintNow(bossName, data)
+  if hintCount < 200 then   -- имён за неделю немного; на всякий случай не копим без конца
+    hintCache[bossName] = out
+    hintCount = hintCount + 1
+  end
+  return out
+end
+
+function ns.BossHintNow(bossName, data)
   local want = Prepare(Norm(bossName))
   local db = ns.GetDB()
   local kills = db and db.kills or {}

@@ -33,7 +33,7 @@ g = host(os.path.join(HERE, "sv_collection.lua"))
 check("file: two characters sorted by name", [c["name"] for c in g["chars"]] == ["Мирна", "Эйра"], g["chars"])
 check("file: collected names", g["mounts"] == sorted(["Гнедой конь", "Пепел Ал'ара", "Синий протодракон"]), g["mounts"])
 check("file: drops (sourceType 1) by id with source and collected flag", [d["id"] for d in g["drops"]] == [69, 363, 777, 1471]
-      and g["drops"][1]["got"] is True and g["drops"][3]["got"] is False and g["drops"][3]["from"].startswith("Добыча: Тюремщик"), g["drops"])
+      and g["drops"][1]["got"] is True and g["drops"][3]["got"] is False and g["drops"][3]["from"] == "", g["drops"])
 check("file: whole journal with types (vendor mount too)", [d["id"] for d in g["all"]] == [6, 69, 363, 777, 1471]
       and [d for d in g["all"] if d["id"] == 6][0]["type"] == 3, g["all"])
 check("file: collected mount ids", g["ids"] == [6, 69, 363], g["ids"])

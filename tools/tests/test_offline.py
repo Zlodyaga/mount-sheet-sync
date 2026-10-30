@@ -153,8 +153,8 @@ def prog(seen, version, addon=None):
     return 'MountSheetSyncProgram = { seen = %d, sheet = true, version = "%s"%s }\n' % (seen, version, ', addon = "%s"' % addon if addon else "")
 
 
-L, g, ns, _ = new_game(prog(NOW - 20, "2.9.4", addon="2.9.1"))
-check("program 2.9.4 needs addon ≥ 2.9.1 → oldaddon", ns.ProgramState() == "oldaddon" and not ns.ProgramOffline())
+L, g, ns, _ = new_game(prog(NOW - 20, "2.9.4", addon="2.99.0"))
+check("program 2.9.4 needs addon ≥ 2.99.0 → oldaddon", ns.ProgramState() == "oldaddon" and not ns.ProgramOffline())
 chat = first_kill_chat(L, g)
 check("…kills still go to the sheet: the usual hint after the first kill", any("В таблицу попадёт" in c for c in chat), chat)
 broker, hint, tip = window_bits(L, g)
