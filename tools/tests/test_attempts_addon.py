@@ -64,7 +64,7 @@ def to_lua(v):
 
 
 SHEET_SRC = "MountSheetSyncSheet = " + to_lua(status) + "\n"
-PROGRAM_SRC = 'MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.8.0" }\n' % (NOW - 30)
+PROGRAM_SRC = 'MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.9.1" }\n' % (NOW - 30)
 
 
 def new_game(quiet=False):
@@ -159,6 +159,9 @@ out = kill(L, g, "Сильвана Ветрокрылая", 15, 2435)
 check("Heroic kill: the Mythic-only mount could not drop — no attempt line", not any("мог выпасть" in c for c in out), out)
 out = kill(L, g, "Галеон", 0, 725, inst=("Долина Четырех Ветров", "none"))
 check("world boss Galleon: attempt 1 · 1% (the 0.01 from the sheet)", any("Сын Галеона" in c and "попытка 1 " in c and "1%" in c for c in out), out)
+out = kill(L, g, "Галлеон", 0, 1563, inst=("Долина Четырех Ветров", "none"))
+check("the game spells the boss otherwise («Галлеон»): the encounter ID from the list still finds it (attempt 2)",
+      any("Сын Галеона" in c and "попытка 2 " in c for c in out), out)
 check("no Lua errors", not any("Ошибка" in c or "error" in c.lower() for c in chat(g, 0)), chat(g, 0))
 
 # ---- the unit tooltip: only rares (3.0). Inside instances the game hides NPC names even before the pull, so raid and
@@ -352,8 +355,8 @@ rep = g.MountSheetSyncReportFrame
 boxes = [r for r in regs + [g.ALL_REGIONS[i] for i in range(len(regs) + 1, len(g.ALL_REGIONS) + 1)] if r._type == "EditBox" and r._multiline]
 text = str(boxes[0]._text) if boxes else ""
 check("report window: the text selected for Ctrl+C", rep is not None and rep._shown and boxes and boxes[0]._highlighted, text)
-check("…versions, program state and counts", "Mount Sheet Sync bug report" in text and "Addon: 3.0.1" in text and "Game: 12.1.5 (build 65000" in text
-      and "Program: online (version 2.8.0, sheet connected" in text and "attempt rows 3" in text and "Journal: 4 records" in text, text)
+check("…versions, program state and counts", "Mount Sheet Sync bug report" in text and "Addon: 3.0.2" in text and "Game: 12.1.5 (build 65000" in text
+      and "Program: online (version 2.9.1, sheet connected" in text and "attempt rows 3" in text and "Journal: 5 records" in text, text)
 check("…no character names, realm or spreadsheet title", "Эйра" not in text and "Ревущий" not in text and "Мирна" not in text, text)
 boxes[0]._scripts.OnTextChanged(boxes[0], True)
 check("…read-only: typing restores the text", str(boxes[0]._text) == text)

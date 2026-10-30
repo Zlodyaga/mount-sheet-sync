@@ -6,9 +6,9 @@ using System.Runtime.Versioning;
 [assembly: AssemblyTitle("Mount Sheet Sync")]
 [assembly: AssemblyDescription("Keeps a Google sheet of World of Warcraft mounts from the addon data: boss kills, new mounts, characters")]
 [assembly: AssemblyProduct("Mount Sheet Sync")]
-[assembly: AssemblyVersion("2.9.0.0")]
-[assembly: AssemblyFileVersion("2.9.0.0")]
-[assembly: AssemblyInformationalVersion("2.9.0")]
+[assembly: AssemblyVersion("2.9.1.0")]
+[assembly: AssemblyFileVersion("2.9.1.0")]
+[assembly: AssemblyInformationalVersion("2.9.1")]
 [assembly: NeutralResourcesLanguage("ru-RU")]
 [assembly: ComVisible(false)]
 

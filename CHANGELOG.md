@@ -2,6 +2,11 @@
 
 The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [CHANGELOG-addon.md](CHANGELOG-addon.md).
 
+## 2.9.1
+- The "Remaining" list and the attempt rows the program writes for the addon now carry the encounter IDs of each
+  boss, so the addon 3.0.2 recognises a kill even when the game spells the boss differently from the sheet.
+- The catalog spells Galleon as the Russian client does: «Галеон» (sheets made before keep «Галлеон»; both work).
+
 ## 2.9.0
 - Attempts made before you installed the addon now count too. The game keeps kill statistics for every character
   (Achievements → Statistics); the addon 2.9.0 reads them for the bosses of the sheet's random-drop mounts each time a

@@ -126,13 +126,13 @@ toc = open(os.path.join(ADDON_DIR, "MountSheetSync.toc"), encoding="utf-8").read
 files = [ln.strip().replace("\\", "/") for ln in toc if ln.strip() and not ln.startswith("#")]
 check("Collection.lua in the toc after the core, before the window",
       files.index("MountSheetSync.lua") < files.index("Collection.lua") < files.index("UI.lua"), files)
-check("toc version 3.0.1", "## Version: 3.0.1" in toc)
+check("toc version 3.0.2", "## Version: 3.0.2" in toc)
 check("Statistics.lua (the statistic IDs) loads before Collection.lua", files.index("Statistics.lua") < files.index("Collection.lua"), files)
 ns = L.table()
 loader = L.eval("function(src, name) return assert(loadstring(src, '@' .. name)) end")
 for name in files:
     loader(open(os.path.join(ADDON_DIR, name), encoding="utf-8").read(), name)("MountSheetSync", ns)
-check("core version 3.0.1", ns.VERSION == "3.0.1")
+check("core version 3.0.2", ns.VERSION == "3.0.2")
 
 
 def chat_all():

@@ -108,7 +108,9 @@ namespace MountSheetSync
             "The Darkness", "Тьма",
             // Мировые боссы
             "Sha of Anger", "Ша Злости",
-            "Galleon", "Галлеон",
+            "Galleon", "Галеон",
+            "Галеон", "Галлеон",   // так босс был записан в каталоге до 2.9.1 (игра пишет «Галеон»)
+            "Галлеон", "Галеон",
             "Oondasta", "Ундаста",
             "Nalak", "Налак",
             "Rukhmar", "Рухмар");
@@ -1372,6 +1374,12 @@ namespace MountSheetSync
             item["row"] = (double)(r + 1);
             item["names"] = Unique(names.Where(n => n.Length > 0)).Cast<object>().ToList();
             item["d"] = DifficultyIds(diff);
+            // номера боёв: аддон узнаёт убийство по encounterID, даже если игра пишет имя иначе («Галеон» / «Галлеон»)
+            List<long> encounters = Encounters.IdsFor(names);
+            if (encounters.Count > 0)
+            {
+                item["e"] = encounters.Select(e => (object)(double)e).ToList();
+            }
             if (yes)
             {
                 item["y"] = true;

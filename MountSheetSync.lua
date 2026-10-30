@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.1 — ядро
+Mount Sheet Sync 3.0.2 — ядро
 =============================
 Записывает убийства боссов на текущем персонаже и новые маунты, чтобы программа
 Mount Sheet Sync (MountSheetSync.exe в трее Windows) отметила их в Google-таблице маунтов:
@@ -26,7 +26,7 @@ SavedVariables. Игра сохраняет файл
 
 local ADDON_NAME, ns = ...
 
-local VERSION = "3.0.1"
+local VERSION = "3.0.2"
 local MAX_RECORDS = 400               -- храним не больше стольких записей
 local MAX_AGE = 21 * 24 * 60 * 60     -- и не старше трёх недель
 local DUPLICATE_WINDOW = 120          -- ENCOUNTER_END и BOSS_KILL об одном бое, сек
@@ -70,7 +70,7 @@ ns.ISSUES_URL = "https://github.com/Zlodyaga/mount-sheet-sync/issues"
 --   "oldaddon" / "oldprogram" — программа работает, но ей нужен аддон новее (MountSheetSyncProgram.addon) или
 --   аддону — программа новее (MIN_PROGRAM): у программы и аддона свои выпуски, они могут разойтись.
 local PROGRAM_FRESH = 150   -- секунд: программа пишет раз в минуту, с запасом на паузу
-local MIN_PROGRAM = "2.8.0"  -- с какой версии программы аддону хватает всего, что он умеет
+local MIN_PROGRAM = "2.9.1"  -- с какой версии программы аддону хватает всего, что он умеет
 local loadedAt = time()
 local programState
 

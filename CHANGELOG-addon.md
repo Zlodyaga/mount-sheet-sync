@@ -2,6 +2,11 @@
 
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
+## 3.0.2
+- Kills are now recognised by the game's encounter ID from the sheet's list, not only by the boss name: the game
+  calls Galleon «Галеон» while the sheet said «Галлеон», so in the Russian client the attempt line in chat did not show
+  (the sheet counted it). Needs the program 2.9.1 — the window says so while an older one runs.
+
 ## 3.0.1
 - The separator dot “·” and the arrow “→” showed as a box in the Russian game client (its font has no such glyphs):
   they are now a plain “-” and “>”.

@@ -330,7 +330,7 @@ try:
     code, out = run("--once")
     book = state()["spreadsheets"][book["id"]]
     world = sheet_cells(book, "Мировые боссы")
-    r = find_row(world, 4, "Галлеон")
+    r = find_row(world, 4, "Галеон")
     check("after signing in again the pending world boss kill is sent (Эйра' checkbox)", code == 0 and r is not None
           and world[r].get(13) is True and world[r].get(12) is False, (out[-800:], world.get(r)))
 finally:

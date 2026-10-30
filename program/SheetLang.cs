@@ -753,6 +753,26 @@ namespace MountSheetSync
         }
 
         /// <summary>Все имена боёв, одно из имён которых — tableName (для списка «Осталось» в аддоне).</summary>
+        /// <summary>Номера боёв (dungeonEncounterID), одно из имён которых — одно из этих (сравнение через Norm).</summary>
+        public static List<long> IdsFor(IEnumerable<string> names)
+        {
+            HashSet<string> want = new HashSet<string>(names.Select(n => SheetLogic.Norm(n)).Where(n => n.Length > 0));
+            List<long> ids = new List<long>();
+            if (want.Count == 0)
+            {
+                return ids;
+            }
+            foreach (KeyValuePair<long, List<string>> kv in Current().Names)
+            {
+                if (kv.Value.Any(n => want.Contains(SheetLogic.Norm(n))) && !ids.Contains(kv.Key))
+                {
+                    ids.Add(kv.Key);
+                }
+            }
+            ids.Sort();
+            return ids;
+        }
+
         public static List<string> RelatedNames(string tableName)
         {
             List<string> result = new List<string>();

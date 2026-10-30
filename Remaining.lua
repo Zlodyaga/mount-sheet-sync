@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.1 — «Осталось на этой неделе»
+Mount Sheet Sync 3.0.2 — «Осталось на этой неделе»
 ==================================================
 Список приходит из Google-таблицы: программа MountSheetSync.exe записывает его
 в SheetData.lua (глобальная MountSheetSyncSheet), а игра читает этот файл при
@@ -222,8 +222,18 @@ local function Fits(item, rec, recName, known)
   end
   local manual = rec.kind == "manual"
   local named = false
+  -- номер боя из игры (ENCOUNTER_END / BOSS_KILL) — надёжнее имени: Blizzard пишет имена по-разному («Галеон» / «Галлеон»)
+  local enc = tonumber(rec.encounterID)
+  if enc and type(item.e) == "table" then
+    for i = 1, #item.e do
+      if tonumber(item.e[i]) == enc then
+        named = true
+        break
+      end
+    end
+  end
   local names = type(item.names) == "table" and item.names or {}
-  for i = 1, #names do
+  for i = 1, not named and #names or 0 do
     if MatchPrepared(recName, Prepare(names[i]), manual) then
       named = true
       break

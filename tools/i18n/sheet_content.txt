@@ -1069,7 +1069,7 @@ en: A new Midnight recolor from the Timelost Saddle pool.
 @ Ша Злости
 en: Sha of Anger
 
-@ Галлеон
+@ Галеон
 en: Galleon
 
 @ Ундаста

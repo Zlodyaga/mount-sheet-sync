@@ -337,14 +337,14 @@ try:
     book = state()["spreadsheets"][[i for i in state()["spreadsheets"] if i not in before][0]]
     check("ru: default language is the program's: Russian sheets", code == 0 and book["sheets"][0]["title"] == "Рейды"
           and book["title"] == "Маунты WoW" and book["locale"] == "ru_RU", (out[-600:], book["title"]))
-    # the game says «Галеон», the catalog «Галлеон»: the encounter ID decides
-    kills3.append(kill("W-1", "Эйра", "Ревущий фьорд", "Галеон", 1563, "Пандария", diff=0, kind="world"))
+    # the game says «Галеон»; an older sheet (and the record here) says «Галлеон»: the encounter ID decides
+    kills3.append(kill("W-1", "Эйра", "Ревущий фьорд", "Галлеон", 1563, "Пандария", diff=0, kind="world"))
     ru.write_sv(db3)
     code, out = ru.run("--once")
     book = state()["spreadsheets"][book["id"]]
     world = sheet_cells(book, "Мировые боссы")
-    r = find_row(world, 4, "Галлеон")
-    check("ru: «Галеон» from the game ticks «Галлеон» (encounter 1563)", code == 0 and r is not None and world[r].get(12) is True,
+    r = find_row(world, 4, "Галеон")
+    check("ru: «Галеон» from the game ticks its row (encounter 1563)", code == 0 and r is not None and world[r].get(12) is True,
           (world.get(r), out[-800:]))
 finally:
     mock.terminate()

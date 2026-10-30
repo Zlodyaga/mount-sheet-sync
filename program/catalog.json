@@ -165,7 +165,7 @@
     ]},
     {"sheet": "Мировые боссы", "key": "world", "columns": ["Аддон", "Локация", "Маунт", "Босс / достижение / сундук", "Сброс / частота", "Совет по фарму", "Шанс выпадения", "Источник", "ID в игре", "ID босса", "ID в журнале", "ID места", "ID статистики"], "rows": [
       ["Mists of Pandaria", "Kun-Lai Summit", "Небесный ониксовый облачный змей", "Ша Злости", "Еженедельно", "Респ 15 минут", 0.01, "https://www.warcraftmounts.com/loot.php", 473, "1564", "691", "", "6989"],
-      ["Mists of Pandaria", "Valley of the Four Winds", "Сын Галеона", "Галлеон", "Еженедельно", "Респ 15 минут", 0.01, "https://www.warcraftmounts.com/loot.php", 515, "1563", "725", "", "6990"],
+      ["Mists of Pandaria", "Valley of the Four Winds", "Сын Галеона", "Галеон", "Еженедельно", "Респ 15 минут", 0.01, "https://www.warcraftmounts.com/loot.php", 515, "1563", "725", "", "6990"],
       ["Mists of Pandaria", "Isle of Giants", "Кобальтовый доисторический дикорог", "Ундаста", "Еженедельно", "Респ 15 минут", 0.01, "https://www.warcraftmounts.com/loot.php", 533, "1587", "826", "", "8147"],
       ["Mists of Pandaria", "Isle of Thunder", "Грозовой кобальтовый облачный змей", "Налак", "Еженедельно", "Респ 15 минут", 0.01, "https://www.warcraftmounts.com/loot.php", 542, "1571", "814", "", "8146"],
       ["Warlords of Draenor", "Spires of Arak", "Солнечный ястреб пиков", "Рухмар", "Еженедельно", "Респ 15 минут", 0.01, "https://www.warcraftmounts.com/loot.php", 634, "", "1262", "", "9279"],
