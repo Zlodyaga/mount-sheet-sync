@@ -214,15 +214,31 @@ def button(text):
     return bs[0]
 
 
+def list_rows():
+    """Texts of the main list (ScrollBox with 16 px rows), top to bottom."""
+    box = [r for r in regions("Frame") if r._template == "WowScrollBoxList" and under_window(r) and r._view._extent == 16][0]
+    return [str(box._pool[i].text._text) for i in range(1, len(box._pool) + 1) if box._pool[i]._shown]
+
+
+def settings_part(kind, text):
+    sf = g.MountSheetSyncSettingsFrame
+    found = [r for r in regions(kind) if r._parent is not None and r._parent._uid == sf._uid
+             and str(r.Text._text if kind == "CheckButton" else r._text) == text]
+    assert len(found) == 1, (text, len(found))
+    return found[0]
+
+
 fontstrings = [r for r in regions("FontString") if under_window(r)]
 texts = [str(r._text) for r in fontstrings if r._text]
 check("header: character and realm", "Эйра — Ревущий фьорд" in texts)
 check("header: this week count and time to reset", any(t.startswith("Записей за эту неделю: ") and "до сброса недели: 2 д 23 ч" in t for t in texts))
-rows = [r for r in fontstrings if r._text and r._font == "GameFontHighlightSmall"]
-shown_rows = [r for r in rows if r._shown]
-check("one row per record", len(shown_rows) == len(kills()))
-check("newest record first", "Злой босс x Конец" in str(shown_rows[0]._text))
-check("rows are colored by kind", "|cff8cff8c" in str([r for r in shown_rows if "Галлеон" in str(r._text)][0]._text))
+check("3.0: the window opens on «Осталось»", win.selectedTab == 1 and g.MountSheetSyncDB.tab is None)
+click(button("Журнал"))
+check("journal tab remembered", win.selectedTab == 4 and g.MountSheetSyncDB.tab == "log")
+rows = list_rows()
+check("one row per record", len(rows) == len(kills()))
+check("newest record first", "Злой босс x Конец" in rows[0])
+check("rows are colored by kind", "|cff8cff8c" in [t for t in rows if "Галлеон" in t][0])
 
 # manual add from the window
 edit = [r for r in regions("EditBox") if under_window(r) and r._maxLetters == 60][0]   # «Отметить вручную»
@@ -232,8 +248,7 @@ cnt = len(kills())
 click(button("Отметить"))
 check("«Отметить» adds a manual record and clears the field", len(kills()) == cnt + 1 and kills()[-1]["kind"] == "manual"
       and kills()[-1]["boss"] == "Ша Злости" and edit._text == "")
-check("list refreshed after adding", "Ша Злости" in str([r for r in rows if r._shown][0]._text) or
-      "Ша Злости" in str([r for r in regions("FontString") if r._shown and r._font == "GameFontHighlightSmall"][0]._text))
+check("list refreshed after adding", "Ша Злости" in list_rows()[0], list_rows()[:2])
 edit._text = ""
 click(button("Отметить"))
 check("empty manual name -> hint, nothing added", len(kills()) == cnt + 1 and "Укажите имя босса" in chat()[0])
@@ -248,17 +263,24 @@ check("«Найти в сохранениях» requests raid info", g.REQ == re
 g.Fire("UPDATE_INSTANCE_INFO"); g.RunTimers()
 check("…and reports the result", "сохранениях" in chat()[0] or "сохранений" in chat()[0])
 
-quiet = [r for r in regions("CheckButton") if under_window(r)][0]
-check("quiet checkbox label", str(quiet.Text._text) == "Не писать в чат")
+check("3.0: no checkboxes and no «Очистить журнал» in the window (rare things live in the settings)",
+      not [r for r in regions("CheckButton") if under_window(r)]
+      and not [r for r in regions("Button") if r._text == "Очистить журнал" and under_window(r)])
+gear = [r for r in regions("Button") if under_window(r) and r._highlight == "Interface\\Buttons\\ButtonHilight-Square"]
+check("one gear button in the window", len(gear) == 1)
+click(gear[0])
+check("…it opens the settings", g.MountSheetSyncSettingsFrame is not None and g.MountSheetSyncSettingsFrame._shown)
+quiet = settings_part("CheckButton", "Не писать в чат")
 click(quiet)
-check("checkbox turns quiet on", g.MountSheetSyncDB.quiet is True)
+check("settings checkbox turns quiet on", g.MountSheetSyncDB.quiet is True)
 click(quiet)
-check("checkbox turns quiet off", g.MountSheetSyncDB.quiet is None)
+check("settings checkbox turns quiet off", g.MountSheetSyncDB.quiet is None)
 
-# clear (with confirmation)
+# clear (with confirmation) — from the settings
 popups_before = len(g.POPUPS)
-click(button("Очистить журнал"))
+click(settings_part("Button", "Очистить журнал"))
 check("«Очистить журнал» asks first", len(g.POPUPS) == popups_before + 1 and len(kills()) > 0)
+g.MountSheetSyncSettingsFrame.Hide(g.MountSheetSyncSettingsFrame)
 saved_kills = kills()
 
 # reset week (with confirmation) -> record + reload
@@ -272,8 +294,7 @@ g.RunTimers()
 r = kills()[-1]
 check("confirm -> reset record + reload", r["kind"] == "reset" and r["id"].startswith("R-") and r["char"] == "Эйра"
       and abs(r["weekEnd"] - (NOW + UNTIL_RESET)) <= 300 and g.RELOADED is True)
-first_row = [x for x in regions("FontString") if x._shown and x._font == "GameFontHighlightSmall" and under_window(x)][0]
-check("reset shown in the list", "— Сброс недели —" in str(first_row._text))
+check("reset shown in the list", "— Сброс недели —" in list_rows()[0], list_rows()[:1])
 check("reset is not counted as a kill this week", int([t for t in [str(x._text) for x in fontstrings] if t.startswith("Записей за эту неделю")][0].split(":")[1].split()[0]) >= 0)
 
 g.RELOADED = False

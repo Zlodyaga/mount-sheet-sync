@@ -283,8 +283,28 @@ ns3.ApplyLanguage()
 out = kill(L3, g3, "Сильвана Ветрокрылая", 16, 2435)
 check("English: «… could drop: attempt 37 · chance over all attempts 31%»", any("could drop: attempt 37" in c and "31%" in c for c in out), out)
 
-# ---- bug report in the settings (right click)
+# ---- 3.0: «Попытки» tab in the window
 obj = L.eval('(LibStub("LibDataBroker-1.1"))').GetDataObjectByName(L.eval('(LibStub("LibDataBroker-1.1"))'), "MountSheetSync")
+obj.OnClick(g.UIParent, "LeftButton")
+regs = [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
+tab = [r for r in regs if r._type == "Button" and r._template == "PanelTopTabButtonTemplate" and str(r._text) == "Попытки"][0]
+tab.MockClick(tab)
+g.RunTimers()
+regs = [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
+box = [r for r in regs if r._type == "Frame" and r._template == "WowScrollBoxList" and r._view._extent == 16][0]
+rows = [box._pool[i] for i in range(1, len(box._pool) + 1) if box._pool[i]._shown]
+texts = [str(f.text._text) for f in rows]
+att = ns.GetAttemptsList()
+check("«Попытки»: head line, then uncollected mounts, most expected drops first",
+      texts[0] == "|cff8c8c8cНесобранные маунты со случайным шансом: %d · выше — больше ожидаемых выпадений|r" % len(att)
+      and texts[1].startswith("   |cffc9a0ffОтмщение|r") and texts[1].endswith("попыток: 38, шанс 32%") and len(texts) == len(att) + 1, texts)
+rows[1]._scripts.OnEnter(rows[1])
+tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
+check("…hover: how many characters can still try this week", tt[0] == "Отмщение" and any("ещё не убит у персонажей: 1" in t for t in tt), tt)
+check("…the same numbers as the boss tooltip (one count for both)", att[1].n == 38 and att[1].left == 1)
+g.MountSheetSyncFrame.Hide(g.MountSheetSyncFrame)
+
+# ---- bug report in the settings (right click)
 obj.OnClick(g.UIParent, "RightButton")
 regs = [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
 btn = [r for r in regs if r._type == "Button" and str(r._text or "") == "Сведения для отчёта об ошибке…"]
@@ -294,7 +314,7 @@ rep = g.MountSheetSyncReportFrame
 boxes = [r for r in regs + [g.ALL_REGIONS[i] for i in range(len(regs) + 1, len(g.ALL_REGIONS) + 1)] if r._type == "EditBox" and r._multiline]
 text = str(boxes[0]._text) if boxes else ""
 check("report window: the text selected for Ctrl+C", rep is not None and rep._shown and boxes and boxes[0]._highlighted, text)
-check("…versions, program state and counts", "Mount Sheet Sync bug report" in text and "Addon: 2.9.1" in text and "Game: 12.1.5 (build 65000" in text
+check("…versions, program state and counts", "Mount Sheet Sync bug report" in text and "Addon: 3.0.0" in text and "Game: 12.1.5 (build 65000" in text
       and "Program: online (version 2.8.0, sheet connected" in text and "attempt rows 3" in text and "Journal: 4 records" in text, text)
 check("…no character names, realm or spreadsheet title", "Эйра" not in text and "Ревущий" not in text and "Мирна" not in text, text)
 boxes[0]._scripts.OnTextChanged(boxes[0], True)

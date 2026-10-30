@@ -128,6 +128,11 @@ function Region:CreateTexture(name, layer)
 end
 function Region:SetTexture(t) self._texture = t end
 function Region:SetTexCoord(...) self._texcoord = { ... } end
+function Region:SetAllPoints(rel) self._points = { { point = "ALL", rel = rel or self._parent, relPoint = "ALL", x = 0, y = 0 } } end
+function Region:SetColorTexture(r, g, b, a)
+  assert(self._type == "Texture", "mock: SetColorTexture on " .. tostring(self._type))
+  self._color = { r, g, b, a }
+end
 function Region:GetCenter() if self._center then return self._center[1], self._center[2] end return nil end
 function Region:GetEffectiveScale() return self._scale or 1 end
 -- test helpers (not WoW API)
@@ -169,10 +174,61 @@ local TEMPLATE_SETUP = {
     bar:SetWidth(16); bar:SetPoint("TOPLEFT", s, "TOPRIGHT", 6, -16); bar:SetPoint("BOTTOMLEFT", s, "BOTTOMRIGHT", 6, 16)
     s._keys.ScrollBar = bar
   end,
+  -- Blizzard_SharedXML ScrollBox (12.1.5), simplified: SetDataProvider hides the frames and calls the view's
+  -- initializer for every element on a pooled frame (the game does it only for the visible ones). _pool holds the
+  -- frames in element order, _inits counts initializer calls (tests check that nothing is rebuilt needlessly).
+  WowScrollBoxList = function(box)
+    box._pool, box._inits, box._vscroll = {}, 0, 0
+    box._keys.SetDataProvider = function(self, dp, retain)
+      local view = assert(rawget(self, "_view"), "mock: ScrollBox without a view (ScrollUtil.InitScrollBoxListWithScrollBar)")
+      assert(type(dp) == "table" and dp._items, "mock: SetDataProvider(CreateDataProvider(list))")
+      if not retain then self._vscroll = 0 end
+      for _, f in ipairs(self._pool) do f:Hide() end
+      for i, elem in ipairs(dp._items) do
+        local f = self._pool[i]
+        if not f then
+          f = CreateFrame(view._frameType, nil, self)
+          self._pool[i] = f
+        end
+        f:ClearAllPoints()
+        f:SetPoint("TOPLEFT", self, "TOPLEFT", 0, -(i - 1) * view._extent)
+        f:SetPoint("RIGHT", self, "RIGHT", 0, 0)
+        f:Show()
+        view._init(f, elem)
+        self._inits = self._inits + 1
+      end
+      self._data = dp._items
+    end
+    box._keys.ScrollToBegin = function(self) self._vscroll = 0 end
+  end,
+  MinimalScrollBar = function(bar) bar:SetWidth(8) end,
 }
 local KNOWN_TEMPLATES = { BackdropTemplate = true, DefaultPanelTemplate = true, UIPanelButtonTemplate = true,
   UIPanelCloseButtonDefaultAnchors = true, UICheckButtonTemplate = true, InputBoxTemplate = true,
-  UIPanelScrollFrameTemplate = true, InsetFrameTemplate = true, PanelTopTabButtonTemplate = true }
+  UIPanelScrollFrameTemplate = true, InsetFrameTemplate = true, PanelTopTabButtonTemplate = true,
+  WowScrollBoxList = true, MinimalScrollBar = true }
+
+function CreateScrollBoxListLinearView()
+  local view = {}
+  function view:SetElementExtent(e) assert(type(e) == "number", "mock: SetElementExtent(height)"); self._extent = e end
+  function view:SetElementInitializer(frameType, init)
+    assert(type(frameType) == "string" and type(init) == "function", "mock: SetElementInitializer(frameTypeOrTemplate, initializer)")
+    self._frameType, self._init = frameType, init
+  end
+  return view
+end
+function CreateDataProvider(list) return { _items = list or {} } end
+ScrollBoxConstants = { RetainScrollPosition = true, DiscardScrollPosition = false }
+ScrollUtil = {}
+function ScrollUtil.InitScrollBoxListWithScrollBar(box, bar, view)
+  assert(box._template == "WowScrollBoxList" and bar._template == "MinimalScrollBar", "mock: InitScrollBoxListWithScrollBar(box, bar, view)")
+  assert(view._extent and view._init, "mock: the view needs an extent and an initializer first")
+  box._view, box._bar = view, bar
+end
+function ScrollUtil.AddManagedScrollBarVisibilityBehavior(box, bar)
+  assert(box._template == "WowScrollBoxList" and bar._template == "MinimalScrollBar")
+  box._managedBar = true
+end
 
 -- Blizzard_SharedXML/Mainline/SharedUIPanelTemplates.lua (12.1.5), simplified
 function PanelTemplates_SetNumTabs(frame, n)
