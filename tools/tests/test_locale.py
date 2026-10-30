@@ -90,6 +90,13 @@ for code in langs:
     check("%s: all %d texts, same %%s/%%d in the same order" % (code, len(keys)), not missing and not extra and not bad,
           (missing, extra, bad))
 
+# a key written twice in one language: Lua keeps the last one silently (3.0 nearly lost the /mss chars title this way)
+src = open(os.path.join(paths.ADDON_DIR, "Locales.lua"), encoding="utf-8").read()
+for block in re.findall(r"^T\.(\w+) = \{\n(.*?)^\}", src, re.S | re.M):
+    names = re.findall(r"^  (\w+) = ", block[1], re.M)
+    dups = sorted({k for k in names if names.count(k) > 1})
+    check("%s: no key written twice in Locales.lua" % block[0], not dups, dups)
+
 # ---------------------------------------------------------------- 2. language picked from the game client
 for locale, want, sample in [("ruRU", "ruRU", "открыть окно"), ("deDE", "deDE", "Fenster öffnen"),
                              ("frFR", "frFR", "ouvrir la fenêtre"), ("esMX", "esES", "abrir la ventana"),
@@ -106,7 +113,7 @@ L, g, ns = new_game("deDE")
 g.SlashCmdList["MOUNTSHEETSYNC"]("")
 texts = window_texts(g)
 check("German window: buttons, tab, hint", {"An Tabelle senden", "In Sperren suchen", "Protokoll", "Von Hand markieren:",
-                                           "Keine Chatnachrichten"} <= texts, sorted(t for t in texts if len(t) < 40))
+                                           "Alle Charaktere", "Versuche"} <= texts, sorted(t for t in texts if len(t) < 40))
 check("…no Russian left in the window", not any(re.search("[А-Яа-яЁё]", t) for t in texts if "Eira" not in t),
       [t for t in texts if re.search("[А-Яа-яЁё]", t)])
 obj = L.eval("LibStub('LibDataBroker-1.1'):GetDataObjectByName('MountSheetSync')")

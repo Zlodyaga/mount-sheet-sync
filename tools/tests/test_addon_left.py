@@ -6,6 +6,7 @@ Usage: test_addon_left.py [<SheetData.lua written by the exe>] [<layout out json
 """
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -53,7 +54,7 @@ def sheet_lua(v):
 if SHEET_FILE:
     sheet_src = open(SHEET_FILE, encoding="utf-8").read()
 else:
-    subprocess.run(["python3", os.path.join(HERE, "make_fixture.py"), os.path.join(HERE, "wb_left.json"), "real"], check=True)
+    subprocess.run([sys.executable, os.path.join(HERE, "make_fixture.py"), os.path.join(HERE, "wb_left.json"), "real"], check=True)
     subprocess.run(["node", os.path.join(HERE, "dump_status.js"), os.path.join(HERE, "wb_left.json"), os.path.join(HERE, "status_left.json")], check=True)
     status = json.load(open(os.path.join(HERE, "status_left.json"), encoding="utf-8"))
     sheet_src = "MountSheetSyncSheet = " + sheet_lua(status) + "\n"
@@ -100,7 +101,16 @@ C_MountJournal = {
   end,
 }
 function Advance(sec) MOCK.now = MOCK.now + sec; MOCK.gt = MOCK.gt + sec; MOCK.untilReset = MOCK.untilReset - sec end
-MountSheetSyncDB = { version = 1, kills = {} }
+-- characters that logged in on this account before (class for the colours on the left, GUID for their own kills)
+MountSheetSyncDB = { version = 1, kills = {}, chars = {
+  ["Эйра-Ревущий фьорд"] = { name = "Эйра", realm = "Ревущий фьорд", classFile = "HUNTER" },
+  ["Элтара-Ревущий фьорд"] = { name = "Элтара", realm = "Ревущий фьорд", classFile = "MAGE", guid = "Player-1602-0E1715" },
+  ["Мирна-Ревущий фьорд"] = { name = "Мирна", realm = "Ревущий фьорд", classFile = "PRIEST" },
+  ["Каэлия-Ревущий фьорд"] = { name = "Каэлия", realm = "Ревущий фьорд", classFile = "WARLOCK" },
+  ["Эллин-Ревущий фьорд"] = { name = "Эллин", realm = "Ревущий фьорд", classFile = "PALADIN" },
+} }
+RAID_CLASS_COLORS = { HUNTER = { colorStr = "ffaad372" }, MAGE = { colorStr = "ff3fc7eb" }, PRIEST = { colorStr = "ffffffff" },
+                      WARLOCK = { colorStr = "ff8788ee" }, PALADIN = { colorStr = "fff48cba" } }
 """ % (NOW, UNTIL_RESET))
 g = L.globals()
 
@@ -197,18 +207,37 @@ def under_window(x):
 
 
 tabs = [x for x in regions("Button") if x._template == "PanelTopTabButtonTemplate"]
-check("two Blizzard top tabs above the list", len(tabs) == 2 and [str(t._text) for t in tabs] == ["Журнал", "Осталось (24)"], [str(t._text) for t in tabs])
-check("journal tab selected by default", win.selectedTab == 1 and not tabs[0].IsEnabled(tabs[0]) and tabs[1].IsEnabled(tabs[1]))
+check("four Blizzard top tabs above the list", [str(t._text) for t in tabs] == ["Осталось (24)", "Все персонажи", "Попытки", "Журнал"],
+      [str(t._text) for t in tabs])
+check("3.0: «Осталось» selected by default", win.selectedTab == 1 and not tabs[0].IsEnabled(tabs[0]) and tabs[3].IsEnabled(tabs[3]))
+
+
+def boxes(extent):
+    """ScrollBox lists of the window: 16 px rows — the main list, 20 px — the characters on the left."""
+    return [x for x in regions("Frame") if x._template == "WowScrollBoxList" and under_window(x) and x._view._extent == extent]
+
+
+def pool(extent):
+    box = boxes(extent)[0]
+    return [box._pool[i] for i in range(1, len(box._pool) + 1) if box._pool[i]._shown]
 
 
 def shown_rows():
-    rows = [x for x in regions("FontString") if x._font == "GameFontHighlightSmall" and x._shown and under_window(x)]
-    rows.sort(key=lambda x: -x._points[1].y)
-    return [str(x._text) for x in rows]
+    return [str(f.text._text) for f in pool(16)]
 
 
+def plain(text):
+    return re.sub(r"\|c[0-9a-fA-F]{8}|\|r", "", str(text))
+
+
+def char_rows():
+    return [(plain(f.name._text), str(f.count._text), bool(f.sel._shown)) for f in pool(20)]
+
+
+check("two ScrollBox lists with a scroll bar each", len(boxes(16)) == 1 and len(boxes(20)) == 1 and boxes(16)[0]._managedBar)
+tabs[3].MockClick(tabs[3]); g.RunTimers()
 check("journal tab shows the journal", any("Тюремщик" in t for t in shown_rows()) and not any("Осталось" in t for t in shown_rows()))
-tabs[1].MockClick(tabs[1]); g.RunTimers()
+tabs[0].MockClick(tabs[0]); g.RunTimers()
 rows = shown_rows()
 check("«Осталось» tab: info line first", rows[0].startswith("|cff8c8c8cОсталось 24 из 36 · список из таблицы сегодня в "), rows[0])
 check("no reset this week known: orange reminder under it", rows[1] == "|cffff9a4dНа этой неделе «Сброс недели» не нажимали — в таблице могут быть «Да» прошлой недели.|r", rows[1])
@@ -218,8 +247,75 @@ check("row: boss (difficulty) — mount · place",
 raid = rows[rows.index("|cffffd200Рейды|r") + 1: rows.index("|cffffd200Подземелья|r")]
 check("killed rows go to the bottom of their group with a check mark", raid[0].startswith("   Сильвана") and raid[-1].startswith("   |TInterface\\RaidFrame\\ReadyCheck-Ready")
       and "убит, ждёт таблицы" in raid[-1], raid)
-check("selected tab is remembered", g.MountSheetSyncDB.tab == "left" and win.selectedTab == 2)
-check("list scrolled to the top on tab switch", g.ALL_REGIONS and [x for x in regions("ScrollFrame") if under_window(x)][0]._vscroll == 0)
+check("selected tab is remembered", g.MountSheetSyncDB.tab == "left" and win.selectedTab == 1)
+check("list scrolled to the top on tab switch", boxes(16)[0]._vscroll == 0)
+
+# ---- 3.0: characters on the left, any character's «Осталось», «Все персонажи», «Попытки»
+chars = char_rows()
+allr = ns.GetAllRemaining()
+check("3.0: characters from the sheet on the left, the current one first and selected",
+      chars and chars[0][0] == "Эйра" and chars[0][2] and not any(c[2] for c in chars[1:]), chars)
+check("…what is left next to each name", chars[0][1] == "24" and len(chars) == len(allr), chars)
+check("…every character of the sheet", "Элтара" in [c[0] for c in chars] and any(c[0].startswith("Каэлия") for c in chars), chars)
+lefts = [allr[i].r.left for i in range(2, len(allr) + 1)]
+check("…then the ones with more left first", lefts == sorted(lefts, reverse=True), lefts)
+box = boxes(16)[0]
+inits = box._inits
+win.Hide(win); win.Show(win); g.RunTimers()
+check("reopening the window with nothing changed rebuilds no rows", box._inits == inits, (inits, box._inits))
+eltara = [f for f in pool(20) if plain(f.name._text) == "Элтара"][0]
+eltara.MockClick(eltara); g.RunTimers()
+rows = shown_rows()
+check("click on Элтара: her «Осталось» (12 of 16; Эйра's kills do not count)", rows[0].startswith("|cff8c8c8cОсталось 12 из 16"), rows[:1])
+check("…she is selected on the left", [c[0] for c in char_rows() if c[2]] == ["Элтара"], char_rows())
+check("…no «не фармлю» menu on another character's rows", not [f for f in pool(16) if f.elem.entry is not None])
+check("…the tab title still counts the current character", tabs[0]._text == "Осталось (24)", tabs[0]._text)
+check("…her name in her class colour: the sheet's key is just «элтара», found among this account's characters",
+      str(eltara.name._text) == "|cff3fc7ebЭлтара|r", str(eltara.name._text))
+L.execute("MSS_NS = ...", ns)
+L.execute("""
+local r
+for _, c in ipairs(MSS_NS.GetAllRemaining()) do if c.name == "Элтара" then r = c.r end end
+for _, e in ipairs(r.items) do
+  if not e.done and e.item.kind == "world" then
+    table.insert(MountSheetSyncDB.kills, { id = "M-eltara-test", kind = "manual", boss = e.item.boss, char = "Элтара",
+      charKey = "Player-1602-0E1715", time = MOCK.now, weekEnd = MountSheetSyncDB.kills[1].weekEnd })
+    break
+  end
+end
+""")
+L.execute("MSS_NS.OnChange()")   # what a new record does in the game: the open window refreshes
+g.RunTimers()
+check("…a kill Элтара made on this account (her GUID) ticks her own list", shown_rows()[0].startswith("|cff8c8c8cОсталось 11 из 16"),
+      shown_rows()[:1])
+L.execute("table.remove(MountSheetSyncDB.kills)")
+g.RunTimers()
+tabs[1].MockClick(tabs[1]); g.RunTimers()
+rows = shown_rows()
+summ = ns.GetSummary()
+check("«Все персонажи»: head line with rows and characters",
+      rows[0] == "|cff8c8c8cЕщё убить на этой неделе: строк %d · персонажей в таблице: %d|r" % (len(summ), len(allr)), rows[0])
+check("…grouped by kind", [t for t in rows if t.startswith("|cffffd200")] == ["|cffffd200Рейды|r", "|cffffd200Подземелья|r", "|cffffd200Мировые боссы|r"],
+      [t for t in rows if t.startswith("|cffffd200")])
+first = summ[1]
+check("…a row of the sheet, then who still has to kill it", rows[2] == "   " + ns.FormatRemaining(L.table_from({"item": first.item}))
+      and rows[3].startswith("      |cff8c8c8c") and str(first.names[1]) in rows[3], rows[2:4])
+check("…more than %d names: «и ещё N»" % 3, all((" и ещё " in rows[3 + 2 * (i - 1)]) == (len(summ[i].names) > 3)
+                                                 for i in range(1, len(summ) + 1) if summ[i].kind == first.kind), rows[2:8])
+names_row = pool(16)[3]
+names_row._scripts.OnEnter(names_row)
+tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
+check("…hover: every name in the tooltip", tt[1] == ", ".join(str(first.names[i]) for i in range(1, len(first.names) + 1)), tt)
+eira = [f for f in pool(20) if plain(f.name._text) == "Эйра"][0]
+eira.MockClick(eira); g.RunTimers()
+check("click on a character from another tab opens his «Осталось»", win.selectedTab == 1 and shown_rows()[0].startswith("|cff8c8c8cОсталось 24 из 36"))
+tabs[2].MockClick(tabs[2]); g.RunTimers()
+att = ns.GetAttemptsList()
+empty = [x for x in regions("FontString") if x._font == "GameFontDisable" and under_window(x)][0]
+check("«Попытки»: the counter or a word that there is none yet",
+      (len(att) == 0 and empty._shown and "Счётчика попыток пока нет" in str(empty._text))
+      or (len(att) > 0 and shown_rows()[0].startswith("|cff8c8c8cНесобранные маунты со случайным шансом: %d" % len(att))), len(att))
+tabs[0].MockClick(tabs[0]); g.RunTimers()
 
 LUA_RAWGET = L.eval("rawget")
 
@@ -256,6 +352,9 @@ def dump_layout(root, path):
                        "checked": bool(x._checked) if x._type == "CheckButton" else None,
                        "title": str(x._title) if x._title is not None else None,
                        "radio": x._type == "CheckButton" and LUA_RAWGET(x, "code") is not None,
+                       "layer": x._layer if x._type == "Texture" else None,
+                       "texture": str(x._texture) if x._type == "Texture" and x._texture is not None else None,
+                       "color": [x._color[k] for k in range(1, 5)] if x._type == "Texture" and x._color is not None else None,
                        "parent": ref(x._parent) if i else "UIParent", "points": pts, "scrollChildOf": None})
     for i, x in enumerate(export):
         if x._type == "ScrollFrame" and x._scrollChild is not None:
@@ -263,22 +362,24 @@ def dump_layout(root, path):
     json.dump(layout, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
 
-tabs[1].MockClick(tabs[1]); g.RunTimers()
+tabs[0].MockClick(tabs[0]); g.RunTimers()
 dump_layout(win, OUT_LAYOUT)
 LAYOUT_DIR = os.path.dirname(os.path.abspath(OUT_LAYOUT))
-tabs[0].MockClick(tabs[0]); g.RunTimers()
+tabs[1].MockClick(tabs[1]); g.RunTimers()
+dump_layout(win, os.path.join(LAYOUT_DIR, "layout_all.json"))
+tabs[3].MockClick(tabs[3]); g.RunTimers()
 dump_layout(win, os.path.join(LAYOUT_DIR, "layout_log.json"))
 g.SlashCmdList["MOUNTSHEETSYNC"]("settings"); g.RunTimers()
 sf = g.MountSheetSyncSettingsFrame
 check("settings window opens for the screenshots", sf is not None and sf._shown)
 dump_layout(sf, os.path.join(LAYOUT_DIR, "layout_settings.json"))
 sf.Hide(sf)
-tabs[1].MockClick(tabs[1]); g.RunTimers()
+tabs[0].MockClick(tabs[0]); g.RunTimers()
 
 kill("Кто-то совсем другой", "Святилище Господства", "raid", 16)
 check("odd boss name does not tick anything new", remaining().left == 24, remaining().left)
 kill("Сильвана Ветрокрылая", "Святилище Господства", "raid", 16)
-check("new kill refreshes the open tab and its title", tabs[1]._text == "Осталось (23)" and any("Сильвана" in t and "убит" in t for t in shown_rows()), tabs[1]._text)
+check("new kill refreshes the open tab and its title", tabs[0]._text == "Осталось (23)" and any("Сильвана" in t and "убит" in t for t in shown_rows()), tabs[0]._text)
 
 # ---- broker tooltip, slash command
 g.GameTooltip.lines = L.table()
@@ -306,7 +407,7 @@ r = remaining()
 check("character without sheets: nochar", r.state == "nochar" and r.name == "Тралл")
 win.Hide(win); win.Show(win)
 empty = [x for x in regions("FontString") if x._font == "GameFontDisable" and under_window(x)][0]
-check("window explains a missing character", empty._shown and "Персонажа «Тралл» нет в таблице" in str(empty._text) and tabs[1]._text == "Осталось", str(empty._text))
+check("window explains a missing character", empty._shown and "Персонажа «Тралл» нет в таблице" in str(empty._text) and tabs[0]._text == "Осталось", str(empty._text))
 
 # ---- «Сброс недели»: known from the sheet (resetAt) or from the journal
 g.MOCK.name = "Эйра"; g.MOCK.guid = "Player-1602-0ABCDEF1"
@@ -339,7 +440,7 @@ win.Hide(win); win.Show(win)
 rows = shown_rows()
 check("…the window says the week was reset", rows[1] == "|cff8cff8cНеделя сброшена — в списке снова все строки, убитые отмечены галочкой.|r"
       and rows[0].startswith("|cff8c8c8cОсталось %d из 36" % (before.left + 4)), rows[:2])
-check("…and the tab title counts them", tabs[1]._text == "Осталось (%d)" % (before.left + 4), tabs[1]._text)
+check("…and the tab title counts them", tabs[0]._text == "Осталось (%d)" % (before.left + 4), tabs[0]._text)
 other = L.table_from({"id": "R-other", "kind": "reset", "char": "Элтара", "charKey": "Player-1602-0E1715", "boss": "Сброс недели",
                       "time": NOW - 30 * 86400, "weekEnd": NOW - 23 * 86400})
 L.globals().MountSheetSyncDB.kills[len(L.globals().MountSheetSyncDB.kills) + 1] = other
@@ -398,7 +499,7 @@ check("same mount twice -> one record", len(g.MountSheetSyncDB.kills) == n + 1)
 g.Fire("NEW_MOUNT_ADDED", 99999)
 g.Fire("NEW_MOUNT_ADDED", g.SECRET)
 check("unknown or secret mount id: nothing, no error", len(g.MountSheetSyncDB.kills) == n + 1 and "ошибка" not in chat_all())
-tabs[0].MockClick(tabs[0]); g.RunTimers()
+tabs[3].MockClick(tabs[3]); g.RunTimers()
 check("journal shows the mount in purple", any(t.startswith("|cff8c8c8c") and "|cffc77dffНовый маунт: Синий протодракон|r" in t for t in shown_rows()))
 check("mount record does not tick list rows", remaining().left == left_before_mount, (remaining().left, left_before_mount))
 g.MountSheetSyncDB.quiet = True
@@ -413,18 +514,16 @@ g.C_MountJournal = saved_journal
 
 # ---- «не фармлю» from the «Осталось» tab (right click on a row)
 raw = L.eval("rawget")
-tabs[1].MockClick(tabs[1]); g.RunTimers()
+tabs[0].MockClick(tabs[0]); g.RunTimers()
 
 
 def row_buttons():
-    bs = [x for x in regions("Button") if raw(x, "index") is not None and x._shown and under_window(x)]
-    return sorted(bs, key=lambda b: raw(b, "index"))
+    """Rows of the main list that have the right-click menu (in list order)."""
+    return [f for f in pool(16) if f.elem.entry is not None]
 
 
 def row_text(b):
-    fs = [x for x in regions("FontString") if x._font == "GameFontHighlightSmall" and x._shown and under_window(x)
-          and abs(x._points[1].y - b._points[1].y) < 0.5]
-    return str(fs[0]._text) if fs else ""
+    return str(b.text._text)
 
 
 rb = row_buttons()
@@ -460,7 +559,7 @@ check("the row is gone from «Осталось» right away", r.left == left0 - 
 check("chat explains and says how to undo", "не фармлю на Эйра" in chat_all() and "«Что фармить…»" in chat_all(), chat_all().split("\n")[-1])
 g.RunTimers()
 check("window refreshed, tab title updated", not any(t.startswith("   " + boss0) for t in shown_rows())
-      and tabs[1]._text == "Осталось (%d)" % (left0 - 1), tabs[1]._text)
+      and tabs[0]._text == "Осталось (%d)" % (left0 - 1), tabs[0]._text)
 # whole place
 rb = row_buttons()
 target_place = None
@@ -487,7 +586,7 @@ r = remaining()
 check("newer list from the sheet: local hiding dropped (the sheet decides now)", g.MountSheetSyncDB.notFarmed["Player-1602-0ABCDEF1"] is None
       and any(str(r["items"][i].item.boss) == boss0 for i in range(1, len(r["items"]) + 1)))
 g.MountSheetSyncSheet.generated = saved_generated
-tabs[0].MockClick(tabs[0]); g.RunTimers()
+tabs[3].MockClick(tabs[3]); g.RunTimers()
 check("journal shows «Не фармлю» in grey", any("|cff9d9d9dНе фармлю: " + boss0 in t for t in shown_rows()), [t for t in shown_rows() if "фармлю" in t])
 check("world rows have no «не фармлю» menu", ns.AddPlan(L.table_from({"kind": "world", "boss": "Галлеон"}), "row") is False)
 
@@ -512,6 +611,40 @@ for _ in range(200):
     ns.GetRemaining()
 ms = (time.perf_counter() - t0) / 200 * 1000
 check("unchanged journal: cached list, %.3f ms" % ms, ms < 0.5)
+
+# 3.0: many characters (the sheet's characters copied up to 20+), 400 records — the left panel and «Все персонажи»
+L.execute("""
+local chars = MountSheetSyncSheet.chars
+local n = #chars
+for k = 1, 5 do
+  for i = 1, n do
+    local c = chars[i]
+    chars[#chars + 1] = { name = c.name .. " " .. k, keys = { "copy " .. k .. " " .. i }, items = c.items }
+  end
+end
+""")
+check("speed test sheet has 20+ characters", len(g.MountSheetSyncSheet.chars) >= 20, len(g.MountSheetSyncSheet.chars))
+rebuild_all = L.eval("""function(ns) return function()
+  MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1   -- new list: caches are dropped
+  ns.GetSummary()
+  ns.GetAttemptsList()
+  return ns.GetAllRemaining() end end""")(ns)
+rebuild_all()
+t0 = time.perf_counter()
+for _ in range(10):
+    rebuild_all()
+ms = (time.perf_counter() - t0) / 10 * 1000
+check("all %d characters + summary + attempts rebuilt: %.1f ms" % (len(g.MountSheetSyncSheet.chars), ms), ms < 40)
+t0 = time.perf_counter()
+for _ in range(200):
+    ns.GetSummary()
+    ns.GetAllRemaining()
+ms = (time.perf_counter() - t0) / 200 * 1000
+check("unchanged: cached characters and summary, %.3f ms" % ms, ms < 0.5)
+win.Show(win)
+tabs[1].MockClick(tabs[1]); g.RunTimers()
+check("«Все персонажи» with 20+ characters: names cut to 3 + «и ещё N»", any(" и ещё " in t for t in shown_rows()))
+check("left panel lists them all (the ScrollBox scrolls)", len(char_rows()) == len(g.MountSheetSyncSheet.chars), len(char_rows()))
 
 check("no Lua errors reported in chat", "ошибка" not in chat_all())
 failed = [nm for nm, ok in checks if not ok]

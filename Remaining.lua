@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 2.9.1 — «Осталось на этой неделе»
+Mount Sheet Sync 3.0.0 — «Осталось на этой неделе»
 ==================================================
 Список приходит из Google-таблицы: программа MountSheetSync.exe записывает его
 в SheetData.lua (глобальная MountSheetSyncSheet), а игра читает этот файл при
@@ -340,7 +340,8 @@ local function ResetTime(kills, weekEnd)
   return last
 end
 
-function ns.BuildRemaining(data, player, weekEnd, kills)
+-- ch — строка персонажа из таблицы, если она уже известна (список всех персонажей), иначе ищется по player.
+function ns.BuildRemaining(data, player, weekEnd, kills, ch)
   local result = { generated = tonumber(data.generated), spreadsheet = data.spreadsheet }
   local resetT = ResetTime(kills, weekEnd)
   result.afterReset = resetT ~= nil and (not result.generated or result.generated < resetT)
@@ -349,7 +350,7 @@ function ns.BuildRemaining(data, player, weekEnd, kills)
     local resetAt = tonumber(data.resetAt)
     result.notReset = not (resetAt and resetAt >= weekEnd - WEEK - 3600)
   end
-  local ch = FindCharacter(data, player)
+  ch = ch or FindCharacter(data, player)
   if not ch then
     result.state = "nochar"
     result.name = player.name
@@ -394,6 +395,127 @@ function ns.BuildRemaining(data, player, weekEnd, kills)
   result.left = left
   result.total = total
   return result
+end
+
+-- Все персонажи из таблицы: { { name, classFile, current, r }, … }, r — как у ns.GetRemaining().
+-- Текущий персонаж первым, дальше — у кого больше осталось, потом по имени. Пересчёт — только когда
+-- поменялись список из таблицы, журнал, неделя или персонаж.
+local allKey, allResult
+
+function ns.GetAllRemaining()
+  local data = MountSheetSyncSheet
+  if type(data) ~= "table" or type(data.chars) ~= "table" then
+    return {}
+  end
+  local player = ns.GetPlayer()
+  local weekEnd = ns.WeekEnd()
+  local db = ns.GetDB()
+  local kills = db and db.kills or {}
+  local last = kills[#kills]
+  local key = table.concat({ tostring(data), tostring(data.generated), tostring(data.resetAt), player.key or "?",
+    tostring(weekEnd), #kills, last and tostring(last.id) or "" }, "|")
+  if key == allKey then
+    return allResult
+  end
+  -- персонажи этого аккаунта (класс и GUID) по ключу, как в таблице
+  local byKey = {}
+  for _, c in pairs(db and type(db.chars) == "table" and db.chars or {}) do
+    if type(c) == "table" and c.name then
+      local realm = tostring(c.realm or "")
+      byKey[Norm(c.name .. "-" .. realm)] = c
+      byKey[Norm(c.name .. "-" .. (realm:gsub(" ", "")))] = c
+      local short = Norm(c.name)   -- в таблице ключ обычно просто имя листа
+      byKey[short] = byKey[short] or c
+    end
+  end
+  local current = FindCharacter(data, player)
+  local list = {}
+  for _, ch in ipairs(data.chars) do
+    if type(ch) == "table" then
+      local known
+      for _, k in ipairs(type(ch.keys) == "table" and ch.keys or {}) do
+        if byKey[k] then
+          known = byKey[k]
+          break
+        end
+      end
+      local who
+      if ch == current then
+        who = player
+      elseif known then
+        who = { name = known.name, realm = known.realm, key = known.guid or (known.name .. "-" .. tostring(known.realm or "?")) }
+      else
+        who = { name = ch.name, key = "?" }   -- персонаж с другого аккаунта: его записей здесь нет
+      end
+      list[#list + 1] = {
+        name = tostring(ch.name or who.name or "?"),
+        classFile = known and known.classFile or nil,
+        current = ch == current,
+        r = ns.BuildRemaining(data, who, weekEnd, kills, ch),
+      }
+    end
+  end
+  table.sort(list, function(a, b)
+    if a.current ~= b.current then
+      return a.current
+    end
+    if (a.r.left or 0) ~= (b.r.left or 0) then
+      return (a.r.left or 0) > (b.r.left or 0)
+    end
+    return a.name < b.name
+  end)
+  allKey, allResult = key, list
+  return list
+end
+
+-- Сводка «кому что осталось»: { { kind, item, names = { имя, … } }, … } — строки, которые хоть у кого-то ещё
+-- не убиты; одна на босса + сложность + маунт. Порядок: ns.KIND_ORDER, потом у кого больше персонажей, потом босс.
+local summaryFor, summaryResult
+local summaryKey = setmetatable({}, { __mode = "k" })   -- строка таблицы → её ключ (строки живут до /reload)
+
+function ns.GetSummary()
+  local all = ns.GetAllRemaining()
+  if all == summaryFor then
+    return summaryResult
+  end
+  local rows, byKey = {}, {}
+  for _, c in ipairs(all) do
+    if c.r.state == "ok" then
+      for _, entry in ipairs(c.r.items) do
+        if not entry.done then
+          local it = entry.item
+          local k = summaryKey[it]
+          if not k then
+            k = table.concat({ tostring(it.kind), Norm(it.boss), Norm(it.diff), Norm(it.mount) }, "|")
+            summaryKey[it] = k
+          end
+          local row = byKey[k]
+          if not row then
+            row = { kind = it.kind, item = it, names = {} }
+            byKey[k] = row
+            rows[#rows + 1] = row
+          end
+          row.names[#row.names + 1] = c.name
+        end
+      end
+    end
+  end
+  local order = {}
+  for i, kind in ipairs(ns.KIND_ORDER) do
+    order[kind] = i
+  end
+  table.sort(rows, function(a, b)
+    local ka, kb = order[a.kind] or 99, order[b.kind] or 99
+    if ka ~= kb then
+      return ka < kb
+    end
+    if #a.names ~= #b.names then
+      return #a.names > #b.names
+    end
+    return tostring(a.item.boss) < tostring(b.item.boss)
+  end)
+  summaryFor, summaryResult = all, rows
+  return rows
 end
 
 ---------------------------------------------------------------------------
@@ -507,12 +629,18 @@ function ns.RareRow(name)
   return false
 end
 
--- Персонаж из списка — тот, кто сделал запись.
+-- Персонаж из списка — тот, кто сделал запись (имена записи нормализуются один раз на запись).
+local whoCache = setmetatable({}, { __mode = "k" })
+
 local function RecordBy(ch, rec)
   local keys = type(ch.keys) == "table" and ch.keys or {}
-  local who = { [Norm(rec.char)] = true }
-  if rec.realm then
-    who[Norm(tostring(rec.char) .. "-" .. tostring(rec.realm))] = true
+  local who = whoCache[rec]
+  if not who then
+    who = { [Norm(rec.char)] = true }
+    if rec.realm then
+      who[Norm(tostring(rec.char) .. "-" .. tostring(rec.realm))] = true
+    end
+    whoCache[rec] = who
   end
   for _, k in ipairs(keys) do
     if who[k] then
@@ -522,29 +650,46 @@ local function RecordBy(ch, rec)
   return false
 end
 
+-- Строки персонажей по маунту, один раз на список из таблицы: [kind|маунт] = { { ch, item }, … }
+-- (у персонажа — первая такая строка). Без него вкладка «Попытки» нормализовала бы имена сотни тысяч раз.
+local function MountIndex(data)
+  if not data._byMount then
+    local index = {}
+    for _, ch in ipairs(type(data.chars) == "table" and data.chars or {}) do
+      local seen = {}
+      for _, item in ipairs(type(ch) == "table" and type(ch.items) == "table" and ch.items or {}) do
+        if type(item) == "table" then
+          local k = tostring(item.kind) .. "|" .. Norm(item.mount)
+          if not seen[k] then
+            seen[k] = true
+            index[k] = index[k] or {}
+            index[k][#index[k] + 1] = { ch = ch, item = item }
+          end
+        end
+      end
+    end
+    data._byMount = index
+  end
+  return data._byMount
+end
+
 -- Сколько персонажей из таблицы ещё не убивали этого босса на этой неделе (строка с этим маунтом у них есть).
 local function CharactersLeft(m, data, kills, known, weekEnd)
   local resetT = ResetTime(kills, weekEnd)
   local afterReset = resetT ~= nil and (not tonumber(data.generated) or tonumber(data.generated) < resetT)
-  local want = Norm(m.mount)
   local left = 0
-  for _, ch in ipairs(type(data.chars) == "table" and data.chars or {}) do
-    for _, item in ipairs(type(ch) == "table" and type(ch.items) == "table" and ch.items or {}) do
-      if type(item) == "table" and item.kind == m.kind and Norm(item.mount) == want then
-        local done = item.y and not afterReset
-        if not done and weekEnd then
-          for _, rec in ipairs(kills) do
-            if rec.weekEnd == weekEnd and RecordBy(ch, rec) and Fits(item, rec, RecordName(rec), known) then
-              done = true
-              break
-            end
-          end
+  for _, e in ipairs(MountIndex(data)[tostring(m.kind) .. "|" .. Norm(m.mount)] or {}) do
+    local done = e.item.y and not afterReset
+    if not done and weekEnd then
+      for _, rec in ipairs(kills) do
+        if rec.weekEnd == weekEnd and RecordBy(e.ch, rec) and Fits(e.item, rec, RecordName(rec), known) then
+          done = true
+          break
         end
-        if not done then
-          left = left + 1
-        end
-        break
       end
+    end
+    if not done then
+      left = left + 1
     end
   end
   return left
@@ -612,6 +757,46 @@ function ns.BossHintNow(bossName, data)
       end
     end
   end
+  return out
+end
+
+-- Вкладка «Попытки»: несобранные маунты со счётчиком { name, n, p, left, diff, kind, boss }.
+-- Пересчёт — только когда поменялись список, журнал, неделя или коллекция (тот же признак, что у подсказки).
+local attemptsStamp, attemptsResult
+
+function ns.GetAttemptsList()
+  local data = AttemptRows()
+  if not data then
+    return {}
+  end
+  local db = ns.GetDB()
+  local kills = db and db.kills or {}
+  local known = KnownIds(data)
+  local weekEnd = ns.WeekEnd and ns.WeekEnd()
+  local last = kills[#kills]
+  local stamp = table.concat({ tostring(data), tostring(data.generated), #kills, last and tostring(last.id) or "",
+    tostring(weekEnd), tostring(db and type(db.collection) == "table" and db.collection.collected) }, "|")
+  if stamp == attemptsStamp then
+    return attemptsResult
+  end
+  local out = {}
+  for _, m in ipairs(data.mounts) do
+    local p = type(m) == "table" and tonumber(m.p)
+    if p and p > 0 and p < 1 and not Collected(m) then
+      local n = CountNow(m, data, kills, known)
+      out[#out + 1] = { name = MountName(m), n = n, p = p, left = CharactersLeft(m, data, kills, known, weekEnd), diff = m.diff, kind = m.kind, boss = m.boss }
+    end
+  end
+  table.sort(out, function(a, b)
+    if a.n * a.p > b.n * b.p then
+      return true
+    elseif a.n * a.p < b.n * b.p then
+      return false
+    else
+      return a.name < b.name
+    end
+  end)
+  attemptsStamp, attemptsResult = stamp, out
   return out
 end
 

@@ -1,12 +1,15 @@
 --[[
-Mount Sheet Sync 2.9.1 — окно, иконка и настройки
+Mount Sheet Sync 3.0.0 — окно, иконка и настройки
 ==================================================
-  * окно (ЛКМ по иконке или /mss): вкладки «Журнал» (записи аддона) и «Осталось»
-    (что текущему персонажу ещё убить на этой неделе — из таблицы), все действия кнопками;
+  * окно (ЛКМ по иконке или /mss): слева персонажи из таблицы (сколько каждому осталось), справа вкладки
+    «Осталось» (выбранному персонажу), «Все персонажи» (кому что ещё убить), «Попытки» (счётчик маунтов)
+    и «Журнал» (записи аддона); внизу — частые действия и кнопка настроек;
+  * списки — ScrollBox игры: кадры только для видимых строк, перестраиваются, только когда поменялись данные;
   * кнопка у миникарты — её забирают к себе HidingBar и похожие панели;
   * иконка LibDataBroker — для Titan Panel, ChocolateBar и т. п.;
   * пункт в меню аддонов у миникарты (Addon Compartment);
-  * настройки (ПКМ по иконке или /mss settings): язык, сообщения в чате, кнопка у миникарты.
+  * настройки (ПКМ по иконке, кнопка в окне или /mss settings): язык, сообщения в чате, кнопка у миникарты,
+    очистка журнала, сведения для отчёта об ошибке.
 Все надписи — из ns.L; при смене языка окно и настройки перерисовываются сразу.
 ]]
 
@@ -14,8 +17,11 @@ local ADDON_NAME, ns = ...
 
 local ICON = "Interface\\AddOns\\MountSheetSync\\Media\\Icon"   -- the horseshoe, same as the tray program
 local WINDOW_NAME = "MountSheetSyncFrame"
-local WIDTH, HEIGHT = 600, 520
+local WIDTH, HEIGHT = 820, 540
+local SIDE_WIDTH = 180
 local ROW_HEIGHT = 16
+local CHAR_HEIGHT = 20
+local NAMES_SHOWN = 3   -- «Все персонажи»: столько имён в строке, остальные — «и ещё N» (все — в подсказке)
 
 local KIND_COLOR = {
   raid = "ffffffff",
@@ -28,17 +34,19 @@ local KIND_COLOR = {
   plan = "ff9d9d9d",
 }
 
-local TAB_LOG, TAB_LEFT = 1, 2
+-- Вкладки по порядку; в db.tab хранится ключ.
+local TAB_LEFT, TAB_ALL, TAB_ATTEMPTS, TAB_LOG = 1, 2, 3, 4
+local TAB_KEYS = { "left", "all", "attempts", "log" }
+local TAB_LABELS = { "tab_left", "tab_all", "tab_attempts", "tab_log" }
 
 local UI = {}
 local L = ns.L
 local relabel = {}      -- функции, которые заново ставят надписи (смена языка)
-local frame, scroll, content, emptyText, header1, header2, quietCheck, editBox, urlBox
+local frame, listBox, charBox, emptyText, header1, header2, editBox, urlBox
 local tabs = {}
-local rows = {}
-local rowButtons = {}   -- невидимые кнопки поверх строк: правый щелчок по строке «Осталось»
-local rowEntries = {}
 local refreshQueued = false
+local selectedChar      -- имя персонажа из таблицы, выбранного слева; nil — текущий
+local shownList, shownChars   -- что сейчас в списках: перестраиваем только при изменении
 
 ---------------------------------------------------------------------------
 -- Мелочи
@@ -186,9 +194,17 @@ end
 ---------------------------------------------------------------------------
 -- Окно
 ---------------------------------------------------------------------------
--- Меню по правому щелчку на строке «Осталось»: не фармить эту строку или весь рейд / подземелье.
+-- «|» в тексте ячейки игра приняла бы за код цвета — удваиваем его.
+local function Safe(value)
+  if value == nil then
+    return ""
+  end
+  return (tostring(value):gsub("|", "||"))
+end
+
+-- Меню по правому щелчку на строке «Осталось» (только у текущего персонажа): не фармить строку или весь рейд / подземелье.
 local function ShowRowMenu(button)
-  local entry = rowEntries[button.index]
+  local entry = button.elem and button.elem.entry
   if not entry or entry.done or not MenuUtil or not MenuUtil.CreateContextMenu then
     return
   end
@@ -206,34 +222,106 @@ local function ShowRowMenu(button)
   end)
 end
 
-local function CreateRow(index)
-  local row = content:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-  row:SetPoint("TOPLEFT", content, "TOPLEFT", 4, -(index - 1) * ROW_HEIGHT)
-  row:SetPoint("RIGHT", content, "RIGHT", -4, 0)
-  row:SetHeight(ROW_HEIGHT)
-  row:SetJustifyH("LEFT")
-  row:SetWordWrap(false)
-  rows[index] = row
-  local b = CreateFrame("Button", nil, content)
-  b:SetPoint("TOPLEFT", content, "TOPLEFT", 0, -(index - 1) * ROW_HEIGHT)
-  b:SetPoint("RIGHT", content, "RIGHT", 0, 0)
-  b:SetHeight(ROW_HEIGHT)
-  b:RegisterForClicks("RightButtonUp")
-  b:SetHighlightTexture("Interface\\QuestFrame\\UI-QuestTitleHighlight", "ADD")
-  b.index = index
-  b:SetScript("OnClick", ShowRowMenu)
-  b:SetScript("OnEnter", function(self)
-    if rowEntries[self.index] and not rowEntries[self.index].done then
-      GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
-      GameTooltip:SetText(L.tip_row_menu, 1, 1, 1)
-      GameTooltip:Show()
+-- Подсказка строки: «ПКМ — не фармлю» или elem.tip = { заголовок, строка, … }.
+local function ShowRowTooltip(button)
+  local elem = button.elem
+  if elem and elem.entry then
+    GameTooltip:SetOwner(button, "ANCHOR_CURSOR")
+    GameTooltip:SetText(L.tip_row_menu, 1, 1, 1)
+    GameTooltip:Show()
+  elseif elem and elem.tip then
+    GameTooltip:SetOwner(button, "ANCHOR_CURSOR")
+    GameTooltip:SetText(elem.tip[1], 1, 0.82, 0)
+    for i = 2, #elem.tip do
+      GameTooltip:AddLine(elem.tip[i], 1, 1, 1, true)
     end
-  end)
-  b:SetScript("OnLeave", function()
-    GameTooltip:Hide()
-  end)
-  rowButtons[index] = b
-  return row
+    GameTooltip:Show()
+  end
+end
+
+local function HideTooltip()
+  GameTooltip:Hide()
+end
+
+-- Кадры строк, которые уже собраны (ScrollBox отдаёт и новые, и переиспользованные).
+local built = setmetatable({}, { __mode = "k" })
+
+-- Строка списка. ScrollBox переиспользует кадры: всё, что зависит от строки, ставится при каждом показе.
+local function InitRow(button, elem)
+  if not built[button] then
+    built[button] = true
+    button:SetHeight(ROW_HEIGHT)
+    button.text = button:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    button.text:SetPoint("LEFT", 4, 0)
+    button.text:SetPoint("RIGHT", -4, 0)
+    button.text:SetJustifyH("LEFT")
+    button.text:SetWordWrap(false)
+    button.hl = button:CreateTexture(nil, "HIGHLIGHT")
+    button.hl:SetAllPoints()
+    button.hl:SetColorTexture(1, 1, 1, 0.08)
+    button:RegisterForClicks("RightButtonUp")
+    button:SetScript("OnClick", ShowRowMenu)
+    button:SetScript("OnEnter", ShowRowTooltip)
+    button:SetScript("OnLeave", HideTooltip)
+  end
+  button.elem = elem
+  button.text:SetText(elem.text)
+  button.hl:SetShown(elem.entry ~= nil or elem.tip ~= nil)
+end
+
+local DONE_MARK = "|TInterface\\RaidFrame\\ReadyCheck-Ready:12:12|t"
+
+local function ClassColored(name, classFile)
+  local color = classFile and RAID_CLASS_COLORS and RAID_CLASS_COLORS[classFile]
+  if color and color.colorStr then
+    return "|c" .. color.colorStr .. Safe(name) .. "|r"
+  end
+  return Safe(name)
+end
+
+-- Строка персонажа слева: имя в цвете класса, справа — сколько осталось (или галочка).
+local function InitCharRow(button, elem)
+  if not built[button] then
+    built[button] = true
+    button:SetHeight(CHAR_HEIGHT)
+    button.sel = button:CreateTexture(nil, "BACKGROUND")
+    button.sel:SetAllPoints()
+    button.sel:SetColorTexture(1, 0.82, 0, 0.18)
+    button.hl = button:CreateTexture(nil, "HIGHLIGHT")
+    button.hl:SetAllPoints()
+    button.hl:SetColorTexture(1, 1, 1, 0.08)
+    button.name = button:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+    button.name:SetPoint("LEFT", 6, 0)
+    button.name:SetPoint("RIGHT", -30, 0)
+    button.name:SetJustifyH("LEFT")
+    button.name:SetWordWrap(false)
+    button.count = button:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    button.count:SetPoint("RIGHT", -6, 0)
+    button:SetScript("OnClick", function(self)
+      UI.SelectChar(not self.elem.current and self.elem.name or nil)   -- свой персонаж — снова «текущий»
+    end)
+    button:SetScript("OnEnter", function(self)
+      local r = self.elem.r
+      GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+      GameTooltip:SetText(Safe(self.elem.name), 1, 1, 1)
+      if r.state == "ok" then
+        GameTooltip:AddLine(string.format(L.tip_char, r.left, r.total), 1, 0.82, 0)
+      end
+      GameTooltip:Show()
+    end)
+    button:SetScript("OnLeave", HideTooltip)
+  end
+  button.elem = elem
+  button.name:SetText(ClassColored(elem.name, elem.classFile))
+  local r = elem.r
+  if r.state ~= "ok" then
+    button.count:SetText("")
+  elseif r.left > 0 then
+    button.count:SetText(tostring(r.left))
+  else
+    button.count:SetText(DONE_MARK)
+  end
+  button.sel:SetShown(elem.selected)
 end
 
 function UI.RefreshHeader()
@@ -243,30 +331,32 @@ function UI.RefreshHeader()
   header2:SetText(string.format(L.header_week, ns.CountThisWeek(), untilReset and FormatDuration(untilReset) or "?"))
 end
 
+local function Line(text, entry, tip)
+  return { text = text, entry = entry, tip = tip }
+end
+
 -- Вкладка «Журнал»: записи аддона, новые сверху.
-local function JournalLines(db)
-  local lines = {}
+local function JournalList(db)
+  local list = {}
   for i = #db.kills, 1, -1 do
-    lines[#lines + 1] = FormatRow(db.kills[i])
+    list[#list + 1] = Line(FormatRow(db.kills[i]))
   end
-  return lines, L.journal_empty
+  return list, L.journal_empty
 end
 
 -- Вкладка «Осталось»: строки «Нет» из таблицы, убитые после обновления списка — с галочкой внизу группы.
-local function RemainingLines(r, entries)
+-- own — список текущего персонажа: только у него правый щелчок «Не фармлю».
+local function RemainingList(r, own)
   if r.state == "nodata" then
     return {}, L.left_nodata .. "\n\n" .. L.left_getprogram, true
   end
   if r.state == "nochar" then
-    local name = r.name or "?"
-    return {}, string.format(L.left_nochar, name)
+    return {}, string.format(L.left_nochar, r.name or "?")
   end
-  local lines = {
-    "|cff8c8c8c" .. string.format(L.left_head, r.left, r.total, ns.FormatWhen(r.generated)) .. "|r",
-  }
+  local list = { Line("|cff8c8c8c" .. string.format(L.left_head, r.left, r.total, ns.FormatWhen(r.generated)) .. "|r") }
   local note = ns.RemainingNote(r)
   if note then
-    lines[#lines + 1] = (r.afterReset and "|cff8cff8c" or "|cffff9a4d") .. note .. "|r"
+    list[#list + 1] = Line((r.afterReset and "|cff8cff8c" or "|cffff9a4d") .. note .. "|r")
   end
   for _, kind in ipairs(ns.KIND_ORDER) do
     local group = {}
@@ -276,25 +366,84 @@ local function RemainingLines(r, entries)
       end
     end
     if #group > 0 then
-      lines[#lines + 1] = "|cffffd200" .. ns.KindTitle(kind) .. "|r"
+      list[#list + 1] = Line("|cffffd200" .. ns.KindTitle(kind) .. "|r")
       for pass = 1, 2 do   -- сначала то, что осталось, потом убитые
         for _, entry in ipairs(group) do
           if entry.done == (pass == 2) then
-            lines[#lines + 1] = "   " .. ns.FormatRemaining(entry)
-            if kind ~= "world" and not entry.done then
-              entries[#lines] = entry
-            end
+            local menu = own and kind ~= "world" and not entry.done
+            list[#list + 1] = Line("   " .. ns.FormatRemaining(entry), menu and entry or nil)
           end
         end
       end
     end
   end
   if r.total == 0 then
-    lines[#lines + 1] = "|cff8c8c8c" .. L.left_norows .. "|r"
+    list[#list + 1] = Line("|cff8c8c8c" .. L.left_norows .. "|r")
   elseif r.left == 0 then
-    lines[#lines + 1] = "|cff8cff8c" .. L.left_alldone .. "|r"
+    list[#list + 1] = Line("|cff8cff8c" .. L.left_alldone .. "|r")
   end
-  return lines
+  return list
+end
+
+-- «Злодяга, Жрица, Охотник и ещё 12»
+local function Names(names)
+  local shown = {}
+  for i = 1, math.min(#names, NAMES_SHOWN) do
+    shown[i] = Safe(names[i])
+  end
+  local text = table.concat(shown, ", ")
+  if #names > NAMES_SHOWN then
+    text = string.format(L.all_more, text, #names - NAMES_SHOWN)
+  end
+  return text
+end
+
+-- Вкладка «Все персонажи»: строка таблицы и под ней — у кого она ещё не убита (все имена — в подсказке).
+local function SummaryList(rows, chars)
+  local list = { Line("|cff8c8c8c" .. string.format(L.all_head, #rows, chars) .. "|r") }
+  local kind
+  for _, row in ipairs(rows) do
+    if row.kind ~= kind then
+      kind = row.kind
+      list[#list + 1] = Line("|cffffd200" .. ns.KindTitle(kind) .. "|r")
+    end
+    local text = ns.FormatRemaining({ item = row.item })
+    local all = {}
+    for i, name in ipairs(row.names) do
+      all[i] = Safe(name)
+    end
+    local tip = { text, table.concat(all, ", ") }
+    list[#list + 1] = Line("   " .. text, nil, tip)
+    list[#list + 1] = Line("      |cff8c8c8c" .. Names(row.names) .. "|r", nil, tip)
+  end
+  if #rows == 0 then
+    list[#list + 1] = Line("|cff8cff8c" .. L.all_empty .. "|r")
+  end
+  return list
+end
+
+-- Вкладка «Попытки»: маунт — босс (сложность) · попыток, шанс; сколько персонажей ещё могут — в подсказке.
+local function AttemptsList(rows)
+  if #rows == 0 then
+    return {}, L.attempts_empty
+  end
+  local list = { Line("|cff8c8c8c" .. string.format(L.attempts_head, #rows) .. "|r") }
+  for _, m in ipairs(rows) do
+    local text = "   |cffc9a0ff" .. Safe(m.name) .. "|r"
+    if Safe(m.boss) ~= "" then
+      text = text .. " — " .. Safe(m.boss)
+    end
+    if Safe(m.diff) ~= "" then
+      text = text .. " |cff8c8c8c(" .. Safe(m.diff) .. ")|r"
+    end
+    local count = m.n > 0 and string.format(L.boss_hint, m.n, ns.FormatChance(m.n, m.p)) or L.boss_hint_none
+    local tip = { Safe(m.name), count }
+    if m.left > 0 then
+      tip[#tip + 1] = string.format(L.boss_hint_left, m.left)
+    end
+    list[#list + 1] = Line(text .. " |cff8c8c8c·|r " .. count, nil, tip)
+  end
+  return list
 end
 
 local function UpdateTabTitle(r)
@@ -306,48 +455,112 @@ local function UpdateTabTitle(r)
   end
 end
 
+-- Выбранный слева персонаж — его строка из ns.GetAllRemaining(); nil — текущий.
+local function SelectedEntry(all)
+  if not selectedChar then
+    return nil
+  end
+  for _, c in ipairs(all) do
+    if c.name == selectedChar then
+      return not c.current and c or nil
+    end
+  end
+  return nil
+end
+
+local function RefreshChars(all, sel)
+  local key = tostring(all) .. "|" .. tostring(sel)
+  if key == shownChars then
+    return
+  end
+  shownChars = key
+  local elems = {}
+  for _, c in ipairs(all) do
+    elems[#elems + 1] = { name = c.name, classFile = c.classFile, r = c.r, current = c.current,
+      selected = (sel and c == sel) or (not sel and c.current) or false }
+  end
+  charBox:SetDataProvider(CreateDataProvider(elems), ScrollBoxConstants.RetainScrollPosition)
+end
+
+-- Списки перестраиваются, только когда поменялись их данные (кэши Remaining.lua отдают ту же таблицу):
+-- шапка раз в 30 с, новая запись или открытие окна без изменений не трогают кадры.
 function UI.Refresh()
   if not frame or not frame:IsShown() then
     return
   end
   local db = ns.GetDB()
   UI.RefreshHeader()
+  local all = ns.GetAllRemaining()
+  local sel = SelectedEntry(all)
+  RefreshChars(all, sel)
+  local own = ns.GetRemaining()
+  UpdateTabTitle(own)
 
-  local width = scroll:GetWidth()
-  content:SetWidth(width and width > 0 and width or WIDTH - 60)
-
-  local remaining = ns.GetRemaining()
-  UpdateTabTitle(remaining)
-  local lines, empty, showUrl
-  local entries = {}
-  if frame.selectedTab == TAB_LEFT then
-    lines, empty, showUrl = RemainingLines(remaining, entries)
+  local tab = frame.selectedTab
+  local key, build
+  if tab == TAB_LEFT then
+    local r = sel and sel.r or own
+    key = "left|" .. tostring(r)
+    build = function() return RemainingList(r, not sel) end
+  elseif tab == TAB_ALL and type(MountSheetSyncSheet) ~= "table" then
+    key = "all|nodata"
+    build = function() return RemainingList({ state = "nodata" }) end
+  elseif tab == TAB_ALL then
+    local rows = ns.GetSummary()
+    key = "all|" .. tostring(rows)
+    build = function() return SummaryList(rows, #all) end
+  elseif tab == TAB_ATTEMPTS then
+    local rows = ns.GetAttemptsList()
+    key = "attempts|" .. tostring(rows)
+    build = function() return AttemptsList(rows) end
   else
-    lines, empty = JournalLines(db)
+    local last = db.kills[#db.kills]
+    key = "log|" .. #db.kills .. "|" .. tostring(last and last.id)
+    build = function() return JournalList(db) end
   end
-  rowEntries = entries
-  for i, text in ipairs(lines) do
-    local row = rows[i] or CreateRow(i)
-    row:SetText(text)
-    row:Show()
-    rowButtons[i]:SetShown(entries[i] ~= nil)
+  if key == shownList then
+    return
   end
-  for i = #lines + 1, #rows do
-    rows[i]:Hide()
-    rowButtons[i]:Hide()
-  end
-  content:SetHeight(math.max(1, #lines * ROW_HEIGHT))
+  shownList = key
+  local list, empty, showUrl = build()
+  listBox:SetDataProvider(CreateDataProvider(list), ScrollBoxConstants.RetainScrollPosition)
   emptyText:SetText(empty or "")
-  emptyText:SetShown(#lines == 0)
-  urlBox:SetShown(#lines == 0 and showUrl and true or false)
-  quietCheck:SetChecked(db.quiet and true or false)
+  emptyText:SetShown(#list == 0)
+  urlBox:SetShown(#list == 0 and showUrl and true or false)
 end
 
 function UI.SelectTab(id)
-  ns.GetDB().tab = id == TAB_LEFT and "left" or nil
+  ns.GetDB().tab = TAB_KEYS[id]
   PanelTemplates_SetTab(frame, id)
-  scroll:SetVerticalScroll(0)
+  shownList = nil
+  listBox:ScrollToBegin()
   UI.Refresh()
+end
+
+-- Щелчок по персонажу слева: его «Осталось» (name = nil — текущий персонаж).
+function UI.SelectChar(name)
+  selectedChar = name
+  if frame.selectedTab ~= TAB_LEFT then
+    UI.SelectTab(TAB_LEFT)
+    return
+  end
+  shownList = nil
+  listBox:ScrollToBegin()
+  UI.Refresh()
+end
+
+-- Прокручиваемый список ScrollBox: кадры строк создаются только для видимой части и переиспользуются.
+local function CreateList(parent, extent, initializer)
+  local box = CreateFrame("Frame", nil, parent, "WowScrollBoxList")
+  local bar = CreateFrame("EventFrame", nil, parent, "MinimalScrollBar")
+  bar:SetPoint("TOPLEFT", box, "TOPRIGHT", 4, 0)
+  bar:SetPoint("BOTTOMLEFT", box, "BOTTOMRIGHT", 4, 0)
+  local view = CreateScrollBoxListLinearView()
+  view:SetElementExtent(extent)
+  view:SetElementInitializer("Button", initializer)
+  ScrollUtil.InitScrollBoxListWithScrollBar(box, bar, view)
+  ScrollUtil.AddManagedScrollBarVisibilityBehavior(box, bar)
+  return box
 end
 
 local function CreateWindow()
@@ -387,20 +600,32 @@ local function CreateWindow()
   header2 = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
   header2:SetPoint("TOPLEFT", 18, -48)
 
-  -- Список: вкладки «Журнал» и «Осталось» над ним
+  -- Слева — персонажи из таблицы
+  local charsTitle = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+  charsTitle:SetPoint("TOPLEFT", 20, -74)
+  Label(charsTitle, "side_title")
+  local side = CreateFrame("Frame", nil, frame, "InsetFrameTemplate")
+  side:SetPoint("TOPLEFT", 12, -92)
+  side:SetPoint("BOTTOMLEFT", 12, 100)
+  side:SetWidth(SIDE_WIDTH)
+  charBox = CreateList(side, CHAR_HEIGHT, InitCharRow)
+  charBox:SetPoint("TOPLEFT", 4, -4)
+  charBox:SetPoint("BOTTOMRIGHT", -18, 4)
+
+  -- Справа — список, вкладки над ним
   local inset = CreateFrame("Frame", nil, frame, "InsetFrameTemplate")
-  inset:SetPoint("TOPLEFT", 12, -92)
-  inset:SetPoint("BOTTOMRIGHT", -12, 146)
+  inset:SetPoint("TOPLEFT", side, "TOPRIGHT", 6, 0)
+  inset:SetPoint("BOTTOMRIGHT", -12, 100)
 
   frame.minTabWidth = 90
-  for i, key in ipairs({ "tab_log", "tab_left" }) do
+  for i, key in ipairs(TAB_LABELS) do
     local tab = CreateFrame("Button", nil, frame, "PanelTopTabButtonTemplate")
     tab:SetID(i)
     tab:SetText(L[key])
     PanelTemplates_TabResize(tab, 0, nil, frame.minTabWidth)
-    if i == TAB_LOG then
+    if i ~= TAB_LEFT then   -- у «Осталось» заголовок с числом ставит UpdateTabTitle
       relabel[#relabel + 1] = function()
-        tab:SetText(L.tab_log)
+        tab:SetText(L[key])
         PanelTemplates_TabResize(tab, 0, nil, frame.minTabWidth)
       end
     end
@@ -409,20 +634,23 @@ local function CreateWindow()
     end)
     tabs[i] = tab
   end
-  tabs[TAB_LOG]:SetPoint("BOTTOMLEFT", inset, "TOPLEFT", 8, -2)
-  PanelTemplates_SetNumTabs(frame, #tabs)   -- вторая вкладка встаёт справа от первой
-  PanelTemplates_SetTab(frame, ns.GetDB().tab == "left" and TAB_LEFT or TAB_LOG)
+  tabs[1]:SetPoint("BOTTOMLEFT", inset, "TOPLEFT", 8, -2)
+  PanelTemplates_SetNumTabs(frame, #tabs)   -- остальные вкладки встают справа от первой
+  local selected = TAB_LEFT
+  for i, key in ipairs(TAB_KEYS) do
+    if ns.GetDB().tab == key then
+      selected = i
+    end
+  end
+  PanelTemplates_SetTab(frame, selected)
 
-  scroll = CreateFrame("ScrollFrame", nil, inset, "UIPanelScrollFrameTemplate")
-  scroll:SetPoint("TOPLEFT", 6, -6)
-  scroll:SetPoint("BOTTOMRIGHT", -28, 6)
-  content = CreateFrame("Frame", nil, scroll)
-  content:SetSize(WIDTH - 60, 1)
-  scroll:SetScrollChild(content)
+  listBox = CreateList(inset, ROW_HEIGHT, InitRow)
+  listBox:SetPoint("TOPLEFT", 6, -6)
+  listBox:SetPoint("BOTTOMRIGHT", -22, 6)
 
   emptyText = inset:CreateFontString(nil, "OVERLAY", "GameFontDisable")
   emptyText:SetPoint("CENTER", 0, 14)
-  emptyText:SetWidth(WIDTH - 80)
+  emptyText:SetWidth(WIDTH - SIDE_WIDTH - 80)
 
   -- адрес сайта с программой: только выделить и скопировать (Ctrl+C), изменить нельзя
   urlBox = CreateFrame("EditBox", nil, inset, "InputBoxTemplate")
@@ -445,11 +673,11 @@ local function CreateWindow()
 
   -- Отметить вручную
   local manualLabel = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-  manualLabel:SetPoint("BOTTOMLEFT", 18, 118)
+  manualLabel:SetPoint("BOTTOMLEFT", 18, 76)
   Label(manualLabel, "manual_label")
 
   editBox = CreateFrame("EditBox", nil, frame, "InputBoxTemplate")
-  editBox:SetSize(196, 22)
+  editBox:SetSize(240, 22)
   editBox:SetPoint("LEFT", manualLabel, "RIGHT", 12, 0)
   editBox:SetAutoFocus(false)
   editBox:SetMaxLetters(60)
@@ -457,36 +685,32 @@ local function CreateWindow()
   editBox:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
 
   local addButton = MakeButton(frame, "button_mark", 110, "tip_mark", SubmitManual)
-  addButton:SetPoint("BOTTOMRIGHT", -16, 112)
+  addButton:SetPoint("LEFT", editBox, "RIGHT", 8, 0)
 
-  -- Основные действия
+  -- Основные действия; редкое (чат, очистка журнала, отчёт об ошибке) — в настройках
   local syncButton = MakeButton(frame, "button_sync", 156, "tip_sync", function() ns.SyncNow() end)
-  syncButton:SetPoint("BOTTOMLEFT", 16, 78)
+  syncButton:SetPoint("BOTTOMLEFT", 16, 38)
 
   local scanButton = MakeButton(frame, "button_scan", 156, "tip_scan", function() ns.RequestScan() end)
   scanButton:SetPoint("LEFT", syncButton, "RIGHT", 6, 0)
 
   local resetButton = MakeButton(frame, "button_reset", 140, "tip_reset", UI.ConfirmResetWeek)
-  resetButton:SetPoint("BOTTOMRIGHT", -16, 78)
+  resetButton:SetPoint("LEFT", scanButton, "RIGHT", 6, 0)
 
-  -- Настройки
-  quietCheck = CreateFrame("CheckButton", nil, frame, "UICheckButtonTemplate")
-  quietCheck:SetSize(26, 26)
-  quietCheck:SetPoint("BOTTOMLEFT", 14, 43)
-  if quietCheck.Text then
-    Label(quietCheck.Text, "quiet")
-  end
-  quietCheck:SetScript("OnClick", function(self)
-    ns.SetQuiet(self:GetChecked())
-  end)
-  AttachTooltip(quietCheck, "quiet", "tip_quiet")
-
-  local clearButton = MakeButton(frame, "button_clear", 140, "tip_clear", ConfirmClear)
-  clearButton:SetPoint("BOTTOMRIGHT", -16, 44)
+  local gear = CreateFrame("Button", nil, frame)
+  gear:SetSize(24, 24)
+  gear:SetPoint("BOTTOMRIGHT", -18, 38)
+  local gearIcon = gear:CreateTexture(nil, "ARTWORK")
+  gearIcon:SetAllPoints()
+  gearIcon:SetTexture("Interface\\Icons\\INV_Misc_Gear_01")
+  gearIcon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+  gear:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
+  gear:SetScript("OnClick", function() UI.ToggleSettings() end)
+  AttachTooltip(gear, "settings_title", "tip_settings")
 
   local hint = frame:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
-  hint:SetPoint("BOTTOMLEFT", 18, 12)
-  hint:SetPoint("BOTTOMRIGHT", -18, 12)
+  hint:SetPoint("BOTTOMLEFT", 18, 14)
+  hint:SetPoint("BOTTOMRIGHT", -18, 14)
   hint:SetJustifyH("LEFT")
   -- Без программы (или пока она не подключена к таблице) — та же неброская строка, но о том, что аддон
   -- работает сам по себе; подробности — при наведении.
@@ -501,6 +725,11 @@ local function CreateWindow()
     hover:EnableMouse(true)
     local old = state == "oldaddon" or state == "oldprogram"
     AttachTooltip(hover, old and "update_title" or "offline_title", "tip_" .. state)
+  end
+
+  -- другой язык — списки собрать заново
+  relabel[#relabel + 1] = function()
+    shownList, shownChars = nil, nil
   end
 
   frame:SetScript("OnShow", UI.Refresh)
@@ -743,7 +972,7 @@ local function CreateSettings()
   for _, code in ipairs(ns.LANGUAGES) do
     codes[#codes + 1] = code
   end
-  local height = 92 + #codes * 24 + 70 + 36
+  local height = 92 + #codes * 24 + 70 + 66
   settingsFrame = CreateFrame("Frame", SETTINGS_NAME, UIParent, "DefaultPanelTemplate")
   settingsFrame:SetSize(330, height)
   settingsFrame:SetFrameStrata("DIALOG")
@@ -811,6 +1040,9 @@ local function CreateSettings()
     ns.SafeCall(ShowReport)
   end)
   reportButton:SetPoint("BOTTOMLEFT", 20, 16)
+
+  local clearButton = MakeButton(settingsFrame, "button_clear", 200, "tip_clear", ConfirmClear)
+  clearButton:SetPoint("BOTTOMLEFT", 20, 46)
 
   settingsFrame:SetScript("OnShow", RefreshSettings)
   settingsFrame:Hide()
