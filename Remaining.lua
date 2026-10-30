@@ -340,7 +340,8 @@ local function ResetTime(kills, weekEnd)
   return last
 end
 
-function ns.BuildRemaining(data, player, weekEnd, kills)
+-- ch — строка персонажа из таблицы, если она уже известна (список всех персонажей), иначе ищется по player.
+function ns.BuildRemaining(data, player, weekEnd, kills, ch)
   local result = { generated = tonumber(data.generated), spreadsheet = data.spreadsheet }
   local resetT = ResetTime(kills, weekEnd)
   result.afterReset = resetT ~= nil and (not result.generated or result.generated < resetT)
@@ -349,7 +350,7 @@ function ns.BuildRemaining(data, player, weekEnd, kills)
     local resetAt = tonumber(data.resetAt)
     result.notReset = not (resetAt and resetAt >= weekEnd - WEEK - 3600)
   end
-  local ch = FindCharacter(data, player)
+  ch = ch or FindCharacter(data, player)
   if not ch then
     result.state = "nochar"
     result.name = player.name
@@ -394,6 +395,120 @@ function ns.BuildRemaining(data, player, weekEnd, kills)
   result.left = left
   result.total = total
   return result
+end
+
+-- Все персонажи из таблицы: { { name, classFile, current, r }, … }, r — как у ns.GetRemaining().
+-- Текущий персонаж первым, дальше — у кого больше осталось, потом по имени. Пересчёт — только когда
+-- поменялись список из таблицы, журнал, неделя или персонаж.
+local allKey, allResult
+
+function ns.GetAllRemaining()
+  local data = MountSheetSyncSheet
+  if type(data) ~= "table" or type(data.chars) ~= "table" then
+    return {}
+  end
+  local player = ns.GetPlayer()
+  local weekEnd = ns.WeekEnd()
+  local db = ns.GetDB()
+  local kills = db and db.kills or {}
+  local last = kills[#kills]
+  local key = table.concat({ tostring(data), tostring(data.generated), tostring(data.resetAt), player.key or "?",
+    tostring(weekEnd), #kills, last and tostring(last.id) or "" }, "|")
+  if key == allKey then
+    return allResult
+  end
+  -- персонажи этого аккаунта (класс и GUID) по ключу, как в таблице
+  local byKey = {}
+  for _, c in pairs(db and type(db.chars) == "table" and db.chars or {}) do
+    if type(c) == "table" and c.name then
+      local realm = tostring(c.realm or "")
+      byKey[Norm(c.name .. "-" .. realm)] = c
+      byKey[Norm(c.name .. "-" .. (realm:gsub(" ", "")))] = c
+    end
+  end
+  local current = FindCharacter(data, player)
+  local list = {}
+  for _, ch in ipairs(data.chars) do
+    if type(ch) == "table" then
+      local known
+      for _, k in ipairs(type(ch.keys) == "table" and ch.keys or {}) do
+        if byKey[k] then
+          known = byKey[k]
+          break
+        end
+      end
+      local who
+      if ch == current then
+        who = player
+      elseif known then
+        who = { name = known.name, realm = known.realm, key = known.guid or (known.name .. "-" .. tostring(known.realm or "?")) }
+      else
+        who = { name = ch.name, key = "?" }   -- персонаж с другого аккаунта: его записей здесь нет
+      end
+      list[#list + 1] = {
+        name = tostring(ch.name or who.name or "?"),
+        classFile = known and known.classFile or nil,
+        current = ch == current,
+        r = ns.BuildRemaining(data, who, weekEnd, kills, ch),
+      }
+    end
+  end
+  table.sort(list, function(a, b)
+    if a.current ~= b.current then
+      return a.current
+    end
+    if (a.r.left or 0) ~= (b.r.left or 0) then
+      return (a.r.left or 0) > (b.r.left or 0)
+    end
+    return a.name < b.name
+  end)
+  allKey, allResult = key, list
+  return list
+end
+
+-- Сводка «кому что осталось»: { { kind, item, names = { имя, … } }, … } — строки, которые хоть у кого-то ещё
+-- не убиты; одна на босса + сложность + маунт. Порядок: ns.KIND_ORDER, потом у кого больше персонажей, потом босс.
+local summaryFor, summaryResult
+
+function ns.GetSummary()
+  local all = ns.GetAllRemaining()
+  if all == summaryFor then
+    return summaryResult
+  end
+  local rows, byKey = {}, {}
+  for _, c in ipairs(all) do
+    if c.r.state == "ok" then
+      for _, entry in ipairs(c.r.items) do
+        if not entry.done then
+          local it = entry.item
+          local k = table.concat({ tostring(it.kind), Norm(it.boss), Norm(it.diff), Norm(it.mount) }, "|")
+          local row = byKey[k]
+          if not row then
+            row = { kind = it.kind, item = it, names = {} }
+            byKey[k] = row
+            rows[#rows + 1] = row
+          end
+          row.names[#row.names + 1] = c.name
+        end
+      end
+    end
+  end
+  local order = {}
+  for i, kind in ipairs(ns.KIND_ORDER) do
+    order[kind] = i
+  end
+  table.sort(rows, function(a, b)
+    local ka, kb = order[a.kind] or 99, order[b.kind] or 99
+    if ka ~= kb then
+      return ka < kb
+    end
+    if #a.names ~= #b.names then
+      return #a.names > #b.names
+    end
+    return tostring(a.item.boss) < tostring(b.item.boss)
+  end)
+  summaryFor, summaryResult = all, rows
+  return rows
 end
 
 ---------------------------------------------------------------------------
