@@ -603,7 +603,7 @@ local function CreateWindow()
   -- Слева — персонажи из таблицы
   local charsTitle = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
   charsTitle:SetPoint("TOPLEFT", 20, -74)
-  Label(charsTitle, "chars_title")
+  Label(charsTitle, "side_title")
   local side = CreateFrame("Frame", nil, frame, "InsetFrameTemplate")
   side:SetPoint("TOPLEFT", 12, -92)
   side:SetPoint("BOTTOMLEFT", 12, 100)

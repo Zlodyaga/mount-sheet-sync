@@ -248,7 +248,7 @@ cnt = len(kills())
 click(button("Отметить"))
 check("«Отметить» adds a manual record and clears the field", len(kills()) == cnt + 1 and kills()[-1]["kind"] == "manual"
       and kills()[-1]["boss"] == "Ша Злости" and edit._text == "")
-check("list refreshed after adding", "Ша Злости" in list_rows()[0], list_rows()[:2])
+check("list refreshed after adding", "Ша Злости" in list_rows()[0])
 edit._text = ""
 click(button("Отметить"))
 check("empty manual name -> hint, nothing added", len(kills()) == cnt + 1 and "Укажите имя босса" in chat()[0])
@@ -294,7 +294,7 @@ g.RunTimers()
 r = kills()[-1]
 check("confirm -> reset record + reload", r["kind"] == "reset" and r["id"].startswith("R-") and r["char"] == "Эйра"
       and abs(r["weekEnd"] - (NOW + UNTIL_RESET)) <= 300 and g.RELOADED is True)
-check("reset shown in the list", "— Сброс недели —" in list_rows()[0], list_rows()[:1])
+check("reset shown in the list", "— Сброс недели —" in list_rows()[0])
 check("reset is not counted as a kill this week", int([t for t in [str(x._text) for x in fontstrings] if t.startswith("Записей за эту неделю")][0].split(":")[1].split()[0]) >= 0)
 
 g.RELOADED = False
