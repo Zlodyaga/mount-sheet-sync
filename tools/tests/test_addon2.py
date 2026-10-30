@@ -6,14 +6,15 @@ import json
 import os
 import random
 import sys
+import tempfile
 import time
 from lupa import lua51
 import paths
 
 ADDON_DIR = paths.ADDON_DIR
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT_SV = sys.argv[1] if len(sys.argv) > 1 else "/tmp/MountSheetSync.lua"
-OUT_LAYOUT = sys.argv[2] if len(sys.argv) > 2 else "/tmp/layout.json"
+OUT_SV = sys.argv[1] if len(sys.argv) > 1 else os.path.join(tempfile.gettempdir(), "MountSheetSync.lua")
+OUT_LAYOUT = sys.argv[2] if len(sys.argv) > 2 else os.path.join(tempfile.gettempdir(), "layout.json")
 
 L = lua51.LuaRuntime(unpack_returned_tuples=True)
 NOW = int(time.time())
@@ -268,8 +269,13 @@ check("3.0: no checkboxes and no «Очистить журнал» in the window
       and not [r for r in regions("Button") if r._text == "Очистить журнал" and under_window(r)])
 gear = [r for r in regions("Button") if under_window(r) and r._highlight == "Interface\\Buttons\\ButtonHilight-Square"]
 check("one gear button in the window", len(gear) == 1)
+if g.MountSheetSyncSettingsFrame is not None and g.MountSheetSyncSettingsFrame._shown:
+    g.MountSheetSyncSettingsFrame.Hide(g.MountSheetSyncSettingsFrame)   # opened above by the right click on the icon
 click(gear[0])
 check("…it opens the settings", g.MountSheetSyncSettingsFrame is not None and g.MountSheetSyncSettingsFrame._shown)
+click(gear[0])
+check("…a second click closes them", not g.MountSheetSyncSettingsFrame._shown)
+click(gear[0])
 quiet = settings_part("CheckButton", "Не писать в чат")
 click(quiet)
 check("settings checkbox turns quiet on", g.MountSheetSyncDB.quiet is True)

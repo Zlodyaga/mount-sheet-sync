@@ -53,7 +53,7 @@ def sheet_lua(v):
 if SHEET_FILE:
     sheet_src = open(SHEET_FILE, encoding="utf-8").read()
 else:
-    subprocess.run(["python3", os.path.join(HERE, "make_fixture.py"), os.path.join(HERE, "wb_left.json"), "real"], check=True)
+    subprocess.run([sys.executable, os.path.join(HERE, "make_fixture.py"), os.path.join(HERE, "wb_left.json"), "real"], check=True)
     subprocess.run(["node", os.path.join(HERE, "dump_status.js"), os.path.join(HERE, "wb_left.json"), os.path.join(HERE, "status_left.json")], check=True)
     status = json.load(open(os.path.join(HERE, "status_left.json"), encoding="utf-8"))
     sheet_src = "MountSheetSyncSheet = " + sheet_lua(status) + "\n"
