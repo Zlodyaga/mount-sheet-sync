@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.0 — окно, иконка и настройки
+Mount Sheet Sync 3.0.1 — окно, иконка и настройки
 ==================================================
   * окно (ЛКМ по иконке или /mss): слева персонажи из таблицы (сколько каждому осталось), справа вкладки
     «Осталось» (выбранному персонажу), «Все персонажи» (кому что ещё убить), «Попытки» (счётчик маунтов)
@@ -422,7 +422,7 @@ local function SummaryList(rows, chars)
   return list
 end
 
--- Вкладка «Попытки»: маунт — босс (сложность) · попыток, шанс; сколько персонажей ещё могут — в подсказке.
+-- Вкладка «Попытки»: маунт — босс (сложность) - попыток, шанс; сколько персонажей ещё могут — в подсказке.
 local function AttemptsList(rows)
   if #rows == 0 then
     return {}, L.attempts_empty
@@ -441,7 +441,7 @@ local function AttemptsList(rows)
     if m.left > 0 then
       tip[#tip + 1] = string.format(L.boss_hint_left, m.left)
     end
-    list[#list + 1] = Line(text .. " |cff8c8c8c·|r " .. count, nil, tip)
+    list[#list + 1] = Line(text .. " |cff8c8c8c-|r " .. count, nil, tip)
   end
   return list
 end

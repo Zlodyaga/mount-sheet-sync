@@ -239,11 +239,11 @@ tabs[3].MockClick(tabs[3]); g.RunTimers()
 check("journal tab shows the journal", any("Тюремщик" in t for t in shown_rows()) and not any("Осталось" in t for t in shown_rows()))
 tabs[0].MockClick(tabs[0]); g.RunTimers()
 rows = shown_rows()
-check("«Осталось» tab: info line first", rows[0].startswith("|cff8c8c8cОсталось 24 из 36 · список из таблицы сегодня в "), rows[0])
+check("«Осталось» tab: info line first", rows[0].startswith("|cff8c8c8cОсталось 24 из 36 - список из таблицы сегодня в "), rows[0])
 check("no reset this week known: orange reminder under it", rows[1] == "|cffff9a4dНа этой неделе «Сброс недели» не нажимали — в таблице могут быть «Да» прошлой недели.|r", rows[1])
 check("group headers in order", [t for t in rows if t.startswith("|cffffd200")] == ["|cffffd200Рейды|r", "|cffffd200Подземелья|r", "|cffffd200Мировые боссы|r"])
 check("row: boss (difficulty) — mount · place",
-      "   Сильвана Ветрокрылая |cff8c8c8c(Mythic)|r — |cffc9a0ffМесть|r |cff8c8c8c· Sanctum of Domination|r" in rows, [t for t in rows if "Сильвана" in t])
+      "   Сильвана Ветрокрылая |cff8c8c8c(Mythic)|r — |cffc9a0ffМесть|r |cff8c8c8c- Sanctum of Domination|r" in rows, [t for t in rows if "Сильвана" in t])
 raid = rows[rows.index("|cffffd200Рейды|r") + 1: rows.index("|cffffd200Подземелья|r")]
 check("killed rows go to the bottom of their group with a check mark", raid[0].startswith("   Сильвана") and raid[-1].startswith("   |TInterface\\RaidFrame\\ReadyCheck-Ready")
       and "убит, ждёт таблицы" in raid[-1], raid)
@@ -294,7 +294,7 @@ tabs[1].MockClick(tabs[1]); g.RunTimers()
 rows = shown_rows()
 summ = ns.GetSummary()
 check("«Все персонажи»: head line with rows and characters",
-      rows[0] == "|cff8c8c8cЕщё убить на этой неделе: строк %d · персонажей в таблице: %d|r" % (len(summ), len(allr)), rows[0])
+      rows[0] == "|cff8c8c8cЕщё убить на этой неделе: строк %d - персонажей в таблице: %d|r" % (len(summ), len(allr)), rows[0])
 check("…grouped by kind", [t for t in rows if t.startswith("|cffffd200")] == ["|cffffd200Рейды|r", "|cffffd200Подземелья|r", "|cffffd200Мировые боссы|r"],
       [t for t in rows if t.startswith("|cffffd200")])
 first = summ[1]
@@ -590,7 +590,7 @@ for i in range(1, len(remaining()["items"]) + 1):
     if not it.done and str(it.item.kind) == "dungeon" and str(it.item.place) != place0:
         target_place = str(it.item.place)
         break
-dbtn = [b for b in rb if target_place and ("· " + target_place) in row_text(b)][0]
+dbtn = [b for b in rb if target_place and ("- " + target_place) in row_text(b)][0]
 dbtn.MockClick(dbtn, "RightButton")
 menu = g.MENUS[len(g.MENUS)]
 L.eval("function(b) b.cb() end")(menu["items"][3])

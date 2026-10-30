@@ -184,6 +184,26 @@ g.MountSheetSync_OnAddonCompartmentClick("MountSheetSync", "RightButton")
 check("addon compartment right click toggles the settings", not g.MountSheetSyncSettingsFrame._shown)
 check("no Lua errors reported in chat", not any("error:" in t or "ошибка" in t for t in chat(g)), [t for t in chat(g) if "rror" in t])
 
+# glyphs WoW's fonts do not have (the Russian client draws a box): middle dot, arrows
+import glob, re
+bad = []
+for f in sorted(glob.glob(os.path.join(ADDON_DIR, "*.lua"))):
+    in_block = False
+    for n, line in enumerate(open(f, encoding="utf-8"), 1):
+        code = line
+        if in_block:
+            if "]]" in code:
+                in_block = False
+            continue
+        if code.lstrip().startswith("--[["):
+            in_block = "]]" not in code
+            continue
+        code = re.sub(r"--.*$", "", code) if not re.search(r'"[^"]*--[^"]*"', code) else code
+        for ch in "·→←↑↓":
+            if ch in code:
+                bad.append("%s:%d %r" % (os.path.basename(f), n, ch))
+check("no glyphs missing from WoW fonts in addon texts (· → … shown as a box)", not bad, bad[:5])
+
 passed = sum(1 for _, ok in checks if ok)
 print("\n%d/%d checks passed" % (passed, len(checks)))
 raise SystemExit(0 if passed == len(checks) else 1)

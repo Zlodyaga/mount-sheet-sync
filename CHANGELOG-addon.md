@@ -2,6 +2,10 @@
 
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
+## 3.0.1
+- The separator dot “·” and the arrow “→” showed as a box in the Russian game client (its font has no such glyphs):
+  they are now a plain “-” and “>”.
+
 ## 3.0.0
 - The mount hint when you hover a unit is now only for rares (Ishak of the Four Winds and the like). Inside raids and
   dungeons the game hides NPC names from addons even before the pull, so on bosses it could not work; raid and

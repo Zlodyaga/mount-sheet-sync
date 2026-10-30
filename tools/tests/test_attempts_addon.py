@@ -334,7 +334,7 @@ rows = [box._pool[i] for i in range(1, len(box._pool) + 1) if box._pool[i]._show
 texts = [str(f.text._text) for f in rows]
 att = ns.GetAttemptsList()
 check("«Попытки»: head line, then uncollected mounts, most expected drops first",
-      texts[0] == "|cff8c8c8cНесобранные маунты со случайным шансом: %d · выше — больше ожидаемых выпадений|r" % len(att)
+      texts[0] == "|cff8c8c8cНесобранные маунты со случайным шансом: %d - выше — больше ожидаемых выпадений|r" % len(att)
       and texts[1].startswith("   |cffc9a0ffОтмщение|r") and texts[1].endswith("попыток: 38, шанс 32%") and len(texts) == len(att) + 1, texts)
 rows[1]._scripts.OnEnter(rows[1])
 tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
@@ -352,7 +352,7 @@ rep = g.MountSheetSyncReportFrame
 boxes = [r for r in regs + [g.ALL_REGIONS[i] for i in range(len(regs) + 1, len(g.ALL_REGIONS) + 1)] if r._type == "EditBox" and r._multiline]
 text = str(boxes[0]._text) if boxes else ""
 check("report window: the text selected for Ctrl+C", rep is not None and rep._shown and boxes and boxes[0]._highlighted, text)
-check("…versions, program state and counts", "Mount Sheet Sync bug report" in text and "Addon: 3.0.0" in text and "Game: 12.1.5 (build 65000" in text
+check("…versions, program state and counts", "Mount Sheet Sync bug report" in text and "Addon: 3.0.1" in text and "Game: 12.1.5 (build 65000" in text
       and "Program: online (version 2.8.0, sheet connected" in text and "attempt rows 3" in text and "Journal: 4 records" in text, text)
 check("…no character names, realm or spreadsheet title", "Эйра" not in text and "Ревущий" not in text and "Мирна" not in text, text)
 boxes[0]._scripts.OnTextChanged(boxes[0], True)

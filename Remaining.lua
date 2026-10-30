@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.0 — «Осталось на этой неделе»
+Mount Sheet Sync 3.0.1 — «Осталось на этой неделе»
 ==================================================
 Список приходит из Google-таблицы: программа MountSheetSync.exe записывает его
 в SheetData.lua (глобальная MountSheetSyncSheet), а игра читает этот файл при
@@ -40,7 +40,7 @@ local APOSTROPHES = {
   ["\202\188"] = true, ["\194\180"] = true,                                     -- ʼ ´
 }
 -- Не буквы и не цифры — в Code.gs они тоже разделяют слова: знаки U+0080–U+00BF
--- (« » · неразрывный пробел…), × и ÷, всё из U+2000–U+2FFF (— – “ ” … → № …)
+-- (« » - неразрывный пробел…), × и ÷, всё из U+2000–U+2FFF (— – “ ” … → № …)
 -- и знаки препинания U+3000–U+303F.
 local function IsSeparator(ch)
   local b1, b2 = ch:byte(1, 2)
@@ -873,7 +873,7 @@ function ns.FormatRemaining(entry)
     text = text .. " — |cffc9a0ff" .. Safe(item.mount) .. "|r"
   end
   if Safe(item.place) ~= "" then
-    text = text .. " |cff8c8c8c· " .. Safe(item.place) .. "|r"
+    text = text .. " |cff8c8c8c- " .. Safe(item.place) .. "|r"
   end
   return text
 end
