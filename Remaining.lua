@@ -469,6 +469,7 @@ end
 -- Сводка «кому что осталось»: { { kind, item, names = { имя, … } }, … } — строки, которые хоть у кого-то ещё
 -- не убиты; одна на босса + сложность + маунт. Порядок: ns.KIND_ORDER, потом у кого больше персонажей, потом босс.
 local summaryFor, summaryResult
+local summaryKey = setmetatable({}, { __mode = "k" })   -- строка таблицы → её ключ (строки живут до /reload)
 
 function ns.GetSummary()
   local all = ns.GetAllRemaining()
@@ -481,7 +482,11 @@ function ns.GetSummary()
       for _, entry in ipairs(c.r.items) do
         if not entry.done then
           local it = entry.item
-          local k = table.concat({ tostring(it.kind), Norm(it.boss), Norm(it.diff), Norm(it.mount) }, "|")
+          local k = summaryKey[it]
+          if not k then
+            k = table.concat({ tostring(it.kind), Norm(it.boss), Norm(it.diff), Norm(it.mount) }, "|")
+            summaryKey[it] = k
+          end
           local row = byKey[k]
           if not row then
             row = { kind = it.kind, item = it, names = {} }

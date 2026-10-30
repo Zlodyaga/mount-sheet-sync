@@ -2,6 +2,17 @@
 
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
+## 3.0.0
+- New window. On the left — every character from the sheet in class colour with how much is left this week (a tick
+  when everything is done); click one to see its “Remaining” list. The window now opens on “Remaining”.
+- “All characters” tab: what is still to kill this week across all characters, one line per boss, with who still
+  needs it (“Eira, Mirna, Kaelia and 12 more”; every name in the tooltip).
+- “Attempts” tab: every uncollected mount with a drop chance — attempts and chance so far, most expected drops first;
+  the tooltip says on how many characters the boss is still alive this week.
+- Lighter with many characters: the lists only create frames for the rows you see and are rebuilt only when their
+  data changes, so opening the window or switching tabs does not stutter even with 20+ characters and a full log.
+- “No chat messages” and “Clear log” moved to the settings (the gear button in the window or right-click on the icon).
+
 ## 2.9.1
 - Lighter: the boss tooltip remembers its answer per boss until something changes (a kill, a new mount, the weekly
   reset), so hovering a boss no longer re-reads the whole kill journal on every tooltip refresh (about 150× less work

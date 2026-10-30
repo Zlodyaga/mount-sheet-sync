@@ -6,7 +6,7 @@ A World of Warcraft addon and a small Windows tray program that keep a Google Sh
 which bosses each character has killed this week, which mounts you already own, and what is still left to farm.
 
 - **The addon** (WoW Retail, Midnight 12.x) records boss kills, your characters and your mount collection, and shows
-  the “Remaining” list for the current character right in the game. After a kill that could drop a mount you still
+  the “Remaining” list of every character from the sheet right in the game. After a kill that could drop a mount you still
   need it says which attempt that was and the chance over all attempts; the boss tooltip says the same. Attempts from
   before the addon come from the game's own kill statistics.
 - **The program** (Windows 10/11, one file, no administrator rights) watches the addon's saved data, creates the spreadsheet in your
