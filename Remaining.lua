@@ -752,7 +752,7 @@ function ns.BossHintNow(bossName, data)
         end
       end
       if named then
-        out[#out + 1] = { name = MountName(m), n = CountNow(m, data, kills, known), p = p,
+        out[#out + 1] = { name = MountName(m), kind = m.kind, n = CountNow(m, data, kills, known), p = p,
           left = CharactersLeft(m, data, kills, known, weekEnd), diff = m.diff }
       end
     end

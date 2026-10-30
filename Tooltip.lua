@@ -1,12 +1,13 @@
 --[[
-Mount Sheet Sync 3.0.0 — подсказка о боссе
-==========================================
-При наведении на босса — у скольких персонажей из таблицы он на этой неделе ещё не убит и по строке на
-несобранный маунт с него: сколько попыток и шанс за все попытки. В Атласе приключений — значок-подкова под
-вкладками страницы босса (справа, «Обзор / Добыча / Модель»), те же строки — в его подсказке; на вкладке «Модель»
-значка нет. Так он не перекрывает ни текст, ни фильтры добычи, ни модель.
-Данные — из списка таблицы (ns.BossHint, Remaining.lua); без таблицы программы 2.8+ подсказки нет. Имена,
-которые игра прячет («секретные» значения в бою), не трогаем.
+Mount Sheet Sync 3.0.0 — подсказки о маунтах
+============================================
+При наведении на рара (UnitClassification «rare» / «rareelite») со строки «Мировых боссов» — у скольких персонажей
+он на этой неделе ещё не убит и его маунт: попытки и шанс за все попытки. Боссам подсказки юнита нет: в рейдах и
+подземельях игра прячет аддонам имена НИП даже до боя (проверено 30.10.2026), сравнить их нельзя.
+В Атласе приключений — значок-подкова под вкладками страницы босса (справа), на странице рейда / подземелья — маунты
+всех его боссов; строки — в подсказке значка; на вкладке «Модель» значка нет.
+Данные — из списка таблицы (ns.BossHint, Remaining.lua); без таблицы программы 2.8+ подсказки нет. «Секретные»
+значения не сравниваем. /mss tip — в чат, что аддон видит при наведении.
 ]]
 
 local ADDON_NAME, ns = ...
@@ -21,7 +22,7 @@ end
 
 -- Строки подсказки для босса с таким именем (пусто — ничего не показываем): сначала «ещё не убит у N
 -- персонажей», потом по строке на маунт.
-function ns.BossHintLines(name, maxLines)
+function ns.BossHintLines(name, maxLines, kind)
   if type(name) ~= "string" or Secret(name) or name == "" or not ns.BossHint then
     return {}
   end
@@ -30,9 +31,13 @@ function ns.BossHintLines(name, maxLines)
     return {}
   end
   local lines, left = {}, 0
-  for i, h in ipairs(hints) do
-    left = math.max(left, h.left or 0)
-    if i <= (maxLines or MAX_LINES) then
+  local shown = 0
+  for _, h in ipairs(hints) do
+    if kind and h.kind ~= kind then
+      -- только строки этого вида (подсказка юнита — мировые: рары)
+    elseif shown < (maxLines or MAX_LINES) then
+      shown = shown + 1
+      left = math.max(left, h.left or 0)
       local mount = "|cffc9a0ff" .. tostring(h.name):gsub("|", "||") .. "|r"
       local n = h.n or 0
       local tail = n > 0 and string.format(L.boss_hint, n, ns.FormatChance(n, h.p)) or L.boss_hint_none
@@ -89,49 +94,6 @@ local function InstanceLines(instanceID, limit)
   return lines
 end
 
--- Подземелье, где стоит игрок, по данным Атласа (journalInstanceID) или nil.
-local function CurrentInstance()
-  if not (IsInInstance and EJ_GetInstanceForMap and C_Map and C_Map.GetBestMapForUnit) then
-    return nil
-  end
-  local inside = IsInInstance()
-  if Secret(inside) or not inside then
-    return nil
-  end
-  local map = C_Map.GetBestMapForUnit("player")
-  if not map or Secret(map) then
-    return nil
-  end
-  local id = EJ_GetInstanceForMap(map)
-  if not id or Secret(id) or id == 0 then
-    return nil
-  end
-  return id
-end
-
--- Босс ли это (уровень «??» или «мировой босс»), если игра это не прячет.
-local function LooksLikeBoss(unit)
-  if not unit then
-    return false
-  end
-  local level = UnitLevel and UnitLevel(unit)
-  if level ~= nil and not Secret(level) and level == -1 then
-    return true
-  end
-  local class = UnitClassification and UnitClassification(unit)
-  return class ~= nil and not Secret(class) and class == "worldboss"
-end
-
-local function Shown(v)
-  if v == nil then
-    return "nil"
-  end
-  if Secret(v) then
-    return "secret"
-  end
-  return tostring(v)
-end
-
 local function OnUnitTooltip(tooltip, data)
   if not tooltip then
     return
@@ -160,17 +122,7 @@ local function OnUnitTooltip(tooltip, data)
     end
   end
   if not plain then
-    -- в подземельях игра прячет имена: у босса показываем маунты всех боссов этого подземелья
-    local boss = LooksLikeBoss(unit)
-    local instance = boss and CurrentInstance()
-    Debug(string.format("the game hides this name (secret value); level %s, class %s, guid %s → %s",
-      Shown(unit and UnitLevel and UnitLevel(unit)), Shown(unit and UnitClassification and UnitClassification(unit)),
-      Shown(unit and UnitGUID and UnitGUID(unit)), instance and ("mounts of instance " .. instance) or "nothing"))
-    if instance then
-      for _, line in ipairs(InstanceLines(instance, MAX_UNIT_INSTANCE_LINES)) do
-        tooltip:AddLine(line, 1, 1, 1, true)
-      end
-    end
+    Debug("the game hides this name (secret value)")
     return
   end
   if unit and UnitIsPlayer then
@@ -179,7 +131,13 @@ local function OnUnitTooltip(tooltip, data)
       return
     end
   end
-  local hint = ns.BossHintLines(plain)
+  -- только рары: у боссов в подземельях игра прячет имена (сравнить их нельзя), а мировые боссы и так в Атласе
+  local class = unit and UnitClassification and UnitClassification(unit)
+  if class == nil or Secret(class) or (class ~= "rare" and class ~= "rareelite") then
+    Debug(string.format("«%s» is not a rare (%s) — the hint is only for rares", plain, class == nil and "nil" or Secret(class) and "secret" or class))
+    return
+  end
+  local hint = ns.BossHintLines(plain, nil, "world")
   if #hint == 0 then
     local data0 = MountSheetSyncSheet
     Debug(string.format("«%s» — no uncollected mount with a chance (list from the sheet: %s)", plain,

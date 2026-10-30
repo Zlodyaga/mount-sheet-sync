@@ -161,68 +161,53 @@ out = kill(L, g, "Галеон", 0, 725, inst=("Долина Четырех Ве
 check("world boss Galleon: attempt 1 · 1% (the 0.01 from the sheet)", any("Сын Галеона" in c and "попытка 1 " in c and "1%" in c for c in out), out)
 check("no Lua errors", not any("Ошибка" in c or "error" in c.lower() for c in chat(g, 0)), chat(g, 0))
 
-# ---- the boss tooltip
-g.GameTooltip.lines = L.table()
-g.UNIT_POSTCALL(g.GameTooltip)
-tip = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
-check("tooltip on Sylvanas: one short line per mount — attempts 38, chance 32%",
-      any("Отмщение" in t and "попыток: 38, шанс 32%" in t and "Media\\Icon" in t for t in tip), tip)
-check("…and one line for the boss first: not killed this week on 1 character (Мирна; Эйра killed her)",
-      tip and "ещё не убит у персонажей: 1" in tip[0] and "Отмщение" not in tip[0], tip)
-L.execute('TIP_UNIT = { "SECRET", "target" }')
-g.GameTooltip.lines = L.table()
-g.UNIT_POSTCALL(g.GameTooltip)
-check("a hidden (secret) name: nothing added, no error", len(g.GameTooltip.lines) == 0)
+# ---- the unit tooltip: only rares (3.0). Inside instances the game hides NPC names even before the pull, so raid and
+# dungeon bosses get nothing there (they have the Adventure Guide icon); world bosses neither.
+ISHAK_NAME = "Исхак Повелитель Четырех Ветров"
+L.execute('UNIT_CLASS = "rareelite"; function UnitClassification() return UNIT_CLASS end; TIP_UNIT = { "%s", "target" }' % ISHAK_NAME)
+def tipl():
+    g.GameTooltip.lines = L.table()
+    g.UNIT_POSTCALL(g.GameTooltip)
+    return [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
+tip = tipl()
+check("tooltip on a rare (Ishak, rare elite): its mount, no attempts yet",
+      any("Дракон Четырех Ветров" in t and "попыток пока нет" in t and "Media\\Icon" in t for t in tip), tip)
+L.execute('UNIT_CLASS = "rare"')
+check("…a plain rare too", any("Дракон Четырех Ветров" in t for t in tipl()))
+L.execute('UNIT_CLASS = "worldboss"; TIP_UNIT = { "Сильвана Ветрокрылая", "target" }')
+check("a raid boss: nothing (only the Adventure Guide shows bosses)", tipl() == [])
+L.execute('TIP_UNIT = { "Галеон", "target" }')
+check("a world boss: nothing", tipl() == [])
+L.execute('UNIT_CLASS = "SECRET"; TIP_UNIT = { "%s", "target" }' % ISHAK_NAME)
+check("classification hidden by the game: nothing", tipl() == [])
+L.execute('UNIT_CLASS = "rareelite"; TIP_UNIT = { "SECRET", "target" }')
+check("a hidden (secret) name: nothing added, no error", tipl() == [])
 g.SlashCmdList["MOUNTSHEETSYNC"]("tip")
 n0 = len(g.CHAT)
-g.UNIT_POSTCALL(g.GameTooltip)
-check("/mss tip: the chat says why there is no hint (the game hides the name)",
-      any("hides this name" in c for c in chat(g, n0)), chat(g, n0))
-L.execute('TIP_UNIT = { nil, "target" }; TARGET.name = "SECRET"')
+tipl()
+check("/mss tip: the chat says why there is no hint (the game hides the name)", any("hides this name" in c for c in chat(g, n0)), chat(g, n0))
+L.execute('TIP_UNIT = { "Сильвана Ветрокрылая", "target" }; UNIT_CLASS = "worldboss"')
+tipl()
+check("…and that a boss is not a rare", any("is not a rare (worldboss)" in c for c in chat(g, n0)), chat(g, n0))
+L.execute('TIP_UNIT = { nil, "target" }; TARGET.name = "SECRET"; UNIT_CLASS = "rareelite"')
 g.GameTooltip.lines = L.table()
-tipdata = L.eval('{ lines = { { leftText = "Сильвана Ветрокрылая" } } }')
-g.UNIT_POSTCALL(g.GameTooltip, tipdata)
+g.UNIT_POSTCALL(g.GameTooltip, L.eval('{ lines = { { leftText = "%s" } } }' % ISHAK_NAME))
 check("no name from GetUnit / UnitName: the name from the tooltip data is used",
-      any("Отмщение" in str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)))
-check("…and /mss tip reports the lines", any("Сильвана Ветрокрылая» — " in c and "lines" in c for c in chat(g, n0)), chat(g, n0))
-L.execute('TIP_UNIT = { "Сильвана Ветрокрылая", "target" }; TARGET.name = nil; _UIP = UnitIsPlayer; UnitIsPlayer = function() return "SECRET" end')
-g.GameTooltip.lines = L.table()
-g.UNIT_POSTCALL(g.GameTooltip)
-check("«is it a player» hidden by the game: the boss hint still shows", len(g.GameTooltip.lines) > 0)
+      any("Дракон Четырех Ветров" in str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)))
+check("…and /mss tip reports the lines", any(ISHAK_NAME + "» — " in c and "lines" in c for c in chat(g, n0)), chat(g, n0))
+L.execute('TIP_UNIT = { "%s", "target" }; TARGET.name = nil; _UIP = UnitIsPlayer; UnitIsPlayer = function() return "SECRET" end' % ISHAK_NAME)
+check("«is it a player» hidden by the game: the rare hint still shows", len(tipl()) > 0)
 L.execute('UnitIsPlayer = _UIP')
-# in an instance the game hides names even before the pull: a boss-level unit gets the instance's mounts
-L.execute('TIP_UNIT = { "SECRET", "target" }; UNIT_LEVEL = -1; function UnitLevel() return UNIT_LEVEL end; '
-          'function UnitClassification() return "SECRET" end; function IsInInstance() return true, "raid" end; '
-          'C_Map = { GetBestMapForUnit = function() return 1998 end }; function EJ_GetInstanceForMap(m) return m == 1998 and 1193 or 0 end')
-g.GameTooltip.lines = L.table()
-n2 = len(g.CHAT)
-g.UNIT_POSTCALL(g.GameTooltip)
-it = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
-check("hidden name of a boss (level ??) inside a raid: the mounts of this raid's bosses, by boss",
-      any("Сильвана Ветрокрылая" in t for t in it) and any("Отмщение" in t for t in it), it)
-check("…/mss tip says what it saw (level −1, class hidden) and what it did", any("level -1, class secret" in c and "instance 1193" in c for c in chat(g, n2)), chat(g, n2))
-L.execute('UNIT_LEVEL = 60')
-g.GameTooltip.lines = L.table()
-g.UNIT_POSTCALL(g.GameTooltip)
-check("…an ordinary mob with a hidden name: nothing", len(g.GameTooltip.lines) == 0)
-L.execute('UNIT_LEVEL = -1; function IsInInstance() return false end')
-g.GameTooltip.lines = L.table()
-g.UNIT_POSTCALL(g.GameTooltip)
-check("…outside an instance: nothing", len(g.GameTooltip.lines) == 0)
-L.execute('UnitLevel = nil; UnitClassification = nil; IsInInstance = nil; C_Map = nil; EJ_GetInstanceForMap = nil')
 g.SlashCmdList["MOUNTSHEETSYNC"]("tip")
 n1 = len(g.CHAT)
 L.execute('TIP_UNIT = { "SECRET", "target" }')
-g.UNIT_POSTCALL(g.GameTooltip)
-check("/mss tip again: off, silent", chat(g, n1) == [] or all("tooltip:" not in c for c in chat(g, n1)), chat(g, n1))
-L.execute('TIP_UNIT = { "Сильвана Ветрокрылая", "player" }')
-g.GameTooltip.lines = L.table()
-g.UNIT_POSTCALL(g.GameTooltip)
-check("a player with a boss's name: nothing", len(g.GameTooltip.lines) == 0)
+tipl()
+check("/mss tip again: off, silent", all("tooltip:" not in c for c in chat(g, n1)), chat(g, n1))
+L.execute('TIP_UNIT = { "%s", "player" }' % ISHAK_NAME)
+check("a player with a rare's name: nothing", tipl() == [])
 L.execute('TIP_UNIT = { "Кто-то другой", "target" }')
-g.GameTooltip.lines = L.table()
-g.UNIT_POSTCALL(g.GameTooltip)
-check("any other NPC: nothing", len(g.GameTooltip.lines) == 0)
+check("any other rare: nothing", tipl() == [])
+L.execute('TIP_UNIT = { "Сильвана Ветрокрылая", "target" }; UnitClassification = nil')
 
 # ---- the Adventure Guide
 g.Fire("ADDON_LOADED", "Blizzard_EncounterJournal")
@@ -259,9 +244,7 @@ check("…also after a boss page with mounts", not buttons[0]._shown)
 # ---- hint cache (2.9.1): the answer is remembered per name, but a kill or a new mount shows at once
 Lc, gc, nsc, _, _ = new_game()
 def tipc():
-    gc.GameTooltip.lines = Lc.table()
-    gc.UNIT_POSTCALL(gc.GameTooltip)
-    return [str(gc.GameTooltip.lines[i]) for i in range(1, len(gc.GameTooltip.lines) + 1)]
+    return list(nsc.BossHintLines("Сильвана Ветрокрылая", 6).values())
 t1 = tipc()
 kill(Lc, gc, "Сильвана Ветрокрылая", 16, 2435)
 t2 = tipc()

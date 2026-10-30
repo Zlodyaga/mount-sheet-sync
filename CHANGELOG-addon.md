@@ -3,11 +3,10 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.0
-- Boss tooltip in the world: the name is now also taken from the tooltip's own data when the game does not give it
-  directly, and a hidden “is it a player” no longer stops the hint (it did not show on Ultraxion). `/mss tip` writes
-  to chat what the addon sees when you hover a boss — to check it in the game.
-- Inside raids and dungeons the game hides NPC names even before the pull, so the hint could not tell which boss it
-  is: hovering a boss there now shows the mounts of all bosses of that raid or dungeon, by boss.
+- The mount hint when you hover a unit is now only for rares (Ishak of the Four Winds and the like). Inside raids and
+  dungeons the game hides NPC names from addons even before the pull, so on bosses it could not work; raid and
+  dungeon bosses have the Adventure Guide icon instead. `/mss tip` writes to chat what the addon sees when you hover
+  a unit — to check it in the game.
 - Adventure Guide: the horseshoe icon is there already on the raid or dungeon page, before you pick a boss, with the
   mounts of all its bosses; on a raid without such mounts it goes away instead of keeping the previous raid's hint.
 - New window. On the left — every character from the sheet in class colour with how much is left this week (a tick
