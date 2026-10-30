@@ -28,3 +28,16 @@ ScrollBox в `wow_mock.lua` упрощён: `SetDataProvider` вызывает �
 коммитом вернуть (`git checkout`), версию в `status_left.json` оставлять актуальной. Под mono нет общих между
 процессами именованных мьютексов и ярлыков «Пуск» — тесты это учитывают. Индексы колонок в e2e жёстко заданы:
 при новых колонках таблицы их надо сдвинуть.
+
+На Windows (Python + lupa, без mono): `paths.py` ставит локаль `C` — иначе Lua `string.lower` по системной cp1251
+портит кириллицу в UTF-8 (в игре локаль `C`). Идут `test_addon2`, `test_minimap`, `test_offline`, `test_locale`,
+`test_collection`; `test_addon_left` — с готовым `SheetData.lua` первым аргументом (Node-скрипт таблицы под Windows
+не работает; дата списка тогда старая — одна проверка «сегодня в» не проходит). `test_attempts_addon` — только в CI.
+
+## Скриншоты окон аддона
+
+`test_addon_left.py` выгружает разметку окна (кадры, размеры, якоря, тексты, текстуры) в `tools/layout_left.json`,
+`layout_all.json`, `layout_log.json`, `layout_settings.json`; `python tools/screens/render.py` рисует их в браузере
+(playwright, Chromium) в `docs/screens/addon-*.png`. Персонажи — примерные из `wb_left.json`, классы — из
+`MountSheetSyncDB.chars` в тесте. ScrollBox, его полоса (только когда список не влезает), текстуры с цветом и
+шестерёнка рисуются по разметке; слой HIGHLIGHT не рисуется.

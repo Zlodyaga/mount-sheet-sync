@@ -6,6 +6,7 @@ Usage: test_addon_left.py [<SheetData.lua written by the exe>] [<layout out json
 """
 import json
 import os
+import re
 import subprocess
 import sys
 import time
@@ -100,7 +101,16 @@ C_MountJournal = {
   end,
 }
 function Advance(sec) MOCK.now = MOCK.now + sec; MOCK.gt = MOCK.gt + sec; MOCK.untilReset = MOCK.untilReset - sec end
-MountSheetSyncDB = { version = 1, kills = {} }
+-- characters that logged in on this account before (class for the colours on the left, GUID for their own kills)
+MountSheetSyncDB = { version = 1, kills = {}, chars = {
+  ["Эйра-Ревущий фьорд"] = { name = "Эйра", realm = "Ревущий фьорд", classFile = "HUNTER" },
+  ["Элтара-Ревущий фьорд"] = { name = "Элтара", realm = "Ревущий фьорд", classFile = "MAGE", guid = "Player-1602-0E1715" },
+  ["Мирна-Ревущий фьорд"] = { name = "Мирна", realm = "Ревущий фьорд", classFile = "PRIEST" },
+  ["Каэлия-Ревущий фьорд"] = { name = "Каэлия", realm = "Ревущий фьорд", classFile = "WARLOCK" },
+  ["Эллин-Ревущий фьорд"] = { name = "Эллин", realm = "Ревущий фьорд", classFile = "PALADIN" },
+} }
+RAID_CLASS_COLORS = { HUNTER = { colorStr = "ffaad372" }, MAGE = { colorStr = "ff3fc7eb" }, PRIEST = { colorStr = "ffffffff" },
+                      WARLOCK = { colorStr = "ff8788ee" }, PALADIN = { colorStr = "fff48cba" } }
 """ % (NOW, UNTIL_RESET))
 g = L.globals()
 
@@ -216,8 +226,12 @@ def shown_rows():
     return [str(f.text._text) for f in pool(16)]
 
 
+def plain(text):
+    return re.sub(r"\|c[0-9a-fA-F]{8}|\|r", "", str(text))
+
+
 def char_rows():
-    return [(str(f.name._text), str(f.count._text), bool(f.sel._shown)) for f in pool(20)]
+    return [(plain(f.name._text), str(f.count._text), bool(f.sel._shown)) for f in pool(20)]
 
 
 check("two ScrollBox lists with a scroll bar each", len(boxes(16)) == 1 and len(boxes(20)) == 1 and boxes(16)[0]._managedBar)
@@ -249,13 +263,33 @@ box = boxes(16)[0]
 inits = box._inits
 win.Hide(win); win.Show(win); g.RunTimers()
 check("reopening the window with nothing changed rebuilds no rows", box._inits == inits, (inits, box._inits))
-eltara = [f for f in pool(20) if str(f.name._text) == "Элтара"][0]
+eltara = [f for f in pool(20) if plain(f.name._text) == "Элтара"][0]
 eltara.MockClick(eltara); g.RunTimers()
 rows = shown_rows()
 check("click on Элтара: her «Осталось» (12 of 16; Эйра's kills do not count)", rows[0].startswith("|cff8c8c8cОсталось 12 из 16"), rows[:1])
 check("…she is selected on the left", [c[0] for c in char_rows() if c[2]] == ["Элтара"], char_rows())
 check("…no «не фармлю» menu on another character's rows", not [f for f in pool(16) if f.elem.entry is not None])
 check("…the tab title still counts the current character", tabs[0]._text == "Осталось (24)", tabs[0]._text)
+check("…her name in her class colour: the sheet's key is just «элтара», found among this account's characters",
+      str(eltara.name._text) == "|cff3fc7ebЭлтара|r", str(eltara.name._text))
+L.execute("MSS_NS = ...", ns)
+L.execute("""
+local r
+for _, c in ipairs(MSS_NS.GetAllRemaining()) do if c.name == "Элтара" then r = c.r end end
+for _, e in ipairs(r.items) do
+  if not e.done and e.item.kind == "world" then
+    table.insert(MountSheetSyncDB.kills, { id = "M-eltara-test", kind = "manual", boss = e.item.boss, char = "Элтара",
+      charKey = "Player-1602-0E1715", time = MOCK.now, weekEnd = MountSheetSyncDB.kills[1].weekEnd })
+    break
+  end
+end
+""")
+L.execute("MSS_NS.OnChange()")   # what a new record does in the game: the open window refreshes
+g.RunTimers()
+check("…a kill Элтара made on this account (her GUID) ticks her own list", shown_rows()[0].startswith("|cff8c8c8cОсталось 11 из 16"),
+      shown_rows()[:1])
+L.execute("table.remove(MountSheetSyncDB.kills)")
+g.RunTimers()
 tabs[1].MockClick(tabs[1]); g.RunTimers()
 rows = shown_rows()
 summ = ns.GetSummary()
@@ -272,7 +306,7 @@ names_row = pool(16)[3]
 names_row._scripts.OnEnter(names_row)
 tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
 check("…hover: every name in the tooltip", tt[1] == ", ".join(str(first.names[i]) for i in range(1, len(first.names) + 1)), tt)
-eira = [f for f in pool(20) if str(f.name._text) == "Эйра"][0]
+eira = [f for f in pool(20) if plain(f.name._text) == "Эйра"][0]
 eira.MockClick(eira); g.RunTimers()
 check("click on a character from another tab opens his «Осталось»", win.selectedTab == 1 and shown_rows()[0].startswith("|cff8c8c8cОсталось 24 из 36"))
 tabs[2].MockClick(tabs[2]); g.RunTimers()
@@ -318,6 +352,9 @@ def dump_layout(root, path):
                        "checked": bool(x._checked) if x._type == "CheckButton" else None,
                        "title": str(x._title) if x._title is not None else None,
                        "radio": x._type == "CheckButton" and LUA_RAWGET(x, "code") is not None,
+                       "layer": x._layer if x._type == "Texture" else None,
+                       "texture": str(x._texture) if x._type == "Texture" and x._texture is not None else None,
+                       "color": [x._color[k] for k in range(1, 5)] if x._type == "Texture" and x._color is not None else None,
                        "parent": ref(x._parent) if i else "UIParent", "points": pts, "scrollChildOf": None})
     for i, x in enumerate(export):
         if x._type == "ScrollFrame" and x._scrollChild is not None:
@@ -328,6 +365,8 @@ def dump_layout(root, path):
 tabs[0].MockClick(tabs[0]); g.RunTimers()
 dump_layout(win, OUT_LAYOUT)
 LAYOUT_DIR = os.path.dirname(os.path.abspath(OUT_LAYOUT))
+tabs[1].MockClick(tabs[1]); g.RunTimers()
+dump_layout(win, os.path.join(LAYOUT_DIR, "layout_all.json"))
 tabs[3].MockClick(tabs[3]); g.RunTimers()
 dump_layout(win, os.path.join(LAYOUT_DIR, "layout_log.json"))
 g.SlashCmdList["MOUNTSHEETSYNC"]("settings"); g.RunTimers()

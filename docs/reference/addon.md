@@ -47,9 +47,7 @@ Midnight (`issecretvalue`) не читаются — имя босса тогд�
 
 ## Окно (`/mss`, ЛКМ по кнопке)
 
-Скриншоты ниже — окно 2.x (до 3.0); окно 3.0 шире и с панелью персонажей слева.
-
-![Журнал](../screens/addon-log.png) ![Осталось](../screens/addon-remaining.png)
+![Осталось](../screens/addon-remaining.png) ![Все персонажи](../screens/addon-all.png) ![Журнал](../screens/addon-log.png)
 
 Окно 820×540 (3.0). Все списки — ScrollBox игры (`WowScrollBoxList` + `MinimalScrollBar`,
 `CreateScrollBoxListLinearView`, `ScrollUtil.InitScrollBoxListWithScrollBar`): кадры строк только для видимой части,

@@ -424,6 +424,8 @@ function ns.GetAllRemaining()
       local realm = tostring(c.realm or "")
       byKey[Norm(c.name .. "-" .. realm)] = c
       byKey[Norm(c.name .. "-" .. (realm:gsub(" ", "")))] = c
+      local short = Norm(c.name)   -- в таблице ключ обычно просто имя листа
+      byKey[short] = byKey[short] or c
     end
   end
   local current = FindCharacter(data, player)

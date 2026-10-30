@@ -70,6 +70,7 @@
   .f-GameFontNormalSmall { color: #d9c68e; font-size: 10.5px; }
   .f-GameFontDisableSmall { color: var(--muted); font-size: 9.6px; }
   .f-none { color: var(--text); font-size: 11.5px; }
+  .gear { color: var(--muted); font-size: 18px; line-height: 1; display: flex; align-items: center; justify-content: center; }
   .tick {
     display: inline-flex; width: 12px; height: 12px; border-radius: 50%; background: #3fb36b; color: #08140c;
     font-size: 9px; font-weight: 700; align-items: center; justify-content: center; vertical-align: -1px;
@@ -152,6 +153,9 @@ function rect(i) {
   if (x.scrollChildOf !== null) {
     const s = rect(x.scrollChildOf);
     res = { l: s.l, t: s.t, r: s.l + (x.w || (s.r - s.l)), b: s.t + (x.h || 2000) };
+  } else if (x.points.length && x.points[0].point === "ALL") {   // SetAllPoints
+    const s = relRect(x, x.points[0].rel);
+    res = s ? { l: s.l, t: s.t, r: s.r, b: s.b } : null;
   } else if (!x.points.length) {
     if (x.parent === "UIParent") return null;
     const p = rect(x.parent);
@@ -184,6 +188,13 @@ function rect(i) {
   }
   rects[i] = res;
   return res;
+}
+
+// a ScrollBox whose shown rows go below its bottom edge
+function overflows(box) {
+  const b = rect(box);
+  if (!b) return false;
+  return L.some((y, k) => y.parent === box && y.shown && rect(k) && rect(k).b > b.b + 1);
 }
 
 // build the DOM along the parent chain, so scroll frames clip their content
@@ -223,8 +234,18 @@ function build(i) {
   else if (x.type === "CheckButton") {
     el.classList.add("check"); if (x.radio) el.classList.add("radio"); if (x.checked) el.classList.add("on");
     const box = document.createElement("i"); if (x.checked && !x.radio) box.textContent = "✓"; el.appendChild(box);
-  } else if (x.type === "ScrollFrame") el.classList.add("scroll");
+  } else if (x.type === "ScrollFrame" || tmpl === "WowScrollBoxList") el.classList.add("scroll");
   else if (x.type === "Slider") el.classList.add("bar");
+  else if (tmpl === "MinimalScrollBar") {
+    // the game hides it while the list fits (ScrollUtil.AddManagedScrollBarVisibilityBehavior)
+    if (!overflows(x.points[0].rel)) { nodes[i] = null; return null; }
+    el.classList.add("bar");
+  } else if (x.type === "Texture") {
+    if (x.layer === "HIGHLIGHT") { nodes[i] = null; return null; }   // only under the mouse
+    if (x.color) el.style.background = "rgba(" + x.color.slice(0, 3).map(c => Math.round(c * 255)).join(",") + "," + x.color[3] + ")";
+    else if (/Gear/.test(x.texture || "")) { el.classList.add("gear"); el.textContent = "⚙"; }
+    else { nodes[i] = null; return null; }
+  }
   else if (x.type === "FontString") {
     // a button's own label is drawn by the button
     const p = L[x.parent];

@@ -26,9 +26,9 @@ Portuguese spreadsheets.
 
 ## Screenshots
 
-| “Remaining” this week | Log | Settings |
+| “Remaining” of any character | All characters | Settings |
 | --- | --- | --- |
-| ![Remaining](docs/screens/addon-remaining.png) | ![Log](docs/screens/addon-log.png) | ![Settings](docs/screens/addon-settings.png) |
+| ![Remaining](docs/screens/addon-remaining.png) | ![All characters](docs/screens/addon-all.png) | ![Settings](docs/screens/addon-settings.png) |
 
 The addon window (Russian game client, sample characters). Drawn from the addon's real layout — the same frames,
 sizes and texts it creates in the game — with `tools/screens/render.py`; the in-game look follows your UI.
