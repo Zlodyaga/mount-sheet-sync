@@ -266,7 +266,22 @@ namespace MountSheetSync
         public void RunOnce(Settings settings)
         {
             UseLedger(settings);
-            Iteration();
+            IterationInSession();
+        }
+
+        /// <summary>Один проход — одна загрузка таблицы (см. SyncEngine.BeginSession).</summary>
+        void IterationInSession()
+        {
+            SyncEngine current = engine;
+            current.BeginSession();
+            try
+            {
+                Iteration();
+            }
+            finally
+            {
+                current.EndSession();
+            }
         }
 
         /// <summary>Список отправленного — свой у каждой таблицы (AppPaths.SentFileFor).</summary>
@@ -340,7 +355,7 @@ namespace MountSheetSync
                 int waitSeconds = Math.Max(2, engine.Settings.PollSeconds);
                 try
                 {
-                    Iteration();
+                    IterationInSession();
                 }
                 catch (Exception ex)
                 {
@@ -682,7 +697,7 @@ namespace MountSheetSync
             CollectionResult res;
             try
             {
-                res = new GoogleSheetService(engine.Settings.SpreadsheetId).SyncCollection(game, manual);
+                res = engine.GoogleService().SyncCollection(game, manual);
             }
             catch (SyncException ex)
             {
@@ -781,6 +796,7 @@ namespace MountSheetSync
             statusFailures = 0;
             statusUnsupported = false;
             nextStatusAt = now + StatusInterval;
+            resp = ResetWeekIfDue(resp);
             sheetLua = SheetData.Build(resp);
             status.Left = SheetData.Summarize(resp);
             status.LeftAt = now;
@@ -793,6 +809,30 @@ namespace MountSheetSync
             }
             WriteSheetFiles();
             Publish();
+        }
+
+        /// <summary>
+        /// Новая неделя игры, а в таблице сброса ещё не было — сбросить самим (и заново отметить убийства этой недели,
+        /// как после кнопки). Ответ — свежий список; не получилось — прежний и попытка при следующем обновлении списка.
+        /// </summary>
+        Dictionary<string, object> ResetWeekIfDue(Dictionary<string, object> resp)
+        {
+            try
+            {
+                Dictionary<string, object> reset = engine.WeekResetRecord(resp, engine.ReadAllRecords(files), DateTime.UtcNow);
+                if (reset == null)
+                {
+                    return resp;
+                }
+                Report(engine.SyncAll(files, reset), false);
+                SetIdle();
+                return engine.FetchStatus();
+            }
+            catch (SyncException ex)
+            {
+                Log.Write(Tr.L("Автоматический сброс недели не прошёл: {0} Попробую позже.", TextUtil.Sentence(ex.Message)));
+                return resp;
+            }
         }
 
         /// <summary>Напоминание о «Сбросе недели» для меню; сломанный файл игры его просто отменяет.</summary>

@@ -307,6 +307,41 @@ try:
     code, out = run("--add-chars")
     check("--add-chars again: nothing to add", code == 0 and "Все персонажи уже есть" in out, out[-500:])
 
+    # ---------------------------------------------------------------- one pass: the table is loaded once
+    kills.append({"id": "K-load", "time": NOW, "char": "Эйра", "realm": "Ревущий фьорд", "charKey": "Player-1-A", "source": "encounter",
+                  "boss": "Сильвана Ветрокрылая", "kind": "raid", "difficultyID": 16, "weekEnd": WEEK_END, "instance": "Святилище Господства"})
+    write_sv([EIRA, MIRNA], ["Пепел Ал'ара", "Синий протодракон"], kills)
+    n_before = len(state()["requests"])
+    code, out = run("--once")
+    reads = [p for m, p in state()["requests"][n_before:] if m == "GET" and p.startswith("/v4/spreadsheets")]
+    sheetdata = open(os.path.join(ADDON, "SheetData.lua"), encoding="utf-8").read()
+    check("kills + list in one pass: 3 reads, not 6 (one load of the table)", code == 0 and len(reads) == 3, reads)
+    check("…the list is still written, from the table as it is after the kills", "MountSheetSyncSheet" in sheetdata)
+
+    # ---------------------------------------------------------------- a new game week: the program resets by itself
+    next_week = WEEK_END + 7 * 86400
+    book = state()["spreadsheets"][book["id"]]
+    mim = sheet_cells(book, "Рейды Мирна")
+    meta_before = [m for m in book["devmeta"] if m["metadataKey"] == "mountSheetSync.lastWeekReset"][0]["metadataValue"]
+    check("before the new week: last week's mark on Мирна", mim[find_row(mim, 3, "Отмщение")][0] == "Да")
+    kills.append({"id": "K-week", "time": NOW, "char": "Эйра", "realm": "Ревущий фьорд", "charKey": "Player-1-A", "source": "encounter",
+                  "boss": "Сильвана Ветрокрылая", "kind": "raid", "difficultyID": 16, "weekEnd": next_week, "instance": "Святилище Господства"})
+    write_sv([EIRA, MIRNA], ["Пепел Ал'ара", "Синий протодракон"], kills)
+    time.sleep(1.1)
+    code, out = run("--once")
+    book = state()["spreadsheets"][book["id"]]
+    mim = sheet_cells(book, "Рейды Мирна")
+    eira = sheet_cells(book, "Рейды Эйра")
+    meta = [m for m in book["devmeta"] if m["metadataKey"] == "mountSheetSync.lastWeekReset"]
+    check("new week, nobody pressed the button: last week's marks cleared by the program", code == 0 and mim[find_row(mim, 3, "Отмщение")][0] == "Нет", out[-800:])
+    check("…this week's kill stays marked", eira[find_row(eira, 3, "Отмщение")][0] == "Да")
+    check("…the time of the reset is stored", len(meta) == 1 and meta[0]["metadataValue"] != meta_before, meta)
+    ledger = [f for f in os.listdir(DATA) if f.startswith("sent-ids-google")]
+    check("…remembered as sent for this week", any("R-auto-%d" % next_week in open(os.path.join(DATA, f), encoding="utf-8").read() for f in ledger), ledger)
+    n_before = len(state()["requests"])
+    code, out = run("--once")
+    check("…and not repeated", code == 0 and not any(p.endswith("values:batchUpdate") for m, p in state()["requests"][n_before:]))
+
     # ---------------------------------------------------------------- revoked sign-in
     api("/__control", {"expireAccess": True, "revokeRefresh": True})
     kills.append({"id": "K-3", "time": NOW + 1, "char": "Эйра", "realm": "Ревущий фьорд", "charKey": "Player-1-A", "source": "bosskill",

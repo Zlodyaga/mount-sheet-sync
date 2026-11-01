@@ -234,6 +234,8 @@ try:
     # the same boss reported by a Russian client: only the encounter ID matches
     kills.append(kill("K-2", "Mirna", "Blackhand", "Рагнарос", 1203, "Огненные Просторы", diff=14))
     kills[-1]["weekEnd"] = WEEK_END - 60   # not this reset's week: not marked again after the reset below
+    # this test presses the reset itself below: the program's automatic one for this week counts as done
+    open(os.path.join(de.data, "sent-ids-google-%s.txt" % book["id"]), "a", newline="").write("R-auto-%d\t%d\r\n" % (WEEK_END, NOW))
     kills.append({"id": "C-1", "time": NOW - 20, "char": "Eira", "realm": "Blackhand", "charKey": "Player-Eira", "source": "mount",
                   "kind": "mount", "boss": "Rache", "mount": "Rache", "mountID": 1471, "from": "Beute: Sylvanas Windläufer"})
     de.write_sv(db)

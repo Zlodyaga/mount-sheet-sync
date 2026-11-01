@@ -2,6 +2,11 @@
 
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
+## 3.0.3
+- Rares (Ishak of the Four Winds and the like): the attempt no longer depends on what is targeted when the loot window
+  opens. The addon remembers rares you targeted, hovered or saw a nameplate of, and a corpse whose name it did not know
+  still counts if you open it again.
+
 ## 3.0.2
 - Kills are now recognised by the game's encounter ID from the sheet's list, not only by the boss name: the game
   calls Galleon «Галеон» while the sheet said «Галлеон», so in the Russian client the attempt line in chat did not show

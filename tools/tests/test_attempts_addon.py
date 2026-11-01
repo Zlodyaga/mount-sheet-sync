@@ -293,6 +293,32 @@ out = loot(L4, g4, "Creature-0-3767-1-41-12345-0000AAAA", "Песчаный ск
 check("an ordinary mob: nothing", len(g4.MountSheetSyncDB.kills) == n, out)
 out = loot(L4, g4, "Creature-0-3767-1-41-157134-0000BBBB", None)
 check("a corpse that is not the target (name unknown): nothing, no error", len(g4.MountSheetSyncDB.kills) == n and not any("Ошибка" in c for c in out), out)
+L4.execute("MOCK.now = MOCK.now + 1000")   # past the 15 minutes of «the same boss was just recorded»
+out = loot(L4, g4, "Creature-0-3767-1-41-157134-0000BBBB", "Исхак Повелитель Четырех Ветров")
+check("…the same corpse opened again as the target: counted (a corpse without a name is not written off)",
+      len(g4.MountSheetSyncDB.kills) == n + 1 and any("попытка 2 " in c for c in out), out)
+n = len(g4.MountSheetSyncDB.kills)
+L4.execute('function UnitClassification(u) if u == "target" then return UNIT_KIND end end; UNIT_KIND = "rareelite"')
+L4.execute('MOCK.now = MOCK.now + 1000; TARGET = { guid = "Creature-0-3767-1-41-157134-0000DDDD", name = "Исхак Повелитель Четырех Ветров" }')
+g4.Fire("PLAYER_TARGET_CHANGED")
+L4.execute('TARGET = { guid = "Creature-0-3767-1-41-12345-0000EEEE", name = "Песчаный скорпид" }; MOCK.loot = { "Creature-0-3767-1-41-157134-0000DDDD" }')
+before = len(g4.CHAT)
+g4.Fire("LOOT_READY", False)
+g4.RunTimers()
+out = chat(g4, before)
+check("a rare seen earlier, another target when its corpse opens: the remembered name counts the attempt",
+      len(g4.MountSheetSyncDB.kills) == n + 1 and any("попытка 3 " in c for c in out), out)
+L4.execute('UNIT_KIND = "normal"; TARGET = { guid = "Creature-0-3767-1-41-157134-0000FFFF", name = "Исхак Повелитель Четырех Ветров" }')
+g4.Fire("PLAYER_TARGET_CHANGED")
+L4.execute('MOCK.now = MOCK.now + 1000; TARGET = {}; MOCK.loot = { "Creature-0-3767-1-41-157134-0000FFFF" }')
+g4.Fire("LOOT_READY", False)
+g4.RunTimers()
+check("…an ordinary mob is not remembered", len(g4.MountSheetSyncDB.kills) == n + 1)
+L4.execute('UNIT_KIND = "SECRET"; TARGET = { guid = "Creature-0-3767-1-41-157134-0000AAAB", name = "Исхак Повелитель Четырех Ветров" }')
+g4.Fire("PLAYER_TARGET_CHANGED")
+check("…a hidden classification: skipped, no error", not any("Ошибка" in c for c in chat(g4, 0)))
+L4.execute('UNIT_KIND = "normal"; TARGET = {}')
+n = len(g4.MountSheetSyncDB.kills)
 out = kill(L4, g4, "Галеон", 0, 725, inst=("Долина Четырех Ветров", "none"))
 out = loot(L4, g4, "Creature-0-3767-1-41-62346-0000CCCC", "Галеон")
 check("a world boss looted right after its kill: not counted twice", not any("мог выпасть" in c for c in out)
@@ -355,7 +381,7 @@ rep = g.MountSheetSyncReportFrame
 boxes = [r for r in regs + [g.ALL_REGIONS[i] for i in range(len(regs) + 1, len(g.ALL_REGIONS) + 1)] if r._type == "EditBox" and r._multiline]
 text = str(boxes[0]._text) if boxes else ""
 check("report window: the text selected for Ctrl+C", rep is not None and rep._shown and boxes and boxes[0]._highlighted, text)
-check("…versions, program state and counts", "Mount Sheet Sync bug report" in text and "Addon: 3.0.2" in text and "Game: 12.1.5 (build 65000" in text
+check("…versions, program state and counts", "Mount Sheet Sync bug report" in text and "Addon: 3.0.3" in text and "Game: 12.1.5 (build 65000" in text
       and "Program: online (version 2.9.1, sheet connected" in text and "attempt rows 3" in text and "Journal: 5 records" in text, text)
 check("…no character names, realm or spreadsheet title", "Эйра" not in text and "Ревущий" not in text and "Мирна" not in text, text)
 boxes[0]._scripts.OnTextChanged(boxes[0], True)

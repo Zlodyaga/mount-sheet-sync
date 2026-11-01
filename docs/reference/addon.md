@@ -22,7 +22,7 @@
 ## События и записи журнала
 
 Регистрируются в `MountSheetSync.lua` после `ADDON_LOADED`: `PLAYER_LOGIN`, `ENCOUNTER_END`, `BOSS_KILL`,
-`UPDATE_INSTANCE_INFO`, `NEW_MOUNT_ADDED`, `LOOT_READY` (рары). `Tooltip.lua` ждёт `ADDON_LOADED` для `Blizzard_EncounterJournal`.
+`UPDATE_INSTANCE_INFO`, `NEW_MOUNT_ADDED`, `LOOT_READY`, `PLAYER_TARGET_CHANGED`, `UPDATE_MOUSEOVER_UNIT`, `NAME_PLATE_UNIT_ADDED` (рары). `Tooltip.lua` ждёт `ADDON_LOADED` для `Blizzard_EncounterJournal`.
 
 `MountSheetSyncDB.kills` — журнал, не больше `MAX_RECORDS = 400` записей и не старше `MAX_AGE` = 21 день.
 Каждая запись: `char`, `realm`, `charKey` (GUID), `time`, `kind`, `id`, для убийств ещё `boss`, `encounterID`,
@@ -33,11 +33,11 @@
 | `K-<charKey>-<encounterID>-<time>` | raid / party / scenario / world | `ENCOUNTER_END` или `BOSS_KILL` (дубль за 120 с отбрасывается) |
 | `L-…` | raid / party | «Найти в сохранениях»: сохранения подземелий этой недели (продлённые пропускаются) |
 | `W-<charKey>-<босс>-<lockEnd>` | world | сохранения мировых боссов |
-| `D-<charKey>-<npcID>-<time>` | world | **рар** (не бой, без сохранений — напр. Исхак Повелитель Четырех Ветров): открыта добыча с трупа, чьё имя (у цели / под курсором с тем же GUID) есть в несобранных строках «Мировые боссы» из `mounts`; `npcID` из GUID; тот же босс за 15 мин второй раз не пишется |
+| `D-<charKey>-<npcID>-<time>` | world | **рар** (не бой, без сохранений — напр. Исхак Повелитель Четырех Ветров): открыта добыча с трупа, чьё имя (у цели / под курсором с тем же GUID или запомненное: рары, которых игрок видел как цель, под курсором или по табличке, `rareNames`, до 100 GUID) есть в несобранных строках «Мировые боссы» из `mounts`; `npcID` из GUID; тот же босс за 15 мин второй раз не пишется; труп без известного имени не считается обработанным — откроют снова целью, и попытка запишется |
 | `C-<charKey>-<mountID>` | mount | новый маунт (`NEW_MOUNT_ADDED`), с `mount`, `mountID`, `from` (источник) |
 | `M-…` | manual | ручная отметка (поле в окне, `/mss add`) |
 | `P-…` | plan | «Не фармлю на этом персонаже» (правый щелчок по строке «Осталось»), `farm`, `scope` row/place |
-| `R-<charKey>-<time>` | reset | «Сброс недели» |
+| `R-<charKey>-<time>` | reset | «Сброс недели» (кнопка). Автоматический сброс делает программа, в журнале его нет: аддон узнаёт о нём по `resetAt` |
 
 Скан сохранений сразу после убийства (до 30 с) тоже пишет строку попытки — так ловятся бои, имя которых игра
 спрятала, и мировые боссы без события. Скан при входе в игру попыток в чат не пишет.

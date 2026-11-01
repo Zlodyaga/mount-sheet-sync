@@ -1,6 +1,6 @@
 
 MountSheetSyncDB = {
-	["addonVersion"] = "3.0.2",
+	["addonVersion"] = "3.0.3",
 	["chars"] = {
 		["Мирна-Ревущий фьорд"] = {
 			["class"] = "Жрица",

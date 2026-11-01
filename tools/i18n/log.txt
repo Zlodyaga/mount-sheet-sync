@@ -259,6 +259,9 @@ en: Collection check failed: {0} Will try at the next data update from the game.
 @ Список «Осталось» недоступен: {0}.
 en: The “Remaining” list is unavailable: {0}.
 
+@ Автоматический сброс недели не прошёл: {0} Попробую позже.
+en: Automatic weekly reset failed: {0} Will try later.
+
 @ Не удалось получить список «Осталось»: {0} Попробую позже.
 en: Could not get the “Remaining” list: {0} Will try later.
 
