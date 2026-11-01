@@ -269,7 +269,7 @@ namespace MountSheetSync
         /// <summary>Напоминание для меню, если на этой неделе в таблице ещё не было «Сброса недели».</summary>
         public static string WeekNote(Dictionary<string, object> status, IEnumerable<Dictionary<string, object>> records, DateTime utcNow)
         {
-            return WeekWithoutReset(status, records, utcNow) > 0 ? Tr._("На этой неделе «Сброс недели» не нажимали") : "";
+            return WeekWithoutReset(status, records, utcNow) > 0 ? Tr._("На этой неделе таблицу ещё не сбрасывали") : "";
         }
 
         /// <summary>

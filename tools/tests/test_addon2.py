@@ -290,7 +290,8 @@ g.MountSheetSyncSettingsFrame.Hide(g.MountSheetSyncSettingsFrame)
 saved_kills = kills()
 
 # reset week (with confirmation) -> record + reload
-click(button("Сброс недели"))
+check("3.0.3: no «Сброс недели» in the window, it lives in the settings", not [r for r in regions("Button") if r._text == "Сброс недели" and under_window(r)])
+click(settings_part("Button", "Сброс недели"))
 popup = g.POPUPS[len(g.POPUPS)]
 check("«Сброс недели» asks for confirmation", "Начать новую неделю?" in popup.text and popup.acceptText == "Сбросить" and popup.cancelText == "Отмена")
 check("nothing happens before confirming", not g.RELOADED and kills()[-1]["kind"] != "reset")

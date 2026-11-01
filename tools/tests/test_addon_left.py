@@ -240,7 +240,7 @@ check("journal tab shows the journal", any("Тюремщик" in t for t in show
 tabs[0].MockClick(tabs[0]); g.RunTimers()
 rows = shown_rows()
 check("«Осталось» tab: info line first", (rows[0].startswith("|cff8c8c8cОсталось 24 из 36 - список из таблицы сегодня в ") or rows[0].startswith("|cff8c8c8cОсталось 24 из 36 - список из таблицы вчера в ")), rows[0])
-check("no reset this week known: orange reminder under it", rows[1] == "|cffff9a4dНа этой неделе «Сброс недели» не нажимали — в таблице могут быть «Да» прошлой недели.|r", rows[1])
+check("no reset this week known: orange reminder under it", rows[1] == "|cffff9a4dНа этой неделе таблицу ещё не сбрасывали — в ней могут быть «Да» прошлой недели.|r", rows[1])
 check("group headers in order", [t for t in rows if t.startswith("|cffffd200")] == ["|cffffd200Рейды|r", "|cffffd200Подземелья|r", "|cffffd200Мировые боссы|r"])
 check("row: boss (difficulty) — mount · place",
       "   Сильвана Ветрокрылая |cff8c8c8c(Mythic)|r — |cffc9a0ffМесть|r |cff8c8c8c- Sanctum of Domination|r" in rows, [t for t in rows if "Сильвана" in t])

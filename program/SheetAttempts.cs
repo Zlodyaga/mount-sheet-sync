@@ -116,7 +116,20 @@ namespace MountSheetSync
             {
                 return;   // повтор уже отправленного убийства после «Сброса недели»
             }
-            string masterName = MasterFor(kind);
+            List<object> counted = new List<object>();
+            CountIn(book, MasterFor(kind), kill, kind, names, counted);
+            if (kind == "world" || kind == "manual")
+            {
+                CountIn(book, RareSheet, kill, kind, names, counted);   // рар приходит из игры как мировой босс
+            }
+            if (counted.Count > 0)
+            {
+                o["attempts"] = counted;
+            }
+        }
+
+        static void CountIn(IBook book, string masterName, Dictionary<string, object> kill, string kind, List<string> names, List<object> counted)
+        {
             SheetEntry entry = masterName != null ? ByName(book, masterName) : null;
             if (entry == null || entry.Data.Count < 2)
             {
@@ -134,9 +147,8 @@ namespace MountSheetSync
             int cMount = FindCol(header, "маунт", 3);
             int cPlace = FindCol(header, "^рейд|подземел|локац", 2);
             int cDrop = FindCol(header, DropPattern, -1);
-            bool world = masterName == SheetBuilder.WorldSheet;
+            bool world = masterName == SheetBuilder.WorldSheet || masterName == RareSheet;
             bool loose = kind == "manual";
-            List<object> counted = new List<object>();
             for (int r = 1; r < entry.Data.Count; r++)
             {
                 object[] row = entry.Data[r];
@@ -173,10 +185,6 @@ namespace MountSheetSync
                 a["row"] = (double)(r + 1);
                 counted.Add(a);
             }
-            if (counted.Count > 0)
-            {
-                o["attempts"] = counted;
-            }
         }
 
         /// <summary>
@@ -188,7 +196,7 @@ namespace MountSheetSync
             List<object> list = new List<object>();
             foreach (string[] m in new[]
             {
-                new[] { SheetBuilder.RaidsSheet, "raid" }, new[] { SheetBuilder.DungeonsSheet, "dungeon" }, new[] { SheetBuilder.WorldSheet, "world" },
+                new[] { SheetBuilder.RaidsSheet, "raid" }, new[] { SheetBuilder.DungeonsSheet, "dungeon" }, new[] { SheetBuilder.WorldSheet, "world" }, new[] { RareSheet, "rare" },
             })
             {
                 SheetEntry entry = ByName(book, m[0]);
@@ -203,7 +211,7 @@ namespace MountSheetSync
                 {
                     continue;
                 }
-                bool world = m[1] == "world";
+                bool world = m[1] == "world" || m[1] == "rare";
                 int cCollected = FindCol(header, "собрано", -1);
                 int cBoss = FindCol(header, "босс", 4);
                 int cDiff = world ? -1 : FindCol(header, "сложност|режим", 5);

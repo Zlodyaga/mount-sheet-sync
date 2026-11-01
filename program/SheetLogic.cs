@@ -45,6 +45,7 @@ namespace MountSheetSync
         public const string RaidPrefix = "Рейды";
         public const string DungeonPrefix = "Подземелья";
         public const string WorldSheet = "Мировые боссы";
+        public const string RareSheet = "Редкие монстры";
         public const string ResetProperty = "lastWeekReset";
 
         static readonly string[,] Prefixes = { { "raid", RaidPrefix }, { "dungeon", DungeonPrefix } };
@@ -280,6 +281,7 @@ namespace MountSheetSync
             if (kind == "world" || kind == "manual")
             {
                 worldFound = MarkInWorld(book, kill, charKeys, names, ctx);
+                worldFound = MarkInRare(book, kill, names, ctx) || worldFound;
             }
             CountAttempts(book, kill, kind, names, o);   // «Попыток» на общих листах (SheetAttempts.cs)
 
@@ -767,6 +769,64 @@ namespace MountSheetSync
                 ctx.Cells.Add(CellInfo(entry, r, Truthy(At(row, cMount)) ? JsString(At(row, cMount)) : "", changed));
             }
             return true;
+        }
+
+        /// <summary>Рар: «Последнее убийство» на его листе — когда и кто. Откат считает аддон, персонажам галочек нет.</summary>
+        static bool MarkInRare(IBook book, Dictionary<string, object> kill, List<string> names, MarkContext ctx)
+        {
+            SheetEntry entry = ByName(book, RareSheet);
+            if (entry == null || entry.Data.Count == 0)
+            {
+                return false;
+            }
+            object[] header = entry.Data[0];
+            int cBoss = FindCol(header, "босс", 4);
+            int cMount = FindCol(header, "маунт", 3);
+            int cLast = FindCol(header, "^последнее убийство", -1);
+            bool loose = J.Str(kill, "kind") == "manual";
+            bool found = false;
+            for (int r = 1; r < entry.Data.Count; r++)
+            {
+                object[] row = entry.Data[r];
+                string text = JsString(At(row, cBoss));
+                if (text.Trim().Length == 0 || !text.Split('/').Any(alt => names.Any(n => NameMatches(n, alt, loose))))
+                {
+                    continue;
+                }
+                found = true;
+                bool write = cLast >= 0 && !Truthy(J.Get(kill, "again"));
+                if (write)
+                {
+                    DateTime when = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(J.Long(kill, "time")).ToLocalTime();
+                    book.Set(entry, r, cLast, when.ToString("dd.MM HH:mm", CultureInfo.InvariantCulture) + " " + J.Str(kill, "char"));
+                }
+                ctx.Cells.Add(CellInfo(entry, r, Truthy(At(row, cMount)) ? JsString(At(row, cMount)) : "", write));
+            }
+            return found;
+        }
+
+        static readonly Regex EveryHours = new Regex(@"(\d+)\s*(ч|h)", RegexOptions.IgnoreCase);
+
+        /// <summary>
+        /// Откат рара из «Сброс / частота» (на любом языке таблицы): "weekly", число секунд («каждые 8 ч») или "daily" —
+        /// ежедневный сброс игры, он же значение по умолчанию.
+        /// </summary>
+        public static object RareEvery(object cell)
+        {
+            string text = JsString(cell).ToLowerInvariant();
+            foreach (string w in new[] { "еженедельно", "раз в неделю", "weekly", "wöchentlich", "hebdomadaire", "semanal" })
+            {
+                if (text.Contains(w))
+                {
+                    return "weekly";
+                }
+            }
+            Match m = EveryHours.Match(text);
+            if (m.Success)
+            {
+                return double.Parse(m.Groups[1].Value, CultureInfo.InvariantCulture) * 3600;
+            }
+            return "daily";
         }
 
         enum Match3 { No, Yes, Difficulty }
@@ -1270,6 +1330,7 @@ namespace MountSheetSync
                 }
             }
 
+            List<string> worldOwners = new List<string>();
             SheetEntry world = ByName(book, WorldSheet);
             if (world != null)
             {
@@ -1291,6 +1352,7 @@ namespace MountSheetSync
                     {
                         continue;
                     }
+                    worldOwners.Add(owner);
                     Dictionary<string, object> ch = charFor(owner);
                     for (int r = 1; r < data.Count; r++)
                     {
@@ -1316,6 +1378,34 @@ namespace MountSheetSync
             reply["version"] = Program.Version;
             reply["spreadsheet"] = book.Title;
             reply["generated"] = (double)UnixNow();
+
+            // Рары — всем, у кого есть колонка на «Мировых боссах»; убит ли и когда снова можно, считает аддон (every — откат)
+            SheetEntry rare = ByName(book, RareSheet);
+            if (rare != null && rare.Data.Count > 1)
+            {
+                object[] header = rare.Data[0];
+                int cBoss = FindCol(header, "босс", 4);
+                int cMount = FindCol(header, "маунт", 3);
+                int cPlace = FindCol(header, "локац", 2);
+                int cCollected = FindCol(header, "собрано", -1);
+                int cEvery = FindCol(header, "сброс|частота", -1);
+                for (int r = 1; r < rare.Data.Count; r++)
+                {
+                    object[] row = rare.Data[r];
+                    string boss = CellText(At(row, cBoss));
+                    string mount = CellText(At(row, cMount));
+                    if ((boss.Length == 0 && mount.Length == 0) || (cCollected >= 0 && IsYes(At(row, cCollected))) || collected.Contains(Norm(mount)))
+                    {
+                        continue;
+                    }
+                    foreach (string owner in worldOwners)
+                    {
+                        Dictionary<string, object> item = StatusItem("rare", rare.Name, r, At(row, cPlace), boss, "", mount, false);
+                        item["every"] = RareEvery(cEvery >= 0 ? At(row, cEvery) : "");
+                        ((List<object>)charFor(owner)["items"]).Add(item);
+                    }
+                }
+            }
             string resetAt = null;
             try
             {

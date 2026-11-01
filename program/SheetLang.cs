@@ -33,7 +33,7 @@ namespace MountSheetSync
             "Шанс выпадения",
         };
 
-        static readonly string[] Masters = { SheetBuilder.RaidsSheet, SheetBuilder.DungeonsSheet, SheetBuilder.WorldSheet, SheetBuilder.SummarySheet };
+        static readonly string[] Masters = { SheetBuilder.RaidsSheet, SheetBuilder.DungeonsSheet, SheetBuilder.WorldSheet, SheetBuilder.RareSheet, SheetBuilder.SummarySheet };
         static readonly string[] Prefixes = { SheetBuilder.RaidsSheet, SheetBuilder.DungeonsSheet };
         public const string DefaultTitle = "Маунты WoW";
 
@@ -657,7 +657,7 @@ namespace MountSheetSync
         {
             Index i = new Index();
             SheetLang en = SheetLang.Get("en");
-            foreach (CatalogSheet sheet in new[] { catalog.Raids, catalog.Dungeons, catalog.World })
+            foreach (CatalogSheet sheet in new[] { catalog.Raids, catalog.Dungeons, catalog.World, catalog.Rare }.Where(s => s != null))
             {
                 int cBoss = sheet.Columns.FindIndex(c => c.StartsWith("Босс", StringComparison.Ordinal));
                 int cEnc = sheet.Col("ID босса");

@@ -190,7 +190,7 @@ try:
     book = [b for b in state()["spreadsheets"].values()][0]
     titles = [x["title"] for x in book["sheets"]]
     check("de: German sheet names", titles == ["Schlachtzüge", "Schlachtzüge Eira", "Schlachtzüge Mirna", "Dungeons", "Dungeons Eira",
-          "Dungeons Mirna", "Übersicht", "Weltbosse"], titles)
+          "Dungeons Mirna", "Übersicht", "Weltbosse", "Seltene Monster"], titles)
     check("de: German title and locale", book["title"] == "WoW-Reittiere" and book["locale"] == "de_DE", (book["title"], book["locale"]))
     mark = [m for m in book["devmeta"] if m["metadataKey"] == "mountSheetSync"]
     check("de: the program's marker names the language", mark and json.loads(mark[0]["metadataValue"]).get("lang") == "de", mark)
@@ -271,7 +271,7 @@ try:
     titles = [x["title"] for x in book["sheets"]]
     check("de: --add-chars: German sheets next to the others", code == 0 and titles == ["Schlachtzüge", "Schlachtzüge Eira",
           "Schlachtzüge Mirna", "Schlachtzüge Kaelia", "Dungeons", "Dungeons Eira", "Dungeons Mirna", "Dungeons Kaelia", "Übersicht",
-          "Weltbosse"], (titles, out[-800:]))
+          "Weltbosse", "Seltene Monster"], (titles, out[-800:]))
     kaelia = sheet_cells(book, "Schlachtzüge Kaelia")
     raids = sheet_cells(book, "Schlachtzüge")
     check("de: new character's sheet: German header, rows without collected mounts", kaelia[0][0] == "Diese Woche versucht?"
@@ -308,7 +308,7 @@ try:
     book = state()["spreadsheets"][new[0]]
     titles = [x["title"] for x in book["sheets"]]
     check("en: English sheet names, title, locale", titles == ["Raids", "Raids Эйра", "Dungeons", "Dungeons Эйра", "Summary",
-          "World Bosses"] and book["title"] == "WoW Mounts" and book["locale"] == "en_US", (titles, book["title"], book["locale"]))
+          "World Bosses", "Rare Monsters"] and book["title"] == "WoW Mounts" and book["locale"] == "en_US", (titles, book["title"], book["locale"]))
     raids = sheet_cells(book, "Raids")
     r = find_row(raids, 17, 1471)
     check("en: the Russian game's names are not used: English mount, boss, raid", r is not None and raids[r][3] == "Vengeance"

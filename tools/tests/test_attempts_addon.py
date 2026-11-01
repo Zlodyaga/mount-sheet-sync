@@ -371,6 +371,58 @@ check("…hover: how many characters can still try this week", tt[0] == "Отм�
 check("…the same numbers as the boss tooltip (one count for both)", att[1].n == 38 and att[1].left == 1)
 g.MountSheetSyncFrame.Hide(g.MountSheetSyncFrame)
 
+# ---- rares in the lists: their own group, a cooldown of their own (not the week)
+L6, g6, ns6, _, _ = new_game()
+L6.execute("""
+MOCK.daily = 5 * 3600
+C_DateAndTime.GetSecondsUntilDailyReset = function() return MOCK.daily end
+local items = MountSheetSyncSheet.chars[1].items
+for i = #items, 1, -1 do
+  if items[i].mount == "Дракон Четырех Ветров" then table.remove(items, i) end   -- on a real table the row is on one sheet
+end
+RARE_ITEM = { kind = "rare", boss = "Исхак Повелитель Четырех Ветров", mount = "Дракон Четырех Ветров", place = "Uldum",
+              names = { "исхак повелитель четырех ветров" }, d = {}, every = "daily" }
+items[#items + 1] = RARE_ITEM
+for _, m in ipairs(MountSheetSyncSheet.mounts) do
+  if m.mount == "Дракон Четырех Ветров" then m.kind = "rare" end
+end
+function RareEntry(ns)
+  local r = ns.GetRemaining()
+  for _, e in ipairs(r.items) do
+    if e.item == RARE_ITEM then return e, r end
+  end
+end
+""")
+entry = L6.eval("RareEntry")
+check("rares have their own group after the world bosses", [str(ns6.KIND_ORDER[i]) for i in range(1, 5)] == ["raid", "dungeon", "world", "rare"])
+e, r = entry(ns6)
+left0 = r.left
+check("not killed yet: left, the title of the group is translated", e.done is False and str(ns6.KindTitle("rare")) == "Редкие монстры")
+out = loot(L6, g6, "Creature-0-3767-1-41-157134-00006A2B3C", "Исхак Повелитель Четырех Ветров")
+e, r = entry(ns6)
+check("looted: an attempt (a row of kind «rare» is recognised) and done until the daily reset", any("Дракон Четырех Ветров" in c and "попытка 1 " in c for c in out)
+      and e.done is True and e.again == 5 * 3600 and r.left == left0 - 1, (e.done, e.again, r.left, left0))
+text = str(ns6.FormatRemaining(e))
+check("…the row says when it can be tried again", "снова через 5 ч 0 мин" in text and "ждёт таблицы" not in text, text)
+L6.execute("MOCK.now = MOCK.now + 6 * 3600; MOCK.daily = 23 * 3600")
+e, r = entry(ns6)
+check("after the daily reset: left again, without any «Сброс недели»", e.done is False and r.left == left0, (e.done, r.left))
+L6.execute("MOCK.now = MOCK.now + 3600")
+out = loot(L6, g6, "Creature-0-3767-1-41-157134-00007A2B3C", "Исхак Повелитель Четырех Ветров")
+L6.execute('RARE_ITEM.every = 8 * 3600; MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1; MOCK.now = MOCK.now + 3600')
+e, r = entry(ns6)
+check("another rare, every 8 h: counted from the kill", e.done is True and e.again == 7 * 3600, (e.done, e.again))
+L6.execute('MOCK.now = MOCK.now + 7 * 3600 + 60')
+e, r = entry(ns6)
+check("…and free again after 8 h, no new list needed", e.done is False)
+L6.execute('RARE_ITEM.every = "weekly"; MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1')
+e, r = entry(ns6)
+check("…a weekly rare: done until the weekly reset", e.done is True)
+L6.execute('C_DateAndTime.GetSecondsUntilDailyReset = nil; RARE_ITEM.every = "daily"; MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1; MOCK.now = MOCK.now + 3600')
+e, r = entry(ns6)
+check("…no daily reset from the game: a day since the kill", e.done is True and 0 < e.again < 86400, (e.done, e.again))
+check("no Lua errors with rares", not any("Ошибка" in c for c in chat(g6, 0)), chat(g6, 0)[-3:])
+
 # ---- bug report in the settings (right click)
 obj.OnClick(g.UIParent, "RightButton")
 regs = [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]

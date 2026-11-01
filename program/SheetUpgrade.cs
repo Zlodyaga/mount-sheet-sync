@@ -2,6 +2,7 @@
 //   2 — «Да»/«Нет» цветом в «Собрано?» и «Пытался на этой неделе?», колонка «Фармлю» на листах персонажей,
 //       «Осталось попыток выбить» без строк, которые персонаж не фармит.
 //   3 — счётчик попыток: «Попыток» и «Шанс за все попытки» справа от «Шанса выпадения» на общих листах (2.8).
+//   5 — рары из каталога (Исхак) — с «Мировых боссов» на отдельный лист «Редкие монстры» (2.9.2).
 // Колонку «ID в игре» добавляет CollectionSync — ей нужна коллекция из игры.
 
 using System;
@@ -13,7 +14,7 @@ namespace MountSheetSync
 {
     static class SheetUpgrade
     {
-        public const int Current = 4;
+        public const int Current = 5;
         public const string Property = "layout";
 
         static readonly string[] Masters = { SheetBuilder.RaidsSheet, SheetBuilder.DungeonsSheet, SheetBuilder.WorldSheet };
@@ -92,6 +93,14 @@ namespace MountSheetSync
                     done.Add(Tr.L("формат «Попыток» и «Шанса за все попытки» в строках, скрытых фильтром ({0})", fixedSheets));
                 }
             }
+            if (layout < 5)
+            {
+                string moved = MoveRares(book, req, memory);
+                if (moved != null)
+                {
+                    done.Add(moved);
+                }
+            }
             book.Apply(req, Property, Current.ToString(CultureInfo.InvariantCulture));
             foreach (Action a in memory)
             {
@@ -102,6 +111,83 @@ namespace MountSheetSync
                 Log.Write(Tr.L("Таблица обновлена: {0}.", string.Join("; ", done.ToArray())));
             }
             return true;
+        }
+
+        /// <summary>
+        /// Вид 5: строки рар каталога — на свой лист, с «Собрано?» и «Попыток». Галочки персонажей этих строк не переносим:
+        /// откат у рара свой, его считает аддон. Строк рар на «Мировых боссах» нет (своя таблица) — листа не будет.
+        /// </summary>
+        static string MoveRares(IStructuredBook book, List<object> req, List<Action> memory)
+        {
+            Catalog catalog = Catalog.Embedded();
+            SheetEntry world = SheetLogic.ByName(book, SheetBuilder.WorldSheet);
+            if (catalog.Rare == null || world == null || world.Data.Count < 2 || SheetLogic.ByName(book, SheetBuilder.RareSheet) != null)
+            {
+                return null;
+            }
+            object[] wh = world.Data[0];
+            int cMount = SheetLogic.FindCol(wh, "маунт", -1);
+            int cCollected = SheetLogic.FindCol(wh, "собрано", -1);
+            int cAttempts = SheetLogic.FindCol(wh, SheetLogic.AttemptsPattern, -1);
+            int cWorldId = SheetLogic.FindCol(wh, "^id в игре$", -1);
+            GoogleBook google = book as GoogleBook;
+            BuildPlan plan = new BuildPlan { Catalog = catalog, Lang = google != null ? google.Lang : SheetLang.Russian };
+            List<object[]> rows = SheetBuilder.RareRows(plan);
+            string[] header = SheetBuilder.RareMaster;
+            int rMount = Array.IndexOf(header, "Маунт");
+            int rCollected = Array.IndexOf(header, SheetBuilder.Collected);
+            int rAttempts = Array.IndexOf(header, SheetBuilder.AttemptsColumn);
+            int rChance = Array.IndexOf(header, SheetBuilder.ChanceColumn);
+            int rId = Array.IndexOf(header, SheetBuilder.IdColumn);
+            List<int> remove = new List<int>();
+            foreach (object[] row in rows)
+            {
+                long id = MountIndex.IdOf(row[rId]);
+                for (int r = 1; r < world.Data.Count; r++)
+                {
+                    object[] w = world.Data[r];
+                    bool sameId = id > 0 && cWorldId >= 0 && MountIndex.IdOf(w[cWorldId]) == id;
+                    if (remove.Contains(r) || !(sameId || (cMount >= 0 && SheetLogic.Norm(w[cMount]) == SheetLogic.Norm(row[rMount]))))
+                    {
+                        continue;
+                    }
+                    remove.Add(r);
+                    if (cCollected >= 0)
+                    {
+                        row[rCollected] = w[cCollected];
+                    }
+                    double n;
+                    if (cAttempts >= 0 && SheetLogic.AttemptCount(w[cAttempts], out n))
+                    {
+                        row[rAttempts] = n;
+                    }
+                }
+            }
+            if (remove.Count == 0)
+            {
+                return null;
+            }
+            long sheetId = book.Entries.Max(e => e.SheetId) + 1;
+            int index = book.Entries.IndexOf(world) + 1;
+            SheetBuilder.AddRare(req, (int)sheetId, index, rows);
+            req.AddRange(BookEdit.DeleteRequests(world, remove));
+            memory.Add(() =>
+            {
+                BookEdit.DeleteRows(world, remove);
+                SheetEntry entry = new SheetEntry { Name = SheetBuilder.RareSheet, SheetId = sheetId, GridColumns = header.Length };
+                entry.Data.Add(header.Cast<object>().ToArray());
+                foreach (object[] row in rows)
+                {
+                    if (row[rChance] is SheetBuilder.Formula)
+                    {
+                        entry.Formulas.Add(SheetLogic.Key(entry.Data.Count, rChance));
+                        row[rChance] = "";
+                    }
+                    entry.Data.Add(row);
+                }
+                book.Entries.Insert(index, entry);
+            });
+            return Tr.L("редкие монстры перенесены на отдельный лист ({0})", remove.Count);
         }
 
         /// <summary>Вид 2: «Да»/«Нет» цветом, «Фармлю» на листах персонажей, новая «Осталось попыток выбить».</summary>

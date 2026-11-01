@@ -200,7 +200,7 @@ try:
     book = books[0]
     titles = [x["title"] for x in book["sheets"]]
     check("sheets: masters, per-character, summary, world bosses",
-          titles == ["Рейды", "Рейды Мирна", "Рейды Эйра", "Подземелья", "Подземелья Мирна", "Подземелья Эйра", "Сводка", "Мировые боссы"], titles)
+          titles == ["Рейды", "Рейды Мирна", "Рейды Эйра", "Подземелья", "Подземелья Мирна", "Подземелья Эйра", "Сводка", "Мировые боссы", "Редкие монстры"], titles)
     check("title and Russian locale", book["title"] == "Маунты (тест)" and book["locale"] == "ru_RU", (book["title"], book["locale"]))
     raids = sheet_cells(book, "Рейды")
     r = find_row(raids, 3, "Пепел Ал'ара")
@@ -295,7 +295,7 @@ try:
     book = state()["spreadsheets"][book["id"]]
     titles = [x["title"] for x in book["sheets"]]
     check("--add-chars: new sheets next to the others", code == 0 and titles == ["Рейды", "Рейды Мирна", "Рейды Эйра", "Рейды Каэлия", "Подземелья",
-          "Подземелья Мирна", "Подземелья Эйра", "Подземелья Каэлия", "Сводка", "Мировые боссы"], (titles, out[-1000:]))
+          "Подземелья Мирна", "Подземелья Эйра", "Подземелья Каэлия", "Сводка", "Мировые боссы", "Редкие монстры"], (titles, out[-1000:]))
     lok = sheet_cells(book, "Рейды Каэлия")
     check("new character's rows follow «Собрано?» now (Зеретский смотритель is collected)",
           find_row(lok, 3, "Зеретский смотритель") is None and find_row(lok, 3, "Отмщение") is not None and len(lok) > 10)
@@ -341,6 +341,22 @@ try:
     n_before = len(state()["requests"])
     code, out = run("--once")
     check("…and not repeated", code == 0 and not any(p.endswith("values:batchUpdate") for m, p in state()["requests"][n_before:]))
+
+    # ---------------------------------------------------------------- rares: their own sheet, no weekly marks
+    book = state()["spreadsheets"][book["id"]]
+    rare = sheet_cells(book, "Редкие монстры")
+    world = sheet_cells(book, "Мировые боссы")
+    check("new table: Ishak on «Редкие монстры», not on «Мировые боссы»", find_row(rare, 3, "Дракон Четырех Ветров") is not None
+          and find_row(world, 3, "Дракон Четырех Ветров") is None, rare.get(1))
+    kills.append({"id": "D-1", "time": NOW, "char": "Эйра", "realm": "Ревущий фьорд", "charKey": "Player-1-A", "source": "loot",
+                  "boss": "Исхак Повелитель Четырех Ветров", "kind": "world", "difficultyID": 0, "weekEnd": next_week, "npcID": 157134})
+    write_sv([EIRA, MIRNA], ["Пепел Ал'ара", "Синий протодракон"], kills)
+    code, out = run("--once")
+    rare = sheet_cells(state()["spreadsheets"][book["id"]], "Редкие монстры")
+    r = find_row(rare, 3, "Дракон Четырех Ветров")
+    check("a looted rare: «Последнее убийство» — when and who, «Попыток» +1", code == 0 and "Эйра" in str(rare[r].get(6)) and rare[r].get(9) == 1, (rare[r], out[-600:]))
+    sheetdata = open(os.path.join(ADDON, "SheetData.lua"), encoding="utf-8").read()
+    check("…in the list as a rare with its own cooldown", 'kind = "rare"' in sheetdata and 'every = "daily"' in sheetdata, sheetdata[:200])
 
     # ---------------------------------------------------------------- revoked sign-in
     api("/__control", {"expireAccess": True, "revokeRefresh": True})

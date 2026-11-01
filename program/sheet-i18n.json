@@ -845,6 +845,13 @@
    "fr": "Tentatives",
    "pt": "Tentativas"
   },
+  "Последнее убийство": {
+   "de": "Letzter Kill",
+   "en": "Last kill",
+   "es": "Última muerte",
+   "fr": "Dernière mise à mort",
+   "pt": "Última morte"
+  },
   "Проверь доступность": {
    "de": "Verfügbarkeit prüfen",
    "en": "Check availability",
@@ -865,6 +872,13 @@
    "es": "Una vez",
    "fr": "Une fois",
    "pt": "Uma vez"
+  },
+  "Редкие монстры": {
+   "de": "Seltene Monster",
+   "en": "Rare Monsters",
+   "es": "Monstruos raros",
+   "fr": "Monstres rares",
+   "pt": "Monstros raros"
   },
   "Рейд": {
    "de": "Schlachtzug",

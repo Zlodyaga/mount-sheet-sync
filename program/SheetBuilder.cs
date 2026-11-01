@@ -33,6 +33,8 @@ namespace MountSheetSync
         public CatalogSheet Raids;
         public CatalogSheet Dungeons;
         public CatalogSheet World;
+        /// <summary>Редкие монстры; в каталогах до 2.9.2 их нет.</summary>
+        public CatalogSheet Rare;
         /// <summary>mountID → прежние названия маунта в каталоге (до названий «как в игре»).</summary>
         public Dictionary<long, List<string>> Aliases = new Dictionary<long, List<string>>();
 
@@ -69,6 +71,10 @@ namespace MountSheetSync
                 else if (sheet.Key == "world")
                 {
                     c.World = sheet;
+                }
+                else if (sheet.Key == "rare")
+                {
+                    c.Rare = sheet;
                 }
             }
             if (c.Raids == null || c.Dungeons == null || c.World == null)
@@ -159,6 +165,8 @@ namespace MountSheetSync
         public const string RaidsSheet = "Рейды";
         public const string DungeonsSheet = "Подземелья";
         public const string WorldSheet = "Мировые боссы";
+        public const string RareSheet = "Редкие монстры";
+        public const string LastKill = "Последнее убийство";
         public const string SummarySheet = "Сводка";
         public const string MetadataKey = "mountSheetSync";
 
@@ -195,6 +203,14 @@ namespace MountSheetSync
             "Совет по фарму", "Шанс выпадения", AttemptsColumn, ChanceColumn, "Источник",
         };
         static readonly int[] WorldWidths = { 71, 134, 160, 216, 132, 97, 195, 185, 83, 90, 110, 279 };
+
+        /// <summary>Рары: без колонок персонажей — откат у каждого свой, его считает аддон по журналу убийств.</summary>
+        public static readonly string[] RareMaster =
+        {
+            Collected, "Аддон", "Локация", "Маунт", "Босс / достижение / сундук", "Сброс / частота", LastKill,
+            "Совет по фарму", "Шанс выпадения", AttemptsColumn, ChanceColumn, "Источник", IdColumn,
+        };
+        static readonly int[] RareWidths = { 71, 134, 160, 216, 200, 97, 170, 260, 83, 90, 110, 279, 90 };
 
         static readonly string[] RaidChar =
         {
@@ -253,6 +269,7 @@ namespace MountSheetSync
             public List<MasterRow> Raids = new List<MasterRow>();
             public List<MasterRow> Dungeons = new List<MasterRow>();
             public List<MasterRow> World = new List<MasterRow>();
+            public List<MasterRow> Rare = new List<MasterRow>();
             public List<BuildCharacter> RaidChars = new List<BuildCharacter>();
             public List<BuildCharacter> DungeonChars = new List<BuildCharacter>();
             public List<BuildCharacter> WorldChars = new List<BuildCharacter>();
@@ -449,6 +466,10 @@ namespace MountSheetSync
             l.Raids = MasterRows(plan.Catalog.Raids, RaidMaster, plan);
             l.Dungeons = MasterRows(plan.Catalog.Dungeons, DungeonMaster, plan);
             l.World = MasterRows(plan.Catalog.World, WorldMaster, plan);
+            if (plan.Catalog.Rare != null)
+            {
+                l.Rare = MasterRows(plan.Catalog.Rare, RareMaster, plan);
+            }
             l.RaidChars = plan.Characters.Where(c => c.Raids).ToList();
             l.DungeonChars = plan.Characters.Where(c => c.Dungeons).ToList();
             l.WorldChars = plan.Characters.Where(c => c.World).ToList();
@@ -591,6 +612,10 @@ namespace MountSheetSync
 
             // Мировые боссы: колонки персонажей с галочками
             AddWorld(req, 400, index++, l.World, l.WorldChars.Select(c => c.Name.Trim()).ToList());
+            if (l.Rare.Count > 0)
+            {
+                AddRare(req, 450, index++, l.Rare.Select(r => r.Cells).ToList());
+            }
 
             req.AddRange(late);
             req.Add(O("deleteSheet", O("sheetId", defaultSheetId)));
@@ -1065,6 +1090,30 @@ namespace MountSheetSync
             return req;
         }
 
+        /// <summary>Строки каталога для листа рар (и для переноса со старых «Мировых боссов»).</summary>
+        public static List<object[]> RareRows(BuildPlan plan)
+        {
+            return MasterRows(plan.Catalog.Rare, RareMaster, plan).Select(r => r.Cells).ToList();
+        }
+
+        public static void AddRare(List<object> req, int sheetId, int index, List<object[]> data)
+        {
+            AddTable(req, sheetId, RareSheet, index, RareMaster, data, RareWidths);
+            int end = data.Count + 1;
+            req.Add(Validation(sheetId, 1, end, 0, ListRule(new[] { SheetLogic.Yes, SheetLogic.No },
+                new[] { new[] { ChipYesBg, ChipYesFg }, new[] { ChipNoBg, ChipNoFg } })));
+            req.AddRange(YesNoColors(sheetId, 0));
+            foreach (string name in new[] { Collected, "Шанс выпадения", "Сброс / частота" })
+            {
+                int c = Array.IndexOf(RareMaster, name);
+                req.Add(RepeatFormat(sheetId, 1, end, c, c + 1, O("horizontalAlignment", "CENTER"), "userEnteredFormat.horizontalAlignment"));
+            }
+            int cChance = Array.IndexOf(RareMaster, "Шанс выпадения");
+            req.Add(RepeatFormat(sheetId, 1, end, cChance, cChance + 1, O("numberFormat", O("type", "PERCENT", "pattern", "0%")),
+                "userEnteredFormat.numberFormat"));
+            req.AddRange(AttemptFormats(sheetId, Array.IndexOf(RareMaster, AttemptsColumn), end, false));
+        }
+
         static void AddWorld(List<object> req, int sheetId, int index, List<MasterRow> rows, List<string> chars)
         {
             List<string> header = WorldMaster.ToList();
@@ -1175,6 +1224,9 @@ namespace MountSheetSync
                 new object[] { WorldSheet, new Formula("=COUNTA('" + WorldSheet + "'!D2:D)"),
                     new Formula("=COUNTIF('" + WorldSheet + "'!A2:A, \"Да\")"),
                     new Formula("=COUNTIF('" + WorldSheet + "'!A2:A, \"Нет\")"), 0.0 },
+                new object[] { RareSheet, new Formula("=COUNTA('" + RareSheet + "'!D2:D)"),
+                    new Formula("=COUNTIF('" + RareSheet + "'!A2:A, \"Да\")"),
+                    new Formula("=COUNTIF('" + RareSheet + "'!A2:A, \"Нет\")"), 0.0 },
                 new object[] { "", "", "", "", "" },
                 new object[] { "Статусы в таблице", "", "", "", "" },
                 new object[] { "Фармится", "Можно целенаправленно фармить сейчас в Retail.", "", "", "" },

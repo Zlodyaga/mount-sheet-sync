@@ -31,7 +31,7 @@ namespace MountSheetSync
         public static MountIndex For(Catalog catalog)
         {
             MountIndex index = new MountIndex();
-            foreach (CatalogSheet sheet in new[] { catalog.Raids, catalog.Dungeons, catalog.World })
+            foreach (CatalogSheet sheet in new[] { catalog.Raids, catalog.Dungeons, catalog.World, catalog.Rare }.Where(s => s != null))
             {
                 int cMount = sheet.Col("Маунт");
                 int cBoss = sheet.Columns.FindIndex(x => x.StartsWith("Босс", StringComparison.Ordinal));
@@ -133,6 +133,10 @@ namespace MountSheetSync
             if (n == SheetLogic.Norm(SheetBuilder.WorldSheet))
             {
                 return "world";
+            }
+            if (n == SheetLogic.Norm(SheetBuilder.RareSheet))
+            {
+                return "rare";
             }
             return null;
         }

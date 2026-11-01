@@ -211,7 +211,7 @@ namespace MountSheetSync
         /// <summary>Свойство таблицы: время снимка коллекции (collection.updated), с которым уже сверились.</summary>
         public const string CheckedProperty = "collectionChecked";
 
-        static readonly string[] Masters = { SheetBuilder.RaidsSheet, SheetBuilder.DungeonsSheet, SheetBuilder.WorldSheet };
+        static readonly string[] Masters = { SheetBuilder.RaidsSheet, SheetBuilder.DungeonsSheet, SheetBuilder.WorldSheet, SheetBuilder.RareSheet };
 
         public static CollectionResult Run(IStructuredBook book, GameSnapshot game, MountIndex index)
         {

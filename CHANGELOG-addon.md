@@ -3,6 +3,9 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.3
+- “Rare monsters” is a group of its own in “Remaining” and “All characters”. A rare killed by this character shows when it can
+  be tried again (Ishak — after the daily reset), and comes back by itself. Needs the program 2.9.2 for the new sheet.
+- “Weekly reset” moved to the settings: the program 2.9.2 does it by itself.
 - Rares (Ishak of the Four Winds and the like): the attempt no longer depends on what is targeted when the loot window
   opens. The addon remembers rares you targeted, hovered or saw a nameplate of, and a corpse whose name it did not know
   still counts if you open it again.

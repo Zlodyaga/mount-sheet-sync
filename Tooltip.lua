@@ -33,7 +33,7 @@ function ns.BossHintLines(name, maxLines, kind)
   local lines, left = {}, 0
   local shown = 0
   for _, h in ipairs(hints) do
-    if kind and h.kind ~= kind then
+    if kind and h.kind ~= kind and not (kind == "world" and h.kind == "rare") then
       -- только строки этого вида (подсказка юнита — мировые: рары)
     elseif shown < (maxLines or MAX_LINES) then
       shown = shown + 1
