@@ -19,10 +19,10 @@ local ICON = "Interface\\AddOns\\MountSheetSync\\Media\\Icon"   -- the horseshoe
 local WINDOW_NAME = "MountSheetSyncFrame"
 local WIDTH, HEIGHT = 1060, 600
 local SIDE_WIDTH = 160
-local ROW_HEIGHT = 20
-local CHAR_HEIGHT = 22
-local TOOLBAR_HEIGHT = 30
-local HEAD_HEIGHT = 20
+local ROW_HEIGHT = 22
+local CHAR_HEIGHT = 24
+local TOOLBAR_HEIGHT = 34
+local HEAD_HEIGHT = 24
 local SLIDER_ROOM = 16    -- место под полосой прокрутки столбцов
 local COLUMN_GAP = 8
 local CHANCE_BAR_WIDTH = 58
@@ -51,10 +51,11 @@ local FILTER_KINDS = { "all", "raid", "dungeon", "world", "rare" }
 
 local UI = {}
 local L = ns.L
+local Skin = ns.Skin
 local relabel = {}      -- функции, которые заново ставят надписи (смена языка)
 local frame, listBox, charBox, emptyText, header1, header2, editBox, urlBox
 local toolbar, summaryText, focusText, attemptsBar, attemptsCount, logBar, headRow, gridSlider, columnGlow, hideZeroCheck
-local listWidth = WIDTH - SIDE_WIDTH - 58
+local listWidth = WIDTH - SIDE_WIDTH - 62
 local tabs = {}
 local filterButtons = {}
 local headCells = {}
@@ -107,8 +108,7 @@ end
 
 -- Кнопка шире, если длинная надпись на другом языке в ней не помещается.
 local function MakeButton(parent, key, width, tipKey, onClick)
-  local button = CreateFrame("Button", nil, parent, "UIPanelButtonTemplate")
-  button:SetSize(width, 24)
+  local button = Skin.Button(parent, width, 26)
   button:SetScript("OnClick", onClick)
   local function apply()
     button:SetText(L[key])
@@ -237,6 +237,7 @@ local function ShortDiff(diff)
   local text = Safe(diff)
   text = text:gsub("Normal", "N"):gsub("Heroic", "H"):gsub("Mythic%+", "M+"):gsub("Mythic", "M")
   text = text:gsub("Timewalking", "TW"):gsub(" timed run", ""):gsub("%s*/%s*", "/")
+  text = text:gsub("Layers%s*", ""):gsub("Challenge cache", "CM"):gsub("Challenge", "CM")
   return text
 end
 
@@ -334,7 +335,7 @@ end
 -- Кадры строк, которые уже собраны (ScrollBox отдаёт и новые, и переиспользованные).
 local built = setmetatable({}, { __mode = "k" })
 
-local DOT_TEXTURE = "Interface\\CharacterFrame\\TempPortraitAlphaMask"   -- белый круг: красим в цвет класса
+local DOT_TEXTURE = Skin.DOT   -- белый круг: красим в цвет класса
 
 -- Ячейки сетки у строки: кружок цвета класса — надо убить, чёрточка — уже убит.
 local function DrawGrid(button, elem)
@@ -374,21 +375,18 @@ local function DrawCells(button, elem)
   local cols = elem.cols
   local used = 0
   for _, col in ipairs(cols) do
-    if col.key == "icon" then
-      button.icon:ClearAllPoints()
-      button.icon:SetPoint("LEFT", col.x, 0)
-    elseif col.key == "bar" then
+    if col.key == "bar" then
       button.barBack:ClearAllPoints()
       button.barBack:SetPoint("LEFT", col.x, 0)
       button.barBack:SetWidth(col.w)
       button.barFill:ClearAllPoints()
       button.barFill:SetPoint("LEFT", col.x, 0)
       button.barFill:SetWidth(math.max(1, col.w * (elem.bar or 0)))
-    elseif col.key ~= "grid" then
+    elseif col.key ~= "grid" and col.key ~= "icon" then
       used = used + 1
       local cell = button.cells[used]
       if not cell then
-        cell = button:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+        cell = button:CreateFontString(nil, "OVERLAY", "MSSFontBody")
         cell:SetWordWrap(false)
         button.cells[used] = cell
       end
@@ -397,6 +395,7 @@ local function DrawCells(button, elem)
         cell:SetPoint("LEFT", col.x, 0)
         cell:SetWidth(col.w)
         cell:SetJustifyH(col.right and "RIGHT" or "LEFT")
+        cell:SetFontObject(col.bold and MSSFontBold or MSSFontBody)
       end
       cell:SetText(elem.values[col.key] or "")
       cell:Show()
@@ -406,13 +405,16 @@ local function DrawCells(button, elem)
     button.cells[i]:Hide()
   end
   button.laidOut = cols
-  button.icon:SetTexture(elem.icon or "Interface\\Icons\\INV_Misc_QuestionMark")
-  if elem.done then
-    button.icon:SetTexCoord(0, 1, 0, 1)
-  else
-    button.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+  button.iconBack:Show()
+  button.icon:SetShown(elem.icon ~= nil)   -- ID маунта неизвестен — пустая рамка
+  if elem.icon then
+    button.icon:SetTexture(elem.icon)
+    if elem.done then
+      button.icon:SetTexCoord(0, 1, 0, 1)
+    else
+      button.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+    end
   end
-  button.icon:Show()
   local hasBar = elem.bar ~= nil
   button.barBack:SetShown(hasBar)
   button.barFill:SetShown(hasBar)
@@ -430,13 +432,18 @@ local function InitRow(button, elem)
     button.stripe = button:CreateTexture(nil, "BACKGROUND")
     button.stripe:SetAllPoints()
     button.stripe:SetColorTexture(1, 1, 1, 0.03)
-    button.text = button:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    button.text = button:CreateFontString(nil, "OVERLAY", "MSSFontBody")
     button.text:SetPoint("LEFT", 4, 0)
     button.text:SetPoint("RIGHT", -4, 0)
     button.text:SetJustifyH("LEFT")
     button.text:SetWordWrap(false)
+    button.iconBack = button:CreateTexture(nil, "BORDER")
+    button.iconBack:SetSize(20, 20)
+    button.iconBack:SetPoint("LEFT", 3, 0)
+    button.iconBack:SetColorTexture(Skin.COLOR.editLine[1], Skin.COLOR.editLine[2], Skin.COLOR.editLine[3])
     button.icon = button:CreateTexture(nil, "ARTWORK")
     button.icon:SetSize(18, 18)
+    button.icon:SetPoint("CENTER", button.iconBack)
     button.barBack = button:CreateTexture(nil, "ARTWORK")
     button.barBack:SetHeight(6)
     button.barBack:SetColorTexture(1, 1, 1, 0.08)
@@ -463,8 +470,10 @@ local function InitRow(button, elem)
       HideDots(button)
     end
   else
+    button.text:SetFontObject(elem.group and MSSFontTitle or MSSFontBody)
     button.text:SetText(elem.text)
     button.text:Show()
+    button.iconBack:Hide()
     button.icon:Hide()
     button.barBack:Hide()
     button.barFill:Hide()
@@ -493,16 +502,16 @@ local function InitCharRow(button, elem)
     button:SetHeight(CHAR_HEIGHT)
     button.sel = button:CreateTexture(nil, "BACKGROUND")
     button.sel:SetAllPoints()
-    button.sel:SetColorTexture(1, 0.82, 0, 0.18)
+    button.sel:SetColorTexture(0.227, 0.184, 0.071)
     button.hl = button:CreateTexture(nil, "HIGHLIGHT")
     button.hl:SetAllPoints()
     button.hl:SetColorTexture(1, 1, 1, 0.08)
-    button.name = button:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
+    button.name = button:CreateFontString(nil, "OVERLAY", "MSSFontName")
     button.name:SetPoint("LEFT", 6, 0)
     button.name:SetPoint("RIGHT", -30, 0)
     button.name:SetJustifyH("LEFT")
     button.name:SetWordWrap(false)
-    button.count = button:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    button.count = button:CreateFontString(nil, "OVERLAY", "MSSFontGold")
     button.count:SetPoint("RIGHT", -6, 0)
     button:SetScript("OnClick", function(self)
       if self.elem.all then
@@ -564,6 +573,10 @@ local function Line(text, entry, tip)
   return { text = text, entry = entry, tip = tip }
 end
 
+local function GroupLine(kind)
+  return { text = "|cffffd200" .. ns.KindTitle(kind) .. "|r", group = true }
+end
+
 ---------------------------------------------------------------------------
 -- Столбцы таблиц
 ---------------------------------------------------------------------------
@@ -601,10 +614,10 @@ local function AttemptsColumns()
       { key = "mount", flex = 1, label = "col_mount", sort = "name" },
       { key = "boss", flex = 1.2, label = "col_boss", sort = "boss" },
       { key = "diff", w = 46, label = "col_diff" },
-      { key = "n", w = 52, right = true, label = "col_attempts", sort = "n" },
-      { key = "chance", w = 38, right = true, label = "col_chance", sort = "p", tip = "tip_col_chance", span = CHANCE_BAR_WIDTH + COLUMN_GAP },
+      { key = "n", w = 52, right = true, bold = true, label = "col_attempts", sort = "n" },
+      { key = "chance", w = 38, right = true, bold = true, label = "col_chance", sort = "p", tip = "tip_col_chance", span = CHANCE_BAR_WIDTH + COLUMN_GAP },
       { key = "bar", w = CHANCE_BAR_WIDTH },
-      { key = "left", w = 56, right = true, label = "col_left", sort = "left", tip = "tip_col_left" },
+      { key = "left", w = 56, right = true, bold = true, label = "col_left", sort = "left", tip = "tip_col_left" },
     }, listWidth)
   end
   return attemptsCols
@@ -618,8 +631,8 @@ local function LeftColumns()
       { key = "diff", w = 46, label = "col_diff" },
       { key = "mount", flex = 1.25, label = "col_mount" },
       { key = "place", flex = 0.9, label = "col_where" },
-      { key = "n", w = 52, right = true, label = "col_attempts" },
-      { key = "chance", w = 40, right = true, label = "col_chance", tip = "tip_col_chance" },
+      { key = "n", w = 52, right = true, bold = true, label = "col_attempts" },
+      { key = "chance", w = 40, right = true, bold = true, label = "col_chance", tip = "tip_col_chance" },
     }, listWidth)
     -- убитая строка: те же босс и маунт, дальше одна ячейка «убит, ждёт таблицы» (место — в подсказке)
     local place, last = leftCols[5], leftCols[7]
@@ -643,7 +656,7 @@ local function GridColumns(count)
     { key = "diff", w = 40, label = "col_diff" },
     { key = "mount", flex = 1, label = "col_mount" },
     { key = "grid", w = shown * view.cell },
-    { key = "total", w = 40, right = true, label = "col_total", tip = "tip_col_total" },
+    { key = "total", w = 40, right = true, bold = true, label = "col_total", tip = "tip_col_total" },
   }, listWidth)
   grid.shown, grid.cell, grid.letters = shown, view.cell, view.letters
   grid.x = cols[5].x
@@ -739,7 +752,7 @@ local function RemainingView(r, own)
       end
     end
     if #group > 0 then
-      list[#list + 1] = Line("|cffffd200" .. ns.KindTitle(kind) .. "|r")
+      list[#list + 1] = GroupLine(kind)
       local stripe = false
       for pass = 1, 2 do   -- сначала то, что осталось, потом убитые
         for _, entry in ipairs(group) do
@@ -783,7 +796,7 @@ local function GridView(rows, all)
     if row.kind ~= kind then
       kind = row.kind
       stripe = false
-      list[#list + 1] = Line("|cffffd200" .. ns.KindTitle(kind) .. "|r")
+      list[#list + 1] = GroupLine(kind)
     end
     local item = row.item
     local names, shownNames = {}, {}
@@ -891,12 +904,13 @@ local function HeadCell(i)
   if not cell then
     cell = CreateFrame("Button", nil, headRow)
     cell:SetHeight(HEAD_HEIGHT)
-    cell.text = cell:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    cell.text = cell:CreateFontString(nil, "OVERLAY", "MSSFontHead")
     cell.text:SetAllPoints()
     cell.text:SetWordWrap(false)
     cell.arrow = cell:CreateTexture(nil, "OVERLAY")
-    cell.arrow:SetTexture("Interface\\Buttons\\UI-SortArrow")
-    cell.arrow:SetSize(9, 8)
+    cell.arrow:SetTexture(Skin.ARROW)
+    cell.arrow:SetSize(10, 10)
+    cell.arrow:SetVertexColor(Skin.COLOR.gold[1], Skin.COLOR.gold[2], Skin.COLOR.gold[3])
     cell:SetScript("OnClick", function(self)
       if self.sort then
         UI.SortAttempts(self.sort)
@@ -942,6 +956,11 @@ local function DrawHead(cols, sortState, isGrid)
       cell:EnableMouse(col.sort ~= nil or col.tip ~= nil)
       cell.text:SetText(L[col.label])
       local active = sortState and col.sort == sortState.sort
+      if active then
+        cell.text:SetTextColor(Skin.COLOR.gold[1], Skin.COLOR.gold[2], Skin.COLOR.gold[3])
+      else
+        cell.text:SetTextColor(0.659, 0.624, 0.545)
+      end
       cell.arrow:SetShown(active and true or false)
       if active then
         cell.arrow:ClearAllPoints()
@@ -951,9 +970,9 @@ local function DrawHead(cols, sortState, isGrid)
           cell.arrow:SetPoint("LEFT", cell.text, "LEFT", cell.text:GetStringWidth() + 3, 0)
         end
         if sortState.desc then
-          cell.arrow:SetTexCoord(0, 0.5625, 0, 1)
+          cell.arrow:SetTexCoord(0, 1, 0, 1)
         else
-          cell.arrow:SetTexCoord(0, 0.5625, 1, 0)
+          cell.arrow:SetTexCoord(0, 1, 1, 0)
         end
       end
     end
@@ -1012,11 +1031,7 @@ local function ApplyChrome(view)
     attemptsCount:SetText(view.count and string.format(L.attempts_count, view.count) or "")
     local st = AttemptsState()
     for _, b in ipairs(filterButtons) do
-      if b.kind == st.kind then
-        b:LockHighlight()
-      else
-        b:UnlockHighlight()
-      end
+      Skin.ChipState(b, b.kind == st.kind)
     end
     hideZeroCheck:SetChecked(st.hideZero and true or false)
   end
@@ -1040,7 +1055,7 @@ local function UpdateTabTitle(r, total)
   end
   if tab:GetText() ~= title then
     tab:SetText(title)
-    PanelTemplates_TabResize(tab, 0, nil, frame.minTabWidth)
+    Skin.TabWidth(tab, frame.minTabWidth)
   end
 end
 
@@ -1132,9 +1147,16 @@ function UI.Refresh()
   urlBox:SetShown(#view.list == 0 and view.url and true or false)
 end
 
+local function ShowTabState(id)
+  frame.selectedTab = id
+  for i, tab in ipairs(tabs) do
+    Skin.TabState(tab, i == id)
+  end
+end
+
 function UI.SelectTab(id)
   ns.GetDB().tab = TAB_KEYS[id]
-  PanelTemplates_SetTab(frame, id)
+  ShowTabState(id)
   shownList = nil
   listBox:ScrollToBegin()
   UI.Refresh()
@@ -1190,6 +1212,7 @@ local function CreateList(parent, extent, initializer)
   view:SetElementInitializer("Button", initializer)
   ScrollUtil.InitScrollBoxListWithScrollBar(box, bar, view)
   ScrollUtil.AddManagedScrollBarVisibilityBehavior(box, bar)
+  Skin.ScrollBar(bar)
   return box
 end
 
@@ -1225,15 +1248,15 @@ end
 -- Над списком: у «Попыток» — фильтры, у «Журнала» — ручная отметка и поиск, у остальных — строка итога.
 local function CreateToolbar(inset)
   toolbar = CreateFrame("Frame", nil, inset)
-  toolbar:SetPoint("TOPLEFT", 6, -3)
+  toolbar:SetPoint("TOPLEFT", 6, -2)
   toolbar:SetPoint("RIGHT", -6, 0)
   toolbar:SetHeight(TOOLBAR_HEIGHT - 4)
 
-  summaryText = toolbar:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+  summaryText = toolbar:CreateFontString(nil, "OVERLAY", "MSSFontBody")
   summaryText:SetPoint("LEFT", 4, 0)
   summaryText:SetJustifyH("LEFT")
   frame.summaryText = summaryText
-  focusText = toolbar:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+  focusText = toolbar:CreateFontString(nil, "OVERLAY", "MSSFontBody")
   focusText:SetPoint("RIGHT", -4, 0)
   focusText:SetJustifyH("RIGHT")
 
@@ -1242,43 +1265,44 @@ local function CreateToolbar(inset)
   local previous
   for _, kind in ipairs(FILTER_KINDS) do
     local key = kind == "all" and "attempts_filter_all" or ("kind_" .. kind)
-    local b = MakeButton(attemptsBar, key, 60, nil, function(self)
+    local b = Skin.Chip(attemptsBar, 22)
+    local function apply()
+      b:SetText(L[key])
+      b:SetWidth(math.max(44, b.label:GetStringWidth() + 22))
+    end
+    apply()
+    relabel[#relabel + 1] = apply
+    b.kind = kind
+    b:SetScript("OnClick", function(self)
       UI.FilterAttempts(self.kind)
     end)
-    b:SetHeight(22)
-    b.kind = kind
     if previous then
-      b:SetPoint("LEFT", previous, "RIGHT", 4, 0)
+      b:SetPoint("LEFT", previous, "RIGHT", 6, 0)
     else
       b:SetPoint("LEFT", 2, 0)
     end
     filterButtons[#filterButtons + 1] = b
     previous = b
   end
-  hideZeroCheck = CreateFrame("CheckButton", nil, attemptsBar, "UICheckButtonTemplate")
-  hideZeroCheck:SetSize(22, 22)
-  hideZeroCheck:SetPoint("LEFT", previous, "RIGHT", 12, 0)
-  if hideZeroCheck.Text then
-    Label(hideZeroCheck.Text, "attempts_hide_zero")
-  end
+  hideZeroCheck = Skin.Check(attemptsBar, false)
+  hideZeroCheck:SetPoint("LEFT", previous, "RIGHT", 14, 0)
+  Label(hideZeroCheck.Text, "attempts_hide_zero")
   hideZeroCheck:SetScript("OnClick", function(self)
     AttemptsState().hideZero = self:GetChecked() and true or false
     listBox:ScrollToBegin()
     UI.Refresh()
   end)
-  attemptsCount = attemptsBar:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
+  attemptsCount = attemptsBar:CreateFontString(nil, "OVERLAY", "MSSFontSmall")
   attemptsCount:SetPoint("RIGHT", -4, 0)
 
   logBar = CreateFrame("Frame", nil, toolbar)
   logBar:SetAllPoints()
-  local manualLabel = logBar:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+  local manualLabel = logBar:CreateFontString(nil, "OVERLAY", "MSSFontTitle")
   manualLabel:SetPoint("LEFT", 4, 0)
   Label(manualLabel, "manual_label")
 
-  editBox = CreateFrame("EditBox", nil, logBar, "InputBoxTemplate")
-  editBox:SetSize(220, 22)
+  editBox = Skin.EditBox(logBar, 220, 24)
   editBox:SetPoint("LEFT", manualLabel, "RIGHT", 12, 0)
-  editBox:SetAutoFocus(false)
   editBox:SetMaxLetters(60)
   editBox:SetScript("OnEnterPressed", SubmitManual)
   editBox:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
@@ -1288,22 +1312,21 @@ local function CreateToolbar(inset)
 
   local scanButton = MakeButton(logBar, "button_scan", 156, "tip_scan", function() ns.RequestScan() end)
   scanButton:SetPoint("LEFT", addButton, "RIGHT", 6, 0)
+
+  local line = toolbar:CreateTexture(nil, "ARTWORK")
+  line:SetPoint("BOTTOMLEFT", -5, -2)
+  line:SetPoint("BOTTOMRIGHT", 5, -2)
+  line:SetHeight(1)
+  line:SetColorTexture(1, 1, 1, 0.06)
 end
 
 local function CreateWindow()
-  frame = CreateFrame("Frame", WINDOW_NAME, UIParent, "DefaultPanelTemplate")
   -- маленький экран или крупный масштаб: окно уже, столбцы названий отдают ширину сами
   local screen = UIParent:GetWidth() or 0
   local width = screen > 0 and math.min(WIDTH, screen - 20) or WIDTH
-  listWidth = width - SIDE_WIDTH - 58
-  frame:SetSize(width, HEIGHT)
-  frame:SetFrameStrata("HIGH")
-  frame:SetToplevel(true)
-  frame:SetClampedToScreen(true)
-  frame:SetMovable(true)
-  frame:EnableMouse(true)
-  frame:RegisterForDrag("LeftButton")
-  frame:SetScript("OnDragStart", frame.StartMoving)
+  listWidth = width - SIDE_WIDTH - 62
+  frame = Skin.Window(WINDOW_NAME, width, HEIGHT, "HIGH")
+  frame.titleText:SetText("Mount Sheet Sync")
   frame:SetScript("OnDragStop", function(self)
     self:StopMovingOrSizing()
     local point, _, relativePoint, x, y = self:GetPoint()
@@ -1317,56 +1340,52 @@ local function CreateWindow()
     frame:SetPoint("CENTER")
   end
 
-  if frame.SetTitle then
-    frame:SetTitle("Mount Sheet Sync")
-  elseif frame.TitleContainer and frame.TitleContainer.TitleText then
-    frame.TitleContainer.TitleText:SetText("Mount Sheet Sync")
-  end
-  CreateFrame("Button", nil, frame, "UIPanelCloseButtonDefaultAnchors")
-  tinsert(UISpecialFrames, WINDOW_NAME)   -- закрывается по Esc
-
   -- Шапка: одной строкой, чтобы не отнимать высоту у списка
-  header1 = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
-  header1:SetPoint("TOPLEFT", 18, -30)
-  header2 = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-  header2:SetPoint("TOPRIGHT", -18, -32)
+  header1 = frame:CreateFontString(nil, "OVERLAY", "MSSFontStrong")
+  header1:SetPoint("LEFT", frame, "TOPLEFT", 16, -48)
+  header2 = frame:CreateFontString(nil, "OVERLAY", "MSSFontGold")
+  header2:SetPoint("RIGHT", frame, "TOPRIGHT", -16, -48)
 
   -- Слева — все персонажи из таблицы
-  local charsTitle = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-  charsTitle:SetPoint("TOPLEFT", 20, -58)
+  local charsTitle = frame:CreateFontString(nil, "OVERLAY", "MSSFontTitle")
+  charsTitle:SetPoint("LEFT", frame, "TOPLEFT", 18, -80)
   Label(charsTitle, "side_title")
-  local side = CreateFrame("Frame", nil, frame, "InsetFrameTemplate")
-  side:SetPoint("TOPLEFT", 12, -76)
+  local side = Skin.Panel(frame)
+  side:SetPoint("TOPLEFT", 12, -94)
   side:SetPoint("BOTTOMLEFT", 12, 44)
   side:SetWidth(SIDE_WIDTH)
   charBox = CreateList(side, CHAR_HEIGHT, InitCharRow)
   charBox:SetPoint("TOPLEFT", 4, -4)
-  charBox:SetPoint("BOTTOMRIGHT", -18, 4)
+  charBox:SetPoint("BOTTOMRIGHT", -14, 4)
 
-  -- Справа — список, вкладки над ним
-  local inset = CreateFrame("Frame", nil, frame, "InsetFrameTemplate")
-  inset:SetPoint("TOPLEFT", side, "TOPRIGHT", 6, 0)
+  -- Справа — список, вкладки над ним (низ вкладок уходит под панель: у неё кадр выше)
+  local inset = Skin.Panel(frame)
+  inset:SetFrameLevel(frame:GetFrameLevel() + 5)
+  inset:SetPoint("TOPLEFT", side, "TOPRIGHT", 10, 0)
   inset:SetPoint("BOTTOMRIGHT", -12, 44)
 
   frame.minTabWidth = 90
   for i, key in ipairs(TAB_LABELS) do
-    local tab = CreateFrame("Button", nil, frame, "PanelTopTabButtonTemplate")
+    local tab = Skin.Tab(frame)
     tab:SetID(i)
     tab:SetText(L[key])
-    PanelTemplates_TabResize(tab, 0, nil, frame.minTabWidth)
+    Skin.TabWidth(tab, frame.minTabWidth)
     if i ~= TAB_LEFT then   -- у «Осталось» заголовок с числом ставит UpdateTabTitle
       relabel[#relabel + 1] = function()
         tab:SetText(L[key])
-        PanelTemplates_TabResize(tab, 0, nil, frame.minTabWidth)
+        Skin.TabWidth(tab, frame.minTabWidth)
       end
     end
     tab:SetScript("OnClick", function(self)
       UI.SelectTab(self:GetID())
     end)
+    if i == 1 then
+      tab:SetPoint("BOTTOMLEFT", inset, "TOPLEFT", 8, 0)
+    else
+      tab:SetPoint("BOTTOMLEFT", tabs[i - 1], "BOTTOMRIGHT", 4, 0)
+    end
     tabs[i] = tab
   end
-  tabs[1]:SetPoint("BOTTOMLEFT", inset, "TOPLEFT", 8, -2)
-  PanelTemplates_SetNumTabs(frame, #tabs)   -- остальные вкладки встают справа от первой
   local selected = TAB_LEFT
   for i, key in ipairs(TAB_KEYS) do
     if ns.GetDB().tab == key then
@@ -1377,7 +1396,7 @@ local function CreateWindow()
     selectedChar = ALL_CHARS
     ns.GetDB().tab = "left"
   end
-  PanelTemplates_SetTab(frame, selected)
+  ShowTabState(selected)
 
   CreateToolbar(inset)
 
@@ -1389,7 +1408,7 @@ local function CreateWindow()
   headLine:SetPoint("BOTTOMLEFT")
   headLine:SetPoint("BOTTOMRIGHT")
   headLine:SetHeight(1)
-  headLine:SetColorTexture(1, 1, 1, 0.15)
+  headLine:SetColorTexture(Skin.COLOR.line[1], Skin.COLOR.line[2], Skin.COLOR.line[3])
 
   listBox = CreateList(inset, ROW_HEIGHT, InitRow)
   listBox:SetPoint("TOPLEFT", 6, -TOOLBAR_HEIGHT)
@@ -1402,15 +1421,13 @@ local function CreateWindow()
   gridSlider = CreateGridSlider(inset)
   frame.gridSlider = gridSlider
 
-  emptyText = inset:CreateFontString(nil, "OVERLAY", "GameFontDisable")
+  emptyText = inset:CreateFontString(nil, "OVERLAY", "MSSFontDim")
   emptyText:SetPoint("CENTER", 0, 14)
   emptyText:SetWidth(width - SIDE_WIDTH - 80)
 
   -- адрес сайта с программой: только выделить и скопировать (Ctrl+C), изменить нельзя
-  urlBox = CreateFrame("EditBox", nil, inset, "InputBoxTemplate")
-  urlBox:SetSize(240, 22)
+  urlBox = Skin.EditBox(inset, 240, 24)
   urlBox:SetPoint("TOP", emptyText, "BOTTOM", 0, -10)
-  urlBox:SetAutoFocus(false)
   urlBox:SetText(ns.PROGRAM_URL)
   urlBox:SetCursorPosition(0)
   urlBox:SetScript("OnTextChanged", function(self, userInput)
@@ -1427,20 +1444,23 @@ local function CreateWindow()
 
   -- Внизу: отправка в таблицу, подсказка, настройки; редкое (чат, очистка журнала, отчёт об ошибке) — в настройках
   local syncButton = MakeButton(frame, "button_sync", 156, "tip_sync", function() ns.SyncNow() end)
-  syncButton:SetPoint("BOTTOMLEFT", 16, 12)
+  syncButton:SetPoint("BOTTOMLEFT", 12, 10)
 
   local gear = CreateFrame("Button", nil, frame)
-  gear:SetSize(24, 24)
-  gear:SetPoint("BOTTOMRIGHT", -18, 12)
+  gear:SetSize(26, 26)
+  gear:SetPoint("BOTTOMRIGHT", -12, 10)
+  Skin.Fill(gear, "Round3", Skin.COLOR.editLine, 0, 0)
+  Skin.Fill(gear, "Round3", Skin.COLOR.raised, 1, 1)
   local gearIcon = gear:CreateTexture(nil, "ARTWORK")
-  gearIcon:SetAllPoints()
-  gearIcon:SetTexture("Interface\\Icons\\INV_Misc_Gear_01")
-  gearIcon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+  gearIcon:SetSize(20, 20)
+  gearIcon:SetPoint("CENTER")
+  gearIcon:SetTexture(Skin.GEAR)
+  gearIcon:SetVertexColor(0.85, 0.83, 0.77)
   gear:SetHighlightTexture("Interface\\Buttons\\ButtonHilight-Square", "ADD")
   gear:SetScript("OnClick", function() UI.ToggleSettings() end)
   AttachTooltip(gear, "settings_title", "tip_settings")
 
-  local hint = frame:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
+  local hint = frame:CreateFontString(nil, "OVERLAY", "MSSFontSmall")
   hint:SetPoint("LEFT", syncButton, "RIGHT", 10, 0)
   hint:SetPoint("RIGHT", gear, "LEFT", -10, 0)
   hint:SetJustifyH("LEFT")
@@ -1539,12 +1559,9 @@ local function RefreshSettings()
 end
 
 local function SettingsCheck(parent, y, key, onClick)
-  local c = CreateFrame("CheckButton", nil, parent, "UICheckButtonTemplate")
-  c:SetSize(24, 24)
+  local c = Skin.Check(parent, false)
   c:SetPoint("TOPLEFT", 20, y)
-  if c.Text then
-    Label(c.Text, key)
-  end
+  Label(c.Text, key)
   c:SetScript("OnClick", onClick)
   return c
 end
@@ -1646,31 +1663,16 @@ end
 
 local function ShowReport()
   if not reportFrame then
-    reportFrame = CreateFrame("Frame", REPORT_NAME, UIParent, "DefaultPanelTemplate")
-    reportFrame:SetSize(520, 300)
-    reportFrame:SetFrameStrata("DIALOG")
-    reportFrame:SetToplevel(true)
-    reportFrame:SetClampedToScreen(true)
-    reportFrame:SetMovable(true)
-    reportFrame:EnableMouse(true)
-    reportFrame:RegisterForDrag("LeftButton")
-    reportFrame:SetScript("OnDragStart", reportFrame.StartMoving)
-    reportFrame:SetScript("OnDragStop", reportFrame.StopMovingOrSizing)
+    reportFrame = Skin.Window(REPORT_NAME, 520, 300, "DIALOG")
     reportFrame:SetPoint("CENTER", 0, 40)
     local function title()
-      if reportFrame.SetTitle then
-        reportFrame:SetTitle(L.report_title)
-      elseif reportFrame.TitleContainer and reportFrame.TitleContainer.TitleText then
-        reportFrame.TitleContainer.TitleText:SetText(L.report_title)
-      end
+      reportFrame.titleText:SetText(L.report_title)
     end
     title()
     relabel[#relabel + 1] = title
-    CreateFrame("Button", nil, reportFrame, "UIPanelCloseButtonDefaultAnchors")
-    tinsert(UISpecialFrames, REPORT_NAME)
-    local hint = reportFrame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
-    hint:SetPoint("TOPLEFT", 18, -32)
-    hint:SetPoint("TOPRIGHT", -18, -32)
+    local hint = reportFrame:CreateFontString(nil, "OVERLAY", "MSSFontBody")
+    hint:SetPoint("TOPLEFT", 18, -38)
+    hint:SetPoint("TOPRIGHT", -18, -38)
     hint:SetJustifyH("LEFT")
     local function hintText()
       hint:SetText(string.format(L.report_hint, ns.ISSUES_URL))
@@ -1678,7 +1680,7 @@ local function ShowReport()
     hintText()
     relabel[#relabel + 1] = hintText
     local scroll = CreateFrame("ScrollFrame", nil, reportFrame, "UIPanelScrollFrameTemplate")
-    scroll:SetPoint("TOPLEFT", 16, -70)
+    scroll:SetPoint("TOPLEFT", 16, -76)
     scroll:SetPoint("BOTTOMRIGHT", -34, 16)
     reportBox = CreateFrame("EditBox", nil, scroll)
     reportBox:SetMultiLine(true)
@@ -1709,46 +1711,28 @@ local function CreateSettings()
   for _, code in ipairs(ns.LANGUAGES) do
     codes[#codes + 1] = code
   end
-  local height = 92 + #codes * 24 + 70 + 96 + 82
-  settingsFrame = CreateFrame("Frame", SETTINGS_NAME, UIParent, "DefaultPanelTemplate")
-  settingsFrame:SetSize(330, height)
-  settingsFrame:SetFrameStrata("DIALOG")
-  settingsFrame:SetToplevel(true)
-  settingsFrame:SetClampedToScreen(true)
-  settingsFrame:SetMovable(true)
-  settingsFrame:EnableMouse(true)
-  settingsFrame:RegisterForDrag("LeftButton")
-  settingsFrame:SetScript("OnDragStart", settingsFrame.StartMoving)
-  settingsFrame:SetScript("OnDragStop", settingsFrame.StopMovingOrSizing)
+  local height = 100 + #codes * 24 + 70 + 96 + 86
+  settingsFrame = Skin.Window(SETTINGS_NAME, 330, height, "DIALOG")
   settingsFrame:SetPoint("CENTER", 0, 60)
   local function title()
-    if settingsFrame.SetTitle then
-      settingsFrame:SetTitle(L.settings_title)
-    elseif settingsFrame.TitleContainer and settingsFrame.TitleContainer.TitleText then
-      settingsFrame.TitleContainer.TitleText:SetText(L.settings_title)
-    end
+    settingsFrame.titleText:SetText(L.settings_title)
   end
   title()
   relabel[#relabel + 1] = title
-  CreateFrame("Button", nil, settingsFrame, "UIPanelCloseButtonDefaultAnchors")
-  tinsert(UISpecialFrames, SETTINGS_NAME)
 
-  local head = settingsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-  head:SetPoint("TOPLEFT", 20, -34)
+  local head = settingsFrame:CreateFontString(nil, "OVERLAY", "MSSFontTitle")
+  head:SetPoint("TOPLEFT", 20, -40)
   Label(head, "settings_language")
 
   for i, code in ipairs(codes) do
-    local b = CreateFrame("CheckButton", nil, settingsFrame, "UICheckButtonTemplate")
-    b:SetSize(24, 24)
-    b:SetPoint("TOPLEFT", 26, -54 - (i - 1) * 24)
+    local b = Skin.Check(settingsFrame, true)
+    b:SetPoint("TOPLEFT", 26, -62 - (i - 1) * 24)
     b.code = code
     local function text()
-      if b.Text then
-        if code == "auto" then
-          b.Text:SetText(string.format(L.settings_auto, ns.LANGUAGE_NAMES[ns.ClientLanguage()]))
-        else
-          b.Text:SetText(ns.LANGUAGE_NAMES[code])
-        end
+      if code == "auto" then
+        b.Text:SetText(string.format(L.settings_auto, ns.LANGUAGE_NAMES[ns.ClientLanguage()]))
+      else
+        b.Text:SetText(ns.LANGUAGE_NAMES[code])
       end
     end
     text()
@@ -1760,17 +1744,14 @@ local function CreateSettings()
     languageButtons[#languageButtons + 1] = b
   end
 
-  local gridHead = settingsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-  gridHead:SetPoint("TOPLEFT", 20, -54 - #codes * 24 - 10)
+  local gridHead = settingsFrame:CreateFontString(nil, "OVERLAY", "MSSFontTitle")
+  gridHead:SetPoint("TOPLEFT", 20, -62 - #codes * 24 - 10)
   Label(gridHead, "settings_grid")
   for i, choice in ipairs({ { "scroll", "settings_grid_scroll", "tip_grid_scroll" }, { "all", "settings_grid_all", "tip_grid_all" } }) do
-    local b = CreateFrame("CheckButton", nil, settingsFrame, "UICheckButtonTemplate")
-    b:SetSize(24, 24)
-    b:SetPoint("TOPLEFT", 26, -54 - #codes * 24 - 28 - (i - 1) * 24)
+    local b = Skin.Check(settingsFrame, true)
+    b:SetPoint("TOPLEFT", 26, -62 - #codes * 24 - 32 - (i - 1) * 24)
     b.view = choice[1]
-    if b.Text then
-      Label(b.Text, choice[2])
-    end
+    Label(b.Text, choice[2])
     AttachTooltip(b, choice[2], choice[3])
     b:SetScript("OnClick", function(self)
       UI.SetGridView(self.view)
@@ -1779,7 +1760,7 @@ local function CreateSettings()
     gridButtons[#gridButtons + 1] = b
   end
 
-  local y = -54 - #codes * 24 - 92
+  local y = -62 - #codes * 24 - 96
   settingsQuiet = SettingsCheck(settingsFrame, y, "quiet", function(self)
     ns.SetQuiet(self:GetChecked())
   end)

@@ -206,14 +206,14 @@ def under_window(x):
     return False
 
 
-tabs = [x for x in regions("Button") if x._template == "PanelTopTabButtonTemplate"]
+tabs = [x for x in regions("Button") if x._isTab]
 check("three Blizzard top tabs above the list", [str(t._text) for t in tabs] == ["Осталось (24)", "Попытки", "Журнал"],
       [str(t._text) for t in tabs])
 check("3.0: «Осталось» selected by default", win.selectedTab == 1 and not tabs[0].IsEnabled(tabs[0]) and tabs[2].IsEnabled(tabs[2]))
 
 
 def boxes(extent):
-    """ScrollBox lists of the window: 20 px rows — the main list, 22 px — the characters on the left."""
+    """ScrollBox lists of the window: 22 px rows — the main list, 24 px — the characters on the left."""
     return [x for x in regions("Frame") if x._template == "WowScrollBoxList" and under_window(x) and x._view._extent == extent]
 
 
@@ -222,7 +222,7 @@ def pool(extent):
     return [box._pool[i] for i in range(1, len(box._pool) + 1) if box._pool[i]._shown]
 
 
-ROW, CHAR = 20, 22
+ROW, CHAR = 22, 24
 
 
 def row_text(f):
@@ -273,7 +273,7 @@ check("3.0.3: row in columns: boss, short difficulty, mount, place, attempts, ch
       any(t.startswith("Сильвана Ветрокрылая | |cffb7ae9aM|r | |cffc9a0ffМесть|r | |cff8c8c8cSanctum of Domination|r | ") for t in rows), [t for t in rows if "Сильвана" in t])
 first_row = [f for f in pool(ROW) if f.elem.cols is not None][0]
 check("…a mount icon slot and the columns stay inside the list",
-      first_row.icon._shown and all(c.x + c.w <= 842 for c in [first_row.elem.cols[i] for i in range(1, len(first_row.elem.cols) + 1)]))
+      first_row.iconBack._shown and all(c.x + c.w <= 842 for c in [first_row.elem.cols[i] for i in range(1, len(first_row.elem.cols) + 1)]))
 check("…the header names the columns", [str(c.text._text) for c in head_cells()] == ["Босс", "Слож.", "Маунт", "Где", "Попыток", "Шанс"], [str(c.text._text) for c in head_cells()])
 raid = rows[rows.index("|cffffd200Рейды|r") + 1: rows.index("|cffffd200Подземелья|r")]
 check("killed rows go to the bottom of their group with a check mark", raid[0].startswith("Сильвана") and "убит, ждёт таблицы" in raid[-1]
@@ -388,7 +388,7 @@ eira.MockClick(eira); g.RunTimers()
 check("click on a character from another tab opens his «Осталось»", win.selectedTab == 1 and shown_rows()[0].startswith("|cff8c8c8cОсталось 24 из 36"))
 tabs[1].MockClick(tabs[1]); g.RunTimers()
 att = ns.GetAttemptsList()
-empty = [x for x in regions("FontString") if x._font == "GameFontDisable" and under_window(x)][0]
+empty = [x for x in regions("FontString") if x._font == "MSSFontDim" and under_window(x)][0]
 check("«Попытки»: the counter or a word that there is none yet",
       (len(att) == 0 and empty._shown and "Счётчика попыток пока нет" in str(empty._text))
       or (len(att) > 0 and len(shown_rows()) == len(att)), len(att))
@@ -536,7 +536,7 @@ g.MOCK.name = "Тралл"; g.MOCK.guid = "Player-1602-0ABC"
 r = remaining()
 check("character without sheets: nochar", r.state == "nochar" and r.name == "Тралл")
 win.Hide(win); win.Show(win)
-empty = [x for x in regions("FontString") if x._font == "GameFontDisable" and under_window(x)][0]
+empty = [x for x in regions("FontString") if x._font == "MSSFontDim" and under_window(x)][0]
 check("window explains a missing character", empty._shown and "Персонажа «Тралл» нет в таблице" in str(empty._text) and tabs[0]._text == "Осталось", str(empty._text))
 
 # ---- «Сброс недели»: known from the sheet (resetAt) or from the journal

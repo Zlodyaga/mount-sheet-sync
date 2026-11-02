@@ -395,11 +395,11 @@ def row_text(f):
 obj = L.eval('(LibStub("LibDataBroker-1.1"))').GetDataObjectByName(L.eval('(LibStub("LibDataBroker-1.1"))'), "MountSheetSync")
 obj.OnClick(g.UIParent, "LeftButton")
 regs = [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
-tab = [r for r in regs if r._type == "Button" and r._template == "PanelTopTabButtonTemplate" and str(r._text) == "Попытки"][0]
+tab = [r for r in regs if r._type == "Button" and r._isTab and str(r._text) == "Попытки"][0]
 tab.MockClick(tab)
 g.RunTimers()
 regs = [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
-box = [r for r in regs if r._type == "Frame" and r._template == "WowScrollBoxList" and r._view._extent == 20][0]
+box = [r for r in regs if r._type == "Frame" and r._template == "WowScrollBoxList" and r._view._extent == 22][0]
 rows = [box._pool[i] for i in range(1, len(box._pool) + 1) if box._pool[i]._shown]
 texts = [row_text(f) for f in rows]
 att = ns.GetAttemptsList()
@@ -453,13 +453,13 @@ def window6():
 
 
 def tab6(title):
-    t = [r for r in window6() if r._type == "Button" and r._template == "PanelTopTabButtonTemplate" and str(r._text).startswith(title)][0]
+    t = [r for r in window6() if r._type == "Button" and r._isTab and str(r._text).startswith(title)][0]
     t.MockClick(t)
     g6.RunTimers()
 
 
 def rows6():
-    box = [r for r in window6() if r._type == "Frame" and r._template == "WowScrollBoxList" and r._view._extent == 20][0]
+    box = [r for r in window6() if r._type == "Frame" and r._template == "WowScrollBoxList" and r._view._extent == 22][0]
     return [box._pool[i] for i in range(1, len(box._pool) + 1) if box._pool[i]._shown]
 
 
@@ -479,7 +479,7 @@ check("…the row says when it can be tried again", "снова через 5 ч 
 check("boss hint: 1 character left now", ns6.BossHint(ISHAK_RU)[1].left == 1, ns6.BossHint(ISHAK_RU)[1].left)
 g6.RunTimers()
 check("window: the row shows the wait", any("снова через" in row_text(f) and "Исхак" in row_text(f) for f in rows6()), [row_text(f) for f in rows6()][-3:])
-side6 = [r for r in window6() if r._type == "Frame" and r._template == "WowScrollBoxList" and r._view._extent == 22][0]
+side6 = [r for r in window6() if r._type == "Frame" and r._template == "WowScrollBoxList" and r._view._extent == 24][0]
 side6._pool[1].MockClick(side6._pool[1])   # «Все персонажи»
 g6.RunTimers()
 texts = [row_text(f) for f in rows6()]

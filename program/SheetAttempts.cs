@@ -191,6 +191,17 @@ namespace MountSheetSync
         /// Строки со счётчиком для аддона: несобранные маунты со случайным шансом — кто их роняет (как строки
         /// «Осталось»: имена босса, сложности), сколько попыток (n) и шанс за попытку (p).
         /// </summary>
+        static MountIndex catalogIndex;
+
+        static MountIndex CatalogIndex()
+        {
+            if (catalogIndex == null)
+            {
+                catalogIndex = MountIndex.For(Catalog.Embedded());
+            }
+            return catalogIndex;
+        }
+
         public static List<object> StatusMounts(IBook book, HashSet<string> collected)
         {
             List<object> list = new List<object>();
@@ -237,6 +248,11 @@ namespace MountSheetSync
                     item["n"] = Math.Max(0, Math.Floor(n));
                     item["p"] = p;
                     long id = cId >= 0 ? MountIndex.IdOf(At(row, cId)) : 0;
+                    if (id <= 0)
+                    {
+                        // на «Мировых боссах» скрытой колонки нет: ID — из каталога (значок и «уже собран» в аддоне)
+                        id = CatalogIndex().Find(MountIndex.KindOfSheet(m[0]), At(row, cMount), boss);
+                    }
                     if (id > 0)
                     {
                         item["id"] = (double)id;

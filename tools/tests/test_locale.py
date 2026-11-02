@@ -128,7 +128,7 @@ check("German chat for a manual mark", "Sha des Zorns — von Hand für Eira mar
 obj.OnClick(None, "RightButton")
 sf = g.MountSheetSyncSettingsFrame
 check("right click on the DataBroker icon opens the settings", sf is not None and sf._shown)
-check("settings title in German", sf._title == "Mount Sheet Sync — Einstellungen", sf._title)
+check("settings title in German", sf.titleText._text == "Mount Sheet Sync — Einstellungen", sf.titleText._text)
 radios = [r for r in [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
           if r._type == "CheckButton" and r._parent is not None and r._parent._uid == sf._uid and rg(r, "code") is not None]
 labels = {str(rg(r, "code")): str(r.Text._text) for r in radios}
@@ -140,7 +140,7 @@ ru.MockClick(ru)
 texts = window_texts(g)
 check("pick Русский: the open window switches at once", {"Отправить в таблицу", "Найти в сохранениях", "Журнал",
                                                          "Не писать в чат"} <= texts and "An Tabelle senden" not in texts)
-check("…the settings too, and only Русский is ticked", sf._title == "Mount Sheet Sync — настройки"
+check("…the settings too, and only Русский is ticked", sf.titleText._text == "Mount Sheet Sync — настройки"
       and [str(rg(r, "code")) for r in radios if r._checked] == ["ruRU"] and labels and str(ru.Text._text) == "Русский")
 check("…saved in SavedVariables", g.MountSheetSyncDB.language == "ruRU")
 check("auto label follows the new language", str([r for r in radios if rg(r, "code") == "auto"][0].Text._text) == "Язык игры (Deutsch)")

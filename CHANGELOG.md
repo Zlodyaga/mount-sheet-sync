@@ -3,6 +3,7 @@
 The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [CHANGELOG-addon.md](CHANGELOG-addon.md).
 
 ## 2.9.2
+- World boss mounts now reach the addon with their game ID: their icons show in its window, and a collected one leaves its lists.
 - The weekly reset happens by itself: when a new game week has started and the sheet has not been reset yet, the program
   sets “No” for every character and marks this week's kills again — at the first update of the “Remaining” list, for
   example when you start the game. The “Weekly reset” button in the addon still works.

@@ -72,7 +72,7 @@ def window_bits(L, g):
     obj.OnClick(g.UIParent, "LeftButton")
     win = g.MountSheetSyncFrame
     regs = [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
-    small = [r for r in regs if r._type == "FontString" and r._font == "GameFontDisableSmall" and r._parent is not None
+    small = [r for r in regs if r._type == "FontString" and r._font == "MSSFontSmall" and r._parent is not None
              and r._parent._uid == win._uid]
     hint = small[0] if small else None
     hovers = [r for r in regs if r._type == "Frame" and r._parent is not None and r._parent._uid == win._uid

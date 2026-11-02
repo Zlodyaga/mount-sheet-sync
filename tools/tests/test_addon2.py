@@ -173,7 +173,7 @@ check("right click does nothing", g.MountSheetSyncFrame is None)
 obj.OnClick(g.UIParent, "LeftButton")
 win = g.MountSheetSyncFrame
 check("left click opens the window", win is not None and win._shown)
-check("window uses Blizzard DefaultPanelTemplate + title", win._template == "DefaultPanelTemplate" and win._title == "Mount Sheet Sync")
+check("3.0.3: the window has its own style, with the title", win._template is None and win.titleText._text == "Mount Sheet Sync")
 check("Esc closes it (UISpecialFrames)", "MountSheetSyncFrame" in [g.UISpecialFrames[i] for i in range(1, len(g.UISpecialFrames) + 1)])
 obj.OnClick(g.UIParent, "LeftButton")
 check("second left click closes", not win._shown)
@@ -216,8 +216,8 @@ def button(text):
 
 
 def list_rows():
-    """Texts of the main list (ScrollBox with 20 px rows), top to bottom."""
-    box = [r for r in regions("Frame") if r._template == "WowScrollBoxList" and under_window(r) and r._view._extent == 20][0]
+    """Texts of the main list (ScrollBox with 22 px rows), top to bottom."""
+    box = [r for r in regions("Frame") if r._template == "WowScrollBoxList" and under_window(r) and r._view._extent == 22][0]
     return [str(box._pool[i].text._text) for i in range(1, len(box._pool) + 1) if box._pool[i]._shown]
 
 

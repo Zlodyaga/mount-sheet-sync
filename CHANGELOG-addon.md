@@ -3,6 +3,7 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.3
+- A new look: the windows have their own dark style with gold accents, fonts (PT Sans, Philosopher) and round selectors.
 - The window is wider (1060x600) and its lists are real tables: mount icons, columns for boss, difficulty, mount, attempts
   and chance, full names in the tooltip. Numbers no longer get cut off by a long name.
 - "Attempts": click a column title to sort, filter by raids, dungeons, world bosses and rares, hide mounts without

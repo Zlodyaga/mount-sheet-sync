@@ -243,6 +243,8 @@ check("…with n, p, the boss names and the Mythic difficulty IDs (like a «Rema
       and "сильвана ветрокрылая" in o.get("names", []) and 16 in o.get("d", []) and 15 not in o.get("d", []) and o.get("id") == 1471 and o.get("kind") == "raid", o)
 check("…world row without difficulties", mounts.get("Сын Галеона", {}).get("kind") == "world" and mounts["Сын Галеона"].get("d") == [], mounts.get("Сын Галеона"))
 old = run({"catalog": None, "sheets": OLD, "mode": "handle", "properties": {"layout": "2"}, "request": {"action": "status"}})["reply"]
+check("world bosses have no ID column on the sheet: the mount ID comes from the catalog (icon, «already collected»)",
+      any(m.get("kind") == "world" and m.get("id") for m in mounts.values()), [m for m in mounts.values() if m.get("kind") == "world"][:1])
 check("a table without the counter: no «mounts» in the status (the addon simply shows nothing)", "mounts" not in old, list(old))
 
 failed = [n for n, ok in checks if not ok]

@@ -60,6 +60,15 @@ function Region:SetPoint(point, a, b, c, d)
   self._points[#self._points + 1] = { point = point, rel = rel, relPoint = relPoint, x = x, y = y }
 end
 function Region:ClearAllPoints() self._points = {} end
+function Region:SetTextColor(...) self._color = { ... } end
+function Region:SetFontString(fs) self._fs = fs; fs._text = self._text end
+function Region:SetTextureSliceMargins(...) self._slice = { ... } end
+function Region:SetGradient(...) self._gradient = { ... } end
+function Region:SetHitRectInsets(...) end
+function Region:SetTextInsets(...) end
+function Region:SetCheckedTexture(t) self._checkedTexture = NewRegion('Texture', nil, self, nil); self._checkedTexture._texture = t end
+function Region:GetCheckedTexture() return self._checkedTexture end
+function Region:GetFrameLevel() return self._level or 1 end
 function Region:SetOrientation(o) self._orientation = o end
 function Region:SetValueStep(s) self._step = s end
 function Region:SetObeyStepOnDrag(v) self._obey = v end
@@ -236,6 +245,13 @@ function CreateScrollBoxListLinearView()
     self._frameType, self._init = frameType, init
   end
   return view
+end
+function CreateColor(r, g, b, a) return { r = r, g = g, b = b, a = a } end
+STANDARD_TEXT_FONT = STANDARD_TEXT_FONT or 'Fonts\\FRIZQT__.TTF'
+function CreateFont(name)
+  local font = NewRegion('Font', name, nil, nil)
+  function font:SetFont(path, size, flags) self._file, self._size = path, size end
+  return font
 end
 function CreateDataProvider(list) return { _items = list or {} } end
 ScrollBoxConstants = { RetainScrollPosition = true, DiscardScrollPosition = false }

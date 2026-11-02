@@ -39,7 +39,7 @@ ScrollBox в `wow_mock.lua` упрощён: `SetDataProvider` вызывает �
 ## Скриншоты окон аддона
 
 `test_addon_left.py` выгружает разметку окна (кадры, размеры, якоря, тексты, текстуры) в `tools/layout_left.json`,
-`layout_all.json`, `layout_log.json`, `layout_settings.json`; `python tools/screens/render.py` рисует их в браузере
+`layout_all.json`, `layout_log.json`, `layout_settings.json`; `python tools/screens/render.py` рисует их в браузере (своё оформление окон 3.0.3 он пока не знает: снимки окна — из игры)
 (playwright, Chromium) в `docs/screens/addon-*.png`. Персонажи — примерные из `wb_left.json`, классы — из
 `MountSheetSyncDB.chars` в тесте. ScrollBox, его полоса (только когда список не влезает), текстуры с цветом и
 шестерёнка рисуются по разметке; слой HIGHLIGHT не рисуется.
