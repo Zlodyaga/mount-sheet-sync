@@ -245,6 +245,42 @@ check("…world row without difficulties", mounts.get("Сын Галеона", {
 old = run({"catalog": None, "sheets": OLD, "mode": "handle", "properties": {"layout": "2"}, "request": {"action": "status"}})["reply"]
 check("world bosses have no ID column on the sheet: the mount ID comes from the catalog (icon, «already collected»)",
       any(m.get("kind") == "world" and m.get("id") for m in mounts.values()), [m for m in mounts.values() if m.get("kind") == "world"][:1])
+# ---- a raid with separate lockouts: «Normal/Heroic/Mythic» is three attempts a week
+def sep_row(sheets):
+    sheet = next(x for x in sheets if x["name"].startswith("Рейды ") and any("Normal/Heroic/Mythic" in map(str, r) for r in x["rows"]))
+    head = sheet["rows"][0]
+    row = next(r for r in sheet["rows"] if "Normal/Heroic/Mythic" in map(str, r))
+    return sheet["name"], head, row
+
+
+SEP = json.loads(json.dumps(SHEETS))
+sep_sheet = next(x for x in SEP if x["name"] == "Рейды Эйра")
+sep_new = list(sep_sheet["rows"][1])
+sep_new[3], sep_new[4], sep_new[5], sep_new[0] = "Тестовый скакун", "Девятка", "Normal/Heroic/Mythic", "Нет"
+sep_sheet["rows"].append(sep_new)
+if sep_sheet.get("formulas"):
+    sep_sheet["formulas"].append(["" for _ in sep_new])
+sep_name, sep_head, sep_cells = sep_row(SEP)
+sep_boss = sep_cells[next(i for i, h in enumerate(sep_head) if str(h).startswith("Босс"))]
+out, n1 = handle(SEP, [kill(90, sep_boss, "raid", 14)])
+sep_name, sep_head, sep_cells = sep_row(n1)
+check("N/H/M row, kill on Normal: still «Нет», «N» in the hidden column", sep_head[-1] == "N/H/M" and sep_cells[-1] == "N"
+      and str(sep_cells[0]) == "Нет" and out["reply"]["results"][0]["status"] == "marked", (sep_head[-1], sep_cells[-1], sep_cells[0], out["reply"]["results"][0]))
+st = run({"catalog": None, "sheets": n1, "mode": "handle", "properties": {"layout": "5"}, "request": {"action": "status"}})["reply"]
+sep_item = next(i for c in st["chars"] for i in c["items"] if i["boss"] == sep_boss and i.get("k"))
+check("…the list for the addon: the row is separate, N is killed", sep_item.get("sep") is True and sep_item["k"] == "N" and not sep_item.get("y"), sep_item)
+out, n2 = handle(n1, [kill(91, sep_boss, "raid", 14)])
+check("…the same difficulty again: nothing new", sep_row(n2)[2][-1] == "N" and out["reply"]["results"][0]["status"] != "marked", out["reply"]["results"][0])
+out, n3 = handle(n2, [kill(92, sep_boss, "raid", 16)])
+check("…then Mythic: «N,M», still «Нет»", sep_row(n3)[2][-1] == "N,M" and str(sep_row(n3)[2][0]) == "Нет", sep_row(n3)[2])
+out, n4 = handle(n3, [kill(93, sep_boss, "raid", 15)])
+check("…all three: «Да»", sep_row(n4)[2][-1] == "N,H,M" and str(sep_row(n4)[2][0]) == "Да", sep_row(n4)[2])
+reset = run({"catalog": None, "sheets": n4, "mode": "handle", "properties": {"layout": "5"}, "request": {"action": "kills", "client": "exe-2.8.0", "kills": [
+    {"id": "R-90", "time": NOW, "char": "Эйра", "boss": "Сброс недели", "kind": "reset"}]}})
+n5 = [{"name": x["name"], "rows": x["rows"], "formulas": x["formulas"]} for x in reset["sheets"]]
+check("«Сброс недели» clears the hidden column too", sep_row(n5)[2][-1] == "" and str(sep_row(n5)[2][0]) == "Нет", sep_row(n5)[2])
+out, n6 = handle(SEP, [kill(94, sep_boss, "manual", None)])
+check("a manual mark has no difficulty: the whole row is «Да», no hidden column", str(sep_row(n6)[2][0]) == "Да" and sep_row(n6)[1][-1] != "N/H/M", sep_row(n6)[1][-1])
 check("a table without the counter: no «mounts» in the status (the addon simply shows nothing)", "mounts" not in old, list(old))
 
 failed = [n for n, ok in checks if not ok]

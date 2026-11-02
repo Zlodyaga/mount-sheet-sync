@@ -337,7 +337,17 @@ local built = setmetatable({}, { __mode = "k" })
 
 local DOT_TEXTURE = Skin.DOT   -- белый круг: красим в цвет класса
 
--- Ячейки сетки у строки: кружок цвета класса — надо убить, чёрточка — уже убит.
+-- «N H M»: что ещё можно — цветом color, убитое — тёмным.
+local function PartsText(killed, color)
+  local out = {}
+  for i, p in ipairs(ns.PARTS) do
+    out[i] = "|c" .. (killed[p] and "ff5f5a4e" or color) .. p .. "|r"
+  end
+  return table.concat(out, " ")
+end
+
+-- Ячейки сетки у строки: кружок цвета класса — надо убить, чёрточка — уже убит;
+-- у строки с раздельными сохранениями — буквы сложностей (в узких столбцах — сколько осталось).
 local function DrawGrid(button, elem)
   for slot = 1, grid.shown do
     local c = grid.chars[grid.offset + slot]
@@ -348,7 +358,31 @@ local function DrawGrid(button, elem)
     end
     dot:ClearAllPoints()
     dot:SetPoint("CENTER", button, "LEFT", grid.x + (slot - 0.5) * grid.cell, 0)
-    if c and elem.names[c.name] then
+    local mark = button.marks[slot]
+    if mark then
+      mark:SetText("")
+    end
+    local killed = c and elem.killed and elem.killed[c.name]
+    if killed then
+      if not mark then
+        mark = button:CreateFontString(nil, "OVERLAY", "MSSFontHead")
+        button.marks[slot] = mark
+      end
+      mark:ClearAllPoints()
+      mark:SetPoint("CENTER", button, "LEFT", grid.x + (slot - 0.5) * grid.cell, 0)
+      if grid.cell >= GRID_SCROLL.cell then
+        mark:SetText(PartsText(killed, c.hex))
+      else
+        local left = 0
+        for _, p in ipairs(ns.PARTS) do
+          left = left + (killed[p] and 0 or 1)
+        end
+        mark:SetText("|c" .. c.hex .. left .. "|r")
+      end
+      dot:SetSize(1, 1)
+      dot:SetColorTexture(0, 0, 0, 0)
+      dot:SetVertexColor(1, 1, 1)
+    elseif c and elem.names[c.name] then
       dot:SetSize(10, 10)
       dot:SetTexture(DOT_TEXTURE)
       dot:SetVertexColor(c.r, c.g, c.b)
@@ -361,12 +395,18 @@ local function DrawGrid(button, elem)
   end
   for slot = grid.shown + 1, #button.dots do
     button.dots[slot]:Hide()
+    if button.marks[slot] then
+      button.marks[slot]:SetText("")
+    end
   end
 end
 
 local function HideDots(button)
   for _, dot in ipairs(button.dots) do
     dot:Hide()
+  end
+  for _, mark in pairs(button.marks) do
+    mark:SetText("")
   end
 end
 
@@ -428,7 +468,7 @@ local function InitRow(button, elem)
   if not built[button] then
     built[button] = true
     button:SetHeight(ROW_HEIGHT)
-    button.cells, button.dots, button.laidOut = {}, {}, false
+    button.cells, button.dots, button.marks, button.laidOut = {}, {}, {}, false
     button.stripe = button:CreateTexture(nil, "BACKGROUND")
     button.stripe:SetAllPoints()
     button.stripe:SetColorTexture(1, 1, 1, 0.03)
@@ -440,7 +480,7 @@ local function InitRow(button, elem)
     button.iconBack = button:CreateTexture(nil, "BORDER")
     button.iconBack:SetSize(20, 20)
     button.iconBack:SetPoint("LEFT", 3, 0)
-    button.iconBack:SetColorTexture(Skin.COLOR.editLine[1], Skin.COLOR.editLine[2], Skin.COLOR.editLine[3])
+    button.iconBack:SetColorTexture(Skin.COLOR.line[1], Skin.COLOR.line[2], Skin.COLOR.line[3])
     button.icon = button:CreateTexture(nil, "ARTWORK")
     button.icon:SetSize(18, 18)
     button.icon:SetPoint("CENTER", button.iconBack)
@@ -652,9 +692,9 @@ local function GridColumns(count)
   end
   local cols = Columns({
     { key = "icon", w = 18 },
-    { key = "boss", flex = 1.25, label = "col_boss" },
+    { key = "boss", flex = 1, label = "col_boss" },
     { key = "diff", w = 40, label = "col_diff" },
-    { key = "mount", flex = 1, label = "col_mount" },
+    { key = "mount", flex = 1.3, label = "col_mount" },
     { key = "grid", w = shown * view.cell },
     { key = "total", w = 40, right = true, bold = true, label = "col_total", tip = "tip_col_total" },
   }, listWidth)
@@ -715,6 +755,10 @@ local function RemainingRow(entry, menu, stripe)
       status = "|cff8c8c8c" .. status .. "|r",
     } }
   end
+  local diff = "|cffb7ae9a" .. ShortDiff(item.diff) .. "|r"
+  if entry.killed then
+    diff = PartsText(entry.killed, "ffd9d3c4")
+  end
   local chance = "|cff8c8c8c-|r"
   if n and n > 0 then
     chance = "|cff" .. ChanceColor(n, p) .. ns.FormatChance(n, p) .. "|r"
@@ -722,7 +766,7 @@ local function RemainingRow(entry, menu, stripe)
   end
   return { cols = cols, icon = ns.MountIcon(id), stripe = stripe, tip = tip, entry = menu and entry or nil, values = {
     boss = Safe(item.boss),
-    diff = "|cffb7ae9a" .. ShortDiff(item.diff) .. "|r",
+    diff = diff,
     mount = "|cffc9a0ff" .. Safe(item.mount) .. "|r",
     place = "|cff8c8c8c" .. Safe(item.place) .. "|r",
     n = n and n > 0 and tostring(n) or "|cff8c8c8c-|r",
@@ -780,6 +824,7 @@ local function GridChars(all)
   for i, c in ipairs(all) do
     local color = c.classFile and RAID_CLASS_COLORS and RAID_CLASS_COLORS[c.classFile]
     chars[i] = { name = c.name, classFile = c.classFile, colored = ClassColored(c.name, c.classFile),
+      hex = color and color.colorStr or "ffd9d9d9",
       r = color and color.r or 0.85, g = color and color.g or 0.85, b = color and color.b or 0.85 }
   end
   return chars
@@ -791,7 +836,6 @@ local function GridView(rows, all)
   local cols = GridColumns(#all)
   grid.offset = math.min(grid.offset, math.max(0, #all - grid.shown))
   local list, kind, stripe = {}, nil, false
-  local total = 0
   for _, row in ipairs(rows) do
     if row.kind ~= kind then
       kind = row.kind
@@ -803,15 +847,24 @@ local function GridView(rows, all)
     for i, name in ipairs(row.names) do
       names[name] = true
       shownNames[i] = Safe(name)
+      local killed = row.killed and row.killed[name]
+      if killed then
+        local left = {}
+        for _, p in ipairs(ns.PARTS) do
+          if not killed[p] then
+            left[#left + 1] = p
+          end
+        end
+        shownNames[i] = shownNames[i] .. " (" .. table.concat(left, ", ") .. ")"
+      end
     end
-    total = total + #row.names
     local _, _, id = ns.ItemAttempts(item)
-    list[#list + 1] = { cols = cols, names = names, icon = ns.MountIcon(id), stripe = stripe,
+    list[#list + 1] = { cols = cols, names = names, killed = row.killed or false, icon = ns.MountIcon(id), stripe = stripe,
       tip = { Safe(item.mount), BossAndDiff(item.boss, item.diff), table.concat(shownNames, ", ") }, values = {
         boss = Safe(item.boss),
         diff = "|cffb7ae9a" .. ShortDiff(item.diff) .. "|r",
         mount = "|cffc9a0ff" .. Safe(item.mount) .. "|r",
-        total = "|cffd8c98f" .. #row.names .. "|r",
+        total = "|cffd8c98f" .. row.total .. "|r",
       } }
     stripe = not stripe
   end

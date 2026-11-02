@@ -3,6 +3,7 @@
 The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [CHANGELOG-addon.md](CHANGELOG-addon.md).
 
 ## 2.9.2
+- Raids with separate lockouts: on a Normal/Heroic/Mythic row a kill on one difficulty no longer closes the row. It becomes “Yes” when all three are killed; the killed ones are kept in a hidden “N/H/M” column.
 - World boss mounts now reach the addon with their game ID: their icons show in its window, and a collected one leaves its lists.
 - The weekly reset happens by itself: when a new game week has started and the sheet has not been reset yet, the program
   sets “No” for every character and marks this week's kills again — at the first update of the “Remaining” list, for

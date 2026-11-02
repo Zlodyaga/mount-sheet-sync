@@ -192,6 +192,38 @@ local KIND_FITS = {
   rare = { world = true, manual = true },   -- рар приходит из игры как мировой босс
 }
 
+-- Строки с раздельными сохранениями (item.sep от программы): какие сложности убиты.
+ns.PARTS = { "N", "H", "M" }
+local PART_OF_DIFFICULTY = { [14] = "N", [15] = "H", [16] = "M" }
+
+local function AddKilledParts(killed, text)
+  for part in tostring(text):gmatch("[NHM]") do
+    killed[part] = true
+  end
+end
+
+-- Запись без подходящей сложности (ручная отметка) закрывает все.
+local function AddRecordPart(killed, rec)
+  local part = PART_OF_DIFFICULTY[tonumber(rec.difficultyID)]
+  if part then
+    killed[part] = true
+  else
+    for _, p in ipairs(ns.PARTS) do
+      killed[p] = true
+    end
+  end
+end
+
+local function CountPartsLeft(killed)
+  local n = 0
+  for _, p in ipairs(ns.PARTS) do
+    if not killed[p] then
+      n = n + 1
+    end
+  end
+  return n
+end
+
 -- d — DifficultyID, при которых строка засчитывается (пусто — любая сложность).
 -- Неизвестную игре сложность обычная строка принимает, «Любой босс …» — нет.
 local function DifficultyFits(item, rec, strict, known)
@@ -413,6 +445,7 @@ function ns.BuildRemaining(data, player, weekEnd, kills, ch)
 
   local known = KnownIds(data)
   local hidden = ns.NotFarmed and ns.NotFarmed(player.key, tonumber(data.generated)) or {}
+  local afterReset = result.afterReset
   local items, left, total = {}, 0, 0
   local now = time()
   for _, item in ipairs(type(ch.items) == "table" and ch.items or {}) do
@@ -433,9 +466,28 @@ function ns.BuildRemaining(data, player, weekEnd, kills, ch)
       if wait <= 0 then
         left = left + 1
       end
+    elseif type(item) == "table" and item.sep and not ns.IsNotFarmed(hidden, item) then
+      -- у каждой сложности своё сохранение: три попытки в неделю
+      total = total + #ns.PARTS
+      if not item.y or afterReset then
+        local killed = {}
+        if item.k and not afterReset then
+          AddKilledParts(killed, item.k)
+        end
+        local by
+        for _, rec in ipairs(recs) do
+          if Fits(item, rec, RecordName(rec), known) then
+            by = rec
+            AddRecordPart(killed, rec)
+          end
+        end
+        local partsLeft = CountPartsLeft(killed)
+        items[#items + 1] = { item = item, done = partsLeft == 0, by = by, killed = killed, partsLeft = partsLeft }
+        left = left + partsLeft
+      end
     elseif type(item) == "table" and not ns.IsNotFarmed(hidden, item) then
       total = total + 1
-      if not item.y or result.afterReset then
+      if not item.y or afterReset then
         local by
         for _, rec in ipairs(recs) do
           if Fits(item, rec, RecordName(rec), known) then
@@ -552,11 +604,16 @@ function ns.GetSummary()
           end
           local row = byKey[k]
           if not row then
-            row = { kind = it.kind, item = it, names = {} }
+            row = { kind = it.kind, item = it, names = {}, total = 0 }
             byKey[k] = row
             rows[#rows + 1] = row
           end
           row.names[#row.names + 1] = c.name
+          row.total = row.total + (entry.partsLeft or 1)
+          if entry.killed then
+            row.killed = row.killed or {}
+            row.killed[c.name] = entry.killed
+          end
         end
       end
     end
@@ -751,11 +808,21 @@ local function CharactersLeft(m, data, kills, known, weekEnd)
         end
       end
     elseif not done and weekEnd then
+      local killed = e.item.sep and {} or nil
+      if killed and e.item.k and not afterReset then
+        AddKilledParts(killed, e.item.k)
+      end
       for _, rec in ipairs(kills) do
         if rec.weekEnd == weekEnd and RecordBy(e.ch, rec) and Fits(e.item, rec, RecordName(rec), known) then
-          done = true
-          break
+          if not killed then
+            done = true
+            break
+          end
+          AddRecordPart(killed, rec)
         end
+      end
+      if killed and CountPartsLeft(killed) == 0 then
+        done = true
       end
     end
     if not done then
@@ -970,6 +1037,15 @@ function ns.FormatRemaining(entry)
   local item = entry.item
   local boss = Safe(item.boss) ~= "" and Safe(item.boss) or "?"
   local diff = Safe(item.diff)
+  if entry.killed and not entry.done then
+    local left = {}
+    for _, p in ipairs(ns.PARTS) do
+      if not entry.killed[p] then
+        left[#left + 1] = p
+      end
+    end
+    diff = table.concat(left, ", ")
+  end
   if entry.done then
     local tail = entry.again and string.format(L.left_again, ns.FormatDuration(entry.again)) or L.left_done
     return DONE_ICON .. "|cff8c8c8c" .. boss .. (diff ~= "" and (" (" .. diff .. ")") or "")

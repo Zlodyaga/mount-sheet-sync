@@ -347,6 +347,34 @@ gr._scripts.OnEnter(gr)
 tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
 check("…hover: every name in the tooltip", tt[-1] == ", ".join(str(first.names[i]) for i in range(1, len(first.names) + 1)), tt)
 gr._scripts.OnLeave(gr)
+# a raid with separate lockouts: the program marks the row, the difficulties killed are in item.k
+sep_ch = None
+for ci in range(1, len(g.MountSheetSyncSheet.chars) + 1):
+    if g.MountSheetSyncSheet.chars[ci].name == allr[2].name:
+        sep_ch = g.MountSheetSyncSheet.chars[ci]
+g.MSS_SEP_CH = sep_ch
+L.execute("""SEP_ITEM = { kind = "raid", boss = "Тестовая Девятка", diff = "Normal/Heroic/Mythic", mount = "Тестовый скакун", place = "Тест", names = { "тестовая девятка" }, d = { 14, 15, 16 }, sep = true, k = "N" }
+table.insert(MSS_SEP_CH.items, SEP_ITEM)
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1""")
+L.execute("MSS_NS.OnChange()"); g.RunTimers()
+sep_row = [f for f in pool(ROW) if f.elem.names is not None and str(f.elem["values"]["boss"]) == "Тестовая Девятка"]
+sep_name = str(sep_ch.name)
+check("3.0.3: N/H/M row in the grid: the letters instead of a dot, the total counts attempts",
+      len(sep_row) == 1 and plain(row_text(sep_row[0])).endswith(" | 2"), [row_text(f) for f in sep_row])
+sep_slot = [i for i in range(1, len(ns.GetAllRemaining()) + 1) if str(ns.GetAllRemaining()[i].name) == sep_name][0]
+sep_mark = sep_row[0].marks[sep_slot]
+check("…N is dark, H and M in the character's colour", plain(sep_mark._text) == "N H M" and "|cff5f5a4eN|r" in str(sep_mark._text), str(sep_mark._text))
+sep_row[0]._scripts.OnEnter(sep_row[0])
+tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
+check("…the tooltip says what is left", "(H, M)" in tt[-1], tt)
+sep_row[0]._scripts.OnLeave(sep_row[0])
+sep_entry = [e for e in pool(CHAR) if plain(e.name._text) == sep_name][0]
+sep_entry.MockClick(sep_entry); g.RunTimers()
+sep_text = [t for t in shown_rows() if "Тестовая Девятка" in t]
+check("…on the character's list: the same letters, the row stays", len(sep_text) == 1 and "N" in plain(sep_text[0]) and "|cff5f5a4eN|r" in sep_text[0], sep_text)
+L.execute("""for i, it in ipairs(MSS_SEP_CH.items) do if it == SEP_ITEM then table.remove(MSS_SEP_CH.items, i) break end end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1""")
+click_all()
 # many characters: scrolled columns, then all at once from the settings
 L.execute("""GRID_OLD = MountSheetSyncSheet
 local copy = {}

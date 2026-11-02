@@ -33,7 +33,7 @@ ScrollBox в `wow_mock.lua` упрощён: `SetDataProvider` вызывает �
 
 На Windows (Python + lupa, без mono): `paths.py` ставит локаль `C` — иначе Lua `string.lower` по системной cp1251
 портит кириллицу в UTF-8 (в игре локаль `C`). Идут `test_addon2`, `test_minimap`, `test_offline`, `test_locale`,
-`test_collection`; `test_addon_left` — с готовым `SheetData.lua` первым аргументом (Node-скрипт таблицы под Windows
+`test_collection`; `test_attempts`, `test_collection_sync` и другие без `mono` в пути — с хостами, собранными `csc`, и заменой `mono.exe`, которая запускает exe напрямую; `test_addon_left` — с готовым `SheetData.lua` первым аргументом (Node-скрипт таблицы под Windows
 не работает; дата списка тогда старая — одна проверка «сегодня в» не проходит). `test_attempts_addon` — только в CI.
 
 ## Скриншоты окон аддона
