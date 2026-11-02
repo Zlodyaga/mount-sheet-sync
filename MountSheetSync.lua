@@ -336,7 +336,7 @@ end
 ---------------------------------------------------------------------------
 -- Убийство в бою (ENCOUNTER_END / BOSS_KILL)
 ---------------------------------------------------------------------------
-local function OnBossKilled(source, encounterID, encounterName, difficultyID, groupSize)
+local function OnBossKilled(encounterID, encounterName, difficultyID, groupSize)
   encounterID = ToNumber(encounterID)
   local boss = Clean(encounterName)
 
@@ -378,7 +378,6 @@ local function OnBossKilled(source, encounterID, encounterName, difficultyID, gr
   local stamp = time()
   local rec = BaseRecord(player, stamp)
   rec.id = string.format("K-%s-%d-%d", player.key, encounterID or 0, stamp)
-  rec.source = source
   rec.boss = boss
   rec.encounterID = encounterID
   rec.instance = Clean(instanceName)
@@ -478,9 +477,7 @@ local function OnLootReady()
       local npc = guid:match("^Creature%-%d+%-%d+%-%d+%-%d+%-(%d+)%-") or "0"
       local rec = BaseRecord(player, stamp)
       rec.id = string.format("D-%s-%s-%d", player.key, npc, stamp)
-      rec.source = "loot"
       rec.boss = name
-      rec.npcID = tonumber(npc)
       rec.kind = "world"
       rec.difficultyID = 0
       rec.weekEnd = WeekEnd()
@@ -541,7 +538,6 @@ local function ScanLockouts()
           local rec = BaseRecord(player, stamp)
           rec.id = string.format("L-%s-%s-%d-%d-%d", player.key, tostring(place),
             difficultyID or 0, j, lockEnd)
-          rec.source = "lockout"
           rec.boss = boss
           rec.instance = Clean(instanceName)
           rec.kind = kind
@@ -568,7 +564,6 @@ local function ScanLockouts()
       local lockEnd = RoundTime(stamp + reset)
       local rec = BaseRecord(player, stamp)
       rec.id = string.format("W-%s-%s-%d", player.key, tostring(ToNumber(worldBossID) or boss), lockEnd)
-      rec.source = "lockout"
       rec.boss = boss
       rec.kind = "world"
       rec.difficultyID = 0
@@ -633,7 +628,6 @@ local function CleanSource(text)
   text = text:gsub("|H.-|h(.-)|h", "%1")
   return Clean(text)
 end
-ns.CleanSource = CleanSource
 
 local function OnMountAdded(mountID)
   mountID = ToNumber(mountID)
@@ -641,7 +635,7 @@ local function OnMountAdded(mountID)
   if not mountID or not journal or not journal.GetMountInfoByID then
     return
   end
-  local name, spellID = journal.GetMountInfoByID(mountID)
+  local name = journal.GetMountInfoByID(mountID)
   name = Clean(name)
   local player = GetPlayer()
   if not name or not player.name then
@@ -657,12 +651,10 @@ local function OnMountAdded(mountID)
   end
   local rec = BaseRecord(player, time())
   rec.id = string.format("C-%s-%d", player.key, mountID)
-  rec.source = "mount"
   rec.kind = "mount"
   rec.boss = name          -- у записи всегда есть «boss»; для маунта это его имя
   rec.mount = name
   rec.mountID = mountID
-  rec.spellID = ToNumber(spellID)
   rec.from = from          -- откуда маунт, по журналу маунтов: по нему таблица узнаёт босса
   if AddRecord(rec) and not db.quiet then
     Print(string.format(L.mount_added, name))
@@ -685,7 +677,6 @@ local function AddManual(text)
   local stamp = time()
   local rec = BaseRecord(player, stamp)
   rec.id = string.format("M-%s-%d-%d", player.key, stamp, #db.kills + 1)
-  rec.source = "manual"
   rec.kind = "manual"
   rec.boss = boss
   rec.weekEnd = WeekEnd()
@@ -719,7 +710,6 @@ local function AddPlan(item, scope)
   local stamp = time()
   local rec = BaseRecord(player, stamp)
   rec.id = string.format("P-%s-%d-%d", player.key, stamp, #db.kills + 1)
-  rec.source = "plan"
   rec.kind = "plan"
   rec.list = item.kind
   rec.scope = scope
@@ -759,7 +749,6 @@ function ns.ResetWeek()
   local stamp = time()
   local rec = BaseRecord(player, stamp)
   rec.id = string.format("R-%s-%d", player.key, stamp)
-  rec.source = "reset"
   rec.kind = "reset"
   rec.boss = L.reset_week   -- у записи всегда есть «boss»; таблице оно не важно
   rec.weekEnd = WeekEnd()
@@ -932,7 +921,6 @@ local function Init()
     MountSheetSyncDB = {}
   end
   db = MountSheetSyncDB
-  db.version = 1
   db.addonVersion = VERSION   -- программа читает: не нужна ли ей версия аддона новее
   if type(db.kills) ~= "table" then
     db.kills = {}
@@ -971,11 +959,11 @@ frame:SetScript("OnEvent", function(self, event, ...)
   elseif event == "ENCOUNTER_END" then
     local encounterID, encounterName, difficultyID, groupSize, success = ...
     if not issecretvalue(success) and (success == 1 or success == true) then
-      SafeCall(OnBossKilled, "encounter", encounterID, encounterName, difficultyID, groupSize)
+      SafeCall(OnBossKilled, encounterID, encounterName, difficultyID, groupSize)
     end
   elseif event == "BOSS_KILL" then
     local encounterID, encounterName = ...
-    SafeCall(OnBossKilled, "bosskill", encounterID, encounterName)
+    SafeCall(OnBossKilled, encounterID, encounterName)
   elseif event == "UPDATE_INSTANCE_INFO" then
     QueueScan()
   elseif event == "LOOT_READY" then

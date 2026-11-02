@@ -42,6 +42,9 @@ namespace MountSheetSync
             return Path.Combine(Path.Combine(Path.Combine(retailDir, "Interface"), "AddOns"), "MountSheetSync");
         }
 
+        /// <summary>Поля ответа таблицы, которые аддон не читает: в SheetData.lua это 15 % файла, а игра разбирает его при каждом входе.</summary>
+        static readonly HashSet<string> NotForAddon = new HashSet<string> { "sheet", "row" };
+
         public static string Build(Dictionary<string, object> status)
         {
             Dictionary<string, object> data = new Dictionary<string, object>();
@@ -91,6 +94,10 @@ namespace MountSheetSync
                 bool any = false;
                 foreach (KeyValuePair<string, object> kv in dict)
                 {
+                    if (NotForAddon.Contains(kv.Key))
+                    {
+                        continue;
+                    }
                     if (kv.Value == null)
                     {
                         continue;

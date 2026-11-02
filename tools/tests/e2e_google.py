@@ -356,6 +356,7 @@ try:
     r = find_row(rare, 3, "Дракон Четырех Ветров")
     check("a looted rare: «Последнее убийство» — when and who, «Попыток» +1", code == 0 and "Эйра" in str(rare[r].get(6)) and rare[r].get(9) == 1, (rare[r], out[-600:]))
     sheetdata = open(os.path.join(ADDON, "SheetData.lua"), encoding="utf-8").read()
+    check("the list for the addon has no fields it does not read (sheet, row)", not re.search(r"\b(sheet|row) =", sheetdata), sheetdata[:300])
     check("…in the list as a rare with its own cooldown", 'kind = "rare"' in sheetdata and 'every = "daily"' in sheetdata, sheetdata[:200])
 
     # ---------------------------------------------------------------- revoked sign-in

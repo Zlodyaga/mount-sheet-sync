@@ -69,7 +69,6 @@ local function Plain(v)
 end
 
 local MAX_INSTANCE_LINES = 24
-local MAX_UNIT_INSTANCE_LINES = 12
 
 -- Маунты всех боссов подземелья (journalInstanceID): имя босса заголовком, под ним его строки.
 local function InstanceLines(instanceID, limit)

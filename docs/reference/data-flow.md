@@ -29,4 +29,6 @@ WoW (аддон) ──SavedVariables\MountSheetSync.lua──► програм
 значения + формулы), одна на проход цикла (`ping`, `kills`, `status` и сверка берут её из памяти) — отправка убийств со
 списком = 3 чтения и 1–2 записи, только список = 3 чтения.
 
+В `SheetData.lua` у строк нет `sheet` и `row`: они есть в ответе таблицы, но аддон их не читает (`SheetData.NotForAddon`).
+
 Рары в `SheetData.lua`: `items`/`mounts` с `kind = "rare"`, у `items` ещё `every` (`"daily"`, `"weekly"` или секунды). Лимит проекта — 300 чтений и 300 записей в минуту (см. [decisions.md](decisions.md)).

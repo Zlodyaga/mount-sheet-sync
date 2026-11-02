@@ -35,7 +35,7 @@ local KIND_COLOR = {
 }
 
 -- Вкладки по порядку; в db.tab хранится ключ.
-local TAB_LEFT, TAB_ALL, TAB_ATTEMPTS, TAB_LOG = 1, 2, 3, 4
+local TAB_LEFT, TAB_ALL, TAB_ATTEMPTS = 1, 2, 3
 local TAB_KEYS = { "left", "all", "attempts", "log" }
 local TAB_LABELS = { "tab_left", "tab_all", "tab_attempts", "tab_log" }
 
@@ -890,8 +890,8 @@ function ns.BugReport()
   add("Characters remembered: %d; collection: %s mounts, %s", Count(db.chars), tostring(col.collected or "?"),
     col.updated and ("read " .. Ago(col.updated)) or "not read yet")
   local loaded = 0
-  local getNum = C_AddOns and C_AddOns.GetNumAddOns or GetNumAddOns
-  local isLoaded = C_AddOns and C_AddOns.IsAddOnLoaded or IsAddOnLoaded
+  local getNum = C_AddOns and C_AddOns.GetNumAddOns
+  local isLoaded = C_AddOns and C_AddOns.IsAddOnLoaded
   if getNum and isLoaded then
     for i = 1, getNum() do
       if isLoaded(i) then
@@ -1084,7 +1084,7 @@ end)
 ---------------------------------------------------------------------------
 local LDB = LibStub and LibStub("LibDataBroker-1.1", true)
 if LDB then
-  ns.broker = LDB:NewDataObject(ADDON_NAME, {
+  LDB:NewDataObject(ADDON_NAME, {
     type = "launcher",
     label = "Mount Sheet Sync",
     icon = ICON,

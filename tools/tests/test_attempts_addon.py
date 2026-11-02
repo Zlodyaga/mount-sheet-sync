@@ -281,9 +281,9 @@ ISHAK = "Creature-0-3767-1-41-157134-00004A2B3C"
 out = loot(L4, g4, ISHAK, "Исхак Повелитель Четырех Ветров")
 recs = g4.MountSheetSyncDB.kills
 last = recs[len(recs)]
-check("looting Ishak: recorded as a world kill (source loot, NPC ID from the GUID)", last.kind == "world" and last.source == "loot"
-      and last.boss == "Исхак Повелитель Четырех Ветров" and last.npcID == 157134 and str(last.id).startswith("D-Player-1602-0ABCDEF1-157134-"),
-      (last.kind, last.source, last.boss, last.npcID, last.id))
+check("looting Ishak: recorded as a world kill (NPC ID from the GUID in the record's id)", last.kind == "world"
+      and last.boss == "Исхак Повелитель Четырех Ветров" and "-157134-" in str(last.id) and str(last.id).startswith("D-Player-1602-0ABCDEF1-157134-"),
+      (last.kind, last.boss, last.id))
 check("…chat: recorded + «Дракон Четырех Ветров мог выпасть: попытка 1 · шанс за все попытки 3%»",
       any("записано" in c for c in out) and any("Дракон Четырех Ветров" in c and "попытка 1 " in c and "3%" in c for c in out), out)
 n = len(recs)
