@@ -830,7 +830,7 @@ function ns.BossHintNow(bossName, data)
   return out
 end
 
--- Вкладка «Попытки»: несобранные маунты со счётчиком { name, n, p, left, diff, kind, boss }.
+-- Вкладка «Попытки»: несобранные маунты со счётчиком { name, n, p, left, diff, kind, boss, id }.
 -- Пересчёт — только когда поменялись список, журнал, неделя или коллекция (тот же признак, что у подсказки).
 local attemptsStamp, attemptsResult
 
@@ -854,7 +854,7 @@ function ns.GetAttemptsList()
     local p = type(m) == "table" and tonumber(m.p)
     if p and p > 0 and p < 1 and not Collected(m) then
       local n = CountNow(m, data, kills, known)
-      out[#out + 1] = { name = MountName(m), n = n, p = p, left = CharactersLeft(m, data, kills, known, weekEnd), diff = m.diff, kind = m.kind, boss = m.boss }
+      out[#out + 1] = { name = MountName(m), n = n, p = p, left = CharactersLeft(m, data, kills, known, weekEnd), diff = m.diff, kind = m.kind, boss = m.boss, id = m.id }
     end
   end
   table.sort(out, function(a, b)
@@ -868,6 +868,45 @@ function ns.GetAttemptsList()
   end)
   attemptsStamp, attemptsResult = stamp, out
   return out
+end
+
+-- Строка «Осталось» → её счётчик: n, p, ID маунта (nil — маунта нет среди строк со случайным шансом).
+function ns.ItemAttempts(item)
+  local data = AttemptRows()
+  if not data then
+    return nil
+  end
+  if not data._mountRows then
+    local index = {}
+    for _, m in ipairs(data.mounts) do
+      local p = type(m) == "table" and tonumber(m.p)
+      if p and p > 0 and p < 1 then
+        index[tostring(m.kind) .. "|" .. Norm(m.mount)] = m
+      end
+    end
+    data._mountRows = index
+  end
+  local m = data._mountRows[tostring(item.kind) .. "|" .. Norm(item.mount)]
+  if not m then
+    return nil, nil, tonumber(item.id)
+  end
+  local db = ns.GetDB()
+  return CountNow(m, data, db and db.kills or {}, KnownIds(data)), tonumber(m.p), tonumber(m.id) or tonumber(item.id)
+end
+
+-- Значок маунта по ID (nil — игра его не знает). Значки не меняются: запоминаем на сеанс.
+local mountIcons = {}
+
+function ns.MountIcon(id)
+  id = tonumber(id)
+  if not id or not C_MountJournal or not C_MountJournal.GetMountInfoByID then
+    return nil
+  end
+  if mountIcons[id] == nil then
+    local ok, _, _, icon = pcall(C_MountJournal.GetMountInfoByID, id)
+    mountIcons[id] = ok and icon and not (issecretvalue and issecretvalue(icon)) and icon or false
+  end
+  return mountIcons[id] or nil
 end
 
 ---------------------------------------------------------------------------

@@ -1,15 +1,15 @@
 --[[
 Mount Sheet Sync 3.0.3 — окно, иконка и настройки
 ==================================================
-  * окно (ЛКМ по иконке или /mss): слева персонажи из таблицы (сколько каждому осталось), справа вкладки
-    «Осталось» (выбранному персонажу), «Все персонажи» (кому что ещё убить), «Попытки» (счётчик маунтов)
-    и «Журнал» (записи аддона); внизу — частые действия и кнопка настроек;
+  * окно (ЛКМ по иконке или /mss): слева «Все персонажи» и персонажи из таблицы (сколько каждому осталось), справа
+    вкладки «Осталось» (таблица выбранного персонажа или сетка всех), «Попытки» (счётчик маунтов, сортировка и
+    фильтры) и «Журнал» (записи аддона, ручная отметка, поиск в сохранениях); внизу — отправка в таблицу и настройки;
   * списки — ScrollBox игры: кадры только для видимых строк, перестраиваются, только когда поменялись данные;
   * кнопка у миникарты — её забирают к себе HidingBar и похожие панели;
   * иконка LibDataBroker — для Titan Panel, ChocolateBar и т. п.;
   * пункт в меню аддонов у миникарты (Addon Compartment);
-  * настройки (ПКМ по иконке, кнопка в окне или /mss settings): язык, сообщения в чате, кнопка у миникарты,
-    очистка журнала, сведения для отчёта об ошибке.
+  * настройки (ПКМ по иконке, кнопка в окне или /mss settings): язык, вид сетки всех персонажей, сообщения в чате,
+    кнопка у миникарты, очистка журнала, сведения для отчёта об ошибке.
 Все надписи — из ns.L; при смене языка окно и настройки перерисовываются сразу.
 ]]
 
@@ -17,11 +17,19 @@ local ADDON_NAME, ns = ...
 
 local ICON = "Interface\\AddOns\\MountSheetSync\\Media\\Icon"   -- the horseshoe, same as the tray program
 local WINDOW_NAME = "MountSheetSyncFrame"
-local WIDTH, HEIGHT = 820, 540
-local SIDE_WIDTH = 180
-local ROW_HEIGHT = 16
-local CHAR_HEIGHT = 20
-local NAMES_SHOWN = 3   -- «Все персонажи»: столько имён в строке, остальные — «и ещё N» (все — в подсказке)
+local WIDTH, HEIGHT = 1060, 600
+local SIDE_WIDTH = 160
+local ROW_HEIGHT = 20
+local CHAR_HEIGHT = 22
+local TOOLBAR_HEIGHT = 30
+local HEAD_HEIGHT = 20
+local SLIDER_ROOM = 16    -- место под полосой прокрутки столбцов
+local COLUMN_GAP = 8
+local CHANCE_BAR_WIDTH = 58
+-- Сетка всех персонажей: ширина столбца, сколько столбцов видно, сколько букв имени в заголовке.
+local GRID_SCROLL = { cell = 40, visible = 7, letters = 3 }
+local GRID_ALL = { cell = 16, visible = 20, letters = 1 }
+local MIN_TEXT_WIDTH = 240   -- меньше этого на босса и маунт не отдаём: лучше меньше столбцов
 
 local KIND_COLOR = {
   raid = "ffffffff",
@@ -35,18 +43,26 @@ local KIND_COLOR = {
 }
 
 -- Вкладки по порядку; в db.tab хранится ключ.
-local TAB_LEFT, TAB_ALL, TAB_ATTEMPTS = 1, 2, 3
-local TAB_KEYS = { "left", "all", "attempts", "log" }
-local TAB_LABELS = { "tab_left", "tab_all", "tab_attempts", "tab_log" }
+local TAB_LEFT, TAB_ATTEMPTS, TAB_LOG = 1, 2, 3
+local TAB_KEYS = { "left", "attempts", "log" }
+local TAB_LABELS = { "tab_left", "tab_attempts", "tab_log" }
+local ALL_CHARS = {}      -- selectedChar: первая строка слева, «Все персонажи»
+local FILTER_KINDS = { "all", "raid", "dungeon", "world", "rare" }
 
 local UI = {}
 local L = ns.L
 local relabel = {}      -- функции, которые заново ставят надписи (смена языка)
 local frame, listBox, charBox, emptyText, header1, header2, editBox, urlBox
+local toolbar, summaryText, focusText, attemptsBar, attemptsCount, logBar, headRow, gridSlider, columnGlow, hideZeroCheck
+local listWidth = WIDTH - SIDE_WIDTH - 58
 local tabs = {}
+local filterButtons = {}
+local headCells = {}
 local refreshQueued = false
-local selectedChar      -- имя персонажа из таблицы, выбранного слева; nil — текущий
+local selectedChar      -- имя персонажа из таблицы, выбранного слева; nil — текущий; ALL_CHARS — все
 local shownList, shownChars   -- что сейчас в списках: перестраиваем только при изменении
+local grid = { chars = {}, offset = 0, shown = 0, cell = GRID_SCROLL.cell, x = 0 }   -- сетка всех персонажей
+local shownHead         -- столбцы и подписи заголовка таблицы, что сейчас на экране
 
 ---------------------------------------------------------------------------
 -- Мелочи
@@ -203,6 +219,35 @@ local function Safe(value)
   return (tostring(value):gsub("|", "||"))
 end
 
+-- Первые n букв имени (UTF-8): заголовок столбца сетки.
+local function FirstLetters(name, n)
+  local out, count = {}, 0
+  for ch in tostring(name):gmatch("[%z\1-\127\194-\244][\128-\191]*") do
+    count = count + 1
+    if count > n then
+      break
+    end
+    out[count] = ch
+  end
+  return table.concat(out)
+end
+
+-- Сложность короче для колонки; полная — в подсказке строки.
+local function ShortDiff(diff)
+  local text = Safe(diff)
+  text = text:gsub("Normal", "N"):gsub("Heroic", "H"):gsub("Mythic%+", "M+"):gsub("Mythic", "M")
+  text = text:gsub("Timewalking", "TW"):gsub(" timed run", ""):gsub("%s*/%s*", "/")
+  return text
+end
+
+local function BossAndDiff(boss, diff)
+  local text = Safe(boss)
+  if Safe(diff) ~= "" then
+    text = text .. " (" .. Safe(diff) .. ")"
+  end
+  return text
+end
+
 -- Меню по правому щелчку на строке «Осталось» (только у текущего персонажа): не фармить строку или весь рейд / подземелье.
 local function ShowRowMenu(button)
   local entry = button.elem and button.elem.entry
@@ -223,54 +268,215 @@ local function ShowRowMenu(button)
   end)
 end
 
--- Подсказка строки: «ПКМ — не фармлю» или elem.tip = { заголовок, строка, … }.
-local function ShowRowTooltip(button)
-  local elem = button.elem
-  if elem and elem.entry then
-    GameTooltip:SetOwner(button, "ANCHOR_CURSOR")
-    GameTooltip:SetText(L.tip_row_menu, 1, 1, 1)
-    GameTooltip:Show()
-  elseif elem and elem.tip then
-    GameTooltip:SetOwner(button, "ANCHOR_CURSOR")
-    GameTooltip:SetText(elem.tip[1], 1, 0.82, 0)
-    for i = 2, #elem.tip do
-      GameTooltip:AddLine(elem.tip[i], 1, 1, 1, true)
-    end
-    GameTooltip:Show()
-  end
-end
-
 local function HideTooltip()
   GameTooltip:Hide()
 end
 
+-- Сетка: какой столбец под курсором — подсветить его и назвать персонажа (при узких столбцах имени не видно).
+local function FocusColumn(index)
+  local c = index and grid.chars[index]
+  local slot = c and index - grid.offset
+  if not c or slot < 1 or slot > grid.shown then
+    columnGlow:Hide()
+    focusText:SetText("")
+    return
+  end
+  columnGlow:ClearAllPoints()
+  columnGlow:SetPoint("TOPLEFT", 6 + grid.x + (slot - 1) * grid.cell, -TOOLBAR_HEIGHT)
+  columnGlow:SetPoint("BOTTOMLEFT", 6 + grid.x + (slot - 1) * grid.cell, grid.overflow and SLIDER_ROOM + 6 or 6)
+  columnGlow:SetWidth(grid.cell)
+  columnGlow:Show()
+  focusText:SetText(string.format(L.all_focus, c.colored))
+end
+
+local function GridHover(button)
+  local left = button:GetLeft()
+  if not left then
+    return
+  end
+  local x = GetCursorPosition() / button:GetEffectiveScale() - left - grid.x
+  local slot = math.floor(x / grid.cell) + 1
+  FocusColumn(slot >= 1 and slot <= grid.shown and slot + grid.offset or nil)
+end
+
+-- Подсказка строки: elem.tip = { заголовок, строка, … }; у строк с меню — ещё «ПКМ — не фармлю».
+local function ShowRowTooltip(button)
+  local elem = button.elem
+  if not elem or not (elem.tip or elem.entry) then
+    return
+  end
+  GameTooltip:SetOwner(button, "ANCHOR_CURSOR")
+  if elem.tip then
+    GameTooltip:SetText(elem.tip[1], 1, 0.82, 0)
+    for i = 2, #elem.tip do
+      GameTooltip:AddLine(elem.tip[i], 1, 1, 1, true)
+    end
+    if elem.entry then
+      GameTooltip:AddLine(L.tip_row_menu, 0.6, 0.6, 0.6, true)
+    end
+  else
+    GameTooltip:SetText(L.tip_row_menu, 1, 1, 1)
+  end
+  GameTooltip:Show()
+  if elem.names then
+    button:SetScript("OnUpdate", GridHover)
+  end
+end
+
+local function LeaveRow(button)
+  button:SetScript("OnUpdate", nil)
+  HideTooltip()
+  if button.elem and button.elem.names then
+    FocusColumn(nil)
+  end
+end
+
 -- Кадры строк, которые уже собраны (ScrollBox отдаёт и новые, и переиспользованные).
 local built = setmetatable({}, { __mode = "k" })
+
+local DOT_TEXTURE = "Interface\\CharacterFrame\\TempPortraitAlphaMask"   -- белый круг: красим в цвет класса
+
+-- Ячейки сетки у строки: кружок цвета класса — надо убить, чёрточка — уже убит.
+local function DrawGrid(button, elem)
+  for slot = 1, grid.shown do
+    local c = grid.chars[grid.offset + slot]
+    local dot = button.dots[slot]
+    if not dot then
+      dot = button:CreateTexture(nil, "ARTWORK")
+      button.dots[slot] = dot
+    end
+    dot:ClearAllPoints()
+    dot:SetPoint("CENTER", button, "LEFT", grid.x + (slot - 0.5) * grid.cell, 0)
+    if c and elem.names[c.name] then
+      dot:SetSize(10, 10)
+      dot:SetTexture(DOT_TEXTURE)
+      dot:SetVertexColor(c.r, c.g, c.b)
+    else
+      dot:SetSize(8, 2)
+      dot:SetColorTexture(0.42, 0.38, 0.32)
+      dot:SetVertexColor(1, 1, 1)
+    end
+    dot:Show()
+  end
+  for slot = grid.shown + 1, #button.dots do
+    button.dots[slot]:Hide()
+  end
+end
+
+local function HideDots(button)
+  for _, dot in ipairs(button.dots) do
+    dot:Hide()
+  end
+end
+
+-- Строка таблицы: значок, ячейки по столбцам elem.cols, полоска шанса. Столбцы ставятся, только если сменились.
+local function DrawCells(button, elem)
+  local cols = elem.cols
+  local used = 0
+  for _, col in ipairs(cols) do
+    if col.key == "icon" then
+      button.icon:ClearAllPoints()
+      button.icon:SetPoint("LEFT", col.x, 0)
+    elseif col.key == "bar" then
+      button.barBack:ClearAllPoints()
+      button.barBack:SetPoint("LEFT", col.x, 0)
+      button.barBack:SetWidth(col.w)
+      button.barFill:ClearAllPoints()
+      button.barFill:SetPoint("LEFT", col.x, 0)
+      button.barFill:SetWidth(math.max(1, col.w * (elem.bar or 0)))
+    elseif col.key ~= "grid" then
+      used = used + 1
+      local cell = button.cells[used]
+      if not cell then
+        cell = button:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+        cell:SetWordWrap(false)
+        button.cells[used] = cell
+      end
+      if button.laidOut ~= cols then
+        cell:ClearAllPoints()
+        cell:SetPoint("LEFT", col.x, 0)
+        cell:SetWidth(col.w)
+        cell:SetJustifyH(col.right and "RIGHT" or "LEFT")
+      end
+      cell:SetText(elem.values[col.key] or "")
+      cell:Show()
+    end
+  end
+  for i = used + 1, #button.cells do
+    button.cells[i]:Hide()
+  end
+  button.laidOut = cols
+  button.icon:SetTexture(elem.icon or "Interface\\Icons\\INV_Misc_QuestionMark")
+  if elem.done then
+    button.icon:SetTexCoord(0, 1, 0, 1)
+  else
+    button.icon:SetTexCoord(0.08, 0.92, 0.08, 0.92)
+  end
+  button.icon:Show()
+  local hasBar = elem.bar ~= nil
+  button.barBack:SetShown(hasBar)
+  button.barFill:SetShown(hasBar)
+  if hasBar then
+    button.barFill:SetColorTexture(elem.barColor[1], elem.barColor[2], elem.barColor[3])
+  end
+end
 
 -- Строка списка. ScrollBox переиспользует кадры: всё, что зависит от строки, ставится при каждом показе.
 local function InitRow(button, elem)
   if not built[button] then
     built[button] = true
     button:SetHeight(ROW_HEIGHT)
+    button.cells, button.dots, button.laidOut = {}, {}, false
+    button.stripe = button:CreateTexture(nil, "BACKGROUND")
+    button.stripe:SetAllPoints()
+    button.stripe:SetColorTexture(1, 1, 1, 0.03)
     button.text = button:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
     button.text:SetPoint("LEFT", 4, 0)
     button.text:SetPoint("RIGHT", -4, 0)
     button.text:SetJustifyH("LEFT")
     button.text:SetWordWrap(false)
+    button.icon = button:CreateTexture(nil, "ARTWORK")
+    button.icon:SetSize(18, 18)
+    button.barBack = button:CreateTexture(nil, "ARTWORK")
+    button.barBack:SetHeight(6)
+    button.barBack:SetColorTexture(1, 1, 1, 0.08)
+    button.barFill = button:CreateTexture(nil, "OVERLAY")
+    button.barFill:SetHeight(6)
     button.hl = button:CreateTexture(nil, "HIGHLIGHT")
     button.hl:SetAllPoints()
     button.hl:SetColorTexture(1, 1, 1, 0.08)
     button:RegisterForClicks("RightButtonUp")
     button:SetScript("OnClick", ShowRowMenu)
     button:SetScript("OnEnter", ShowRowTooltip)
-    button:SetScript("OnLeave", HideTooltip)
+    button:SetScript("OnLeave", LeaveRow)
   end
   button.elem = elem
-  button.text:SetText(elem.text)
+  button.stripe:SetShown(elem.stripe and true or false)
   button.hl:SetShown(elem.entry ~= nil or elem.tip ~= nil)
+  if elem.cols then
+    button.text:SetText("")
+    button.text:Hide()
+    DrawCells(button, elem)
+    if elem.names then
+      DrawGrid(button, elem)
+    else
+      HideDots(button)
+    end
+  else
+    button.text:SetText(elem.text)
+    button.text:Show()
+    button.icon:Hide()
+    button.barBack:Hide()
+    button.barFill:Hide()
+    for _, cell in ipairs(button.cells) do
+      cell:Hide()
+    end
+    HideDots(button)
+  end
 end
 
 local DONE_MARK = "|TInterface\\RaidFrame\\ReadyCheck-Ready:12:12|t"
+local DONE_TEXTURE = "Interface\\RaidFrame\\ReadyCheck-Ready"
 
 local function ClassColored(name, classFile)
   local color = classFile and RAID_CLASS_COLORS and RAID_CLASS_COLORS[classFile]
@@ -280,7 +486,7 @@ local function ClassColored(name, classFile)
   return Safe(name)
 end
 
--- Строка персонажа слева: имя в цвете класса, справа — сколько осталось (или галочка).
+-- Строка слева: «Все персонажи» или персонаж в цвете класса; справа — сколько осталось (или галочка).
 local function InitCharRow(button, elem)
   if not built[button] then
     built[button] = true
@@ -299,20 +505,43 @@ local function InitCharRow(button, elem)
     button.count = button:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
     button.count:SetPoint("RIGHT", -6, 0)
     button:SetScript("OnClick", function(self)
-      UI.SelectChar(not self.elem.current and self.elem.name or nil)   -- свой персонаж — снова «текущий»
+      if self.elem.all then
+        UI.SelectChar(ALL_CHARS)
+      else
+        UI.SelectChar(not self.elem.current and self.elem.name or nil)   -- свой персонаж — снова «текущий»
+      end
     end)
     button:SetScript("OnEnter", function(self)
-      local r = self.elem.r
+      local e = self.elem
       GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-      GameTooltip:SetText(Safe(self.elem.name), 1, 1, 1)
-      if r.state == "ok" then
-        GameTooltip:AddLine(string.format(L.tip_char, r.left, r.total), 1, 0.82, 0)
+      if e.all then
+        GameTooltip:SetText(L.side_all, 1, 0.82, 0)
+        GameTooltip:AddLine(string.format(L.tip_side_all, e.total), 1, 1, 1, true)
+      else
+        GameTooltip:SetText(Safe(e.name), 1, 1, 1)
+        if e.r.state == "ok" then
+          GameTooltip:AddLine(string.format(L.tip_char, e.r.left, e.r.total), 1, 0.82, 0)
+        end
+        if selectedChar == ALL_CHARS then
+          FocusColumn(e.index)
+        end
       end
       GameTooltip:Show()
     end)
-    button:SetScript("OnLeave", HideTooltip)
+    button:SetScript("OnLeave", function()
+      HideTooltip()
+      if selectedChar == ALL_CHARS then
+        FocusColumn(nil)
+      end
+    end)
   end
   button.elem = elem
+  button.sel:SetShown(elem.selected)
+  if elem.all then
+    button.name:SetText("|cffffd200" .. L.side_all .. "|r")
+    button.count:SetText(elem.total > 0 and tostring(elem.total) or DONE_MARK)
+    return
+  end
   button.name:SetText(ClassColored(elem.name, elem.classFile))
   local r = elem.r
   if r.state ~= "ok" then
@@ -322,7 +551,6 @@ local function InitCharRow(button, elem)
   else
     button.count:SetText(DONE_MARK)
   end
-  button.sel:SetShown(elem.selected)
 end
 
 function UI.RefreshHeader()
@@ -336,25 +564,169 @@ local function Line(text, entry, tip)
   return { text = text, entry = entry, tip = tip }
 end
 
+---------------------------------------------------------------------------
+-- Столбцы таблиц
+---------------------------------------------------------------------------
+-- spec: { key, w или flex, label — ключ надписи, right — по правому краю, sort, tip, span — заголовок шире столбца }.
+local function Columns(spec, width)
+  local free, flex = width - 8 - COLUMN_GAP * (#spec - 1), 0
+  for _, c in ipairs(spec) do
+    if c.flex then
+      flex = flex + c.flex
+    else
+      free = free - c.w
+    end
+  end
+  free = math.max(0, free)
+  local out, x = {}, 4
+  for i, c in ipairs(spec) do
+    local col = {}
+    for k, v in pairs(c) do
+      col[k] = v
+    end
+    col.w = c.flex and math.floor(free * c.flex / flex) or c.w
+    col.x = x
+    x = x + col.w + COLUMN_GAP
+    out[i] = col
+  end
+  return out
+end
+
+local attemptsCols, leftCols, leftDoneCols   -- столбцы вкладок: ширина окна задаётся один раз
+
+local function AttemptsColumns()
+  if not attemptsCols then
+    attemptsCols = Columns({
+      { key = "icon", w = 18 },
+      { key = "mount", flex = 1, label = "col_mount", sort = "name" },
+      { key = "boss", flex = 1.2, label = "col_boss", sort = "boss" },
+      { key = "diff", w = 46, label = "col_diff" },
+      { key = "n", w = 52, right = true, label = "col_attempts", sort = "n" },
+      { key = "chance", w = 38, right = true, label = "col_chance", sort = "p", tip = "tip_col_chance", span = CHANCE_BAR_WIDTH + COLUMN_GAP },
+      { key = "bar", w = CHANCE_BAR_WIDTH },
+      { key = "left", w = 56, right = true, label = "col_left", sort = "left", tip = "tip_col_left" },
+    }, listWidth)
+  end
+  return attemptsCols
+end
+
+local function LeftColumns()
+  if not leftCols then
+    leftCols = Columns({
+      { key = "icon", w = 18 },
+      { key = "boss", flex = 1.15, label = "col_boss" },
+      { key = "diff", w = 46, label = "col_diff" },
+      { key = "mount", flex = 1.25, label = "col_mount" },
+      { key = "place", flex = 0.9, label = "col_where" },
+      { key = "n", w = 52, right = true, label = "col_attempts" },
+      { key = "chance", w = 40, right = true, label = "col_chance", tip = "tip_col_chance" },
+    }, listWidth)
+    -- убитая строка: те же босс и маунт, дальше одна ячейка «убит, ждёт таблицы» (место — в подсказке)
+    local place, last = leftCols[5], leftCols[7]
+    leftDoneCols = { leftCols[1], leftCols[2], leftCols[3], leftCols[4],
+      { key = "status", x = place.x, w = last.x + last.w - place.x, right = true } }
+  end
+  return leftCols, leftDoneCols
+end
+
+-- Сетка: сколько столбцов показать и где они начинаются; лишние персонажи — за полосой прокрутки.
+local function GridColumns(count)
+  local view = ns.GetDB().gridView == "all" and GRID_ALL or GRID_SCROLL
+  local fixed = 8 + 18 + 40 + 40 + COLUMN_GAP * 4
+  local shown = math.min(count, view.visible)
+  while shown > 1 and listWidth - fixed - shown * view.cell < MIN_TEXT_WIDTH do
+    shown = shown - 1
+  end
+  local cols = Columns({
+    { key = "icon", w = 18 },
+    { key = "boss", flex = 1.25, label = "col_boss" },
+    { key = "diff", w = 40, label = "col_diff" },
+    { key = "mount", flex = 1, label = "col_mount" },
+    { key = "grid", w = shown * view.cell },
+    { key = "total", w = 40, right = true, label = "col_total", tip = "tip_col_total" },
+  }, listWidth)
+  grid.shown, grid.cell, grid.letters = shown, view.cell, view.letters
+  grid.x = cols[5].x
+  grid.overflow = count > shown
+  return cols
+end
+
+-- Цвет шанса: от 63 % (ожидаемое выпадение уже прошло) — оранжевый, от 30 % — жёлтый.
+local function ChanceColor(n, p)
+  local v = 1 - (1 - p) ^ n
+  if v >= 0.63 then
+    return "ff9a3c", { 1, 0.6, 0.24 }, v
+  elseif v >= 0.3 then
+    return "ffd24a", { 1, 0.82, 0.29 }, v
+  end
+  return "c8c2b4", { 0.78, 0.76, 0.71 }, v
+end
+
+---------------------------------------------------------------------------
+-- Содержимое вкладок: { list, empty, url, summary, cols, attempts, grid }
+---------------------------------------------------------------------------
 -- Вкладка «Журнал»: записи аддона, новые сверху.
-local function JournalList(db)
+local function JournalView(db)
   local list = {}
   for i = #db.kills, 1, -1 do
     list[#list + 1] = Line(FormatRow(db.kills[i]))
   end
-  return list, L.journal_empty
+  return { list = list, empty = L.journal_empty, log = true }
 end
 
--- Вкладка «Осталось»: строки «Нет» из таблицы, убитые после обновления списка — с галочкой внизу группы.
+local NO_DATA = {
+  list = {},
+  url = true,
+}
+
+local function NoDataView()
+  NO_DATA.empty = L.left_nodata .. "\n\n" .. L.left_getprogram
+  return NO_DATA
+end
+
+-- Строка таблицы у персонажа: осталось — со счётчиком попыток, убита — серая, с галочкой.
+local function RemainingRow(entry, menu, stripe)
+  local cols, doneCols = LeftColumns()
+  local item = entry.item
+  local tip = { Safe(item.mount), BossAndDiff(item.boss, item.diff) }
+  if Safe(item.place) ~= "" then
+    tip[#tip + 1] = Safe(item.place)
+  end
+  local n, p, id = ns.ItemAttempts(item)
+  if entry.done then
+    local status = (entry.again and string.format(L.left_again, ns.FormatDuration(entry.again)) or L.left_done):gsub("^%s*—%s*", "")
+    return { cols = doneCols, done = true, icon = DONE_TEXTURE, stripe = stripe, tip = tip, values = {
+      boss = "|cff8c8c8c" .. Safe(item.boss) .. "|r",
+      diff = "|cff8c8c8c" .. ShortDiff(item.diff) .. "|r",
+      mount = "|cff8c8c8c" .. Safe(item.mount) .. "|r",
+      status = "|cff8c8c8c" .. status .. "|r",
+    } }
+  end
+  local chance = "|cff8c8c8c-|r"
+  if n and n > 0 then
+    chance = "|cff" .. ChanceColor(n, p) .. ns.FormatChance(n, p) .. "|r"
+    tip[#tip + 1] = string.format(L.boss_hint, n, ns.FormatChance(n, p))
+  end
+  return { cols = cols, icon = ns.MountIcon(id), stripe = stripe, tip = tip, entry = menu and entry or nil, values = {
+    boss = Safe(item.boss),
+    diff = "|cffb7ae9a" .. ShortDiff(item.diff) .. "|r",
+    mount = "|cffc9a0ff" .. Safe(item.mount) .. "|r",
+    place = "|cff8c8c8c" .. Safe(item.place) .. "|r",
+    n = n and n > 0 and tostring(n) or "|cff8c8c8c-|r",
+    chance = chance,
+  } }
+end
+
+-- Вкладка «Осталось» у персонажа: строки «Нет» из таблицы, убитые после обновления списка — с галочкой внизу группы.
 -- own — список текущего персонажа: только у него правый щелчок «Не фармлю».
-local function RemainingList(r, own)
+local function RemainingView(r, own)
   if r.state == "nodata" then
-    return {}, L.left_nodata .. "\n\n" .. L.left_getprogram, true
+    return NoDataView()
   end
   if r.state == "nochar" then
-    return {}, string.format(L.left_nochar, r.name or "?")
+    return { list = {}, empty = string.format(L.left_nochar, r.name or "?") }
   end
-  local list = { Line("|cff8c8c8c" .. string.format(L.left_head, r.left, r.total, ns.FormatWhen(r.generated)) .. "|r") }
+  local list = {}
   local note = ns.RemainingNote(r)
   if note then
     list[#list + 1] = Line((r.afterReset and "|cff8cff8c" or "|cffff9a4d") .. note .. "|r")
@@ -368,11 +740,13 @@ local function RemainingList(r, own)
     end
     if #group > 0 then
       list[#list + 1] = Line("|cffffd200" .. ns.KindTitle(kind) .. "|r")
+      local stripe = false
       for pass = 1, 2 do   -- сначала то, что осталось, потом убитые
         for _, entry in ipairs(group) do
           if entry.done == (pass == 2) then
             local menu = own and kind ~= "world" and kind ~= "rare" and not entry.done
-            list[#list + 1] = Line("   " .. ns.FormatRemaining(entry), menu and entry or nil)
+            list[#list + 1] = RemainingRow(entry, menu, stripe)
+            stripe = not stripe
           end
         end
       end
@@ -383,82 +757,296 @@ local function RemainingList(r, own)
   elseif r.left == 0 then
     list[#list + 1] = Line("|cff8cff8c" .. L.left_alldone .. "|r")
   end
-  return list
+  return { list = list, cols = LeftColumns(),
+    summary = "|cff8c8c8c" .. string.format(L.left_head, r.left, r.total, ns.FormatWhen(r.generated)) .. "|r" }
 end
 
--- «Злодяга, Жрица, Охотник и ещё 12»
-local function Names(names)
-  local shown = {}
-  for i = 1, math.min(#names, NAMES_SHOWN) do
-    shown[i] = Safe(names[i])
+-- Персонажи для столбцов сетки: имя, цвет класса (без класса — серый: персонаж другого аккаунта).
+local function GridChars(all)
+  local chars = {}
+  for i, c in ipairs(all) do
+    local color = c.classFile and RAID_CLASS_COLORS and RAID_CLASS_COLORS[c.classFile]
+    chars[i] = { name = c.name, classFile = c.classFile, colored = ClassColored(c.name, c.classFile),
+      r = color and color.r or 0.85, g = color and color.g or 0.85, b = color and color.b or 0.85 }
   end
-  local text = table.concat(shown, ", ")
-  if #names > NAMES_SHOWN then
-    text = string.format(L.all_more, text, #names - NAMES_SHOWN)
-  end
-  return text
+  return chars
 end
 
--- Вкладка «Все персонажи»: строка таблицы и под ней — у кого она ещё не убита (все имена — в подсказке).
-local function SummaryList(rows, chars)
-  local list = { Line("|cff8c8c8c" .. string.format(L.all_head, #rows, chars) .. "|r") }
-  local kind
+-- «Все персонажи»: строка таблицы и столбец на каждого персонажа.
+local function GridView(rows, all)
+  grid.chars = GridChars(all)
+  local cols = GridColumns(#all)
+  grid.offset = math.min(grid.offset, math.max(0, #all - grid.shown))
+  local list, kind, stripe = {}, nil, false
+  local total = 0
   for _, row in ipairs(rows) do
     if row.kind ~= kind then
       kind = row.kind
+      stripe = false
       list[#list + 1] = Line("|cffffd200" .. ns.KindTitle(kind) .. "|r")
     end
-    local text = ns.FormatRemaining({ item = row.item })
-    local all = {}
+    local item = row.item
+    local names, shownNames = {}, {}
     for i, name in ipairs(row.names) do
-      all[i] = Safe(name)
+      names[name] = true
+      shownNames[i] = Safe(name)
     end
-    local tip = { text, table.concat(all, ", ") }
-    list[#list + 1] = Line("   " .. text, nil, tip)
-    list[#list + 1] = Line("      |cff8c8c8c" .. Names(row.names) .. "|r", nil, tip)
+    total = total + #row.names
+    local _, _, id = ns.ItemAttempts(item)
+    list[#list + 1] = { cols = cols, names = names, icon = ns.MountIcon(id), stripe = stripe,
+      tip = { Safe(item.mount), BossAndDiff(item.boss, item.diff), table.concat(shownNames, ", ") }, values = {
+        boss = Safe(item.boss),
+        diff = "|cffb7ae9a" .. ShortDiff(item.diff) .. "|r",
+        mount = "|cffc9a0ff" .. Safe(item.mount) .. "|r",
+        total = "|cffd8c98f" .. #row.names .. "|r",
+      } }
+    stripe = not stripe
   end
   if #rows == 0 then
     list[#list + 1] = Line("|cff8cff8c" .. L.all_empty .. "|r")
   end
-  return list
+  return { list = list, cols = #rows > 0 and cols or nil, grid = #rows > 0,
+    summary = "|cff8c8c8c" .. string.format(L.all_head, #rows, #all) .. "|r" }
 end
 
--- Вкладка «Попытки»: маунт — босс (сложность) - попыток, шанс; сколько персонажей ещё могут — в подсказке.
-local function AttemptsList(rows)
-  if #rows == 0 then
-    return {}, L.attempts_empty
+-- Сортировка и фильтры вкладки «Попытки» (запоминаются): db.attemptsView.
+local function AttemptsState()
+  local db = ns.GetDB()
+  if type(db.attemptsView) ~= "table" then
+    db.attemptsView = {}
   end
-  local list = { Line("|cff8c8c8c" .. string.format(L.attempts_head, #rows) .. "|r") }
+  local st = db.attemptsView
+  st.sort = st.sort or "p"
+  st.kind = st.kind or "all"
+  if st.desc == nil then
+    st.desc = true
+  end
+  return st
+end
+
+local function AttemptsSorted(rows, st)
+  local out = {}
   for _, m in ipairs(rows) do
-    local text = "   |cffc9a0ff" .. Safe(m.name) .. "|r"
-    if Safe(m.boss) ~= "" then
-      text = text .. " — " .. Safe(m.boss)
+    if (st.kind == "all" or m.kind == st.kind) and not (st.hideZero and m.n == 0) then
+      out[#out + 1] = m
     end
-    if Safe(m.diff) ~= "" then
-      text = text .. " |cff8c8c8c(" .. Safe(m.diff) .. ")|r"
+  end
+  local function value(m)
+    if st.sort == "name" or st.sort == "boss" then
+      return tostring(m[st.sort] or "")
+    elseif st.sort == "p" then
+      return m.n * m.p
     end
+    return m[st.sort] or 0
+  end
+  table.sort(out, function(a, b)
+    local x, y = value(a), value(b)
+    if x == y then
+      return a.name < b.name
+    end
+    if st.desc then
+      return x > y
+    end
+    return x < y
+  end)
+  return out
+end
+
+-- Вкладка «Попытки»: маунт, босс, сложность, попыток, шанс с полоской, сколько персонажей ещё могут.
+local function AttemptsView(rows, chars)
+  if #rows == 0 then
+    return { list = {}, empty = L.attempts_empty, attempts = true }
+  end
+  local cols = AttemptsColumns()
+  local sorted = AttemptsSorted(rows, AttemptsState())
+  local list = {}
+  for i, m in ipairs(sorted) do
     local count = m.n > 0 and string.format(L.boss_hint, m.n, ns.FormatChance(m.n, m.p)) or L.boss_hint_none
-    local tip = { Safe(m.name), count }
+    local tip = { Safe(m.name), BossAndDiff(m.boss, m.diff), count }
     if m.left > 0 then
       tip[#tip + 1] = string.format(L.boss_hint_left, m.left)
     end
-    list[#list + 1] = Line(text .. " |cff8c8c8c-|r " .. count, nil, tip)
+    local hasTries = m.n > 0
+    local color, bar, v = "8c8c8c", nil, nil
+    if hasTries then
+      color, bar, v = ChanceColor(m.n, m.p)
+    end
+    list[i] = { cols = cols, icon = ns.MountIcon(m.id), stripe = i % 2 == 0, tip = tip, bar = v, barColor = bar, values = {
+      mount = "|cffc9a0ff" .. Safe(m.name) .. "|r",
+      boss = Safe(m.boss),
+      diff = "|cffb7ae9a" .. ShortDiff(m.diff) .. "|r",
+      n = hasTries and tostring(m.n) or "|cff8c8c8c-|r",
+      chance = "|cff" .. color .. (hasTries and ns.FormatChance(m.n, m.p) or "-") .. "|r",
+      left = (m.left > 0 and "|cff7fdc7f" or "|cff8c8c8c") .. m.left .. "/" .. chars .. "|r",
+    } }
   end
-  return list
+  return { list = list, cols = cols, attempts = true, count = #sorted }
 end
 
-local function UpdateTabTitle(r)
+---------------------------------------------------------------------------
+-- Заголовок таблицы
+---------------------------------------------------------------------------
+local function HeadCell(i)
+  local cell = headCells[i]
+  if not cell then
+    cell = CreateFrame("Button", nil, headRow)
+    cell:SetHeight(HEAD_HEIGHT)
+    cell.text = cell:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
+    cell.text:SetAllPoints()
+    cell.text:SetWordWrap(false)
+    cell.arrow = cell:CreateTexture(nil, "OVERLAY")
+    cell.arrow:SetTexture("Interface\\Buttons\\UI-SortArrow")
+    cell.arrow:SetSize(9, 8)
+    cell:SetScript("OnClick", function(self)
+      if self.sort then
+        UI.SortAttempts(self.sort)
+      end
+    end)
+    cell:SetScript("OnEnter", function(self)
+      if self.charIndex then
+        FocusColumn(self.charIndex)
+      elseif self.tipKey then
+        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+        GameTooltip:SetText(L[self.labelKey], 1, 0.82, 0)
+        GameTooltip:AddLine(L[self.tipKey], 1, 1, 1, true)
+        GameTooltip:Show()
+      end
+    end)
+    cell:SetScript("OnLeave", function(self)
+      HideTooltip()
+      if self.charIndex then
+        FocusColumn(nil)
+      end
+    end)
+    headCells[i] = cell
+  end
+  cell:Show()
+  return cell
+end
+
+local function PlaceHead(cell, x, w, right)
+  cell:ClearAllPoints()
+  cell:SetPoint("LEFT", x, 0)
+  cell:SetWidth(w)
+  cell.text:SetJustifyH(right and "RIGHT" or "LEFT")
+end
+
+local function DrawHead(cols, sortState, isGrid)
+  local used = 0
+  for _, col in ipairs(cols) do
+    if col.label then
+      used = used + 1
+      local cell = HeadCell(used)
+      PlaceHead(cell, col.x, col.w + (col.span or 0), col.right and not col.span)
+      cell.sort, cell.tipKey, cell.labelKey, cell.charIndex = col.sort or false, col.tip or false, col.label, false
+      cell:EnableMouse(col.sort ~= nil or col.tip ~= nil)
+      cell.text:SetText(L[col.label])
+      local active = sortState and col.sort == sortState.sort
+      cell.arrow:SetShown(active and true or false)
+      if active then
+        cell.arrow:ClearAllPoints()
+        if col.right and not col.span then
+          cell.arrow:SetPoint("RIGHT", cell, "LEFT", 0, 0)
+        else
+          cell.arrow:SetPoint("LEFT", cell.text, "LEFT", cell.text:GetStringWidth() + 3, 0)
+        end
+        if sortState.desc then
+          cell.arrow:SetTexCoord(0, 0.5625, 0, 1)
+        else
+          cell.arrow:SetTexCoord(0, 0.5625, 1, 0)
+        end
+      end
+    end
+  end
+  if isGrid then
+    for slot = 1, grid.shown do
+      local index = grid.offset + slot
+      local c = grid.chars[index]
+      used = used + 1
+      local cell = HeadCell(used)
+      PlaceHead(cell, grid.x + (slot - 1) * grid.cell, grid.cell, false)
+      cell.text:SetJustifyH("CENTER")
+      cell.sort, cell.tipKey, cell.labelKey, cell.charIndex = false, false, false, index
+      cell:EnableMouse(true)
+      cell.arrow:Hide()
+      cell.text:SetText(c and ClassColored(FirstLetters(c.name, grid.letters), c.classFile) or "")
+    end
+  end
+  for i = used + 1, #headCells do
+    headCells[i]:Hide()
+  end
+end
+
+-- Сдвинули полосу под столбцами: перерисовать заголовок и видимые строки, данные не трогаем.
+local function RedrawGrid()
+  if shownHead then
+    DrawHead(shownHead, nil, true)
+  end
+  listBox:ForEachFrame(function(button)
+    if button.elem and button.elem.names then
+      DrawGrid(button, button.elem)
+    end
+  end)
+end
+
+-- Части окна вокруг списка: что нужно этому виду.
+local function ApplyChrome(view)
+  local top = TOOLBAR_HEIGHT + (view.cols and HEAD_HEIGHT or 0)
+  local useSlider = view.grid and grid.overflow and true or false
+  listBox:ClearAllPoints()
+  listBox:SetPoint("TOPLEFT", 6, -top)
+  listBox:SetPoint("BOTTOMRIGHT", -22, useSlider and SLIDER_ROOM + 6 or 6)
+  summaryText:SetText(view.summary or "")
+  summaryText:SetShown(not view.attempts and not view.log)
+  focusText:SetText("")
+  focusText:SetShown(view.grid and true or false)
+  columnGlow:Hide()
+  attemptsBar:SetShown(view.attempts and true or false)
+  logBar:SetShown(view.log and true or false)
+  headRow:SetShown(view.cols ~= nil)
+  shownHead = view.cols
+  if view.cols then
+    DrawHead(view.cols, view.attempts and AttemptsState() or nil, view.grid)
+  end
+  if view.attempts then
+    attemptsCount:SetText(view.count and string.format(L.attempts_count, view.count) or "")
+    local st = AttemptsState()
+    for _, b in ipairs(filterButtons) do
+      if b.kind == st.kind then
+        b:LockHighlight()
+      else
+        b:UnlockHighlight()
+      end
+    end
+    hideZeroCheck:SetChecked(st.hideZero and true or false)
+  end
+  gridSlider:SetShown(useSlider)
+  if useSlider then
+    gridSlider:ClearAllPoints()
+    gridSlider:SetPoint("BOTTOMLEFT", 6 + grid.x, 6)
+    gridSlider:SetWidth(grid.shown * grid.cell)
+    gridSlider:SetMinMaxValues(0, #grid.chars - grid.shown)
+    gridSlider:SetValue(grid.offset)
+  end
+end
+
+local function UpdateTabTitle(r, total)
   local tab = tabs[TAB_LEFT]
-  local title = r.state == "ok" and string.format(L.tab_left_n, r.left) or L.tab_left
+  local title = L.tab_left
+  if total then
+    title = string.format(L.tab_left_n, total)
+  elseif r.state == "ok" then
+    title = string.format(L.tab_left_n, r.left)
+  end
   if tab:GetText() ~= title then
     tab:SetText(title)
     PanelTemplates_TabResize(tab, 0, nil, frame.minTabWidth)
   end
 end
 
--- Выбранный слева персонаж — его строка из ns.GetAllRemaining(); nil — текущий.
+-- Выбранный слева персонаж — его строка из ns.GetAllRemaining(); nil — текущий (или «Все персонажи»).
 local function SelectedEntry(all)
-  if not selectedChar then
+  if not selectedChar or selectedChar == ALL_CHARS then
     return nil
   end
   for _, c in ipairs(all) do
@@ -469,16 +1057,30 @@ local function SelectedEntry(all)
   return nil
 end
 
+local function TotalLeft(all)
+  local total = 0
+  for _, c in ipairs(all) do
+    if c.r.state == "ok" then
+      total = total + c.r.left
+    end
+  end
+  return total
+end
+
 local function RefreshChars(all, sel)
-  local key = tostring(all) .. "|" .. tostring(sel)
+  local showAll = selectedChar == ALL_CHARS
+  local key = tostring(all) .. "|" .. tostring(sel) .. "|" .. tostring(showAll)
   if key == shownChars then
     return
   end
   shownChars = key
   local elems = {}
-  for _, c in ipairs(all) do
-    elems[#elems + 1] = { name = c.name, classFile = c.classFile, r = c.r, current = c.current,
-      selected = (sel and c == sel) or (not sel and c.current) or false }
+  if #all > 0 then
+    elems[1] = { all = true, total = TotalLeft(all), selected = showAll }
+  end
+  for i, c in ipairs(all) do
+    elems[#elems + 1] = { name = c.name, classFile = c.classFile, r = c.r, current = c.current, index = i,
+      selected = (not showAll and ((sel and c == sel) or (not sel and c.current))) or false }
   end
   charBox:SetDataProvider(CreateDataProvider(elems), ScrollBoxConstants.RetainScrollPosition)
 end
@@ -495,39 +1097,39 @@ function UI.Refresh()
   local sel = SelectedEntry(all)
   RefreshChars(all, sel)
   local own = ns.GetRemaining()
-  UpdateTabTitle(own)
+  local showAll = selectedChar == ALL_CHARS and #all > 0
+  UpdateTabTitle(sel and sel.r or own, showAll and TotalLeft(all) or nil)
 
   local tab = frame.selectedTab
   local key, build
-  if tab == TAB_LEFT then
+  if tab == TAB_LEFT and showAll then
+    local rows = ns.GetSummary()
+    key = "all|" .. tostring(rows) .. "|" .. tostring(db.gridView)
+    build = function() return GridView(rows, all) end
+  elseif tab == TAB_LEFT then
     local r = sel and sel.r or own
     key = "left|" .. tostring(r)
-    build = function() return RemainingList(r, not sel) end
-  elseif tab == TAB_ALL and type(MountSheetSyncSheet) ~= "table" then
-    key = "all|nodata"
-    build = function() return RemainingList({ state = "nodata" }) end
-  elseif tab == TAB_ALL then
-    local rows = ns.GetSummary()
-    key = "all|" .. tostring(rows)
-    build = function() return SummaryList(rows, #all) end
+    build = function() return RemainingView(r, not sel) end
   elseif tab == TAB_ATTEMPTS then
     local rows = ns.GetAttemptsList()
-    key = "attempts|" .. tostring(rows)
-    build = function() return AttemptsList(rows) end
+    local st = AttemptsState()
+    key = table.concat({ "attempts", tostring(rows), st.sort, tostring(st.desc), st.kind, tostring(st.hideZero) }, "|")
+    build = function() return AttemptsView(rows, #all) end
   else
     local last = db.kills[#db.kills]
     key = "log|" .. #db.kills .. "|" .. tostring(last and last.id)
-    build = function() return JournalList(db) end
+    build = function() return JournalView(db) end
   end
   if key == shownList then
     return
   end
   shownList = key
-  local list, empty, showUrl = build()
-  listBox:SetDataProvider(CreateDataProvider(list), ScrollBoxConstants.RetainScrollPosition)
-  emptyText:SetText(empty or "")
-  emptyText:SetShown(#list == 0)
-  urlBox:SetShown(#list == 0 and showUrl and true or false)
+  local view = build()
+  ApplyChrome(view)
+  listBox:SetDataProvider(CreateDataProvider(view.list), ScrollBoxConstants.RetainScrollPosition)
+  emptyText:SetText(view.empty or "")
+  emptyText:SetShown(#view.list == 0)
+  urlBox:SetShown(#view.list == 0 and view.url and true or false)
 end
 
 function UI.SelectTab(id)
@@ -538,7 +1140,7 @@ function UI.SelectTab(id)
   UI.Refresh()
 end
 
--- Щелчок по персонажу слева: его «Осталось» (name = nil — текущий персонаж).
+-- Щелчок слева: «Осталось» персонажа (name = nil — текущий) или всех (ALL_CHARS).
 function UI.SelectChar(name)
   selectedChar = name
   if frame.selectedTab ~= TAB_LEFT then
@@ -547,6 +1149,33 @@ function UI.SelectChar(name)
   end
   shownList = nil
   listBox:ScrollToBegin()
+  UI.Refresh()
+end
+
+-- Щелчок по заголовку «Попыток»: та же колонка — обратный порядок; новая — большие сверху (имена — по алфавиту).
+function UI.SortAttempts(sort)
+  local st = AttemptsState()
+  if st.sort == sort then
+    st.desc = not st.desc
+  else
+    st.sort = sort
+    st.desc = sort ~= "name" and sort ~= "boss"
+  end
+  listBox:ScrollToBegin()
+  UI.Refresh()
+end
+
+function UI.FilterAttempts(kind)
+  AttemptsState().kind = kind
+  listBox:ScrollToBegin()
+  UI.Refresh()
+end
+
+-- Настройки: вид сетки всех персонажей («scroll» — по умолчанию, «all» — все столбцы сразу).
+function UI.SetGridView(view)
+  ns.GetDB().gridView = view == "all" and "all" or nil
+  grid.offset = 0
+  shownList = nil
   UI.Refresh()
 end
 
@@ -564,9 +1193,110 @@ local function CreateList(parent, extent, initializer)
   return box
 end
 
+-- Полоса под столбцами сетки: шаг — один персонаж, колесо тоже двигает.
+local function CreateGridSlider(parent)
+  local slider = CreateFrame("Slider", nil, parent)
+  slider:SetOrientation("HORIZONTAL")
+  slider:SetHeight(12)
+  slider:SetValueStep(1)
+  slider:SetObeyStepOnDrag(true)
+  local back = slider:CreateTexture(nil, "BACKGROUND")
+  back:SetAllPoints()
+  back:SetColorTexture(1, 1, 1, 0.08)
+  local thumb = slider:CreateTexture(nil, "OVERLAY")
+  thumb:SetSize(36, 12)
+  thumb:SetColorTexture(0.75, 0.68, 0.5, 0.9)
+  slider:SetThumbTexture(thumb)
+  slider:SetScript("OnValueChanged", function(_, value)
+    local offset = math.floor(value + 0.5)
+    if offset ~= grid.offset then
+      grid.offset = offset
+      RedrawGrid()
+    end
+  end)
+  slider:EnableMouseWheel(true)
+  slider:SetScript("OnMouseWheel", function(self, delta)
+    self:SetValue(self:GetValue() - delta)
+  end)
+  slider:Hide()
+  return slider
+end
+
+-- Над списком: у «Попыток» — фильтры, у «Журнала» — ручная отметка и поиск, у остальных — строка итога.
+local function CreateToolbar(inset)
+  toolbar = CreateFrame("Frame", nil, inset)
+  toolbar:SetPoint("TOPLEFT", 6, -3)
+  toolbar:SetPoint("RIGHT", -6, 0)
+  toolbar:SetHeight(TOOLBAR_HEIGHT - 4)
+
+  summaryText = toolbar:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+  summaryText:SetPoint("LEFT", 4, 0)
+  summaryText:SetJustifyH("LEFT")
+  frame.summaryText = summaryText
+  focusText = toolbar:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+  focusText:SetPoint("RIGHT", -4, 0)
+  focusText:SetJustifyH("RIGHT")
+
+  attemptsBar = CreateFrame("Frame", nil, toolbar)
+  attemptsBar:SetAllPoints()
+  local previous
+  for _, kind in ipairs(FILTER_KINDS) do
+    local key = kind == "all" and "attempts_filter_all" or ("kind_" .. kind)
+    local b = MakeButton(attemptsBar, key, 60, nil, function(self)
+      UI.FilterAttempts(self.kind)
+    end)
+    b:SetHeight(22)
+    b.kind = kind
+    if previous then
+      b:SetPoint("LEFT", previous, "RIGHT", 4, 0)
+    else
+      b:SetPoint("LEFT", 2, 0)
+    end
+    filterButtons[#filterButtons + 1] = b
+    previous = b
+  end
+  hideZeroCheck = CreateFrame("CheckButton", nil, attemptsBar, "UICheckButtonTemplate")
+  hideZeroCheck:SetSize(22, 22)
+  hideZeroCheck:SetPoint("LEFT", previous, "RIGHT", 12, 0)
+  if hideZeroCheck.Text then
+    Label(hideZeroCheck.Text, "attempts_hide_zero")
+  end
+  hideZeroCheck:SetScript("OnClick", function(self)
+    AttemptsState().hideZero = self:GetChecked() and true or false
+    listBox:ScrollToBegin()
+    UI.Refresh()
+  end)
+  attemptsCount = attemptsBar:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
+  attemptsCount:SetPoint("RIGHT", -4, 0)
+
+  logBar = CreateFrame("Frame", nil, toolbar)
+  logBar:SetAllPoints()
+  local manualLabel = logBar:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+  manualLabel:SetPoint("LEFT", 4, 0)
+  Label(manualLabel, "manual_label")
+
+  editBox = CreateFrame("EditBox", nil, logBar, "InputBoxTemplate")
+  editBox:SetSize(220, 22)
+  editBox:SetPoint("LEFT", manualLabel, "RIGHT", 12, 0)
+  editBox:SetAutoFocus(false)
+  editBox:SetMaxLetters(60)
+  editBox:SetScript("OnEnterPressed", SubmitManual)
+  editBox:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
+
+  local addButton = MakeButton(logBar, "button_mark", 100, "tip_mark", SubmitManual)
+  addButton:SetPoint("LEFT", editBox, "RIGHT", 8, 0)
+
+  local scanButton = MakeButton(logBar, "button_scan", 156, "tip_scan", function() ns.RequestScan() end)
+  scanButton:SetPoint("LEFT", addButton, "RIGHT", 6, 0)
+end
+
 local function CreateWindow()
   frame = CreateFrame("Frame", WINDOW_NAME, UIParent, "DefaultPanelTemplate")
-  frame:SetSize(WIDTH, HEIGHT)
+  -- маленький экран или крупный масштаб: окно уже, столбцы названий отдают ширину сами
+  local screen = UIParent:GetWidth() or 0
+  local width = screen > 0 and math.min(WIDTH, screen - 20) or WIDTH
+  listWidth = width - SIDE_WIDTH - 58
+  frame:SetSize(width, HEIGHT)
   frame:SetFrameStrata("HIGH")
   frame:SetToplevel(true)
   frame:SetClampedToScreen(true)
@@ -595,19 +1325,19 @@ local function CreateWindow()
   CreateFrame("Button", nil, frame, "UIPanelCloseButtonDefaultAnchors")
   tinsert(UISpecialFrames, WINDOW_NAME)   -- закрывается по Esc
 
-  -- Шапка
+  -- Шапка: одной строкой, чтобы не отнимать высоту у списка
   header1 = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlight")
   header1:SetPoint("TOPLEFT", 18, -30)
   header2 = frame:CreateFontString(nil, "OVERLAY", "GameFontNormalSmall")
-  header2:SetPoint("TOPLEFT", 18, -48)
+  header2:SetPoint("TOPRIGHT", -18, -32)
 
-  -- Слева — персонажи из таблицы
+  -- Слева — все персонажи из таблицы
   local charsTitle = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-  charsTitle:SetPoint("TOPLEFT", 20, -74)
+  charsTitle:SetPoint("TOPLEFT", 20, -58)
   Label(charsTitle, "side_title")
   local side = CreateFrame("Frame", nil, frame, "InsetFrameTemplate")
-  side:SetPoint("TOPLEFT", 12, -92)
-  side:SetPoint("BOTTOMLEFT", 12, 100)
+  side:SetPoint("TOPLEFT", 12, -76)
+  side:SetPoint("BOTTOMLEFT", 12, 44)
   side:SetWidth(SIDE_WIDTH)
   charBox = CreateList(side, CHAR_HEIGHT, InitCharRow)
   charBox:SetPoint("TOPLEFT", 4, -4)
@@ -616,7 +1346,7 @@ local function CreateWindow()
   -- Справа — список, вкладки над ним
   local inset = CreateFrame("Frame", nil, frame, "InsetFrameTemplate")
   inset:SetPoint("TOPLEFT", side, "TOPRIGHT", 6, 0)
-  inset:SetPoint("BOTTOMRIGHT", -12, 100)
+  inset:SetPoint("BOTTOMRIGHT", -12, 44)
 
   frame.minTabWidth = 90
   for i, key in ipairs(TAB_LABELS) do
@@ -643,15 +1373,38 @@ local function CreateWindow()
       selected = i
     end
   end
+  if ns.GetDB().tab == "all" then   -- до 3.0.3 «Все персонажи» были вкладкой
+    selectedChar = ALL_CHARS
+    ns.GetDB().tab = "left"
+  end
   PanelTemplates_SetTab(frame, selected)
 
+  CreateToolbar(inset)
+
+  headRow = CreateFrame("Frame", nil, inset)
+  headRow:SetPoint("TOPLEFT", 6, -TOOLBAR_HEIGHT)
+  headRow:SetPoint("RIGHT", -22, 0)
+  headRow:SetHeight(HEAD_HEIGHT)
+  local headLine = headRow:CreateTexture(nil, "ARTWORK")
+  headLine:SetPoint("BOTTOMLEFT")
+  headLine:SetPoint("BOTTOMRIGHT")
+  headLine:SetHeight(1)
+  headLine:SetColorTexture(1, 1, 1, 0.15)
+
   listBox = CreateList(inset, ROW_HEIGHT, InitRow)
-  listBox:SetPoint("TOPLEFT", 6, -6)
+  listBox:SetPoint("TOPLEFT", 6, -TOOLBAR_HEIGHT)
   listBox:SetPoint("BOTTOMRIGHT", -22, 6)
+
+  columnGlow = inset:CreateTexture(nil, "OVERLAY")
+  columnGlow:SetColorTexture(1, 0.82, 0, 0.1)
+  columnGlow:Hide()
+
+  gridSlider = CreateGridSlider(inset)
+  frame.gridSlider = gridSlider
 
   emptyText = inset:CreateFontString(nil, "OVERLAY", "GameFontDisable")
   emptyText:SetPoint("CENTER", 0, 14)
-  emptyText:SetWidth(WIDTH - SIDE_WIDTH - 80)
+  emptyText:SetWidth(width - SIDE_WIDTH - 80)
 
   -- адрес сайта с программой: только выделить и скопировать (Ctrl+C), изменить нельзя
   urlBox = CreateFrame("EditBox", nil, inset, "InputBoxTemplate")
@@ -672,32 +1425,13 @@ local function CreateWindow()
   urlBox:SetScript("OnEnterPressed", function(self) self:ClearFocus() end)
   urlBox:Hide()
 
-  -- Отметить вручную
-  local manualLabel = frame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
-  manualLabel:SetPoint("BOTTOMLEFT", 18, 76)
-  Label(manualLabel, "manual_label")
-
-  editBox = CreateFrame("EditBox", nil, frame, "InputBoxTemplate")
-  editBox:SetSize(240, 22)
-  editBox:SetPoint("LEFT", manualLabel, "RIGHT", 12, 0)
-  editBox:SetAutoFocus(false)
-  editBox:SetMaxLetters(60)
-  editBox:SetScript("OnEnterPressed", SubmitManual)
-  editBox:SetScript("OnEscapePressed", function(self) self:ClearFocus() end)
-
-  local addButton = MakeButton(frame, "button_mark", 110, "tip_mark", SubmitManual)
-  addButton:SetPoint("LEFT", editBox, "RIGHT", 8, 0)
-
-  -- Основные действия; редкое (чат, очистка журнала, отчёт об ошибке) — в настройках
+  -- Внизу: отправка в таблицу, подсказка, настройки; редкое (чат, очистка журнала, отчёт об ошибке) — в настройках
   local syncButton = MakeButton(frame, "button_sync", 156, "tip_sync", function() ns.SyncNow() end)
-  syncButton:SetPoint("BOTTOMLEFT", 16, 38)
-
-  local scanButton = MakeButton(frame, "button_scan", 156, "tip_scan", function() ns.RequestScan() end)
-  scanButton:SetPoint("LEFT", syncButton, "RIGHT", 6, 0)
+  syncButton:SetPoint("BOTTOMLEFT", 16, 12)
 
   local gear = CreateFrame("Button", nil, frame)
   gear:SetSize(24, 24)
-  gear:SetPoint("BOTTOMRIGHT", -18, 38)
+  gear:SetPoint("BOTTOMRIGHT", -18, 12)
   local gearIcon = gear:CreateTexture(nil, "ARTWORK")
   gearIcon:SetAllPoints()
   gearIcon:SetTexture("Interface\\Icons\\INV_Misc_Gear_01")
@@ -707,9 +1441,10 @@ local function CreateWindow()
   AttachTooltip(gear, "settings_title", "tip_settings")
 
   local hint = frame:CreateFontString(nil, "OVERLAY", "GameFontDisableSmall")
-  hint:SetPoint("BOTTOMLEFT", 18, 14)
-  hint:SetPoint("BOTTOMRIGHT", -18, 14)
+  hint:SetPoint("LEFT", syncButton, "RIGHT", 10, 0)
+  hint:SetPoint("RIGHT", gear, "LEFT", -10, 0)
   hint:SetJustifyH("LEFT")
+  hint:SetWordWrap(false)
   -- Без программы (или пока она не подключена к таблице) — та же неброская строка, но о том, что аддон
   -- работает сам по себе; подробности — при наведении.
   local state = ns.ProgramState()
@@ -784,6 +1519,7 @@ local SETTINGS_NAME = "MountSheetSyncSettingsFrame"
 local settingsFrame
 local languageButtons = {}
 local settingsQuiet, settingsMinimap
+local gridButtons = {}
 
 local function RefreshSettings()
   if not settingsFrame then
@@ -797,6 +1533,9 @@ local function RefreshSettings()
   settingsQuiet:SetChecked(db and db.quiet and true or false)
   local mm = db and type(db.minimap) == "table" and db.minimap or {}
   settingsMinimap:SetChecked(not mm.hide)
+  for _, b in ipairs(gridButtons) do
+    b:SetChecked(b.view == (db and db.gridView or "scroll"))
+  end
 end
 
 local function SettingsCheck(parent, y, key, onClick)
@@ -970,7 +1709,7 @@ local function CreateSettings()
   for _, code in ipairs(ns.LANGUAGES) do
     codes[#codes + 1] = code
   end
-  local height = 92 + #codes * 24 + 70 + 96
+  local height = 92 + #codes * 24 + 70 + 96 + 82
   settingsFrame = CreateFrame("Frame", SETTINGS_NAME, UIParent, "DefaultPanelTemplate")
   settingsFrame:SetSize(330, height)
   settingsFrame:SetFrameStrata("DIALOG")
@@ -1021,7 +1760,26 @@ local function CreateSettings()
     languageButtons[#languageButtons + 1] = b
   end
 
-  local y = -54 - #codes * 24 - 14
+  local gridHead = settingsFrame:CreateFontString(nil, "OVERLAY", "GameFontNormal")
+  gridHead:SetPoint("TOPLEFT", 20, -54 - #codes * 24 - 10)
+  Label(gridHead, "settings_grid")
+  for i, choice in ipairs({ { "scroll", "settings_grid_scroll", "tip_grid_scroll" }, { "all", "settings_grid_all", "tip_grid_all" } }) do
+    local b = CreateFrame("CheckButton", nil, settingsFrame, "UICheckButtonTemplate")
+    b:SetSize(24, 24)
+    b:SetPoint("TOPLEFT", 26, -54 - #codes * 24 - 28 - (i - 1) * 24)
+    b.view = choice[1]
+    if b.Text then
+      Label(b.Text, choice[2])
+    end
+    AttachTooltip(b, choice[2], choice[3])
+    b:SetScript("OnClick", function(self)
+      UI.SetGridView(self.view)
+      RefreshSettings()
+    end)
+    gridButtons[#gridButtons + 1] = b
+  end
+
+  local y = -54 - #codes * 24 - 92
   settingsQuiet = SettingsCheck(settingsFrame, y, "quiet", function(self)
     ns.SetQuiet(self:GetChecked())
   end)

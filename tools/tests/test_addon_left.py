@@ -207,13 +207,13 @@ def under_window(x):
 
 
 tabs = [x for x in regions("Button") if x._template == "PanelTopTabButtonTemplate"]
-check("four Blizzard top tabs above the list", [str(t._text) for t in tabs] == ["Осталось (24)", "Все персонажи", "Попытки", "Журнал"],
+check("three Blizzard top tabs above the list", [str(t._text) for t in tabs] == ["Осталось (24)", "Попытки", "Журнал"],
       [str(t._text) for t in tabs])
-check("3.0: «Осталось» selected by default", win.selectedTab == 1 and not tabs[0].IsEnabled(tabs[0]) and tabs[3].IsEnabled(tabs[3]))
+check("3.0: «Осталось» selected by default", win.selectedTab == 1 and not tabs[0].IsEnabled(tabs[0]) and tabs[2].IsEnabled(tabs[2]))
 
 
 def boxes(extent):
-    """ScrollBox lists of the window: 16 px rows — the main list, 20 px — the characters on the left."""
+    """ScrollBox lists of the window: 20 px rows — the main list, 22 px — the characters on the left."""
     return [x for x in regions("Frame") if x._template == "WowScrollBoxList" and under_window(x) and x._view._extent == extent]
 
 
@@ -222,8 +222,35 @@ def pool(extent):
     return [box._pool[i] for i in range(1, len(box._pool) + 1) if box._pool[i]._shown]
 
 
+ROW, CHAR = 20, 22
+
+
+def row_text(f):
+    """A plain line as it is; a table row: its cells joined with « | »."""
+    if f.elem.cols is None:
+        return str(f.text._text)
+    cells = [f.cells[i] for i in range(1, len(f.cells) + 1)]
+    return " | ".join(str(c._text) for c in cells if c._shown)
+
+
+def rg(x, key):
+    return L.eval("rawget")(x, key)
+
+
+def head_cells():
+    """Shown cells of the table header, left to right."""
+    return [x for x in regions("Button") if rg(x, "arrow") is not None and x._shown and under_window(x)]
+
+
+def click_all():
+    row = pool(CHAR)[0]
+    row.MockClick(row)
+    g.RunTimers()
+
+
 def shown_rows():
-    return [str(f.text._text) for f in pool(16)]
+    head = [str(win.summaryText._text)] if win.summaryText._shown and win.summaryText._text else []
+    return head + [row_text(f) for f in pool(ROW)]
 
 
 def plain(text):
@@ -231,45 +258,52 @@ def plain(text):
 
 
 def char_rows():
-    return [(plain(f.name._text), str(f.count._text), bool(f.sel._shown)) for f in pool(20)]
+    return [(plain(f.name._text), str(f.count._text), bool(f.sel._shown)) for f in pool(CHAR)]
 
 
-check("two ScrollBox lists with a scroll bar each", len(boxes(16)) == 1 and len(boxes(20)) == 1 and boxes(16)[0]._managedBar)
-tabs[3].MockClick(tabs[3]); g.RunTimers()
+check("two ScrollBox lists with a scroll bar each", len(boxes(ROW)) == 1 and len(boxes(CHAR)) == 1 and boxes(ROW)[0]._managedBar)
+tabs[2].MockClick(tabs[2]); g.RunTimers()
 check("journal tab shows the journal", any("Тюремщик" in t for t in shown_rows()) and not any("Осталось" in t for t in shown_rows()))
 tabs[0].MockClick(tabs[0]); g.RunTimers()
 rows = shown_rows()
 check("«Осталось» tab: info line first", (rows[0].startswith("|cff8c8c8cОсталось 24 из 36 - список из таблицы сегодня в ") or rows[0].startswith("|cff8c8c8cОсталось 24 из 36 - список из таблицы вчера в ")), rows[0])
 check("no reset this week known: orange reminder under it", rows[1] == "|cffff9a4dНа этой неделе таблицу ещё не сбрасывали — в ней могут быть «Да» прошлой недели.|r", rows[1])
 check("group headers in order", [t for t in rows if t.startswith("|cffffd200")] == ["|cffffd200Рейды|r", "|cffffd200Подземелья|r", "|cffffd200Мировые боссы|r"])
-check("row: boss (difficulty) — mount · place",
-      "   Сильвана Ветрокрылая |cff8c8c8c(Mythic)|r — |cffc9a0ffМесть|r |cff8c8c8c- Sanctum of Domination|r" in rows, [t for t in rows if "Сильвана" in t])
+check("3.0.3: row in columns: boss, short difficulty, mount, place, attempts, chance",
+      any(t.startswith("Сильвана Ветрокрылая | |cffb7ae9aM|r | |cffc9a0ffМесть|r | |cff8c8c8cSanctum of Domination|r | ") for t in rows), [t for t in rows if "Сильвана" in t])
+first_row = [f for f in pool(ROW) if f.elem.cols is not None][0]
+check("…a mount icon slot and the columns stay inside the list",
+      first_row.icon._shown and all(c.x + c.w <= 842 for c in [first_row.elem.cols[i] for i in range(1, len(first_row.elem.cols) + 1)]))
+check("…the header names the columns", [str(c.text._text) for c in head_cells()] == ["Босс", "Слож.", "Маунт", "Где", "Попыток", "Шанс"], [str(c.text._text) for c in head_cells()])
 raid = rows[rows.index("|cffffd200Рейды|r") + 1: rows.index("|cffffd200Подземелья|r")]
-check("killed rows go to the bottom of their group with a check mark", raid[0].startswith("   Сильвана") and raid[-1].startswith("   |TInterface\\RaidFrame\\ReadyCheck-Ready")
-      and "убит, ждёт таблицы" in raid[-1], raid)
+check("killed rows go to the bottom of their group with a check mark", raid[0].startswith("Сильвана") and "убит, ждёт таблицы" in raid[-1]
+      and [f for f in pool(ROW) if row_text(f) == raid[-1]][0].icon._texture == "Interface\\RaidFrame\\ReadyCheck-Ready", raid)
 check("selected tab is remembered", g.MountSheetSyncDB.tab == "left" and win.selectedTab == 1)
-check("list scrolled to the top on tab switch", boxes(16)[0]._vscroll == 0)
+check("list scrolled to the top on tab switch", boxes(ROW)[0]._vscroll == 0)
 
 # ---- 3.0: characters on the left, any character's «Осталось», «Все персонажи», «Попытки»
-chars = char_rows()
+all_row = char_rows()[0]
+chars = char_rows()[1:]
 allr = ns.GetAllRemaining()
+check("3.0.3: «Все персонажи» — first row on the left, not selected", all_row[0] == "Все персонажи" and not all_row[2], all_row)
+check("…with the total of everybody", all_row[1] == str(sum(allr[i].r.left for i in range(1, len(allr) + 1))), all_row)
 check("3.0: characters from the sheet on the left, the current one first and selected",
       chars and chars[0][0] == "Эйра" and chars[0][2] and not any(c[2] for c in chars[1:]), chars)
 check("…what is left next to each name", chars[0][1] == "24" and len(chars) == len(allr), chars)
 check("…every character of the sheet", "Элтара" in [c[0] for c in chars] and any(c[0].startswith("Каэлия") for c in chars), chars)
 lefts = [allr[i].r.left for i in range(2, len(allr) + 1)]
 check("…then the ones with more left first", lefts == sorted(lefts, reverse=True), lefts)
-box = boxes(16)[0]
+box = boxes(ROW)[0]
 inits = box._inits
 win.Hide(win); win.Show(win); g.RunTimers()
 check("reopening the window with nothing changed rebuilds no rows", box._inits == inits, (inits, box._inits))
-eltara = [f for f in pool(20) if plain(f.name._text) == "Элтара"][0]
+eltara = [f for f in pool(CHAR) if plain(f.name._text) == "Элтара"][0]
 eltara.MockClick(eltara); g.RunTimers()
 rows = shown_rows()
 check("click on Элтара: her «Осталось» (12 of 16; Эйра's kills do not count)", rows[0].startswith("|cff8c8c8cОсталось 12 из 16"), rows[:1])
 check("…she is selected on the left", [c[0] for c in char_rows() if c[2]] == ["Элтара"], char_rows())
-check("…no «не фармлю» menu on another character's rows", not [f for f in pool(16) if f.elem.entry is not None])
-check("…the tab title still counts the current character", tabs[0]._text == "Осталось (24)", tabs[0]._text)
+check("…no «не фармлю» menu on another character's rows", not [f for f in pool(ROW) if f.elem.entry is not None])
+check("…the tab title counts the selected character", tabs[0]._text == "Осталось (12)", tabs[0]._text)
 check("…her name in her class colour: the sheet's key is just «элтара», found among this account's characters",
       str(eltara.name._text) == "|cff3fc7ebЭлтара|r", str(eltara.name._text))
 L.execute("MSS_NS = ...", ns)
@@ -290,31 +324,74 @@ check("…a kill Элтара made on this account (her GUID) ticks her own list
       shown_rows()[:1])
 L.execute("table.remove(MountSheetSyncDB.kills)")
 g.RunTimers()
-tabs[1].MockClick(tabs[1]); g.RunTimers()
+click_all()
 rows = shown_rows()
 summ = ns.GetSummary()
 check("«Все персонажи»: head line with rows and characters",
       rows[0] == "|cff8c8c8cЕщё убить на этой неделе: строк %d - персонажей в таблице: %d|r" % (len(summ), len(allr)), rows[0])
 check("…grouped by kind", [t for t in rows if t.startswith("|cffffd200")] == ["|cffffd200Рейды|r", "|cffffd200Подземелья|r", "|cffffd200Мировые боссы|r"],
       [t for t in rows if t.startswith("|cffffd200")])
+check("…selected on the left, the tab counts everybody", char_rows()[0][2] and tabs[0]._text == "Осталось (%s)" % char_rows()[0][1], tabs[0]._text)
 first = summ[1]
-check("…a row of the sheet, then who still has to kill it", rows[2] == "   " + ns.FormatRemaining(L.table_from({"item": first.item}))
-      and rows[3].startswith("      |cff8c8c8c") and str(first.names[1]) in rows[3], rows[2:4])
-check("…more than %d names: «и ещё N»" % 3, all((" и ещё " in rows[3 + 2 * (i - 1)]) == (len(summ[i].names) > 3)
-                                                 for i in range(1, len(summ) + 1) if summ[i].kind == first.kind), rows[2:8])
-names_row = pool(16)[3]
-names_row._scripts.OnEnter(names_row)
+gr = [f for f in pool(ROW) if f.elem.names is not None][0]
+check("…a row of the sheet with the number of characters left",
+      plain(row_text(gr)).startswith(str(first.item.boss)) and plain(row_text(gr)).endswith(" | %d" % len(first.names)), row_text(gr))
+alive = [gr.dots[i]._w == 10 for i in range(1, len(allr) + 1)]
+want = [allr[i].name in [first.names[j] for j in range(1, len(first.names) + 1)] for i in range(1, len(allr) + 1)]
+check("…one column per character: a dot if the boss is still to kill, a dash if killed", alive == want, (alive, want))
+check("…the header: boss, difficulty, mount, a column per character, total",
+      [plain(c.text._text) for c in head_cells()][:4] == ["Босс", "Слож.", "Маунт", "Всего"] and len(head_cells()) == 4 + len(allr)
+      and plain(head_cells()[4].text._text) == str(allr[1].name)[:3], [plain(c.text._text) for c in head_cells()])
+check("…all fit: no scroll bar under the columns", not win.gridSlider._shown)
+gr._scripts.OnEnter(gr)
 tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
-check("…hover: every name in the tooltip", tt[1] == ", ".join(str(first.names[i]) for i in range(1, len(first.names) + 1)), tt)
-eira = [f for f in pool(20) if plain(f.name._text) == "Эйра"][0]
+check("…hover: every name in the tooltip", tt[-1] == ", ".join(str(first.names[i]) for i in range(1, len(first.names) + 1)), tt)
+gr._scripts.OnLeave(gr)
+# many characters: scrolled columns, then all at once from the settings
+L.execute("""GRID_OLD = MountSheetSyncSheet
+local copy = {}
+for k, v in pairs(MountSheetSyncSheet) do copy[k] = v end
+copy.chars = {}
+for _, c in ipairs(MountSheetSyncSheet.chars) do copy.chars[#copy.chars + 1] = c end
+for i = 1, 16 do
+  local c = {}
+  for k, v in pairs(MountSheetSyncSheet.chars[2]) do c[k] = v end
+  c.name = "Альт" .. i
+  c.keys = { "альт" .. i }
+  copy.chars[#copy.chars + 1] = c
+end
+copy.generated = copy.generated + 1
+MountSheetSyncSheet = copy""")
+L.execute("MSS_NS.OnChange()"); g.RunTimers()
+n_chars = len(ns.GetAllRemaining())
+check("%d characters: the bar under the columns, 7 of them visible" % n_chars, win.gridSlider._shown and win.gridSlider._max == n_chars - 7, win.gridSlider._max)
+heads_before = [plain(c.text._text) for c in head_cells()]
+inits = boxes(ROW)[0]._inits
+win.gridSlider.SetValue(win.gridSlider, 2)
+heads_after = [plain(c.text._text) for c in head_cells()]
+check("…moving it shifts the column titles, boss and total stay", heads_after[4:] != heads_before[4:] and heads_after[:4] == heads_before[:4], heads_after)
+check("…and rebuilds no rows", boxes(ROW)[0]._inits == inits)
+g.SlashCmdList["MOUNTSHEETSYNC"]("settings"); g.RunTimers()
+grid_sf = g.MountSheetSyncSettingsFrame
+views = {str(rg(x, "view")): x for x in regions("CheckButton") if x._parent is not None and x._parent._uid == grid_sf._uid and rg(x, "view") is not None}
+check("settings: two views of the table, scrolling by default", set(views) == {"scroll", "all"} and views["scroll"].GetChecked(views["scroll"]) and not views["all"].GetChecked(views["all"]), list(views))
+views["all"].MockClick(views["all"]); g.RunTimers()
+check("«Все столбцы сразу»: remembered, 20 columns at 16 px, the bar only for the rest", g.MountSheetSyncDB.gridView == "all" and win.gridSlider._max == n_chars - 20
+      and len(head_cells()) == 4 + 20 and head_cells()[4]._w == 16, len(head_cells()))
+views["scroll"].MockClick(views["scroll"]); g.RunTimers()
+check("…back to scrolling", g.MountSheetSyncDB.gridView is None and win.gridSlider._shown)
+grid_sf.Hide(grid_sf)
+L.execute("MountSheetSyncSheet = GRID_OLD")
+L.execute("MSS_NS.OnChange()"); g.RunTimers()
+eira = [f for f in pool(CHAR) if plain(f.name._text) == "Эйра"][0]
 eira.MockClick(eira); g.RunTimers()
 check("click on a character from another tab opens his «Осталось»", win.selectedTab == 1 and shown_rows()[0].startswith("|cff8c8c8cОсталось 24 из 36"))
-tabs[2].MockClick(tabs[2]); g.RunTimers()
+tabs[1].MockClick(tabs[1]); g.RunTimers()
 att = ns.GetAttemptsList()
 empty = [x for x in regions("FontString") if x._font == "GameFontDisable" and under_window(x)][0]
 check("«Попытки»: the counter or a word that there is none yet",
       (len(att) == 0 and empty._shown and "Счётчика попыток пока нет" in str(empty._text))
-      or (len(att) > 0 and shown_rows()[0].startswith("|cff8c8c8cНесобранные маунты со случайным шансом: %d" % len(att))), len(att))
+      or (len(att) > 0 and len(shown_rows()) == len(att)), len(att))
 tabs[0].MockClick(tabs[0]); g.RunTimers()
 
 LUA_RAWGET = L.eval("rawget")
@@ -365,9 +442,11 @@ def dump_layout(root, path):
 tabs[0].MockClick(tabs[0]); g.RunTimers()
 dump_layout(win, OUT_LAYOUT)
 LAYOUT_DIR = os.path.dirname(os.path.abspath(OUT_LAYOUT))
-tabs[1].MockClick(tabs[1]); g.RunTimers()
+click_all()
 dump_layout(win, os.path.join(LAYOUT_DIR, "layout_all.json"))
-tabs[3].MockClick(tabs[3]); g.RunTimers()
+eira_row = pool(CHAR)[1]
+eira_row.MockClick(eira_row); g.RunTimers()
+tabs[2].MockClick(tabs[2]); g.RunTimers()
 dump_layout(win, os.path.join(LAYOUT_DIR, "layout_log.json"))
 # «Попытки» for the picture: the fixture's sheet is older than the counter — rows like a real player's (2.9 program)
 L.execute(r"""SCREEN_MOUNTS = {
@@ -386,8 +465,37 @@ local copy = {}
 for k, v in pairs(MountSheetSyncSheet) do copy[k] = v end
 copy.mounts = SCREEN_MOUNTS
 MountSheetSyncSheet = copy""")
-tabs[2].MockClick(tabs[2]); g.RunTimers()
+tabs[1].MockClick(tabs[1]); g.RunTimers()
 check("«Попытки» with rows (for the picture): most expected drops first", ns.GetAttemptsList()[1].name == "Пламенное Крыло Алисразор", ns.GetAttemptsList()[1].name)
+rows = shown_rows()
+check("3.0.3: «Попытки» in columns: mount, boss, difficulty, attempts, chance, characters left",
+      plain(rows[0]).startswith("Пламенное Крыло Алисразор | Алисразор | N/H | ") and "%" in rows[0] and "/" in plain(rows[0]).split(" | ")[-1], rows[0])
+check("…a chance bar next to the number", pool(ROW)[0].barFill._shown)
+check("…the header", [str(c.text._text) for c in head_cells()] == ["Маунт", "Босс", "Слож.", "Попыток", "Шанс", "Осталось"], [str(c.text._text) for c in head_cells()])
+sort_by = {str(c.text._text): c for c in head_cells()}
+sort_by["Маунт"].MockClick(sort_by["Маунт"]); g.RunTimers()
+names = [plain(t).split(" | ")[0] for t in shown_rows()]
+check("click on «Маунт»: by name, A to Z", names == sorted(names), names)
+sort_by["Маунт"].MockClick(sort_by["Маунт"]); g.RunTimers()
+check("…again: Z to A", [plain(t).split(" | ")[0] for t in shown_rows()] == sorted(names, reverse=True))
+sort_by["Попыток"].MockClick(sort_by["Попыток"]); g.RunTimers()
+nums = [int(plain(t).split(" | ")[3]) for t in shown_rows()]
+check("click on «Попыток»: most first", nums == sorted(nums, reverse=True), nums)
+check("…remembered", g.MountSheetSyncDB.attemptsView.sort == "n")
+world = [x for x in regions("Button") if x._text == "Мировые боссы" and under_window(x)][0]
+world.MockClick(world); g.RunTimers()
+check("filter «Мировые боссы»: only world rows", all(str(f.elem["values"]["boss"]) in ("Налак", "Ша Злости", "Галлеон") for f in pool(ROW)) and len(pool(ROW)) == 3, shown_rows())
+every = [x for x in regions("Button") if x._text == "Все" and under_window(x)][0]
+every.MockClick(every); g.RunTimers()
+hide = [x for x in regions("CheckButton") if under_window(x)][0]
+L.execute("SCREEN_MOUNTS[9].n = 0; SCREEN_MOUNTS[9].p = 0.02; MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1")
+L.execute("MSS_NS.OnChange()"); g.RunTimers()
+check("a mount without attempts: dashes", any(" | - | - | " in plain(t) for t in shown_rows()), shown_rows())
+hide.MockClick(hide); g.RunTimers()
+check("«Скрыть без попыток»: gone", not any(" | - | - | " in plain(t) for t in shown_rows()))
+hide.MockClick(hide); g.RunTimers()
+L.execute("MountSheetSyncDB.attemptsView = nil")
+tabs[0].MockClick(tabs[0]); tabs[1].MockClick(tabs[1]); g.RunTimers()
 dump_layout(win, os.path.join(LAYOUT_DIR, "layout_attempts.json"))
 L.execute("MountSheetSyncSheet = SCREEN_OLD")
 tabs[0].MockClick(tabs[0]); g.RunTimers()
@@ -521,7 +629,7 @@ check("same mount twice -> one record", len(g.MountSheetSyncDB.kills) == n + 1)
 g.Fire("NEW_MOUNT_ADDED", 99999)
 g.Fire("NEW_MOUNT_ADDED", g.SECRET)
 check("unknown or secret mount id: nothing, no error", len(g.MountSheetSyncDB.kills) == n + 1 and "ошибка" not in chat_all())
-tabs[3].MockClick(tabs[3]); g.RunTimers()
+tabs[2].MockClick(tabs[2]); g.RunTimers()
 check("journal shows the mount in purple", any(t.startswith("|cff8c8c8c") and "|cffc77dffНовый маунт: Синий протодракон|r" in t for t in shown_rows()))
 check("mount record does not tick list rows", remaining().left == left_before_mount, (remaining().left, left_before_mount))
 g.MountSheetSyncDB.quiet = True
@@ -541,17 +649,13 @@ tabs[0].MockClick(tabs[0]); g.RunTimers()
 
 def row_buttons():
     """Rows of the main list that have the right-click menu (in list order)."""
-    return [f for f in pool(16) if f.elem.entry is not None]
-
-
-def row_text(b):
-    return str(b.text._text)
+    return [f for f in pool(ROW) if f.elem.entry is not None]
 
 
 rb = row_buttons()
 texts = [row_text(b) for b in rb]
 check("right-click buttons only on raid/dungeon rows that are left (not headers, world bosses or ticked rows)",
-      len(rb) > 10 and all(t.startswith("   ") and "убит" not in t for t in texts)
+      len(rb) > 10 and all("убит" not in t for t in texts)
       and not any("Галлеон" in t or "Налак" in t for t in texts), texts[:5])
 left0 = remaining().left
 first = None
@@ -561,7 +665,7 @@ for i in range(1, len(remaining()["items"]) + 1):
         first = it.item
         break
 boss0, place0 = str(first.boss), str(first.place)
-btn = [b for b in rb if row_text(b).startswith("   " + boss0)][0]
+btn = [b for b in rb if row_text(b).startswith(boss0)][0]
 n_kills = len(g.MountSheetSyncDB.kills)
 btn.MockClick(btn, "RightButton")
 menu = g.MENUS[len(g.MENUS)]
@@ -580,7 +684,7 @@ check("the row is gone from «Осталось» right away", r.left == left0 - 
                   for i in range(1, len(r["items"]) + 1)), r.left)
 check("chat explains and says how to undo", "не фармлю на Эйра" in chat_all() and "«Что фармить…»" in chat_all(), chat_all().split("\n")[-1])
 g.RunTimers()
-check("window refreshed, tab title updated", not any(t.startswith("   " + boss0) for t in shown_rows())
+check("window refreshed, tab title updated", not any(t.startswith(boss0) for t in shown_rows())
       and tabs[0]._text == "Осталось (%d)" % (left0 - 1), tabs[0]._text)
 # whole place
 rb = row_buttons()
@@ -590,7 +694,7 @@ for i in range(1, len(remaining()["items"]) + 1):
     if not it.done and str(it.item.kind) == "dungeon" and str(it.item.place) != place0:
         target_place = str(it.item.place)
         break
-dbtn = [b for b in rb if target_place and ("- " + target_place) in row_text(b)][0]
+dbtn = [b for b in rb if target_place and target_place in row_text(b)][0]
 dbtn.MockClick(dbtn, "RightButton")
 menu = g.MENUS[len(g.MENUS)]
 L.eval("function(b) b.cb() end")(menu["items"][3])
@@ -608,7 +712,7 @@ r = remaining()
 check("newer list from the sheet: local hiding dropped (the sheet decides now)", g.MountSheetSyncDB.notFarmed["Player-1602-0ABCDEF1"] is None
       and any(str(r["items"][i].item.boss) == boss0 for i in range(1, len(r["items"]) + 1)))
 g.MountSheetSyncSheet.generated = saved_generated
-tabs[3].MockClick(tabs[3]); g.RunTimers()
+tabs[2].MockClick(tabs[2]); g.RunTimers()
 check("journal shows «Не фармлю» in grey", any("|cff9d9d9dНе фармлю: " + boss0 in t for t in shown_rows()), [t for t in shown_rows() if "фармлю" in t])
 check("world rows have no «не фармлю» menu", ns.AddPlan(L.table_from({"kind": "world", "boss": "Галлеон"}), "row") is False)
 
@@ -664,9 +768,9 @@ for _ in range(200):
 ms = (time.perf_counter() - t0) / 200 * 1000
 check("unchanged: cached characters and summary, %.3f ms" % ms, ms < 0.5)
 win.Show(win)
-tabs[1].MockClick(tabs[1]); g.RunTimers()
-check("«Все персонажи» with 20+ characters: names cut to 3 + «и ещё N»", any(" и ещё " in t for t in shown_rows()))
-check("left panel lists them all (the ScrollBox scrolls)", len(char_rows()) == len(g.MountSheetSyncSheet.chars), len(char_rows()))
+click_all()
+check("«Все персонажи» with 20+ characters: the bar under the columns", win.gridSlider._shown and win.gridSlider._max == len(g.MountSheetSyncSheet.chars) - 7, win.gridSlider._max)
+check("left panel lists them all (the ScrollBox scrolls)", len(char_rows()) == len(g.MountSheetSyncSheet.chars) + 1, len(char_rows()))
 
 check("no Lua errors reported in chat", "ошибка" not in chat_all())
 failed = [nm for nm, ok in checks if not ok]
