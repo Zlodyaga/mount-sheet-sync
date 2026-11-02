@@ -39,6 +39,7 @@ run test_layout22.py
 run test_attempts.py
 run test_release_plan.py
 run e2e_google.py "$EXE"
+run e2e_week.py "$EXE"
 run e2e_collection.py "$EXE" "$F/MountSheetSync-2.0-test.exe"
 run e2e_chars.py "$EXE" "$F/MountSheetSync-2.1-test.exe"
 run e2e_script.py "$EXE"

@@ -317,6 +317,39 @@ check("…an ordinary mob is not remembered", len(g4.MountSheetSyncDB.kills) == 
 L4.execute('UNIT_KIND = "SECRET"; TARGET = { guid = "Creature-0-3767-1-41-157134-0000AAAB", name = "Исхак Повелитель Четырех Ветров" }')
 g4.Fire("PLAYER_TARGET_CHANGED")
 check("…a hidden classification: skipped, no error", not any("Ошибка" in c for c in chat(g4, 0)))
+# the other two ways to see a rare: under the mouse, by its nameplate (a unit token that is gone by the time of the loot)
+L4.execute("""
+UNITS = {}
+_GUID, _NAME, _CLASS = UnitGUID, UnitName, UnitClassification
+function UnitGUID(u) if UNITS[u] then return UNITS[u].guid end return _GUID(u) end
+function UnitName(u) if UNITS[u] then return UNITS[u].name end return _NAME(u) end
+function UnitClassification(u) if UNITS[u] then return UNITS[u].class end return _CLASS(u) end
+""")
+n = len(g4.MountSheetSyncDB.kills)
+L4.execute('UNIT_KIND = "normal"; TARGET = {}; UNITS.mouseover = { guid = "Creature-0-3767-1-41-157134-00001111", name = "Исхак Повелитель Четырех Ветров", class = "rare" }')
+g4.Fire("UPDATE_MOUSEOVER_UNIT")
+L4.execute('UNITS.mouseover = nil; MOCK.now = MOCK.now + 1000; MOCK.loot = { "Creature-0-3767-1-41-157134-00001111" }')
+g4.Fire("LOOT_READY", False)
+g4.RunTimers()
+check("a rare seen under the mouse only: counted", len(g4.MountSheetSyncDB.kills) == n + 1)
+n = len(g4.MountSheetSyncDB.kills)
+L4.execute('UNITS.nameplate3 = { guid = "Creature-0-3767-1-41-157134-00002222", name = "Исхак Повелитель Четырех Ветров", class = "rareelite" }')
+g4.Fire("NAME_PLATE_UNIT_ADDED", "nameplate3")
+L4.execute('UNITS.nameplate3 = nil; MOCK.now = MOCK.now + 1000; MOCK.loot = { "Creature-0-3767-1-41-157134-00002222" }')
+g4.Fire("LOOT_READY", False)
+g4.RunTimers()
+check("a rare seen by its nameplate only: counted", len(g4.MountSheetSyncDB.kills) == n + 1)
+n = len(g4.MountSheetSyncDB.kills)
+L4.execute('UNITS.nameplate4 = { guid = "SECRET", name = "Исхак Повелитель Четырех Ветров", class = "rare" }; UNITS.nameplate5 = { guid = "Creature-0-3767-1-41-157134-00003333", name = "SECRET", class = "rare" }')
+g4.Fire("NAME_PLATE_UNIT_ADDED", "nameplate4")
+g4.Fire("NAME_PLATE_UNIT_ADDED", "nameplate5")
+L4.execute('UNITS.nameplate5 = nil; MOCK.now = MOCK.now + 1000; MOCK.loot = { "Creature-0-3767-1-41-157134-00003333" }')
+g4.Fire("LOOT_READY", False)
+g4.RunTimers()
+check("hidden GUID or name on a nameplate: not remembered, no error", len(g4.MountSheetSyncDB.kills) == n and not any("Ошибка" in c for c in chat(g4, 0)))
+g4.Fire("NAME_PLATE_UNIT_ADDED")
+check("a nameplate event without a unit: no error", not any("Ошибка" in c for c in chat(g4, 0)))
+L4.execute('UNITS = {}')
 L4.execute('UNIT_KIND = "normal"; TARGET = {}')
 n = len(g4.MountSheetSyncDB.kills)
 out = kill(L4, g4, "Галеон", 0, 725, inst=("Долина Четырех Ветров", "none"))
@@ -376,13 +409,17 @@ L6, g6, ns6, _, _ = new_game()
 L6.execute("""
 MOCK.daily = 5 * 3600
 C_DateAndTime.GetSecondsUntilDailyReset = function() return MOCK.daily end
-local items = MountSheetSyncSheet.chars[1].items
-for i = #items, 1, -1 do
-  if items[i].mount == "Дракон Четырех Ветров" then table.remove(items, i) end   -- on a real table the row is on one sheet
+for _, ch in ipairs(MountSheetSyncSheet.chars) do
+  local items = ch.items
+  for i = #items, 1, -1 do
+    if items[i].mount == "Дракон Четырех Ветров" then table.remove(items, i) end   -- on a real table the row is on one sheet
+  end
+  local it = { kind = "rare", boss = "Исхак Повелитель Четырех Ветров", mount = "Дракон Четырех Ветров", place = "Uldum",
+               names = { "исхак повелитель четырех ветров" }, d = {}, every = "daily" }
+  items[#items + 1] = it
+  if ch.name == "Эйра" then RARE_ITEM = it end
 end
-RARE_ITEM = { kind = "rare", boss = "Исхак Повелитель Четырех Ветров", mount = "Дракон Четырех Ветров", place = "Uldum",
-              names = { "исхак повелитель четырех ветров" }, d = {}, every = "daily" }
-items[#items + 1] = RARE_ITEM
+MountSheetSyncSheet._hasRare = nil
 for _, m in ipairs(MountSheetSyncSheet.mounts) do
   if m.mount == "Дракон Четырех Ветров" then m.kind = "rare" end
 end
@@ -398,15 +435,55 @@ check("rares have their own group after the world bosses", [str(ns6.KIND_ORDER[i
 e, r = entry(ns6)
 left0 = r.left
 check("not killed yet: left, the title of the group is translated", e.done is False and str(ns6.KindTitle("rare")) == "Редкие монстры")
+ISHAK_RU = "Исхак Повелитель Четырех Ветров"
+hint = ns6.BossHint(ISHAK_RU)
+check("boss hint on a rare: its mount, not killed on 2 characters", hint[1].left == 2 and str(hint[1].name) == "Дракон Четырех Ветров", hint[1].left if hint[1] else None)
+
+
+def window6():
+    regs = [g6.ALL_REGIONS[i] for i in range(1, len(g6.ALL_REGIONS) + 1)]
+    return regs
+
+
+def tab6(title):
+    t = [r for r in window6() if r._type == "Button" and r._template == "PanelTopTabButtonTemplate" and str(r._text).startswith(title)][0]
+    t.MockClick(t)
+    g6.RunTimers()
+
+
+def rows6():
+    box = [r for r in window6() if r._type == "Frame" and r._template == "WowScrollBoxList" and r._view._extent == 16][0]
+    return [box._pool[i] for i in range(1, len(box._pool) + 1) if box._pool[i]._shown]
+
+
+g6.SlashCmdList["MOUNTSHEETSYNC"]("")
+tab6("Осталось")
+texts = [str(f.text._text) for f in rows6()]
+check("window: «Редкие монстры» is its own group, the last one", [t for t in texts if t.startswith("|cffffd200")][-1] == "|cffffd200Редкие монстры|r", texts)
+rare_rows = [f for f in rows6() if "Исхак" in str(f.text._text)]
+check("…with the rare in it, once", len(rare_rows) == 1 and texts.index(str(rare_rows[0].text._text)) > texts.index("|cffffd200Редкие монстры|r"), texts)
+check("…no «не фармлю» menu on a rare", rare_rows[0].elem.entry is None)
 out = loot(L6, g6, "Creature-0-3767-1-41-157134-00006A2B3C", "Исхак Повелитель Четырех Ветров")
 e, r = entry(ns6)
 check("looted: an attempt (a row of kind «rare» is recognised) and done until the daily reset", any("Дракон Четырех Ветров" in c and "попытка 1 " in c for c in out)
       and e.done is True and e.again == 5 * 3600 and r.left == left0 - 1, (e.done, e.again, r.left, left0))
 text = str(ns6.FormatRemaining(e))
 check("…the row says when it can be tried again", "снова через 5 ч 0 мин" in text and "ждёт таблицы" not in text, text)
+check("boss hint: 1 character left now", ns6.BossHint(ISHAK_RU)[1].left == 1, ns6.BossHint(ISHAK_RU)[1].left)
+g6.RunTimers()
+check("window: the row shows the wait", any("снова через" in str(f.text._text) and "Исхак" in str(f.text._text) for f in rows6()), [str(f.text._text) for f in rows6()][-3:])
+tab6("Все персонажи")
+texts = [str(f.text._text) for f in rows6()]
+i = next((k for k, t in enumerate(texts) if "Исхак" in t), None)
+check("«Все персонажи»: the rare in its own group, only for who can still try", "|cffffd200Редкие монстры|r" in texts and i is not None and "Мирна" in texts[i + 1] and "Эйра" not in texts[i + 1], texts[-4:])
+tab6("Осталось")
 L6.execute("MOCK.now = MOCK.now + 6 * 3600; MOCK.daily = 23 * 3600")
 e, r = entry(ns6)
 check("after the daily reset: left again, without any «Сброс недели»", e.done is False and r.left == left0, (e.done, r.left))
+check("boss hint: both characters again, no new list or kill needed", ns6.BossHint(ISHAK_RU)[1].left == 2, ns6.BossHint(ISHAK_RU)[1].left)
+g6.MountSheetSyncFrame.Hide(g6.MountSheetSyncFrame)
+g6.MountSheetSyncFrame.Show(g6.MountSheetSyncFrame)
+check("window: reopened, the wait is gone", not any("снова через" in str(f.text._text) for f in rows6()), [str(f.text._text) for f in rows6()][-3:])
 L6.execute("MOCK.now = MOCK.now + 3600")
 out = loot(L6, g6, "Creature-0-3767-1-41-157134-00007A2B3C", "Исхак Повелитель Четырех Ветров")
 L6.execute('RARE_ITEM.every = 8 * 3600; MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1; MOCK.now = MOCK.now + 3600')

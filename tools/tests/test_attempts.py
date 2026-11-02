@@ -165,6 +165,25 @@ rr = {s["name"]: s["rows"] for s in h["sheets"]}["Редкие монстры"]
 res = h["reply"]["results"][0]
 check("…a kill from the game (kind world): marked on the rare sheet — when and who, attempt +1", res["status"] == "marked"
       and rr[1][rh.index("Попыток")] == 5 and "Эйра" in str(rr[1][rh.index("Последнее убийство")]), (res, rr[1]))
+cEvery = rh.index("Сброс / частота")
+for text, want in [("Ежедневно", "daily"), ("Daily", "daily"), ("Täglich", "daily"), ("Quotidien", "daily"), ("", "daily"), ("что-то своё", "daily"),
+                   ("Еженедельно", "weekly"), ("Раз в неделю", "weekly"), ("Weekly", "weekly"), ("Wöchentlich", "weekly"), ("Hebdomadaire", "weekly"), ("Semanal", "weekly"),
+                   ("Каждые 8 ч", 8 * 3600), ("раз в 12 часов", 12 * 3600), ("Every 4 h", 4 * 3600), ("Alle 6h", 6 * 3600)]:
+    every_sheets = json.loads(json.dumps(rare_sheets))
+    [s for s in every_sheets if s["name"] == "Редкие монстры"][0]["rows"][1][cEvery] = text
+    got = run({"catalog": None, "sheets": every_sheets, "mode": "handle", "properties": {"layout": "5"}, "request": {"action": "status"}})["reply"]
+    its = [i for c in got["chars"] for i in c["items"] if i["kind"] == "rare"]
+    check("«Сброс / частота» = «%s» → cooldown %s" % (text, want), its and its[0]["every"] == want, its[:1])
+collected_sheets = json.loads(json.dumps(rare_sheets))
+[s for s in collected_sheets if s["name"] == "Редкие монстры"][0]["rows"][1][rh.index("Собрано?")] = "Да"
+got = run({"catalog": None, "sheets": collected_sheets, "mode": "handle", "properties": {"layout": "5"}, "request": {"action": "status"}})["reply"]
+check("a collected rare: not in the list, no attempt row", not [i for c in got["chars"] for i in c["items"] if i["kind"] == "rare"]
+      and not [m for m in got.get("mounts", []) if m["kind"] == "rare"], got.get("mounts"))
+reset_reply = run({"catalog": None, "sheets": rare_sheets, "mode": "handle", "properties": {"layout": "5"}, "request": {"action": "kills", "client": "exe-test", "kills": [
+    {"id": "R-1", "time": 1793457054, "char": "Эйра", "boss": "Сброс недели", "kind": "reset"}]}})
+rs = {s["name"]: s["rows"] for s in reset_reply["sheets"]}["Редкие монстры"]
+base = {s["name"]: s["rows"] for s in rare_sheets}["Редкие монстры"]
+check("«Сброс недели» does not touch the rare sheet", rs == base, rs[:2])
 # a 2.0/2.1 table goes 0 → 3 in one go
 up0 = run({"catalog": None, "sheets": OLD, "mode": "upgrade"})
 check("2.0/2.1 table: colours, «Фармлю» and the counter in one batch, layout 5", up0["properties"].get("layout") == "5" and len(up0["applied"]) == 1

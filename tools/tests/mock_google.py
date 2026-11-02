@@ -169,6 +169,10 @@ class Handler(BaseHTTPRequestHandler):
                             STATE["refresh"][k] = False
                     if "consent" in c:
                         STATE["consent"] = c["consent"]
+                    if "failWrites" in c:   # the next N writes answer 503 (reads go through)
+                        STATE["failWrites"] = c["failWrites"]
+                    if "setBook" in c:      # replace a spreadsheet: an older table, marks made by hand
+                        STATE["spreadsheets"][c["setBook"]["id"]] = c["setBook"]
                     return self.reply(200, {"ok": True})
                 if path == "/o/oauth2/v2/auth":
                     return self.auth(q)
@@ -181,6 +185,9 @@ class Handler(BaseHTTPRequestHandler):
                     return self.reply(200, {})
                 # ---- APIs with a bearer token
                 self.authed()
+                if STATE.get("failWrites") and method == "POST" and path.endswith("atchUpdate"):
+                    STATE["failWrites"] -= 1
+                    raise ApiError(503, "UNAVAILABLE", "injected write failure")
                 if STATE["fail"]:
                     code = STATE["fail"].pop(0)
                     raise ApiError(code, "UNAVAILABLE" if code >= 500 else "RESOURCE_EXHAUSTED", "injected failure")

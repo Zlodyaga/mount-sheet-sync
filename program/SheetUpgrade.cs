@@ -130,11 +130,13 @@ namespace MountSheetSync
             int cCollected = SheetLogic.FindCol(wh, "собрано", -1);
             int cAttempts = SheetLogic.FindCol(wh, SheetLogic.AttemptsPattern, -1);
             int cWorldId = SheetLogic.FindCol(wh, "^id в игре$", -1);
+            int cBoss = SheetLogic.FindCol(wh, "босс", -1);
             GoogleBook google = book as GoogleBook;
             BuildPlan plan = new BuildPlan { Catalog = catalog, Lang = google != null ? google.Lang : SheetLang.Russian };
             List<object[]> rows = SheetBuilder.RareRows(plan);
             string[] header = SheetBuilder.RareMaster;
             int rMount = Array.IndexOf(header, "Маунт");
+            int rBoss = Array.IndexOf(header, "Босс / достижение / сундук");
             int rCollected = Array.IndexOf(header, SheetBuilder.Collected);
             int rAttempts = Array.IndexOf(header, SheetBuilder.AttemptsColumn);
             int rChance = Array.IndexOf(header, SheetBuilder.ChanceColumn);
@@ -152,6 +154,9 @@ namespace MountSheetSync
                         continue;
                     }
                     remove.Add(r);
+                    // названия — как в этой таблице: нерусская могла взять их из журнала игры, а не из каталога
+                    row[rMount] = cMount >= 0 ? w[cMount] : row[rMount];
+                    row[rBoss] = cBoss >= 0 ? w[cBoss] : row[rBoss];
                     if (cCollected >= 0)
                     {
                         row[rCollected] = w[cCollected];
