@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.2 — окно, иконка и настройки
+Mount Sheet Sync 3.0.3 — окно, иконка и настройки
 ==================================================
   * окно (ЛКМ по иконке или /mss): слева персонажи из таблицы (сколько каждому осталось), справа вкладки
     «Осталось» (выбранному персонажу), «Все персонажи» (кому что ещё убить), «Попытки» (счётчик маунтов)
@@ -63,6 +63,7 @@ local function FormatDuration(seconds)
   end
   return string.format(L.duration_m, minutes)
 end
+ns.FormatDuration = FormatDuration
 
 -- Подсказка: ключи текстов, сам текст берётся при наведении (на текущем языке).
 local function AttachTooltip(widget, titleKey, textKey)
@@ -370,7 +371,7 @@ local function RemainingList(r, own)
       for pass = 1, 2 do   -- сначала то, что осталось, потом убитые
         for _, entry in ipairs(group) do
           if entry.done == (pass == 2) then
-            local menu = own and kind ~= "world" and not entry.done
+            local menu = own and kind ~= "world" and kind ~= "rare" and not entry.done
             list[#list + 1] = Line("   " .. ns.FormatRemaining(entry), menu and entry or nil)
           end
         end
@@ -694,9 +695,6 @@ local function CreateWindow()
   local scanButton = MakeButton(frame, "button_scan", 156, "tip_scan", function() ns.RequestScan() end)
   scanButton:SetPoint("LEFT", syncButton, "RIGHT", 6, 0)
 
-  local resetButton = MakeButton(frame, "button_reset", 140, "tip_reset", UI.ConfirmResetWeek)
-  resetButton:SetPoint("LEFT", scanButton, "RIGHT", 6, 0)
-
   local gear = CreateFrame("Button", nil, frame)
   gear:SetSize(24, 24)
   gear:SetPoint("BOTTOMRIGHT", -18, 38)
@@ -972,7 +970,7 @@ local function CreateSettings()
   for _, code in ipairs(ns.LANGUAGES) do
     codes[#codes + 1] = code
   end
-  local height = 92 + #codes * 24 + 70 + 66
+  local height = 92 + #codes * 24 + 70 + 96
   settingsFrame = CreateFrame("Frame", SETTINGS_NAME, UIParent, "DefaultPanelTemplate")
   settingsFrame:SetSize(330, height)
   settingsFrame:SetFrameStrata("DIALOG")
@@ -1043,6 +1041,9 @@ local function CreateSettings()
 
   local clearButton = MakeButton(settingsFrame, "button_clear", 200, "tip_clear", ConfirmClear)
   clearButton:SetPoint("BOTTOMLEFT", 20, 46)
+
+  local resetButton = MakeButton(settingsFrame, "button_reset", 200, "tip_reset", UI.ConfirmResetWeek)
+  resetButton:SetPoint("BOTTOMLEFT", 20, 76)
 
   settingsFrame:SetScript("OnShow", RefreshSettings)
   settingsFrame:Hide()

@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.2 — подсказки о маунтах
+Mount Sheet Sync 3.0.3 — подсказки о маунтах
 ============================================
 При наведении на рара (UnitClassification «rare» / «rareelite») со строки «Мировых боссов» — у скольких персонажей
 он на этой неделе ещё не убит и его маунт: попытки и шанс за все попытки. Боссам подсказки юнита нет: в рейдах и
@@ -33,7 +33,7 @@ function ns.BossHintLines(name, maxLines, kind)
   local lines, left = {}, 0
   local shown = 0
   for _, h in ipairs(hints) do
-    if kind and h.kind ~= kind then
+    if kind and h.kind ~= kind and not (kind == "world" and h.kind == "rare") then
       -- только строки этого вида (подсказка юнита — мировые: рары)
     elseif shown < (maxLines or MAX_LINES) then
       shown = shown + 1

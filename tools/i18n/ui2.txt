@@ -418,12 +418,12 @@ fr: …et {0} de plus
 es: …y {0} más
 pt: …e mais {0}
 
-@ На этой неделе «Сброс недели» не нажимали
-en: “Weekly reset” was not pressed this week
-de: „Wochenreset“ wurde diese Woche nicht gedrückt
-fr: « Nouvelle semaine » n'a pas été cliqué cette semaine
-es: Esta semana no se pulsó «Reinicio semanal»
-pt: “Reinício semanal” não foi clicado nesta semana
+@ На этой неделе таблицу ещё не сбрасывали
+en: The sheet has not been reset this week yet
+de: Die Tabelle wurde diese Woche noch nicht zurückgesetzt
+fr: Le tableau n'a pas encore été réinitialisé cette semaine
+es: La tabla aún no se ha reiniciado esta semana
+pt: A planilha ainda não foi reiniciada nesta semana
 
 @ в записи нет id, персонажа или босса
 en: the record has no id, character or boss

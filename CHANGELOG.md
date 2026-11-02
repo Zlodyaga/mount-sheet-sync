@@ -2,6 +2,16 @@
 
 The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [CHANGELOG-addon.md](CHANGELOG-addon.md).
 
+## 2.9.2
+- The weekly reset happens by itself: when a new game week has started and the sheet has not been reset yet, the program
+  sets “No” for every character and marks this week's kills again — at the first update of the “Remaining” list, for
+  example when you start the game. The “Weekly reset” button in the addon still works.
+- Fewer requests to Google: one pass (send the kills, check the collection, update the list) loads the spreadsheet once
+  instead of once per step, so sending kills with the list takes 3 reads instead of 6.
+- Rare monsters have their own sheet: Ishak of the Four Winds moves from “World Bosses” to “Rare Monsters” by itself, with
+  “Collected?” and “Attempts”; the sheet shows the last kill. A rare has its own cooldown from “Reset / frequency” (Ishak —
+  until the daily reset), not the weekly reset. Needs the addon 3.0.3.
+
 ## 2.9.1
 - The "Remaining" list and the attempt rows the program writes for the addon now carry the encounter IDs of each
   boss, so the addon 3.0.2 recognises a kill even when the game spells the boss differently from the sheet.

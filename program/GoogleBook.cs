@@ -34,18 +34,34 @@ namespace MountSheetSync
     sealed class GoogleSheetService : ISheetService
     {
         readonly string spreadsheetId;
+        GoogleBook kept;
+
+        /// <summary>Загруженную таблицу — и на следующие вызовы (один проход цикла, SyncEngine.BeginSession).</summary>
+        public bool KeepBook;
 
         public GoogleSheetService(string spreadsheetId)
         {
             this.spreadsheetId = spreadsheetId;
         }
 
+        GoogleBook Book()
+        {
+            if (kept != null && kept.Reusable)
+            {
+                return kept;
+            }
+            GoogleBook book = GoogleBook.Load(spreadsheetId);
+            kept = KeepBook ? book : null;
+            return book;
+        }
+
         public Dictionary<string, object> Call(Dictionary<string, object> payload)
         {
             // Тот же вид, что получает скрипт: через JSON (числа — double, списки — List<object>).
             Dictionary<string, object> request = (Dictionary<string, object>)Json.Parse(Json.Write(payload, false));
-            GoogleBook book = GoogleBook.Load(spreadsheetId);
             bool dry = J.Truthy(request, "dryRun");
+            // проба ничего не записывает, но меняет таблицу в памяти — ей отдельная загрузка
+            GoogleBook book = dry ? GoogleBook.Load(spreadsheetId) : Book();
             Dictionary<string, object> resp;
             try
             {
@@ -113,7 +129,7 @@ namespace MountSheetSync
             {
                 return null;
             }
-            GoogleBook book = GoogleBook.Load(spreadsheetId);
+            GoogleBook book = Book();
             string stamp = game.CollectionUpdated.ToString(CultureInfo.InvariantCulture);
             if (!force && book.GetProperty(CollectionSync.CheckedProperty) == stamp)
             {
@@ -159,6 +175,14 @@ namespace MountSheetSync
 
         /// <summary>Сколько запросов на запись ушло (для журнала и проверок).</summary>
         public int WriteCalls;
+
+        bool inSync = true;
+
+        /// <summary>
+        /// Таблица в памяти совпадает с Google: всё записано, запись не сорвалась и не было правок вида (Apply),
+        /// которые здесь не отражаются. Иначе следующему вызову нужна новая загрузка.
+        /// </summary>
+        public bool Reusable { get { return inSync && pending.Count == 0; } }
 
         GoogleBook(string id)
         {
@@ -338,7 +362,9 @@ namespace MountSheetSync
                 data.Add(d);
             }
             pending.Clear();
+            inSync = false;
             GoogleSheets.BatchUpdateValues(id, data);
+            inSync = true;
             WriteCalls++;
         }
 
@@ -349,7 +375,9 @@ namespace MountSheetSync
             int grid = entry.GridColumns > 0 ? entry.GridColumns : col;
             List<object> req = SheetBuilder.AppendColumnRequests((int)entry.SheetId, col, grid, values, hidden);
             lang.Outgoing(req);
+            inSync = false;
             GoogleSheets.BatchUpdate(id, req);
+            inSync = true;
             WriteCalls++;
             if (col >= grid)
             {
@@ -370,7 +398,9 @@ namespace MountSheetSync
             {
                 return;
             }
+            inSync = false;
             GoogleSheets.BatchUpdate(id, req);
+            inSync = true;
             WriteCalls++;
             foreach (KeyValuePair<SheetEntry, List<int>> kv in rows)
             {
@@ -392,6 +422,7 @@ namespace MountSheetSync
             {
                 return;
             }
+            inSync = false;   // вид таблицы менялся — память за ним не следит
             Dictionary<string, object> resp = GoogleSheets.BatchUpdate(id, req);
             WriteCalls++;
             if (propertyKey != null)

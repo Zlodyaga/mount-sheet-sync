@@ -19,6 +19,20 @@ fr: Boss mondiaux
 es: Jefes del mundo
 pt: Chefes Mundiais
 
+@ Редкие монстры
+en: Rare Monsters
+de: Seltene Monster
+fr: Monstres rares
+es: Monstruos raros
+pt: Monstros raros
+
+@ Последнее убийство
+en: Last kill
+de: Letzter Kill
+fr: Dernière mise à mort
+es: Última muerte
+pt: Última morte
+
 @ Сводка
 en: Summary
 de: Übersicht

@@ -179,6 +179,48 @@ namespace MountSheetSync
             this.sent = sent;
         }
 
+        // Один проход цикла — одна загрузка таблицы: отправка, сверка и список берут её из памяти.
+        bool sessionOpen;
+        ISheetService session;
+        Settings sessionFor;
+
+        public void BeginSession()
+        {
+            sessionOpen = true;
+            session = null;
+        }
+
+        public void EndSession()
+        {
+            sessionOpen = false;
+            session = null;
+        }
+
+        ISheetService Service()
+        {
+            if (!sessionOpen)
+            {
+                return Settings.CreateService();
+            }
+            if (session == null || sessionFor != Settings)
+            {
+                session = Settings.CreateService();
+                sessionFor = Settings;
+                GoogleSheetService google = session as GoogleSheetService;
+                if (google != null)
+                {
+                    google.KeepBook = true;
+                }
+            }
+            return session;
+        }
+
+        /// <summary>Таблица программы (Settings.UseGoogle) в рамках этого прохода.</summary>
+        public GoogleSheetService GoogleService()
+        {
+            return Service() as GoogleSheetService ?? new GoogleSheetService(Settings.SpreadsheetId);
+        }
+
         static string Id(Dictionary<string, object> r)
         {
             return J.Str(r, "id");
@@ -261,7 +303,7 @@ namespace MountSheetSync
             }
             Dictionary<string, object> payload = Request("ping");
             payload["chars"] = chars;
-            Dictionary<string, object> resp = Settings.CreateService().Call(payload);
+            Dictionary<string, object> resp = Service().Call(payload);
 
             PingInfo info = new PingInfo();
             info.Spreadsheet = J.Str(resp, "spreadsheet");
@@ -309,7 +351,7 @@ namespace MountSheetSync
         {
             Dictionary<string, object> payload = Request("status");
             payload["client"] = "exe-" + Program.Version;
-            Dictionary<string, object> resp = Settings.CreateService().Call(payload);
+            Dictionary<string, object> resp = Service().Call(payload);
             if (!(J.Get(resp, "chars") is List<object>))
             {
                 throw new OldScriptException();
@@ -358,10 +400,42 @@ namespace MountSheetSync
             return list;
         }
 
-        public SyncSummary SyncAll(IList<string> files)
+        /// <summary>
+        /// «Сброс недели» от самой программы, если на этой неделе его ещё не было: новая неделя игры началась, а отметки
+        /// в таблице прошлые. Номер записи — по неделе, так что с этого компьютера она уходит один раз; другой компьютер
+        /// с той же таблицей увидит resetAt. null — сбрасывать не нужно.
+        /// </summary>
+        public Dictionary<string, object> WeekResetRecord(Dictionary<string, object> status, List<Dictionary<string, object>> records, DateTime utcNow)
+        {
+            long weekEnd = SheetData.WeekWithoutReset(status, records, utcNow);
+            if (weekEnd <= 0)
+            {
+                return null;
+            }
+            string id = "R-auto-" + weekEnd.ToString(CultureInfo.InvariantCulture);
+            if (sent.Contains(id))
+            {
+                return null;
+            }
+            Dictionary<string, object> reset = new Dictionary<string, object>();
+            reset["id"] = id;
+            reset["kind"] = "reset";
+            reset["boss"] = "Сброс недели";
+            reset["char"] = "Mount Sheet Sync";
+            reset["time"] = (double)Epoch.Now;
+            reset["weekEnd"] = (double)weekEnd;
+            return reset;
+        }
+
+        /// <summary>extra — запись от самой программы (автоматический «Сброс недели»), её нет в файлах игры.</summary>
+        public SyncSummary SyncAll(IList<string> files, Dictionary<string, object> extra = null)
         {
             SyncSummary sum = new SyncSummary();
             List<Dictionary<string, object>> records = ReadAllRecords(files);
+            if (extra != null)
+            {
+                records.Add(extra);
+            }
             List<Dictionary<string, object>> pending = GetSendList(records);
             if (!Settings.UseGoogle)
             {
@@ -400,7 +474,7 @@ namespace MountSheetSync
                 Dictionary<string, object> payload = Request("kills");
                 payload["client"] = "exe-" + Program.Version;
                 payload["kills"] = batch;
-                Dictionary<string, object> resp = Settings.CreateService().Call(payload);
+                Dictionary<string, object> resp = Service().Call(payload);
                 List<object> results = J.Arr(J.Get(resp, "results"));
                 Report(results, sum, mountIds);
                 long now = Epoch.Now;

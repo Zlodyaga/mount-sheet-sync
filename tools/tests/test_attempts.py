@@ -102,7 +102,7 @@ OLD = [
     {"name": "Мировые боссы", "rows": [WH, ["Нет", "MoP", "Valley of the Four Winds", "Сын Галеона", "Галеон", "Еженедельно", "", "", 0.01, "", False, True]], "grid": 12},
 ]
 up = run({"catalog": None, "sheets": OLD, "mode": "upgrade", "properties": {"layout": "2"}})
-check("upgrade to layout 4 in one batch", up["changed"] is True and up["properties"].get("layout") == "4" and len(up["applied"]) == 1, up["structure"])
+check("upgrade to layout 5 in one batch", up["changed"] is True and up["properties"].get("layout") == "5" and len(up["applied"]) == 1, up["structure"])
 batch = up["applied"][0]
 ins = [r["insertDimension"] for r in batch if "insertDimension" in r]
 ids = {s["name"]: 100 + i for i, s in enumerate(OLD)}
@@ -130,13 +130,63 @@ check("characters of the upgraded table found where they are now", sorted((t["na
 again = run({"catalog": None, "sheets": up["sheets"], "mode": "upgrade", "properties": {"layout": "3"}})
 ab = again["applied"][0] if again["applied"] else []
 check("layout 3 (a 2.8 table): formats of both columns again, cell by cell, on the three sheets, no new columns",
-      again["changed"] is True and again["properties"].get("layout") == "4" and not any("insertDimension" in r for r in ab)
+      again["changed"] is True and again["properties"].get("layout") == "5" and not any("insertDimension" in r for r in ab)
       and sorted({r["updateCells"]["range"]["sheetId"] for r in ab if "updateCells" in r}) == sorted([ids["Рейды"], ids["Подземелья"], ids["Мировые боссы"]]), again)
-again = run({"catalog": None, "sheets": up["sheets"], "mode": "upgrade", "properties": {"layout": "4"}})
-check("layout 4: nothing more to do", again["changed"] is False)
+again = run({"catalog": None, "sheets": up["sheets"], "mode": "upgrade", "properties": {"layout": "5"}})
+check("layout 5: nothing more to do", again["changed"] is False)
+# ---- layout 5: rares of the catalog move from «Мировые боссы» to their own sheet, with «Собрано?» and the counter
+moved = json.loads(json.dumps(up["sheets"]))
+w = [s for s in moved if s["name"] == "Мировые боссы"][0]
+wh = w["rows"][0]
+row = ["" for _ in wh]
+row[wh.index("Собрано?")], row[wh.index("Маунт")] = "Нет", "Дракон Четырех Ветров"
+row[wh.index("Босс / достижение / сундук")], row[wh.index("Попыток")] = "Исхак Повелитель Четырех Ветров", 4
+rows_before = len(w["rows"])
+w["rows"].append(row)
+mv = run({"catalog": None, "sheets": moved, "mode": "upgrade", "properties": {"layout": "4"}})
+sheets_after = {s["name"]: s["rows"] for s in mv["sheets"]}
+reqs = mv["applied"][0] if mv["applied"] else []
+check("layout 5: the rare's row leaves «Мировые боссы»", len(sheets_after["Мировые боссы"]) == rows_before
+      and any("deleteDimension" in r for r in reqs), mv["structure"])
+check("…a new sheet «Редкие монстры» in the same batch", any("addSheet" in r and r["addSheet"]["properties"]["title"] == "Редкие монстры" for r in reqs), mv["structure"])
+rh = sheets_after["Редкие монстры"][0]
+check("…the row keeps its attempts, the header has «Последнее убийство»",
+      sheets_after["Редкие монстры"][1][rh.index("Попыток")] == 4 and "Последнее убийство" in rh, sheets_after["Редкие монстры"][:2])
+rare_sheets = mv["sheets"]
+st = run({"catalog": None, "sheets": rare_sheets, "mode": "handle", "properties": {"layout": "5"}, "request": {"action": "status"}})["reply"]
+items = [i for c in st["chars"] for i in c["items"] if i["kind"] == "rare"]
+check("…list: a «rare» item with the daily cooldown for each character with a world column",
+      len(items) == 2 and all(i["every"] == "daily" and i["mount"] == "Дракон Четырех Ветров" for i in items), items[:1])
+check("…attempt row of kind «rare»", any(m["kind"] == "rare" and m["n"] == 4 and m["mount"] == "Дракон Четырех Ветров" for m in st.get("mounts", [])), st.get("mounts"))
+h = run({"catalog": None, "sheets": rare_sheets, "mode": "handle", "properties": {"layout": "5"}, "request": {"action": "kills", "client": "exe-test", "kills": [
+    {"id": "D-1", "time": 1793457054, "char": "Эйра", "realm": "Ревущий фьорд", "charKey": "Player-1-A", "source": "loot",
+     "boss": "Исхак Повелитель Четырех Ветров", "kind": "world"}]}})
+rr = {s["name"]: s["rows"] for s in h["sheets"]}["Редкие монстры"]
+res = h["reply"]["results"][0]
+check("…a kill from the game (kind world): marked on the rare sheet — when and who, attempt +1", res["status"] == "marked"
+      and rr[1][rh.index("Попыток")] == 5 and "Эйра" in str(rr[1][rh.index("Последнее убийство")]), (res, rr[1]))
+cEvery = rh.index("Сброс / частота")
+for text, want in [("Ежедневно", "daily"), ("Daily", "daily"), ("Täglich", "daily"), ("Quotidien", "daily"), ("", "daily"), ("что-то своё", "daily"),
+                   ("Еженедельно", "weekly"), ("Раз в неделю", "weekly"), ("Weekly", "weekly"), ("Wöchentlich", "weekly"), ("Hebdomadaire", "weekly"), ("Semanal", "weekly"),
+                   ("Каждые 8 ч", 8 * 3600), ("раз в 12 часов", 12 * 3600), ("Every 4 h", 4 * 3600), ("Alle 6h", 6 * 3600)]:
+    every_sheets = json.loads(json.dumps(rare_sheets))
+    [s for s in every_sheets if s["name"] == "Редкие монстры"][0]["rows"][1][cEvery] = text
+    got = run({"catalog": None, "sheets": every_sheets, "mode": "handle", "properties": {"layout": "5"}, "request": {"action": "status"}})["reply"]
+    its = [i for c in got["chars"] for i in c["items"] if i["kind"] == "rare"]
+    check("«Сброс / частота» = «%s» → cooldown %s" % (text, want), its and its[0]["every"] == want, its[:1])
+collected_sheets = json.loads(json.dumps(rare_sheets))
+[s for s in collected_sheets if s["name"] == "Редкие монстры"][0]["rows"][1][rh.index("Собрано?")] = "Да"
+got = run({"catalog": None, "sheets": collected_sheets, "mode": "handle", "properties": {"layout": "5"}, "request": {"action": "status"}})["reply"]
+check("a collected rare: not in the list, no attempt row", not [i for c in got["chars"] for i in c["items"] if i["kind"] == "rare"]
+      and not [m for m in got.get("mounts", []) if m["kind"] == "rare"], got.get("mounts"))
+reset_reply = run({"catalog": None, "sheets": rare_sheets, "mode": "handle", "properties": {"layout": "5"}, "request": {"action": "kills", "client": "exe-test", "kills": [
+    {"id": "R-1", "time": 1793457054, "char": "Эйра", "boss": "Сброс недели", "kind": "reset"}]}})
+rs = {s["name"]: s["rows"] for s in reset_reply["sheets"]}["Редкие монстры"]
+base = {s["name"]: s["rows"] for s in rare_sheets}["Редкие монстры"]
+check("«Сброс недели» does not touch the rare sheet", rs == base, rs[:2])
 # a 2.0/2.1 table goes 0 → 3 in one go
 up0 = run({"catalog": None, "sheets": OLD, "mode": "upgrade"})
-check("2.0/2.1 table: colours, «Фармлю» and the counter in one batch, layout 4", up0["properties"].get("layout") == "4" and len(up0["applied"]) == 1
+check("2.0/2.1 table: colours, «Фармлю» and the counter in one batch, layout 5", up0["properties"].get("layout") == "5" and len(up0["applied"]) == 1
       and any("insertDimension" in r for r in up0["applied"][0]), up0["structure"])
 
 # ---------------------------------------------------------------- kills
@@ -152,7 +202,7 @@ def kill(i, boss, kind, diff, **kw):
 
 
 def handle(sheets, kills):
-    out = run({"catalog": None, "sheets": sheets, "mode": "handle", "properties": {"layout": "4"},
+    out = run({"catalog": None, "sheets": sheets, "mode": "handle", "properties": {"layout": "5"},
                "request": {"action": "kills", "client": "exe-2.8.0", "kills": kills}})
     return out, [{"name": s["name"], "rows": s["rows"], "formulas": s["formulas"]} for s in out["sheets"]]
 
@@ -184,7 +234,7 @@ out, _ = handle(hand, [kill(10, "Сильвана Ветрокрылая", "raid
 check("a number typed by hand (40) goes on: 41", out["reply"]["results"][0].get("attempts", [{}])[0].get("n") == 41, out["reply"]["results"][0])
 
 # ---------------------------------------------------------------- status for the addon
-st = run({"catalog": None, "sheets": s3, "mode": "handle", "properties": {"layout": "4"}, "request": {"action": "status"}})["reply"]
+st = run({"catalog": None, "sheets": s3, "mode": "handle", "properties": {"layout": "5"}, "request": {"action": "status"}})["reply"]
 mounts = {m["mount"]: m for m in st.get("mounts", [])}
 check("status lists the counted rows not collected yet (Отмщение, Синий протодракон, Сын Галеона)",
       sorted(mounts) == ["Отмщение", "Синий протодракон", "Сын Галеона"], sorted(mounts))

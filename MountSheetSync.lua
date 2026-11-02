@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.2 — ядро
+Mount Sheet Sync 3.0.3 — ядро
 =============================
 Записывает убийства боссов на текущем персонаже и новые маунты, чтобы программа
 Mount Sheet Sync (MountSheetSync.exe в трее Windows) отметила их в Google-таблице маунтов:
@@ -26,7 +26,7 @@ SavedVariables. Игра сохраняет файл
 
 local ADDON_NAME, ns = ...
 
-local VERSION = "3.0.2"
+local VERSION = "3.0.3"
 local MAX_RECORDS = 400               -- храним не больше стольких записей
 local MAX_AGE = 21 * 24 * 60 * 60     -- и не старше трёх недель
 local DUPLICATE_WINDOW = 120          -- ENCOUNTER_END и BOSS_KILL об одном бое, сек
@@ -401,6 +401,30 @@ end
 local LOOT_REPEAT = 15 * 60
 local lootedGuids = {}
 
+-- Рары, которых игрок видел (цель, под курсором, табличка над головой): GUID → имя. К моменту добычи цель могла
+-- смениться, а курсор уйти — тогда имя трупа берётся отсюда.
+local RARE_CLASS = { rare = true, rareelite = true }
+local rareNames, rareCount = {}, 0
+
+local function RememberRare(unit)
+  if not UnitClassification or not unit then
+    return
+  end
+  local class = UnitClassification(unit)
+  if not class or issecretvalue(class) or not RARE_CLASS[class] then
+    return
+  end
+  local guid, name = UnitGUID(unit), UnitName(unit)
+  if not guid or issecretvalue(guid) or not name or issecretvalue(name) or rareNames[guid] then
+    return
+  end
+  if rareCount >= 100 then
+    rareNames, rareCount = {}, 0
+  end
+  rareNames[guid] = name
+  rareCount = rareCount + 1
+end
+
 local function NameOfGuid(guid)
   for _, unit in ipairs({ "target", "mouseover" }) do
     local g = UnitGUID and UnitGUID(unit)
@@ -409,10 +433,10 @@ local function NameOfGuid(guid)
       if name and not issecretvalue(name) then
         return name
       end
-      return nil
+      break
     end
   end
-  return nil
+  return rareNames[guid]
 end
 
 local function RecentlyRecorded(player, boss, stamp)
@@ -445,8 +469,10 @@ local function OnLootReady()
   end
   local player = GetPlayer()
   for guid in pairs(guids) do
-    lootedGuids[guid] = true
     local name = Clean(NameOfGuid(guid))
+    if name then
+      lootedGuids[guid] = true   -- имени нет — труп ещё не решён: может, откроют снова, выбрав его целью
+    end
     local stamp = time()
     if name and player.name and ns.RareRow(name) and not RecentlyRecorded(player, name, stamp) then
       local npc = guid:match("^Creature%-%d+%-%d+%-%d+%-%d+%-(%d+)%-") or "0"
@@ -930,6 +956,9 @@ frame:SetScript("OnEvent", function(self, event, ...)
       self:RegisterEvent("UPDATE_INSTANCE_INFO")
       self:RegisterEvent("NEW_MOUNT_ADDED")
       self:RegisterEvent("LOOT_READY")
+      self:RegisterEvent("PLAYER_TARGET_CHANGED")
+      self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
+      self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
     end
   elseif event == "PLAYER_LOGIN" then
     if ns.SetupMinimapButton then
@@ -951,6 +980,12 @@ frame:SetScript("OnEvent", function(self, event, ...)
     QueueScan()
   elseif event == "LOOT_READY" then
     SafeCall(OnLootReady)
+  elseif event == "PLAYER_TARGET_CHANGED" then
+    SafeCall(RememberRare, "target")
+  elseif event == "UPDATE_MOUSEOVER_UNIT" then
+    SafeCall(RememberRare, "mouseover")
+  elseif event == "NAME_PLATE_UNIT_ADDED" then
+    SafeCall(RememberRare, (...))
   elseif event == "NEW_MOUNT_ADDED" then
     SafeCall(OnMountAdded, ...)
   end

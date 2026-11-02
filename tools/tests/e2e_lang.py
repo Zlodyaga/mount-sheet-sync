@@ -190,7 +190,7 @@ try:
     book = [b for b in state()["spreadsheets"].values()][0]
     titles = [x["title"] for x in book["sheets"]]
     check("de: German sheet names", titles == ["Schlachtzüge", "Schlachtzüge Eira", "Schlachtzüge Mirna", "Dungeons", "Dungeons Eira",
-          "Dungeons Mirna", "Übersicht", "Weltbosse"], titles)
+          "Dungeons Mirna", "Übersicht", "Weltbosse", "Seltene Monster"], titles)
     check("de: German title and locale", book["title"] == "WoW-Reittiere" and book["locale"] == "de_DE", (book["title"], book["locale"]))
     mark = [m for m in book["devmeta"] if m["metadataKey"] == "mountSheetSync"]
     check("de: the program's marker names the language", mark and json.loads(mark[0]["metadataValue"]).get("lang") == "de", mark)
@@ -234,6 +234,8 @@ try:
     # the same boss reported by a Russian client: only the encounter ID matches
     kills.append(kill("K-2", "Mirna", "Blackhand", "Рагнарос", 1203, "Огненные Просторы", diff=14))
     kills[-1]["weekEnd"] = WEEK_END - 60   # not this reset's week: not marked again after the reset below
+    # this test presses the reset itself below: the program's automatic one for this week counts as done
+    open(os.path.join(de.data, "sent-ids-google-%s.txt" % book["id"]), "a", newline="").write("R-auto-%d\t%d\r\n" % (WEEK_END, NOW))
     kills.append({"id": "C-1", "time": NOW - 20, "char": "Eira", "realm": "Blackhand", "charKey": "Player-Eira", "source": "mount",
                   "kind": "mount", "boss": "Rache", "mount": "Rache", "mountID": 1471, "from": "Beute: Sylvanas Windläufer"})
     de.write_sv(db)
@@ -269,7 +271,7 @@ try:
     titles = [x["title"] for x in book["sheets"]]
     check("de: --add-chars: German sheets next to the others", code == 0 and titles == ["Schlachtzüge", "Schlachtzüge Eira",
           "Schlachtzüge Mirna", "Schlachtzüge Kaelia", "Dungeons", "Dungeons Eira", "Dungeons Mirna", "Dungeons Kaelia", "Übersicht",
-          "Weltbosse"], (titles, out[-800:]))
+          "Weltbosse", "Seltene Monster"], (titles, out[-800:]))
     kaelia = sheet_cells(book, "Schlachtzüge Kaelia")
     raids = sheet_cells(book, "Schlachtzüge")
     check("de: new character's sheet: German header, rows without collected mounts", kaelia[0][0] == "Diese Woche versucht?"
@@ -306,7 +308,7 @@ try:
     book = state()["spreadsheets"][new[0]]
     titles = [x["title"] for x in book["sheets"]]
     check("en: English sheet names, title, locale", titles == ["Raids", "Raids Эйра", "Dungeons", "Dungeons Эйра", "Summary",
-          "World Bosses"] and book["title"] == "WoW Mounts" and book["locale"] == "en_US", (titles, book["title"], book["locale"]))
+          "World Bosses", "Rare Monsters"] and book["title"] == "WoW Mounts" and book["locale"] == "en_US", (titles, book["title"], book["locale"]))
     raids = sheet_cells(book, "Raids")
     r = find_row(raids, 17, 1471)
     check("en: the Russian game's names are not used: English mount, boss, raid", r is not None and raids[r][3] == "Vengeance"
@@ -346,6 +348,67 @@ try:
     r = find_row(world, 4, "Галеон")
     check("ru: «Галеон» from the game ticks its row (encounter 1563)", code == 0 and r is not None and world[r].get(12) is True,
           (world.get(r), out[-800:]))
+
+    # ---------------------------------------------------------------- a German table of the previous layout: rares move
+    book = [b for b in state()["spreadsheets"].values() if any(s["title"] == "Weltbosse" for s in b["sheets"])][0]
+    world_s = [s for s in book["sheets"] if s["title"] == "Weltbosse"][0]
+    rare_s = [s for s in book["sheets"] if s["title"] == "Seltene Monster"][0]
+    wh = sheet_cells(book, "Weltbosse")[0]
+    rh = sheet_cells(book, "Seltene Monster")[0]
+    rr = sheet_cells(book, "Seltene Monster")[1]
+    w_col = {str(v): c for c, v in wh.items()}
+    r_col = {str(v): c for v, c in ((v, c) for c, v in rh.items())}
+    new_row = max(int(k.split(",")[0]) for k in world_s["cells"]) + 1
+    for title, c in r_col.items():
+        if title in w_col and rr.get(c) is not None and not str(rr.get(c)).startswith("="):
+            world_s["cells"]["%d,%d" % (new_row, w_col[title])] = {"numberValue": rr[c]} if isinstance(rr[c], (int, float)) else {"stringValue": rr[c]}
+    id_title = rh[max(rh)]   # «ID в игре» in German: the last column of the rare sheet
+    id_col = max(wh) + 1
+    world_s["cells"]["0,%d" % id_col] = {"stringValue": id_title}
+    world_s["cells"]["%d,%d" % (new_row, id_col)] = {"numberValue": rr[max(rh)]}
+    world_s["cols"] = max(world_s.get("cols", 0), id_col + 1)
+    mount_col, boss_col = 3, 4
+    # the table was made with the names of the German game client: only the ID says which mount this is
+    world_s["cells"]["%d,%d" % (new_row, mount_col)] = {"stringValue": "Drache der Vier Winde"}
+    world_s["cells"]["%d,%d" % (new_row, boss_col)] = {"stringValue": "Ishak der Vier Winde"}
+    world_s["cells"]["%d,%d" % (new_row, w_col[str(rh[9])])] = {"numberValue": 4}
+    book["sheets"].remove(rare_s)
+    for m in book["devmeta"]:
+        if m["metadataKey"] == "mountSheetSync.layout":
+            m["metadataValue"] = "4"
+    api("/__control", {"setBook": book})
+    settings_de = json.load(open(os.path.join(de.data, "settings.json"), encoding="utf-8"))
+    check("de: test table is the one the German setup uses", settings_de.get("spreadsheetId") == book["id"], settings_de.get("spreadsheetId"))
+    kills.append({"id": "D-de", "time": NOW + 5, "char": "Eira", "realm": "Blackhand", "charKey": "Player-Eira", "source": "loot",
+                  "boss": "Ishak der Vier Winde", "kind": "world", "difficultyID": 0, "weekEnd": WEEK_END})
+    de.write_sv(db)
+    n_before = len(state()["requests"])
+    code, out = de.run("--once")
+    book = state()["spreadsheets"][book["id"]]
+    titles = [s["title"] for s in book["sheets"]]
+    world = sheet_cells(book, "Weltbosse")
+    check("de upgrade: the rare leaves «Weltbosse»", code == 0 and find_row(world, mount_col, "Drache der Vier Winde") is None, out[-800:])
+    check("de upgrade: a new German sheet next to it", "Seltene Monster" in titles and titles.index("Seltene Monster") == titles.index("Weltbosse") + 1, titles)
+    moved = sheet_cells(book, "Seltene Monster") if "Seltene Monster" in titles else {0: {}, 1: {}}
+    check("de upgrade: German header", moved[0].get(6) == "Letzter Kill" and moved[0].get(0) == wh[0], moved[0])
+    check("de upgrade: the row keeps the table's names (found by ID)", moved[1].get(mount_col) == "Drache der Vier Winde" and moved[1].get(boss_col) == "Ishak der Vier Winde", moved.get(1))
+    check("de upgrade: attempts carried over, the kill of this pass counted", moved[1].get(9) == 5, moved.get(1))
+    check("de upgrade: the kill of this pass is on the sheet", "Eira" in str(moved[1].get(6)), moved.get(1))
+    check("de upgrade: no Russian on the new sheet", not any(CYR.search(str(v)) for row in moved.values() for v in row.values()),
+          [v for row in moved.values() for v in row.values() if CYR.search(str(v))])
+    meta = [m for m in book["devmeta"] if m["metadataKey"] == "mountSheetSync.layout"]
+    check("de upgrade: layout 5 stored", meta and meta[0]["metadataValue"] == "5", meta)
+    sd = de.sheet_data()
+    check("de upgrade: list with a daily cooldown read from «Täglich»", 'kind = "rare"' in sd and 'every = "daily"' in sd, sd[:300])
+    reads = [p for m, p in state()["requests"][n_before:] if m == "GET" and p.startswith("/v4/spreadsheets")]
+    check("de upgrade: the changed table is loaded again, not reused from memory (6 reads)", len(reads) == 6, reads)
+    n_before = len(state()["requests"])
+    kills.append({"id": "D-de2", "time": NOW + 6, "char": "Mirna", "realm": "Blackhand", "charKey": "Player-Mirna", "source": "loot",
+                  "boss": "Ishak der Vier Winde", "kind": "world", "difficultyID": 0, "weekEnd": WEEK_END})
+    de.write_sv(db)
+    code, out = de.run("--once")
+    reads = [p for m, p in state()["requests"][n_before:] if m == "GET" and p.startswith("/v4/spreadsheets")]
+    check("de: after the upgrade one load per pass again (3 reads)", code == 0 and len(reads) == 3, reads)
 finally:
     mock.terminate()
 

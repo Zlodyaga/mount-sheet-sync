@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.2 — «Осталось на этой неделе»
+Mount Sheet Sync 3.0.3 — «Осталось на этой неделе»
 ==================================================
 Список приходит из Google-таблицы: программа MountSheetSync.exe записывает его
 в SheetData.lua (глобальная MountSheetSyncSheet), а игра читает этот файл при
@@ -194,6 +194,7 @@ local KIND_FITS = {
   raid = { raid = true, manual = true },
   dungeon = { party = true, scenario = true, manual = true },
   world = { world = true, manual = true },
+  rare = { world = true, manual = true },   -- рар приходит из игры как мировой босс
 }
 
 -- d — DifficultyID, при которых строка засчитывается (пусто — любая сложность).
@@ -239,7 +240,7 @@ local function Fits(item, rec, recName, known)
       break
     end
   end
-  if item.kind == "world" or manual then
+  if item.kind == "world" or item.kind == "rare" or manual then
     return named   -- мировые боссы и ручная отметка: сложность не проверяется
   end
   if named and DifficultyFits(item, rec, false, known) then
@@ -316,6 +317,43 @@ notReset — на этой неделе «Сброса недели» не бы�
 ]]
 local cacheKey, cacheResult
 
+-- Есть ли в списке рары: откат зависит от времени, такой список устаревает сам — номер минуты в ключах кэшей.
+local function RareMinute(data)
+  if data._hasRare == nil then
+    data._hasRare = false
+    for _, ch in ipairs(type(data.chars) == "table" and data.chars or {}) do
+      for _, item in ipairs(type(ch) == "table" and type(ch.items) == "table" and ch.items or {}) do
+        if type(item) == "table" and item.kind == "rare" then
+          data._hasRare = true
+        end
+      end
+    end
+  end
+  return data._hasRare and math.floor(time() / 60) or 0
+end
+
+-- Сколько секунд рар ещё недоступен после убийства в момент t (0 — уже можно). every — откат из таблицы:
+-- "daily" — ежедневный сброс игры, "weekly" — недельный, число — секунды с убийства.
+local function RareWait(t, every, now, weekEnd)
+  if every == "weekly" then
+    return weekEnd and t >= weekEnd - WEEK and weekEnd - now or 0
+  end
+  local seconds = tonumber(every)
+  if seconds then
+    return math.max(0, t + seconds - now)
+  end
+  local api = C_DateAndTime and C_DateAndTime.GetSecondsUntilDailyReset
+  local ok, untilReset = false, nil
+  if api then
+    ok, untilReset = pcall(api)
+  end
+  if not ok or (issecretvalue and issecretvalue(untilReset)) or not tonumber(untilReset) then
+    return math.max(0, t + 86400 - now)   -- игра не сказала, когда сброс: сутки с убийства
+  end
+  untilReset = tonumber(untilReset)
+  return t >= now + untilReset - 86400 and untilReset or 0
+end
+
 function ns.GetRemaining()
   local data = MountSheetSyncSheet
   if type(data) ~= "table" or type(data.chars) ~= "table" then
@@ -327,7 +365,7 @@ function ns.GetRemaining()
   local kills = db and db.kills or {}
   local last = kills[#kills]
   local key = table.concat({ tostring(data), tostring(data.generated), tostring(data.resetAt), player.key or "?",
-    tostring(weekEnd), #kills, last and tostring(last.id) or "" }, "|")
+    tostring(weekEnd), #kills, last and tostring(last.id) or "", RareMinute(data) }, "|")
   if key == cacheKey then
     return cacheResult
   end
@@ -381,8 +419,26 @@ function ns.BuildRemaining(data, player, weekEnd, kills, ch)
   local known = KnownIds(data)
   local hidden = ns.NotFarmed and ns.NotFarmed(player.key, tonumber(data.generated)) or {}
   local items, left, total = {}, 0, 0
+  local now = time()
   for _, item in ipairs(type(ch.items) == "table" and ch.items or {}) do
-    if type(item) == "table" and not ns.IsNotFarmed(hidden, item) then
+    if type(item) == "table" and item.kind == "rare" then
+      -- откат свой, неделя ни при чём: последнее убийство этим персонажем из всего журнала
+      total = total + 1
+      local by, byTime
+      for _, rec in ipairs(kills) do
+        local t = tonumber(rec.time) or 0
+        if rec.kind ~= "reset" and rec.kind ~= "mount" and (not byTime or t > byTime)
+          and (rec.charKey == player.key or (not rec.charKey and rec.char == player.name))
+          and Fits(item, rec, RecordName(rec), known) then
+          by, byTime = rec, t
+        end
+      end
+      local wait = by and RareWait(byTime, item.every, now, weekEnd) or 0
+      items[#items + 1] = { item = item, done = wait > 0, by = by, again = wait > 0 and wait or nil }
+      if wait <= 0 then
+        left = left + 1
+      end
+    elseif type(item) == "table" and not ns.IsNotFarmed(hidden, item) then
       total = total + 1
       if not item.y or result.afterReset then
         local by
@@ -423,7 +479,7 @@ function ns.GetAllRemaining()
   local kills = db and db.kills or {}
   local last = kills[#kills]
   local key = table.concat({ tostring(data), tostring(data.generated), tostring(data.resetAt), player.key or "?",
-    tostring(weekEnd), #kills, last and tostring(last.id) or "" }, "|")
+    tostring(weekEnd), #kills, last and tostring(last.id) or "", RareMinute(data) }, "|")
   if key == allKey then
     return allResult
   end
@@ -537,7 +593,7 @@ end
 
 -- Попытка ли эта запись для строки: ручная отметка (без сложности) — только для мировых боссов, как в программе.
 local function IsAttempt(m, rec, recName, known)
-  if rec.kind == "manual" and m.kind ~= "world" then
+  if rec.kind == "manual" and m.kind ~= "world" and m.kind ~= "rare" then
     return false
   end
   return Fits(m, rec, recName, known)
@@ -628,7 +684,7 @@ function ns.RareRow(name)
   end
   local want = Prepare(Norm(name))
   for _, m in ipairs(data.mounts) do
-    if type(m) == "table" and m.kind == "world" and not Collected(m) then
+    if type(m) == "table" and (m.kind == "world" or m.kind == "rare") and not Collected(m) then
       for _, n in ipairs(type(m.names) == "table" and m.names or {}) do
         if MatchPrepared(want, Prepare(n), false) then
           return true
@@ -690,7 +746,16 @@ local function CharactersLeft(m, data, kills, known, weekEnd)
   local left = 0
   for _, e in ipairs(MountIndex(data)[tostring(m.kind) .. "|" .. Norm(m.mount)] or {}) do
     local done = e.item.y and not afterReset
-    if not done and weekEnd then
+    if e.item.kind == "rare" then
+      local now = time()
+      for _, rec in ipairs(kills) do
+        if RecordBy(e.ch, rec) and rec.kind ~= "reset" and rec.kind ~= "mount" and Fits(e.item, rec, RecordName(rec), known)
+          and RareWait(tonumber(rec.time) or 0, e.item.every, now, weekEnd) > 0 then
+          done = true
+          break
+        end
+      end
+    elseif not done and weekEnd then
       for _, rec in ipairs(kills) do
         if rec.weekEnd == weekEnd and RecordBy(e.ch, rec) and Fits(e.item, rec, RecordName(rec), known) then
           done = true
@@ -712,7 +777,7 @@ local hintCount = 0
 
 local function SameStamp(data, kills, weekEnd, collected)
   local last = kills[#kills]
-  return hintStamp.data == data and hintStamp.generated == data.generated and hintStamp.kills == #kills
+  return hintStamp.minute == RareMinute(data) and hintStamp.data == data and hintStamp.generated == data.generated and hintStamp.kills == #kills
     and hintStamp.last == last and hintStamp.weekEnd == weekEnd and hintStamp.collected == collected
 end
 
@@ -730,7 +795,7 @@ function ns.BossHint(bossName)
   if not SameStamp(data, kills0, weekEnd0, collected) then
     hintCache, hintCount = {}, 0
     hintStamp = { data = data, generated = data.generated, kills = #kills0, last = kills0[#kills0], weekEnd = weekEnd0,
-                  collected = collected }
+                  collected = collected, minute = RareMinute(data) }
   end
   local cached = hintCache[bossName]
   if cached then
@@ -785,7 +850,7 @@ function ns.GetAttemptsList()
   local weekEnd = ns.WeekEnd and ns.WeekEnd()
   local last = kills[#kills]
   local stamp = table.concat({ tostring(data), tostring(data.generated), #kills, last and tostring(last.id) or "",
-    tostring(weekEnd), tostring(db and type(db.collection) == "table" and db.collection.collected) }, "|")
+    tostring(weekEnd), tostring(db and type(db.collection) == "table" and db.collection.collected), RareMinute(data) }, "|")
   if stamp == attemptsStamp then
     return attemptsResult
   end
@@ -855,7 +920,7 @@ end
 function ns.KindTitle(kind)
   return L["kind_" .. kind]
 end
-ns.KIND_ORDER = { "raid", "dungeon", "world" }
+ns.KIND_ORDER = { "raid", "dungeon", "world", "rare" }
 
 -- «|» в тексте ячейки игра приняла бы за код цвета — удваиваем его.
 local function Safe(value)
@@ -872,8 +937,9 @@ function ns.FormatRemaining(entry)
   local boss = Safe(item.boss) ~= "" and Safe(item.boss) or "?"
   local diff = Safe(item.diff)
   if entry.done then
+    local tail = entry.again and string.format(L.left_again, ns.FormatDuration(entry.again)) or L.left_done
     return DONE_ICON .. "|cff8c8c8c" .. boss .. (diff ~= "" and (" (" .. diff .. ")") or "")
-      .. L.left_done .. "|r"
+      .. tail .. "|r"
   end
   local text = boss
   if diff ~= "" then

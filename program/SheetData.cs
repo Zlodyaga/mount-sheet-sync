@@ -266,12 +266,18 @@ namespace MountSheetSync
             return sb.ToString();
         }
 
+        /// <summary>Напоминание для меню, если на этой неделе в таблице ещё не было «Сброса недели».</summary>
+        public static string WeekNote(Dictionary<string, object> status, IEnumerable<Dictionary<string, object>> records, DateTime utcNow)
+        {
+            return WeekWithoutReset(status, records, utcNow) > 0 ? Tr._("На этой неделе таблицу ещё не сбрасывали") : "";
+        }
+
         /// <summary>
-        /// Напоминание, если на этой неделе в таблице ещё не было «Сброса недели». Неделю
-        /// узнаём по меткам weekEnd в журнале аддона (сброс в игре — раз в 7 суток в одно время),
+        /// Конец текущей недели, если на ней в таблице ещё не было «Сброса недели»; 0 — сброс был или неделя неизвестна.
+        /// Неделю узнаём по меткам weekEnd в журнале аддона (сброс в игре — раз в 7 суток в одно время),
         /// сброс — по resetAt из таблицы или по записи «Сброс недели» этой недели в журнале.
         /// </summary>
-        public static string WeekNote(Dictionary<string, object> status, IEnumerable<Dictionary<string, object>> records, DateTime utcNow)
+        public static long WeekWithoutReset(Dictionary<string, object> status, IEnumerable<Dictionary<string, object>> records, DateTime utcNow)
         {
             long now = (long)(utcNow - Epoch).TotalSeconds;
             long latest = 0;
@@ -282,7 +288,7 @@ namespace MountSheetSync
             }
             if (latest <= 0)
             {
-                return "";   // неделя неизвестна
+                return 0;   // неделя неизвестна
             }
             long weekEnd = latest > now ? latest : latest + Week * ((now - latest) / Week + 1);
             long weekStart = weekEnd - Week;
@@ -290,15 +296,15 @@ namespace MountSheetSync
             {
                 if (J.Str(r, "kind") == "reset" && Math.Abs(J.Long(r, "weekEnd") - weekEnd) < 3600)
                 {
-                    return "";
+                    return 0;
                 }
             }
             long resetAt = J.Long(status, "resetAt");
             if (resetAt > 0 && resetAt >= weekStart - 3600)
             {
-                return "";
+                return 0;
             }
-            return Tr._("На этой неделе «Сброс недели» не нажимали");
+            return weekEnd;
         }
 
         /// <summary>Сколько всего строк осталось — по персонажам («Эйра 4, Элтара 7»).</summary>
