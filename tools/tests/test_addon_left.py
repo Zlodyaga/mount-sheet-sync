@@ -140,8 +140,8 @@ def remaining():
 
 
 r = remaining()
-check("list for Эйра: 4 raid + 20 dungeon + 7 world left, 5 rows already «Да», nothing ticked yet",
-      r.state == "ok" and r.name == "Эйра" and r.total == 36 and r.left == 31 and len(r["items"]) == 31, (r.state, r.total, r.left))
+check("list for Эйра: 31 rows left (Девятка N/H/M counts as 3 attempts), 5 rows already «Да», nothing ticked yet",
+      r.state == "ok" and r.name == "Эйра" and r.total == 38 and r.left == 33 and len(r["items"]) == 31, (r.state, r.total, r.left))
 
 
 def kill(boss, inst_name, inst_type, diff, event="ENCOUNTER_END", eid=None):
@@ -169,7 +169,13 @@ check("Mythic kill ticks the Mythic row", done_bosses() == ["Тюремщик"],
 kill("Сильвана Ветрокрылая", "Святилище Господства", "raid", 15)
 check("Heroic kill does not tick a Mythic-only row", "Сильвана Ветрокрылая" not in done_bosses())
 kill("Девятка", "Святилище Господства", "raid", 14)
-check("Normal kill ticks a Normal/Heroic/Mythic row", "Девятка" in done_bosses())
+def nine():
+    rr = remaining()
+    return [rr["items"][i] for i in range(1, len(rr["items"]) + 1) if str(rr["items"][i].item.boss) == "Девятка"][0]
+
+
+check("3.0.3: Normal kill on a Normal/Heroic/Mythic row: not ticked, H and M are left", "Девятка" not in done_bosses() and nine().partsLeft == 2 and nine().killed["N"] is True)
+check("…the chat line names what is left", "(H, M)" in str(ns.FormatRemaining(nine())), str(ns.FormatRemaining(nine())))
 kill("Фиракк Пылающий", "Амирдрассил, Надежда Сна", "raid", 16)
 check("«Фиракк» in the sheet = «Фиракк Пылающий» in the game", "Фиракк" in done_bosses())
 kill("Король Имирон", "Вершина Утгард", "party", 24)
@@ -185,7 +191,7 @@ check("manual mark ticks the world row by name", "Ундаста" in done_bosses
 kill("Ша Злости", "Вершина Кунь-Лай", "raid", 14)
 check("a raid record never ticks a world row", "Ша Злости" not in done_bosses())
 r = remaining()
-check("7 ticked, 24 left", r.left == 24 and r.total == 36, (r.left, r.total))
+check("6 ticked, 26 attempts left", r.left == 26 and r.total == 38, (r.left, r.total))
 
 # ---- the window: tabs
 obj = L.eval('(LibStub("LibDataBroker-1.1"))').GetDataObjectByName(L.eval('(LibStub("LibDataBroker-1.1"))'), "MountSheetSync")
@@ -207,7 +213,7 @@ def under_window(x):
 
 
 tabs = [x for x in regions("Button") if x._isTab]
-check("three Blizzard top tabs above the list", [str(t._text) for t in tabs] == ["Осталось (24)", "Попытки", "Журнал"],
+check("three Blizzard top tabs above the list", [str(t._text) for t in tabs] == ["Осталось (26)", "Попытки", "Журнал"],
       [str(t._text) for t in tabs])
 check("3.0: «Осталось» selected by default", win.selectedTab == 1 and not tabs[0].IsEnabled(tabs[0]) and tabs[2].IsEnabled(tabs[2]))
 
@@ -266,7 +272,7 @@ tabs[2].MockClick(tabs[2]); g.RunTimers()
 check("journal tab shows the journal", any("Тюремщик" in t for t in shown_rows()) and not any("Осталось" in t for t in shown_rows()))
 tabs[0].MockClick(tabs[0]); g.RunTimers()
 rows = shown_rows()
-check("«Осталось» tab: info line first", (rows[0].startswith("|cff8c8c8cОсталось 24 из 36 - список из таблицы сегодня в ") or rows[0].startswith("|cff8c8c8cОсталось 24 из 36 - список из таблицы вчера в ")), rows[0])
+check("«Осталось» tab: info line first", (rows[0].startswith("|cff8c8c8cОсталось 26 из 38 - список из таблицы сегодня в ") or rows[0].startswith("|cff8c8c8cОсталось 26 из 38 - список из таблицы вчера в ")), rows[0])
 check("no reset this week known: orange reminder under it", rows[1] == "|cffff9a4dНа этой неделе таблицу ещё не сбрасывали — в ней могут быть «Да» прошлой недели.|r", rows[1])
 check("group headers in order", [t for t in rows if t.startswith("|cffffd200")] == ["|cffffd200Рейды|r", "|cffffd200Подземелья|r", "|cffffd200Мировые боссы|r"])
 check("3.0.3: row in columns: boss, short difficulty, mount, place, attempts, chance",
@@ -289,7 +295,7 @@ check("3.0.3: «Все персонажи» — first row on the left, not selec
 check("…with the total of everybody", all_row[1] == str(sum(allr[i].r.left for i in range(1, len(allr) + 1))), all_row)
 check("3.0: characters from the sheet on the left, the current one first and selected",
       chars and chars[0][0] == "Эйра" and chars[0][2] and not any(c[2] for c in chars[1:]), chars)
-check("…what is left next to each name", chars[0][1] == "24" and len(chars) == len(allr), chars)
+check("…what is left next to each name", chars[0][1] == "26" and len(chars) == len(allr), chars)
 check("…every character of the sheet", "Элтара" in [c[0] for c in chars] and any(c[0].startswith("Каэлия") for c in chars), chars)
 lefts = [allr[i].r.left for i in range(2, len(allr) + 1)]
 check("…then the ones with more left first", lefts == sorted(lefts, reverse=True), lefts)
@@ -300,10 +306,10 @@ check("reopening the window with nothing changed rebuilds no rows", box._inits =
 eltara = [f for f in pool(CHAR) if plain(f.name._text) == "Элтара"][0]
 eltara.MockClick(eltara); g.RunTimers()
 rows = shown_rows()
-check("click on Элтара: her «Осталось» (12 of 16; Эйра's kills do not count)", rows[0].startswith("|cff8c8c8cОсталось 12 из 16"), rows[:1])
+check("click on Элтара: her «Осталось» (14 of 18; Эйра's kills do not count)", rows[0].startswith("|cff8c8c8cОсталось 14 из 18"), rows[:1])
 check("…she is selected on the left", [c[0] for c in char_rows() if c[2]] == ["Элтара"], char_rows())
 check("…no «не фармлю» menu on another character's rows", not [f for f in pool(ROW) if f.elem.entry is not None])
-check("…the tab title counts the selected character", tabs[0]._text == "Осталось (12)", tabs[0]._text)
+check("…the tab title counts the selected character", tabs[0]._text == "Осталось (14)", tabs[0]._text)
 check("…her name in her class colour: the sheet's key is just «элтара», found among this account's characters",
       str(eltara.name._text) == "|cff3fc7ebЭлтара|r", str(eltara.name._text))
 L.execute("MSS_NS = ...", ns)
@@ -320,7 +326,7 @@ end
 """)
 L.execute("MSS_NS.OnChange()")   # what a new record does in the game: the open window refreshes
 g.RunTimers()
-check("…a kill Элтара made on this account (her GUID) ticks her own list", shown_rows()[0].startswith("|cff8c8c8cОсталось 11 из 16"),
+check("…a kill Элтара made on this account (her GUID) ticks her own list", shown_rows()[0].startswith("|cff8c8c8cОсталось 13 из 18"),
       shown_rows()[:1])
 L.execute("table.remove(MountSheetSyncDB.kills)")
 g.RunTimers()
@@ -332,8 +338,8 @@ check("«Все персонажи»: head line with rows and characters",
 check("…grouped by kind", [t for t in rows if t.startswith("|cffffd200")] == ["|cffffd200Рейды|r", "|cffffd200Подземелья|r", "|cffffd200Мировые боссы|r"],
       [t for t in rows if t.startswith("|cffffd200")])
 check("…selected on the left, the tab counts everybody", char_rows()[0][2] and tabs[0]._text == "Осталось (%s)" % char_rows()[0][1], tabs[0]._text)
-first = summ[1]
-gr = [f for f in pool(ROW) if f.elem.names is not None][0]
+first = next(summ[i] for i in range(1, len(summ) + 1) if not summ[i].item.sep)
+gr = [f for f in pool(ROW) if f.elem.names is not None and str(f.elem["values"]["boss"]) == str(first.item.boss)][0]
 check("…a row of the sheet with the number of characters left",
       plain(row_text(gr)).startswith(str(first.item.boss)) and plain(row_text(gr)).endswith(" | %d" % len(first.names)), row_text(gr))
 alive = [gr.dots[i]._w == 10 for i in range(1, len(allr) + 1)]
@@ -413,7 +419,7 @@ L.execute("MountSheetSyncSheet = GRID_OLD")
 L.execute("MSS_NS.OnChange()"); g.RunTimers()
 eira = [f for f in pool(CHAR) if plain(f.name._text) == "Эйра"][0]
 eira.MockClick(eira); g.RunTimers()
-check("click on a character from another tab opens his «Осталось»", win.selectedTab == 1 and shown_rows()[0].startswith("|cff8c8c8cОсталось 24 из 36"))
+check("click on a character from another tab opens his «Осталось»", win.selectedTab == 1 and shown_rows()[0].startswith("|cff8c8c8cОсталось 26 из 38"))
 tabs[1].MockClick(tabs[1]); g.RunTimers()
 att = ns.GetAttemptsList()
 empty = [x for x in regions("FontString") if x._font == "MSSFontDim" and under_window(x)][0]
@@ -535,28 +541,28 @@ sf.Hide(sf)
 tabs[0].MockClick(tabs[0]); g.RunTimers()
 
 kill("Кто-то совсем другой", "Святилище Господства", "raid", 16)
-check("odd boss name does not tick anything new", remaining().left == 24, remaining().left)
+check("odd boss name does not tick anything new", remaining().left == 26, remaining().left)
 kill("Сильвана Ветрокрылая", "Святилище Господства", "raid", 16)
-check("new kill refreshes the open tab and its title", tabs[0]._text == "Осталось (23)" and any("Сильвана" in t and "убит" in t for t in shown_rows()), tabs[0]._text)
+check("new kill refreshes the open tab and its title", tabs[0]._text == "Осталось (25)" and any("Сильвана" in t and "убит" in t for t in shown_rows()), tabs[0]._text)
 
 # ---- broker tooltip, slash command
 g.GameTooltip.lines = L.table()
 obj.OnTooltipShow(g.GameTooltip)
 tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
-check("tooltip: what is left this week", "Осталось на этой неделе: 23 из 36" in tt, tt)
+check("tooltip: what is left this week", "Осталось на этой неделе: 25 из 38" in tt, tt)
 g.SlashCmdList["MOUNTSHEETSYNC"]("left")
 lines = chat_all().split("\n")
-start = max(i for i, t in enumerate(lines) if "Осталось на этой неделе (Эйра): 23 из 36" in t)
+start = max(i for i, t in enumerate(lines) if "Осталось на этой неделе (Эйра): 25 из 38" in t)
 printed = [t for t in lines[start + 1:] if t.startswith("   ")]
-check("/mss left prints the summary and the 23 rows left (ticked ones skipped)",
-      len(printed) == 23 and not any("Тюремщик" in t or "Сильвана" in t for t in printed), (len(printed), printed[:3]))
+check("/mss left prints the summary and the 24 rows left, Девятка among them (ticked ones skipped)",
+      len(printed) == 24 and not any("Тюремщик" in t or "Сильвана" in t for t in printed), (len(printed), printed[:3]))
 g.SlashCmdList["MOUNTSHEETSYNC"]("help")
 check("/mss help lists /mss left", "/mss left" in chat_all())
 
 # ---- another character: only his rows and his kills
 g.MOCK.name = "Элтара"; g.MOCK.guid = "Player-1602-0E1715"
 r = remaining()
-check("Элтара: 5 raid + 7 world left (+4 «Да»), Эйра' kills do not count", r.state == "ok" and r.name == "Элтара" and r.total == 16 and r.left == 12, (r.state, r.total, r.left))
+check("Элтара: 5 raid + 7 world left (+4 «Да»), Эйра' kills do not count", r.state == "ok" and r.name == "Элтара" and r.total == 18 and r.left == 14, (r.state, r.total, r.left))
 g.MOCK.name = "Каэлия"; g.MOCK.guid = "Player-1602-0C0FFEE"
 r = remaining()
 check("«Каэлия» finds «Каэлия (Лок)»", r.state == "ok" and r.name == "Каэлия")
@@ -590,14 +596,14 @@ check("kill of a row that is already «Да» in the sheet: not listed, nothing 
 L.execute("Advance(60)")
 ns.ResetWeek()
 r = remaining()
-check("after «Сброс недели»: «Да» rows are back in the list at once", r.afterReset is True and not r.notReset and r.total == 36
+check("after «Сброс недели»: «Да» rows are back in the list at once", r.afterReset is True and not r.notReset and r.total == 38
       and len(r["items"]) == 36 and r.left == before.left + 4, (r.afterReset, r.total, len(r["items"]), r.left, before.left))
 check("…a kill of this week before the reset stays ticked (the program re-marks it)", "Ультраксион" in done_bosses()
       and "Тюремщик" in done_bosses(), done_bosses())
 win.Hide(win); win.Show(win)
 rows = shown_rows()
 check("…the window says the week was reset", rows[1] == "|cff8cff8cНеделя сброшена — в списке снова все строки, убитые отмечены галочкой.|r"
-      and rows[0].startswith("|cff8c8c8cОсталось %d из 36" % (before.left + 4)), rows[:2])
+      and rows[0].startswith("|cff8c8c8cОсталось %d из 38" % (before.left + 4)), rows[:2])
 check("…and the tab title counts them", tabs[0]._text == "Осталось (%d)" % (before.left + 4), tabs[0]._text)
 other = L.table_from({"id": "R-other", "kind": "reset", "char": "Элтара", "charKey": "Player-1602-0E1715", "boss": "Сброс недели",
                       "time": NOW - 30 * 86400, "weekEnd": NOW - 23 * 86400})
@@ -689,7 +695,7 @@ left0 = remaining().left
 first = None
 for i in range(1, len(remaining()["items"]) + 1):
     it = remaining()["items"][i]
-    if not it.done and str(it.item.kind) in ("raid", "dungeon"):
+    if not it.done and str(it.item.kind) in ("raid", "dungeon") and not it.item.sep:
         first = it.item
         break
 boss0, place0 = str(first.boss), str(first.place)
@@ -732,7 +738,7 @@ check("«весь …» hides every row of that dungeon", not any(str(r["items"]
 hidden = g.MountSheetSyncDB.notFarmed["Player-1602-0ABCDEF1"]
 check("pending «не фармлю» kept per character until the sheet's list is newer", len(hidden) == 2)
 g.MOCK.name = "Элтара"; g.MOCK.guid = "Player-1602-0E1715"
-check("another character is not affected", remaining().total == 16)
+check("another character is not affected", remaining().total == 18)
 g.MOCK.name = "Эйра"; g.MOCK.guid = "Player-1602-0ABCDEF1"
 saved_generated = g.MountSheetSyncSheet.generated
 g.MountSheetSyncSheet.generated = NOW + 3600   # the program sent it and brought a newer list
