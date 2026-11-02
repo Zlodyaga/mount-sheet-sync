@@ -126,7 +126,7 @@ MOCK.world = { { "Ша Злости", 1, %d } }
 g.Fire("UPDATE_INSTANCE_INFO"); g.Fire("UPDATE_INSTANCE_INFO")
 check("scan is debounced", len(g.TIMERS) == 1)
 g.RunTimers()
-lk = [k for k in kills() if k.get("source") == "lockout"]
+lk = [k for k in kills() if str(k["id"]).startswith(("L-", "W-"))]
 check("lockout scan: 2 raid + 1 world boss, extended skipped", len(lk) == 3 and sorted(k["kind"] for k in lk) == ["raid", "raid", "world"])
 n = len(kills()); g.Fire("UPDATE_INSTANCE_INFO"); g.RunTimers()
 check("re-scan adds nothing", len(kills()) == n)

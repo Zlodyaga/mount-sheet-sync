@@ -243,7 +243,6 @@ function ns.CollectionAdd(mountID, name)
   c.names[#c.names + 1] = name
   c.collected = #c.ids
   MarkGot(c.mounts, mountID)
-  MarkGot(c.drops, mountID)   -- данные аддона 2.0.0
   c.updated = time()
   return true
 end

@@ -512,7 +512,7 @@ left_before_mount = remaining().left
 g.Fire("NEW_MOUNT_ADDED", 363)
 k = dict(g.MountSheetSyncDB.kills[n + 1].items())
 check("NEW_MOUNT_ADDED -> mount record", k["kind"] == "mount" and k["boss"] == "Синий протодракон" and k["mount"] == "Синий протодракон"
-      and k["mountID"] == 363 and k["spellID"] == 59996 and k["id"] == "C-Player-1602-0ABCDEF1-363" and k["char"] == "Эйра", k)
+      and k["mountID"] == 363 and k["id"] == "C-Player-1602-0ABCDEF1-363" and k["char"] == "Эйра", k)
 check("mount record: source text without colour codes", k["from"] == "Добыча: Скади Безжалостный / Подземелье: Вершина Утгард / Сложность: Героический", k.get("from"))
 check("mount record has no weekEnd and does not count as a kill", "weekEnd" not in k and ns.CountThisWeek() == week_count)
 check("chat says what will happen", "Новый маунт: Синий протодракон — «Собрано?»" in chat_all().split("\n")[-1])

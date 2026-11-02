@@ -123,11 +123,6 @@ local function MatchPrepared(a, b, loose)
   return #a.words >= minWords and Subset(a.words, b.set)
 end
 
-local function NameMatches(a, b, loose)
-  return MatchPrepared(Prepare(a), Prepare(b), loose)
-end
-ns.NameMatches = NameMatches
-
 local function Chars(s)
   local list = {}
   for ch in s:gmatch(UTF8_CHAR) do
@@ -390,7 +385,7 @@ end
 
 -- ch — строка персонажа из таблицы, если она уже известна (список всех персонажей), иначе ищется по player.
 function ns.BuildRemaining(data, player, weekEnd, kills, ch)
-  local result = { generated = tonumber(data.generated), spreadsheet = data.spreadsheet }
+  local result = { generated = tonumber(data.generated) }
   local resetT = ResetTime(kills, weekEnd)
   result.afterReset = resetT ~= nil and (not result.generated or result.generated < resetT)
   if weekEnd and not resetT then

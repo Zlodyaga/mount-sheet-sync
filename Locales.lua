@@ -1017,15 +1017,4 @@ function ns.ParseLanguage(text)
   return aliases[t]
 end
 
--- Quotes around a name in the current language: «…» or “…”.
-function ns.Q(text)
-  return string.format(current.quote or T.enUS.quote, text or "")
-end
-T.enUS.quote = "“%s”"
-T.ruRU.quote = "«%s»"
-T.deDE.quote = "„%s“"
-T.frFR.quote = "« %s »"
-T.esES.quote = "«%s»"
-T.ptBR.quote = "“%s”"
-
 ns.TRANSLATIONS = T   -- for tests: every language must have every key

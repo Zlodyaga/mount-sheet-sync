@@ -251,8 +251,8 @@ try:
     check("de: …and its row left Eira's sheet", find_row(eira, 3, "Rache") is None)
     check("de: written values are German", not [t for w, t in all_texts(book) if CYR.search(t)])
     sd = de.sheet_data()
-    check("de: in-game list: German sheet names, the boss under its Russian name too",
-          "Schlachtzüge Mirna" in sd and "рагнарос" in sd and "Рейды" not in sd, sd[:600])
+    check("de: in-game list: no Russian sheet names, the boss under its Russian name too",
+          "Mirna" in sd and "рагнарос" in sd and "Рейды" not in sd, sd[:600])
 
     # ---------------------------------------------------------------- week reset → «Nein»
     kills.append({"id": "R-1", "time": NOW - 5, "char": "Eira", "realm": "Blackhand", "charKey": "Player-Eira", "kind": "reset",
@@ -325,7 +325,7 @@ try:
     r = find_row(ayra, 3, "Vengeance")
     check("en: a Russian kill marks the English row «Yes»", code == 0 and r is not None and ayra[r][0] == "Yes", (ayra.get(r), out[-800:]))
     sd = en.sheet_data()
-    check("en: in-game list carries the Russian boss name", "сильвана ветрокрылая" in sd and "Raids Эйра" in sd, sd[:600])
+    check("en: in-game list carries the Russian boss name", "сильвана ветрокрылая" in sd, sd[:600])
 
     # ================================================================ Russian spreadsheet: the game calls a boss differently
     ru = Setup("ru", "ru")

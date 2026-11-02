@@ -8,6 +8,7 @@ The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [C
   example when you start the game. The “Weekly reset” button in the addon still works.
 - Fewer requests to Google: one pass (send the kills, check the collection, update the list) loads the spreadsheet once
   instead of once per step, so sending kills with the list takes 3 reads instead of 6.
+- A smaller list for the addon: SheetData.lua no longer carries the sheet and row of every line (about 15% of the file).
 - Rare monsters have their own sheet: Ishak of the Four Winds moves from “World Bosses” to “Rare Monsters” by itself, with
   “Collected?” and “Attempts”; the sheet shows the last kill. A rare has its own cooldown from “Reset / frequency” (Ishak —
   until the daily reset), not the weekly reset. Needs the addon 3.0.3.
