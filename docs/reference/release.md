@@ -32,6 +32,8 @@
    аддон покажет серую строку «нужен аддон новее» / «программа устарела», программа — строку в меню и одно
    уведомление «обновите аддон в CurseForge».
 
+Ветка `main` защищена правилом GitHub (ruleset `main`, Settings > Rules): её нельзя удалить и нельзя перезаписать force push. Обычный push и слияние PR работают как раньше.
+
 `.github/workflows/release.yml`: **plan** (`release_plan.sh`) → **exe** (Windows: суффикс в Prerelease,
 `program\build.cmd`, подпись SignPath — включится сама, когда будут переменные `SIGNPATH_ORGANIZATION_ID`,
 `SIGNPATH_PROJECT_SLUG` и секрет `SIGNPATH_API_TOKEN`) → **archive** (`tools/package.sh`: README.txt, 1-addon с
