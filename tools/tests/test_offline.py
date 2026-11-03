@@ -61,7 +61,7 @@ def new_game(program_src=None, lang=None):
 def mark(seen, sheet=True):
     # the same text ProgramMark.Text writes (C#)
     return ("-- Mount Sheet Sync: MountSheetSync.exe rewrites this file every minute while it runs,\r\n"
-            "MountSheetSyncProgram = { seen = %d, sheet = %s, version = \"2.9.1\" }\r\n" % (seen, "true" if sheet else "false"))
+            "MountSheetSyncProgram = { seen = %d, sheet = %s, version = \"2.9.2\" }\r\n" % (seen, "true" if sheet else "false"))
 
 
 def window_bits(L, g):
@@ -72,7 +72,7 @@ def window_bits(L, g):
     obj.OnClick(g.UIParent, "LeftButton")
     win = g.MountSheetSyncFrame
     regs = [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
-    small = [r for r in regs if r._type == "FontString" and r._font == "GameFontDisableSmall" and r._parent is not None
+    small = [r for r in regs if r._type == "FontString" and r._font == "MSSFontSmall" and r._parent is not None
              and r._parent._uid == win._uid]
     hint = small[0] if small else None
     hovers = [r for r in regs if r._type == "Frame" and r._parent is not None and r._parent._uid == win._uid
@@ -164,7 +164,7 @@ L, g, ns, _ = new_game(prog(NOW - 20, "2.7.0"))
 check("program 2.7.0 (older than the addon needs) → oldprogram", ns.ProgramState() == "oldprogram")
 broker, hint, tip = window_bits(L, g)
 check("…«Программа … устарела — обновите её»", hint is not None and "устарела" in hint, hint)
-L, g, ns, _ = new_game(prog(NOW - 20, "2.9.1", addon="2.8.0"))
+L, g, ns, _ = new_game(prog(NOW - 20, "2.9.2", addon="2.8.0"))
 check("same versions → online", ns.ProgramState() == "online")
 vl = ns.VersionLess
 check("version order like the program: 2.9 < 2.10, 2.9.0-alpha1 < alpha2 < beta1 < 2.9.0, 2.9.0 = 2.9",

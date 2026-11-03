@@ -14,7 +14,7 @@ WoW (аддон) ──SavedVariables\MountSheetSync.lua──► програм
   (`marked`, `already`, `stale`, `not_found`, `wrong_difficulty`, `no_sheet`, `collected`, `planned`, `reset`) и
   попытки.
 - **Таблица → игра.** `status` → `SheetData.lua` (`MountSheetSyncSheet`: `generated`, `version`, `spreadsheet`,
-  `known` (ID сложностей), `resetAt`, `chars[{name, keys, items[]}]`, `mounts[]`; у строк `items`/`mounts` с 2.9.1 —
+  `known` (ID сложностей), `resetAt`, `chars[{name, keys, items[]}]` (у строки с раздельными сохранениями — `sep`, убитые сложности — `k`: «N,M»), `mounts[]` (`id` — из скрытой колонки листа, иначе из каталога: на «Мировых боссах» колонки нет); у строк `items`/`mounts` с 2.9.1 —
   `e` = номера боёв, `Encounters.IdsFor`: аддон 3.0.2 узнаёт убийство по `encounterID`, даже если имя другое) в папку аддона каждой найденной
   игры (`Interface\AddOns\MountSheetSync`). Игра читает его при входе и `/reload`; убитое после `generated` аддон
   отмечает сам по своему журналу.

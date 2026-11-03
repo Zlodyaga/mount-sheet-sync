@@ -4,6 +4,7 @@ turned into SheetData.lua like SheetData.Build does.
 
   python3 test_attempts_addon.py      (needs tools/cs_host/CollectionHost.exe)
 """
+import re
 import json, os, subprocess, tempfile, time
 from lupa import lua51
 import paths
@@ -64,7 +65,7 @@ def to_lua(v):
 
 
 SHEET_SRC = "MountSheetSyncSheet = " + to_lua(status) + "\n"
-PROGRAM_SRC = 'MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.9.1" }\n' % (NOW - 30)
+PROGRAM_SRC = 'MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.9.2" }\n' % (NOW - 30)
 
 
 def new_game(quiet=False):
@@ -384,21 +385,27 @@ out = kill(L3, g3, "Сильвана Ветрокрылая", 16, 2435)
 check("English: «… could drop: attempt 37 · chance over all attempts 31%»", any("could drop: attempt 37" in c and "31%" in c for c in out), out)
 
 # ---- 3.0: «Попытки» tab in the window
+def row_text(f):
+    """A plain line as it is; a table row: its cells joined with « | »."""
+    if f.elem.cols is None:
+        return str(f.text._text)
+    return " | ".join(str(f.cells[i]._text) for i in range(1, len(f.cells) + 1) if f.cells[i]._shown)
+
+
 obj = L.eval('(LibStub("LibDataBroker-1.1"))').GetDataObjectByName(L.eval('(LibStub("LibDataBroker-1.1"))'), "MountSheetSync")
 obj.OnClick(g.UIParent, "LeftButton")
 regs = [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
-tab = [r for r in regs if r._type == "Button" and r._template == "PanelTopTabButtonTemplate" and str(r._text) == "Попытки"][0]
+tab = [r for r in regs if r._type == "Button" and r._isTab and str(r._text) == "Попытки"][0]
 tab.MockClick(tab)
 g.RunTimers()
 regs = [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
-box = [r for r in regs if r._type == "Frame" and r._template == "WowScrollBoxList" and r._view._extent == 16][0]
+box = [r for r in regs if r._type == "Frame" and r._template == "WowScrollBoxList" and r._view._extent == 22][0]
 rows = [box._pool[i] for i in range(1, len(box._pool) + 1) if box._pool[i]._shown]
-texts = [str(f.text._text) for f in rows]
+texts = [row_text(f) for f in rows]
 att = ns.GetAttemptsList()
-check("«Попытки»: head line, then uncollected mounts, most expected drops first",
-      texts[0] == "|cff8c8c8cНесобранные маунты со случайным шансом: %d - выше — больше ожидаемых выпадений|r" % len(att)
-      and texts[1].startswith("   |cffc9a0ffОтмщение|r") and texts[1].endswith("попыток: 38, шанс 32%") and len(texts) == len(att) + 1, texts)
-rows[1]._scripts.OnEnter(rows[1])
+check("«Попытки»: uncollected mounts in columns, most expected drops first",
+      "Отмщение" in texts[0] and " | 38 | " in re.sub(r"\|c[0-9a-fA-F]{8}|\|r", "", texts[0]) and "32%" in texts[0] and len(texts) == len(att), texts)
+rows[0]._scripts.OnEnter(rows[0])
 tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
 check("…hover: how many characters can still try this week", tt[0] == "Отмщение" and any("ещё не убит у персонажей: 1" in t for t in tt), tt)
 check("…the same numbers as the boss tooltip (one count for both)", att[1].n == 38 and att[1].left == 1)
@@ -446,22 +453,22 @@ def window6():
 
 
 def tab6(title):
-    t = [r for r in window6() if r._type == "Button" and r._template == "PanelTopTabButtonTemplate" and str(r._text).startswith(title)][0]
+    t = [r for r in window6() if r._type == "Button" and r._isTab and str(r._text).startswith(title)][0]
     t.MockClick(t)
     g6.RunTimers()
 
 
 def rows6():
-    box = [r for r in window6() if r._type == "Frame" and r._template == "WowScrollBoxList" and r._view._extent == 16][0]
+    box = [r for r in window6() if r._type == "Frame" and r._template == "WowScrollBoxList" and r._view._extent == 22][0]
     return [box._pool[i] for i in range(1, len(box._pool) + 1) if box._pool[i]._shown]
 
 
 g6.SlashCmdList["MOUNTSHEETSYNC"]("")
 tab6("Осталось")
-texts = [str(f.text._text) for f in rows6()]
+texts = [row_text(f) for f in rows6()]
 check("window: «Редкие монстры» is its own group, the last one", [t for t in texts if t.startswith("|cffffd200")][-1] == "|cffffd200Редкие монстры|r", texts)
-rare_rows = [f for f in rows6() if "Исхак" in str(f.text._text)]
-check("…with the rare in it, once", len(rare_rows) == 1 and texts.index(str(rare_rows[0].text._text)) > texts.index("|cffffd200Редкие монстры|r"), texts)
+rare_rows = [f for f in rows6() if "Исхак" in row_text(f)]
+check("…with the rare in it, once", len(rare_rows) == 1 and texts.index(row_text(rare_rows[0])) > texts.index("|cffffd200Редкие монстры|r"), texts)
 check("…no «не фармлю» menu on a rare", rare_rows[0].elem.entry is None)
 out = loot(L6, g6, "Creature-0-3767-1-41-157134-00006A2B3C", "Исхак Повелитель Четырех Ветров")
 e, r = entry(ns6)
@@ -471,11 +478,16 @@ text = str(ns6.FormatRemaining(e))
 check("…the row says when it can be tried again", "снова через 5 ч 0 мин" in text and "ждёт таблицы" not in text, text)
 check("boss hint: 1 character left now", ns6.BossHint(ISHAK_RU)[1].left == 1, ns6.BossHint(ISHAK_RU)[1].left)
 g6.RunTimers()
-check("window: the row shows the wait", any("снова через" in str(f.text._text) and "Исхак" in str(f.text._text) for f in rows6()), [str(f.text._text) for f in rows6()][-3:])
-tab6("Все персонажи")
-texts = [str(f.text._text) for f in rows6()]
-i = next((k for k, t in enumerate(texts) if "Исхак" in t), None)
-check("«Все персонажи»: the rare in its own group, only for who can still try", "|cffffd200Редкие монстры|r" in texts and i is not None and "Мирна" in texts[i + 1] and "Эйра" not in texts[i + 1], texts[-4:])
+check("window: the row shows the wait", any("снова через" in row_text(f) and "Исхак" in row_text(f) for f in rows6()), [row_text(f) for f in rows6()][-3:])
+side6 = [r for r in window6() if r._type == "Frame" and r._template == "WowScrollBoxList" and r._view._extent == 24][0]
+side6._pool[1].MockClick(side6._pool[1])   # «Все персонажи»
+g6.RunTimers()
+texts = [row_text(f) for f in rows6()]
+rare_grid = [f for f in rows6() if "Исхак" in row_text(f)]
+check("«Все персонажи»: the rare in its own group, only for who can still try", "|cffffd200Редкие монстры|r" in texts and len(rare_grid) == 1
+      and rare_grid[0].elem.names["Мирна"] is True and rare_grid[0].elem.names["Эйра"] is None, texts)
+side6._pool[2].MockClick(side6._pool[2])   # back to this character
+g6.RunTimers()
 tab6("Осталось")
 L6.execute("MOCK.now = MOCK.now + 6 * 3600; MOCK.daily = 23 * 3600")
 e, r = entry(ns6)
@@ -483,7 +495,7 @@ check("after the daily reset: left again, without any «Сброс недели�
 check("boss hint: both characters again, no new list or kill needed", ns6.BossHint(ISHAK_RU)[1].left == 2, ns6.BossHint(ISHAK_RU)[1].left)
 g6.MountSheetSyncFrame.Hide(g6.MountSheetSyncFrame)
 g6.MountSheetSyncFrame.Show(g6.MountSheetSyncFrame)
-check("window: reopened, the wait is gone", not any("снова через" in str(f.text._text) for f in rows6()), [str(f.text._text) for f in rows6()][-3:])
+check("window: reopened, the wait is gone", not any("снова через" in row_text(f) for f in rows6()), [row_text(f) for f in rows6()][-3:])
 L6.execute("MOCK.now = MOCK.now + 3600")
 out = loot(L6, g6, "Creature-0-3767-1-41-157134-00007A2B3C", "Исхак Повелитель Четырех Ветров")
 L6.execute('RARE_ITEM.every = 8 * 3600; MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1; MOCK.now = MOCK.now + 3600')
@@ -511,7 +523,7 @@ boxes = [r for r in regs + [g.ALL_REGIONS[i] for i in range(len(regs) + 1, len(g
 text = str(boxes[0]._text) if boxes else ""
 check("report window: the text selected for Ctrl+C", rep is not None and rep._shown and boxes and boxes[0]._highlighted, text)
 check("…versions, program state and counts", "Mount Sheet Sync bug report" in text and "Addon: 3.0.3" in text and "Game: 12.1.5 (build 65000" in text
-      and "Program: online (version 2.9.1, sheet connected" in text and "attempt rows 3" in text and "Journal: 5 records" in text, text)
+      and "Program: online (version 2.9.2, sheet connected" in text and "attempt rows 3" in text and "Journal: 5 records" in text, text)
 check("…no character names, realm or spreadsheet title", "Эйра" not in text and "Ревущий" not in text and "Мирна" not in text, text)
 boxes[0]._scripts.OnTextChanged(boxes[0], True)
 check("…read-only: typing restores the text", str(boxes[0]._text) == text)

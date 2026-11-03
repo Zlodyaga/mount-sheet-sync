@@ -173,7 +173,7 @@ check("right click does nothing", g.MountSheetSyncFrame is None)
 obj.OnClick(g.UIParent, "LeftButton")
 win = g.MountSheetSyncFrame
 check("left click opens the window", win is not None and win._shown)
-check("window uses Blizzard DefaultPanelTemplate + title", win._template == "DefaultPanelTemplate" and win._title == "Mount Sheet Sync")
+check("3.0.3: the window has its own style, with the title", win._template is None and win.titleText._text == "Mount Sheet Sync")
 check("Esc closes it (UISpecialFrames)", "MountSheetSyncFrame" in [g.UISpecialFrames[i] for i in range(1, len(g.UISpecialFrames) + 1)])
 obj.OnClick(g.UIParent, "LeftButton")
 check("second left click closes", not win._shown)
@@ -216,8 +216,8 @@ def button(text):
 
 
 def list_rows():
-    """Texts of the main list (ScrollBox with 16 px rows), top to bottom."""
-    box = [r for r in regions("Frame") if r._template == "WowScrollBoxList" and under_window(r) and r._view._extent == 16][0]
+    """Texts of the main list (ScrollBox with 22 px rows), top to bottom."""
+    box = [r for r in regions("Frame") if r._template == "WowScrollBoxList" and under_window(r) and r._view._extent == 22][0]
     return [str(box._pool[i].text._text) for i in range(1, len(box._pool) + 1) if box._pool[i]._shown]
 
 
@@ -235,7 +235,7 @@ check("header: character and realm", "Эйра — Ревущий фьорд" in
 check("header: this week count and time to reset", any(t.startswith("Записей за эту неделю: ") and "до сброса недели: 2 д 23 ч" in t for t in texts))
 check("3.0: the window opens on «Осталось»", win.selectedTab == 1 and g.MountSheetSyncDB.tab is None)
 click(button("Журнал"))
-check("journal tab remembered", win.selectedTab == 4 and g.MountSheetSyncDB.tab == "log")
+check("journal tab remembered", win.selectedTab == 3 and g.MountSheetSyncDB.tab == "log")
 rows = list_rows()
 check("one row per record", len(rows) == len(kills()))
 check("newest record first", "Злой босс x Конец" in rows[0])
@@ -264,8 +264,8 @@ check("«Найти в сохранениях» requests raid info", g.REQ == re
 g.Fire("UPDATE_INSTANCE_INFO"); g.RunTimers()
 check("…and reports the result", "сохранениях" in chat()[0] or "сохранений" in chat()[0])
 
-check("3.0: no checkboxes and no «Очистить журнал» in the window (rare things live in the settings)",
-      not [r for r in regions("CheckButton") if under_window(r)]
+check("3.0.3: one checkbox («Скрыть без попыток») and no «Очистить журнал» in the window (rare things live in the settings)",
+      len([r for r in regions("CheckButton") if under_window(r)]) == 1
       and not [r for r in regions("Button") if r._text == "Очистить журнал" and under_window(r)])
 gear = [r for r in regions("Button") if under_window(r) and r._highlight == "Interface\\Buttons\\ButtonHilight-Square"]
 check("one gear button in the window", len(gear) == 1)

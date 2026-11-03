@@ -8,7 +8,7 @@ xdotool, stalonetray, imagemagick. В CI — то же (`.github/workflows/ci.ym
 
 | Тест | Что проверяет |
 | --- | --- |
-| `test_addon2.py`, `test_addon_left.py`, `test_minimap.py`, `test_collection.py`, `test_locale.py` | аддон в имитации WoW (`wow_mock.lua`, lupa): окно (персонажи слева, вкладки «Осталось» / «Все персонажи» / «Попытки» / «Журнал», шестерёнка → настройки), «Осталось» любого персонажа, коллекция и статистика убийств, все ключи во всех языках и без повторов в `Locales.lua`; скорость с 20+ персонажами и что повторное открытие окна ничего не перестраивает |
+| `test_addon2.py`, `test_addon_left.py`, `test_minimap.py`, `test_collection.py`, `test_locale.py` | аддон в имитации WoW (`wow_mock.lua`, lupa): окно (персонажи и «Все персонажи» слева, вкладки «Осталось» / «Попытки» / «Журнал», таблицы: столбцы, сортировка и фильтры, сетка с прокруткой и её вид в настройках, шестерёнка → настройки), «Осталось» любого персонажа, коллекция и статистика убийств, все ключи во всех языках и без повторов в `Locales.lua`; скорость с 20+ персонажами и что повторное открытие окна ничего не перестраивает |
 | `test_offline.py` | пометка «офлайн» по `Program.lua`, «нужен аддон новее» / «программа устарела», порядок версий |
 | `test_release_plan.py` | какие теги и выпуски делает `tools/release_plan.sh` (программа / аддон / оба, release / alpha / beta) |
 | `test_attempts_addon.py` | строка попытки в чате, подсказка босса (и её кеш), Атлас, вкладка «Попытки», рары (добыча, запомненное имя: цель, курсор, табличка; откат daily / weekly / часы; группа в окне, подсказка), «Сведения для отчёта» |
@@ -33,13 +33,13 @@ ScrollBox в `wow_mock.lua` упрощён: `SetDataProvider` вызывает �
 
 На Windows (Python + lupa, без mono): `paths.py` ставит локаль `C` — иначе Lua `string.lower` по системной cp1251
 портит кириллицу в UTF-8 (в игре локаль `C`). Идут `test_addon2`, `test_minimap`, `test_offline`, `test_locale`,
-`test_collection`; `test_addon_left` — с готовым `SheetData.lua` первым аргументом (Node-скрипт таблицы под Windows
+`test_collection`; `test_attempts`, `test_collection_sync` и другие без `mono` в пути — с хостами, собранными `csc`, и заменой `mono.exe`, которая запускает exe напрямую; `test_addon_left` — с готовым `SheetData.lua` первым аргументом (Node-скрипт таблицы под Windows
 не работает; дата списка тогда старая — одна проверка «сегодня в» не проходит). `test_attempts_addon` — только в CI.
 
 ## Скриншоты окон аддона
 
 `test_addon_left.py` выгружает разметку окна (кадры, размеры, якоря, тексты, текстуры) в `tools/layout_left.json`,
-`layout_all.json`, `layout_log.json`, `layout_settings.json`; `python tools/screens/render.py` рисует их в браузере
+`layout_all.json`, `layout_log.json`, `layout_settings.json`; `python tools/screens/render.py` рисует их в браузере (своё оформление окон 3.0.3 он пока не знает: снимки окна — из игры)
 (playwright, Chromium) в `docs/screens/addon-*.png`. Персонажи — примерные из `wb_left.json`, классы — из
 `MountSheetSyncDB.chars` в тесте. ScrollBox, его полоса (только когда список не влезает), текстуры с цветом и
 шестерёнка рисуются по разметке; слой HIGHLIGHT не рисуется.

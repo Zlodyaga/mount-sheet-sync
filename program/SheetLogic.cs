@@ -359,9 +359,14 @@ namespace MountSheetSync
                 {
                     continue;   // без заголовка «Пытался…» лист не трогаем
                 }
+                int cParts = FindCol(data[0], PartsPattern, -1);
                 for (int r = 1; r < data.Count; r++)
                 {
                     count += ResetCell(book, entry, r, cStatus);
+                    if (cParts >= 0 && CellText(Cell(entry, r, cParts)).Length > 0)
+                    {
+                        book.Set(entry, r, cParts, "");
+                    }
                 }
             }
             SheetEntry world = ByName(book, WorldSheet);
@@ -706,6 +711,35 @@ namespace MountSheetSync
                     continue;
                 }
                 object current = At(row, cStatus);
+                string part = J.Str(kill, "kind") == "manual" ? null : PartOf(J.Get(kill, "difficultyID"));
+                if (part != null && IsNo(current) && SeparateRow(At(row, cDiff)) && book is IStructuredBook)
+                {
+                    int cParts = FindCol(entry.Data[0], PartsPattern, -1);
+                    if (cParts < 0)
+                    {
+                        List<object> blank = new List<object> { PartsColumn };
+                        for (int i = 1; i < entry.Data.Count; i++)
+                        {
+                            blank.Add("");
+                        }
+                        ((IStructuredBook)book).AppendColumn(entry, blank, true);
+                        cParts = FindCol(entry.Data[0], PartsPattern, -1);
+                        data = entry.Data;
+                        row = data[r];
+                    }
+                    string before = CellText(At(row, cParts));
+                    string after = AddPart(before, part);
+                    if (after != before)
+                    {
+                        book.Set(entry, r, cParts, after);
+                    }
+                    if (after.Split(',').Length < AllParts.Length)
+                    {
+                        // другие сложности ещё можно убить: строка остаётся «Нет»
+                        ctx.Cells.Add(CellInfo(entry, r, Truthy(At(row, cMount)) ? JsString(At(row, cMount)) : "", after != before));
+                        continue;
+                    }
+                }
                 bool changed = false;
                 if (IsNo(current))
                 {
@@ -718,6 +752,37 @@ namespace MountSheetSync
                 }
                 ctx.Cells.Add(CellInfo(entry, r, Truthy(At(row, cMount)) ? JsString(At(row, cMount)) : "", changed));
             }
+        }
+
+        // Рейды с раздельными сохранениями на Normal, Heroic и Mythic (с Warlords of Draenor): на строку «Normal/Heroic/Mythic»
+        // за неделю три попытки. Убитые сложности — в скрытой колонке «N/H/M» листа персонажа, она появляется при первом таком
+        // убийстве; «Да» в «Пытался…» — только когда убиты все три. В старых рейдах сохранение общее: там строки «Normal/Heroic».
+        public const string PartsColumn = "N/H/M";
+        const string PartsPattern = "^n h m$";
+        static readonly string[] AllParts = { "N", "H", "M" };
+        static readonly Regex SeparatePattern = new Regex("normal.*heroic.*mythic");
+
+        static bool SeparateRow(object diffCell)
+        {
+            return SeparatePattern.IsMatch(Norm(diffCell));
+        }
+
+        static string PartOf(object difficultyId)
+        {
+            double id;
+            if (difficultyId == null || !double.TryParse(JsString(difficultyId), NumberStyles.Any, CultureInfo.InvariantCulture, out id))
+            {
+                return null;
+            }
+            return id == 14 ? "N" : id == 15 ? "H" : id == 16 ? "M" : null;
+        }
+
+        /// <summary>«N» + «M» → «N,M»: всегда в порядке N, H, M.</summary>
+        static string AddPart(string parts, string part)
+        {
+            HashSet<string> have = new HashSet<string>(parts.Split(',').Select(x => x.Trim()));
+            have.Add(part);
+            return string.Join(",", AllParts.Where(x => have.Contains(x)));
         }
 
         /// <summary>Лист «Мировые боссы»: галочка в колонке персонажа.</summary>
@@ -1311,6 +1376,7 @@ namespace MountSheetSync
                     int cMount = FindCol(header, "маунт", 3);
                     int cPlace = FindCol(header, "^рейд|подземел", 2);
                     int cFarm = FindCol(header, "^фармлю", -1);
+                    int cParts = FindCol(header, PartsPattern, -1);
                     for (int r = 1; r < data.Count; r++)
                     {
                         object[] row = data[r];
@@ -1325,7 +1391,17 @@ namespace MountSheetSync
                         {
                             continue;   // «Фармлю» снята: этот персонаж эту строку не фармит
                         }
-                        ((List<object>)ch["items"]).Add(StatusItem(kind, entry.Name, r, At(row, cPlace), boss, At(row, cDiff), mount, yes));
+                        Dictionary<string, object> statusItem = StatusItem(kind, entry.Name, r, At(row, cPlace), boss, At(row, cDiff), mount, yes);
+                        if (SeparateRow(At(row, cDiff)))
+                        {
+                            statusItem["sep"] = true;
+                            string killedParts = cParts >= 0 ? CellText(At(row, cParts)) : "";
+                            if (!yes && killedParts.Length > 0)
+                            {
+                                statusItem["k"] = killedParts;
+                            }
+                        }
+                        ((List<object>)ch["items"]).Add(statusItem);
                     }
                 }
             }

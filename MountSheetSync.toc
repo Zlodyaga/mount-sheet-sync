@@ -26,5 +26,6 @@ MountSheetSync.lua
 Statistics.lua
 Collection.lua
 Remaining.lua
+Skin.lua
 UI.lua
 Tooltip.lua

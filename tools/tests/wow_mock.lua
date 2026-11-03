@@ -60,6 +60,32 @@ function Region:SetPoint(point, a, b, c, d)
   self._points[#self._points + 1] = { point = point, rel = rel, relPoint = relPoint, x = x, y = y }
 end
 function Region:ClearAllPoints() self._points = {} end
+function Region:SetTextColor(...) self._color = { ... } end
+function Region:SetFontString(fs) self._fs = fs; fs._text = self._text end
+function Region:SetTextureSliceMargins(...) self._slice = { ... } end
+function Region:SetGradient(...) self._gradient = { ... } end
+function Region:SetHitRectInsets(...) end
+function Region:SetTextInsets(...) end
+function Region:SetCheckedTexture(t) self._checkedTexture = NewRegion('Texture', nil, self, nil); self._checkedTexture._texture = t end
+function Region:GetCheckedTexture() return self._checkedTexture end
+function Region:GetFrameLevel() return self._level or 1 end
+function Region:SetOrientation(o) self._orientation = o end
+function Region:SetValueStep(s) self._step = s end
+function Region:SetObeyStepOnDrag(v) self._obey = v end
+function Region:SetThumbTexture(t) self._thumb = t end
+function Region:SetMinMaxValues(a, b) self._min, self._max = a, b end
+function Region:GetValue() return self._value or 0 end
+function Region:SetValue(v)
+  if self._value ~= v then
+    self._value = v
+    if self._scripts.OnValueChanged then self._scripts.OnValueChanged(self, v) end
+  end
+end
+function Region:EnableMouseWheel(v) self._wheel = v end
+function Region:LockHighlight() self._locked = true end
+function Region:UnlockHighlight() self._locked = false end
+function Region:SetVertexColor(...) self._vertex = { ... } end
+function Region:GetLeft() return self._left or 0 end
 function Region:GetPoint(i)
   local p = self._points[i or 1]
   if not p then return nil end
@@ -200,6 +226,9 @@ local TEMPLATE_SETUP = {
       self._data = dp._items
     end
     box._keys.ScrollToBegin = function(self) self._vscroll = 0 end
+    box._keys.ForEachFrame = function(self, fn)
+      for _, f in ipairs(self._pool) do if f._shown then fn(f) end end
+    end
   end,
   MinimalScrollBar = function(bar) bar:SetWidth(8) end,
 }
@@ -216,6 +245,13 @@ function CreateScrollBoxListLinearView()
     self._frameType, self._init = frameType, init
   end
   return view
+end
+function CreateColor(r, g, b, a) return { r = r, g = g, b = b, a = a } end
+STANDARD_TEXT_FONT = STANDARD_TEXT_FONT or 'Fonts\\FRIZQT__.TTF'
+function CreateFont(name)
+  local font = NewRegion('Font', name, nil, nil)
+  function font:SetFont(path, size, flags) self._file, self._size = path, size end
+  return font
 end
 function CreateDataProvider(list) return { _items = list or {} } end
 ScrollBoxConstants = { RetainScrollPosition = true, DiscardScrollPosition = false }

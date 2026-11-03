@@ -70,7 +70,7 @@ ns.ISSUES_URL = "https://github.com/Zlodyaga/mount-sheet-sync/issues"
 --   "oldaddon" / "oldprogram" — программа работает, но ей нужен аддон новее (MountSheetSyncProgram.addon) или
 --   аддону — программа новее (MIN_PROGRAM): у программы и аддона свои выпуски, они могут разойтись.
 local PROGRAM_FRESH = 150   -- секунд: программа пишет раз в минуту, с запасом на паузу
-local MIN_PROGRAM = "2.9.1"  -- с какой версии программы аддону хватает всего, что он умеет
+local MIN_PROGRAM = "2.9.2"  -- с какой версии программы аддону хватает всего, что он умеет
 local loadedAt = time()
 local programState
 
