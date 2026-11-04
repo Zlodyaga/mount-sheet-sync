@@ -2,7 +2,7 @@
 
 **Farm mounts on all your alts without losing track.** The addon records every boss kill of every character and shows, right in the game, what is still worth killing this week — only the bosses whose mount you don't have yet. A free companion program keeps it all in a Google Sheet for you.
 
-![The "Remaining" list of any character](https://media.forgecdn.net/attachments/2145/78/addon-remaining-png.png)
+![All your characters in one table: what is still to kill this week](https://media.forgecdn.net/attachments/2145/79/addon-all-png.png)
 
 ## Why it's handy
 
@@ -12,6 +12,8 @@
 - **A spreadsheet that fills itself.** With the companion Windows program: a sheet per character in your own Google Drive, about 165 mounts from raids, dungeons and world bosses with skip and farming tips. A kill turns "Yes" on its own, collected mounts drop off the list.
 - **Six languages.** English, Russian, German, French, Spanish and Portuguese — the addon, the program and the spreadsheet.
 - **Light and private.** The addon never sends anything anywhere (WoW addons can't). The program can open only the spreadsheets it created itself.
+
+![The "Remaining" list of any character](https://media.forgecdn.net/attachments/2145/78/addon-remaining-png.png)
 
 ![Attempts and chance for every mount you still need](https://media.forgecdn.net/attachments/2145/80/addon-attempts-png.png)
 

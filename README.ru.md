@@ -20,9 +20,9 @@
 
 ## Как это выглядит
 
-| «Осталось» любого персонажа | Все персонажи | Настройки |
+| Все персонажи | «Осталось» любого персонажа | Настройки |
 | --- | --- | --- |
-| ![Осталось](docs/screens/addon-remaining.png) | ![Все персонажи](docs/screens/addon-all.png) | ![Настройки](docs/screens/addon-settings.png) |
+| ![Все персонажи](docs/screens/addon-all.png) | ![Осталось](docs/screens/addon-remaining.png) | ![Настройки](docs/screens/addon-settings.png) |
 
 | Попытки | Журнал убийств |
 | --- | --- |

@@ -26,9 +26,9 @@ Portuguese spreadsheets.
 
 ## Screenshots
 
-| “Remaining” of any character | All characters | Settings |
+| All characters | “Remaining” of any character | Settings |
 | --- | --- | --- |
-| ![Remaining](docs/screens/addon-remaining.png) | ![All characters](docs/screens/addon-all.png) | ![Settings](docs/screens/addon-settings.png) |
+| ![All characters](docs/screens/addon-all.png) | ![Remaining](docs/screens/addon-remaining.png) | ![Settings](docs/screens/addon-settings.png) |
 
 | Attempts | Kill log |
 | --- | --- |
