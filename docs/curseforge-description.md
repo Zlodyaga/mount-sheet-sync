@@ -1,12 +1,13 @@
 # Mount Sheet Sync
 
-**Farm mounts on all your alts without losing track.** The addon records every boss kill of every character and shows, right in the game, what is still worth killing this week — only the bosses whose mount you don't have yet. A free companion program keeps it all in a Google Sheet for you.
+**All your alts in one table: which boss is still worth killing this week, and on whom.** One window, right in the game, with a row per boss and a column per character — only the bosses whose mount you don't have yet. The addon records every kill by itself, and a free companion program keeps it all in a Google Sheet for you.
 
 ![All your characters in one table: what is still to kill this week](https://media.forgecdn.net/attachments/2145/79/addon-all-png.png)
 
 ## Why it's handy
 
-- **"Remaining" list in the game — for every character.** See at once which raid, dungeon and world bosses are still worth a run this week on each of your characters, without logging in on them, and which bosses the most characters still need. Kills are ticked off as they happen.
+- **All characters in one table.** See every raid, dungeon and world boss still worth a run this week, and which of your characters still need it, without logging in on them. A dot means still to kill, a dash means done, and the last column counts what is left. Raids where each difficulty has its own lockout show N, H and M separately.
+- **"Remaining" list for each character.** Click a character for their own list, with the attempts and chance for every mount. Kills are ticked off as they happen.
 - **Nothing to type.** Kills are recorded automatically, with difficulty. New mounts are noticed the moment you learn them. Kills from before you installed the addon are picked up from your lockouts with one click.
 - **Attempt counter.** After a kill that could drop a mount you still need, the chat says which attempt it was and the chance over all attempts ("attempt 37 · 31%"); the Adventure Guide (and a rare's tooltip) shows the same and how many of your characters still have that boss this week. Counted in the spreadsheet, all characters together — including the kills from before you installed the addon, taken from the game's own statistics.
 - **A spreadsheet that fills itself.** With the companion Windows program: a sheet per character in your own Google Drive, about 165 mounts from raids, dungeons and world bosses with skip and farming tips. A kill turns "Yes" on its own, collected mounts drop off the list.
