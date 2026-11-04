@@ -347,3 +347,24 @@ de: „Versuche“ aus der Spielstatistik: {0} ({1})
 fr: « Tentatives » d'après les statistiques du jeu : {0} ({1})
 es: «Intentos» según las estadísticas del juego: {0} ({1})
 pt: “Tentativas” pelas estatísticas do jogo: {0} ({1})
+@ Данные на этом компьютере ещё не созданы
+en: There is no data on this computer yet
+de: Auf diesem Computer gibt es noch keine Daten
+fr: Il n'y a pas encore de données sur cet ordinateur
+es: Todavía no hay datos en este ordenador
+pt: Ainda não há dados neste computador
+
+@ не удалось прочитать данные с диска: {0}
+en: could not read the data from the disk: {0}
+de: die Daten konnten nicht vom Datenträger gelesen werden: {0}
+fr: impossible de lire les données sur le disque : {0}
+es: no se pudieron leer los datos del disco: {0}
+pt: não foi possível ler os dados do disco: {0}
+
+@ не удалось записать данные на диск: {0}
+en: could not write the data to the disk: {0}
+de: die Daten konnten nicht auf den Datenträger geschrieben werden: {0}
+fr: impossible d'écrire les données sur le disque : {0}
+es: no se pudieron escribir los datos en el disco: {0}
+pt: não foi possível gravar os dados no disco: {0}
+

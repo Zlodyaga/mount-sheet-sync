@@ -33,6 +33,12 @@ namespace MountSheetSync
 
         /// <summary>Какая версия программы создала таблицу («2.0.0» и т. п.; "" — неизвестно).</summary>
         string CreatorApp { get; }
+
+        /// <summary>Язык таблицы.</summary>
+        SheetLang Lang { get; }
+
+        /// <summary>Копию в памяти можно взять и для следующего вызова: она совпадает с сохранённым.</summary>
+        bool Reusable { get; }
     }
 
     /// <summary>Те же правки в копии таблицы в памяти (после того как они ушли в Google).</summary>

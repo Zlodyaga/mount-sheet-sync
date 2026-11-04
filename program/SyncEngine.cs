@@ -206,19 +206,19 @@ namespace MountSheetSync
             {
                 session = Settings.CreateService();
                 sessionFor = Settings;
-                GoogleSheetService google = session as GoogleSheetService;
-                if (google != null)
+                BookSheetService own = session as BookSheetService;
+                if (own != null)
                 {
-                    google.KeepBook = true;
+                    own.KeepBook = true;
                 }
             }
             return session;
         }
 
-        /// <summary>Таблица программы (Settings.UseGoogle) в рамках этого прохода.</summary>
-        public GoogleSheetService GoogleService()
+        /// <summary>Данные, которые ведёт программа (Settings.HasOwnBook), в рамках этого прохода.</summary>
+        public BookSheetService BookService()
         {
-            return Service() as GoogleSheetService ?? new GoogleSheetService(Settings.SpreadsheetId);
+            return (BookSheetService)Service();
         }
 
         static string Id(Dictionary<string, object> r)
@@ -437,7 +437,7 @@ namespace MountSheetSync
                 records.Add(extra);
             }
             List<Dictionary<string, object>> pending = GetSendList(records);
-            if (!Settings.UseGoogle)
+            if (Settings.UsesScript)
             {
                 // «Не фармлю» из игры — только для таблицы программы; скрипт Code.gs принял бы её за убийство
                 List<Dictionary<string, object>> plans = pending.Where(r => J.Str(r, "kind") == "plan").ToList();

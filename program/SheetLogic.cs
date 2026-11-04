@@ -1835,6 +1835,10 @@ namespace MountSheetSync
 
         public string CreatorApp { get { return Creator; } }
 
+        public SheetLang Lang { get { return SheetLang.Russian; } }
+
+        public bool Reusable { get { return true; } }
+
         /// <summary>Правки структуры (для проверок): «column <лист>» / «delete <лист> <строки>».</summary>
         public readonly List<string> Structure = new List<string>();
 

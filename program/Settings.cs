@@ -14,8 +14,9 @@ namespace MountSheetSync
 
         public const string ModeGoogle = "google";
         public const string ModeScript = "script";
+        public const string ModeLocal = "local";
 
-        /// <summary>«google» — таблица, созданная программой (вход через Google); «script» — своя таблица со скриптом Code.gs.</summary>
+        /// <summary>«google» — таблица, созданная программой (вход через Google); «script» — своя таблица со скриптом Code.gs; «local» — данные в файле на этом компьютере.</summary>
         public string Mode = ModeGoogle;
         public string SpreadsheetId = "";
         public string SpreadsheetTitle = "";
@@ -42,13 +43,33 @@ namespace MountSheetSync
 
         public bool UseGoogle
         {
-            get { return Mode != ModeScript; }
+            get { return Mode == ModeGoogle; }
+        }
+
+        public bool IsLocal
+        {
+            get { return Mode == ModeLocal; }
+        }
+
+        public bool UsesScript
+        {
+            get { return Mode == ModeScript; }
+        }
+
+        /// <summary>Данные ведёт сама программа (и они уже есть), а не скрипт в таблице.</summary>
+        public bool HasOwnBook
+        {
+            get { return IsLocal ? File.Exists(AppPaths.LocalBookFile) : UseGoogle && SpreadsheetId.Length > 0; }
         }
 
         public bool IsConfigured
         {
             get
             {
+                if (IsLocal)
+                {
+                    return File.Exists(AppPaths.LocalBookFile);
+                }
                 if (UseGoogle)
                 {
                     return !string.IsNullOrWhiteSpace(SpreadsheetId) && TokenStore.Exists;
@@ -62,6 +83,10 @@ namespace MountSheetSync
         {
             get
             {
+                if (IsLocal)
+                {
+                    return Tr._("Данные на этом компьютере ещё не созданы");
+                }
                 if (UseGoogle)
                 {
                     if (!TokenStore.Exists)
@@ -77,6 +102,10 @@ namespace MountSheetSync
         /// <summary>Куда отправлять записи.</summary>
         public ISheetService CreateService()
         {
+            if (IsLocal)
+            {
+                return new LocalSheetService(AppPaths.LocalBookFile);
+            }
             if (UseGoogle)
             {
                 return new GoogleSheetService(SpreadsheetId);
@@ -116,7 +145,7 @@ namespace MountSheetSync
                 }
                 s.WebAppUrl = J.Str(d, "webAppUrl").Trim();
                 string mode = J.Str(d, "mode").Trim().ToLowerInvariant();
-                if (mode == ModeGoogle || mode == ModeScript)
+                if (mode == ModeGoogle || mode == ModeScript || mode == ModeLocal)
                 {
                     s.Mode = mode;
                 }

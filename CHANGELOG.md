@@ -2,6 +2,9 @@
 
 The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [CHANGELOG-addon.md](CHANGELOG-addon.md).
 
+## 2.10.0
+- First step towards working without Google: the program can keep its data in a file on this computer. For now it is command line only (`--create-local`, `--import-local`, `--storage local|google`); the windows and the menu come next.
+
 ## 2.9.2
 - Raids with separate lockouts: on a Normal/Heroic/Mythic row a kill on one difficulty no longer closes the row. It becomes “Yes” when all three are killed; the killed ones are kept in a hidden “N/H/M” column.
 - World boss mounts now reach the addon with their game ID: their icons show in its window, and a collected one leaves its lists.

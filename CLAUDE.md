@@ -62,6 +62,7 @@
 - **Discord** (02.11.2026): сервер «MountSheetSync WoW», бессрочное приглашение https://discord.gg/DKPGJP222d, ссылка стоит в Social Links проекта на CurseForge.
 
 - Открыто / на потом:
+  - режим без Google (ветка `local-mode`, программа 2.10.0, не выпущено): этап 1 сделан — `LocalBook`, `--create-local`, `--import-local`, `--storage`; этап 2 — первый запуск без входа, окна и меню (`SettingsForm`, `GoogleForms`, `TrayApp`, `FarmForm`), переводы, README, описание на CurseForge, политика конфиденциальности; потом — выгрузка в новую Google-таблицу, советы по фарму в окне аддона, правка попыток; компактный формат `SheetData.lua` — когда каталог вырастет;
   - расхождения попыток с Rarity (Ша Злости, Галлеон, Исхак, Рухмар);
   - описание на CurseForge (`docs/curseforge-description.md`) уже с фразой про статистику, но на сайте CurseForge
     не обновлено — правится в консоли автора, только с согласия пользователя;

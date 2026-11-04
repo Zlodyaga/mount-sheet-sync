@@ -402,3 +402,33 @@ en: “{0}”: “Attempts” {1} → {2} from the game's kill statistics (chara
 
 @ формат «Попыток» и «Шанса за все попытки» в строках, скрытых фильтром ({0})
 en: format of “Attempts” and “Chance over all attempts” in rows hidden by the filter ({0})
+@ Файл данных повреждён ({0}), читаю резервную копию.
+en: The data file is damaged ({0}), reading the backup copy.
+
+@ Данные на этом компьютере уже есть: {0}. Чтобы не потерять их, ничего не заменяю.
+en: Data already exists on this computer: {0}. Nothing is replaced, so it isn't lost.
+
+@ Данные на этом компьютере не созданы: {0}
+en: Data on this computer was not created: {0}
+
+@ Данные программы созданы на этом компьютере: {0}
+en: The program's data was created on this computer: {0}
+
+@ Таблица, созданная программой, не выбрана — переносить нечего.
+en: No spreadsheet made by the program is selected, so there is nothing to move.
+
+@ Перенести данные не получилось: {0}
+en: Could not move the data: {0}
+
+@ Данные перенесены из таблицы на этот компьютер: {0}
+en: The data was moved from the spreadsheet to this computer: {0}
+
+@ Неизвестное хранилище: {0} (нужно local или google).
+en: Unknown storage: {0} (use local or google).
+
+@ Данные на этом компьютере ещё не созданы: сначала --create-local или --import-local.
+en: There is no data on this computer yet: run --create-local or --import-local first.
+
+@ Теперь данные хранятся: {0}.
+en: Data is now kept in: {0}.
+

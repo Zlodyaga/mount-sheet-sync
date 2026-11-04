@@ -30,27 +30,29 @@ namespace MountSheetSync
         }
     }
 
-    /// <summary>Таблица, созданная программой: читаем её, решаем всё здесь и пишем обратно.</summary>
-    sealed class GoogleSheetService : ISheetService
+    /// <summary>Данные, которые ведёт сама программа (в Google или на этом компьютере): читаем, решаем всё здесь и пишем обратно.</summary>
+    abstract class BookSheetService : ISheetService
     {
-        readonly string spreadsheetId;
-        GoogleBook kept;
+        IStructuredBook kept;
 
         /// <summary>Загруженную таблицу — и на следующие вызовы (один проход цикла, SyncEngine.BeginSession).</summary>
         public bool KeepBook;
 
-        public GoogleSheetService(string spreadsheetId)
+        protected abstract IStructuredBook Load();
+
+        /// <summary>Загрузка для пробы: она ничего не записывает.</summary>
+        protected virtual IStructuredBook LoadForTrial()
         {
-            this.spreadsheetId = spreadsheetId;
+            return Load();
         }
 
-        GoogleBook Book()
+        IStructuredBook Book()
         {
             if (kept != null && kept.Reusable)
             {
                 return kept;
             }
-            GoogleBook book = GoogleBook.Load(spreadsheetId);
+            IStructuredBook book = Load();
             kept = KeepBook ? book : null;
             return book;
         }
@@ -61,7 +63,7 @@ namespace MountSheetSync
             Dictionary<string, object> request = (Dictionary<string, object>)Json.Parse(Json.Write(payload, false));
             bool dry = J.Truthy(request, "dryRun");
             // проба ничего не записывает, но меняет таблицу в памяти — ей отдельная загрузка
-            GoogleBook book = dry ? GoogleBook.Load(spreadsheetId) : Book();
+            IStructuredBook book = dry ? LoadForTrial() : Book();
             Dictionary<string, object> resp;
             try
             {
@@ -94,7 +96,7 @@ namespace MountSheetSync
         }
 
         /// <summary>Таблица прошлой версии — к нынешнему виду. Ошибка здесь не мешает отправке записей.</summary>
-        public static void Upgrade(GoogleBook book)
+        public static void Upgrade(IStructuredBook book)
         {
             try
             {
@@ -107,7 +109,7 @@ namespace MountSheetSync
         }
 
         /// <summary>Строки собранных маунтов — с листов персонажей. Ошибка здесь не мешает отправке записей.</summary>
-        static void RemoveCollected(GoogleBook book)
+        static void RemoveCollected(IStructuredBook book)
         {
             try
             {
@@ -129,7 +131,7 @@ namespace MountSheetSync
             {
                 return null;
             }
-            GoogleBook book = Book();
+            IStructuredBook book = Book();
             string stamp = game.CollectionUpdated.ToString(CultureInfo.InvariantCulture);
             if (!force && book.GetProperty(CollectionSync.CheckedProperty) == stamp)
             {
@@ -152,6 +154,22 @@ namespace MountSheetSync
             }
             book.SetProperty(CollectionSync.CheckedProperty, stamp);
             return res;
+        }
+    }
+
+    /// <summary>Таблица, созданная программой в Google.</summary>
+    sealed class GoogleSheetService : BookSheetService
+    {
+        readonly string spreadsheetId;
+
+        public GoogleSheetService(string spreadsheetId)
+        {
+            this.spreadsheetId = spreadsheetId;
+        }
+
+        protected override IStructuredBook Load()
+        {
+            return GoogleBook.Load(spreadsheetId);
         }
     }
 
@@ -466,6 +484,12 @@ namespace MountSheetSync
                 }
             }
             properties[key] = new KeyValuePair<long, string>(newId, value);
+        }
+
+        /// <summary>Все служебные значения (перенос на этот компьютер).</summary>
+        public IEnumerable<KeyValuePair<string, string>> AllProperties
+        {
+            get { return properties.Select(p => new KeyValuePair<string, string>(p.Key, p.Value.Value)); }
         }
 
         public string GetProperty(string key)

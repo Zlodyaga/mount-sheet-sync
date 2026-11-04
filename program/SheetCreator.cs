@@ -153,7 +153,11 @@ namespace MountSheetSync
         public static int AddCharacters(string spreadsheetId, IList<BuildCharacter> chars, Action<string> progress)
         {
             progress(Tr._("Читаю таблицу…"));
-            GoogleBook book = GoogleBook.Load(spreadsheetId);
+            return AddCharacters(GoogleBook.Load(spreadsheetId), chars, progress);
+        }
+
+        public static int AddCharacters(IStructuredBook book, IList<BuildCharacter> chars, Action<string> progress)
+        {
             GoogleSheetService.Upgrade(book);
             List<BuildCharacter> desired = new List<BuildCharacter>();
             foreach (CharacterInTable c in TableCharacters(book))
@@ -184,7 +188,11 @@ namespace MountSheetSync
         public static CharacterChanges UpdateCharacters(string spreadsheetId, IList<BuildCharacter> desired, Action<string> progress)
         {
             progress(Tr._("Читаю таблицу…"));
-            GoogleBook book = GoogleBook.Load(spreadsheetId);
+            return UpdateCharacters(GoogleBook.Load(spreadsheetId), desired, progress);
+        }
+
+        public static CharacterChanges UpdateCharacters(IStructuredBook book, IList<BuildCharacter> desired, Action<string> progress)
+        {
             GoogleSheetService.Upgrade(book);
             return Apply(book, desired, progress);
         }
@@ -234,7 +242,7 @@ namespace MountSheetSync
             return ch;
         }
 
-        static CharacterChanges Apply(GoogleBook book, IList<BuildCharacter> desired, Action<string> progress)
+        static CharacterChanges Apply(IStructuredBook book, IList<BuildCharacter> desired, Action<string> progress)
         {
             foreach (BuildCharacter d in desired)
             {
@@ -347,10 +355,20 @@ namespace MountSheetSync
             }
 
             req.AddRange(late);
-            book.Lang.Outgoing(req);
-            SheetBuilder.LocalizeFormulas(req, book.Locale);
             progress(Tr._("Меняю листы…"));
-            GoogleSheets.BatchUpdate(book.Id, req);
+            GoogleBook google = book as GoogleBook;
+            if (google != null)
+            {
+                google.Lang.Outgoing(req);
+                SheetBuilder.LocalizeFormulas(req, google.Locale);
+                GoogleSheets.BatchUpdate(google.Id, req);
+            }
+            else
+            {
+                LocalBook local = (LocalBook)book;   // листы внутри «русские», как и запросы
+                local.Run(req);
+                local.Flush();
+            }
             Log.Write(Tr.L("Персонажи в таблице: {0}.", ch.Summary(book.Lang)));
             return ch;
         }

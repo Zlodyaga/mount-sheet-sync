@@ -15,6 +15,7 @@ xdotool, stalonetray, imagemagick. В CI — то же (`.github/workflows/ci.ym
 | `profile_addon.py` | не тест: время и мусор горячих мест аддона на настоящих данных игрока (аргументы — SavedVariables и SheetData.lua) |
 | `test_gamedata.py`, `test_collection_sync.py`, `test_layout22.py`, `test_attempts.py` | C# на таблице в памяти (`CollectionHost`, `BuilderHost`, `MemoryBook`): чтение игры, сверка, обновление вида, счётчик попыток, перенос рар на свой лист, откат из «Сброс / частота» на разных языках |
 | `e2e_google.py` (ещё: 3 чтения на проход, лист рар), `e2e_collection.py`, `e2e_chars.py`, `e2e_lang.py` | exe против имитации Google (`mock_google.py`: Sheets/Drive/OAuth, проверка формул по локали, insertDimension…) |
+| `e2e_local.py` | режим «на этом компьютере»: создание без Google, отметки и попытки, N/H/M, `--set-chars`, сверка, повреждённый файл и `.bak`, английские данные, перенос из `mock_google.py` без двойного счёта |
 | `e2e_lang.py` дополнительно | немецкая таблица прошлого вида: перенос рара по ID, заголовки, откат из «Täglich», новая загрузка после правки вида |
 | `e2e_week.py` | автосброс: новая неделя без убийств (неделя считается от старой записи), пустой журнал, неповторение, второй компьютер, сбой Google и повтор |
 | `e2e_script.py` | режим со скриптом: Code.gs в Node (`gas_harness.js`) |

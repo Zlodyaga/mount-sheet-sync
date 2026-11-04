@@ -1,0 +1,471 @@
+// Данные программы в файле на этом компьютере, без Google: те же листы и колонки, что в таблице, поэтому логика
+// (SheetLogic, CollectionSync) работает как обычно. Создают и меняют листы те же запросы SheetBuilder: из них
+// берутся значения ячеек, оформление не нужно.
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text;
+
+namespace MountSheetSync
+{
+    /// <summary>Режим Settings.ModeLocal: читаем файл, решаем всё здесь и пишем обратно.</summary>
+    sealed class LocalSheetService : BookSheetService
+    {
+        readonly string file;
+
+        public LocalSheetService(string file)
+        {
+            this.file = file;
+        }
+
+        protected override IStructuredBook Load()
+        {
+            return LocalBook.Load(file);
+        }
+
+        protected override IStructuredBook LoadForTrial()
+        {
+            LocalBook book = LocalBook.Load(file);
+            book.ReadOnly = true;
+            return book;
+        }
+    }
+
+    /// <summary>
+    /// IBook поверх JSON-файла. Листы внутри — «русские», как GoogleBook после загрузки (SheetLang). Запись атомарная:
+    /// сначала во временный файл, прошлая версия остаётся рядом (.bak) и выручит, если файл окажется повреждён.
+    /// </summary>
+    sealed class LocalBook : IStructuredBook
+    {
+        const int Format = 1;
+
+        readonly string file;
+        string title = "";
+        string creatorApp = "";
+        SheetLang lang = SheetLang.Russian;
+        readonly List<SheetEntry> entries = new List<SheetEntry>();
+        readonly Dictionary<string, string> properties = new Dictionary<string, string>(StringComparer.Ordinal);
+        bool dirty;
+
+        /// <summary>Проба (dryRun): правки остаются в памяти, файл не меняется.</summary>
+        public bool ReadOnly;
+
+        LocalBook(string file)
+        {
+            this.file = file;
+        }
+
+        public string Title { get { return title; } }
+        public string Url { get { return ""; } }
+        public List<SheetEntry> Entries { get { return entries; } }
+        public string CreatorApp { get { return creatorApp; } }
+        public SheetLang Lang { get { return lang; } }
+        public bool Reusable { get { return !dirty; } }
+
+        /// <summary>Новые данные по плану — те же листы и строки, что у новой таблицы в Google.</summary>
+        public static LocalBook Create(string file, BuildPlan plan)
+        {
+            SheetBuilder.Validate(plan);
+            if (plan.Catalog == null)
+            {
+                plan.Catalog = Catalog.Embedded();
+            }
+            LocalBook book = new LocalBook(file);
+            book.title = plan.Title;
+            book.lang = plan.Lang ?? SheetLang.Russian;
+            book.Run(SheetBuilder.Requests(plan, 0));
+            book.Run(SheetBuilder.FinishRequests(plan.Catalog, plan.CollectionStamp, book.lang));
+            if (!book.lang.IsRussian)
+            {
+                // запросы уже на языке таблицы — внутри программы листы «русские»
+                foreach (SheetEntry e in book.entries)
+                {
+                    e.Name = book.lang.SheetNameToRu(e.Name);
+                    book.lang.ToRussian(e);
+                }
+            }
+            book.Save();
+            return book;
+        }
+
+        /// <summary>Копия таблицы из Google: все листы и служебные значения.</summary>
+        public static LocalBook Import(string file, GoogleBook source)
+        {
+            LocalBook book = new LocalBook(file);
+            book.title = source.Title;
+            book.creatorApp = source.CreatorApp;
+            book.lang = source.Lang;
+            book.entries.AddRange(source.Entries);
+            foreach (KeyValuePair<string, string> p in source.AllProperties)
+            {
+                book.properties[p.Key] = p.Value;
+            }
+            book.Save();
+            return book;
+        }
+
+        public static LocalBook Load(string file)
+        {
+            try
+            {
+                return Read(file);
+            }
+            catch (Exception ex)
+            {
+                if (ex is OutOfMemoryException)
+                {
+                    throw;
+                }
+                string backup = file + ".bak";
+                if (File.Exists(file) && File.Exists(backup))
+                {
+                    Log.Write(Tr.L("Файл данных повреждён ({0}), читаю резервную копию.", ex.Message));
+                    try
+                    {
+                        LocalBook book = Read(backup);
+                        return book;
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                throw new SyncException(Tr.F("не удалось прочитать данные с диска: {0}", ex.Message));
+            }
+        }
+
+        static LocalBook Read(string path)
+        {
+            Dictionary<string, object> d = Json.Parse(File.ReadAllText(path, Encoding.UTF8)) as Dictionary<string, object>;
+            if (d == null || J.Long(d, "format") != Format)
+            {
+                throw new FormatException("format");
+            }
+            string real = path.EndsWith(".bak", StringComparison.Ordinal) ? path.Substring(0, path.Length - 4) : path;
+            LocalBook book = new LocalBook(real);
+            book.title = J.Str(d, "title");
+            book.creatorApp = J.Str(d, "app");
+            book.lang = SheetLang.Detect(J.Str(d, "lang"), new string[0]);
+            Dictionary<string, object> props = J.Obj(J.Get(d, "properties"));
+            if (props != null)
+            {
+                foreach (KeyValuePair<string, object> p in props)
+                {
+                    book.properties[p.Key] = Convert.ToString(p.Value, System.Globalization.CultureInfo.InvariantCulture);
+                }
+            }
+            foreach (object o in J.Arr(J.Get(d, "sheets")))
+            {
+                Dictionary<string, object> s = J.Obj(o);
+                SheetEntry e = new SheetEntry();
+                e.Name = J.Str(s, "name");
+                e.SheetId = J.Long(s, "id");
+                foreach (object r in J.Arr(J.Get(s, "rows")))
+                {
+                    e.Data.Add(J.Arr(r).ToArray());
+                }
+                foreach (object f in J.Arr(J.Get(s, "formulas")))
+                {
+                    e.Formulas.Add(Convert.ToInt64(f));
+                }
+                book.entries.Add(e);
+            }
+            return book;
+        }
+
+        void Save()
+        {
+            if (ReadOnly)
+            {
+                return;
+            }
+            Dictionary<string, object> d = new Dictionary<string, object>();
+            d["format"] = Format;
+            d["app"] = creatorApp;
+            d["lang"] = lang.Code;
+            d["title"] = title;
+            Dictionary<string, object> props = new Dictionary<string, object>();
+            foreach (KeyValuePair<string, string> p in properties)
+            {
+                props[p.Key] = p.Value;
+            }
+            d["properties"] = props;
+            List<object> sheets = new List<object>();
+            foreach (SheetEntry e in entries)
+            {
+                Dictionary<string, object> s = new Dictionary<string, object>();
+                s["name"] = e.Name;
+                s["id"] = e.SheetId;
+                s["formulas"] = e.Formulas.OrderBy(k => k).Cast<object>().ToList();
+                s["rows"] = e.Data.Cast<object>().ToList();
+                sheets.Add(s);
+            }
+            d["sheets"] = sheets;
+            string temp = file + ".tmp";
+            try
+            {
+                File.WriteAllText(temp, Json.Write(d, false), new UTF8Encoding(false));
+                if (File.Exists(file))
+                {
+                    File.Replace(temp, file, file + ".bak");
+                }
+                else
+                {
+                    File.Move(temp, file);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (!(ex is IOException) && !(ex is UnauthorizedAccessException))
+                {
+                    throw;
+                }
+                throw new SyncException(Tr.F("не удалось записать данные на диск: {0}", ex.Message));
+            }
+            dirty = false;
+        }
+
+        public void Set(SheetEntry entry, int r, int c, object value)
+        {
+            entry.Data[r][c] = value;
+            dirty = true;
+        }
+
+        public void Flush()
+        {
+            if (dirty)
+            {
+                Save();
+            }
+        }
+
+        public void AppendColumn(SheetEntry entry, List<object> values, bool hidden)
+        {
+            int col = entry.Data.Count > 0 ? entry.Data[0].Length : 0;
+            List<object> plain = new List<object>();
+            for (int r = 0; r < values.Count; r++)
+            {
+                bool formula = values[r] is SheetBuilder.Formula;
+                plain.Add(formula ? "" : values[r]);
+                if (formula)
+                {
+                    entry.Formulas.Add(SheetLogic.Key(r, col));
+                }
+            }
+            BookEdit.AppendColumn(entry, plain);
+            dirty = true;
+            Flush();
+        }
+
+        public void DeleteRows(Dictionary<SheetEntry, List<int>> rows)
+        {
+            foreach (KeyValuePair<SheetEntry, List<int>> kv in rows)
+            {
+                BookEdit.DeleteRows(kv.Key, kv.Value);
+            }
+            dirty = true;
+            Flush();
+        }
+
+        /// <summary>
+        /// Обновление вида (SheetUpgrade): запросы только про оформление и Google, значения вызывающий правит сам сразу после,
+        /// поэтому запись — на его Flush.
+        /// </summary>
+        public void Apply(List<object> requests, string propertyKey, string propertyValue)
+        {
+            if (propertyKey != null)
+            {
+                properties[propertyKey] = propertyValue;
+            }
+            dirty = true;
+        }
+
+        public string GetProperty(string key)
+        {
+            string v;
+            return properties.TryGetValue(key, out v) ? v : null;
+        }
+
+        public void SetProperty(string key, string value)
+        {
+            properties[key] = value;
+            dirty = true;
+            Flush();
+        }
+
+        /// <summary>Значения из запросов SheetBuilder (листы, ячейки, колонки); оформление пропускается. Файл не пишет.</summary>
+        public void Run(List<object> requests)
+        {
+            // через JSON: числа — double, списки — List<object>, формулы уже записаны как formulaValue
+            foreach (object o in (List<object>)Json.Parse(Json.Write(requests, false)))
+            {
+                Dictionary<string, object> req = J.Obj(o);
+                Dictionary<string, object> body;
+                if ((body = J.Obj(J.Get(req, "addSheet"))) != null)
+                {
+                    AddSheet(J.Obj(J.Get(body, "properties")));
+                }
+                else if ((body = J.Obj(J.Get(req, "updateCells"))) != null)
+                {
+                    if (J.Str(body, "fields") == "userEnteredValue")   // остальные — только формат
+                    {
+                        UpdateCells(body);
+                    }
+                }
+                else if ((body = J.Obj(J.Get(req, "deleteSheet"))) != null)
+                {
+                    long id = J.Long(body, "sheetId");
+                    entries.RemoveAll(e => e.SheetId == id);
+                }
+                else if ((body = J.Obj(J.Get(req, "deleteDimension"))) != null)
+                {
+                    DeleteDimension(J.Obj(J.Get(body, "range")));
+                }
+                else if ((body = J.Obj(J.Get(req, "createDeveloperMetadata"))) != null)
+                {
+                    Metadata(J.Obj(J.Get(body, "developerMetadata")));
+                }
+            }
+            foreach (SheetEntry e in entries)
+            {
+                Pad(e);
+            }
+            dirty = true;
+        }
+
+        void AddSheet(Dictionary<string, object> p)
+        {
+            SheetEntry e = new SheetEntry();
+            e.Name = J.Str(p, "title");
+            e.SheetId = J.Long(p, "sheetId");
+            entries.Insert(Math.Min((int)J.Long(p, "index"), entries.Count), e);
+        }
+
+        void UpdateCells(Dictionary<string, object> body)
+        {
+            Dictionary<string, object> start = J.Obj(J.Get(body, "start"));
+            long id = J.Long(start, "sheetId");
+            SheetEntry e = entries.First(x => x.SheetId == id);
+            int r = (int)J.Long(start, "rowIndex");
+            int c0 = (int)J.Long(start, "columnIndex");
+            foreach (object row in J.Arr(J.Get(body, "rows")))
+            {
+                int c = c0;
+                foreach (object cell in J.Arr(J.Get(J.Obj(row), "values")))
+                {
+                    Store(e, r, c++, J.Obj(J.Get(J.Obj(cell), "userEnteredValue")));
+                }
+                r++;
+            }
+        }
+
+        static void Store(SheetEntry e, int r, int c, Dictionary<string, object> value)
+        {
+            while (e.Data.Count <= r)
+            {
+                e.Data.Add(new object[0]);
+            }
+            object[] row = e.Data[r];
+            if (row.Length <= c)
+            {
+                Array.Resize(ref row, c + 1);
+                for (int i = 0; i < row.Length; i++)
+                {
+                    row[i] = row[i] ?? "";
+                }
+                e.Data[r] = row;
+            }
+            long key = SheetLogic.Key(r, c);
+            e.Formulas.Remove(key);
+            row[c] = "";
+            if (value == null)
+            {
+                return;
+            }
+            if (value.ContainsKey("formulaValue"))
+            {
+                e.Formulas.Add(key);   // считает таблица в Google; здесь её значения никто не читает
+            }
+            else if (value.ContainsKey("stringValue"))
+            {
+                row[c] = J.Str(value, "stringValue");
+            }
+            else if (value.ContainsKey("numberValue") || value.ContainsKey("boolValue"))
+            {
+                row[c] = J.Get(value, value.ContainsKey("boolValue") ? "boolValue" : "numberValue");
+            }
+        }
+
+        void DeleteDimension(Dictionary<string, object> range)
+        {
+            long id = J.Long(range, "sheetId");
+            SheetEntry e = entries.FirstOrDefault(x => x.SheetId == id);
+            if (e == null)
+            {
+                return;
+            }
+            int from = (int)J.Long(range, "startIndex");
+            int to = (int)J.Long(range, "endIndex");
+            if (J.Str(range, "dimension") == "ROWS")
+            {
+                BookEdit.DeleteRows(e, Enumerable.Range(from, to - from));
+                return;
+            }
+            int count = to - from;
+            for (int r = 0; r < e.Data.Count; r++)
+            {
+                e.Data[r] = e.Data[r].Where((v, c) => c < from || c >= to).ToArray();
+            }
+            HashSet<long> formulas = new HashSet<long>();
+            foreach (long key in e.Formulas)
+            {
+                int r = (int)(key / 100000);
+                int c = (int)(key % 100000);
+                if (c < from)
+                {
+                    formulas.Add(key);
+                }
+                else if (c >= to)
+                {
+                    formulas.Add(SheetLogic.Key(r, c - count));
+                }
+            }
+            e.Formulas.Clear();
+            e.Formulas.UnionWith(formulas);
+        }
+
+        void Metadata(Dictionary<string, object> m)
+        {
+            string key = J.Str(m, "metadataKey");
+            string value = J.Str(m, "metadataValue");
+            if (key == SheetBuilder.MetadataKey)
+            {
+                creatorApp = J.Str(Json.Parse(value) as Dictionary<string, object>, "app");
+            }
+            else if (key.StartsWith(GoogleBook.PropertyPrefix, StringComparison.Ordinal))
+            {
+                properties[key.Substring(GoogleBook.PropertyPrefix.Length)] = value;
+            }
+        }
+
+        static void Pad(SheetEntry e)
+        {
+            int width = e.Data.Count == 0 ? 0 : e.Data.Max(r => r.Length);
+            for (int r = 0; r < e.Data.Count; r++)
+            {
+                object[] row = e.Data[r];
+                if (row.Length < width)
+                {
+                    int old = row.Length;
+                    Array.Resize(ref row, width);
+                    for (int c = old; c < width; c++)
+                    {
+                        row[c] = "";
+                    }
+                    e.Data[r] = row;
+                }
+            }
+        }
+    }
+}

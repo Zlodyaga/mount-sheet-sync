@@ -10,6 +10,9 @@ Windows 10/11, C# 5 под .NET Framework 4.8 (встроенный в Windows �
 | --- | --- | --- |
 | Google (по умолчанию, `GoogleSheetService`) | Sheets API от имени пользователя, OAuth | создаёт таблицу на 6 языках, всё ниже |
 | Скрипт (`webAppUrl` + `secret`) | POST в веб-приложение Code.gs (`script/Code.gs`, способ 1.x) | только отметки и «Осталось»; нет создания, персонажей, сверки, счётчика попыток |
+| На этом компьютере (`local`, `LocalSheetService`, с 2.10.0) | файл `local-data.json`, без Google и входа | всё то же, что Google, кроме самой таблицы: её нельзя открыть и поправить руками. Пока только из командной строки: окна и меню — следующий шаг |
+
+`GoogleSheetService` и `LocalSheetService` — наследники `BookSheetService`: логика одна, разница в книге (`GoogleBook` / `LocalBook`). `settings.HasOwnBook` — данные ведёт сама программа.
 
 Вход Google: браузер + локальный порт (loopback), права `drive.file` (только файлы, созданные программой),
 `openid`, `email`. Ключ входа — `%APPDATA%\MountSheetSync\google-token.dat` (DPAPI, только этот пользователь
@@ -93,13 +96,13 @@ Windows). «Выйти» удаляет ключ и отзывает его у G
 
 `settings.json` (ключи: `mode`, `spreadsheetId`, `spreadsheetTitle`, `spreadsheetUrl`, `webAppUrl`, `secret`,
 `wowPath`, `notifications`, `checkUpdates`, `testVersions`, `updateNotified`, `installDeclined`, `language`,
-`pollSeconds`, `retrySeconds`), `google-token.dat`, `sent-ids*.txt`, `state.json` (последняя отправка и результат, «Последние события», о чём уже напоминали),
+`pollSeconds`, `retrySeconds`), `google-token.dat`, `sent-ids*.txt` (у `local` — `sent-ids-local.txt`), `local-data.json` и `local-data.json.bak` (режим «на этом компьютере», `LocalBook`), `state.json` (последняя отправка и результат, «Последние события», о чём уже напоминали),
 `sync.log` (по-русски при русском языке, иначе по-английски).
 
 ## Командная строка
 
 `--once` (одна синхронизация и выход), `--test`, `--autostart`, `--google-login`, `--create-sheet [название]`,
-`--sheet-lang <код>`, `--add-chars`, `--set-chars <json>`, `--sync-collection`, `--install`, `--uninstall [--yes]`,
+`--sheet-lang <код>`, `--add-chars`, `--set-chars <json>`, `--sync-collection`, `--create-local [название]` (данные на этом компьютере), `--import-local` (копия таблицы из Google, отправленное копируется тоже), `--storage <local|google>` (куда вернуться, данные обоих мест сохраняются; существующие локальные данные оба `--…-local` не заменяют), `--install`, `--uninstall [--yes]`,
 `--check-update`, `--update`, `--data <папка>`; служебные: `--wait-instance`, `--wait-pid`, `--updated-from`.
 Один экземпляр на пользователя (`Local\MountSheetSync.*`); второй запуск — уведомление «уже запущен» (или окно настроек, если программа не настроена). `--test` — проверка связи с таблицей.
 

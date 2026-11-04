@@ -510,7 +510,7 @@ namespace MountSheetSync
                     missingNotified.UnionWith(newlyMissing);
                     stateChanged = true;
                     Send(Tr.F("Нет листов для: {0}", string.Join(", ", newlyMissing)),
-                        engine.Settings.UseGoogle
+                        !engine.Settings.UsesScript
                             ? Tr._("Добавьте их в таблицу: меню значка → «Персонажи в таблице…».")
                             : Tr._("Отметки этих персонажей сохраняться не будут. Проверьте названия листов в таблице."), true, false);
                 }
@@ -662,7 +662,7 @@ namespace MountSheetSync
         /// </summary>
         void CheckCollection(List<string> addonFiles, bool manual)
         {
-            if (!engine.Settings.UseGoogle || engine.Settings.SpreadsheetId.Length == 0)
+            if (!engine.Settings.HasOwnBook)
             {
                 if (manual)
                 {
@@ -697,7 +697,7 @@ namespace MountSheetSync
             CollectionResult res;
             try
             {
-                res = engine.GoogleService().SyncCollection(game, manual);
+                res = engine.BookService().SyncCollection(game, manual);
             }
             catch (SyncException ex)
             {

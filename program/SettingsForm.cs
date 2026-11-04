@@ -192,8 +192,8 @@ namespace MountSheetSync
             urlBox.Text = settings.WebAppUrl;
             secretBox.Text = settings.Secret;
             wowBox.Text = settings.WowPath;
-            googleRadio.Checked = settings.UseGoogle;
-            scriptRadio.Checked = !settings.UseGoogle;
+            googleRadio.Checked = !settings.UsesScript;
+            scriptRadio.Checked = settings.UsesScript;
             UpdateMode();
             UpdateGoogle();
 
@@ -569,7 +569,7 @@ namespace MountSheetSync
                 }
             }
             result = working.Clone();
-            result.Mode = GoogleMode ? Settings.ModeGoogle : Settings.ModeScript;
+            result.Mode = GoogleMode ? (working.IsLocal ? Settings.ModeLocal : Settings.ModeGoogle) : Settings.ModeScript;
             result.WebAppUrl = url;
             if (secret.Length > 0)
             {
