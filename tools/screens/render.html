@@ -4,73 +4,25 @@
 <meta charset="utf-8">
 <title>Mount Sheet Sync screens</title>
 <style>
-  :root {
-    --gold: #f2c45a;
-    --gold-soft: rgba(242, 196, 90, .16);
-    --text: #ecebe8;
-    --muted: #9aa0ab;
-    --panel: rgba(17, 20, 28, .94);
-    --line: rgba(255, 255, 255, .09);
-  }
+  /*FONT_FACES*/
   html, body { margin: 0; }
   body {
-    font-family: "Inter", "DejaVu Sans", sans-serif;
     background:
-      radial-gradient(1200px 700px at 15% 10%, rgba(64, 120, 170, .35), transparent 60%),
-      radial-gradient(900px 600px at 90% 85%, rgba(170, 110, 60, .30), transparent 60%),
-      linear-gradient(160deg, #0d1220, #1a2030 55%, #141823);
+      radial-gradient(900px 600px at 15% 10%, rgba(120, 84, 40, .38), transparent 60%),
+      radial-gradient(800px 600px at 90% 90%, rgba(70, 60, 110, .34), transparent 60%),
+      linear-gradient(160deg, #15130f, #1d1a15 55%, #141210);
     width: var(--w); height: var(--h); position: relative; overflow: hidden;
-    -webkit-font-smoothing: antialiased;
+    font-family: "PT Sans", sans-serif;
   }
   .r { position: absolute; box-sizing: border-box; }
-  .panel {
-    background: var(--panel); border: 1px solid var(--line); border-radius: 14px;
-    box-shadow: 0 24px 60px rgba(0, 0, 0, .55), 0 0 0 1px rgba(0, 0, 0, .35);
-    backdrop-filter: blur(8px);
+  .clip { overflow: hidden; }
+  .fs { display: flex; align-items: center; white-space: nowrap; line-height: 1.15; }
+  .fs > span { display: block; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .fs.wrap { white-space: pre-wrap; align-items: flex-start; }
+  .stand-in {
+    display: flex; align-items: center; justify-content: center; color: rgba(255, 255, 255, .92);
+    font: 700 11px "PT Sans Bold", sans-serif; text-shadow: 0 1px 1px rgba(0, 0, 0, .7);
   }
-  .panel > .titlebar {
-    position: absolute; left: 0; right: 0; top: 0; height: 24px; border-bottom: 1px solid var(--line);
-    background: linear-gradient(180deg, rgba(255, 255, 255, .05), transparent);
-    border-radius: 14px 14px 0 0;
-    color: var(--gold); font-weight: 600; font-size: 12.5px; line-height: 24px; text-align: center; letter-spacing: .2px;
-  }
-  .close {
-    color: var(--muted); font-size: 16px; line-height: 22px; text-align: center; border-radius: 6px;
-  }
-  .inset { background: rgba(0, 0, 0, .28); border: 1px solid rgba(255, 255, 255, .06); border-radius: 10px; }
-  .tab {
-    border-radius: 9px 9px 0 0; color: var(--muted); font-size: 12px; font-weight: 500;
-    display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, .04);
-    border: 1px solid var(--line); border-bottom: none;
-  }
-  .tab.on { color: var(--gold); background: linear-gradient(180deg, var(--gold-soft), rgba(242, 196, 90, .04)); }
-  .btn {
-    border-radius: 8px; background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .13);
-    color: var(--text); font-size: 11px; font-weight: 500;
-    display: flex; align-items: center; justify-content: center; white-space: nowrap;
-  }
-  .btn.primary { background: linear-gradient(180deg, #f3c862, #d9a83a); color: #1b1406; border-color: rgba(0, 0, 0, .2); font-weight: 600; }
-  .edit { border-radius: 7px; background: rgba(0, 0, 0, .35); border: 1px solid rgba(255, 255, 255, .14); }
-  .check { display: flex; align-items: center; justify-content: center; }
-  .check i {
-    width: 15px; height: 15px; border-radius: 4px; border: 1.5px solid rgba(255, 255, 255, .35); box-sizing: border-box;
-    display: flex; align-items: center; justify-content: center; font-style: normal; font-size: 11px; color: #1b1406;
-  }
-  .check.radio i { border-radius: 50%; }
-  .check.on i { background: var(--gold); border-color: var(--gold); }
-  .check.radio.on i { background: transparent; }
-  .check.radio.on i::after { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--gold); }
-  .scroll { overflow: hidden; }
-  .bar { border-radius: 4px; background: rgba(255, 255, 255, .06); }
-  .bar::after { content: ""; position: absolute; left: 1px; right: 1px; top: 2px; height: 34%; border-radius: 4px; background: rgba(255, 255, 255, .22); }
-  .fs { white-space: pre; line-height: 1.25; }
-  .f-GameFontHighlight { color: #fff; font-size: 12.5px; font-weight: 600; }
-  .f-GameFontHighlightSmall { color: #e4e2de; font-size: 10.5px; }
-  .f-GameFontNormal { color: var(--gold); font-size: 12px; font-weight: 600; }
-  .f-GameFontNormalSmall { color: #d9c68e; font-size: 10.5px; }
-  .f-GameFontDisableSmall { color: var(--muted); font-size: 9.6px; }
-  .f-none { color: var(--text); font-size: 11.5px; }
-  .gear { color: var(--muted); font-size: 18px; line-height: 1; display: flex; align-items: center; justify-content: center; }
   .tick {
     display: inline-flex; width: 12px; height: 12px; border-radius: 50%; background: #3fb36b; color: #08140c;
     font-size: 9px; font-weight: 700; align-items: center; justify-content: center; vertical-align: -1px;
@@ -79,12 +31,15 @@
 </head>
 <body>
 <script>
-// Renders a layout dumped from the addon running in the mock WoW API (tools/tests/test_addon_left.py):
-// every frame, button and line of text with the size and anchors the addon gave it, in a modern skin.
-const L = window.LAYOUT, OPT = window.OPT;
+// Renders a layout dumped from the addon running in the mock WoW API (tools/tests/test_addon_left.py): every frame,
+// texture and line of text with the anchors, colours and fonts the addon gave it. Mount icons are game art, so they
+// are drawn as coloured stand-ins with the mount's first letter.
+const L = window.LAYOUT, OPT = window.OPT, MASKS = window.MASKS;
 document.body.style.setProperty("--w", OPT.w + "px");
 document.body.style.setProperty("--h", OPT.h + "px");
 const SCREEN = { l: 0, t: 0, r: OPT.w, b: OPT.h };
+const LAYERS = { BACKGROUND: 0, BORDER: 1, ARTWORK: 2, OVERLAY: 3, HIGHLIGHT: 4 };
+const RADIUS = { Round3: 3, Round6: 6, Pill: 12, Dot: 999 };
 
 function visible(i) {
   for (let x = L[i]; ; x = L[x.parent]) {
@@ -116,15 +71,26 @@ function markup(t) {
   return out;
 }
 
-function fontClass(x) { return "f-" + (x.font || "none"); }
+function css(c, fallback) {
+  if (!c || c[0] === null || c[0] === undefined) return fallback;
+  const a = c[3] === null || c[3] === undefined ? 1 : c[3];
+  return "rgba(" + c.slice(0, 3).map(v => Math.round(v * 255)).join(",") + "," + a + ")";
+}
+
+function fontStyle(x, s) {
+  const file = (x.fontFile || "").replace(/^.*\\/, "").replace(/\.ttf$/i, "");
+  s.fontFamily = '"' + (OPT.fonts[file] || "PT Sans") + '", sans-serif';
+  s.fontSize = (x.fontSize || 12) + "px";
+  s.color = css(x.textColor, css(x.fontColor, "#e4dfd2"));
+}
 
 const measurer = document.createElement("div");
 measurer.style.cssText = "position:absolute;left:-9999px;top:0";
 document.body.appendChild(measurer);
 function measure(x) {
   const s = document.createElement("span");
-  s.className = "fs " + fontClass(x);
-  if (x.w) { s.style.width = x.w + "px"; s.style.whiteSpace = "pre-wrap"; s.style.display = "inline-block"; }
+  s.style.whiteSpace = "pre"; s.style.lineHeight = "1.15"; s.style.display = "inline-block";
+  fontStyle(x, s.style);
   s.innerHTML = markup(x.text || "");
   measurer.appendChild(s);
   const r = s.getBoundingClientRect();
@@ -147,20 +113,18 @@ function rect(i) {
   if (i in rects) return rects[i];
   rects[i] = null;  // cycle guard
   const x = L[i];
-  let size = { w: x.w || 0, h: x.h || 0 };
+  let size = { w: x.w || 0, h: x.h || x.extent || 0 };
   if (x.type === "FontString") size = measure(x);
   let res = null;
-  if (x.scrollChildOf !== null) {
-    const s = rect(x.scrollChildOf);
-    res = { l: s.l, t: s.t, r: s.l + (x.w || (s.r - s.l)), b: s.t + (x.h || 2000) };
-  } else if (x.points.length && x.points[0].point === "ALL") {   // SetAllPoints
+  if (x.points.length && x.points[0].point === "ALL") {   // SetAllPoints
     const s = relRect(x, x.points[0].rel);
     res = s ? { l: s.l, t: s.t, r: s.r, b: s.b } : null;
   } else if (!x.points.length) {
     if (x.parent === "UIParent") return null;
     const p = rect(x.parent);
     if (!p) return null;
-    if (x.type === "FontString") {
+    if (x.checkedMark) res = { l: p.l, t: p.t, r: p.r, b: p.b };
+    else if (x.type === "FontString") {
       const cx = (p.l + p.r) / 2, cy = (p.t + p.b) / 2;
       res = { l: cx - size.w / 2, r: cx + size.w / 2, t: cy - size.h / 2, b: cy + size.h / 2 };
     } else return null;
@@ -191,75 +155,119 @@ function rect(i) {
 }
 
 // a ScrollBox whose shown rows go below its bottom edge
-function overflows(box) {
+function overflow(box) {
   const b = rect(box);
-  if (!b) return false;
-  return L.some((y, k) => y.parent === box && y.shown && rect(k) && rect(k).b > b.b + 1);
+  if (!b) return null;
+  let bottom = b.b;
+  L.forEach((y, k) => { if (y.parent === box && y.shown && rect(k)) bottom = Math.max(bottom, rect(k).b); });
+  return bottom > b.b + 1 ? (b.b - b.t) / (bottom - b.t) : null;
 }
 
-// build the DOM along the parent chain, so scroll frames clip their content
+function mediaName(x) {
+  const m = /Media\\([A-Za-z0-9]+)$/.exec(x.texture || "");
+  return m ? m[1] : null;
+}
+
+// the name in the same table row: gives a stand-in icon its letter and colour
+function rowLabel(x) {
+  const texts = L.filter(y => y.parent === x.parent && y.type === "FontString" && y.text && y.shown);
+  const mount = texts.find(y => /^\|cffc9a0ff/.test(y.text)) || texts[0];   // the mount's name is purple
+  return mount ? mount.text.replace(/\|c[0-9a-fA-F]{8}|\|r|\|T.*?\|t/g, "") || "?" : "?";
+}
+function standIn(el, x) {
+  const label = rowLabel(x);
+  let hash = 0;
+  for (const ch of label) hash = (hash * 31 + ch.codePointAt(0)) % 360;
+  el.classList.add("stand-in");
+  el.style.background = "linear-gradient(145deg, hsl(" + hash + ",55%,46%), hsl(" + ((hash + 40) % 360) + ",60%,24%))";
+  el.textContent = label[0].toUpperCase();
+}
+
+// the frame behind a mount icon: the game draws the icon on it, the picture a stand-in (a done row has its tick instead)
+function iconFrame(x) {
+  return x.layer === "BORDER" && x.w === 20 && x.h === 20 && x.color &&
+    !L.some(y => y.parent === x.parent && y.shown && /ReadyCheck/.test(y.texture || ""));
+}
+
+function paintTexture(el, x) {
+  const media = mediaName(x);
+  if (iconFrame(x)) { standIn(el, x); return true; }
+  const tint = css(x.vertex, "#fff");
+  if (x.gradient) el.style.background = "linear-gradient(to top, " + css(x.gradient[0]) + ", " + css(x.gradient[1]) + ")";
+  else if (x.color && x.color[0] !== null) el.style.background = css(x.color);
+  else if (media && media in RADIUS) el.style.background = tint;
+  else if (media && MASKS[media]) {
+    el.style.background = tint;
+    el.style.webkitMaskImage = "url(" + MASKS[media] + ")";
+    el.style.webkitMaskSize = "100% 100%";
+    if (x.texcoord && x.texcoord[2] === 1 && x.texcoord[3] === 0) el.style.transform = "scaleY(-1)";
+  } else if (x.texture) {
+    if (/ReadyCheck-Ready/.test(x.texture)) { el.className = "r tick"; el.textContent = "✓"; }
+    else standIn(el, x);
+  } else return false;
+  if (media && media in RADIUS) el.style.borderRadius = Math.min(RADIUS[media], parseFloat(el.style.height) / 2 || RADIUS[media]) + "px";
+  return true;
+}
+
+// the frame tree, so ScrollBoxes clip their rows and frame levels work like in the game
 const nodes = {};
-function domParent(x) {
-  if (x.scrollChildOf !== null) return x.scrollChildOf;
-  return x.parent === "UIParent" ? null : x.parent;
-}
-function originOf(k) { return k === null ? { l: 0, t: 0 } : rect(k) || { l: 0, t: 0 }; }
-
 function build(i) {
   if (i in nodes) return nodes[i];
   const x = L[i];
-  const pk = domParent(x);
+  const pk = x.parent === "UIParent" ? null : x.parent;
   const host = pk === null ? document.body : build(pk);
   const re = rect(i);
-  if (!host || !re || !visible(i)) { nodes[i] = null; return null; }
+  if (!host || !re || !visible(i) || x.layer === "HIGHLIGHT" || (x.checkedMark && !L[x.parent].checked)) { nodes[i] = null; return null; }
   const el = document.createElement("div");
   el.className = "r";
-  const o = originOf(pk);
+  const o = pk === null ? { l: 0, t: 0 } : rect(pk) || { l: 0, t: 0 };
   el.style.left = (re.l - o.l) + "px"; el.style.top = (re.t - o.t) + "px";
   el.style.width = (re.r - re.l) + "px"; el.style.height = (re.b - re.t) + "px";
-  const tmpl = x.template || "";
-  if (tmpl === "DefaultPanelTemplate" || (i === 0 && x.type === "Frame")) {
-    el.classList.add("panel");
-    const tb = document.createElement("div"); tb.className = "titlebar"; tb.textContent = x.title || "";
-    el.appendChild(tb);
-  } else if (tmpl === "InsetFrameTemplate") el.classList.add("inset");
-  else if (tmpl === "UIPanelCloseButtonDefaultAnchors") { el.classList.add("close"); el.textContent = "×"; }
-  else if (tmpl === "PanelTopTabButtonTemplate") {
-    el.classList.add("tab"); if ((x.text || "").startsWith(OPT.tab)) el.classList.add("on");
-    el.textContent = x.text || "";
-  } else if (x.type === "Button" && x.text) {
-    el.classList.add("btn"); if (OPT.primary.includes(x.text)) el.classList.add("primary");
-    el.textContent = x.text;
-  } else if (x.type === "EditBox") el.classList.add("edit");
-  else if (x.type === "CheckButton") {
-    el.classList.add("check"); if (x.radio) el.classList.add("radio"); if (x.checked) el.classList.add("on");
-    const box = document.createElement("i"); if (x.checked && !x.radio) box.textContent = "✓"; el.appendChild(box);
-  } else if (x.type === "ScrollFrame" || tmpl === "WowScrollBoxList") el.classList.add("scroll");
-  else if (x.type === "Slider") el.classList.add("bar");
-  else if (tmpl === "MinimalScrollBar") {
-    // the game hides it while the list fits (ScrollUtil.AddManagedScrollBarVisibilityBehavior)
-    if (!overflows(x.points[0].rel)) { nodes[i] = null; return null; }
-    el.classList.add("bar");
-  } else if (x.type === "Texture") {
-    if (x.layer === "HIGHLIGHT") { nodes[i] = null; return null; }   // only under the mouse
-    if (x.color) el.style.background = "rgba(" + x.color.slice(0, 3).map(c => Math.round(c * 255)).join(",") + "," + x.color[3] + ")";
-    else if (/Gear/.test(x.texture || "")) { el.classList.add("gear"); el.textContent = "⚙"; }
-    else { nodes[i] = null; return null; }
-  }
-  else if (x.type === "FontString") {
-    // a button's own label is drawn by the button
-    const p = L[x.parent];
-    if (p && p.type === "Button" && p.text && !x.points.length) { nodes[i] = null; return null; }
-    el.classList.add("fs", fontClass(x));
-    if (x.w) el.style.whiteSpace = "pre-wrap";
-    el.innerHTML = markup(x.text || "");
+  if (x.type === "Texture") {
+    el.style.zIndex = (LAYERS[x.layer || (x.checkedMark ? "OVERLAY" : "ARTWORK")] || 0) * 100 + (x.sublevel || 0) + 8;
+    if (!paintTexture(el, x)) { nodes[i] = null; return null; }
+  } else if (x.type === "FontString") {
+    el.style.zIndex = 350;
+    el.classList.add("fs");
+    fontStyle(x, el.style);
+    if (x.wrap === true && x.w) el.classList.add("wrap");
+    const j = (x.justify || "CENTER").toUpperCase();
+    el.style.justifyContent = j === "LEFT" ? "flex-start" : j === "RIGHT" ? "flex-end" : "center";
+    const span = document.createElement("span");
+    span.innerHTML = markup(x.text || "");
+    el.appendChild(span);
+  } else {
+    el.style.zIndex = 1000 + (x.level || 0);
+    if (x.template === "WowScrollBoxList") el.classList.add("clip");
+    if (x.template === "MinimalScrollBar") {
+      const part = overflow(x.points[0].rel);   // the game hides the bar while the list fits
+      if (part === null) { nodes[i] = null; return null; }
+      const thumb = document.createElement("div");
+      thumb.className = "r";
+      thumb.style.cssText += ";left:1px;right:1px;top:0;border-radius:3px;background:#8a7f68;height:" + Math.round(part * 100) + "%";
+      el.appendChild(thumb);
+    }
+    if (x.type === "Button" && x.text && !x.hasFontString) {
+      el.classList.add("fs");
+      el.style.justifyContent = "center";
+      el.textContent = x.text;
+    }
   }
   host.appendChild(el);
   nodes[i] = el;
   return el;
 }
-for (let i = 0; i < L.length; i++) build(i);
-window.WINDOW_RECT = rect(0);
+
+window.draw = function () {
+  // a tab is as wide as its label: the mock only guesses how wide text is
+  L.forEach((x, i) => {
+    if (!x.isTab) return;
+    const label = L.find(y => y.parent === i && y.type === "FontString");
+    if (label) x.w = Math.max(x.w || 0, measure(label).w + 28);
+  });
+  for (let i = 0; i < L.length; i++) build(i);
+  window.WINDOW_RECT = rect(0);
+};
 </script>
 </body>
 </html>

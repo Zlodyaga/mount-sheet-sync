@@ -149,15 +149,15 @@ function Region:SetFocus() self._focus = true end
 function Region:SetFrameLevel(v) self._level = v end
 function Region:RegisterForClicks(...) self._clicks = { ... } end
 function Region:SetHighlightTexture(t) self._highlight = t end
-function Region:CreateTexture(name, layer)
-  local t = NewRegion("Texture", name, self, nil); t._layer = layer; return t
+function Region:CreateTexture(name, layer, template, sublevel)
+  local t = NewRegion("Texture", name, self, nil); t._layer, t._sublevel = layer, sublevel; return t
 end
-function Region:SetTexture(t) self._texture = t end
+function Region:SetTexture(t) self._texture = t; self._color = nil end
 function Region:SetTexCoord(...) self._texcoord = { ... } end
 function Region:SetAllPoints(rel) self._points = { { point = "ALL", rel = rel or self._parent, relPoint = "ALL", x = 0, y = 0 } } end
 function Region:SetColorTexture(r, g, b, a)
   assert(self._type == "Texture", "mock: SetColorTexture on " .. tostring(self._type))
-  self._color = { r, g, b, a }
+  self._color, self._texture = { r, g, b, a }, nil
 end
 function Region:GetCenter() if self._center then return self._center[1], self._center[2] end return nil end
 function Region:GetEffectiveScale() return self._scale or 1 end

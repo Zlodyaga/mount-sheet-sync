@@ -452,6 +452,12 @@ def dump_layout(root, path):
                 return i + 1
         return "UIParent"
 
+    def numbers(t, n=4):
+        return [t[k] for k in range(1, n + 1)] if t is not None else None
+
+    def rgba(c):
+        return [c.r, c.g, c.b, c.a]
+
     layout = []
     for i, x in enumerate([root] + export):
         pts = []
@@ -465,7 +471,16 @@ def dump_layout(root, path):
                        "radio": x._type == "CheckButton" and LUA_RAWGET(x, "code") is not None,
                        "layer": x._layer if x._type == "Texture" else None,
                        "texture": str(x._texture) if x._type == "Texture" and x._texture is not None else None,
-                       "color": [x._color[k] for k in range(1, 5)] if x._type == "Texture" and x._color is not None else None,
+                       "color": numbers(x._color) if x._type == "Texture" else None,
+                       "vertex": numbers(x._vertex),
+                       "gradient": [rgba(x._gradient[2]), rgba(x._gradient[3])] if x._gradient is not None else None,
+                       "isTab": bool(x._isTab), "sublevel": x._sublevel, "level": x._level, "texcoord": numbers(x._texcoord),
+                       "checkedMark": x._parent is not None and x._parent._checkedTexture is not None and x._parent._checkedTexture._uid == x._uid,
+                       "hasFontString": x._fs is not None, "extent": x._parent._view._extent if x._parent is not None and x._parent._view is not None else None,
+                       "justify": x._justify, "wrap": x._wrap, "textColor": numbers(x._color) if x._type == "FontString" else None,
+                       "fontFile": str(g[x._font]._file) if x._font is not None and g[x._font] is not None else None,
+                       "fontSize": g[x._font]._size if x._font is not None and g[x._font] is not None else None,
+                       "fontColor": numbers(g[x._font]._color) if x._font is not None and g[x._font] is not None else None,
                        "parent": ref(x._parent) if i else "UIParent", "points": pts, "scrollChildOf": None})
     for i, x in enumerate(export):
         if x._type == "ScrollFrame" and x._scrollChild is not None:
@@ -473,6 +488,22 @@ def dump_layout(root, path):
     json.dump(layout, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
 
 
+# the pictures show an ordinary week: the program is running and the sheet was reset; the sixth fixture character gets a class
+L.execute(r"""
+SCREEN_RESET, SCREEN_STATE = MountSheetSyncSheet.resetAt, MSS_NS.ProgramState
+MountSheetSyncSheet.resetAt = MOCK.now
+MSS_NS.ProgramState = function() return "online" end
+RAID_CLASS_COLORS.DRUID = { colorStr = "ffff7c0a" }
+MountSheetSyncDB.chars["Каэлиия-Ревущий фьорд"] = { name = "Каэлиия", realm = "Ревущий фьорд", classFile = "DRUID" }
+for _, color in pairs(RAID_CLASS_COLORS) do
+  local hex = color.colorStr
+  color.r, color.g, color.b = tonumber(hex:sub(3, 4), 16) / 255, tonumber(hex:sub(5, 6), 16) / 255, tonumber(hex:sub(7, 8), 16) / 255
+end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
+screen_hint = [x for x in regions("FontString") if under_window(x) and x._text == ns.L.window_offline][0]
+screen_hint.SetText(screen_hint, ns.L.window_hint)
 tabs[0].MockClick(tabs[0]); g.RunTimers()
 dump_layout(win, OUT_LAYOUT)
 LAYOUT_DIR = os.path.dirname(os.path.abspath(OUT_LAYOUT))
@@ -538,6 +569,13 @@ sf = g.MountSheetSyncSettingsFrame
 check("settings window opens for the screenshots", sf is not None and sf._shown)
 dump_layout(sf, os.path.join(LAYOUT_DIR, "layout_settings.json"))
 sf.Hide(sf)
+screen_hint.SetText(screen_hint, ns.L.window_offline)
+L.execute(r"""
+MountSheetSyncSheet.resetAt, MSS_NS.ProgramState = SCREEN_RESET, SCREEN_STATE
+MountSheetSyncDB.chars["Каэлиия-Ревущий фьорд"] = nil
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
 tabs[0].MockClick(tabs[0]); g.RunTimers()
 
 kill("Кто-то совсем другой", "Святилище Господства", "raid", 16)

@@ -38,8 +38,9 @@ ScrollBox в `wow_mock.lua` упрощён: `SetDataProvider` вызывает �
 
 ## Скриншоты окон аддона
 
-`test_addon_left.py` выгружает разметку окна (кадры, размеры, якоря, тексты, текстуры) в `tools/layout_left.json`,
-`layout_all.json`, `layout_log.json`, `layout_settings.json`; `python tools/screens/render.py` рисует их в браузере (своё оформление окон 3.0.3 он пока не знает: снимки окна — из игры)
-(playwright, Chromium) в `docs/screens/addon-*.png`. Персонажи — примерные из `wb_left.json`, классы — из
-`MountSheetSyncDB.chars` в тесте. ScrollBox, его полоса (только когда список не влезает), текстуры с цветом и
-шестерёнка рисуются по разметке; слой HIGHLIGHT не рисуется.
+`test_addon_left.py` выгружает разметку окна (кадры, размеры, якоря, цвета, шрифты, текстуры) в `tools/layout_left.json`,
+`layout_all.json`, `layout_attempts.json`, `layout_log.json`, `layout_settings.json`; `python tools/screens/render.py` рисует их в браузере
+(playwright, Chromium) в `docs/screens/addon-*.png`: шрифты и текстуры — настоящие из `Media`, порядок слоёв и кадров как в игре,
+слой HIGHLIGHT не рисуется. Персонажи — вымышленные из `wb_left.json`, классы — из `MountSheetSyncDB.chars` в тесте. На время
+выгрузки тест ставит обычную неделю: программа запущена, таблица сброшена. Значки маунтов — заглушки с первой буквой названия.
+Новая картинка на CurseForge получает новый адрес: его надо подставить в `docs/curseforge-description.md` и на сайте.

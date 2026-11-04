@@ -34,6 +34,8 @@ Portuguese spreadsheets.
 | --- | --- |
 | ![Attempts](docs/screens/addon-attempts.png) | ![Kill log](docs/screens/addon-log.png) |
 
+The pictures are drawn from the window's real layout: the names are made up, and the lettered tiles stand in for the game's mount icons.
+
 The addon window (Russian game client, sample characters). Drawn from the addon's real layout — the same frames,
 sizes and texts it creates in the game — with `tools/screens/render.py`; the in-game look follows your UI.
 
