@@ -494,3 +494,94 @@ fr: Les données sont sur cet ordinateur
 es: Los datos están en este ordenador
 pt: Os dados ficam neste computador
 
+@ Списка пока нет
+en: No list yet
+de: Noch keine Liste
+fr: Pas encore de liste
+es: Aún no hay lista
+pt: Ainda não há lista
+
+@ Проверяю данные…
+en: Checking the data…
+de: Daten werden geprüft…
+fr: Vérification des données…
+es: Comprobando los datos…
+pt: Verificando os dados…
+
+@ Обновлён: {0}
+en: Updated: {0}
+de: Aktualisiert: {0}
+fr: Mis à jour : {0}
+es: Actualizado: {0}
+pt: Atualizado: {0}
+
+@ Персонажи
+en: Characters
+de: Charaktere
+fr: Personnages
+es: Personajes
+pt: Personagens
+
+@ Добавьте их: меню значка → «Персонажи…».
+en: Add them: icon menu → “Characters…”.
+de: Füge sie hinzu: Symbolmenü → „Charaktere…“.
+fr: Ajoutez-les : menu de l'icône → « Personnages… ».
+es: Añádelos: menú del icono → «Personajes…».
+pt: Adicione-os: menu do ícone → “Personagens…”.
+
+@ Данные сверены с коллекцией
+en: Data checked against the collection
+de: Daten mit der Sammlung abgeglichen
+fr: Données comparées à la collection
+es: Datos comparados con la colección
+pt: Dados comparados com a coleção
+
+@ Всё уже учтено. Свежие убийства игра записывает в файл, когда вы выходите на выбор персонажа, из игры или делаете /reload.
+en: Everything is counted. The game writes fresh kills to its file when you go to character selection, leave the game or /reload.
+de: Alles ist erfasst. Neue Kills schreibt das Spiel in seine Datei, wenn du zur Charakterauswahl gehst, das Spiel verlässt oder /reload eingibst.
+fr: Tout est pris en compte. Le jeu écrit les nouvelles victoires dans son fichier quand vous allez au choix du personnage, quittez le jeu ou faites /reload.
+es: Todo está contado. El juego escribe las muertes nuevas en su archivo al ir a la selección de personaje, salir del juego o usar /reload.
+pt: Tudo já foi contado. O jogo grava as novas mortes no arquivo quando você vai à seleção de personagem, sai do jogo ou usa /reload.
+
+@ ! маунта «{0}» нет в списке
+en: ! mount “{0}” is not in the list
+de: ! Reittier „{0}“ ist nicht in der Liste
+fr: ! la monture « {0} » n'est pas dans la liste
+es: ! la montura «{0}» no está en la lista
+pt: ! a montaria “{0}” não está na lista
+
+@ Отмечено: {0}
+en: Marked: {0}
+de: Markiert: {0}
+fr: Marqué : {0}
+es: Marcado: {0}
+pt: Marcado: {0}
+
+@ В «Осталось» этих строк больше нет.
+en: These rows are no longer in “Remaining”.
+de: Diese Zeilen sind nicht mehr in „Verbleibend“.
+fr: Ces lignes ne sont plus dans « Restant ».
+es: Estas filas ya no están en «Restante».
+pt: Estas linhas não estão mais em “Restante”.
+
+@ Маунт не нашёлся в списке
+en: Mount not found in the list
+de: Reittier nicht in der Liste gefunden
+fr: Monture introuvable dans la liste
+es: Montura no encontrada en la lista
+pt: Montaria não encontrada na lista
+
+@ Не нашёлся в списке: {0}.
+en: Not found in the list: {0}.
+de: Nicht in der Liste gefunden: {0}.
+fr: Introuvable dans la liste : {0}.
+es: No encontrado en la lista: {0}.
+pt: Não encontrado na lista: {0}.
+
+@ Отмечены собранными: {0}.
+en: Marked as collected: {0}.
+de: Als gesammelt markiert: {0}.
+fr: Marquées comme obtenues : {0}.
+es: Marcadas como conseguidas: {0}.
+pt: Marcadas como coletadas: {0}.
+

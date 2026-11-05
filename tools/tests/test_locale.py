@@ -46,6 +46,7 @@ def new_game(locale, saved_db=None):
     loader = L.eval("function(src, name) return assert(loadstring(src, '@' .. name)) end")
     for name in files:
         loader(open(os.path.join(ADDON_DIR, name), encoding="utf-8").read(), name)("MountSheetSync", ns)
+    L.eval("function(n) n.UsesListWords = function() return false end end")(ns)   # the texts of a player with a Google sheet
     global LUA_RAWGET
     LUA_RAWGET = L.eval("rawget")
     g.Fire("ADDON_LOADED", "MountSheetSync")
@@ -202,6 +203,19 @@ for f in sorted(glob.glob(os.path.join(ADDON_DIR, "*.lua"))):
         for ch in "·→←↑↓":
             if ch in code:
                 bad.append("%s:%d %r" % (os.path.basename(f), n, ch))
+# words for a player without a Google sheet
+LIST = ns.LIST_WORDS
+codes = ["enUS", "ruRU", "deDE", "frFR", "esES", "ptBR"]
+list_keys = {c: set(LIST[c].keys()) for c in codes}
+check("list words: every language has the same keys", all(list_keys[c] == list_keys["enUS"] for c in codes), {c: sorted(list_keys["enUS"] ^ list_keys[c]) for c in codes})
+base = ns.TRANSLATIONS
+check("list words replace existing texts", all(base.enUS[k] is not None for k in list_keys["enUS"]))
+fmt = lambda t: re.findall(r"%[sd]", str(t))
+check("list words: the same %s / %d in the same order as the texts they replace",
+      all(fmt(LIST[c][k]) == fmt(base.enUS[k]) for c in codes for k in list_keys["enUS"]), [(c, k) for c in codes for k in list_keys["enUS"] if fmt(LIST[c][k]) != fmt(base.enUS[k])][:5])
+SHEET_WORD = re.compile(r"таблиц|sheet|Tabelle|tableau|tabla|planilha|Google", re.I)
+check("list words don't name a sheet", not [(c, k) for c in codes for k in list_keys["enUS"] if SHEET_WORD.search(str(LIST[c][k]).replace("Mount Sheet Sync", ""))], [(c, k) for c in codes for k in list_keys["enUS"] if SHEET_WORD.search(str(LIST[c][k]).replace("Mount Sheet Sync", ""))][:5])
+check("no glyphs missing from WoW fonts in list words", not [(c, k) for c in codes for k in list_keys["enUS"] if re.search("[·→←↑↓]", str(LIST[c][k]))])
 check("no glyphs missing from WoW fonts in addon texts (· → … shown as a box)", not bad, bad[:5])
 
 passed = sum(1 for _, ok in checks if ok)

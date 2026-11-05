@@ -152,7 +152,7 @@ namespace MountSheetSync
             recentItem = new ToolStripMenuItem(Tr._("Последние события"));
             recentItem.DropDownItems.Add(Disabled(Tr._("Пока ничего не отправлялось")));
             leftItem = new ToolStripMenuItem(Tr._("Осталось на неделе"));
-            leftItem.DropDownItems.Add(Disabled(Tr._("Список ещё не получен из таблицы")));
+            leftItem.DropDownItems.Add(Disabled(settings.IsLocal ? Tr._("Списка пока нет") : Tr._("Список ещё не получен из таблицы")));
             openSheetItem = Item(Tr._("Открыть таблицу"), delegate { OpenSheet(); });
             openSheetItem.Visible = false;
             signInItem = Item(Tr._("Войти через Google…"), delegate { SignIn(); });
@@ -303,7 +303,7 @@ namespace MountSheetSync
                         : Tr._("Откройте «Настройки…» и вставьте адрес веб-приложения");
                     break;
                 case SyncState.Checking:
-                    status = Tr._("Проверяю связь с таблицей…");
+                    status = cfg.IsLocal ? Tr._("Проверяю данные…") : Tr._("Проверяю связь с таблицей…");
                     break;
                 case SyncState.NoGame:
                     status = Tr._("Не найдена папка World of Warcraft");
@@ -356,6 +356,7 @@ namespace MountSheetSync
             // Visible у пункта меню читается как «виден ли сейчас на экране» — поэтому условие отдельно
             bool haveSheet = settings.HasOwnBook && (settings.IsLocal || signedIn);
             addCharsItem.Visible = haveSheet;
+            addCharsItem.Text = settings.IsLocal ? Tr._("Персонажи…") : Tr._("Персонажи в таблице…");
             collectionItem.Visible = haveSheet;
             farmItem.Visible = haveSheet;
             autostartItem.Checked = Autostart.IsEnabled();
@@ -400,7 +401,7 @@ namespace MountSheetSync
             ClearItems(leftItem);
             if (last.Left.Count == 0)
             {
-                leftItem.DropDownItems.Add(Disabled(last.LeftNote.Length > 0 ? last.LeftNote : Tr._("Список ещё не получен из таблицы")));
+                leftItem.DropDownItems.Add(Disabled(last.LeftNote.Length > 0 ? last.LeftNote : settings.IsLocal ? Tr._("Списка пока нет") : Tr._("Список ещё не получен из таблицы")));
                 return;
             }
             foreach (CharLeft c in last.Left)
@@ -427,7 +428,7 @@ namespace MountSheetSync
             }
             if (last.LeftAt.HasValue)
             {
-                leftItem.DropDownItems.Add(Disabled(Tr.F("Из таблицы {0}", TextUtil.When(last.LeftAt.Value))));
+                leftItem.DropDownItems.Add(Disabled(settings.IsLocal ? Tr.F("Обновлён: {0}", TextUtil.When(last.LeftAt.Value)) : Tr.F("Из таблицы {0}", TextUtil.When(last.LeftAt.Value))));
             }
         }
 
@@ -619,7 +620,7 @@ namespace MountSheetSync
                 if (add)
                 {
                     CharacterChanges ch = f.Changes;
-                    ShowNote(MakeNote(Tr._("Персонажи в таблице"), TextUtil.Sentence(ch != null ? ch.Summary() : Tr._("без изменений")), false));
+                    ShowNote(MakeNote(settings.IsLocal ? Tr._("Персонажи") : Tr._("Персонажи в таблице"), TextUtil.Sentence(ch != null ? ch.Summary() : Tr._("без изменений")), false));
                     if (ch != null && ch.RemovedCharacters.Count > 0)
                     {
                         worker.IgnoreMissing(ch.RemovedCharacters);   // убрали сами — не напоминать «нет листов»

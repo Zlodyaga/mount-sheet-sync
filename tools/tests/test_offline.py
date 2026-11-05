@@ -171,6 +171,23 @@ check("version order like the program: 2.9 < 2.10, 2.9.0-alpha1 < alpha2 < beta1
       vl("2.9.0", "2.10.0") and vl("2.9.0-alpha1", "2.9.0-alpha2") and vl("2.9.0-alpha2", "2.9.0-beta1") and vl("2.9.0-beta1", "2.9.0")
       and not vl("2.9.0", "2.9") and not vl("2.9", "2.9.0") and not vl("2.10.0", "2.9.9"))
 
+# which words the window uses: a sheet is named only when there is one
+def words_with(program):
+    L2, g2, ns2, _ = new_game(program)
+    return str(ns2.L.button_sync), str(ns2.L.window_hint)
+
+
+local_words = words_with('MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.10.0", storage = "local" }\n' % NOW)
+check("data on this computer: «Сохранить отметки», no sheet named", local_words[0] == "Сохранить отметки" and "таблиц" not in local_words[1], local_words)
+google_words = words_with('MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.10.0", storage = "google" }\n' % NOW)
+check("a Google sheet: «Отправить в таблицу»", google_words[0] == "Отправить в таблицу" and "таблиц" in google_words[1], google_words)
+script_words = words_with('MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.10.0", storage = "script" }\n' % NOW)
+check("a sheet with the script: the same", script_words[0] == "Отправить в таблицу", script_words)
+old_words = words_with('MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.9.2" }\n' % NOW)
+check("an older program says nothing, it always has a sheet", old_words[0] == "Отправить в таблицу", old_words)
+none_words = words_with("MountSheetSyncProgram = nil\n")
+check("no program at all: no sheet to name", none_words[0] == "Сохранить отметки", none_words)
+
 failed = [n for n, ok in checks if not ok]
 print("%d/%d checks passed" % (len(checks) - len(failed), len(checks)))
 raise SystemExit(1 if failed else 0)

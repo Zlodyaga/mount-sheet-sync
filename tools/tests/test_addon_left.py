@@ -123,6 +123,7 @@ loader = L.eval("function(src, name) return assert(loadstring(src, '@' .. name))
 for name in files:
     src = sheet_src if name == "SheetData.lua" else open(os.path.join(ADDON_DIR, name), encoding="utf-8").read()
     loader(src, name)("MountSheetSync", ns)
+L.eval("function(n) n.UsesListWords = function() return false end end")(ns)   # the texts of a player with a Google sheet
 shipped = open(os.path.join(ADDON_DIR, "SheetData.lua"), encoding="utf-8").read()
 check("shipped SheetData.lua is valid Lua and empty", "MountSheetSyncSheet = nil" in shipped and loader(shipped, "x") is not None)
 
@@ -502,6 +503,8 @@ L.execute(r"""
 SCREEN_RESET, SCREEN_STATE = MountSheetSyncSheet.resetAt, MSS_NS.ProgramState
 MountSheetSyncSheet.resetAt = MOCK.now
 MSS_NS.ProgramState = function() return "online" end
+MSS_NS.UsesListWords = function() return true end   -- a new player's words; ApplyLanguage redraws the labels
+MSS_NS.ApplyLanguage()
 RAID_CLASS_COLORS.DRUID = { colorStr = "ffff7c0a" }
 MountSheetSyncDB.chars["Каэлиия-Ревущий фьорд"] = { name = "Каэлиия", realm = "Ревущий фьорд", classFile = "DRUID" }
 for _, color in pairs(RAID_CLASS_COLORS) do
@@ -581,6 +584,8 @@ sf.Hide(sf)
 screen_hint.SetText(screen_hint, ns.L.window_offline)
 L.execute(r"""
 MountSheetSyncSheet.resetAt, MSS_NS.ProgramState = SCREEN_RESET, SCREEN_STATE
+MSS_NS.UsesListWords = function() return false end
+MSS_NS.ApplyLanguage()
 MountSheetSyncDB.chars["Каэлиия-Ревущий фьорд"] = nil
 MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
 MSS_NS.OnChange()""")

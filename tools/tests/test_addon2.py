@@ -80,6 +80,7 @@ loader = L.eval("function(src, name) return assert(loadstring(src, '@' .. name))
 for name in files:
     src = open(os.path.join(ADDON_DIR, name), encoding="utf-8").read()
     loader(src, name)("MountSheetSync", ns)
+L.eval("function(n) n.UsesListWords = function() return false end end")(ns)   # the texts of a player with a Google sheet
 print("loaded:", ", ".join(files))
 
 checks = []

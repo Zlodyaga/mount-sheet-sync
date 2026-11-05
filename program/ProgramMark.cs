@@ -24,6 +24,7 @@ namespace MountSheetSync
         DateTime nextRescan = DateTime.MinValue;
         DateTime nextBeat = DateTime.MinValue;
         bool lastSheet;
+        string lastStorage = "";
         bool stopped;
 
         /// <summary>Из цикла синхронизации: не чаще раза в минуту (или сразу, если настройки поменялись).</summary>
@@ -42,7 +43,7 @@ namespace MountSheetSync
                     wowPath = settings.WowPath;
                     nextRescan = DateTime.MinValue;
                 }
-                if (now < nextBeat && sheet == lastSheet && now < nextRescan)
+                if (now < nextBeat && sheet == lastSheet && settings.Mode == lastStorage && now < nextRescan)
                 {
                     return;
                 }
@@ -59,8 +60,9 @@ namespace MountSheetSync
                     nextRescan = now + RescanEvery;
                 }
                 lastSheet = sheet;
+                lastStorage = settings.Mode;
                 nextBeat = now + Every;
-                WriteAll(Text(UnixNow(), sheet));
+                WriteAll(Text(UnixNow(), sheet, lastStorage));
             }
         }
 
@@ -76,18 +78,19 @@ namespace MountSheetSync
                 stopped = true;
                 if (nextBeat != DateTime.MinValue)
                 {
-                    WriteAll(Text(0, lastSheet));
+                    WriteAll(Text(0, lastSheet, lastStorage));
                 }
             }
         }
 
-        public static string Text(long seen, bool sheet)
+        public static string Text(long seen, bool sheet, string storage)
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("-- Mount Sheet Sync: MountSheetSync.exe rewrites this file every minute while it runs,\r\n");
             sb.Append("-- so the addon knows whether kills go to the sheet right away. There is no need to edit it.\r\n");
             sb.Append("MountSheetSyncProgram = { seen = ").Append(seen)
               .Append(", sheet = ").Append(sheet ? "true" : "false")
+              .Append(", storage = \"").Append(storage).Append("\"")
               .Append(", version = \"").Append(Program.Version)
               .Append("\", addon = \"").Append(Program.MinAddon).Append("\" }\r\n");
             return sb.ToString();

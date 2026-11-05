@@ -10,6 +10,8 @@ WoW (аддон) ──SavedVariables\MountSheetSync.lua──► програм
 В режиме «на этом компьютере» (`settings.mode = local`, с 2.10.0 у новых игроков по умолчанию) вместо Google-таблицы — файл `local-data.json`: те же листы и строки,
 запросов в сеть нет, остальное в этой схеме так же.
 
+`Program.lua` несёт `storage` (`settings.mode`): `local` — аддон пишет «список» вместо «таблицы» (`ns.UsesListWords`, тексты `LIST_WORDS` в `Locales.lua`); программы до 2.10 поля не пишут, у них таблица есть всегда. Нет `Program.lua` — тоже «список».
+
 `local-data.json`: `{format: 1, app, lang, title, properties{}, sheets[{name, id, formulas[], rows[[…]]}]}`. Листы и заголовки — «русские», как в памяти программы (`SheetLang`), значения — на языке данных. Запись атомарная (`.tmp`, затем замена), прошлая версия — `.bak`. Если основной файл повреждён, `LocalBook.Load` откладывает его как `.damaged` и восстанавливает `.bak`, чтобы следующая запись не затёрла копию.
 
 - **Игра → программа.** Аддон пишет `MountSheetSyncDB` в SavedVariables; игра сохраняет файл только при выходе

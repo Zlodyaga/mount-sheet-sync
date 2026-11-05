@@ -125,6 +125,13 @@ namespace MountSheetSync
         // список «Осталось» для аддона
         static readonly TimeSpan StatusInterval = TimeSpan.FromMinutes(30);
         bool statusDirty = true;
+
+        /// <summary>Данные на этом компьютере: в сообщениях нет таблицы.</summary>
+        bool Local
+        {
+            get { return engine.Settings.IsLocal; }
+        }
+
         DateTime nextStatusAt = DateTime.MinValue;
         int statusFailures;
         bool statusUnsupported;
@@ -512,7 +519,9 @@ namespace MountSheetSync
                     missingNotified.UnionWith(newlyMissing);
                     stateChanged = true;
                     Send(Tr.F("Нет листов для: {0}", string.Join(", ", newlyMissing)),
-                        !engine.Settings.UsesScript
+                        engine.Settings.IsLocal
+                            ? Tr._("Добавьте их: меню значка → «Персонажи…».")
+                            : !engine.Settings.UsesScript
                             ? Tr._("Добавьте их в таблицу: меню значка → «Персонажи в таблице…».")
                             : Tr._("Отметки этих персонажей сохраняться не будут. Проверьте названия листов в таблице."), true, false);
                 }
@@ -723,11 +732,11 @@ namespace MountSheetSync
                 AddRecent(Tr.F("Сверка с коллекцией: {0}", res.Summary()));
                 SaveState();
                 Publish();
-                Send(Tr._("Таблица сверена с коллекцией"), TextUtil.Sentence(res.Summary()), false, manual);
+                Send(Local ? Tr._("Данные сверены с коллекцией") : Tr._("Таблица сверена с коллекцией"), TextUtil.Sentence(res.Summary()), false, manual);
             }
             else if (manual)
             {
-                Send(Tr._("Таблица сверена с коллекцией"), Tr._("Всё уже совпадает: собранные маунты отмечены, лишних строк нет."), false, true);
+                Send(Local ? Tr._("Данные сверены с коллекцией") : Tr._("Таблица сверена с коллекцией"), Tr._("Всё уже совпадает: собранные маунты отмечены, лишних строк нет."), false, true);
             }
         }
 
@@ -1142,7 +1151,8 @@ namespace MountSheetSync
                 if (manual)
                 {
                     Send(Tr._("Новых записей нет"),
-                        Tr._("Всё уже в таблице. Свежие убийства игра записывает в файл, когда вы выходите на выбор персонажа, из игры или делаете /reload."),
+                        Local ? Tr._("Всё уже учтено. Свежие убийства игра записывает в файл, когда вы выходите на выбор персонажа, из игры или делаете /reload.")
+                            : Tr._("Всё уже в таблице. Свежие убийства игра записывает в файл, когда вы выходите на выбор персонажа, из игры или делаете /reload."),
                         false, true);
                 }
                 return;
@@ -1162,7 +1172,7 @@ namespace MountSheetSync
             }
             foreach (string m in sum.MountsNotFound)
             {
-                AddRecent(Tr.F("! маунта «{0}» нет в таблице", m));
+                AddRecent(Local ? Tr.F("! маунта «{0}» нет в списке", m) : Tr.F("! маунта «{0}» нет в таблице", m));
             }
             foreach (string p in sum.Planned)
             {
@@ -1193,7 +1203,7 @@ namespace MountSheetSync
             }
             else if (sum.Marked.Count > 0)
             {
-                title = Tr.F("Отмечено в таблице: {0}", sum.Marked.Count);
+                title = Local ? Tr.F("Отмечено: {0}", sum.Marked.Count) : Tr.F("Отмечено в таблице: {0}", sum.Marked.Count);
                 lines.AddRange(sum.Marked.Take(4));
                 if (sum.Marked.Count > 4)
                 {
@@ -1203,18 +1213,25 @@ namespace MountSheetSync
             else if (sum.Collected.Count > 0)
             {
                 title = sum.Collected.Count == 1 ? Tr.F("Новый маунт: {0}", sum.Collected[0]) : Tr.F("Новые маунты: {0}", sum.Collected.Count);
-                lines.Add(sum.Collected.Count == 1 ? Tr._("«Собрано?» в таблице отмечено.")
-                    : Tr.F("«Собрано?» в таблице отмечено: {0}.", string.Join(", ", sum.Collected)));
+                if (Local)
+                {
+                    lines.Add(Tr.F("Отмечены собранными: {0}.", string.Join(", ", sum.Collected)));
+                }
+                else
+                {
+    lines.Add(sum.Collected.Count == 1 ? Tr._("«Собрано?» в таблице отмечено.")
+                        : Tr.F("«Собрано?» в таблице отмечено: {0}.", string.Join(", ", sum.Collected)));
+                }
             }
             else if (sum.Planned.Count > 0)
             {
                 title = Tr.F("Не фармлю: {0}", sum.Planned.Count);
                 lines.AddRange(sum.Planned.Take(4));
-                lines.Add(Tr._("Галочка «Фармлю» в таблице снята — в «Осталось» этих строк больше нет."));
+                lines.Add(Local ? Tr._("В «Осталось» этих строк больше нет.") : Tr._("Галочка «Фармлю» в таблице снята — в «Осталось» этих строк больше нет."));
             }
             else if (sum.MountsNotFound.Count > 0)
             {
-                title = Tr._("Маунт не нашёлся в таблице");
+                title = Local ? Tr._("Маунт не нашёлся в списке") : Tr._("Маунт не нашёлся в таблице");
                 lines.Add(Tr.F("{0} — отметьте «Собрано?» вручную.", string.Join(", ", sum.MountsNotFound)));
                 warning = true;
             }
@@ -1239,7 +1256,7 @@ namespace MountSheetSync
             }
             if (sum.MountsNotFound.Count > 0 && !warning)
             {
-                lines.Add(Tr.F("Не нашёлся в таблице: {0} — отметьте «Собрано?» вручную.", string.Join(", ", sum.MountsNotFound)));
+                lines.Add(Local ? Tr.F("Не нашёлся в списке: {0}.", string.Join(", ", sum.MountsNotFound)) : Tr.F("Не нашёлся в таблице: {0} — отметьте «Собрано?» вручную.", string.Join(", ", sum.MountsNotFound)));
             }
             if (sum.Warnings.Count > 0 && !warning)
             {

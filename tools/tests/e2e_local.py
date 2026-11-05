@@ -188,6 +188,7 @@ check("…without the arrow the game's fonts can't draw", "\u2192" not in sheet_
 check("…and with a mount ID for rows that have no chance too", re.search(r'mount = "Вулканический дракон",.{0,400}?id = \d', sheet_lua(), re.S) is not None or sheet_lua().count("id = ") >= 100, sheet_lua().count("id = "))
 program_lua = open(os.path.join(ADDON, "Program.lua"), encoding="utf-8").read()
 check("Program.lua: the addon sees the program as connected", "sheet = true" in program_lua.replace('["sheet"]', "sheet"), program_lua[:300])
+check("…and knows the data is on this computer, so it won't name a sheet", 'storage = "local"' in program_lua, program_lua[:300])
 
 before = attempts(A, "Сильвана Ветрокрылая")
 write_sv([kill("K1", "Сильвана Ветрокрылая")])
