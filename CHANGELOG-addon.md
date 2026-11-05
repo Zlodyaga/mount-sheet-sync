@@ -3,6 +3,7 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.4
+- Left-click a row in “Remaining”, “All characters” or “Attempts” to open that mount in the game's Mount Journal. The window steps aside and comes back when the journal closes.
 - Mount icons on every row of “Remaining”, including achievements and guaranteed drops. Needs the program 2.10.0; with an older one those rows stay without an icon.
 - The difficulty column is short and readable: “N10”, “Torghast”, “Ach.” and the like, with the full text in the tooltip.
 - The tooltip about the program no longer says that a Google Sheet is required.

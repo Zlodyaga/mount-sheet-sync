@@ -270,6 +270,44 @@ local function BossAndDiff(boss, diff)
   return text
 end
 
+-- Журнал маунтов игры на этом маунте. Наше окно выше по слоям и закрыло бы журнал: прячем, а когда журнал закроют, возвращаем.
+local reopenAfterJournal, journalHooked
+
+local function ShowMountInJournal(id)
+  local ok = pcall(function()
+    if not MountJournal then
+      C_AddOns.LoadAddOn("Blizzard_Collections")
+    end
+    local tab = COLLECTIONS_JOURNAL_TAB_INDEX_MOUNTS or 1
+    if SetCollectionsJournalShown then
+      SetCollectionsJournalShown(true, tab)
+    else
+      if not (CollectionsJournal and CollectionsJournal:IsShown()) then
+        ToggleCollectionsJournal(tab)
+      end
+      CollectionsJournal_SetTab(CollectionsJournal, tab)
+    end
+    MountJournal_SelectByMountID(id)
+  end)
+  if not ok then
+    ns.Print(L.journal_open_failed)
+    return
+  end
+  if CollectionsJournal and CollectionsJournal:IsShown() and frame:IsShown() then
+    if not journalHooked then
+      journalHooked = true
+      CollectionsJournal:HookScript("OnHide", function()
+        if reopenAfterJournal then
+          reopenAfterJournal = false
+          frame:Show()
+        end
+      end)
+    end
+    reopenAfterJournal = true
+    frame:Hide()
+  end
+end
+
 -- Меню по правому щелчку на строке «Осталось» (только у текущего персонажа): не фармить строку или весь рейд / подземелье.
 local function ShowRowMenu(button)
   local entry = button.elem and button.elem.entry
@@ -332,6 +370,9 @@ local function ShowRowTooltip(button)
     GameTooltip:SetText(elem.tip[1], 1, 0.82, 0)
     for i = 2, #elem.tip do
       GameTooltip:AddLine(elem.tip[i], 1, 1, 1, true)
+    end
+    if elem.mountID then
+      GameTooltip:AddLine(L.tip_row_open, 0.6, 0.6, 0.6, true)
     end
     if elem.entry then
       GameTooltip:AddLine(L.tip_row_menu, 0.6, 0.6, 0.6, true)
@@ -513,8 +554,14 @@ local function InitRow(button, elem)
     button.hl = button:CreateTexture(nil, "HIGHLIGHT")
     button.hl:SetAllPoints()
     button.hl:SetColorTexture(1, 1, 1, 0.08)
-    button:RegisterForClicks("RightButtonUp")
-    button:SetScript("OnClick", ShowRowMenu)
+    button:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+    button:SetScript("OnClick", function(self, mouse)
+      if mouse == "RightButton" then
+        ShowRowMenu(self)
+      elseif self.elem and self.elem.mountID then
+        ShowMountInJournal(self.elem.mountID)
+      end
+    end)
     button:SetScript("OnEnter", ShowRowTooltip)
     button:SetScript("OnLeave", LeaveRow)
   end
@@ -758,6 +805,11 @@ local function NoDataView()
   return NO_DATA
 end
 
+-- ID маунта, которого знает игра (у него есть значок): только такой можно открыть в журнале.
+local function KnownMount(id)
+  return ns.MountIcon(id) and tonumber(id) or nil
+end
+
 -- Строка таблицы у персонажа: осталось — со счётчиком попыток, убита — серая, с галочкой.
 local function RemainingRow(entry, menu, stripe)
   local cols, doneCols = LeftColumns()
@@ -769,7 +821,7 @@ local function RemainingRow(entry, menu, stripe)
   local n, p, id = ns.ItemAttempts(item)
   if entry.done then
     local status = (entry.again and string.format(L.left_again, ns.FormatDuration(entry.again)) or L.left_done):gsub("^%s*—%s*", "")
-    return { cols = doneCols, done = true, icon = DONE_TEXTURE, stripe = stripe, tip = tip, values = {
+    return { cols = doneCols, done = true, icon = DONE_TEXTURE, mountID = KnownMount(item.id or id), stripe = stripe, tip = tip, values = {
       boss = "|cff8c8c8c" .. Safe(item.boss) .. "|r",
       diff = "|cff8c8c8c" .. ShortDiff(item.diff) .. "|r",
       mount = "|cff8c8c8c" .. Safe(item.mount) .. "|r",
@@ -785,7 +837,7 @@ local function RemainingRow(entry, menu, stripe)
     chance = "|cff" .. ChanceColor(n, p) .. ns.FormatChance(n, p) .. "|r"
     tip[#tip + 1] = string.format(L.boss_hint, n, ns.FormatChance(n, p))
   end
-  return { cols = cols, icon = ns.MountIcon(item.id or id), stripe = stripe, tip = tip, entry = menu and entry or nil, values = {
+  return { cols = cols, icon = ns.MountIcon(item.id or id), mountID = KnownMount(item.id or id), stripe = stripe, tip = tip, entry = menu and entry or nil, values = {
     boss = Safe(item.boss),
     diff = diff,
     mount = "|cffc9a0ff" .. Safe(item.mount) .. "|r",
@@ -880,7 +932,7 @@ local function GridView(rows, all)
       end
     end
     local _, _, id = ns.ItemAttempts(item)
-    list[#list + 1] = { cols = cols, names = names, killed = row.killed or false, icon = ns.MountIcon(item.id or id), stripe = stripe,
+    list[#list + 1] = { cols = cols, names = names, killed = row.killed or false, icon = ns.MountIcon(item.id or id), mountID = KnownMount(item.id or id), stripe = stripe,
       tip = { Safe(item.mount), BossAndDiff(item.boss, item.diff), table.concat(shownNames, ", ") }, values = {
         boss = Safe(item.boss),
         diff = "|cffb7ae9a" .. ShortDiff(item.diff) .. "|r",
@@ -958,7 +1010,7 @@ local function AttemptsView(rows, chars)
     if hasTries then
       color, bar, v = ChanceColor(m.n, m.p)
     end
-    list[i] = { cols = cols, icon = ns.MountIcon(m.id), stripe = i % 2 == 0, tip = tip, bar = v, barColor = bar, values = {
+    list[i] = { cols = cols, icon = ns.MountIcon(m.id), mountID = KnownMount(m.id), stripe = i % 2 == 0, tip = tip, bar = v, barColor = bar, values = {
       mount = "|cffc9a0ff" .. Safe(m.name) .. "|r",
       boss = Safe(m.boss),
       diff = "|cffb7ae9a" .. ShortDiff(m.diff) .. "|r",

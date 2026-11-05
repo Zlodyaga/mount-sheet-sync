@@ -351,7 +351,7 @@ check("…the header: boss, difficulty, mount, a column per character, total",
 check("…all fit: no scroll bar under the columns", not win.gridSlider._shown)
 gr._scripts.OnEnter(gr)
 tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
-check("…hover: every name in the tooltip", tt[-1] == ", ".join(str(first.names[i]) for i in range(1, len(first.names) + 1)), tt)
+check("…hover: every name in the tooltip", ", ".join(str(first.names[i]) for i in range(1, len(first.names) + 1)) in tt, tt)
 gr._scripts.OnLeave(gr)
 # a raid with separate lockouts: the program marks the row, the difficulties killed are in item.k
 sep_ch = None
@@ -588,6 +588,37 @@ MSS_NS.OnChange()""")
 g.RunTimers()
 tabs[0].MockClick(tabs[0]); g.RunTimers()
 check("3.0.4: the row's own ID gives the icon", any(f.icon._shown and f.icon._texture == 132226 for f in pool(ROW)))
+# left click on a row: the game's Mount Journal on this mount; our window is above it, so it steps aside until the journal closes
+L.execute("""
+MountJournal = {}
+CollectionsJournal = CreateFrame("Frame", "CollectionsJournal")
+CollectionsJournal:Hide()
+function SetCollectionsJournalShown(shown, tab) MOCK_TAB = tab; CollectionsJournal:Show() end
+function MountJournal_SelectByMountID(id) MOCK_SELECTED = id end""")
+with_mount = [f for f in pool(ROW) if f.elem.mountID is not None][0]
+check("3.0.4: a row whose mount the game knows can be opened", with_mount.elem.mountID is not None)
+with_mount.MockClick(with_mount)
+check("3.0.4: left click opens the Mount Journal tab on that mount", g.MOCK_TAB == 1 and g.MOCK_SELECTED == with_mount.elem.mountID, (g.MOCK_TAB, g.MOCK_SELECTED))
+check("…our window steps aside", not win._shown)
+g.CollectionsJournal.Hide(g.CollectionsJournal); g.RunTimers()
+check("…and comes back when the journal closes", win._shown)
+L.execute("""
+SetCollectionsJournalShown = nil
+function ToggleCollectionsJournal(tab) MOCK_TAB = tab; CollectionsJournal:Show() end
+function CollectionsJournal_SetTab(frame, tab) MOCK_SET_TAB = tab end
+MOCK_SELECTED = nil""")
+with_mount = [f for f in pool(ROW) if f.elem.mountID is not None][0]
+with_mount.MockClick(with_mount)
+check("…the same with only the older way to show the journal", g.MOCK_SET_TAB == 1 and g.MOCK_SELECTED == with_mount.elem.mountID and not win._shown, (g.MOCK_SET_TAB, g.MOCK_SELECTED))
+g.CollectionsJournal.Hide(g.CollectionsJournal); g.RunTimers()
+L.execute("function MountJournal_SelectByMountID(id) error('no such function') end; CollectionsJournal:Hide()")
+win.Show(win); g.RunTimers()
+with_mount = [f for f in pool(ROW) if f.elem.mountID is not None][0]
+with_mount.MockClick(with_mount)
+check("a journal that fails: said so in the chat, our window stays", win._shown and "журнал маунтов" in chat_all(), chat_all()[-200:])
+L.execute("CollectionsJournal:Hide(); CollectionsJournal = nil; MountJournal = nil; ToggleCollectionsJournal = nil; CollectionsJournal_SetTab = nil; MountJournal_SelectByMountID = nil")
+g.RunTimers()
+win.Show(win); g.RunTimers()
 L.execute("""
 for _, c in ipairs(MountSheetSyncSheet.chars) do
   for _, i in ipairs(c.items) do i.id = nil end
