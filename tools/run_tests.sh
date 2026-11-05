@@ -37,6 +37,7 @@ run test_gamedata.py
 run test_collection_sync.py
 run test_layout22.py
 run test_attempts.py
+run test_local_book.py
 run test_release_plan.py
 run e2e_google.py "$EXE"
 run e2e_week.py "$EXE"
@@ -48,6 +49,7 @@ run e2e_local.py "$EXE"
 run e2e_update.py "$EXE"
 if [ "${1:-}" != "--no-ui" ]; then
   run ui_google.py "$EXE"
+run ui_local.py "$EXE"
   run ui_lang.py "$EXE"
   run ui_update.py "$EXE"
   run e2e_install.py "$EXE"

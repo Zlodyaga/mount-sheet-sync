@@ -134,6 +134,11 @@ def lua_list(t):
     return [t[i] for i in range(1, len(t) + 1)]
 
 
+def all_head_rows():
+    heads = [plain(x._text) for x in regions("FontString") if under_window(x) and x._shown and x._text is not None and "Ещё убить на этой неделе" in plain(x._text)]
+    return int(heads[0].split("строк ")[1].split(" ")[0])
+
+
 def chat_all():
     return "\n".join(str(g.CHAT[i]) for i in range(1, len(g.CHAT) + 1))
 
@@ -631,9 +636,37 @@ MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
 MSS_NS.OnChange()""")
 g.RunTimers()
 
+# 3.0.4: difficulties the catalog writes at length are short in the column
+SHORT = {"Normal 10, 3 drakes up": "N10", "Heroic 25": "H25", "Achievement": "Дост.", "Любая": "Любая", "Удалённая награда": "Удалена",
+         "Torghast": "Торгаст", "3400+ M+ rating in current season": "3400+", "MoP Challenge Mode": "CM", "Mythic, hard mode": "M", "Mythic dungeon achievements": "Дост."}
+tabs[0].MockClick(tabs[0]); g.RunTimers()
+for long_text, short_text in SHORT.items():
+    L.execute("""
+    for _, i in ipairs(MountSheetSyncSheet.chars[1].items) do
+      if i.mount == "Поводья Повелителя воронов" then i.diff = %s end
+    end
+    MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+    MSS_NS.OnChange()""" % lua_str(long_text))
+    g.RunTimers()
+    tabs[0].MockClick(tabs[0]); g.RunTimers()
+    line = [plain(t) for t in shown_rows() if "Поводья Повелителя воронов" in plain(t)]
+    check("3.0.4: «%s» reads «%s»" % (long_text, short_text), line and (" | %s | " % short_text) in line[0], line)
+L.execute("""
+for _, i in ipairs(MountSheetSyncSheet.chars[1].items) do
+  if i.mount == "Поводья Повелителя воронов" then i.diff = "H" end
+end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
+
 # 3.0.4: achievements and rewards have a group of their own at the end, in both tables
 tabs[0].MockClick(tabs[0]); g.RunTimers()
 before_reward = remaining()
+click_all(); g.RunTimers()
+head_before = all_head_rows()
+tabs[0].MockClick(tabs[0]); g.RunTimers()
+eira_first = pool(CHAR)[1]
+eira_first.MockClick(eira_first); g.RunTimers()
 L.execute("""
 for _, c in ipairs(MountSheetSyncSheet.chars) do
   for _, i in ipairs(c.items) do
@@ -659,6 +692,8 @@ check("3.0.4: a character's list: the reward in its own group, after the others"
 click_all(); g.RunTimers()
 row_after, in_order = after_reward_title()
 check("…and in the table of all characters", row_after is not None and "Поводья Повелителя воронов" in row_after and in_order, row_after)
+head_now = all_head_rows()
+check("…«Ещё убить» doesn't count the row of the reward", head_now == head_before - 1, (head_before, head_now))
 eira_again = pool(CHAR)[1]
 eira_again.MockClick(eira_again); g.RunTimers()
 L.execute("""

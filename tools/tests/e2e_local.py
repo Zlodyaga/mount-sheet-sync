@@ -12,6 +12,7 @@ import subprocess
 import sys
 import time
 import urllib.request
+from lupa import lua51
 import paths
 
 EXE = os.path.abspath(sys.argv[1])
@@ -160,6 +161,27 @@ check("--test works", code == 0, out[-500:])
 code, out = run(A, "--once")
 check("--once: list made, no upgrade, Google never asked", code == 0 and "Таблица обновлена" not in out and "нет связи" not in out, out[-800:])
 check("SheetData.lua for the addon", "Сильвана Ветрокрылая" in sheet_lua() and 'name = "Эйра"' in sheet_lua(), sheet_lua()[:300])
+
+
+def sheet_rows():
+    lua = lua51.LuaRuntime(unpack_returned_tuples=True)
+    lua.execute(sheet_lua())
+    sheet = lua.globals().MountSheetSyncSheet
+    return {ch.name: [ch["items"][i] for i in range(1, len(ch["items"]) + 1)] for ch in [sheet.chars[k] for k in range(1, len(sheet.chars) + 1)]}
+
+
+rows_by_char = sheet_rows()
+mirna = rows_by_char["Мирна"]
+check("every row of the catalog has its mount's ID", all(i.id for i in mirna), [i.mount for i in mirna if not i.id][:5])
+PREFIXES = ("Слава герою", "Слава рейдеру", "Мастер ключей", "Мифик ключей", "Легенда ключей", "Герой своего времени", "Притворяйся", "Безупречный мастер")
+not_marked = [i.boss for i in mirna if str(i.boss).startswith(PREFIXES) and i.src != "reward"]
+check("achievements and season rewards are all marked as not a boss kill", not not_marked, not_marked)
+KILLS = ("Малигос", "Альтаирий", "Анзу", "Сильвана Ветрокрылая", "Сартарион", "Ловчий Аттумен", "Камнедроб", "Мешок Каши", "Король Дазар")
+wrongly = [i.boss for i in mirna if str(i.boss).startswith(KILLS) and i.src == "reward"]
+check("boss drops are not", not wrongly and any(str(i.boss).startswith("Малигос") for i in mirna), wrongly)
+no_place = [str(i.boss) for i in mirna if i.src != "reward" and i.kind in ("raid", "dungeon") and not i.je and not i.im]
+check("boss rows without a place in the guide: only the known few (docs/TODO.md)", len(no_place) <= 13, no_place)
+check("the tray's list counts what can be killed", ("Мирна %d" % len([i for i in mirna if i.src != "reward"])) in out, out[-400:])
 check("…achievements are marked as not a boss kill", 'src = "reward"' in sheet_lua() and re.search(r'boss = "Слава герою",.{0,600}?src = "reward"', sheet_lua(), re.S) is not None)
 check("…and rows say where to find them in the guide", "je = " in sheet_lua() and "im = " in sheet_lua())
 check("…without the arrow the game's fonts can't draw", "\u2192" not in sheet_lua() and "Мифик ключей > Затерянное" in sheet_lua())
@@ -272,6 +294,14 @@ try:
     check("--storage local: and here again, the data is still there", code == 0 and "Да" in row_of(sheet(G, "Рейды Эйра"), "Сильвана Ветрокрылая"), out[-400:])
     code, out = run(G, "--storage", "disk", env=GENV)
     check("an unknown storage is refused", code == 1, out[-300:])
+    # one character: the «left» formula is a number, not TRUE/FALSE, or the column would look like another character's tick boxes
+    write_sv(chars=CHARS[:1])
+    code, out = run(G, "--create-sheet", "Один персонаж", env=GENV)
+    one_book = [b for b in state()["spreadsheets"].values() if b.get("title") == "Один персонаж"]
+    check("a table for one character", code == 0 and one_book, out[-400:])
+    world_sheet = [x for x in one_book[0]["sheets"] if x["title"] == "Мировые боссы"][0]
+    formula = [v.get("formulaValue") for v in world_sheet["cells"].values() if "LAMBDA" in str(v.get("formulaValue"))]
+    check("…its «left» formula makes a number with one tick box", formula and "N(pa=FALSE)" in formula[0], formula[:1])
 finally:
     mock.terminate()
 
