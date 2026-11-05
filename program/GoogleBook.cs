@@ -46,7 +46,7 @@ namespace MountSheetSync
             return Load();
         }
 
-        IStructuredBook Book()
+        protected IStructuredBook Book()
         {
             if (kept != null && kept.Reusable)
             {

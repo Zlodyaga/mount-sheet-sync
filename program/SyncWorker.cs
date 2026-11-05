@@ -518,12 +518,13 @@ namespace MountSheetSync
                 {
                     missingNotified.UnionWith(newlyMissing);
                     stateChanged = true;
-                    Send(Tr.F("Нет листов для: {0}", string.Join(", ", newlyMissing)),
-                        engine.Settings.IsLocal
-                            ? Tr._("Добавьте их: меню значка → «Персонажи…».")
-                            : !engine.Settings.UsesScript
-                            ? Tr._("Добавьте их в таблицу: меню значка → «Персонажи в таблице…».")
-                            : Tr._("Отметки этих персонажей сохраняться не будут. Проверьте названия листов в таблице."), true, false);
+                    if (!engine.Settings.IsLocal)   // без таблицы новые персонажи добавляются сами, а остальных убрал сам человек
+                    {
+                        Send(Tr.F("Нет листов для: {0}", string.Join(", ", newlyMissing)),
+                            !engine.Settings.UsesScript
+                                ? Tr._("Добавьте их в таблицу: меню значка → «Персонажи в таблице…».")
+                                : Tr._("Отметки этих персонажей сохраняться не будут. Проверьте названия листов в таблице."), true, false);
+                    }
                 }
                 if (stateChanged)
                 {
@@ -616,9 +617,9 @@ namespace MountSheetSync
             Recovered();
             Report(sum, force);
             SetIdle();
-            if (sum.SentRecords > 0 || (engine.Settings.IsLocal && !engine.Settings.HasOwnBook))
+            if (sum.SentRecords > 0 || sum.AddedCharacters.Count > 0 || (engine.Settings.IsLocal && !engine.Settings.HasOwnBook))
             {
-                // таблица изменилась — список «Осталось» тоже; а новому игроку данные и список нужны сразу, не через полчаса по расписанию
+                // таблица изменилась — список «Осталось» тоже; а новому игроку и новому персонажу список нужен сразу, не через полчаса по расписанию
                 statusDirty = true;
             }
             CheckCollection(current.Keys.ToList(), collectionNow);

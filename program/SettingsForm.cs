@@ -510,7 +510,7 @@ namespace MountSheetSync
                 }
                 if (add)
                 {
-                    ShowStatus(TextUtil.Sentence(f.Changes != null ? f.Changes.Summary() : Tr._("без изменений")), Good);
+                    ShowStatus(TextUtil.Sentence(f.Changes == null ? Tr._("без изменений") : s.IsLocal ? f.Changes.SummaryLocal() : f.Changes.Summary()), Good);
                     return;
                 }
                 CreatedSheet sheet = f.NewSheet;
@@ -725,7 +725,7 @@ namespace MountSheetSync
                     {
                         text += " " + Tr.F("Листы найдены: {0}.", string.Join(", ", info.Found));
                     }
-                    if (info.Missing.Count > 0)
+                    if (info.Missing.Count > 0 && !candidate.IsLocal)
                     {
                         text += " " + Tr.F("Нет листов для: {0} — их отметки не сохранятся.", string.Join(", ", info.Missing))
                             + (candidate.UseGoogle ? " " + Tr._("Добавьте их: «Персонажи…».") : "");

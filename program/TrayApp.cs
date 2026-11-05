@@ -620,7 +620,7 @@ namespace MountSheetSync
                 if (add)
                 {
                     CharacterChanges ch = f.Changes;
-                    ShowNote(MakeNote(settings.IsLocal ? Tr._("Персонажи") : Tr._("Персонажи в таблице"), TextUtil.Sentence(ch != null ? ch.Summary() : Tr._("без изменений")), false));
+                    ShowNote(MakeNote(settings.IsLocal ? Tr._("Персонажи") : Tr._("Персонажи в таблице"), TextUtil.Sentence(ch == null ? Tr._("без изменений") : settings.IsLocal ? ch.SummaryLocal() : ch.Summary()), false));
                     if (ch != null && ch.RemovedCharacters.Count > 0)
                     {
                         worker.IgnoreMissing(ch.RemovedCharacters);   // убрали сами — не напоминать «нет листов»

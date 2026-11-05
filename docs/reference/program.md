@@ -10,7 +10,7 @@ Windows 10/11, C# 5 под .NET Framework 4.8 (встроенный в Windows �
 | --- | --- | --- |
 | Google (`GoogleSheetService`) | Sheets API от имени пользователя, OAuth | создаёт таблицу на 6 языках, всё ниже |
 | Скрипт (`webAppUrl` + `secret`) | POST в веб-приложение Code.gs (`script/Code.gs`, способ 1.x) | только отметки и «Осталось»; нет создания, персонажей, сверки, счётчика попыток |
-| На этом компьютере (`local`, по умолчанию с 2.10.0, `LocalSheetService`) | файл `local-data.json`, без Google и входа | всё то же, что Google, кроме самой таблицы: её нельзя открыть и поправить руками |
+| На этом компьютере (`local`, по умолчанию с 2.10.0, `LocalSheetService`) | файл `local-data.json`, без Google и входа | всё то же, что Google, кроме самой таблицы: её нельзя открыть и поправить руками; новые персонажи добавляются сами (`AddNewCharacters`, в начале `SyncAll`), снятые в «Персонажи…» остаются убранными (`IsSkipped`) |
 
 `GoogleSheetService` и `LocalSheetService` — наследники `BookSheetService`: логика одна, разница в книге (`GoogleBook` / `LocalBook`). `settings.HasOwnBook` — данные ведёт сама программа и они есть; `settings.OpenBook()` — открыть их в окнах «Персонажи» и «Что фармить».
 

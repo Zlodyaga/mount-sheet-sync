@@ -63,6 +63,52 @@ namespace MountSheetSync
             return created;
         }
 
+        /// <summary>
+        /// Без Google таблицы, которую человек ведёт сам, нет: кого аддон узнал, того и добавляем, всеми группами, до отправки его
+        /// убийств. Кого человек убрал сам, остаётся убранным (LocalBook.IsSkipped). Файла нет — его создаст первая загрузка, сразу со всеми.
+        /// </summary>
+        public List<string> AddNewCharacters(GameSnapshot game)
+        {
+            List<string> added = new List<string>();
+            using (LocalBook.Exclusive(file))
+            {
+                if (game.Characters.Count == 0 || !File.Exists(file))
+                {
+                    return added;
+                }
+                try
+                {
+                    LocalBook book = (LocalBook)Book();
+                    HashSet<string> have = new HashSet<string>(SheetCreator.TableCharacters(book).Select(c => SheetLogic.Norm(SheetLogic.StripNote(c.Name))));
+                    List<BuildCharacter> fresh = new List<BuildCharacter>();
+                    foreach (GameCharacter c in game.Characters)
+                    {
+                        string name = (c.Name ?? "").Trim();
+                        if (SheetCreator.NameFits(name) && !book.IsSkipped(name) && have.Add(SheetLogic.Norm(name)))
+                        {
+                            fresh.Add(new BuildCharacter(name, true, true, true));
+                            added.Add(name);
+                        }
+                    }
+                    if (fresh.Count > 0)
+                    {
+                        SheetCreator.AddCharacters(book, fresh, delegate { });
+                        Log.Write(Tr.L("Новые персонажи добавлены сами: {0}", string.Join(", ", added)));
+                    }
+                }
+                catch (SyncException)
+                {
+                    throw;   // убийства подождут следующего прохода, иначе ушли бы мимо листов
+                }
+                catch (Exception ex)
+                {
+                    Log.Write(Tr.L("Ошибка при разборе таблицы: {0}", ex));
+                    throw new SyncException(Tr.F("внутренняя ошибка при работе с таблицей: {0}", ex.Message));
+                }
+            }
+            return added;
+        }
+
         protected override IStructuredBook LoadForTrial()
         {
             LocalBook book = File.Exists(file) ? LocalBook.Load(file) : LocalBook.Empty(file);
@@ -376,6 +422,37 @@ namespace MountSheetSync
                 properties[propertyKey] = propertyValue;
             }
             dirty = true;
+        }
+
+        const string SkippedKey = "skippedCharacters";
+
+        List<string> Skipped()
+        {
+            return (GetProperty(SkippedKey) ?? "").Split('\n').Where(n => n.Length > 0).ToList();
+        }
+
+        /// <summary>Человек убрал этого персонажа сам: обратно он возвращается только галочкой.</summary>
+        public bool IsSkipped(string name)
+        {
+            return Skipped().Any(n => SheetLogic.Norm(n) == SheetLogic.Norm(SheetLogic.StripNote(name)));
+        }
+
+        public void NoteCharacters(IEnumerable<string> removed, IEnumerable<string> kept)
+        {
+            List<string> was = Skipped();
+            List<string> now = was.Where(n => !kept.Any(k => SheetLogic.Norm(SheetLogic.StripNote(k)) == SheetLogic.Norm(n))).ToList();
+            foreach (string name in removed)
+            {
+                string plain = SheetLogic.StripNote(name);
+                if (!now.Any(n => SheetLogic.Norm(n) == SheetLogic.Norm(plain)))
+                {
+                    now.Add(plain);
+                }
+            }
+            if (!now.SequenceEqual(was))
+            {
+                SetProperty(SkippedKey, string.Join("\n", now));
+            }
         }
 
         public string GetProperty(string key)

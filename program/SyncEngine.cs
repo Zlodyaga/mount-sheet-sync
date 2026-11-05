@@ -143,6 +143,8 @@ namespace MountSheetSync
     sealed class SyncSummary
     {
         public bool NothingToSend;
+        /// <summary>Данные на компьютере: новые персонажи, которых программа добавила сама.</summary>
+        public List<string> AddedCharacters = new List<string>();
         public int SentRecords;
         /// <summary>«Не фармлю» из игры: «Имя: что».</summary>
         public List<string> Planned = new List<string>();
@@ -431,6 +433,10 @@ namespace MountSheetSync
         public SyncSummary SyncAll(IList<string> files, Dictionary<string, object> extra = null)
         {
             SyncSummary sum = new SyncSummary();
+            if (Settings.IsLocal && Settings.HasOwnBook)
+            {
+                sum.AddedCharacters = AddNewCharacters(files);
+            }
             List<Dictionary<string, object>> records = ReadAllRecords(files);
             if (extra != null)
             {
@@ -476,7 +482,7 @@ namespace MountSheetSync
                 payload["kills"] = batch;
                 Dictionary<string, object> resp = Service().Call(payload);
                 List<object> results = J.Arr(J.Get(resp, "results"));
-                Report(results, sum, mountIds);
+                Report(results, sum, mountIds, Settings.IsLocal);
                 long now = Epoch.Now;
                 foreach (object o in results)
                 {
@@ -502,7 +508,22 @@ namespace MountSheetSync
             return sum;
         }
 
-        static void Report(List<object> results, SyncSummary sum, HashSet<string> mountIds)
+        List<string> AddNewCharacters(IList<string> files)
+        {
+            GameSnapshot game;
+            try
+            {
+                game = GameData.Read(files);
+            }
+            catch (Exception ex)
+            {
+                Log.Write(Tr.L("Не удалось прочитать персонажей из файлов аддона: {0}", ex.Message));
+                return new List<string>();
+            }
+            return ((LocalSheetService)Service()).AddNewCharacters(game);
+        }
+
+        static void Report(List<object> results, SyncSummary sum, HashSet<string> mountIds, bool quietNoSheet)
         {
             List<string> notFound = new List<string>();
             HashSet<string> shown = new HashSet<string>(StringComparer.Ordinal);
@@ -598,6 +619,11 @@ namespace MountSheetSync
                     // маунт с этой сложности не падает — делать ничего не нужно
                     Log.Write(Tr.L("[~] {0}: {1} — {2}", who, boss, message));
                     sum.WrongDifficulty++;
+                }
+                else if (status == "no_sheet" && quietNoSheet)
+                {
+                    // данные на компьютере: листов нет только у того, кого человек убрал сам, напоминать незачем
+                    Log.Write(Tr.L("[!] {0}: {1} — {2}", who, boss, message));
                 }
                 else if (shown.Add(status + "|" + message))
                 {

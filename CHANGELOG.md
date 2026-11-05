@@ -5,7 +5,8 @@ The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [C
 ## 2.10.0
 - The program no longer needs Google: new players start with the data in a file on this computer, with no sign-in and nothing to set up. It appears by itself as soon as the addon knows your characters, and the addon's window shows the list.
 - A Google Sheet is still there as an option in the settings, and players who already have one stay on it. “Move from the spreadsheet…” copies an existing sheet to this computer without counting kills twice; the sheet stays in Google as it is.
-- “Characters…” and “What to farm…” work with the data on this computer too. The menu and notifications mention the spreadsheet only if there is one.
+- “Characters…” and “What to farm…” work with the data on this computer too. The menu, notifications and the “Characters…” window mention the spreadsheet only if there is one.
+- With the data on this computer, new characters join by themselves when you log in on them, and their kills count from the start. A character you remove in “Characters…” stays removed until you tick them again.
 - The list tells the addon which rows are achievements and rewards rather than boss kills, and where each row is in the Adventure Guide (needs the addon 3.0.4). The tray menu doesn't count achievements and rewards as left to kill.
 - A spreadsheet with one character no longer gets a phantom character named after its “Attempts left” column.
 - Every row sent to the addon carries its mount's ID, so achievements and guaranteed drops get an icon too (needs the addon 3.0.4).

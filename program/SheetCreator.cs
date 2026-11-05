@@ -154,7 +154,7 @@ namespace MountSheetSync
         {
             using (settings.ExclusiveBook())
             {
-                progress(Tr._("Читаю таблицу…"));
+                progress(settings.IsLocal ? Tr._("Читаю данные…") : Tr._("Читаю таблицу…"));
                 return AddCharacters(settings.OpenBook(), chars, progress);
             }
         }
@@ -163,7 +163,7 @@ namespace MountSheetSync
         {
             using (settings.ExclusiveBook())
             {
-                progress(Tr._("Читаю таблицу…"));
+                progress(settings.IsLocal ? Tr._("Читаю данные…") : Tr._("Читаю таблицу…"));
                 return UpdateCharacters(settings.OpenBook(), desired, progress);
             }
         }
@@ -189,6 +189,7 @@ namespace MountSheetSync
                 have.World |= c.World;
             }
             CharacterChanges ch = Apply(book, desired, progress);
+            Remember(book, ch, chars);
             return ch.AddedSheets.Count;
         }
 
@@ -200,7 +201,25 @@ namespace MountSheetSync
         public static CharacterChanges UpdateCharacters(IStructuredBook book, IList<BuildCharacter> desired, Action<string> progress)
         {
             GoogleSheetService.Upgrade(book);
-            return Apply(book, desired, progress);
+            CharacterChanges ch = Apply(book, desired, progress);
+            Remember(book, ch, desired);
+            return ch;
+        }
+
+        /// <summary>Данные на компьютере: кого человек убрал сам, того программа сама не вернёт.</summary>
+        static void Remember(IStructuredBook book, CharacterChanges ch, IEnumerable<BuildCharacter> chars)
+        {
+            LocalBook local = book as LocalBook;
+            if (local != null)
+            {
+                local.NoteCharacters(ch.RemovedCharacters, chars.Where(c => c.Raids || c.Dungeons || c.World).Select(c => c.Name));
+            }
+        }
+
+        /// <summary>Имя годится для названия листа.</summary>
+        public static bool NameFits(string name)
+        {
+            return name.Length > 0 && name.Length <= 60 && name.IndexOfAny(new[] { '[', ']', '*', '?', '/', '\\', ':' }) < 0;
         }
 
         /// <summary>Что поменяется (без записи в таблицу).</summary>
@@ -253,7 +272,7 @@ namespace MountSheetSync
             foreach (BuildCharacter d in desired)
             {
                 string name = (d.Name ?? "").Trim();
-                if (name.Length == 0 || name.Length > 60 || name.IndexOfAny(new[] { '[', ']', '*', '?', '/', '\\', ':' }) >= 0)
+                if (!NameFits(name))
                 {
                     throw new SyncException(Tr.F("имя «{0}» не подходит для названия листа", name));
                 }
@@ -411,6 +430,32 @@ namespace MountSheetSync
         public string Summary()
         {
             return Summary(SheetLang.Russian);
+        }
+
+        /// <summary>То же для данных на компьютере: там нет листов и колонок, только группы персонажа.</summary>
+        public string SummaryLocal()
+        {
+            List<string> parts = new List<string>();
+            List<string> added = Groups(AddedSheets, AddedWorld);
+            List<string> removed = Groups(RemovedSheets, RemovedWorld);
+            if (added.Count > 0)
+            {
+                parts.Add(Tr.F("добавлено: {0}", string.Join(", ", added.ToArray())));
+            }
+            if (removed.Count > 0)
+            {
+                parts.Add(Tr.F("убрано: {0}", string.Join(", ", removed.ToArray())));
+            }
+            return parts.Count == 0 ? Tr._("без изменений") : string.Join("; ", parts.ToArray());
+        }
+
+        /// <summary>Группы персонажей словами на языке программы.</summary>
+        public static List<string> Groups(IEnumerable<string> sheets, IEnumerable<string> world)
+        {
+            SheetLang lang = SheetLang.Get(Tr.Lang);
+            List<string> list = sheets.Select(n => lang.SheetName(n)).ToList();
+            list.AddRange(world.Select(n => Tr.F("мировые боссы: {0}", n)));
+            return list;
         }
 
         /// <summary>Что поменялось; названия листов — как в таблице (lang — её язык).</summary>

@@ -232,6 +232,33 @@ check("Эйра keeps her marks", "Да" in row_of(sheet(A, "Рейды Эйра
 code, out = run(A, "--sync-collection")
 check("--sync-collection works", code == 0 and "Сверка с коллекцией" in out, out[-500:])
 
+# ---------------------------------------------------------------- new characters join by themselves
+everyone = CHARS + [dict(CHARS[0], name="Тарен")]
+write_sv(kills, chars=everyone)
+code, out = run(A, "--once")
+names = [s["name"] for s in book(A)["sheets"]]
+check("a new character without kills joins by themselves, in all groups", code == 0 and "Рейды Тарен" in names and "Подземелья Тарен" in names and "Тарен" in sheet(A, "Мировые боссы")[0], (names, out[-500:]))
+check("…the addon's list has them", "Тарен" in sheet_lua(), sheet_lua()[:300])
+check("a character the player removed does not come back", "Рейды Мирна" not in names and "Мирна" in book(A)["properties"].get("skippedCharacters", ""), (names, book(A)["properties"]))
+everyone = everyone + [dict(CHARS[0], name="Вера")]
+kills = kills + [kill("K6", "Тюремщик", char="Вера")]
+write_sv(kills, chars=everyone)
+code, out = run(A, "--once")
+check("the kill of a new character is not lost: the sheet comes first", code == 0 and "Да" in row_of(sheet(A, "Рейды Вера"), "Тюремщик"), out[-500:])
+kills = kills + [kill("K7", "Тюремщик", char="Мирна")]
+write_sv(kills, chars=everyone)
+code, out = run(A, "--once")
+check("a removed character can still play: nothing breaks, no sheet appears", code == 0 and "Рейды Мирна" not in [s["name"] for s in book(A)["sheets"]], out[-500:])
+spec = [{"name": n, "raids": True, "dungeons": True, "world": True} for n in ("Эйра", "Новая", "Тарен", "Вера", "Мирна")]
+json.dump(spec, open(path, "w", encoding="utf-8"), ensure_ascii=False)
+code, out = run(A, "--set-chars", path)
+check("a tick brings them back and they are no longer skipped", code == 0 and "Рейды Мирна" in [s["name"] for s in book(A)["sheets"]] and "Мирна" not in book(A)["properties"].get("skippedCharacters", ""), (out[-400:], book(A)["properties"]))
+spec = [s for s in spec if s["name"] != "Тарен"]
+json.dump(spec, open(path, "w", encoding="utf-8"), ensure_ascii=False)
+code, out = run(A, "--set-chars", path)
+code, out = run(A, "--once")
+check("removing one more: remembered across runs", code == 0 and "Рейды Тарен" not in [s["name"] for s in book(A)["sheets"]], out[-400:])
+
 # ---------------------------------------------------------------- a damaged file
 good = open(os.path.join(A, "local-data.json"), encoding="utf-8").read()
 open(os.path.join(A, "local-data.json"), "w", encoding="utf-8").write(good[:len(good) // 2])

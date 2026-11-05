@@ -522,13 +522,6 @@ fr: Personnages
 es: Personajes
 pt: Personagens
 
-@ Добавьте их: меню значка → «Персонажи…».
-en: Add them: icon menu → “Characters…”.
-de: Füge sie hinzu: Symbolmenü → „Charaktere…“.
-fr: Ajoutez-les : menu de l'icône → « Personnages… ».
-es: Añádelos: menú del icono → «Personajes…».
-pt: Adicione-os: menu do ícone → “Personagens…”.
-
 @ Данные сверены с коллекцией
 en: Data checked against the collection
 de: Daten mit der Sammlung abgeglichen
@@ -584,4 +577,67 @@ de: Als gesammelt markiert: {0}.
 fr: Marquées comme obtenues : {0}.
 es: Marcadas como conseguidas: {0}.
 pt: Marcadas como coletadas: {0}.
+
+@ персонажи
+en: characters
+de: Charaktere
+fr: personnages
+es: personajes
+pt: personagens
+
+@ Новых персонажей программа добавляет сама, когда вы на них заходите. Галочки — какие группы есть у персонажа. Снимите все — персонаж уйдёт из списка вместе с отметками, и сама программа его не вернёт. Серым — те, кого в списке нет: вернуть можно галочкой.
+en: The program adds new characters by itself when you log in on them. The boxes show which groups a character has. Clear them all and the character leaves the list with their marks, and the program won't bring them back by itself. Grey rows are not in the list: tick a box to return them.
+de: Neue Charaktere fügt das Programm selbst hinzu, wenn du dich mit ihnen einloggst. Die Häkchen zeigen, welche Gruppen ein Charakter hat. Entfernst du alle, verlässt der Charakter die Liste samt Markierungen, und das Programm holt ihn nicht von selbst zurück. Grau sind Charaktere, die nicht in der Liste sind: Mit einem Häkchen kommen sie zurück.
+fr: Le programme ajoute lui-même les nouveaux personnages quand vous vous connectez avec eux. Les cases indiquent les groupes d'un personnage. Décochez-les toutes et le personnage quitte la liste avec ses marques, et le programme ne le remettra pas de lui-même. En gris, ceux qui ne sont pas dans la liste : cochez une case pour les ramener.
+es: El programa añade solo los personajes nuevos cuando entras con ellos. Las casillas indican qué grupos tiene un personaje. Si las desmarcas todas, el personaje sale de la lista con sus marcas y el programa no lo devolverá por sí solo. En gris, los que no están en la lista: marca una casilla para recuperarlos.
+pt: O programa adiciona sozinho os novos personagens quando você entra com eles. As caixas mostram quais grupos um personagem tem. Desmarque todas e o personagem sai da lista com suas marcas, e o programa não o trará de volta sozinho. Em cinza, os que não estão na lista: marque uma caixa para trazê-los de volta.
+
+@ Читаю данные…
+en: Reading the data…
+de: Daten werden gelesen…
+fr: Lecture des données…
+es: Leyendo los datos…
+pt: Lendo os dados…
+
+@ есть в списке
+en: in the list
+de: in der Liste
+fr: dans la liste
+es: en la lista
+pt: na lista
+
+@ В списке пока нет персонажей. Отметьте их галочками или впишите вручную ниже.
+en: No characters in the list yet. Tick them or type a name below.
+de: Noch keine Charaktere in der Liste. Hake sie an oder gib unten einen Namen ein.
+fr: Aucun personnage dans la liste pour l'instant. Cochez-les ou saisissez un nom ci-dessous.
+es: Aún no hay personajes en la lista. Márcalos o escribe un nombre abajo.
+pt: Ainda não há personagens na lista. Marque-os ou digite um nome abaixo.
+
+@ Вернуть можно: поставить галочку снова, отметки начнутся заново.
+en: To bring them back, tick the box again: the marks start anew.
+de: Zurückholen: Häkchen wieder setzen, die Markierungen beginnen neu.
+fr: Pour les ramener, recochez la case : les marques repartent de zéro.
+es: Para recuperarlos, vuelve a marcar la casilla: las marcas empiezan de nuevo.
+pt: Para trazê-los de volta, marque a caixa de novo: as marcas recomeçam.
+
+@ мировые боссы: {0}
+en: world bosses: {0}
+de: Weltbosse: {0}
+fr: boss de monde : {0}
+es: jefes de mundo: {0}
+pt: chefes mundiais: {0}
+
+@ добавлено: {0}
+en: added: {0}
+de: hinzugefügt: {0}
+fr: ajouté : {0}
+es: añadido: {0}
+pt: adicionado: {0}
+
+@ убрано: {0}
+en: removed: {0}
+de: entfernt: {0}
+fr: retiré : {0}
+es: quitado: {0}
+pt: removido: {0}
 

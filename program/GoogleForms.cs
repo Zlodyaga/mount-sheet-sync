@@ -246,7 +246,7 @@ namespace MountSheetSync
         {
             this.settings = settings;
             this.addMode = addMode;
-            UiStyle.Dialog(this, addMode ? Tr._("персонажи в таблице") : Tr._("новая таблица"));
+            UiStyle.Dialog(this, !addMode ? Tr._("новая таблица") : settings.IsLocal ? Tr._("персонажи") : Tr._("персонажи в таблице"));
             AutoSize = true;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             int unit = Font.Height;
@@ -295,7 +295,9 @@ namespace MountSheetSync
                 table.Controls.Add(langHint);
             }
             Label charsLabel = UiStyle.Text(addMode
-                ? Tr._("Галочки — какие листы есть у персонажа. Поставьте — лист появится, снимите — лист удалится; снимите все — персонаж уйдёт из таблицы. Ниже в списке — персонажи из аддона, которых в таблице ещё нет:")
+                ? (settings.IsLocal
+                    ? Tr._("Новых персонажей программа добавляет сама, когда вы на них заходите. Галочки — какие группы есть у персонажа. Снимите все — персонаж уйдёт из списка вместе с отметками, и сама программа его не вернёт. Серым — те, кого в списке нет: вернуть можно галочкой.")
+                    : Tr._("Галочки — какие листы есть у персонажа. Поставьте — лист появится, снимите — лист удалится; снимите все — персонаж уйдёт из таблицы. Ниже в списке — персонажи из аддона, которых в таблице ещё нет:"))
                 : Tr._("Персонажи (их запомнил аддон). Галочки — для каких листов завести персонажа:"), width, SystemColors.ControlText);
             charsLabel.Margin = new Padding(3, unit / 2, 3, 3);
             table.Controls.Add(charsLabel);
@@ -390,7 +392,7 @@ namespace MountSheetSync
         {
             base.OnShown(e);
             UiStyle.BringToFront(this);
-            SetBusy(true, addMode ? Tr._("Читаю таблицу…") : "");
+            SetBusy(true, !addMode ? "" : settings.IsLocal ? Tr._("Читаю данные…") : Tr._("Читаю таблицу…"));
             Settings s = settings.Clone();
             ThreadPool.QueueUserWorkItem(delegate
             {
@@ -440,7 +442,7 @@ namespace MountSheetSync
                 foreach (CharacterInTable c in inTable)
                 {
                     GameCharacter g = game.Characters.FirstOrDefault(x => SheetLogic.Norm(x.Name) == SheetLogic.Norm(SheetLogic.StripNote(c.Name)));
-                    string info = g == null ? Tr._("есть в таблице") : (g.Class + (g.Level > 0 ? ", " + g.Level : "")).Trim(',', ' ');
+                    string info = g == null ? (settings.IsLocal ? Tr._("есть в списке") : Tr._("есть в таблице")) : (g.Class + (g.Level > 0 ? ", " + g.Level : "")).Trim(',', ' ');
                     grid.Rows.Add(c.Name, g != null ? g.Realm : "", info, c.RaidSheet != null, c.DungeonSheet != null, c.WorldColumn >= 0);
                 }
             }
@@ -477,7 +479,7 @@ namespace MountSheetSync
             }
             else if (addMode && grid.Rows.Count == 0)
             {
-                ShowStatus(Tr._("В таблице пока нет персонажей. Отметьте их галочками или впишите вручную ниже."), UiStyle.Warn);
+                ShowStatus(settings.IsLocal ? Tr._("В списке пока нет персонажей. Отметьте их галочками или впишите вручную ниже.") : Tr._("В таблице пока нет персонажей. Отметьте их галочками или впишите вручную ниже."), UiStyle.Warn);
             }
             okButton.Enabled = true;
         }
@@ -590,10 +592,17 @@ namespace MountSheetSync
                 if (diff.RemovesSomething)
                 {
                     List<string> lines = new List<string>();
-                    lines.AddRange(diff.RemovedSheets.Select(n => "• " + Tr.F("лист «{0}»", n)));
-                    lines.AddRange(diff.RemovedWorld.Select(n => "• " + Tr.F("колонка «{0}» на «Мировых боссах»", n)));
+                    if (settings.IsLocal)
+                    {
+                        lines.AddRange(CharacterChanges.Groups(diff.RemovedSheets, diff.RemovedWorld).Select(n => "• " + n));
+                    }
+                    else
+                    {
+                        lines.AddRange(diff.RemovedSheets.Select(n => "• " + Tr.F("лист «{0}»", n)));
+                        lines.AddRange(diff.RemovedWorld.Select(n => "• " + Tr.F("колонка «{0}» на «Мировых боссах»", n)));
+                    }
                     DialogResult answer = MessageBox.Show(this, Tr._("Будут удалены вместе с отметками:") + "\n\n" + string.Join("\n", lines.ToArray())
-                        + "\n\n" + Tr._("Вернуть можно: поставить галочку снова (лист создастся заново, без старых отметок) или «Файл» → «История версий» в Google Таблицах. Удалить?"),
+                        + "\n\n" + (settings.IsLocal ? Tr._("Вернуть можно: поставить галочку снова, отметки начнутся заново.") : Tr._("Вернуть можно: поставить галочку снова (лист создастся заново, без старых отметок) или «Файл» → «История версий» в Google Таблицах. Удалить?")),
                         Program.Title, MessageBoxButtons.OKCancel, MessageBoxIcon.Warning, MessageBoxDefaultButton.Button2);
                     if (answer != DialogResult.OK)
                     {

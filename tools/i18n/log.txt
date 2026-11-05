@@ -432,3 +432,9 @@ en: There is no data on this computer yet: run --create-local or --import-local 
 @ Теперь данные хранятся: {0}.
 en: Data is now kept in: {0}.
 
+@ Новые персонажи добавлены сами: {0}
+en: New characters added automatically: {0}
+
+@ Не удалось прочитать персонажей из файлов аддона: {0}
+en: Could not read the characters from the addon files: {0}
+

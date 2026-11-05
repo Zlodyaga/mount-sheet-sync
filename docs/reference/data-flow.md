@@ -12,6 +12,8 @@ WoW (аддон) ──SavedVariables\MountSheetSync.lua──► програм
 
 `Program.lua` несёт `storage` (`settings.mode`): `local` — аддон пишет «список» вместо «таблицы» (`ns.UsesListWords`, тексты `LIST_WORDS` в `Locales.lua`); программы до 2.10 поля не пишут, у них таблица есть всегда. Нет `Program.lua` — тоже «список».
 
+В `properties` файла данных `skippedCharacters` — персонажи, которых игрок убрал сам (имена через перевод строки).
+
 `local-data.json`: `{format: 1, app, lang, title, properties{}, sheets[{name, id, formulas[], rows[[…]]}]}`. Листы и заголовки — «русские», как в памяти программы (`SheetLang`), значения — на языке данных. Запись атомарная (`.tmp`, затем замена), прошлая версия — `.bak`. Если основной файл повреждён, `LocalBook.Load` откладывает его как `.damaged` и восстанавливает `.bak`, чтобы следующая запись не затёрла копию.
 
 - **Игра → программа.** Аддон пишет `MountSheetSyncDB` в SavedVariables; игра сохраняет файл только при выходе

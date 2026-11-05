@@ -73,10 +73,11 @@ def wait_file(path, timeout=60):
     return False
 
 
-def write_sv():
+def write_sv(names=("Эйра",)):
+    chars = "".join('\t\t["%s-Ревущий фьорд"] = {\n\t\t\t["name"] = "%s",\n\t\t\t["realm"] = "Ревущий фьорд",\n'
+                    '\t\t\t["classFile"] = "HUNTER",\n\t\t\t["level"] = 90,\n\t\t\t["seen"] = %d,\n\t\t},\n' % (n, n, int(time.time()) - 100) for n in names)
     open(os.path.join(SV_DIR, "MountSheetSync.lua"), "w", encoding="utf-8", newline="\r\n").write(
-        'MountSheetSyncDB = {\n\t["chars"] = {\n\t\t["Эйра-Ревущий фьорд"] = {\n\t\t\t["name"] = "Эйра",\n\t\t\t["realm"] = "Ревущий фьорд",\n'
-        '\t\t\t["classFile"] = "HUNTER",\n\t\t\t["level"] = 90,\n\t\t\t["seen"] = %d,\n\t\t},\n\t},\n\t["kills"] = {\n\t},\n}\n' % (int(time.time()) - 100))
+        'MountSheetSyncDB = {\n\t["chars"] = {\n' + chars + '\t},\n\t["kills"] = {\n\t},\n}\n')
 
 
 def start(*args):
@@ -116,6 +117,13 @@ try:
     made = wait_file(os.path.join(DATA, "local-data.json"))
     check("the addon knows a character: the data makes itself, the program keeps running", made and app.poll() is None, os.listdir(DATA))
     check("…the list is written for the addon", wait_file(os.path.join(ADDON, "SheetData.lua")))
+    write_sv(("Эйра", "Тарен"))
+    deadline = time.time() + 40
+    joined = False
+    while time.time() < deadline and not joined:
+        joined = "Тарен" in open(os.path.join(ADDON, "SheetData.lua"), encoding="utf-8", errors="replace").read()
+        time.sleep(0.5)
+    check("a new character without kills reaches the addon's list at once, not after half an hour", joined)
     stop(app)
     time.sleep(1)
     app = start()
