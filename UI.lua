@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.3 — окно, иконка и настройки
+Mount Sheet Sync 3.0.4 — окно, иконка и настройки
 ==================================================
   * окно (ЛКМ по иконке или /mss): слева «Все персонажи» и персонажи из таблицы (сколько каждому осталось), справа
     вкладки «Осталось» (таблица выбранного персонажа или сетка всех), «Попытки» (счётчик маунтов, сортировка и
@@ -232,9 +232,30 @@ local function FirstLetters(name, n)
   return table.concat(out)
 end
 
+-- Значения каталога, которые не сокращаются правилами ниже: слово на языке игры или короткая запись.
+local DIFF_WORDS = {
+  ["Achievement"] = "diff_ach", ["Guild Achievement"] = "diff_ach", ["Mythic dungeon achievements"] = "diff_ach",
+  ["Heroic achievements"] = "diff_ach", ["Heroic/Mythic dungeon achievements"] = "diff_ach",
+  ["Любая"] = "diff_any", ["Any difficulty"] = "diff_any", ["Any / raid-specific"] = "diff_any",
+  ["Удалённая награда"] = "diff_removed", ["Удалённая награда Retail"] = "diff_removed", ["Удалённая TBC-версия"] = "diff_removed",
+  ["Torghast"] = "diff_torghast",
+}
+local DIFF_SHORT = {
+  ["Обычный рейд"] = "N", ["10 игроков"] = "10", ["25-player loot table / no Keepers"] = "25",
+  ["Normal 10, 3 drakes up"] = "N10", ["Normal 25, 3 drakes up"] = "N25", ["Heroic 10"] = "H10", ["Heroic 25"] = "H25",
+  ["M+ rating / vendor"] = "M+", ["3400+ M+ rating in current season"] = "3400+", ["2000+ M+ rating"] = "2000+", ["3000+ M+ rating"] = "3000+",
+  ["MoP Challenge Mode"] = "CM", ["WoD Challenge Mode"] = "CM", ["Heroic random dungeon only"] = "H", ["Mythic, hard mode"] = "M",
+}
+
 -- Сложность короче для колонки; полная — в подсказке строки.
 local function ShortDiff(diff)
   local text = Safe(diff)
+  if DIFF_WORDS[text] then
+    return L[DIFF_WORDS[text]]
+  end
+  if DIFF_SHORT[text] then
+    return DIFF_SHORT[text]
+  end
   text = text:gsub("Normal", "N"):gsub("Heroic", "H"):gsub("Mythic%+", "M+"):gsub("Mythic", "M")
   text = text:gsub("Timewalking", "TW"):gsub(" timed run", ""):gsub("%s*/%s*", "/")
   text = text:gsub("Layers%s*", ""):gsub("Challenge cache", "CM"):gsub("Challenge", "CM")
@@ -764,7 +785,7 @@ local function RemainingRow(entry, menu, stripe)
     chance = "|cff" .. ChanceColor(n, p) .. ns.FormatChance(n, p) .. "|r"
     tip[#tip + 1] = string.format(L.boss_hint, n, ns.FormatChance(n, p))
   end
-  return { cols = cols, icon = ns.MountIcon(id), stripe = stripe, tip = tip, entry = menu and entry or nil, values = {
+  return { cols = cols, icon = ns.MountIcon(item.id or id), stripe = stripe, tip = tip, entry = menu and entry or nil, values = {
     boss = Safe(item.boss),
     diff = diff,
     mount = "|cffc9a0ff" .. Safe(item.mount) .. "|r",
@@ -859,7 +880,7 @@ local function GridView(rows, all)
       end
     end
     local _, _, id = ns.ItemAttempts(item)
-    list[#list + 1] = { cols = cols, names = names, killed = row.killed or false, icon = ns.MountIcon(id), stripe = stripe,
+    list[#list + 1] = { cols = cols, names = names, killed = row.killed or false, icon = ns.MountIcon(item.id or id), stripe = stripe,
       tip = { Safe(item.mount), BossAndDiff(item.boss, item.diff), table.concat(shownNames, ", ") }, values = {
         boss = Safe(item.boss),
         diff = "|cffb7ae9a" .. ShortDiff(item.diff) .. "|r",

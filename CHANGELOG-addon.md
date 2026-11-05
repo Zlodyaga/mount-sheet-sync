@@ -2,6 +2,11 @@
 
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
+## 3.0.4
+- Mount icons on every row of “Remaining”, including achievements and guaranteed drops. Needs the program 2.10.0; with an older one those rows stay without an icon.
+- The difficulty column is short and readable: “N10”, “Torghast”, “Ach.” and the like, with the full text in the tooltip.
+- The tooltip about the program no longer says that a Google Sheet is required.
+
 ## 3.0.3
 - Raids with separate lockouts (Normal/Heroic/Mythic rows): each difficulty now counts on its own. The letters N H M show what is still left, in "Remaining" and in the all-characters table. Needs the program 2.9.2.
 - A new look: the windows have their own dark style with gold accents, fonts (PT Sans, Philosopher) and round selectors.

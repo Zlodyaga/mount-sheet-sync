@@ -43,7 +43,7 @@ namespace MountSheetSync
         /// Аддон, которого хватает этой программе. Программа и аддон выходят отдельно: аддон старше — подсказка
         /// «обновите аддон» (меню и уведомление), а в Program.lua — это же число, и аддон напишет то же у себя.
         /// </summary>
-        public const string MinAddon = "3.0.3";
+        public const string MinAddon = "3.0.4";
 
         /// <summary>Версия с пометкой пробной сборки: «2.8.0-alpha1» или просто «2.8.0».</summary>
         public static string FullVersion

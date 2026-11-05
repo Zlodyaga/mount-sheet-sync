@@ -283,6 +283,21 @@ out, n6 = handle(SEP, [kill(94, sep_boss, "manual", None)])
 check("a manual mark has no difficulty: the whole row is «Да», no hidden column", str(sep_row(n6)[2][0]) == "Да" and sep_row(n6)[1][-1] != "N/H/M", sep_row(n6)[1][-1])
 check("a table without the counter: no «mounts» in the status (the addon simply shows nothing)", "mounts" not in old, list(old))
 
+# one character: the «left» formula used to give TRUE/FALSE, and the column looked like a character's tick boxes
+one = json.loads(json.dumps(OLD))
+world = [s for s in one if s["name"] == "Мировые боссы"][0]
+one_head = [h for h in WH if h != "Мирна"]
+world["rows"] = [one_head, ["Нет", "MoP", "Valley of the Four Winds", "Сын Галеона", "Галеон", "Еженедельно", True, "", 0.01, "", False]]
+world["grid"] = len(one_head)
+raids = [s for s in one if s["name"] == "Рейды"][0]
+raids["rows"][3][-1] = 999
+[s for s in one if s["name"] == "Рейды Эйра"][0]["rows"].append(["Нет", "Legion", "Antorus", "Кругомер", "Слава герою", "Любая", "", True])
+got = run({"catalog": None, "sheets": one, "mode": "handle", "properties": {"layout": "5"}, "request": {"action": "status"}})["reply"]
+check("one character: «Осталось попыток» full of TRUE/FALSE is not a second character", [c["name"] for c in got["chars"]] == ["Эйра"], [c["name"] for c in got["chars"]])
+ids = {i["mount"]: i.get("id") for c in got["chars"] for i in c["items"]}
+check("every row of the list has its mount's ID: with a chance, and an achievement without one", ids.get("Отмщение") == 1471 and ids.get("Кругомер") == 999, ids)
+check("…a world boss without the hidden column: from the catalog", ids.get("Сын Галеона", 0) > 0, ids)
+
 failed = [n for n, ok in checks if not ok]
 print("%d/%d checks passed" % (len(checks) - len(failed), len(checks)))
 raise SystemExit(1 if failed else 0)

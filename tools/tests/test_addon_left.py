@@ -578,6 +578,24 @@ MSS_NS.OnChange()""")
 g.RunTimers()
 tabs[0].MockClick(tabs[0]); g.RunTimers()
 
+# 3.0.4: an achievement or a guaranteed drop has no attempts, yet its row gets an icon: the ID comes with the row
+L.execute("""
+for _, c in ipairs(MountSheetSyncSheet.chars) do
+  for _, i in ipairs(c.items) do i.id = next(MOCK.mounts) end
+end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
+tabs[0].MockClick(tabs[0]); g.RunTimers()
+check("3.0.4: the row's own ID gives the icon", any(f.icon._shown and f.icon._texture == 132226 for f in pool(ROW)))
+L.execute("""
+for _, c in ipairs(MountSheetSyncSheet.chars) do
+  for _, i in ipairs(c.items) do i.id = nil end
+end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
+
 kill("Кто-то совсем другой", "Святилище Господства", "raid", 16)
 check("odd boss name does not tick anything new", remaining().left == 26, remaining().left)
 kill("Сильвана Ветрокрылая", "Святилище Господства", "raid", 16)

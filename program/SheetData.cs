@@ -193,6 +193,8 @@ namespace MountSheetSync
         /// <summary>Строка Lua в кавычках: \\, ", переводы строк и управляющие символы экранируются.</summary>
         static void WriteString(StringBuilder sb, string s)
         {
+            // шрифты игры не рисуют стрелку: в окне и в чате был бы квадратик
+            s = s.Replace("\u2192", ">");
             sb.Append('"');
             foreach (char c in s)
             {

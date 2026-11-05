@@ -191,6 +191,51 @@ namespace MountSheetSync
         /// Строки со счётчиком для аддона: несобранные маунты со случайным шансом — кто их роняет (как строки
         /// «Осталось»: имена босса, сложности), сколько попыток (n) и шанс за попытку (p).
         /// </summary>
+        /// <summary>
+        /// ID маунта у каждой строки «Осталось» (значок в окне аддона), и у строк без шанса: достижений и гарантированной добычи.
+        /// Берётся из скрытой колонки общего листа, иначе из каталога.
+        /// </summary>
+        static void AddMountIds(IBook book, IEnumerable<Dictionary<string, object>> chars)
+        {
+            Dictionary<string, long> ids = new Dictionary<string, long>();
+            foreach (string name in new[] { RaidPrefix, DungeonPrefix, WorldSheet, RareSheet })
+            {
+                SheetEntry entry = ByName(book, name);
+                if (entry == null || entry.Data.Count == 0)
+                {
+                    continue;
+                }
+                object[] header = entry.Data[0];
+                int cId = FindCol(header, "^id в игре$", -1);
+                int cMount = FindCol(header, "маунт", 3);
+                int cBoss = FindCol(header, "босс", 4);
+                for (int r = 1; cId >= 0 && r < entry.Data.Count; r++)
+                {
+                    long id = MountIndex.IdOf(At(entry.Data[r], cId));
+                    if (id > 0)
+                    {
+                        ids[Norm(At(entry.Data[r], cMount)) + "|" + Norm(At(entry.Data[r], cBoss))] = id;
+                    }
+                }
+            }
+            foreach (Dictionary<string, object> ch in chars)
+            {
+                foreach (object o in (List<object>)ch["items"])
+                {
+                    Dictionary<string, object> item = (Dictionary<string, object>)o;
+                    long id;
+                    if (!ids.TryGetValue(Norm(item["mount"]) + "|" + Norm(item["boss"]), out id))
+                    {
+                        id = CatalogIndex().Find(null, item["mount"], item["boss"]);
+                    }
+                    if (id > 0)
+                    {
+                        item["id"] = (double)id;
+                    }
+                }
+            }
+        }
+
         static MountIndex catalogIndex;
 
         static MountIndex CatalogIndex()

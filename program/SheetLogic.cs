@@ -666,6 +666,12 @@ namespace MountSheetSync
             {
                 return true;
             }
+            // персонажи — правее «Источника»: при одном персонаже «Осталось попыток» в старых таблицах считается в TRUE/FALSE
+            int cSource = data.Count > 0 ? FindCol(data[0], SourcePattern, -1) : -1;
+            if (cSource >= 0 && c <= cSource)
+            {
+                return false;
+            }
             int checkboxes = 0;
             for (int r = 1; r < data.Count; r++)
             {
@@ -1497,6 +1503,7 @@ namespace MountSheetSync
             }
             reply["known"] = KnownDifficultyIds();
             reply["chars"] = order.Select(k => (object)chars[k]).ToList();
+            AddMountIds(book, order.Select(k => chars[k]));
             List<object> mounts = StatusMounts(book, collected);
             if (mounts.Count > 0)
             {
