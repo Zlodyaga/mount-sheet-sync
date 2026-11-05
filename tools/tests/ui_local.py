@@ -60,12 +60,6 @@ def wait_window(part, timeout=40):
     return None
 
 
-def key(wid, k):
-    subprocess.run(["xdotool", "windowfocus", "--sync", wid], env=env, capture_output=True)
-    time.sleep(0.3)
-    subprocess.run(["xdotool", "key", "--window", wid, k], env=env)
-
-
 def settings():
     return json.load(open(SETTINGS, encoding="utf-8-sig"))
 
@@ -108,7 +102,10 @@ try:
     shot("l1_first_run")
     check("…only once: it is remembered right away", settings().get("welcomed") is True, settings())
     check("…the data doesn't exist yet", not os.path.exists(os.path.join(DATA, "local-data.json")))
-    key(wid, "Return")
+    # without a window manager the keyboard focus isn't reliable: a click, like in ui_google.py
+    geo = subprocess.run(["xdotool", "getwindowgeometry", "--shell", wid], env=env, capture_output=True, text=True).stdout
+    g = dict(line.split("=") for line in geo.split())
+    subprocess.run(["xdotool", "mousemove", str(int(g["X"]) + int(g["WIDTH"]) - 192), str(int(g["Y"]) + int(g["HEIGHT"]) - 39), "click", "1"], env=env)
     end = time.time() + 15
     while time.time() < end and wait_window("настройки", 1) is not None:
         time.sleep(0.5)

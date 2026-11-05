@@ -607,9 +607,10 @@ namespace MountSheetSync
             Recovered();
             Report(sum, force);
             SetIdle();
-            if (sum.SentRecords > 0)
+            if (sum.SentRecords > 0 || (engine.Settings.IsLocal && !engine.Settings.HasOwnBook))
             {
-                statusDirty = true;   // таблица изменилась — список «Осталось» тоже
+                // таблица изменилась — список «Осталось» тоже; а новому игроку данные и список нужны сразу, не через полчаса по расписанию
+                statusDirty = true;
             }
             CheckCollection(current.Keys.ToList(), collectionNow);
             CheckAddonVersion(current.Keys.ToList());
