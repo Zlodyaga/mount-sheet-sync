@@ -130,6 +130,10 @@ g.Fire("ADDON_LOADED", "MountSheetSync")
 g.Fire("PLAYER_LOGIN"); g.RunTimers()
 
 
+def lua_list(t):
+    return [t[i] for i in range(1, len(t) + 1)]
+
+
 def chat_all():
     return "\n".join(str(g.CHAT[i]) for i in range(1, len(g.CHAT) + 1))
 
@@ -628,6 +632,8 @@ MSS_NS.OnChange()""")
 g.RunTimers()
 
 # 3.0.4: achievements and rewards have a group of their own at the end, in both tables
+tabs[0].MockClick(tabs[0]); g.RunTimers()
+before_reward = remaining()
 L.execute("""
 for _, c in ipairs(MountSheetSyncSheet.chars) do
   for _, i in ipairs(c.items) do
@@ -638,6 +644,8 @@ MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
 MSS_NS.OnChange()""")
 g.RunTimers()
 tabs[0].MockClick(tabs[0]); g.RunTimers()
+counted = remaining()
+check("3.0.4: a reward is not counted: one less to kill and one less in all", counted.left == before_reward.left - 1 and counted.total == before_reward.total - 1, (counted.left, counted.total, before_reward.left, before_reward.total))
 
 
 def after_reward_title():
@@ -656,6 +664,78 @@ eira_again.MockClick(eira_again); g.RunTimers()
 L.execute("""
 for _, c in ipairs(MountSheetSyncSheet.chars) do
   for _, i in ipairs(c.items) do i.src = nil end
+end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
+
+# 3.0.4: clicks on a row. Left on the boss: the Adventure Guide; Ctrl + left: the way to the entrance, or a map pin if that fails
+L.execute("""
+SAVED_MAP, SAVED_EJ, SAVED_ST, SAVED_ENUM, SAVED_POINT = C_Map, C_EncounterJournal, C_SuperTrack, Enum, UiMapPoint
+SAVED_JOURNAL = MountSheetSyncDB.journal
+MountSheetSyncDB.journal = { instances = { { id = 777, name = "Тестовый рейд", raid = true, map = 2450 } }, encounters = { { id = 1, j = 555, name = "Босс", i = 777 } } }
+for _, c in ipairs(MountSheetSyncSheet.chars) do
+  for _, i in ipairs(c.items) do i.je = 555 end
+end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+function EncounterJournal_OpenJournal(difficulty, instance, encounter) MOCK_GUIDE = { instance, encounter }; EncounterJournal:Show() end
+EncounterJournal = CreateFrame("Frame", "EncounterJournal")
+EncounterJournal:Hide()
+function MountJournal_SelectByMountID(id) MOCK_SELECTED = id end
+ROUTE = { pin = nil, entrance = true, tracks = true }
+Enum = { UIMapType = { Zone = 3 }, SuperTrackingMapPinType = { AreaPOI = 0 } }
+C_Map = { GetMapChildrenInfo = function() return { { mapID = 14 } } end, CanSetUserWaypointOnMap = function() return true end,
+          SetUserWaypoint = function(point) ROUTE.waypoint = point end }
+C_EncounterJournal = { GetDungeonEntrancesForMap = function() return ROUTE.entrance and { { journalInstanceID = 777, areaPoiID = 42, position = { x = 0.5, y = 0.25 } } } or {} end }
+C_SuperTrack = { SetSuperTrackedMapPin = function(kind, id) ROUTE.pin = id end,
+                 GetSuperTrackedMapPin = function() if ROUTE.tracks then return 0, ROUTE.pin end end,
+                 SetSuperTrackedUserWaypoint = function(on) ROUTE.user = on end }
+UiMapPoint = { CreateFromCoordinates = function(map, x, y) return { map = map, x = x, y = y } end }
+MSS_NS.OnChange()""")
+g.RunTimers()
+tabs[0].MockClick(tabs[0]); g.RunTimers()
+row = [f for f in pool(ROW) if f.elem.instance is not None][0]
+check("3.0.4: a row knows its raid from the journal", row.elem.instance == 777 and row.elem.encounter == 555, (row.elem.instance, row.elem.encounter))
+boss_col = [c for c in lua_list(row.elem.cols) if c.key == "boss"][0]
+g.CURSOR[1] = boss_col.x + 1
+row._scripts.OnEnter(row)
+tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
+check("3.0.4: the tooltip names the clicks", any("по боссу" in t for t in tt) and any("Ctrl" in t for t in tt), tt)
+row._scripts.OnLeave(row)
+row.MockClick(row)
+check("3.0.4: left click on the boss opens the guide on that raid and boss", g.MOCK_GUIDE[1] == 777 and g.MOCK_GUIDE[2] == 555 and not win._shown, g.MOCK_GUIDE)
+g.EncounterJournal.Hide(g.EncounterJournal); g.RunTimers()
+check("…and the window comes back with it", win._shown)
+row = [f for f in pool(ROW) if f.elem.instance is not None and f.elem.mountID is not None]
+g.CURSOR[1] = 100000
+g.MOCK_GUIDE = None
+if row:
+    row = row[0]
+    row.MockClick(row)
+    check("3.0.4: left click elsewhere on the row: the Mount Journal, not the guide", g.MOCK_GUIDE is None)
+    if g.CollectionsJournal is not None:
+        g.CollectionsJournal.Hide(g.CollectionsJournal)
+    g.RunTimers()
+win.Show(win); g.RunTimers()
+row = [f for f in pool(ROW) if f.elem.route][0]
+g.MOCK_CTRL = True
+row.MockClick(row)
+check("3.0.4: Ctrl + left click tracks the entrance", g.ROUTE.pin == 42 and g.ROUTE.waypoint is None and "Тестовый рейд" in chat_all(), g.ROUTE.pin)
+L.execute("ROUTE.tracks = false; ROUTE.pin = nil")
+row.MockClick(row)
+check("…if the game won't track it: a map pin at the entrance, tracked", g.ROUTE.waypoint.map == 14 and g.ROUTE.waypoint.x == 0.5 and g.ROUTE.user is True, g.ROUTE.user)
+check("…and the chat says so", "метка на карте" in chat_all(), chat_all()[-160:])
+L.execute("function C_EncounterJournal.GetDungeonEntrancesForMap() return {} end")
+row.elem.instance = 778
+row.MockClick(row)
+check("…no entrance on any map: said in the chat", "не нашёлся" in chat_all(), chat_all()[-160:])
+g.MOCK_CTRL = False
+L.execute("""
+C_Map, C_EncounterJournal, C_SuperTrack, Enum, UiMapPoint = SAVED_MAP, SAVED_EJ, SAVED_ST, SAVED_ENUM, SAVED_POINT
+MountSheetSyncDB.journal = SAVED_JOURNAL
+EncounterJournal:Hide(); EncounterJournal = nil; EncounterJournal_OpenJournal = nil; MountJournal_SelectByMountID = nil
+for _, c in ipairs(MountSheetSyncSheet.chars) do
+  for _, i in ipairs(c.items) do i.je = nil end
 end
 MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
 MSS_NS.OnChange()""")

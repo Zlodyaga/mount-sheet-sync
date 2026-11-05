@@ -486,7 +486,11 @@ function ns.BuildRemaining(data, player, weekEnd, kills, ch)
         left = left + partsLeft
       end
     elseif type(item) == "table" and not ns.IsNotFarmed(hidden, item) then
-      total = total + 1
+      -- достижения и награды показываем, но не считаем: их не убить
+      local counts = item.src ~= "reward"
+      if counts then
+        total = total + 1
+      end
       if not item.y or afterReset then
         local by
         for _, rec in ipairs(recs) do
@@ -496,7 +500,7 @@ function ns.BuildRemaining(data, player, weekEnd, kills, ch)
           end
         end
         items[#items + 1] = { item = item, done = by ~= nil, by = by }
-        if not by then
+        if not by and counts then
           left = left + 1
         end
       end
@@ -921,7 +925,7 @@ function ns.GetAttemptsList()
     local p = type(m) == "table" and tonumber(m.p)
     if p and p > 0 and p < 1 and not Collected(m) then
       local n = CountNow(m, data, kills, known)
-      out[#out + 1] = { name = MountName(m), n = n, p = p, left = CharactersLeft(m, data, kills, known, weekEnd), diff = m.diff, kind = m.kind, boss = m.boss, id = m.id }
+      out[#out + 1] = { name = MountName(m), n = n, p = p, left = CharactersLeft(m, data, kills, known, weekEnd), diff = m.diff, kind = m.kind, boss = m.boss, id = m.id, je = m.je, im = m.im }
     end
   end
   table.sort(out, function(a, b)
@@ -1022,6 +1026,35 @@ function ns.KindTitle(kind)
   return L["kind_" .. kind]
 end
 ns.KIND_ORDER = { "raid", "dungeon", "world", "rare", "reward" }
+
+-- Рейд или подземелье строки в путеводителе: journalInstanceID по боссу (item.je) или месту (item.im), из журнала, который читает аддон.
+local journalFor, instanceByEncounter, instanceByMap, instanceName
+
+function ns.ItemInstance(item)
+  local journal = ns.GetDB().journal
+  if type(journal) ~= "table" then
+    return nil
+  end
+  if journalFor ~= journal then
+    journalFor, instanceByEncounter, instanceByMap, instanceName = journal, {}, {}, {}
+    for _, e in ipairs(journal.encounters or {}) do
+      if e.j then
+        instanceByEncounter[e.j] = e.i
+      end
+    end
+    for _, i in ipairs(journal.instances or {}) do
+      instanceName[i.id] = i.name
+      if i.map then
+        instanceByMap[i.map] = i.id
+      end
+    end
+  end
+  return instanceByEncounter[tonumber(item.je)] or instanceByMap[tonumber(item.im)]
+end
+
+function ns.InstanceName(id)
+  return instanceName and instanceName[id]
+end
 
 -- Группа строки в окне: достижения и награды (item.src, программа 2.10+) — отдельно, это не убийство босса. item.kind у них прежний.
 function ns.GroupOf(item)

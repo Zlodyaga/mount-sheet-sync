@@ -199,7 +199,7 @@ namespace MountSheetSync
         /// Что окну аддона нужно о строке «Осталось», кроме самого списка: ID маунта (значок), и у строк без шанса — у достижений и
         /// гарантированной добычи; src = reward — не за убийство босса (своя группа). Из общего листа, ID ещё и из каталога.
         /// </summary>
-        static void AddRowInfo(IBook book, IEnumerable<Dictionary<string, object>> chars)
+        static void AddRowInfo(IBook book, IEnumerable<Dictionary<string, object>> chars, List<object> mounts)
         {
             Dictionary<string, long> ids = new Dictionary<string, long>();
             HashSet<string> rewards = new HashSet<string>();
@@ -229,25 +229,37 @@ namespace MountSheetSync
                     }
                 }
             }
+            List<object> rows = new List<object>(mounts);
             foreach (Dictionary<string, object> ch in chars)
             {
-                foreach (object o in (List<object>)ch["items"])
+                rows.AddRange((List<object>)ch["items"]);
+            }
+            foreach (object o in rows)
+            {
+                Dictionary<string, object> item = (Dictionary<string, object>)o;
+                string key = Norm(item["mount"]) + "|" + Norm(item["boss"]);
+                long id;
+                if (!ids.TryGetValue(key, out id))
                 {
-                    Dictionary<string, object> item = (Dictionary<string, object>)o;
-                    string key = Norm(item["mount"]) + "|" + Norm(item["boss"]);
-                    long id;
-                    if (!ids.TryGetValue(key, out id))
+                    id = CatalogIndex().Find(null, item["mount"], item["boss"]);
+                }
+                if (id > 0)
+                {
+                    item["id"] = (double)id;
+                    long journal, place;
+                    CatalogIndex().Where(id, item["boss"], out journal, out place);
+                    if (journal > 0)
                     {
-                        id = CatalogIndex().Find(null, item["mount"], item["boss"]);
+                        item["je"] = (double)journal;
                     }
-                    if (id > 0)
+                    if (place > 0)
                     {
-                        item["id"] = (double)id;
+                        item["im"] = (double)place;
                     }
-                    if (rewards.Contains(key))
-                    {
-                        item["src"] = "reward";
-                    }
+                }
+                if (rewards.Contains(key))
+                {
+                    item["src"] = "reward";
                 }
             }
         }

@@ -270,9 +270,27 @@ local function BossAndDiff(boss, diff)
   return text
 end
 
--- Журнал маунтов игры на этом маунте. Наше окно выше по слоям и закрыло бы журнал: прячем, а когда журнал закроют, возвращаем.
-local reopenAfterJournal, journalHooked
+-- Окна игры лежат ниже нашего и были бы закрыты им: прячем своё, а когда то окно закроют, возвращаем.
+local stepAsideFor, stepAsideHooked = nil, {}
 
+local function StepAside(panel)
+  if not (panel and panel:IsShown() and frame:IsShown()) then
+    return
+  end
+  if not stepAsideHooked[panel] then
+    stepAsideHooked[panel] = true
+    panel:HookScript("OnHide", function(self)
+      if stepAsideFor == self then
+        stepAsideFor = nil
+        frame:Show()
+      end
+    end)
+  end
+  stepAsideFor = panel
+  frame:Hide()
+end
+
+-- Журнал маунтов игры на этом маунте.
 local function ShowMountInJournal(id)
   local ok = pcall(function()
     if not MountJournal then
@@ -293,19 +311,82 @@ local function ShowMountInJournal(id)
     ns.Print(L.journal_open_failed)
     return
   end
-  if CollectionsJournal and CollectionsJournal:IsShown() and frame:IsShown() then
-    if not journalHooked then
-      journalHooked = true
-      CollectionsJournal:HookScript("OnHide", function()
-        if reopenAfterJournal then
-          reopenAfterJournal = false
-          frame:Show()
-        end
-      end)
+  StepAside(CollectionsJournal)
+end
+
+-- Путеводитель приключений на этом рейде или подземелье, на боссе, если он известен.
+local function ShowInGuide(instance, encounter)
+  local ok = pcall(function()
+    if not EncounterJournal_OpenJournal then
+      C_AddOns.LoadAddOn("Blizzard_EncounterJournal")
     end
-    reopenAfterJournal = true
-    frame:Hide()
+    EncounterJournal_OpenJournal(nil, instance, encounter)
+  end)
+  if not ok then
+    ns.Print(L.guide_open_failed)
+    return
   end
+  StepAside(EncounterJournal)
+end
+
+-- Вход в рейд или подземелье: игра отдаёт входы по картам зон. 946 — карта всего мира, зоны ищем в ней.
+local WORLD_MAP = 946
+local entrances = {}
+
+local function FindEntrance(instance)
+  if entrances[instance] then
+    return entrances[instance]
+  end
+  local ok = pcall(function()
+    for _, map in ipairs(C_Map.GetMapChildrenInfo(WORLD_MAP, Enum.UIMapType.Zone, true) or {}) do
+      for _, e in ipairs(C_EncounterJournal.GetDungeonEntrancesForMap(map.mapID) or {}) do
+        if not entrances[e.journalInstanceID] then
+          entrances[e.journalInstanceID] = { map = map.mapID, poi = e.areaPoiID, x = e.position.x, y = e.position.y }
+        end
+      end
+    end
+  end)
+  return ok and entrances[instance] or nil
+end
+
+-- Показать путь: игра ведёт к отметке входа, а если не вышло (не изучена территория и т. п.) — своя метка на карте у входа.
+local function ShowRoute(instance, name)
+  name = ns.InstanceName(instance) or Safe(name)
+  local e = FindEntrance(instance)
+  if not e then
+    ns.Print(string.format(L.route_none, name))
+    return
+  end
+  local tracked = pcall(function()
+    C_SuperTrack.SetSuperTrackedMapPin(Enum.SuperTrackingMapPinType.AreaPOI, e.poi)
+    local _, id = C_SuperTrack.GetSuperTrackedMapPin()
+    assert(id == e.poi)
+  end)
+  if tracked then
+    ns.Print(string.format(L.route_set, name))
+    return
+  end
+  local pinned = pcall(function()
+    assert(C_Map.CanSetUserWaypointOnMap(e.map))
+    C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(e.map, e.x, e.y))
+    C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+  end)
+  ns.Print(string.format(pinned and L.route_pin or L.route_none, name))
+end
+
+-- Курсор над столбцом строки (key — ключ столбца)?
+local function OverColumn(button, key)
+  local left = button:GetLeft()
+  if not left or not button.elem.cols then
+    return false
+  end
+  local x = GetCursorPosition() / button:GetEffectiveScale() - left
+  for _, col in ipairs(button.elem.cols) do
+    if col.key == key then
+      return x >= col.x and x <= col.x + col.w
+    end
+  end
+  return false
 end
 
 -- Меню по правому щелчку на строке «Осталось» (только у текущего персонажа): не фармить строку или весь рейд / подземелье.
@@ -359,6 +440,26 @@ local function GridHover(button)
   FocusColumn(slot >= 1 and slot <= grid.shown and slot + grid.offset or nil)
 end
 
+local function ClickRow(button, mouse)
+  if mouse == "RightButton" then
+    ShowRowMenu(button)
+    return
+  end
+  local elem = button.elem
+  if not elem then
+    return
+  end
+  if IsControlKeyDown() then
+    if elem.route then
+      ShowRoute(elem.instance, elem.placeName)
+    end
+  elseif elem.instance and OverColumn(button, "boss") then
+    ShowInGuide(elem.instance, elem.encounter)
+  elseif elem.mountID then
+    ShowMountInJournal(elem.mountID)
+  end
+end
+
 -- Подсказка строки: elem.tip = { заголовок, строка, … }; у строк с меню — ещё «ПКМ — не фармлю».
 local function ShowRowTooltip(button)
   local elem = button.elem
@@ -371,8 +472,14 @@ local function ShowRowTooltip(button)
     for i = 2, #elem.tip do
       GameTooltip:AddLine(elem.tip[i], 1, 1, 1, true)
     end
+    if elem.instance then
+      GameTooltip:AddLine(L.tip_row_guide, 0.6, 0.6, 0.6, true)
+    end
     if elem.mountID then
       GameTooltip:AddLine(L.tip_row_open, 0.6, 0.6, 0.6, true)
+    end
+    if elem.route then
+      GameTooltip:AddLine(L.tip_row_route, 0.6, 0.6, 0.6, true)
     end
     if elem.entry then
       GameTooltip:AddLine(L.tip_row_menu, 0.6, 0.6, 0.6, true)
@@ -555,13 +662,7 @@ local function InitRow(button, elem)
     button.hl:SetAllPoints()
     button.hl:SetColorTexture(1, 1, 1, 0.08)
     button:RegisterForClicks("LeftButtonUp", "RightButtonUp")
-    button:SetScript("OnClick", function(self, mouse)
-      if mouse == "RightButton" then
-        ShowRowMenu(self)
-      elseif self.elem and self.elem.mountID then
-        ShowMountInJournal(self.elem.mountID)
-      end
-    end)
+    button:SetScript("OnClick", ClickRow)
     button:SetScript("OnEnter", ShowRowTooltip)
     button:SetScript("OnLeave", LeaveRow)
   end
@@ -810,6 +911,15 @@ local function KnownMount(id)
   return ns.MountIcon(id) and tonumber(id) or nil
 end
 
+-- Куда ведут щелчки по строке: путеводитель и, у рейдов и подземелий, путь к входу (у мировых боссов входа нет).
+local function WithPlace(elem, item)
+  elem.instance = ns.ItemInstance(item)
+  elem.encounter = tonumber(item.je)
+  elem.route = elem.instance and (item.kind == "raid" or item.kind == "dungeon") or nil
+  elem.placeName = item.place
+  return elem
+end
+
 -- Строка таблицы у персонажа: осталось — со счётчиком попыток, убита — серая, с галочкой.
 local function RemainingRow(entry, menu, stripe)
   local cols, doneCols = LeftColumns()
@@ -821,12 +931,12 @@ local function RemainingRow(entry, menu, stripe)
   local n, p, id = ns.ItemAttempts(item)
   if entry.done then
     local status = (entry.again and string.format(L.left_again, ns.FormatDuration(entry.again)) or L.left_done):gsub("^%s*—%s*", "")
-    return { cols = doneCols, done = true, icon = DONE_TEXTURE, mountID = KnownMount(item.id or id), stripe = stripe, tip = tip, values = {
+    return WithPlace({ cols = doneCols, done = true, icon = DONE_TEXTURE, mountID = KnownMount(item.id or id), stripe = stripe, tip = tip, values = {
       boss = "|cff8c8c8c" .. Safe(item.boss) .. "|r",
       diff = "|cff8c8c8c" .. ShortDiff(item.diff) .. "|r",
       mount = "|cff8c8c8c" .. Safe(item.mount) .. "|r",
       status = "|cff8c8c8c" .. status .. "|r",
-    } }
+    } }, item)
   end
   local diff = "|cffb7ae9a" .. ShortDiff(item.diff) .. "|r"
   if entry.killed then
@@ -837,14 +947,14 @@ local function RemainingRow(entry, menu, stripe)
     chance = "|cff" .. ChanceColor(n, p) .. ns.FormatChance(n, p) .. "|r"
     tip[#tip + 1] = string.format(L.boss_hint, n, ns.FormatChance(n, p))
   end
-  return { cols = cols, icon = ns.MountIcon(item.id or id), mountID = KnownMount(item.id or id), stripe = stripe, tip = tip, entry = menu and entry or nil, values = {
+  return WithPlace({ cols = cols, icon = ns.MountIcon(item.id or id), mountID = KnownMount(item.id or id), stripe = stripe, tip = tip, entry = menu and entry or nil, values = {
     boss = Safe(item.boss),
     diff = diff,
     mount = "|cffc9a0ff" .. Safe(item.mount) .. "|r",
     place = "|cff8c8c8c" .. Safe(item.place) .. "|r",
     n = n and n > 0 and tostring(n) or "|cff8c8c8c-|r",
     chance = chance,
-  } }
+  } }, item)
 end
 
 -- Вкладка «Осталось» у персонажа: строки «Нет» из таблицы, убитые после обновления списка — с галочкой внизу группы.
@@ -909,7 +1019,11 @@ local function GridView(rows, all)
   local cols = GridColumns(#all)
   grid.offset = math.min(grid.offset, math.max(0, #all - grid.shown))
   local list, kind, stripe = {}, nil, false
+  local toKill = 0
   for _, row in ipairs(rows) do
+    if row.kind ~= "reward" then
+      toKill = toKill + 1
+    end
     if row.kind ~= kind then
       kind = row.kind
       stripe = false
@@ -932,20 +1046,20 @@ local function GridView(rows, all)
       end
     end
     local _, _, id = ns.ItemAttempts(item)
-    list[#list + 1] = { cols = cols, names = names, killed = row.killed or false, icon = ns.MountIcon(item.id or id), mountID = KnownMount(item.id or id), stripe = stripe,
+    list[#list + 1] = WithPlace({ cols = cols, names = names, killed = row.killed or false, icon = ns.MountIcon(item.id or id), mountID = KnownMount(item.id or id), stripe = stripe,
       tip = { Safe(item.mount), BossAndDiff(item.boss, item.diff), table.concat(shownNames, ", ") }, values = {
         boss = Safe(item.boss),
         diff = "|cffb7ae9a" .. ShortDiff(item.diff) .. "|r",
         mount = "|cffc9a0ff" .. Safe(item.mount) .. "|r",
         total = "|cffd8c98f" .. row.total .. "|r",
-      } }
+      } }, item)
     stripe = not stripe
   end
   if #rows == 0 then
     list[#list + 1] = Line("|cff8cff8c" .. L.all_empty .. "|r")
   end
   return { list = list, cols = #rows > 0 and cols or nil, grid = #rows > 0,
-    summary = "|cff8c8c8c" .. string.format(L.all_head, #rows, #all) .. "|r" }
+    summary = "|cff8c8c8c" .. string.format(L.all_head, toKill, #all) .. "|r" }
 end
 
 -- Сортировка и фильтры вкладки «Попытки» (запоминаются): db.attemptsView.
@@ -1010,14 +1124,14 @@ local function AttemptsView(rows, chars)
     if hasTries then
       color, bar, v = ChanceColor(m.n, m.p)
     end
-    list[i] = { cols = cols, icon = ns.MountIcon(m.id), mountID = KnownMount(m.id), stripe = i % 2 == 0, tip = tip, bar = v, barColor = bar, values = {
+    list[i] = WithPlace({ cols = cols, icon = ns.MountIcon(m.id), mountID = KnownMount(m.id), stripe = i % 2 == 0, tip = tip, bar = v, barColor = bar, values = {
       mount = "|cffc9a0ff" .. Safe(m.name) .. "|r",
       boss = Safe(m.boss),
       diff = "|cffb7ae9a" .. ShortDiff(m.diff) .. "|r",
       n = hasTries and tostring(m.n) or "|cff8c8c8c-|r",
       chance = "|cff" .. color .. (hasTries and ns.FormatChance(m.n, m.p) or "-") .. "|r",
       left = (m.left > 0 and "|cff7fdc7f" or "|cff8c8c8c") .. m.left .. "/" .. chars .. "|r",
-    } }
+    } }, m)
   end
   return { list = list, cols = cols, attempts = true, count = #sorted }
 end

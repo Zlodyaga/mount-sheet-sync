@@ -3,8 +3,8 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.4
-- Achievements and rewards (Glory of the Hero, Keystone Master and the like) have a group of their own at the end of the table, because they aren't boss kills. Needs the program 2.10.0.
-- Left-click a row in “Remaining”, “All characters” or “Attempts” to open that mount in the game's Mount Journal. The window steps aside and comes back when the journal closes.
+- Achievements and rewards (Glory of the Hero, Keystone Master and the like) have a group of their own at the end of the table and no longer count as left to kill, because they aren't boss kills. Needs the program 2.10.0.
+- Clicks on a row, all named in its tooltip. Left-click the boss: the raid or dungeon in the Adventure Guide. Left-click the mount: the game's Mount Journal. Ctrl + left-click: the way to the entrance, or a map pin at the entrance when the game can't track it. The window steps aside and comes back when the game's window closes.
 - Mount icons on every row of “Remaining”, including achievements and guaranteed drops. Needs the program 2.10.0; with an older one those rows stay without an icon.
 - The difficulty column is short and readable: “N10”, “Torghast”, “Ach.” and the like, with the full text in the tooltip.
 - The tooltip about the program no longer says that a Google Sheet is required.

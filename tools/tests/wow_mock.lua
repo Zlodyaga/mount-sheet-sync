@@ -302,6 +302,7 @@ Minimap:SetSize(140, 140)
 Minimap._center = { 1800, 950 }
 CURSOR = { 0, 0 }
 function GetCursorPosition() return CURSOR[1], CURSOR[2] end
+function IsControlKeyDown() return MOCK_CTRL == true end
 UISpecialFrames = {}
 ChatFontNormal = {}
 function GetBuildInfo() return "12.1.5", "65000", "Oct 1 2026", 120105 end

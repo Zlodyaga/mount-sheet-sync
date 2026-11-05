@@ -1503,8 +1503,8 @@ namespace MountSheetSync
             }
             reply["known"] = KnownDifficultyIds();
             reply["chars"] = order.Select(k => (object)chars[k]).ToList();
-            AddRowInfo(book, order.Select(k => chars[k]));
             List<object> mounts = StatusMounts(book, collected);
+            AddRowInfo(book, order.Select(k => chars[k]), mounts);
             if (mounts.Count > 0)
             {
                 reply["mounts"] = mounts;   // счётчик попыток (таблица программы 2.8+)

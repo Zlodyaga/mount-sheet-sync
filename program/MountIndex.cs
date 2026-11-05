@@ -17,10 +17,14 @@ namespace MountSheetSync
             public string NameKey = "";
             public string BossKey = "";
             public long Id;
+            public long Journal;
+            public long Place;
+            public string PlaceKey = "";
             public List<string> AliasKeys = new List<string>();
         }
 
         readonly List<Item> items = new List<Item>();
+        readonly Dictionary<string, long> places = new Dictionary<string, long>();
         readonly Dictionary<long, string> names = new Dictionary<long, string>();
         readonly Dictionary<long, HashSet<string>> aliasKeys = new Dictionary<long, HashSet<string>>();
         /// <summary>«вид:mountID» → статистики убийств игры, в которых считаются попытки (колонка каталога «ID статистики»).</summary>
@@ -49,6 +53,17 @@ namespace MountSheetSync
                     it.NameKey = SheetLogic.Norm(it.Name);
                     it.BossKey = cBoss >= 0 ? SheetLogic.Norm(row[cBoss]) : "";
                     it.Id = cId >= 0 ? IdOf(row[cId]) : 0;
+                    int cJournal = sheet.Col("ID в журнале");
+                    int cPlace = sheet.Col("ID места");
+                    it.Journal = cJournal >= 0 ? IdOf(row[cJournal]) : 0;
+                    it.Place = cPlace >= 0 ? IdOf(row[cPlace]) : 0;
+                    // у строки без своего ID места — ID другой строки того же рейда или подземелья
+                    string placeKey = SheetLogic.Norm(row[1]);
+                    if (it.Place > 0)
+                    {
+                        index.places[placeKey] = it.Place;
+                    }
+                    it.PlaceKey = placeKey;
                     List<string> old;
                     if (it.Id > 0 && catalog.Aliases.TryGetValue(it.Id, out old))
                     {
@@ -169,6 +184,24 @@ namespace MountSheetSync
                 return byBoss[0].Id;
             }
             return 0;
+        }
+
+        /// <summary>Где искать строку в путеводителе: journalEncounterID и mapID места (0 — неизвестно). Сначала строка этого босса.</summary>
+        public void Where(long id, object bossCell, out long journal, out long place)
+        {
+            string boss = SheetLogic.Norm(bossCell);
+            List<Item> hits = items.Where(i => i.Id == id).ToList();
+            Item it = hits.FirstOrDefault(h => h.BossKey == boss) ?? hits.FirstOrDefault();
+            journal = it != null ? it.Journal : 0;
+            place = 0;
+            if (it != null && it.Place <= 0)
+            {
+                places.TryGetValue(it.PlaceKey, out place);
+            }
+            else if (it != null)
+            {
+                place = it.Place;
+            }
         }
 
         /// <summary>Название маунта в каталоге сейчас (null — маунта нет в каталоге).</summary>

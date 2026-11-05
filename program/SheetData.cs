@@ -239,6 +239,10 @@ namespace MountSheetSync
                     {
                         continue;
                     }
+                    if (J.Str(item, "src") == "reward")
+                    {
+                        continue;   // достижения и награды не считаем: их не убить
+                    }
                     left.All++;
                     if (J.Truthy(item, "y"))
                     {

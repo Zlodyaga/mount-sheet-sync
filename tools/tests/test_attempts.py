@@ -298,6 +298,8 @@ ids = {i["mount"]: i.get("id") for c in got["chars"] for i in c["items"]}
 check("every row of the list has its mount's ID: with a chance, and an achievement without one", ids.get("Отмщение") == 1471 and ids.get("Кругомер") == 999, ids)
 check("…a world boss without the hidden column: from the catalog", ids.get("Сын Галеона", 0) > 0, ids)
 src = {i["mount"]: i.get("src") for c in got["chars"] for i in c["items"]}
+where = {i["mount"]: (i.get("je"), i.get("im")) for c in got["chars"] for i in c["items"]}
+check("a row carries where to find it in the guide (journal encounter or map ID from the catalog)", where.get("Сын Галеона", (0, 0))[0] > 0 and where.get("Синий протодракон", (0, 0))[1] > 0, where)
 check("an achievement is marked as not a boss kill, a boss drop is not", src.get("Кругомер") == "reward" and src.get("Отмщение") is None, src)
 
 failed = [n for n, ok in checks if not ok]
