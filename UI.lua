@@ -262,6 +262,11 @@ local function ShortDiff(diff)
   return text
 end
 
+-- Босс короче для колонки: что идёт после него («/ Сундук претендента», «> Затерянное во времени седло») — в подсказке строки.
+local function ShortBoss(boss)
+  return (Safe(boss):gsub("%s+[/>]%s+.*$", ""))
+end
+
 local function BossAndDiff(boss, diff)
   local text = Safe(boss)
   if Safe(diff) ~= "" then
@@ -349,9 +354,49 @@ local function FindEntrance(instance)
   return ok and entrances[instance] or nil
 end
 
+-- Босс на карте зоны (мировые боссы: входа у них нет).
+local bossSpots = {}
+
+local function FindBossSpot(encounter)
+  if bossSpots[encounter] then
+    return bossSpots[encounter]
+  end
+  local ok = pcall(function()
+    for _, map in ipairs(C_Map.GetMapChildrenInfo(WORLD_MAP, Enum.UIMapType.Zone, true) or {}) do
+      for _, e in ipairs(C_EncounterJournal.GetEncountersOnMap(map.mapID) or {}) do
+        if not bossSpots[e.encounterID] then
+          bossSpots[e.encounterID] = { map = map.mapID, x = e.mapX, y = e.mapY }
+        end
+      end
+    end
+  end)
+  return ok and bossSpots[encounter] or nil
+end
+
+-- Своя метка на карте, выбранная целью.
+local function PinAndTrack(map, x, y)
+  return pcall(function()
+    assert(C_Map.CanSetUserWaypointOnMap(map))
+    C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(map, x, y))
+    C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+  end)
+end
+
 -- Показать путь: игра ведёт к отметке входа, а если не вышло (не изучена территория и т. п.) — своя метка на карте у входа.
-local function ShowRoute(instance, name)
-  name = ns.InstanceName(instance) or Safe(name)
+-- У мировых боссов входа нет: метка там, где их показывает игра.
+local function ShowRoute(elem)
+  if elem.world then
+    local name = Safe(elem.bossName)
+    local spot = elem.encounter and FindBossSpot(elem.encounter)
+    if spot and PinAndTrack(spot.map, spot.x, spot.y) then
+      ns.Print(string.format(L.route_boss, name))
+    else
+      ns.Print(string.format(L.route_none, name))
+    end
+    return
+  end
+  local instance = elem.instance
+  local name = ns.InstanceName(instance) or Safe(elem.placeName)
   local e = FindEntrance(instance)
   if not e then
     ns.Print(string.format(L.route_none, name))
@@ -366,12 +411,7 @@ local function ShowRoute(instance, name)
     ns.Print(string.format(L.route_set, name))
     return
   end
-  local pinned = pcall(function()
-    assert(C_Map.CanSetUserWaypointOnMap(e.map))
-    C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(e.map, e.x, e.y))
-    C_SuperTrack.SetSuperTrackedUserWaypoint(true)
-  end)
-  ns.Print(string.format(pinned and L.route_pin or L.route_none, name))
+  ns.Print(string.format(PinAndTrack(e.map, e.x, e.y) and L.route_pin or L.route_none, name))
 end
 
 -- Курсор над столбцом строки (key — ключ столбца)?
@@ -451,7 +491,7 @@ local function ClickRow(button, mouse)
   end
   if IsControlKeyDown() then
     if elem.route then
-      ShowRoute(elem.instance, elem.placeName)
+      ShowRoute(elem)
     end
   elseif elem.instance and OverColumn(button, "boss") then
     ShowInGuide(elem.instance, elem.encounter)
@@ -466,7 +506,9 @@ local function ShowRowTooltip(button)
   if not elem or not (elem.tip or elem.entry) then
     return
   end
-  GameTooltip:SetOwner(button, "ANCHOR_CURSOR")
+  -- слева от таблицы: так подсказка не закрывает строки
+  GameTooltip:SetOwner(button, "ANCHOR_NONE")
+  GameTooltip:SetPoint("RIGHT", button, "LEFT", -8, 0)
   if elem.tip then
     GameTooltip:SetText(elem.tip[1], 1, 0.82, 0)
     for i = 2, #elem.tip do
@@ -911,12 +953,14 @@ local function KnownMount(id)
   return ns.MountIcon(id) and tonumber(id) or nil
 end
 
--- Куда ведут щелчки по строке: путеводитель и, у рейдов и подземелий, путь к входу (у мировых боссов входа нет).
+-- Куда ведут щелчки по строке: путеводитель и путь к входу в рейд или подземелье, а к мировому боссу — метка, где его показывает игра.
 local function WithPlace(elem, item)
   elem.instance = ns.ItemInstance(item)
   elem.encounter = tonumber(item.je)
-  elem.route = elem.instance and (item.kind == "raid" or item.kind == "dungeon") or nil
+  elem.world = item.kind == "world" or nil
+  elem.route = (elem.instance and (item.kind == "raid" or item.kind == "dungeon")) or (elem.world and elem.encounter ~= nil) or nil
   elem.placeName = item.place
+  elem.bossName = item.boss
   return elem
 end
 
@@ -932,7 +976,7 @@ local function RemainingRow(entry, menu, stripe)
   if entry.done then
     local status = (entry.again and string.format(L.left_again, ns.FormatDuration(entry.again)) or L.left_done):gsub("^%s*—%s*", "")
     return WithPlace({ cols = doneCols, done = true, icon = DONE_TEXTURE, mountID = KnownMount(item.id or id), stripe = stripe, tip = tip, values = {
-      boss = "|cff8c8c8c" .. Safe(item.boss) .. "|r",
+      boss = "|cff8c8c8c" .. ShortBoss(item.boss) .. "|r",
       diff = "|cff8c8c8c" .. ShortDiff(item.diff) .. "|r",
       mount = "|cff8c8c8c" .. Safe(item.mount) .. "|r",
       status = "|cff8c8c8c" .. status .. "|r",
@@ -948,7 +992,7 @@ local function RemainingRow(entry, menu, stripe)
     tip[#tip + 1] = string.format(L.boss_hint, n, ns.FormatChance(n, p))
   end
   return WithPlace({ cols = cols, icon = ns.MountIcon(item.id or id), mountID = KnownMount(item.id or id), stripe = stripe, tip = tip, entry = menu and entry or nil, values = {
-    boss = Safe(item.boss),
+    boss = ShortBoss(item.boss),
     diff = diff,
     mount = "|cffc9a0ff" .. Safe(item.mount) .. "|r",
     place = "|cff8c8c8c" .. Safe(item.place) .. "|r",
@@ -1019,10 +1063,11 @@ local function GridView(rows, all)
   local cols = GridColumns(#all)
   grid.offset = math.min(grid.offset, math.max(0, #all - grid.shown))
   local list, kind, stripe = {}, nil, false
-  local toKill = 0
+  local toKill, attempts = 0, 0
   for _, row in ipairs(rows) do
     if row.kind ~= "reward" then
       toKill = toKill + 1
+      attempts = attempts + row.total
     end
     if row.kind ~= kind then
       kind = row.kind
@@ -1048,7 +1093,7 @@ local function GridView(rows, all)
     local _, _, id = ns.ItemAttempts(item)
     list[#list + 1] = WithPlace({ cols = cols, names = names, killed = row.killed or false, icon = ns.MountIcon(item.id or id), mountID = KnownMount(item.id or id), stripe = stripe,
       tip = { Safe(item.mount), BossAndDiff(item.boss, item.diff), table.concat(shownNames, ", ") }, values = {
-        boss = Safe(item.boss),
+        boss = ShortBoss(item.boss),
         diff = "|cffb7ae9a" .. ShortDiff(item.diff) .. "|r",
         mount = "|cffc9a0ff" .. Safe(item.mount) .. "|r",
         total = "|cffd8c98f" .. row.total .. "|r",
@@ -1059,7 +1104,7 @@ local function GridView(rows, all)
     list[#list + 1] = Line("|cff8cff8c" .. L.all_empty .. "|r")
   end
   return { list = list, cols = #rows > 0 and cols or nil, grid = #rows > 0,
-    summary = "|cff8c8c8c" .. string.format(L.all_head, toKill, #all) .. "|r" }
+    summary = "|cff8c8c8c" .. string.format(L.all_head, toKill, attempts, #all) .. "|r" }
 end
 
 -- Сортировка и фильтры вкладки «Попытки» (запоминаются): db.attemptsView.
@@ -1126,7 +1171,7 @@ local function AttemptsView(rows, chars)
     end
     list[i] = WithPlace({ cols = cols, icon = ns.MountIcon(m.id), mountID = KnownMount(m.id), stripe = i % 2 == 0, tip = tip, bar = v, barColor = bar, values = {
       mount = "|cffc9a0ff" .. Safe(m.name) .. "|r",
-      boss = Safe(m.boss),
+      boss = ShortBoss(m.boss),
       diff = "|cffb7ae9a" .. ShortDiff(m.diff) .. "|r",
       n = hasTries and tostring(m.n) or "|cff8c8c8c-|r",
       chance = "|cff" .. color .. (hasTries and ns.FormatChance(m.n, m.p) or "-") .. "|r",
@@ -1323,14 +1368,14 @@ local function TotalLeft(all)
 end
 
 local function RefreshChars(all, sel)
-  local showAll = selectedChar == ALL_CHARS
+  local showAll = selectedChar == ALL_CHARS and #all > 1
   local key = tostring(all) .. "|" .. tostring(sel) .. "|" .. tostring(showAll)
   if key == shownChars then
     return
   end
   shownChars = key
   local elems = {}
-  if #all > 0 then
+  if #all > 1 then   -- один персонаж: сравнивать не с кем, сразу его «Осталось»
     elems[1] = { all = true, total = TotalLeft(all), selected = showAll }
   end
   for i, c in ipairs(all) do
@@ -1352,7 +1397,7 @@ function UI.Refresh()
   local sel = SelectedEntry(all)
   RefreshChars(all, sel)
   local own = ns.GetRemaining()
-  local showAll = selectedChar == ALL_CHARS and #all > 0
+  local showAll = selectedChar == ALL_CHARS and #all > 1
   UpdateTabTitle(sel and sel.r or own, showAll and TotalLeft(all) or nil)
 
   local tab = frame.selectedTab

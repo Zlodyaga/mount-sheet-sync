@@ -136,7 +136,7 @@ def lua_list(t):
 
 def all_head_rows():
     heads = [plain(x._text) for x in regions("FontString") if under_window(x) and x._shown and x._text is not None and "Ещё убить на этой неделе" in plain(x._text)]
-    return int(heads[0].split("строк ")[1].split(" ")[0])
+    return int(heads[0].split("строк ")[1].split(",")[0])
 
 
 def chat_all():
@@ -343,7 +343,7 @@ click_all()
 rows = shown_rows()
 summ = ns.GetSummary()
 check("«Все персонажи»: head line with rows and characters",
-      rows[0] == "|cff8c8c8cЕщё убить на этой неделе: строк %d - персонажей в таблице: %d|r" % (len(summ), len(allr)), rows[0])
+      rows[0] == "|cff8c8c8cЕщё убить на этой неделе: строк %d, попыток %d - персонажей в таблице: %d|r" % (len(summ), sum(summ[i].total for i in range(1, len(summ) + 1)), len(allr)), rows[0])
 check("…grouped by kind", [t for t in rows if t.startswith("|cffffd200")] == ["|cffffd200Рейды|r", "|cffffd200Подземелья|r", "|cffffd200Мировые боссы|r"],
       [t for t in rows if t.startswith("|cffffd200")])
 check("…selected on the left, the tab counts everybody", char_rows()[0][2] and tabs[0]._text == "Осталось (%s)" % char_rows()[0][1], tabs[0]._text)
@@ -636,6 +636,41 @@ MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
 MSS_NS.OnChange()""")
 g.RunTimers()
 
+# 3.0.4: one character: nothing to compare, so no «Все персонажи» row; the first row is that character
+L.execute("""
+SAVED_CHARS = MountSheetSyncSheet.chars
+MountSheetSyncSheet.chars = { SAVED_CHARS[1] }
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
+tabs[0].MockClick(tabs[0]); g.RunTimers()
+check("3.0.4: one character: no row for all of them", not [f for f in pool(CHAR) if f._shown and f.elem.all], [f.elem.name for f in pool(CHAR) if f._shown])
+L.execute("""
+MountSheetSyncSheet.chars = SAVED_CHARS
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
+tabs[0].MockClick(tabs[0]); g.RunTimers()
+check("…with more of them it is back", [f for f in pool(CHAR) if f._shown and f.elem.all])
+# 3.0.4: what follows the boss goes to the tooltip
+L.execute("""
+for _, i in ipairs(MountSheetSyncSheet.chars[1].items) do
+  if i.mount == "Поводья Повелителя воронов" then i.boss = "Анзу / Сундук претендента" end
+end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
+tabs[0].MockClick(tabs[0]); g.RunTimers()
+line = [plain(t) for t in shown_rows() if "Поводья Повелителя воронов" in plain(t)]
+check("3.0.4: the column keeps only the boss", line and line[0].startswith("Анзу | ") and "Сундук" not in line[0], line)
+L.execute("""
+for _, i in ipairs(MountSheetSyncSheet.chars[1].items) do
+  if i.mount == "Поводья Повелителя воронов" then i.boss = "Анзу" end
+end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
+
 # 3.0.4: difficulties the catalog writes at length are short in the column
 SHORT = {"Normal 10, 3 drakes up": "N10", "Heroic 25": "H25", "Achievement": "Дост.", "Любая": "Любая", "Удалённая награда": "Удалена",
          "Torghast": "Торгаст", "3400+ M+ rating in current season": "3400+", "MoP Challenge Mode": "CM", "Mythic, hard mode": "M", "Mythic dungeon achievements": "Дост."}
@@ -694,6 +729,8 @@ row_after, in_order = after_reward_title()
 check("…and in the table of all characters", row_after is not None and "Поводья Повелителя воронов" in row_after and in_order, row_after)
 head_now = all_head_rows()
 check("…«Ещё убить» doesn't count the row of the reward", head_now == head_before - 1, (head_before, head_now))
+head_text = [plain(x._text) for x in regions("FontString") if under_window(x) and x._shown and x._text is not None and "Ещё убить на этой неделе" in plain(x._text)][0]
+check("…and shows rows and attempts side by side", "попыток" in head_text, head_text)
 eira_again = pool(CHAR)[1]
 eira_again.MockClick(eira_again); g.RunTimers()
 L.execute("""
@@ -736,6 +773,7 @@ g.CURSOR[1] = boss_col.x + 1
 row._scripts.OnEnter(row)
 tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
 check("3.0.4: the tooltip names the clicks", any("по боссу" in t for t in tt) and any("Ctrl" in t for t in tt), tt)
+check("3.0.4: the tooltip stands beside the table, covering no rows", g.GameTooltip.anchor == "ANCHOR_NONE" and g.GameTooltip.relPoint == "LEFT", g.GameTooltip.anchor)
 row._scripts.OnLeave(row)
 row.MockClick(row)
 check("3.0.4: left click on the boss opens the guide on that raid and boss", g.MOCK_GUIDE[1] == 777 and g.MOCK_GUIDE[2] == 555 and not win._shown, g.MOCK_GUIDE)
@@ -763,8 +801,28 @@ check("…and the chat says so", "метка на карте" in chat_all(), cha
 L.execute("function C_EncounterJournal.GetDungeonEntrancesForMap() return {} end")
 row.elem.instance = 778
 row.MockClick(row)
-check("…no entrance on any map: said in the chat", "не нашёлся" in chat_all(), chat_all()[-160:])
+check("…no entrance on any map: said in the chat", "На карте не нашлось" in chat_all(), chat_all()[-160:])
+# a world boss has no entrance: a pin where the game shows the boss
+L.execute("""
+function C_EncounterJournal.GetEncountersOnMap() return { { encounterID = 555, mapX = 0.3, mapY = 0.7 } } end
+ROUTE.waypoint = nil""")
+world_row = [f for f in pool(ROW) if f.elem.world]
+if world_row:
+    world_row[0].MockClick(world_row[0])
+    check("3.0.4: Ctrl + left click on a world boss: a pin where the game shows it", g.ROUTE.waypoint is not None and g.ROUTE.waypoint.x == 0.3 and "Поставлена метка" in chat_all(), g.ROUTE.waypoint)
+else:
+    click_all(); g.RunTimers()
+    world_row = [f for f in pool(ROW) if f.elem.world]
+    world_row[0].MockClick(world_row[0])
+    check("3.0.4: Ctrl + left click on a world boss: a pin where the game shows it", g.ROUTE.waypoint is not None and g.ROUTE.waypoint.x == 0.3 and "Поставлена метка" in chat_all(), g.ROUTE.waypoint)
+    eira_back = pool(CHAR)[1]
+    eira_back.MockClick(eira_back); g.RunTimers()
 g.MOCK_CTRL = False
+L.execute("""
+function EJ_GetEncounterInfo(id) if id == 691 then return "Ша", "d", 691, 1, "link", 322 end end
+MOCK_ITEM_INSTANCE = MSS_NS.ItemInstance({ je = 691 })
+EJ_GetEncounterInfo = nil""")
+check("3.0.4: a world boss the addon's journal doesn't list: its raid comes from the game", g.MOCK_ITEM_INSTANCE == 322, g.MOCK_ITEM_INSTANCE)
 L.execute("""
 C_Map, C_EncounterJournal, C_SuperTrack, Enum, UiMapPoint = SAVED_MAP, SAVED_EJ, SAVED_ST, SAVED_ENUM, SAVED_POINT
 MountSheetSyncDB.journal = SAVED_JOURNAL

@@ -36,6 +36,10 @@ FOLDERS = {"the eye tempest keep": "theeye", "eye of eternity": "northrend", "th
            "isle of thunder": "pandaria", "spires of arak": "draenor", "voldun": "azeroth", "uldum": "azeroth"}
 
 
+# Places without a boss the mods know (rows like «Обычные NPC внутри AQ40»): map IDs from the game's journal, MountSheetSyncDB.journal.
+MANUAL_PLACES = {"Temple of Ahn'Qiraj": "531", "Zul'Aman": "568", "Naxxramas": "533", "Sporefall": "1592", "The Oculus": "578", "Plaguefall": "2289"}
+
+
 def norm(s):
     return re.sub(r"[^a-z0-9]+", " ", s.lower().replace("'", "")).strip()
 
@@ -124,6 +128,8 @@ def main():
             if r[cm]:
                 place_map.setdefault(r[cp], r[cm])
         for r in sheet["rows"]:
+            if not r[cm]:
+                r[cm] = MANUAL_PLACES.get(r[cp], "")
             if not r[cm] and r[cp] in place_map:
                 r[cm] = place_map[r[cp]]
     if "--write" in sys.argv:

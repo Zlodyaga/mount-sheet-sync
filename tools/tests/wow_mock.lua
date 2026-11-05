@@ -320,7 +320,8 @@ MOCK_LOCALE = "ruRU"   -- tests of the Russian texts; test_locale.py switches it
 function GetLocale() return MOCK_LOCALE end
 
 GameTooltip = { lines = {}, shown = false }
-function GameTooltip:SetOwner(owner, anchor) self.owner = owner; self.lines = {} end
+function GameTooltip:SetOwner(owner, anchor) self.owner = owner; self.anchor = anchor; self.lines = {} end
+function GameTooltip:SetPoint(point, rel, relPoint, x, y) self.point, self.relPoint = point, relPoint end
 function GameTooltip:SetText(t) self.lines = { t } end
 function GameTooltip:AddLine(t) self.lines[#self.lines + 1] = t end
 function GameTooltip:Show() self.shown = true end

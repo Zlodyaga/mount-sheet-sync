@@ -180,7 +180,7 @@ KILLS = ("Малигос", "Альтаирий", "Анзу", "Сильвана �
 wrongly = [i.boss for i in mirna if str(i.boss).startswith(KILLS) and i.src == "reward"]
 check("boss drops are not", not wrongly and any(str(i.boss).startswith("Малигос") for i in mirna), wrongly)
 no_place = [str(i.boss) for i in mirna if i.src != "reward" and i.kind in ("raid", "dungeon") and not i.je and not i.im]
-check("boss rows without a place in the guide: only the known few (docs/TODO.md)", len(no_place) <= 13, no_place)
+check("boss rows without a place in the guide: only those the guide doesn't have (Vault of Archavon, Torghast, any Timewalking)", len(no_place) <= 3, no_place)
 check("the tray's list counts what can be killed", ("Мирна %d" % len([i for i in mirna if i.src != "reward"])) in out, out[-400:])
 check("…achievements are marked as not a boss kill", 'src = "reward"' in sheet_lua() and re.search(r'boss = "Слава герою",.{0,600}?src = "reward"', sheet_lua(), re.S) is not None)
 check("…and rows say where to find them in the guide", "je = " in sheet_lua() and "im = " in sheet_lua())

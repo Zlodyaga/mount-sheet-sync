@@ -1049,7 +1049,15 @@ function ns.ItemInstance(item)
       end
     end
   end
-  return instanceByEncounter[tonumber(item.je)] or instanceByMap[tonumber(item.im)]
+  local je = tonumber(item.je)
+  local id = instanceByEncounter[je] or instanceByMap[tonumber(item.im)]
+  if not id and je and instanceByEncounter[je] == nil and EJ_GetEncounterInfo then
+    -- мировые боссы старых дополнений: в журнале аддона их нет (нет dungeonEncounterID), игра знает их и так
+    local ok, _, _, _, _, _, instance = pcall(EJ_GetEncounterInfo, je)
+    instanceByEncounter[je] = ok and instance or false
+    id = instanceByEncounter[je] or nil
+  end
+  return id or nil
 end
 
 function ns.InstanceName(id)
