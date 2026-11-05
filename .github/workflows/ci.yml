@@ -20,7 +20,7 @@ jobs:
         run: |
           $d = Join-Path $env:RUNNER_TEMP 'mss'
           New-Item -ItemType Directory -Force $d | Out-Null
-          Set-Content -Path (Join-Path $d 'settings.json') -Value '{"language":"de"}' -Encoding utf8
+          Set-Content -Path (Join-Path $d 'settings.json') -Value '{"language":"de","mode":"google"}' -Encoding utf8
           $p = Start-Process -FilePath program\MountSheetSync.exe -ArgumentList '--test', '--data', $d -Wait -PassThru
           $log = Get-Content -Path (Join-Path $d 'sync.log') -Raw -Encoding utf8
           Write-Output $log
