@@ -57,7 +57,7 @@ namespace MountSheetSync
             return book;
         }
 
-        public Dictionary<string, object> Call(Dictionary<string, object> payload)
+        public virtual Dictionary<string, object> Call(Dictionary<string, object> payload)
         {
             // Тот же вид, что получает скрипт: через JSON (числа — double, списки — List<object>).
             Dictionary<string, object> request = (Dictionary<string, object>)Json.Parse(Json.Write(payload, false));
@@ -125,7 +125,7 @@ namespace MountSheetSync
         /// «Сверить с коллекцией». force = false — только если снимок коллекции новее того, с которым
         /// таблица уже сверялась (свойство таблицы). null — сверять не понадобилось.
         /// </summary>
-        public CollectionResult SyncCollection(GameSnapshot game, bool force)
+        public virtual CollectionResult SyncCollection(GameSnapshot game, bool force)
         {
             if (game.CollectionUpdated <= 0)
             {

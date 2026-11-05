@@ -17,7 +17,7 @@ namespace MountSheetSync
         public const string ModeLocal = "local";
 
         /// <summary>«google» — таблица, созданная программой (вход через Google); «script» — своя таблица со скриптом Code.gs; «local» — данные в файле на этом компьютере.</summary>
-        public string Mode = ModeGoogle;
+        public string Mode = ModeLocal;
         public string SpreadsheetId = "";
         public string SpreadsheetTitle = "";
         public string SpreadsheetUrl = "";
@@ -33,6 +33,8 @@ namespace MountSheetSync
         public string UpdateNotified = "";
         /// <summary>Отсюда ставить программу не захотели («Нет» на вопросе об установке) — больше не спрашивать.</summary>
         public string InstallDeclined = "";
+        /// <summary>Первое окно настроек новому игроку уже показали.</summary>
+        public bool Welcomed;
         /// <summary>Язык программы: "auto" (как в Windows) или "en", "ru", "de", "fr", "es", "pt".</summary>
         public string Language = "auto";
         public int PollSeconds = 5;
@@ -68,7 +70,7 @@ namespace MountSheetSync
             {
                 if (IsLocal)
                 {
-                    return File.Exists(AppPaths.LocalBookFile);
+                    return true;   // настраивать нечего: данные создаются сами (LocalSheetService)
                 }
                 if (UseGoogle)
                 {
@@ -83,10 +85,6 @@ namespace MountSheetSync
         {
             get
             {
-                if (IsLocal)
-                {
-                    return Tr._("Данные на этом компьютере ещё не созданы");
-                }
                 if (UseGoogle)
                 {
                     if (!TokenStore.Exists)
@@ -104,13 +102,25 @@ namespace MountSheetSync
         {
             if (IsLocal)
             {
-                return new LocalSheetService(AppPaths.LocalBookFile);
+                return new LocalSheetService(AppPaths.LocalBookFile, this);
             }
             if (UseGoogle)
             {
                 return new GoogleSheetService(SpreadsheetId);
             }
             return new ScriptSheetService(WebAppUrl);
+        }
+
+        /// <summary>Данные, которые ведёт сама программа: окна «Персонажи» и «Что фармить» работают с ними одинаково.</summary>
+        public IStructuredBook OpenBook()
+        {
+            return IsLocal ? (IStructuredBook)LocalBook.Load(AppPaths.LocalBookFile) : GoogleBook.Load(SpreadsheetId);
+        }
+
+        /// <summary>На время правки данных на этом компьютере: их файл переписывается целиком. Для Google — null.</summary>
+        public IDisposable ExclusiveBook()
+        {
+            return IsLocal ? LocalBook.Exclusive(AppPaths.LocalBookFile) : null;
         }
 
         public static bool IsWebAppUrl(string url)
@@ -151,9 +161,11 @@ namespace MountSheetSync
                 }
                 else
                 {
-                    // настройки 1.x: был адрес скрипта — значит, своя таблица со скриптом
-                    s.Mode = s.WebAppUrl.Length > 0 ? ModeScript : ModeGoogle;
+                    // настройки без способа: был адрес скрипта — своя таблица со скриптом, была таблица — Google, иначе новый игрок
+                    string sheet = J.Str(d, "spreadsheetId").Trim();
+                    s.Mode = s.WebAppUrl.Length > 0 ? ModeScript : sheet.Length > 0 ? ModeGoogle : ModeLocal;
                 }
+                s.Welcomed = J.Truthy(d, "welcomed");
                 s.SpreadsheetId = J.Str(d, "spreadsheetId").Trim();
                 s.SpreadsheetTitle = J.Str(d, "spreadsheetTitle").Trim();
                 s.SpreadsheetUrl = J.Str(d, "spreadsheetUrl").Trim();
@@ -197,6 +209,7 @@ namespace MountSheetSync
         {
             Dictionary<string, object> d = new Dictionary<string, object>();
             d["mode"] = Mode;
+            d["welcomed"] = Welcomed;
             d["spreadsheetId"] = SpreadsheetId;
             d["spreadsheetTitle"] = SpreadsheetTitle;
             d["spreadsheetUrl"] = SpreadsheetUrl;

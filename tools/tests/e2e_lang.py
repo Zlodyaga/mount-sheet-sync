@@ -67,7 +67,7 @@ class Setup:
             os.makedirs(d)
         open(os.path.join(self.addon, "MountSheetSync.toc"), "w").write("## Interface: 120105\n")
         self.browser = os.path.join(self.dir, "browser.txt")
-        json.dump({"wowPath": wow, "pollSeconds": 2}, open(os.path.join(self.data, "settings.json"), "w"))
+        json.dump({"wowPath": wow, "pollSeconds": 2, "mode": "google"}, open(os.path.join(self.data, "settings.json"), "w"))
         self.env = dict(os.environ, MSS_GOOGLE_TEST=BASE, MSS_BROWSER_LOG=self.browser, LANG="C.UTF-8", MSS_SYSTEM_LANG=ui_lang)
         for k in ("http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY", "no_proxy", "NO_PROXY"):
             self.env.pop(k, None)

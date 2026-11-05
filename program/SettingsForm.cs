@@ -20,8 +20,14 @@ namespace MountSheetSync
 
         Settings working;
         readonly Action<Settings, bool> commit;
+        readonly RadioButton localRadio = new RadioButton();
         readonly RadioButton googleRadio = new RadioButton();
         readonly RadioButton scriptRadio = new RadioButton();
+        readonly TableLayoutPanel localPanel = new TableLayoutPanel();
+        readonly Label localLabel = new Label();
+        readonly Button localCharsButton = new Button();
+        readonly Button importButton = new Button();
+        readonly Button folderButton = new Button();
         readonly TableLayoutPanel googlePanel = new TableLayoutPanel();
         readonly TableLayoutPanel scriptPanel = new TableLayoutPanel();
         readonly Label accountLabel = new Label();
@@ -77,20 +83,45 @@ namespace MountSheetSync
 
             if (firstRun)
             {
-                Label intro = UiStyle.Text(Tr._("Войдите через Google и создайте таблицу — остальное программа сделает сама."),
+                Label intro = UiStyle.Text(settings.IsLocal
+                    ? Tr._("Настраивать ничего не нужно: поставьте аддон и зайдите в игру, список появится сам.")
+                    : Tr._("Войдите через Google и создайте таблицу — остальное программа сделает сама."),
                     textWidth, SystemColors.ControlText);
                 intro.Font = new Font(Font, FontStyle.Bold);
                 intro.Margin = new Padding(3, 0, 3, unit / 2);
                 AddWide(table, intro);
             }
 
-            AddWide(table, UiStyle.Text(Tr._("Где таблица:"), textWidth, SystemColors.ControlText));
-            googleRadio.Text = Tr._("Таблица, которую создаёт программа (вход через Google) — рекомендуется");
+            AddWide(table, UiStyle.Text(Tr._("Где хранить данные:"), textWidth, SystemColors.ControlText));
+            localRadio.Text = Tr._("На этом компьютере, без Google и входа — рекомендуется");
+            localRadio.AutoSize = true;
+            googleRadio.Text = Tr._("Таблица Google: открывается в браузере, её можно править вручную (нужен вход через Google)");
             googleRadio.AutoSize = true;
             scriptRadio.Text = Tr._("Своя таблица со скриптом Code.gs (как в версиях 1.x)");
             scriptRadio.AutoSize = true;
+            AddWide(table, localRadio);
             AddWide(table, googleRadio);
             AddWide(table, scriptRadio);
+
+            // ---- на этом компьютере
+            localPanel.AutoSize = true;
+            localPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            localPanel.ColumnCount = 1;
+            localPanel.Margin = new Padding(unit, unit / 3, 3, 3);
+            localLabel.AutoSize = true;
+            localLabel.MaximumSize = new Size(textWidth - unit, 0);
+            localLabel.Margin = new Padding(3, 3, 3, 0);
+            localPanel.Controls.Add(localLabel);
+            FlowLayoutPanel localButtons = Row();
+            UiStyle.Button(localCharsButton, Tr._("Персонажи…"), unit);
+            UiStyle.Button(importButton, Tr._("Перенести из таблицы…"), unit);
+            UiStyle.Button(folderButton, Tr._("Открыть папку"), unit);
+            localButtons.Controls.Add(localCharsButton);
+            localButtons.Controls.Add(importButton);
+            localButtons.Controls.Add(folderButton);
+            localPanel.Controls.Add(localButtons);
+            localPanel.Controls.Add(UiStyle.Text(Tr._("Список показывает окно аддона. Таблицы в браузере не будет, а на другой компьютер данные сами не перейдут."), wide, SystemColors.GrayText));
+            AddWide(table, localPanel);
 
             // ---- Google
             googlePanel.AutoSize = true;
@@ -192,12 +223,17 @@ namespace MountSheetSync
             urlBox.Text = settings.WebAppUrl;
             secretBox.Text = settings.Secret;
             wowBox.Text = settings.WowPath;
-            googleRadio.Checked = !settings.UsesScript;
+            localRadio.Checked = settings.IsLocal;
+            googleRadio.Checked = settings.UseGoogle;
             scriptRadio.Checked = settings.UsesScript;
             UpdateMode();
             UpdateGoogle();
 
+            localRadio.CheckedChanged += delegate { UpdateMode(); };
             googleRadio.CheckedChanged += delegate { UpdateMode(); };
+            localCharsButton.Click += delegate { OnCharacters(true); };
+            importButton.Click += delegate { OnImport(); };
+            folderButton.Click += delegate { OpenUrl(AppPaths.DataDir); };
             scriptRadio.CheckedChanged += delegate { UpdateMode(); };
             signInButton.Click += delegate { OnSignIn(); };
             signOutButton.Click += delegate { OnSignOut(); };
@@ -231,11 +267,69 @@ namespace MountSheetSync
             get { return googleRadio.Checked; }
         }
 
+        bool LocalMode
+        {
+            get { return localRadio.Checked; }
+        }
+
+        bool ScriptMode
+        {
+            get { return scriptRadio.Checked; }
+        }
+
         void UpdateMode()
         {
+            localPanel.Visible = LocalMode;
             googlePanel.Visible = GoogleMode;
-            scriptPanel.Visible = !GoogleMode;
+            scriptPanel.Visible = ScriptMode;
+            checkButton.Visible = !LocalMode;   // проверять нечего: сети нет
+            UpdateLocal();
             ShowStatus("", SystemColors.ControlText);
+        }
+
+        void UpdateLocal()
+        {
+            bool have = File.Exists(AppPaths.LocalBookFile);
+            bool canImport = !have && working.SpreadsheetId.Length > 0 && GoogleSession.SignedIn;
+            localLabel.Text = have ? Tr.F("Данные хранятся здесь: {0}", AppPaths.LocalBookFile)
+                : canImport ? Tr.F("Данных здесь ещё нет. Можно перенести их из таблицы «{0}» или начать заново.", working.SpreadsheetTitle)
+                : Tr._("Данные появятся сами, когда аддон узнает персонажей.");
+            localLabel.ForeColor = have ? Good : SystemColors.ControlText;
+            localCharsButton.Visible = have;
+            importButton.Visible = canImport;
+        }
+
+        /// <summary>Копия таблицы на этот компьютер; сама таблица остаётся в Google как есть.</summary>
+        void OnImport()
+        {
+            SetBusy(true);
+            ShowStatus(Tr._("Переношу данные из таблицы…"), SystemColors.ControlText);
+            Settings s = working.Clone();
+            ThreadPool.QueueUserWorkItem(delegate
+            {
+                string error = null;
+                try
+                {
+                    Program.ImportToLocal(s);
+                }
+                catch (SyncException ex)
+                {
+                    error = ex.Message;
+                }
+                UiStyle.RunOnUi(this, delegate
+                {
+                    SetBusy(false);
+                    if (error != null)
+                    {
+                        ShowStatus(Tr.F("Не получилось: {0}", error), Bad);
+                        return;
+                    }
+                    working.Mode = Settings.ModeLocal;
+                    Commit(false);
+                    UpdateLocal();
+                    ShowStatus(Tr.F("Данные перенесены из таблицы «{0}». Сама таблица осталась в Google как есть.", working.SpreadsheetTitle), Good);
+                });
+            });
         }
 
         void UpdateGoogle()
@@ -263,7 +357,7 @@ namespace MountSheetSync
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            if (!GoogleMode && urlBox.Text.Length == 0)
+            if (ScriptMode && urlBox.Text.Length == 0)
             {
                 // Адрес часто уже скопирован — подставим его сами.
                 try
@@ -318,7 +412,7 @@ namespace MountSheetSync
             {
                 createButton.Focus();
             }
-            else if (!GoogleMode && urlBox.Text.Length == 0)
+            else if (ScriptMode && urlBox.Text.Length == 0)
             {
                 urlBox.Focus();
             }
@@ -404,6 +498,10 @@ namespace MountSheetSync
             }
             Settings s = working.Clone();
             s.WowPath = wow;
+            if (LocalMode)
+            {
+                s.Mode = Settings.ModeLocal;
+            }
             using (CharactersForm f = new CharactersForm(s, add))
             {
                 if (f.ShowDialog(this) != DialogResult.OK)
@@ -546,7 +644,7 @@ namespace MountSheetSync
                 urlBox.Text = url;
             }
             string secret = secretBox.Text.Trim();
-            if (!GoogleMode)
+            if (ScriptMode)
             {
                 if (url.Length == 0)
                 {
@@ -569,7 +667,7 @@ namespace MountSheetSync
                 }
             }
             result = working.Clone();
-            result.Mode = GoogleMode ? (working.IsLocal ? Settings.ModeLocal : Settings.ModeGoogle) : Settings.ModeScript;
+            result.Mode = LocalMode ? Settings.ModeLocal : GoogleMode ? Settings.ModeGoogle : Settings.ModeScript;
             result.WebAppUrl = url;
             if (secret.Length > 0)
             {

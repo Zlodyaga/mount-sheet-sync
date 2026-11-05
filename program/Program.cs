@@ -386,7 +386,7 @@ namespace MountSheetSync
         }
 
         /// <summary>Новые листы для всех персонажей из аддона.</summary>
-        static BuildPlan PlanFor(GameSnapshot game, string title, string lang)
+        public static BuildPlan PlanFor(GameSnapshot game, string title, string lang)
         {
             BuildPlan plan = new BuildPlan();
             plan.Lang = string.IsNullOrWhiteSpace(lang) ? SheetLang.DefaultFor(game) : SheetLang.Get(lang);
@@ -446,22 +446,14 @@ namespace MountSheetSync
                 Log.Write(Tr.L("Данные на этом компьютере уже есть: {0}. Чтобы не потерять их, ничего не заменяю.", file));
                 return 1;
             }
-            if (!settings.UseGoogle || settings.SpreadsheetId.Length == 0)
+            if (settings.SpreadsheetId.Length == 0)
             {
                 Log.Write(Tr.L("Таблица, созданная программой, не выбрана — переносить нечего."));
                 return 1;
             }
             try
             {
-                GoogleBook book = GoogleBook.Load(settings.SpreadsheetId);
-                GoogleSheetService.Upgrade(book);
-                LocalBook.Import(file, book);
-                string sent = AppPaths.SentFileFor(settings);
-                settings.Mode = Settings.ModeLocal;
-                if (File.Exists(sent))
-                {
-                    File.Copy(sent, AppPaths.SentFileFor(settings), true);
-                }
+                ImportToLocal(settings);
                 settings.Save(AppPaths.SettingsFile);
             }
             catch (SyncException ex)
@@ -469,8 +461,27 @@ namespace MountSheetSync
                 Log.Write(Tr.L("Перенести данные не получилось: {0}", ex.Message));
                 return 1;
             }
-            Log.Write(Tr.L("Данные перенесены из таблицы на этот компьютер: {0}", file));
             return 0;
+        }
+
+        /// <summary>Копия таблицы settings.SpreadsheetId в файл на этом компьютере; settings переходит на неё. Настройки сохраняет вызывающий.</summary>
+        public static void ImportToLocal(Settings settings)
+        {
+            string file = AppPaths.LocalBookFile;
+            using (LocalBook.Exclusive(file))
+            {
+                GoogleBook book = GoogleBook.Load(settings.SpreadsheetId);
+                GoogleSheetService.Upgrade(book);
+                LocalBook.Import(file, book);
+                settings.Mode = Settings.ModeGoogle;
+                string sent = AppPaths.SentFileFor(settings);
+                settings.Mode = Settings.ModeLocal;
+                if (File.Exists(sent))
+                {
+                    File.Copy(sent, AppPaths.SentFileFor(settings), true);
+                }
+            }
+            Log.Write(Tr.L("Данные перенесены из таблицы на этот компьютер: {0}", file));
         }
 
         static int RunStorage(string storage)
@@ -520,8 +531,7 @@ namespace MountSheetSync
             }
             try
             {
-                int n = settings.IsLocal ? SheetCreator.AddCharacters(LocalBook.Load(AppPaths.LocalBookFile), chars, Log.Write)
-                    : SheetCreator.AddCharacters(settings.SpreadsheetId, chars, Log.Write);
+                int n = SheetCreator.AddCharacters(settings, chars, Log.Write);
                 Log.Write(n == 0 ? Tr.L("Все персонажи уже есть в таблице.") : Tr.L("Добавлено листов: {0}.", n));
                 return 0;
             }
@@ -556,8 +566,7 @@ namespace MountSheetSync
             }
             try
             {
-                CharacterChanges ch = settings.IsLocal ? SheetCreator.UpdateCharacters(LocalBook.Load(AppPaths.LocalBookFile), chars, Log.Write)
-                    : SheetCreator.UpdateCharacters(settings.SpreadsheetId, chars, Log.Write);
+                CharacterChanges ch = SheetCreator.UpdateCharacters(settings, chars, Log.Write);
                 Log.Write(Tr.L("Персонажи: {0}.", ch.Summary()));
                 return 0;
             }

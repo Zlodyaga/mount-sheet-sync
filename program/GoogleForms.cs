@@ -233,7 +233,7 @@ namespace MountSheetSync
         readonly Button cancelButton = new Button();
         GameSnapshot game;
         bool busy;
-        GoogleBook loadedBook;
+        IStructuredBook loadedBook;
         List<CharacterInTable> inTable = new List<CharacterInTable>();
 
         /// <summary>Создана таблица (Create).</summary>
@@ -395,14 +395,14 @@ namespace MountSheetSync
             ThreadPool.QueueUserWorkItem(delegate
             {
                 GameSnapshot snap = null;
-                GoogleBook book = null;
+                IStructuredBook book = null;
                 string error = null;
                 try
                 {
                     snap = Program.ReadGame(s);
                     if (addMode)
                     {
-                        book = GoogleBook.Load(s.SpreadsheetId);
+                        book = s.OpenBook();
                     }
                 }
                 catch (SyncException ex)
@@ -418,7 +418,7 @@ namespace MountSheetSync
             });
         }
 
-        void Loaded(GameSnapshot snap, GoogleBook book, string error)
+        void Loaded(GameSnapshot snap, IStructuredBook book, string error)
         {
             SetBusy(false, "");
             if (error != null)
@@ -622,7 +622,7 @@ namespace MountSheetSync
                 }
             }
             SetBusy(true, addMode ? Tr._("Сохраняю…") : Tr._("Создаю таблицу…"));
-            string id = settings.SpreadsheetId;
+            Settings target = settings.Clone();
             ThreadPool.QueueUserWorkItem(delegate
             {
                 CreatedSheet created = null;
@@ -633,7 +633,7 @@ namespace MountSheetSync
                 {
                     if (addMode)
                     {
-                        changes = SheetCreator.UpdateCharacters(id, chars, progress);
+                        changes = SheetCreator.UpdateCharacters(target, chars, progress);
                     }
                     else
                     {

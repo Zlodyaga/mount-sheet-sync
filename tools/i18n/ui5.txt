@@ -347,13 +347,6 @@ de: „Versuche“ aus der Spielstatistik: {0} ({1})
 fr: « Tentatives » d'après les statistiques du jeu : {0} ({1})
 es: «Intentos» según las estadísticas del juego: {0} ({1})
 pt: “Tentativas” pelas estatísticas do jogo: {0} ({1})
-@ Данные на этом компьютере ещё не созданы
-en: There is no data on this computer yet
-de: Auf diesem Computer gibt es noch keine Daten
-fr: Il n'y a pas encore de données sur cet ordinateur
-es: Todavía no hay datos en este ordenador
-pt: Ainda não há dados neste computador
-
 @ не удалось прочитать данные с диска: {0}
 en: could not read the data from the disk: {0}
 de: die Daten konnten nicht vom Datenträger gelesen werden: {0}
@@ -367,4 +360,137 @@ de: die Daten konnten nicht auf den Datenträger geschrieben werden: {0}
 fr: impossible d'écrire les données sur le disque : {0}
 es: no se pudieron escribir los datos en el disco: {0}
 pt: não foi possível gravar os dados no disco: {0}
+
+@ Настраивать ничего не нужно: поставьте аддон и зайдите в игру, список появится сам.
+en: Nothing to set up: install the addon and log in to the game, and the list appears by itself.
+de: Es gibt nichts einzurichten: Installieren Sie das Addon und loggen Sie sich ein, die Liste erscheint von selbst.
+fr: Rien à configurer : installez l'addon et connectez-vous au jeu, la liste apparaîtra d'elle-même.
+es: No hay nada que configurar: instala el addon y entra en el juego, y la lista aparecerá sola.
+pt: Não há nada para configurar: instale o addon e entre no jogo, e a lista aparece sozinha.
+
+@ Где хранить данные:
+en: Where to keep the data:
+de: Wo die Daten gespeichert werden:
+fr: Où conserver les données :
+es: Dónde guardar los datos:
+pt: Onde guardar os dados:
+
+@ На этом компьютере, без Google и входа — рекомендуется
+en: On this computer, no Google and no sign-in (recommended)
+de: Auf diesem Computer, ohne Google und ohne Anmeldung (empfohlen)
+fr: Sur cet ordinateur, sans Google ni connexion (recommandé)
+es: En este ordenador, sin Google y sin iniciar sesión (recomendado)
+pt: Neste computador, sem Google e sem login (recomendado)
+
+@ Таблица Google: открывается в браузере, её можно править вручную (нужен вход через Google)
+en: Google Sheet: opens in the browser and can be edited by hand (needs a Google sign-in)
+de: Google-Tabelle: öffnet sich im Browser und lässt sich von Hand bearbeiten (Google-Anmeldung nötig)
+fr: Feuille Google : s'ouvre dans le navigateur et se modifie à la main (connexion Google requise)
+es: Hoja de Google: se abre en el navegador y se puede editar a mano (requiere iniciar sesión en Google)
+pt: Planilha Google: abre no navegador e pode ser editada à mão (requer login no Google)
+
+@ Перенести из таблицы…
+en: Move from the spreadsheet…
+de: Aus der Tabelle übernehmen…
+fr: Reprendre depuis le tableau…
+es: Traer de la hoja…
+pt: Trazer da planilha…
+
+@ Открыть папку
+en: Open folder
+de: Ordner öffnen
+fr: Ouvrir le dossier
+es: Abrir carpeta
+pt: Abrir pasta
+
+@ Список показывает окно аддона. Таблицы в браузере не будет, а на другой компьютер данные сами не перейдут.
+en: The addon's window shows the list. There is no sheet in the browser, and the data doesn't move to another computer by itself.
+de: Das Addon-Fenster zeigt die Liste. Es gibt keine Tabelle im Browser, und die Daten wandern nicht von selbst auf einen anderen Computer.
+fr: La fenêtre de l'addon affiche la liste. Il n'y a pas de tableau dans le navigateur, et les données ne passent pas seules sur un autre ordinateur.
+es: La ventana del addon muestra la lista. No hay hoja en el navegador y los datos no pasan solos a otro ordenador.
+pt: A janela do addon mostra a lista. Não há planilha no navegador, e os dados não passam sozinhos para outro computador.
+
+@ Данные хранятся здесь: {0}
+en: The data is kept here: {0}
+de: Die Daten liegen hier: {0}
+fr: Les données sont conservées ici : {0}
+es: Los datos se guardan aquí: {0}
+pt: Os dados ficam aqui: {0}
+
+@ Данных здесь ещё нет. Можно перенести их из таблицы «{0}» или начать заново.
+en: There is no data here yet. You can move it from the spreadsheet “{0}” or start anew.
+de: Hier gibt es noch keine Daten. Sie können sie aus der Tabelle „{0}“ übernehmen oder neu anfangen.
+fr: Il n'y a pas encore de données ici. Vous pouvez les reprendre du tableau « {0} » ou repartir de zéro.
+es: Aún no hay datos aquí. Puedes traerlos de la hoja «{0}» o empezar de nuevo.
+pt: Ainda não há dados aqui. Você pode trazê-los da planilha “{0}” ou começar do zero.
+
+@ Данные появятся сами, когда аддон узнает персонажей.
+en: The data appears by itself once the addon knows your characters.
+de: Die Daten erscheinen von selbst, sobald das Addon Ihre Charaktere kennt.
+fr: Les données apparaîtront d'elles-mêmes dès que l'addon connaîtra vos personnages.
+es: Los datos aparecerán solos cuando el addon conozca a tus personajes.
+pt: Os dados aparecem sozinhos quando o addon conhecer seus personagens.
+
+@ Переношу данные из таблицы…
+en: Moving the data from the spreadsheet…
+de: Daten werden aus der Tabelle übernommen…
+fr: Reprise des données du tableau…
+es: Trayendo los datos de la hoja…
+pt: Trazendo os dados da planilha…
+
+@ Данные перенесены из таблицы «{0}». Сама таблица осталась в Google как есть.
+en: The data was moved from the spreadsheet “{0}”. The spreadsheet itself stays in Google as it is.
+de: Die Daten wurden aus der Tabelle „{0}“ übernommen. Die Tabelle selbst bleibt unverändert bei Google.
+fr: Les données ont été reprises du tableau « {0} ». Le tableau lui-même reste tel quel chez Google.
+es: Los datos se trajeron de la hoja «{0}». La hoja sigue en Google tal como está.
+pt: Os dados foram trazidos da planilha “{0}”. A planilha continua no Google como está.
+
+@ данные заняты другой операцией, попробую позже
+en: the data is busy with another operation, trying again later
+de: die Daten werden gerade anderweitig bearbeitet, neuer Versuch später
+fr: les données sont occupées par une autre opération, nouvel essai plus tard
+es: los datos están ocupados con otra operación, se reintentará más tarde
+pt: os dados estão ocupados com outra operação, nova tentativa mais tarde
+
+@ Данные хранятся на этом компьютере. Отметки появятся сами, когда выйдете на выбор персонажа, из игры или сделаете /reload.
+en: The data is kept on this computer. Marks appear by themselves when you go to character select, leave the game or /reload.
+de: Die Daten liegen auf diesem Computer. Markierungen erscheinen von selbst, wenn Sie zur Charakterauswahl gehen, das Spiel verlassen oder /reload eingeben.
+fr: Les données sont sur cet ordinateur. Les marques apparaissent d'elles-mêmes quand vous revenez au choix du personnage, quittez le jeu ou faites /reload.
+es: Los datos están en este ordenador. Las marcas aparecen solas al ir a la selección de personaje, salir del juego o usar /reload.
+pt: Os dados ficam neste computador. As marcas aparecem sozinhas quando você volta à seleção de personagem, sai do jogo ou usa /reload.
+
+@ жду файл аддона
+en: waiting for the addon's file
+de: warte auf die Datei des Addons
+fr: en attente du fichier de l'addon
+es: esperando el archivo del addon
+pt: aguardando o arquivo do addon
+
+@ данные обновлены {0}
+en: data updated {0}
+de: Daten aktualisiert {0}
+fr: données mises à jour {0}
+es: datos actualizados {0}
+pt: dados atualizados {0}
+
+@ работает
+en: running
+de: läuft
+fr: en marche
+es: en marcha
+pt: em execução
+
+@ Всё готово к работе
+en: Ready to work
+de: Alles bereit
+fr: Tout est prêt
+es: Todo listo
+pt: Tudo pronto
+
+@ Данные хранятся на этом компьютере
+en: The data is kept on this computer
+de: Die Daten liegen auf diesem Computer
+fr: Les données sont sur cet ordinateur
+es: Los datos están en este ordenador
+pt: Os dados ficam neste computador
 

@@ -3,7 +3,9 @@
 The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [CHANGELOG-addon.md](CHANGELOG-addon.md).
 
 ## 2.10.0
-- First step towards working without Google: the program can keep its data in a file on this computer. For now it is command line only (`--create-local`, `--import-local`, `--storage local|google`); the windows and the menu come next.
+- The program no longer needs Google: new players start with the data in a file on this computer, with no sign-in and nothing to set up. It appears by itself once the addon knows your characters, and the addon's window shows the list.
+- A Google Sheet is still there as an option in the settings, and players who already have one stay on it. “Move from the spreadsheet…” copies an existing sheet to this computer without counting kills twice; the sheet stays in Google as it is.
+- “Characters…” and “What to farm…” work with the data on this computer too.
 
 ## 2.9.2
 - Raids with separate lockouts: on a Normal/Heroic/Mythic row a kill on one difficulty no longer closes the row. It becomes “Yes” when all three are killed; the killed ones are kept in a hidden “N/H/M” column.

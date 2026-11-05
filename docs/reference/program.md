@@ -8,11 +8,13 @@ Windows 10/11, C# 5 под .NET Framework 4.8 (встроенный в Windows �
 
 | Режим (`settings.mode`) | Как пишет в таблицу | Что умеет |
 | --- | --- | --- |
-| Google (по умолчанию, `GoogleSheetService`) | Sheets API от имени пользователя, OAuth | создаёт таблицу на 6 языках, всё ниже |
+| Google (`GoogleSheetService`) | Sheets API от имени пользователя, OAuth | создаёт таблицу на 6 языках, всё ниже |
 | Скрипт (`webAppUrl` + `secret`) | POST в веб-приложение Code.gs (`script/Code.gs`, способ 1.x) | только отметки и «Осталось»; нет создания, персонажей, сверки, счётчика попыток |
-| На этом компьютере (`local`, `LocalSheetService`, с 2.10.0) | файл `local-data.json`, без Google и входа | всё то же, что Google, кроме самой таблицы: её нельзя открыть и поправить руками. Пока только из командной строки: окна и меню — следующий шаг |
+| На этом компьютере (`local`, по умолчанию с 2.10.0, `LocalSheetService`) | файл `local-data.json`, без Google и входа | всё то же, что Google, кроме самой таблицы: её нельзя открыть и поправить руками |
 
-`GoogleSheetService` и `LocalSheetService` — наследники `BookSheetService`: логика одна, разница в книге (`GoogleBook` / `LocalBook`). `settings.HasOwnBook` — данные ведёт сама программа.
+`GoogleSheetService` и `LocalSheetService` — наследники `BookSheetService`: логика одна, разница в книге (`GoogleBook` / `LocalBook`). `settings.HasOwnBook` — данные ведёт сама программа и они есть; `settings.OpenBook()` — открыть их в окнах «Персонажи» и «Что фармить».
+
+Способ по умолчанию: настройки без `mode` — скрипт, если есть `webAppUrl`; Google, если есть `spreadsheetId`; иначе `local`. Сохранённый `mode` не меняется, поэтому нынешние игроки остаются на Google. Режиму `local` настраивать нечего (`IsConfigured` = true): файл создаёт `LocalSheetService.Load`, как только аддон узнал персонажей, до этого данные пустые и на диск не пишутся. Новому игроку один раз открываются настройки (`welcomed`), при автозапуске — нет. Пишут в файл по очереди (`LocalBook.Exclusive`, именованный мьютекс): цикл, окна и команды другого процесса; копия в памяти устаревает, когда файл изменился (`Reusable`).
 
 Вход Google: браузер + локальный порт (loopback), права `drive.file` (только файлы, созданные программой),
 `openid`, `email`. Ключ входа — `%APPDATA%\MountSheetSync\google-token.dat` (DPAPI, только этот пользователь
@@ -94,9 +96,9 @@ Windows). «Выйти» удаляет ключ и отзывает его у G
 
 ## Файлы (`%APPDATA%\MountSheetSync`, или `--data <папка>`)
 
-`settings.json` (ключи: `mode`, `spreadsheetId`, `spreadsheetTitle`, `spreadsheetUrl`, `webAppUrl`, `secret`,
+`settings.json` (ключи: `mode`, `welcomed`, `spreadsheetId`, `spreadsheetTitle`, `spreadsheetUrl`, `webAppUrl`, `secret`,
 `wowPath`, `notifications`, `checkUpdates`, `testVersions`, `updateNotified`, `installDeclined`, `language`,
-`pollSeconds`, `retrySeconds`), `google-token.dat`, `sent-ids*.txt` (у `local` — `sent-ids-local.txt`), `local-data.json` и `local-data.json.bak` (режим «на этом компьютере», `LocalBook`), `state.json` (последняя отправка и результат, «Последние события», о чём уже напоминали),
+`pollSeconds`, `retrySeconds`), `google-token.dat`, `sent-ids*.txt` (у `local` — `sent-ids-local.txt`), `local-data.json`, `.bak` и (после повреждения) `.damaged` (режим «на этом компьютере», `LocalBook`), `state.json` (последняя отправка и результат, «Последние события», о чём уже напоминали),
 `sync.log` (по-русски при русском языке, иначе по-английски).
 
 ## Командная строка

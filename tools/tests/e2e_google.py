@@ -46,7 +46,7 @@ for d in (DATA, SV_DIR, ADDON):
     os.makedirs(d)
 open(os.path.join(ADDON, "MountSheetSync.toc"), "w").write("## Interface: 120105\n")
 BROWSER_LOG = os.path.join(W, "browser.txt")
-json.dump({"wowPath": WOW, "pollSeconds": 2}, open(os.path.join(DATA, "settings.json"), "w"))
+json.dump({"wowPath": WOW, "pollSeconds": 2, "mode": "google"}, open(os.path.join(DATA, "settings.json"), "w"))
 # как будто K-1 уже уходил в старую таблицу со скриптом: в новую таблицу он всё равно должен попасть
 OLD_LEDGER = "K-1\t%d\r\n" % int(time.time())
 open(os.path.join(DATA, "sent-ids.txt"), "w", newline="").write(OLD_LEDGER)

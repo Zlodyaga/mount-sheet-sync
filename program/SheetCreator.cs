@@ -149,11 +149,23 @@ namespace MountSheetSync
             return list;
         }
 
-        /// <summary>Добавить персонажей (листы, которых ещё нет); ничего не удаляет. Возвращает число новых листов.</summary>
-        public static int AddCharacters(string spreadsheetId, IList<BuildCharacter> chars, Action<string> progress)
+        /// <summary>Персонажи в данных, которые ведёт программа (Google или этот компьютер).</summary>
+        public static int AddCharacters(Settings settings, IList<BuildCharacter> chars, Action<string> progress)
         {
-            progress(Tr._("Читаю таблицу…"));
-            return AddCharacters(GoogleBook.Load(spreadsheetId), chars, progress);
+            using (settings.ExclusiveBook())
+            {
+                progress(Tr._("Читаю таблицу…"));
+                return AddCharacters(settings.OpenBook(), chars, progress);
+            }
+        }
+
+        public static CharacterChanges UpdateCharacters(Settings settings, IList<BuildCharacter> desired, Action<string> progress)
+        {
+            using (settings.ExclusiveBook())
+            {
+                progress(Tr._("Читаю таблицу…"));
+                return UpdateCharacters(settings.OpenBook(), desired, progress);
+            }
         }
 
         public static int AddCharacters(IStructuredBook book, IList<BuildCharacter> chars, Action<string> progress)
@@ -185,12 +197,6 @@ namespace MountSheetSync
         /// добавить, лишние — удалить (персонажа нет в списке или все галочки сняты — он уходит из таблицы).
         /// Формулы «Осталось попыток выбить» пересчитываются.
         /// </summary>
-        public static CharacterChanges UpdateCharacters(string spreadsheetId, IList<BuildCharacter> desired, Action<string> progress)
-        {
-            progress(Tr._("Читаю таблицу…"));
-            return UpdateCharacters(GoogleBook.Load(spreadsheetId), desired, progress);
-        }
-
         public static CharacterChanges UpdateCharacters(IStructuredBook book, IList<BuildCharacter> desired, Action<string> progress)
         {
             GoogleSheetService.Upgrade(book);

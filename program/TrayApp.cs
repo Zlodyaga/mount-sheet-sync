@@ -103,7 +103,11 @@ namespace MountSheetSync
 #endif
             updateTimer = new System.Threading.Timer(delegate { CheckForUpdate(false); }, null, firstCheck, TimeSpan.FromHours(24));
 
-            if (!settings.IsConfigured)
+            if (settings.IsLocal && !settings.Welcomed && !autostart)
+            {
+                Post(delegate { OpenSettings(true); });   // новому игроку: где данные и автозапуск
+            }
+            else if (!settings.IsConfigured)
             {
                 if (autostart)
                 {
@@ -272,8 +276,12 @@ namespace MountSheetSync
                 case SyncState.NoGame:
                     return head + Tr._("не найдена папка WoW");
                 case SyncState.NoFile:
-                    return head + (s.Message == SyncWorker.NoAddonState ? Tr._("аддон не установлен") : Tr._("связь есть, жду файл аддона"));
+                    return head + (s.Message == SyncWorker.NoAddonState ? Tr._("аддон не установлен") : cfg.IsLocal ? Tr._("жду файл аддона") : Tr._("связь есть, жду файл аддона"));
                 case SyncState.Ok:
+                    if (cfg.IsLocal)
+                    {
+                        return head + (s.LastSend.HasValue ? Tr.F("данные обновлены {0}", TextUtil.Stamp(s.LastSend.Value)) : Tr._("работает"));
+                    }
                     return head + (s.LastSend.HasValue ? Tr.F("связь есть, отправлено {0}", TextUtil.Stamp(s.LastSend.Value)) : Tr._("связь есть"));
                 case SyncState.Error:
                     return head + (SyncWorker.IsNetworkError(s.Message) ? Tr._("нет связи") : Tr._("ошибка"))
@@ -308,11 +316,12 @@ namespace MountSheetSync
                         detail = Tr._("Установите его (CurseForge или папка из архива) и зайдите в игру");
                         break;
                     }
-                    status = Tr._("Связь с таблицей есть");
+                    status = cfg.IsLocal ? Tr._("Всё готово к работе") : Tr._("Связь с таблицей есть");
                     detail = Tr._("Жду файл аддона: зайдите в игру и выйдите на выбор персонажа");
                     break;
                 case SyncState.Ok:
-                    status = s.Spreadsheet.Length > 0 ? Tr.F("Таблица «{0}» — связь есть", s.Spreadsheet) : Tr._("Связь с таблицей есть");
+                    status = cfg.IsLocal ? Tr._("Данные хранятся на этом компьютере")
+                        : s.Spreadsheet.Length > 0 ? Tr.F("Таблица «{0}» — связь есть", s.Spreadsheet) : Tr._("Связь с таблицей есть");
                     detail = s.LastSend.HasValue
                         ? Tr.F("Последняя отправка: {0}", TextUtil.When(s.LastSend.Value)) + (s.LastResult.Length > 0 ? " — " + s.LastResult : "")
                         : Tr._("Новых записей пока не было");
@@ -345,7 +354,7 @@ namespace MountSheetSync
             signInItem.Visible = google && !signedIn;
             createItem.Visible = signedIn && settings.SpreadsheetId.Length == 0;
             // Visible у пункта меню читается как «виден ли сейчас на экране» — поэтому условие отдельно
-            bool haveSheet = signedIn && settings.SpreadsheetId.Length > 0;
+            bool haveSheet = settings.HasOwnBook && (settings.IsLocal || signedIn);
             addCharsItem.Visible = haveSheet;
             collectionItem.Visible = haveSheet;
             farmItem.Visible = haveSheet;
@@ -471,6 +480,18 @@ namespace MountSheetSync
                 return;
             }
             bool autostartNow = Autostart.IsEnabled();
+            if (firstRun && !settings.Welcomed)
+            {
+                settings.Welcomed = true;
+                try
+                {
+                    settings.Save(AppPaths.SettingsFile);
+                }
+                catch (Exception ex)
+                {
+                    Log.Write(Tr.L("Не удалось сохранить настройки: {0}", ex.Message));
+                }
+            }
             using (SettingsForm form = new SettingsForm(settings.Clone(), firstRun, firstRun || autostartNow, CommitGoogle))
             {
                 settingsForm = form;

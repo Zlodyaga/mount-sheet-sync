@@ -76,7 +76,7 @@ open(os.path.join(addon, "MountSheetSync.toc"), "w").write("## Version: 2.0.0\n"
 open(os.path.join(addon, "installed-from-archive.txt"), "w").write("x")
 app_exe = os.path.join(app, "MountSheetSync.exe")
 shutil.copyfile(EXE, app_exe)
-json.dump({"wowPath": wow, "pollSeconds": 2}, open(os.path.join(data, "settings.json"), "w"))
+json.dump({"wowPath": wow, "pollSeconds": 2, "mode": "google"}, open(os.path.join(data, "settings.json"), "w"))
 
 env = dict(os.environ, DISPLAY=DISPLAY, LANG="C.UTF-8", MSS_SYSTEM_LANG="en", MSS_UPDATE_TEST=BASE, MSS_UPDATE_DELAY="2",
            MONO_REGISTRY_PATH=os.path.join(W, "registry"))

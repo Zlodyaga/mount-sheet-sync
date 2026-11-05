@@ -117,7 +117,7 @@ def setup(name, marker):
     open(os.path.join(addon, "SheetData.lua"), "w").write("MountSheetSyncSheet = { remaining = true }\n")
     if marker:
         open(os.path.join(addon, "installed-from-archive.txt"), "w").write("x")
-    json.dump({"wowPath": wow}, open(os.path.join(data, "settings.json"), "w"))
+    json.dump({"wowPath": wow, "mode": "google"}, open(os.path.join(data, "settings.json"), "w"))
     return app, data, addon
 
 

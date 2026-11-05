@@ -56,7 +56,7 @@ namespace MountSheetSync
                 }
             }
             StringBuilder sb = new StringBuilder();
-            sb.Append("-- Mount Sheet Sync: what is left this week, copied from the Google sheet.\r\n");
+            sb.Append("-- Mount Sheet Sync: what is left this week, made by the program.\r\n");
             sb.Append("-- MountSheetSync.exe rewrites this file; there is no need to edit it.\r\n");
             sb.Append("MountSheetSyncSheet = ");
             WriteValue(sb, data, 0);

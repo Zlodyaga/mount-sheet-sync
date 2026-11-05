@@ -14,20 +14,58 @@ namespace MountSheetSync
     sealed class LocalSheetService : BookSheetService
     {
         readonly string file;
+        readonly Settings settings;
 
-        public LocalSheetService(string file)
+        public LocalSheetService(string file, Settings settings)
         {
             this.file = file;
+            this.settings = settings;
         }
 
+        public override Dictionary<string, object> Call(Dictionary<string, object> payload)
+        {
+            using (LocalBook.Exclusive(file))
+            {
+                return base.Call(payload);
+            }
+        }
+
+        public override CollectionResult SyncCollection(GameSnapshot game, bool force)
+        {
+            using (LocalBook.Exclusive(file))
+            {
+                return base.SyncCollection(game, force);
+            }
+        }
+
+        /// <summary>Файла ещё нет: создаём, как только аддон узнал персонажей. До тех пор данные пустые и на диск не пишутся.</summary>
         protected override IStructuredBook Load()
         {
-            return LocalBook.Load(file);
+            if (File.Exists(file))
+            {
+                return LocalBook.Load(file);
+            }
+            GameSnapshot game = Program.ReadGame(settings);
+            if (game.Characters.Count == 0)
+            {
+                return LocalBook.Empty(file);
+            }
+            LocalBook created;
+            try
+            {
+                created = LocalBook.Create(file, Program.PlanFor(game, null, null));
+            }
+            catch (ArgumentException ex)
+            {
+                throw new SyncException(ex.Message);
+            }
+            Log.Write(Tr.L("Данные программы созданы на этом компьютере: {0}", file));
+            return created;
         }
 
         protected override IStructuredBook LoadForTrial()
         {
-            LocalBook book = LocalBook.Load(file);
+            LocalBook book = File.Exists(file) ? LocalBook.Load(file) : LocalBook.Empty(file);
             book.ReadOnly = true;
             return book;
         }
@@ -48,8 +86,9 @@ namespace MountSheetSync
         readonly List<SheetEntry> entries = new List<SheetEntry>();
         readonly Dictionary<string, string> properties = new Dictionary<string, string>(StringComparer.Ordinal);
         bool dirty;
+        DateTime savedAt;
 
-        /// <summary>Проба (dryRun): правки остаются в памяти, файл не меняется.</summary>
+        /// <summary>Проба (dryRun) и пустые данные: правки остаются в памяти, файл не меняется.</summary>
         public bool ReadOnly;
 
         LocalBook(string file)
@@ -62,7 +101,61 @@ namespace MountSheetSync
         public List<SheetEntry> Entries { get { return entries; } }
         public string CreatorApp { get { return creatorApp; } }
         public SheetLang Lang { get { return lang; } }
-        public bool Reusable { get { return !dirty; } }
+
+        /// <summary>Файл менялся (окно «Что фармить», команда из другого процесса) — копия в памяти устарела.</summary>
+        public bool Reusable
+        {
+            get { return !dirty && !ReadOnly && File.Exists(file) && File.GetLastWriteTimeUtc(file) == savedAt; }
+        }
+
+        /// <summary>Данных ещё нет: ни листов, ни файла.</summary>
+        public static LocalBook Empty(string file)
+        {
+            LocalBook book = new LocalBook(file);
+            book.ReadOnly = true;
+            return book;
+        }
+
+        /// <summary>Только один пишет в файл: цикл синхронизации, окна и команды из другого процесса.</summary>
+        public static IDisposable Exclusive(string file)
+        {
+            return new FileGate(file);
+        }
+
+        sealed class FileGate : IDisposable
+        {
+            readonly System.Threading.Mutex mutex;
+            readonly bool held;
+
+            public FileGate(string file)
+            {
+                StringBuilder name = new StringBuilder("Local\\MountSheetSync.Data.");
+                foreach (char c in Path.GetFullPath(file).ToLowerInvariant())
+                {
+                    name.Append(char.IsLetterOrDigit(c) ? c : '_');
+                }
+                mutex = new System.Threading.Mutex(false, name.ToString());
+                try
+                {
+                    held = mutex.WaitOne(TimeSpan.FromSeconds(60));
+                }
+                catch (System.Threading.AbandonedMutexException)
+                {
+                    held = true;   // прошлый владелец упал; запись атомарная, файл цел
+                }
+                if (!held)
+                {
+                    mutex.Dispose();
+                    throw new SyncException(Tr._("данные заняты другой операцией, попробую позже"));
+                }
+            }
+
+            public void Dispose()
+            {
+                mutex.ReleaseMutex();
+                mutex.Dispose();
+            }
+        }
 
         /// <summary>Новые данные по плану — те же листы и строки, что у новой таблицы в Google.</summary>
         public static LocalBook Create(string file, BuildPlan plan)
@@ -124,8 +217,11 @@ namespace MountSheetSync
                     Log.Write(Tr.L("Файл данных повреждён ({0}), читаю резервную копию.", ex.Message));
                     try
                     {
-                        LocalBook book = Read(backup);
-                        return book;
+                        Read(backup);
+                        // копия цела — она становится основным файлом, повреждённый остаётся рядом (иначе запись затёрла бы им копию)
+                        File.Copy(file, file + ".damaged", true);
+                        File.Copy(backup, file, true);
+                        return Read(file);
                     }
                     catch (Exception)
                     {
@@ -142,8 +238,8 @@ namespace MountSheetSync
             {
                 throw new FormatException("format");
             }
-            string real = path.EndsWith(".bak", StringComparison.Ordinal) ? path.Substring(0, path.Length - 4) : path;
-            LocalBook book = new LocalBook(real);
+            LocalBook book = new LocalBook(path);
+            book.savedAt = File.GetLastWriteTimeUtc(path);
             book.title = J.Str(d, "title");
             book.creatorApp = J.Str(d, "app");
             book.lang = SheetLang.Detect(J.Str(d, "lang"), new string[0]);
@@ -224,6 +320,7 @@ namespace MountSheetSync
                 throw new SyncException(Tr.F("не удалось записать данные на диск: {0}", ex.Message));
             }
             dirty = false;
+            savedAt = File.GetLastWriteTimeUtc(file);
         }
 
         public void Set(SheetEntry entry, int r, int c, object value)

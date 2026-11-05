@@ -36,7 +36,7 @@ ADDON = os.path.join(WOW, "_retail_", "Interface", "AddOns", "MountSheetSync")
 for d in (DATA, SV_DIR, ADDON):
     os.makedirs(d)
 open(os.path.join(ADDON, "MountSheetSync.toc"), "w").write("## Interface: 120105\n")
-json.dump({"wowPath": WOW, "pollSeconds": 2}, open(os.path.join(DATA, "settings.json"), "w"))
+json.dump({"wowPath": WOW, "pollSeconds": 2, "mode": "google"}, open(os.path.join(DATA, "settings.json"), "w"))
 BROWSER_LOG = os.path.join(W, "browser.txt")
 mock = subprocess.Popen(["python3", os.path.join(HERE, "mock_google.py"), str(PORT), os.path.join(W, "mock_state.json"),
                          os.path.join(W, "mock.log")])

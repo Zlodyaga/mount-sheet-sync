@@ -118,6 +118,25 @@ def sheet_lua():
     return open(os.path.join(ADDON, "SheetData.lua"), encoding="utf-8").read()
 
 
+# ---------------------------------------------------------------- a new player: nothing to set up
+N = new_data("newplayer")
+write_sv(chars=[])
+code, out = run(N, "--once")
+check("a new player: works before the addon knows anyone, no file yet", code == 0 and not os.path.exists(os.path.join(N, "local-data.json")), out[-600:])
+settings = json.load(open(os.path.join(N, "settings.json"), encoding="utf-8-sig"))
+check("…no sign-in asked", "Не выполнен вход" not in out and "войдите" not in out, out[-400:])
+write_sv([kill("N1", "Сильвана Ветрокрылая")])
+code, out = run(N, "--once")
+check("the addon knows characters: the data makes itself", code == 0 and os.path.exists(os.path.join(N, "local-data.json")) and "созданы на этом компьютере" in out, out[-600:])
+check("…and the kill from the journal is marked at once", "Да" in row_of(sheet(N, "Рейды Эйра"), "Сильвана Ветрокрылая"), row_of(sheet(N, "Рейды Эйра"), "Сильвана Ветрокрылая"))
+check("…the list is there for the addon", 'name = "Эйра"' in sheet_lua())
+O = new_data("oldplayer")
+settings = json.load(open(os.path.join(O, "settings.json"), encoding="utf-8-sig"))
+settings["spreadsheetId"] = "abc"
+json.dump(settings, open(os.path.join(O, "settings.json"), "w"))
+code, out = run(O, "--once")
+check("settings with a table and no mode stay on Google, nothing local appears", not os.path.exists(os.path.join(O, "local-data.json")), out[-400:])
+
 # ---------------------------------------------------------------- created here, no Google at all
 A = new_data("local")
 write_sv()
@@ -192,6 +211,8 @@ write_sv(kills + [kill("K5", "Тюремщик")])
 code, out = run(A, "--once")
 check("a damaged file: the backup is read and the work goes on", code == 0 and "резервную копию" in out, out[-800:])
 check("…the file is whole again", json.loads(open(os.path.join(A, "local-data.json"), encoding="utf-8").read())["format"] == 1)
+check("…the damaged one is kept aside", os.path.exists(os.path.join(A, "local-data.json.damaged")))
+check("…and the backup is not overwritten by it", json.loads(open(os.path.join(A, "local-data.json.bak"), encoding="utf-8").read())["format"] == 1)
 
 # ---------------------------------------------------------------- another language
 E = new_data("english")
