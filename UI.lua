@@ -864,7 +864,7 @@ local function RemainingView(r, own)
   for _, kind in ipairs(ns.KIND_ORDER) do
     local group = {}
     for _, entry in ipairs(r.items) do
-      if entry.item.kind == kind then
+      if ns.GroupOf(entry.item) == kind then
         group[#group + 1] = entry
       end
     end

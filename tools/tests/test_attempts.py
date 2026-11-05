@@ -297,6 +297,8 @@ check("one character: «Осталось попыток» full of TRUE/FALSE is 
 ids = {i["mount"]: i.get("id") for c in got["chars"] for i in c["items"]}
 check("every row of the list has its mount's ID: with a chance, and an achievement without one", ids.get("Отмщение") == 1471 and ids.get("Кругомер") == 999, ids)
 check("…a world boss without the hidden column: from the catalog", ids.get("Сын Галеона", 0) > 0, ids)
+src = {i["mount"]: i.get("src") for c in got["chars"] for i in c["items"]}
+check("an achievement is marked as not a boss kill, a boss drop is not", src.get("Кругомер") == "reward" and src.get("Отмщение") is None, src)
 
 failed = [n for n, ok in checks if not ok]
 print("%d/%d checks passed" % (len(checks) - len(failed), len(checks)))

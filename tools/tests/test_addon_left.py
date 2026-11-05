@@ -627,6 +627,40 @@ MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
 MSS_NS.OnChange()""")
 g.RunTimers()
 
+# 3.0.4: achievements and rewards have a group of their own at the end, in both tables
+L.execute("""
+for _, c in ipairs(MountSheetSyncSheet.chars) do
+  for _, i in ipairs(c.items) do
+    if i.mount == "Поводья Повелителя воронов" then i.src = "reward" end
+  end
+end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
+tabs[0].MockClick(tabs[0]); g.RunTimers()
+
+
+def after_reward_title():
+    texts = [plain(t) for t in shown_rows()]
+    at = [i for i, t in enumerate(texts) if "Достижения и награды" in t]
+    return (texts[at[0] + 1] if at and at[0] + 1 < len(texts) else None), (len(at) == 1 and at[0] > [i for i, t in enumerate(texts) if t.startswith("Подземелья")][0])
+
+
+row_after, in_order = after_reward_title()
+check("3.0.4: a character's list: the reward in its own group, after the others", row_after is not None and "Поводья Повелителя воронов" in row_after and in_order, row_after)
+click_all(); g.RunTimers()
+row_after, in_order = after_reward_title()
+check("…and in the table of all characters", row_after is not None and "Поводья Повелителя воронов" in row_after and in_order, row_after)
+eira_again = pool(CHAR)[1]
+eira_again.MockClick(eira_again); g.RunTimers()
+L.execute("""
+for _, c in ipairs(MountSheetSyncSheet.chars) do
+  for _, i in ipairs(c.items) do i.src = nil end
+end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
+
 kill("Кто-то совсем другой", "Святилище Господства", "raid", 16)
 check("odd boss name does not tick anything new", remaining().left == 26, remaining().left)
 kill("Сильвана Ветрокрылая", "Святилище Господства", "raid", 16)

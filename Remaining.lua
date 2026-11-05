@@ -604,7 +604,7 @@ function ns.GetSummary()
           end
           local row = byKey[k]
           if not row then
-            row = { kind = it.kind, item = it, names = {}, total = 0 }
+            row = { kind = ns.GroupOf(it), item = it, names = {}, total = 0 }
             byKey[k] = row
             rows[#rows + 1] = row
           end
@@ -1021,7 +1021,12 @@ end
 function ns.KindTitle(kind)
   return L["kind_" .. kind]
 end
-ns.KIND_ORDER = { "raid", "dungeon", "world", "rare" }
+ns.KIND_ORDER = { "raid", "dungeon", "world", "rare", "reward" }
+
+-- Группа строки в окне: достижения и награды (item.src, программа 2.10+) — отдельно, это не убийство босса. item.kind у них прежний.
+function ns.GroupOf(item)
+  return item.src == "reward" and "reward" or item.kind
+end
 
 -- «|» в тексте ячейки игра приняла бы за код цвета — удваиваем его.
 local function Safe(value)

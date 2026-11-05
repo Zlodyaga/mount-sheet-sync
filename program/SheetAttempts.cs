@@ -191,13 +191,18 @@ namespace MountSheetSync
         /// Строки со счётчиком для аддона: несобранные маунты со случайным шансом — кто их роняет (как строки
         /// «Осталось»: имена босса, сложности), сколько попыток (n) и шанс за попытку (p).
         /// </summary>
+        /// <summary>«Тип источника» не про убийство босса: достижения, награды сезонов и испытаний.</summary>
+        static readonly Regex RewardSource = new Regex(@"achievement|достижен|ahead of the curve|mythic\+|challenge mode|timed / chest",
+            RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
         /// <summary>
-        /// ID маунта у каждой строки «Осталось» (значок в окне аддона), и у строк без шанса: достижений и гарантированной добычи.
-        /// Берётся из скрытой колонки общего листа, иначе из каталога.
+        /// Что окну аддона нужно о строке «Осталось», кроме самого списка: ID маунта (значок), и у строк без шанса — у достижений и
+        /// гарантированной добычи; src = reward — не за убийство босса (своя группа). Из общего листа, ID ещё и из каталога.
         /// </summary>
-        static void AddMountIds(IBook book, IEnumerable<Dictionary<string, object>> chars)
+        static void AddRowInfo(IBook book, IEnumerable<Dictionary<string, object>> chars)
         {
             Dictionary<string, long> ids = new Dictionary<string, long>();
+            HashSet<string> rewards = new HashSet<string>();
             foreach (string name in new[] { RaidPrefix, DungeonPrefix, WorldSheet, RareSheet })
             {
                 SheetEntry entry = ByName(book, name);
@@ -209,12 +214,18 @@ namespace MountSheetSync
                 int cId = FindCol(header, "^id в игре$", -1);
                 int cMount = FindCol(header, "маунт", 3);
                 int cBoss = FindCol(header, "босс", 4);
-                for (int r = 1; cId >= 0 && r < entry.Data.Count; r++)
+                int cSource = FindCol(header, "тип источника", -1);
+                for (int r = 1; r < entry.Data.Count; r++)
                 {
-                    long id = MountIndex.IdOf(At(entry.Data[r], cId));
+                    string key = Norm(At(entry.Data[r], cMount)) + "|" + Norm(At(entry.Data[r], cBoss));
+                    long id = cId >= 0 ? MountIndex.IdOf(At(entry.Data[r], cId)) : 0;
                     if (id > 0)
                     {
-                        ids[Norm(At(entry.Data[r], cMount)) + "|" + Norm(At(entry.Data[r], cBoss))] = id;
+                        ids[key] = id;
+                    }
+                    if (cSource >= 0 && RewardSource.IsMatch(CellText(At(entry.Data[r], cSource))))
+                    {
+                        rewards.Add(key);
                     }
                 }
             }
@@ -223,14 +234,19 @@ namespace MountSheetSync
                 foreach (object o in (List<object>)ch["items"])
                 {
                     Dictionary<string, object> item = (Dictionary<string, object>)o;
+                    string key = Norm(item["mount"]) + "|" + Norm(item["boss"]);
                     long id;
-                    if (!ids.TryGetValue(Norm(item["mount"]) + "|" + Norm(item["boss"]), out id))
+                    if (!ids.TryGetValue(key, out id))
                     {
                         id = CatalogIndex().Find(null, item["mount"], item["boss"]);
                     }
                     if (id > 0)
                     {
                         item["id"] = (double)id;
+                    }
+                    if (rewards.Contains(key))
+                    {
+                        item["src"] = "reward";
                     }
                 }
             }
