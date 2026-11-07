@@ -585,7 +585,7 @@ function ns.GetAllRemaining()
   return list
 end
 
--- Сводка «кому что осталось»: { { kind, item, names = { имя, … } }, … } — строки, которые хоть у кого-то ещё
+-- Сводка «кому что осталось»: { { kind, item, names = { имя, … }, done = { [имя] = true } }, … } — строки, которые хоть у кого-то ещё
 -- не убиты; одна на босса + сложность + маунт. Порядок: ns.KIND_ORDER, потом у кого больше персонажей, потом босс.
 local summaryFor, summaryResult
 local summaryKey = setmetatable({}, { __mode = "k" })   -- строка таблицы → её ключ (строки живут до /reload)
@@ -599,19 +599,21 @@ function ns.GetSummary()
   for _, c in ipairs(all) do
     if c.r.state == "ok" then
       for _, entry in ipairs(c.r.items) do
-        if not entry.done then
-          local it = entry.item
-          local k = summaryKey[it]
-          if not k then
-            k = table.concat({ tostring(it.kind), Norm(it.boss), Norm(it.diff), Norm(it.mount) }, "|")
-            summaryKey[it] = k
-          end
-          local row = byKey[k]
-          if not row then
-            row = { kind = ns.GroupOf(it), item = it, names = {}, total = 0 }
-            byKey[k] = row
-            rows[#rows + 1] = row
-          end
+        local it = entry.item
+        local k = summaryKey[it]
+        if not k then
+          k = table.concat({ tostring(it.kind), Norm(it.boss), Norm(it.diff), Norm(it.mount) }, "|")
+          summaryKey[it] = k
+        end
+        local row = byKey[k]
+        if not row then
+          row = { kind = ns.GroupOf(it), item = it, names = {}, total = 0, done = {} }
+          byKey[k] = row
+          rows[#rows + 1] = row
+        end
+        if entry.done then
+          row.done[c.name] = true   -- убит на этой неделе; у кого строки нет совсем, тот её не фармит
+        else
           row.names[#row.names + 1] = c.name
           row.total = row.total + (entry.partsLeft or 1)
           if entry.killed then
@@ -622,6 +624,13 @@ function ns.GetSummary()
       end
     end
   end
+  local open = {}
+  for _, row in ipairs(rows) do
+    if #row.names > 0 then   -- убито у всех — в сетке не нужно
+      open[#open + 1] = row
+    end
+  end
+  rows = open
   local order = {}
   for i, kind in ipairs(ns.KIND_ORDER) do
     order[kind] = i

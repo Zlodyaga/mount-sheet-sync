@@ -355,6 +355,23 @@ check("…a row of the sheet with the number of characters left",
 alive = [gr.dots[i]._w == 10 for i in range(1, len(allr) + 1)]
 want = [allr[i].name in [first.names[j] for j in range(1, len(first.names) + 1)] for i in range(1, len(allr) + 1)]
 check("…one column per character: a dot if the boss is still to kill, a dash if killed", alive == want, (alive, want))
+
+
+def cell_kinds(f):
+    out = []
+    for i in range(1, len(allr) + 1):
+        d, name = f.dots[i], allr[i].name
+        got = "dot" if d._w == 10 else "dash" if d._w == 8 and d._h == 2 else "cross" if str(d._texture).endswith("Media\\Close") else "?"
+        killed = f.elem.killed and f.elem.killed[name]
+        want = "letters" if killed else "dot" if f.elem.names[name] else "dash" if (f.elem.done and f.elem.done[name]) else "cross"
+        out.append((name, got if not killed else "letters", want))
+    return out
+
+
+grid_cells = [k for f in pool(ROW) if f.elem and f.elem.names is not None and f.dots for k in cell_kinds(f)]
+check("…killed this week is a dash, a row the character doesn't have at all is a faint cross", all(got == want for _, got, want in grid_cells),
+      [c for c in grid_cells if c[1] != c[2]][:5])
+check("…both kinds are in the sample, so the check above means something", {"dash", "cross"} <= {w for _, _, w in grid_cells}, sorted({w for _, _, w in grid_cells}))
 check("…the header: boss, difficulty, mount, a column per character, total",
       [plain(c.text._text) for c in head_cells()][:4] == ["Босс", "Слож.", "Маунт", "Всего"] and len(head_cells()) == 4 + len(allr)
       and plain(head_cells()[4].text._text) == str(allr[1].name)[:3], [plain(c.text._text) for c in head_cells()])
@@ -362,6 +379,8 @@ check("…all fit: no scroll bar under the columns", not win.gridSlider._shown)
 gr._scripts.OnEnter(gr)
 tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
 check("…hover: every name in the tooltip", ", ".join(str(first.names[i]) for i in range(1, len(first.names) + 1)) in tt, tt)
+others = [str(allr[i].name) for i in range(1, len(allr) + 1) if not first.names or str(allr[i].name) not in [str(first.names[j]) for j in range(1, len(first.names) + 1)]]
+check("…and the rest: who killed it this week, who doesn't farm it", all(any(n in line and ("Убит на этой неделе" in line or "Не фармят" in line) for line in tt) for n in others), (others, tt))
 gr._scripts.OnLeave(gr)
 # a raid with separate lockouts: the program marks the row, the difficulties killed are in item.k
 sep_ch = None
@@ -382,7 +401,7 @@ sep_mark = sep_row[0].marks[sep_slot]
 check("…N is dark, H and M in the character's colour", plain(sep_mark._text) == "N H M" and "|cff5f5a4eN|r" in str(sep_mark._text), str(sep_mark._text))
 sep_row[0]._scripts.OnEnter(sep_row[0])
 tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
-check("…the tooltip says what is left", "(H, M)" in tt[-1], tt)
+check("…the tooltip says what is left", any("(H, M)" in t for t in tt), tt)
 sep_row[0]._scripts.OnLeave(sep_row[0])
 sep_entry = [e for e in pool(CHAR) if plain(e.name._text) == sep_name][0]
 sep_entry.MockClick(sep_entry); g.RunTimers()

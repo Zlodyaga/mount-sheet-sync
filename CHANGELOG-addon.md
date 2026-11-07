@@ -3,6 +3,7 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.4
+- All characters: a character who doesn't farm a row (no tick in “Farming”, or no such group) now gets a faint cross instead of the same dash as a kill this week. The row tooltip names who killed it this week and who doesn't farm it.
 - Mount, boss and place names follow the addon's language, not the sheet's. In the game's language they come from the game itself; in another one from translations the program sends (English and Russian; other languages get English). Needs the program 2.10.0.
 - Without a Google sheet the addon talks about the list: the button is “Save marks”, and no text mentions a sheet. With a sheet everything stays as it was, including “Send to sheet”.
 - Achievements and rewards (Glory of the Hero, Keystone Master and the like) have a group of their own at the end of the table and no longer count as left to kill, because they aren't boss kills. Needs the program 2.10.0.

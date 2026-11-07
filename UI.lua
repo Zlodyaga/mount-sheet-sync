@@ -547,6 +547,7 @@ end
 local built = setmetatable({}, { __mode = "k" })
 
 local DOT_TEXTURE = Skin.DOT   -- белый круг: красим в цвет класса
+local NONE_TEXTURE = "Interface\\AddOns\\MountSheetSync\\Media\\Close"   -- тот же крестик, что у кнопки закрытия, только тусклый
 
 -- «N H M»: что ещё можно — цветом color, убитое — тёмным.
 local function PartsText(killed, color)
@@ -557,8 +558,9 @@ local function PartsText(killed, color)
   return table.concat(out, " ")
 end
 
--- Ячейки сетки у строки: кружок цвета класса — надо убить, чёрточка — уже убит;
--- у строки с раздельными сохранениями — буквы сложностей (в узких столбцах — сколько осталось).
+-- Ячейки сетки у строки: кружок цвета класса — надо убить, чёрточка — убит на этой неделе, крестик — строки у
+-- персонажа нет (не фармит или нет такой группы); у строки с раздельными сохранениями — буквы сложностей
+-- (в узких столбцах — сколько осталось).
 local function DrawGrid(button, elem)
   for slot = 1, grid.shown do
     local c = grid.chars[grid.offset + slot]
@@ -597,6 +599,10 @@ local function DrawGrid(button, elem)
       dot:SetSize(10, 10)
       dot:SetTexture(DOT_TEXTURE)
       dot:SetVertexColor(c.r, c.g, c.b)
+    elseif c and not (elem.done and elem.done[c.name]) then
+      dot:SetSize(8, 8)
+      dot:SetTexture(NONE_TEXTURE)
+      dot:SetVertexColor(0.36, 0.33, 0.28)
     else
       dot:SetSize(8, 2)
       dot:SetColorTexture(0.42, 0.38, 0.32)
@@ -1091,8 +1097,23 @@ local function GridView(rows, all)
       end
     end
     local _, _, id = ns.ItemAttempts(item)
-    list[#list + 1] = WithPlace({ cols = cols, names = names, killed = row.killed or false, icon = ns.MountIcon(item.id or id), mountID = KnownMount(item.id or id), stripe = stripe,
-      tip = { Safe(ns.Shown(item, "mount")), BossAndDiff(ns.Shown(item, "boss"), item.diff), table.concat(shownNames, ", ") }, values = {
+    local tip = { Safe(ns.Shown(item, "mount")), BossAndDiff(ns.Shown(item, "boss"), item.diff), table.concat(shownNames, ", ") }
+    local killedThisWeek, notFarming = {}, {}
+    for _, c in ipairs(all) do
+      if row.done and row.done[c.name] then
+        killedThisWeek[#killedThisWeek + 1] = Safe(c.name)
+      elseif not names[c.name] then
+        notFarming[#notFarming + 1] = Safe(c.name)
+      end
+    end
+    if #killedThisWeek > 0 then
+      tip[#tip + 1] = "|cff8c8c8c" .. string.format(L.grid_tip_done, table.concat(killedThisWeek, ", ")) .. "|r"
+    end
+    if #notFarming > 0 then
+      tip[#tip + 1] = "|cff8c8c8c" .. string.format(L.grid_tip_none, table.concat(notFarming, ", ")) .. "|r"
+    end
+    list[#list + 1] = WithPlace({ cols = cols, names = names, killed = row.killed or false, done = row.done or false, icon = ns.MountIcon(item.id or id), mountID = KnownMount(item.id or id), stripe = stripe,
+      tip = tip, values = {
         boss = ShortBoss(ns.Shown(item, "boss")),
         diff = "|cffb7ae9a" .. ShortDiff(item.diff) .. "|r",
         mount = "|cffc9a0ff" .. Safe(ns.Shown(item, "mount")) .. "|r",
