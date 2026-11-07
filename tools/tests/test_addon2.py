@@ -80,6 +80,7 @@ loader = L.eval("function(src, name) return assert(loadstring(src, '@' .. name))
 for name in files:
     src = open(os.path.join(ADDON_DIR, name), encoding="utf-8").read()
     loader(src, name)("MountSheetSync", ns)
+L.eval("function(n) n.UsesListWords = function() return false end end")(ns)   # the texts of a player with a Google sheet
 print("loaded:", ", ".join(files))
 
 checks = []
@@ -235,7 +236,7 @@ check("header: character and realm", "Эйра — Ревущий фьорд" in
 check("header: this week count and time to reset", any(t.startswith("Записей за эту неделю: ") and "до сброса недели: 2 д 23 ч" in t for t in texts))
 check("3.0: the window opens on «Осталось»", win.selectedTab == 1 and g.MountSheetSyncDB.tab is None)
 click(button("Журнал"))
-check("journal tab remembered", win.selectedTab == 3 and g.MountSheetSyncDB.tab == "log")
+check("journal tab remembered", win.selectedTab == 4 and g.MountSheetSyncDB.tab == "log")
 rows = list_rows()
 check("one row per record", len(rows) == len(kills()))
 check("newest record first", "Злой босс x Конец" in rows[0])
@@ -401,6 +402,29 @@ clear_popup.callback()
 g.RunTimers()
 check("clear confirmed -> journal empty, empty-state text shown", len(kills()) == 0 and
       any(x._shown and "Пока ничего не записано" in str(x._text) for x in regions("FontString")))
+# names in the language chosen in the addon, not the sheet's
+L.execute('''
+  MSS_SAVED_SHEET = MountSheetSyncSheet
+  MountSheetSyncSheet = { names = { en = { ["Ультраксион"] = "Ultraxion", ["Пылающий дракон"] = "Blazing Drake" } } }
+  MSS_SAVED_MJ = C_MountJournal
+  C_MountJournal = { GetMountInfoByID = function(id) if id == 442 then return "Пылающий дракон (из игры)" end end }
+  MSS_ITEM = { boss = "Ультраксион", mount = "Пылающий дракон", place = "Dragon Soul", id = 442 }
+''')
+shown = lambda field: str(L.eval('function(ns, f) return ns.Shown(MSS_ITEM, f) end')(ns, field))
+ns.SetLanguage("enUS")
+check("addon in English, game in Russian: names from the program's translations", shown("boss") == "Ultraxion" and shown("mount") == "Blazing Drake" and shown("place") == "Dragon Soul")
+ns.SetLanguage("deDE")
+check("…a language with no translations: English rather than the sheet's Russian", shown("mount") == "Blazing Drake")
+L.execute('MountSheetSyncSheet.names.de = { ["Пылающий дракон"] = "Lodernder Drache" }')
+check("…and German when the program sends German", shown("mount") == "Lodernder Drache")
+ns.SetLanguage("ruRU")
+check("addon in the game's language: the game's own name by ID", shown("mount") == "Пылающий дракон (из игры)" and shown("boss") == "Ультраксион")
+L.execute("MountSheetSyncSheet = {}")
+ns.SetLanguage("enUS")
+check("an older program sends no translations: the sheet's text", shown("boss") == "Ультраксион")
+ns.SetLanguage("auto")
+L.execute("MountSheetSyncSheet = MSS_SAVED_SHEET; C_MountJournal = MSS_SAVED_MJ")
+
 check("no Lua errors reported in chat", "ошибка" not in all_chat())
 
 failed = [nm for nm, ok in checks if not ok]

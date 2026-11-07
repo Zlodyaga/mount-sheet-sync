@@ -16,7 +16,7 @@
 
 | Что | Версия в файле | Тег | Куда уходит |
 | --- | --- | --- | --- |
-| программа | `Program.Version` (+ `AssemblyInfo.cs`, тесты: `e2e_install.py`, `tools/screens/program.py`) | `v<версия>` | выпуск GitHub: exe + полный архив `MountSheetSync-<версия программы>.zip` → автообновление, кнопка сайта. CurseForge не трогается |
+| программа | `Program.Version` (+ `AssemblyInfo.cs`, тесты: `e2e_install.py`, `e2e_update.py`, `tools/screens/program.py`) | `v<версия>` | выпуск GitHub: exe + полный архив `MountSheetSync-<версия программы>.zip` → автообновление, кнопка сайта. CurseForge не трогается |
 | аддон | `## Version` в toc и `VERSION` в MountSheetSync.lua (+ шапки .lua, `test_collection.py`, `status_left.json`) | `addon-v<версия>` | только CurseForge (выпуска GitHub нет — «latest» остаётся выпуском программы) |
 
 1. Поднять версию той части, что меняется, и написать раздел `## <версия>`: программа — в `CHANGELOG.md` (станет

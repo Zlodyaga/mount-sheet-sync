@@ -89,7 +89,7 @@ def icon_url():
 def menu_html(w, h):
     ic = icon_url()
     main = [
-        ("title", "Mount Sheet Sync 2.9.2"),
+        ("title", "Mount Sheet Sync 2.10.0"),
         ("dis", "Таблица «Маунты WoW» — связь есть"),
         ("dis", "Последняя отправка: сегодня в 18:42 — Отмечено в таблице: 2"),
         ("sep", None),
@@ -137,22 +137,20 @@ def settings_html(w, h):
 <div class='win'>
  <div class='bar'><img src='{ic}'><span class='t'>Mount Sheet Sync — настройки</span><span class='x'>✕</span></div>
  <div class='body'>
-  <div>Где таблица:</div>
-  <div class='row'><span class='radio on'></span>Таблица, которую создаёт программа (вход через Google) — рекомендуется</div>
-  <div class='group'>
-   <div class='ok'>Аккаунт Google: player@example.com</div>
-   <div style='margin:8px 0 12px'><span class='btn'>Выйти</span></div>
-   <div class='ok'>Таблица: «Маунты WoW»</div>
-   <div style='margin:8px 0 12px'><span class='btn'>Создать новую…</span><span class='btn'>Персонажи…</span><span class='btn'>Открыть</span></div>
-   <div class='gray'>Программа видит только таблицы, которые создала сама. Остальные файлы на вашем Google Диске ей недоступны.</div>
-  </div>
+  <div>Где хранить данные:</div>
+  <div class='row'><span class='radio on'></span>На этом компьютере, без Google и входа — рекомендуется</div>
+  <div class='row'><span class='radio'></span>Таблица Google: открывается в браузере, её можно править вручную (нужен вход через Google)</div>
   <div class='row'><span class='radio'></span>Своя таблица со скриптом Code.gs (как в версиях 1.x)</div>
   <div class='lbl'>Папка World of Warcraft (если пусто — ищется сама):</div>
   <div class='row'><span class='input'>C:\\Program Files (x86)\\World of Warcraft</span><span class='btn' style='margin:0'>Обзор…</span></div>
   <div class='ok' style='font-size:11.5px'>Ок, файлы аддона ищутся в C:\\Program Files (x86)\\World of Warcraft\\_retail_\\WTF.</div>
+  <div class='group'>
+   <div class='ok'>Данные хранятся здесь: C:\\Users\\player\\AppData\\Roaming\\MountSheetSync\\local-data.json</div>
+   <div style='margin:8px 0 12px'><span class='btn'>Персонажи…</span><span class='btn'>Открыть папку</span></div>
+   <div class='gray'>Список показывает окно аддона. Таблицы в браузере не будет, а на другой компьютер данные сами не перейдут.</div>
+  </div>
   <div class='row' style='margin-top:14px'><span class='cbox on'>✓</span>Запускать вместе с Windows (значок будет в трее)</div>
-  <div class='ok' style='margin-top:12px'>Связь есть: таблица «Маунты WoW». Листы найдены: Эйра, Мирна, Каэлия.</div>
-  <div class='foot'><span class='btn'>Проверить связь</span><span class='btn primary'>Сохранить</span><span class='btn' style='margin-right:0'>Отмена</span></div>
+  <div class='foot'><span class='btn primary'>Сохранить</span><span class='btn' style='margin-right:0'>Отмена</span></div>
  </div>
 </div>""".format(ic=ic)
     return page(SETTINGS_CSS, body, w, h)

@@ -522,7 +522,7 @@ rep = g.MountSheetSyncReportFrame
 boxes = [r for r in regs + [g.ALL_REGIONS[i] for i in range(len(regs) + 1, len(g.ALL_REGIONS) + 1)] if r._type == "EditBox" and r._multiline]
 text = str(boxes[0]._text) if boxes else ""
 check("report window: the text selected for Ctrl+C", rep is not None and rep._shown and boxes and boxes[0]._highlighted, text)
-check("…versions, program state and counts", "Mount Sheet Sync bug report" in text and "Addon: 3.0.3" in text and "Game: 12.1.5 (build 65000" in text
+check("…versions, program state and counts", "Mount Sheet Sync bug report" in text and "Addon: 3.0.4" in text and "Game: 12.1.5 (build 65000" in text
       and "Program: online (version 2.9.2, sheet connected" in text and "attempt rows 3" in text and "Journal: 5 records" in text, text)
 check("…no character names, realm or spreadsheet title", "Эйра" not in text and "Ревущий" not in text and "Мирна" not in text, text)
 boxes[0]._scripts.OnTextChanged(boxes[0], True)

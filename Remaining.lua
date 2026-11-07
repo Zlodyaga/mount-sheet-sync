@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.3 — «Осталось на этой неделе»
+Mount Sheet Sync 3.0.4 — «Осталось на этой неделе»
 ==================================================
 Список приходит из Google-таблицы: программа MountSheetSync.exe записывает его
 в SheetData.lua (глобальная MountSheetSyncSheet), а игра читает этот файл при
@@ -486,7 +486,11 @@ function ns.BuildRemaining(data, player, weekEnd, kills, ch)
         left = left + partsLeft
       end
     elseif type(item) == "table" and not ns.IsNotFarmed(hidden, item) then
-      total = total + 1
+      -- достижения и награды показываем, но не считаем: их не убить
+      local counts = item.src ~= "reward"
+      if counts then
+        total = total + 1
+      end
       if not item.y or afterReset then
         local by
         for _, rec in ipairs(recs) do
@@ -496,7 +500,7 @@ function ns.BuildRemaining(data, player, weekEnd, kills, ch)
           end
         end
         items[#items + 1] = { item = item, done = by ~= nil, by = by }
-        if not by then
+        if not by and counts then
           left = left + 1
         end
       end
@@ -581,7 +585,7 @@ function ns.GetAllRemaining()
   return list
 end
 
--- Сводка «кому что осталось»: { { kind, item, names = { имя, … } }, … } — строки, которые хоть у кого-то ещё
+-- Сводка «кому что осталось»: { { kind, item, names = { имя, … }, done = { [имя] = true } }, … } — строки, которые хоть у кого-то ещё
 -- не убиты; одна на босса + сложность + маунт. Порядок: ns.KIND_ORDER, потом у кого больше персонажей, потом босс.
 local summaryFor, summaryResult
 local summaryKey = setmetatable({}, { __mode = "k" })   -- строка таблицы → её ключ (строки живут до /reload)
@@ -595,19 +599,24 @@ function ns.GetSummary()
   for _, c in ipairs(all) do
     if c.r.state == "ok" then
       for _, entry in ipairs(c.r.items) do
-        if not entry.done then
-          local it = entry.item
-          local k = summaryKey[it]
-          if not k then
-            k = table.concat({ tostring(it.kind), Norm(it.boss), Norm(it.diff), Norm(it.mount) }, "|")
-            summaryKey[it] = k
-          end
-          local row = byKey[k]
-          if not row then
-            row = { kind = it.kind, item = it, names = {}, total = 0 }
-            byKey[k] = row
-            rows[#rows + 1] = row
-          end
+        local it = entry.item
+        local k = summaryKey[it]
+        if not k then
+          k = table.concat({ tostring(it.kind), Norm(it.boss), Norm(it.diff), Norm(it.mount) }, "|")
+          summaryKey[it] = k
+        end
+        local row = byKey[k]
+        if not row and ns.GroupOf(it) == "reward" then
+          row = false   -- достижения и награды — на своей вкладке, не в сетке
+        elseif not row then
+          row = { kind = ns.GroupOf(it), item = it, names = {}, total = 0, done = {} }
+          byKey[k] = row
+          rows[#rows + 1] = row
+        end
+        if not row then   -- luacheck: ignore (награда)
+        elseif entry.done then
+          row.done[c.name] = true   -- убит на этой неделе; у кого строки нет совсем, тот её не фармит
+        else
           row.names[#row.names + 1] = c.name
           row.total = row.total + (entry.partsLeft or 1)
           if entry.killed then
@@ -618,6 +627,13 @@ function ns.GetSummary()
       end
     end
   end
+  local open = {}
+  for _, row in ipairs(rows) do
+    if #row.names > 0 then   -- убито у всех — в сетке не нужно
+      open[#open + 1] = row
+    end
+  end
+  rows = open
   local order = {}
   for i, kind in ipairs(ns.KIND_ORDER) do
     order[kind] = i
@@ -661,16 +677,69 @@ local function Collected(m)
   return ok and isCollected == true
 end
 
--- Имя маунта на языке игры (по ID), иначе — как в таблице.
-local function MountName(m)
-  local id = tonumber(m.id)
-  if id and C_MountJournal and C_MountJournal.GetMountInfoByID then
-    local ok, name = pcall(C_MountJournal.GetMountInfoByID, id)
-    if ok and type(name) == "string" and name ~= "" and not (issecretvalue and issecretvalue(name)) then
-      return name
+-- Названия в окне и в чате — на языке, выбранном в аддоне. Совпадает с языком игры — берём у игры по ID;
+-- другой — из переводов, которые прислала программа (names в SheetData.lua, программа 2.10+); иначе как в таблице.
+local LANG_OF = { enUS = "en", enGB = "en", ruRU = "ru", deDE = "de", frFR = "fr", esES = "es", esMX = "es", ptBR = "pt" }
+local fromGame = {}
+
+local function Plain(value)
+  if type(value) == "string" and not (issecretvalue and issecretvalue(value)) and value ~= "" then
+    return value
+  end
+  return nil
+end
+
+local function GameName(item, field, text)
+  local key, id
+  if field == "mount" then
+    id = tonumber(item.id)
+    key = id and C_MountJournal and C_MountJournal.GetMountInfoByID and ("m" .. id)
+  elseif field == "boss" then
+    id = tonumber(item.je)
+    -- «Босс / Сундук», «Мифик ключей > седло»: такую строку целиком игра не знает
+    key = id and EJ_GetEncounterInfo and not text:find(" / ", 1, true) and not text:find(" > ", 1, true) and ("b" .. id)
+  elseif field == "place" then
+    local inst = ns.ItemInstance and ns.ItemInstance(item)
+    local name = inst and ns.InstanceName and Plain(ns.InstanceName(inst))
+    return name and (name .. (text:match("( %b())$") or ""))   -- пометка «(Midnight)» остаётся
+  end
+  if not key then
+    return nil
+  end
+  if fromGame[key] == nil then
+    local ok, name
+    if field == "mount" then
+      ok, name = pcall(C_MountJournal.GetMountInfoByID, id)
+    else
+      ok, name = pcall(EJ_GetEncounterInfo, id)
+    end
+    fromGame[key] = ok and Plain(name) or false
+  end
+  return fromGame[key] or nil
+end
+
+--- Название из строки списка (field: boss, mount, place) на языке аддона.
+function ns.Shown(item, field)
+  local text = type(item) == "table" and item[field] or nil
+  if type(text) ~= "string" or text == "" then
+    return text
+  end
+  local want = LANG_OF[ns.CurrentLanguage and ns.CurrentLanguage() or ""] or "en"
+  if GetLocale and want == LANG_OF[GetLocale()] then
+    local own = GameName(item, field, text)
+    if own then
+      return own
     end
   end
-  return tostring(m.mount or "?")
+  local data = MountSheetSyncSheet
+  local names = type(data) == "table" and type(data.names) == "table" and data.names or nil
+  local words = names and (names[want] or (want ~= "ru" and names.en)) or nil
+  local v = type(words) == "table" and words[text] or nil
+  return type(v) == "string" and v ~= "" and v or text
+end
+
+local function MountName(m)
+  return ns.Shown(m, "mount") or "?"
 end
 
 local function AttemptRows()
@@ -840,7 +909,7 @@ local hintCount = 0
 local function SameStamp(data, kills, weekEnd, collected)
   local last = kills[#kills]
   return hintStamp.minute == RareMinute(data) and hintStamp.data == data and hintStamp.generated == data.generated and hintStamp.kills == #kills
-    and hintStamp.last == last and hintStamp.weekEnd == weekEnd and hintStamp.collected == collected
+    and hintStamp.last == last and hintStamp.weekEnd == weekEnd and hintStamp.collected == collected and hintStamp.lang == ns.CurrentLanguage()
 end
 
 -- Подсказка о боссе по имени из игры (подсказка юнита, Атлас приключений):
@@ -856,7 +925,7 @@ function ns.BossHint(bossName)
   local collected = db0 and type(db0.collection) == "table" and db0.collection.collected or nil
   if not SameStamp(data, kills0, weekEnd0, collected) then
     hintCache, hintCount = {}, 0
-    hintStamp = { data = data, generated = data.generated, kills = #kills0, last = kills0[#kills0], weekEnd = weekEnd0,
+    hintStamp = { lang = ns.CurrentLanguage(), data = data, generated = data.generated, kills = #kills0, last = kills0[#kills0], weekEnd = weekEnd0,
                   collected = collected, minute = RareMinute(data) }
   end
   local cached = hintCache[bossName]
@@ -912,7 +981,7 @@ function ns.GetAttemptsList()
   local weekEnd = ns.WeekEnd and ns.WeekEnd()
   local last = kills[#kills]
   local stamp = table.concat({ tostring(data), tostring(data.generated), #kills, last and tostring(last.id) or "",
-    tostring(weekEnd), tostring(db and type(db.collection) == "table" and db.collection.collected), RareMinute(data) }, "|")
+    tostring(weekEnd), tostring(db and type(db.collection) == "table" and db.collection.collected), RareMinute(data), ns.CurrentLanguage() }, "|")
   if stamp == attemptsStamp then
     return attemptsResult
   end
@@ -921,7 +990,7 @@ function ns.GetAttemptsList()
     local p = type(m) == "table" and tonumber(m.p)
     if p and p > 0 and p < 1 and not Collected(m) then
       local n = CountNow(m, data, kills, known)
-      out[#out + 1] = { name = MountName(m), n = n, p = p, left = CharactersLeft(m, data, kills, known, weekEnd), diff = m.diff, kind = m.kind, boss = m.boss, id = m.id }
+      out[#out + 1] = { name = MountName(m), n = n, p = p, left = CharactersLeft(m, data, kills, known, weekEnd), diff = m.diff, kind = m.kind, boss = ns.Shown(m, "boss"), id = m.id, je = m.je, im = m.im }
     end
   end
   table.sort(out, function(a, b)
@@ -1021,7 +1090,85 @@ end
 function ns.KindTitle(kind)
   return L["kind_" .. kind]
 end
-ns.KIND_ORDER = { "raid", "dungeon", "world", "rare" }
+ns.KIND_ORDER = { "raid", "dungeon", "world", "rare", "reward" }
+
+-- Рейд или подземелье строки в путеводителе: journalInstanceID по боссу (item.je) или месту (item.im), из журнала, который читает аддон.
+local journalFor, instanceByEncounter, instanceByMap, instanceName
+
+function ns.ItemInstance(item)
+  local journal = ns.GetDB().journal
+  if type(journal) ~= "table" then
+    return nil
+  end
+  if journalFor ~= journal then
+    journalFor, instanceByEncounter, instanceByMap, instanceName = journal, {}, {}, {}
+    for _, e in ipairs(journal.encounters or {}) do
+      if e.j then
+        instanceByEncounter[e.j] = e.i
+      end
+    end
+    for _, i in ipairs(journal.instances or {}) do
+      instanceName[i.id] = i.name
+      if i.map then
+        instanceByMap[i.map] = i.id
+      end
+    end
+  end
+  local je = tonumber(item.je)
+  local id = instanceByEncounter[je] or instanceByMap[tonumber(item.im)]
+  if not id and je and instanceByEncounter[je] == nil and EJ_GetEncounterInfo then
+    -- мировые боссы старых дополнений: в журнале аддона их нет (нет dungeonEncounterID), игра знает их и так
+    local ok, _, _, _, _, _, instance = pcall(EJ_GetEncounterInfo, je)
+    instanceByEncounter[je] = ok and instance or false
+    id = instanceByEncounter[je] or nil
+  end
+  return id or nil
+end
+
+function ns.InstanceName(id)
+  return instanceName and instanceName[id]
+end
+
+-- Вкладка «Достижения»: строки-награды всех персонажей, по одной на маунт и достижение (у всех они одни и те же).
+local achFor, achGenerated, achRows
+
+function ns.GetAchievementRows()
+  local data = MountSheetSyncSheet
+  if type(data) ~= "table" or type(data.chars) ~= "table" then
+    return nil
+  end
+  if achFor == data and achGenerated == data.generated then
+    return achRows
+  end
+  local rows, seen = {}, {}
+  if type(data.rewards) == "table" then   -- программа 2.10+: все награды из таблицы, а не только недельные
+    for _, item in ipairs(data.rewards) do
+      if type(item) == "table" then
+        rows[#rows + 1] = item
+      end
+    end
+    achFor, achGenerated, achRows = data, data.generated, rows
+    return rows
+  end
+  for _, ch in ipairs(data.chars) do
+    for _, item in ipairs(type(ch) == "table" and type(ch.items) == "table" and ch.items or {}) do
+      if type(item) == "table" and item.src == "reward" then
+        local k = tostring(item.id or "") .. "|" .. tostring(item.ach or "") .. "|" .. Norm(item.boss)
+        if not seen[k] then
+          seen[k] = true
+          rows[#rows + 1] = item
+        end
+      end
+    end
+  end
+  achFor, achGenerated, achRows = data, data.generated, rows
+  return rows
+end
+
+-- Группа строки в окне: достижения и награды (item.src, программа 2.10+) — отдельно, это не убийство босса. item.kind у них прежний.
+function ns.GroupOf(item)
+  return item.src == "reward" and "reward" or item.kind
+end
 
 -- «|» в тексте ячейки игра приняла бы за код цвета — удваиваем его.
 local function Safe(value)
@@ -1035,7 +1182,7 @@ local DONE_ICON = "|TInterface\\RaidFrame\\ReadyCheck-Ready:12:12|t "
 
 function ns.FormatRemaining(entry)
   local item = entry.item
-  local boss = Safe(item.boss) ~= "" and Safe(item.boss) or "?"
+  local boss = Safe(ns.Shown(item, "boss")) ~= "" and Safe(ns.Shown(item, "boss")) or "?"
   local diff = Safe(item.diff)
   if entry.killed and not entry.done then
     local left = {}
@@ -1055,11 +1202,11 @@ function ns.FormatRemaining(entry)
   if diff ~= "" then
     text = text .. " |cff8c8c8c(" .. diff .. ")|r"
   end
-  if Safe(item.mount) ~= "" then
-    text = text .. " — |cffc9a0ff" .. Safe(item.mount) .. "|r"
+  if Safe(ns.Shown(item, "mount")) ~= "" then
+    text = text .. " — |cffc9a0ff" .. Safe(ns.Shown(item, "mount")) .. "|r"
   end
-  if Safe(item.place) ~= "" then
-    text = text .. " |cff8c8c8c- " .. Safe(item.place) .. "|r"
+  if Safe(ns.Shown(item, "place")) ~= "" then
+    text = text .. " |cff8c8c8c- " .. Safe(ns.Shown(item, "place")) .. "|r"
   end
   return text
 end

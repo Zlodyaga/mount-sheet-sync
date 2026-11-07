@@ -76,7 +76,7 @@ def main():
         same = os.path.exists(OUT) and open(OUT, encoding="utf-8").read() == text
         print("i18n.json is " + ("up to date" if same else "OUT OF DATE — run build.py"))
         raise SystemExit(0 if same else 1)
-    with open(OUT, "w", encoding="utf-8") as f:
+    with open(OUT, "w", encoding="utf-8", newline="\n") as f:
         f.write(text)
     print("i18n.json: %d UI texts x %d languages, %d log lines (en); written to %s" % (len(ui), len(LANGS), len(log), OUT))
 

@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.3 — окно, иконка и настройки
+Mount Sheet Sync 3.0.4 — окно, иконка и настройки
 ==================================================
   * окно (ЛКМ по иконке или /mss): слева «Все персонажи» и персонажи из таблицы (сколько каждому осталось), справа
     вкладки «Осталось» (таблица выбранного персонажа или сетка всех), «Попытки» (счётчик маунтов, сортировка и
@@ -43,9 +43,9 @@ local KIND_COLOR = {
 }
 
 -- Вкладки по порядку; в db.tab хранится ключ.
-local TAB_LEFT, TAB_ATTEMPTS, TAB_LOG = 1, 2, 3
-local TAB_KEYS = { "left", "attempts", "log" }
-local TAB_LABELS = { "tab_left", "tab_attempts", "tab_log" }
+local TAB_LEFT, TAB_ACH, TAB_ATTEMPTS, TAB_LOG = 1, 2, 3, 4
+local TAB_KEYS = { "left", "ach", "attempts", "log" }
+local TAB_LABELS = { "tab_left", "tab_ach", "tab_attempts", "tab_log" }
 local ALL_CHARS = {}      -- selectedChar: первая строка слева, «Все персонажи»
 local FILTER_KINDS = { "all", "raid", "dungeon", "world", "rare" }
 
@@ -232,13 +232,39 @@ local function FirstLetters(name, n)
   return table.concat(out)
 end
 
+-- Значения каталога, которые не сокращаются правилами ниже: слово на языке игры или короткая запись.
+local DIFF_WORDS = {
+  ["Achievement"] = "diff_ach", ["Guild Achievement"] = "diff_ach", ["Mythic dungeon achievements"] = "diff_ach",
+  ["Heroic achievements"] = "diff_ach", ["Heroic/Mythic dungeon achievements"] = "diff_ach",
+  ["Любая"] = "diff_any", ["Any difficulty"] = "diff_any", ["Any / raid-specific"] = "diff_any",
+  ["Удалённая награда"] = "diff_removed", ["Удалённая награда Retail"] = "diff_removed", ["Удалённая TBC-версия"] = "diff_removed",
+  ["Torghast"] = "diff_torghast",
+}
+local DIFF_SHORT = {
+  ["Обычный рейд"] = "N", ["10 игроков"] = "10", ["25-player loot table / no Keepers"] = "25",
+  ["Normal 10, 3 drakes up"] = "N10", ["Normal 25, 3 drakes up"] = "N25", ["Heroic 10"] = "H10", ["Heroic 25"] = "H25",
+  ["M+ rating / vendor"] = "M+", ["3400+ M+ rating in current season"] = "3400+", ["2000+ M+ rating"] = "2000+", ["3000+ M+ rating"] = "3000+",
+  ["MoP Challenge Mode"] = "CM", ["WoD Challenge Mode"] = "CM", ["Heroic random dungeon only"] = "H", ["Mythic, hard mode"] = "M",
+}
+
 -- Сложность короче для колонки; полная — в подсказке строки.
 local function ShortDiff(diff)
   local text = Safe(diff)
+  if DIFF_WORDS[text] then
+    return L[DIFF_WORDS[text]]
+  end
+  if DIFF_SHORT[text] then
+    return DIFF_SHORT[text]
+  end
   text = text:gsub("Normal", "N"):gsub("Heroic", "H"):gsub("Mythic%+", "M+"):gsub("Mythic", "M")
   text = text:gsub("Timewalking", "TW"):gsub(" timed run", ""):gsub("%s*/%s*", "/")
   text = text:gsub("Layers%s*", ""):gsub("Challenge cache", "CM"):gsub("Challenge", "CM")
   return text
+end
+
+-- Босс короче для колонки: что идёт после него («/ Сундук претендента», «> Затерянное во времени седло») — в подсказке строки.
+local function ShortBoss(boss)
+  return (Safe(boss):gsub("%s+[/>]%s+.*$", ""))
 end
 
 local function BossAndDiff(boss, diff)
@@ -249,6 +275,377 @@ local function BossAndDiff(boss, diff)
   return text
 end
 
+-- Окна игры лежат ниже нашего и были бы закрыты им: прячем своё, а когда то окно закроют, возвращаем.
+local stepAsideFor, stepAsideHooked = nil, {}
+
+local function StepAside(panel)
+  if not (panel and panel:IsShown() and frame:IsShown()) then
+    return
+  end
+  if not stepAsideHooked[panel] then
+    stepAsideHooked[panel] = true
+    panel:HookScript("OnHide", function(self)
+      if stepAsideFor == self then
+        stepAsideFor = nil
+        frame:Show()
+      end
+    end)
+  end
+  stepAsideFor = panel
+  frame:Hide()
+end
+
+-- Журнал маунтов игры на этом маунте.
+-- Окно достижений игры на этом достижении.
+local function ShowAchievement(id)
+  -- OpenAchievementFrameToAchievement есть только в классической игре; в Retail — открыть окно и выбрать достижение
+  local ok = pcall(function()
+    if not AchievementFrame then
+      C_AddOns.LoadAddOn("Blizzard_AchievementUI")
+    end
+    if not AchievementFrame:IsShown() then
+      AchievementFrame_ToggleAchievementFrame()
+    end
+    AchievementFrame_SelectAchievement(id, true)
+  end)
+  if not ok then
+    ns.Print(L.ach_open_failed)
+    return
+  end
+  StepAside(AchievementFrame)
+end
+
+local function ShowMountInJournal(id)
+  local ok = pcall(function()
+    if not MountJournal then
+      C_AddOns.LoadAddOn("Blizzard_Collections")
+    end
+    local tab = COLLECTIONS_JOURNAL_TAB_INDEX_MOUNTS or 1
+    if SetCollectionsJournalShown then
+      SetCollectionsJournalShown(true, tab)
+    else
+      if not (CollectionsJournal and CollectionsJournal:IsShown()) then
+        ToggleCollectionsJournal(tab)
+      end
+      CollectionsJournal_SetTab(CollectionsJournal, tab)
+    end
+    MountJournal_SelectByMountID(id)
+  end)
+  if not ok then
+    ns.Print(L.journal_open_failed)
+    return
+  end
+  StepAside(CollectionsJournal)
+end
+
+-- Путеводитель приключений на этом рейде или подземелье, на боссе, если он известен.
+local function ShowInGuide(instance, encounter)
+  local ok = pcall(function()
+    if not EncounterJournal_OpenJournal then
+      C_AddOns.LoadAddOn("Blizzard_EncounterJournal")
+    end
+    EncounterJournal_OpenJournal(nil, instance, encounter)
+  end)
+  if not ok then
+    ns.Print(L.guide_open_failed)
+    return
+  end
+  StepAside(EncounterJournal)
+end
+
+-- Вход в рейд или подземелье: игра отдаёт входы по картам. 946 — карта всего мира: обходим все карты в ней, не только
+-- зоны — вход в «Душу Дракона» есть лишь на карте Пещер Времени. Ошибка на одной карте не обрывает поиск по остальным.
+local WORLD_MAP = 946
+local MAP_ZONE = 3   -- Enum.UIMapType.Zone
+local entrances, entranceByName, entranceList = {}, {}, {}
+
+-- Строчные буквы и для кириллицы: string.lower в игре меняет только латиницу.
+local function Lower(s)
+  s = s:lower():gsub("\208([\144-\175])", function(c)
+    local b = c:byte()
+    return b < 160 and ("\208" .. string.char(b + 32)) or ("\209" .. string.char(b - 32))
+  end)
+  return (s:gsub("\208\129", "\209\145"))   -- Ё
+end
+
+-- Знаки, которых нет среди ASCII: кавычки-ёлочки и лапки, тире, многоточие, апостроф, неразрывный пробел.
+local WIDE_MARKS = { "\194\171", "\194\187", "\226\128\156", "\226\128\157", "\226\128\158", "\226\128\147", "\226\128\148",
+  "\226\128\166", "\226\128\153", "\226\128\152", "\194\160" }
+
+-- Имя без пробелов, знаков и регистра: «Операция: Мехагон» и «Операция "Мехагон"», «Стратхольм – черный ход» и
+-- «Стратхольм - черный ход» — одно и то же.
+local function NameKey(name)
+  local s = Lower(tostring(name or ""))
+  for _, mark in ipairs(WIDE_MARKS) do
+    s = s:gsub(mark, "")
+  end
+  return (s:gsub("[%p%s]", ""))
+end
+
+local function ScanEntrances()
+  entranceList = {}
+  local ok, maps = pcall(C_Map.GetMapChildrenInfo, WORLD_MAP, nil, true)
+  for _, map in ipairs(ok and type(maps) == "table" and maps or {}) do
+    pcall(function()
+      for _, e in ipairs(C_EncounterJournal.GetDungeonEntrancesForMap(map.mapID) or {}) do
+        entranceList[#entranceList + 1] = { name = e.name, id = e.journalInstanceID, map = map.mapID, mapName = map.name }
+        local spot = { map = map.mapID, zone = map.mapType == MAP_ZONE, poi = e.areaPoiID, x = e.position.x, y = e.position.y }
+        local old = entrances[e.journalInstanceID]
+        if not old or (spot.zone and not old.zone) then   -- метка на карте зоны удобнее
+          entrances[e.journalInstanceID] = spot
+        end
+        if e.name and e.name ~= "" then
+          entranceByName[NameKey(e.name)] = entrances[e.journalInstanceID]
+        end
+      end
+    end)
+  end
+end
+
+local function FindEntrance(instance, name)
+  -- запасной путь — по названию: у части подземелий в журнале и на карте разные номера
+  local function Known()
+    return entrances[instance] or (name and entranceByName[NameKey(name)]) or nil
+  end
+  if not Known() then
+    ScanEntrances()   -- нет в найденном — обходим карты заново: игра могла ещё не отдать их в прошлый раз
+  end
+  return Known()
+end
+
+-- /mss route <часть названия>: что игра отдаёт о входах — для разбора «На карте не нашлось» (по-английски, как /mss tip).
+function ns.RouteDebug(text)
+  local key = NameKey(text)
+  ScanEntrances()
+  local maps = {}
+  for _, e in ipairs(entranceList) do
+    maps[e.map] = true
+  end
+  local nMaps = 0
+  for _ in pairs(maps) do
+    nMaps = nMaps + 1
+  end
+  ns.Print(string.format("route: %d entrances on %d maps; looking for \"%s\"", #entranceList, nMaps, Safe(text)))
+  if key == "" then
+    return
+  end
+  local shown = 0
+  for _, e in ipairs(entranceList) do
+    if shown < 8 and NameKey(e.name):find(key, 1, true) then
+      shown = shown + 1
+      ns.Print(string.format("  entrance \"%s\": journal %s, map %s (%s)", Safe(e.name), tostring(e.id), tostring(e.map), Safe(e.mapName)))
+    end
+  end
+  if shown == 0 then
+    ns.Print("  no entrance by that name on any map")
+  end
+  local data = MountSheetSyncSheet
+  local seen, rows = {}, 0
+  for _, ch in ipairs(type(data) == "table" and type(data.chars) == "table" and data.chars or {}) do
+    for _, item in ipairs(type(ch) == "table" and type(ch.items) == "table" and ch.items or {}) do
+      local place = type(item) == "table" and item.place
+      if rows < 4 and type(place) == "string" and NameKey(place):find(key, 1, true) and not seen[place] then
+        seen[place] = true
+        rows = rows + 1
+        local inst = ns.ItemInstance(item)
+        ns.Print(string.format("  row \"%s\": journal %s (%s), map %s", Safe(place), tostring(inst), Safe(inst and ns.InstanceName(inst) or "?"), tostring(item.im)))
+      end
+    end
+  end
+end
+
+-- Игрок на этой карте или на карте внутри неё?
+local function PlayerInside(map)
+  local ok, inside = pcall(function()
+    local here = C_Map.GetBestMapForUnit and C_Map.GetBestMapForUnit("player")
+    local steps = 0
+    while here and steps < 20 do
+      if here == map then
+        return true
+      end
+      local info = C_Map.GetMapInfo(here)
+      here = info and info.parentMapID ~= here and info.parentMapID or nil
+      steps = steps + 1
+    end
+    return false
+  end)
+  return ok and inside or false
+end
+
+-- Вход лежит на карте внутри другой зоны (Пещеры Времени в Танарисе): куда идти снаружи — та же точка на карте зоны.
+-- nil — карта входа сама зона или игрок уже внутри неё.
+local function OuterStep(e)
+  if PlayerInside(e.map) then
+    return nil   -- уже внутри — сразу ко входу
+  end
+  local ok, step = pcall(function()
+    local inner = C_Map.GetMapInfo(e.map)
+    local outer = inner and inner.parentMapID and C_Map.GetMapInfo(inner.parentMapID)
+    if not (outer and outer.mapType == MAP_ZONE) then
+      return nil
+    end
+    local outerMap = outer.mapID or inner.parentMapID
+    -- лучше всего — значок входа в пещеру на карте зоны (ссылка на вложенную карту): там, где в неё входят
+    if C_Map.GetMapLinksForMap then
+      for _, link in ipairs(C_Map.GetMapLinksForMap(outerMap) or {}) do
+        local pos = link.linkedUiMapID == e.map and link.position
+        local x, y
+        if pos then
+          x, y = pos.x, pos.y
+          if not x and pos.GetXY then
+            x, y = pos:GetXY()
+          end
+        end
+        if x and y then
+          return { map = outerMap, x = x, y = y, name = inner.name, zone = outer.name }
+        end
+      end
+    end
+    -- иначе — где на карте зоны лежит сам вход (точка внутри пещеры, может быть в стороне от её входа)
+    local minX, maxX, minY, maxY = C_Map.GetMapRectOnMap(e.map, outerMap)
+    if not (minX and maxX and minY and maxY) then
+      return nil
+    end
+    return { map = outerMap, x = minX + e.x * (maxX - minX), y = minY + e.y * (maxY - minY),
+             name = inner.name, zone = outer.name }
+  end)
+  return ok and step or nil
+end
+
+-- Босс на карте зоны (мировые боссы: входа у них нет).
+local bossSpots = {}
+
+local function FindBossSpot(encounter)
+  if bossSpots[encounter] then
+    return bossSpots[encounter]
+  end
+  local ok = pcall(function()
+    for _, map in ipairs(C_Map.GetMapChildrenInfo(WORLD_MAP, Enum.UIMapType.Zone, true) or {}) do
+      for _, e in ipairs(C_EncounterJournal.GetEncountersOnMap(map.mapID) or {}) do
+        if not bossSpots[e.encounterID] then
+          bossSpots[e.encounterID] = { map = map.mapID, x = e.mapX, y = e.mapY }
+        end
+      end
+    end
+  end)
+  return ok and bossSpots[encounter] or nil
+end
+
+-- Своя метка на карте, выбранная целью.
+local function PinAndTrack(map, x, y)
+  return pcall(function()
+    assert(C_Map.CanSetUserWaypointOnMap(map))
+    C_Map.SetUserWaypoint(UiMapPoint.CreateFromCoordinates(map, x, y))
+    C_SuperTrack.SetSuperTrackedUserWaypoint(true)
+  end)
+end
+
+-- Показать путь: игра ведёт к отметке входа, а если не вышло (не изучена территория и т. п.) — своя метка на карте у входа.
+-- У мировых боссов входа нет: метка там, где их показывает игра.
+-- Путь, ждущий второго шага: { entrance, name, inner }. routeOwn — цель меняет сам аддон, это не выбор игрока.
+local pendingRoute, routeOwn, routeWatcher = nil, false, nil
+
+-- Путь прямо ко входу: метка входа, а если игра её не ведёт — своя метка у входа.
+local function TrackEntrance(e, name)
+  local tracked = pcall(function()
+    C_SuperTrack.SetSuperTrackedMapPin(Enum.SuperTrackingMapPinType.AreaPOI, e.poi)
+    local _, id = C_SuperTrack.GetSuperTrackedMapPin()
+    assert(id == e.poi)
+  end)
+  if tracked then
+    ns.Print(string.format(L.route_set, name))
+    return
+  end
+  ns.Print(string.format(PinAndTrack(e.map, e.x, e.y) and L.route_pin or L.route_none, name))
+end
+
+-- Второй шаг: игрок вошёл в зону со входом — путь ко входу. Игрок сам выбрал другую цель — ждать больше нечего.
+local function WatchRoute()
+  if routeWatcher then
+    return
+  end
+  routeWatcher = CreateFrame("Frame")
+  for _, event in ipairs({ "ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA", "SUPER_TRACKING_CHANGED" }) do
+    pcall(routeWatcher.RegisterEvent, routeWatcher, event)
+  end
+  routeWatcher:SetScript("OnEvent", function(_, event)
+    local route = pendingRoute
+    if not route or routeOwn then
+      return
+    end
+    if event == "SUPER_TRACKING_CHANGED" then
+      -- метку у входа игра снимает сама, когда до неё дошли: это не повод забыть путь; другая цель — повод
+      local ok, other = pcall(function()
+        return C_SuperTrack.IsSuperTrackingAnything() and not C_SuperTrack.IsSuperTrackingUserWaypoint()
+      end)
+      if ok and other then
+        pendingRoute = nil
+      end
+      return
+    end
+    if PlayerInside(route.entrance.map) then
+      pendingRoute = nil
+      routeOwn = true
+      ns.Print(string.format(L.route_inside, route.inner, route.name))
+      TrackEntrance(route.entrance, route.name)
+      routeOwn = false
+    end
+  end)
+end
+
+local function ShowRoute(elem)
+  pendingRoute = nil   -- новый путь заменяет недоделанный
+  if elem.world then
+    local name = Safe(elem.bossName)
+    local spot = elem.encounter and FindBossSpot(elem.encounter)
+    if spot and PinAndTrack(spot.map, spot.x, spot.y) then
+      ns.Print(string.format(L.route_boss, name))
+    else
+      ns.Print(string.format(L.route_none, name))
+    end
+    return
+  end
+  local instance = elem.instance
+  local name = Safe(elem.placeName) ~= "" and Safe(elem.placeName) or ns.InstanceName(instance) or "?"
+  local e = FindEntrance(instance, ns.InstanceName(instance) or elem.placeName)
+  if not e then
+    ns.Print(string.format(L.route_none, name))
+    return
+  end
+  local outer = OuterStep(e)
+  if not outer then
+    TrackEntrance(e, name)
+    return
+  end
+  -- в два шага, но одним щелчком: сначала метка у зоны со входом (Пещеры Времени), а когда игрок в неё войдёт,
+  -- аддон сам переключит путь на вход (RouteWatch)
+  routeOwn = true
+  local pinned = PinAndTrack(outer.map, outer.x, outer.y)
+  routeOwn = false
+  if not pinned then
+    ns.Print(string.format(L.route_none, Safe(outer.name)))
+    return
+  end
+  pendingRoute = { entrance = e, name = name, inner = Safe(outer.name) }
+  WatchRoute()
+  ns.Print(string.format(L.route_first, Safe(outer.name), Safe(outer.zone), name))
+end
+
+-- Курсор над столбцом строки (key — ключ столбца)?
+local function OverColumn(button, key)
+  local left = button:GetLeft()
+  if not left or not button.elem.cols then
+    return false
+  end
+  local x = GetCursorPosition() / button:GetEffectiveScale() - left
+  for _, col in ipairs(button.elem.cols) do
+    if col.key == key then
+      return x >= col.x and x <= col.x + col.w
+    end
+  end
+  return false
+end
+
 -- Меню по правому щелчку на строке «Осталось» (только у текущего персонажа): не фармить строку или весь рейд / подземелье.
 local function ShowRowMenu(button)
   local entry = button.elem and button.elem.entry
@@ -257,12 +654,12 @@ local function ShowRowMenu(button)
   end
   local item = entry.item
   MenuUtil.CreateContextMenu(button, function(owner, root)
-    root:CreateTitle(item.boss or "?")
+    root:CreateTitle(ns.Shown(item, "boss") or "?")
     root:CreateButton(L.menu_not_row, function()
       ns.AddPlan(item, "row")
     end)
-    if item.place and item.place ~= "" then
-      root:CreateButton(string.format(L.menu_not_place, item.place), function()
+    if ns.Shown(item, "place") and ns.Shown(item, "place") ~= "" then
+      root:CreateButton(string.format(L.menu_not_place, ns.Shown(item, "place")), function()
         ns.AddPlan(item, "place")
       end)
     end
@@ -300,17 +697,53 @@ local function GridHover(button)
   FocusColumn(slot >= 1 and slot <= grid.shown and slot + grid.offset or nil)
 end
 
+local function ClickRow(button, mouse)
+  if mouse == "RightButton" then
+    ShowRowMenu(button)
+    return
+  end
+  local elem = button.elem
+  if not elem then
+    return
+  end
+  if IsControlKeyDown() then
+    if elem.route then
+      ShowRoute(elem)
+    end
+  elseif elem.achievement and OverColumn(button, "boss") then
+    ShowAchievement(elem.achievement)
+  elseif elem.instance and OverColumn(button, "boss") then
+    ShowInGuide(elem.instance, elem.encounter)
+  elseif elem.mountID then
+    ShowMountInJournal(elem.mountID)
+  end
+end
+
 -- Подсказка строки: elem.tip = { заголовок, строка, … }; у строк с меню — ещё «ПКМ — не фармлю».
 local function ShowRowTooltip(button)
   local elem = button.elem
   if not elem or not (elem.tip or elem.entry) then
     return
   end
-  GameTooltip:SetOwner(button, "ANCHOR_CURSOR")
+  -- слева от таблицы: так подсказка не закрывает строки
+  GameTooltip:SetOwner(button, "ANCHOR_NONE")
+  GameTooltip:SetPoint("RIGHT", button, "LEFT", -8, 0)
   if elem.tip then
     GameTooltip:SetText(elem.tip[1], 1, 0.82, 0)
     for i = 2, #elem.tip do
       GameTooltip:AddLine(elem.tip[i], 1, 1, 1, true)
+    end
+    if elem.instance then
+      GameTooltip:AddLine(L.tip_row_guide, 0.6, 0.6, 0.6, true)
+    end
+    if elem.achievement then
+      GameTooltip:AddLine(L.tip_row_ach, 0.6, 0.6, 0.6, true)
+    end
+    if elem.mountID then
+      GameTooltip:AddLine(L.tip_row_open, 0.6, 0.6, 0.6, true)
+    end
+    if elem.route then
+      GameTooltip:AddLine(L.tip_row_route, 0.6, 0.6, 0.6, true)
     end
     if elem.entry then
       GameTooltip:AddLine(L.tip_row_menu, 0.6, 0.6, 0.6, true)
@@ -336,6 +769,7 @@ end
 local built = setmetatable({}, { __mode = "k" })
 
 local DOT_TEXTURE = Skin.DOT   -- белый круг: красим в цвет класса
+local NONE_TEXTURE = "Interface\\AddOns\\MountSheetSync\\Media\\Close"   -- тот же крестик, что у кнопки закрытия, только тусклый
 
 -- «N H M»: что ещё можно — цветом color, убитое — тёмным.
 local function PartsText(killed, color)
@@ -346,8 +780,9 @@ local function PartsText(killed, color)
   return table.concat(out, " ")
 end
 
--- Ячейки сетки у строки: кружок цвета класса — надо убить, чёрточка — уже убит;
--- у строки с раздельными сохранениями — буквы сложностей (в узких столбцах — сколько осталось).
+-- Ячейки сетки у строки: кружок цвета класса — надо убить, чёрточка — убит на этой неделе, крестик — строки у
+-- персонажа нет (не фармит или нет такой группы); у строки с раздельными сохранениями — буквы сложностей
+-- (в узких столбцах — сколько осталось).
 local function DrawGrid(button, elem)
   for slot = 1, grid.shown do
     local c = grid.chars[grid.offset + slot]
@@ -386,6 +821,10 @@ local function DrawGrid(button, elem)
       dot:SetSize(10, 10)
       dot:SetTexture(DOT_TEXTURE)
       dot:SetVertexColor(c.r, c.g, c.b)
+    elseif c and not (elem.done and elem.done[c.name]) then
+      dot:SetSize(8, 8)
+      dot:SetTexture(NONE_TEXTURE)
+      dot:SetVertexColor(0.36, 0.33, 0.28)
     else
       dot:SetSize(8, 2)
       dot:SetColorTexture(0.42, 0.38, 0.32)
@@ -492,8 +931,8 @@ local function InitRow(button, elem)
     button.hl = button:CreateTexture(nil, "HIGHLIGHT")
     button.hl:SetAllPoints()
     button.hl:SetColorTexture(1, 1, 1, 0.08)
-    button:RegisterForClicks("RightButtonUp")
-    button:SetScript("OnClick", ShowRowMenu)
+    button:RegisterForClicks("LeftButtonUp", "RightButtonUp")
+    button:SetScript("OnClick", ClickRow)
     button:SetScript("OnEnter", ShowRowTooltip)
     button:SetScript("OnLeave", LeaveRow)
   end
@@ -737,23 +1176,39 @@ local function NoDataView()
   return NO_DATA
 end
 
+-- ID маунта, которого знает игра (у него есть значок): только такой можно открыть в журнале.
+local function KnownMount(id)
+  return ns.MountIcon(id) and tonumber(id) or nil
+end
+
+-- Куда ведут щелчки по строке: путеводитель и путь к входу в рейд или подземелье, а к мировому боссу — метка, где его показывает игра.
+local function WithPlace(elem, item)
+  elem.instance = ns.ItemInstance(item)
+  elem.encounter = tonumber(item.je)
+  elem.world = item.kind == "world" or nil
+  elem.route = (elem.instance and (item.kind == "raid" or item.kind == "dungeon")) or (elem.world and elem.encounter ~= nil) or nil
+  elem.placeName = ns.Shown(item, "place")
+  elem.bossName = ns.Shown(item, "boss")
+  return elem
+end
+
 -- Строка таблицы у персонажа: осталось — со счётчиком попыток, убита — серая, с галочкой.
 local function RemainingRow(entry, menu, stripe)
   local cols, doneCols = LeftColumns()
   local item = entry.item
-  local tip = { Safe(item.mount), BossAndDiff(item.boss, item.diff) }
-  if Safe(item.place) ~= "" then
-    tip[#tip + 1] = Safe(item.place)
+  local tip = { Safe(ns.Shown(item, "mount")), BossAndDiff(ns.Shown(item, "boss"), item.diff) }
+  if Safe(ns.Shown(item, "place")) ~= "" then
+    tip[#tip + 1] = Safe(ns.Shown(item, "place"))
   end
   local n, p, id = ns.ItemAttempts(item)
   if entry.done then
     local status = (entry.again and string.format(L.left_again, ns.FormatDuration(entry.again)) or L.left_done):gsub("^%s*—%s*", "")
-    return { cols = doneCols, done = true, icon = DONE_TEXTURE, stripe = stripe, tip = tip, values = {
-      boss = "|cff8c8c8c" .. Safe(item.boss) .. "|r",
+    return WithPlace({ cols = doneCols, done = true, icon = DONE_TEXTURE, mountID = KnownMount(item.id or id), stripe = stripe, tip = tip, values = {
+      boss = "|cff8c8c8c" .. ShortBoss(ns.Shown(item, "boss")) .. "|r",
       diff = "|cff8c8c8c" .. ShortDiff(item.diff) .. "|r",
-      mount = "|cff8c8c8c" .. Safe(item.mount) .. "|r",
+      mount = "|cff8c8c8c" .. Safe(ns.Shown(item, "mount")) .. "|r",
       status = "|cff8c8c8c" .. status .. "|r",
-    } }
+    } }, item)
   end
   local diff = "|cffb7ae9a" .. ShortDiff(item.diff) .. "|r"
   if entry.killed then
@@ -764,14 +1219,14 @@ local function RemainingRow(entry, menu, stripe)
     chance = "|cff" .. ChanceColor(n, p) .. ns.FormatChance(n, p) .. "|r"
     tip[#tip + 1] = string.format(L.boss_hint, n, ns.FormatChance(n, p))
   end
-  return { cols = cols, icon = ns.MountIcon(id), stripe = stripe, tip = tip, entry = menu and entry or nil, values = {
-    boss = Safe(item.boss),
+  return WithPlace({ cols = cols, icon = ns.MountIcon(item.id or id), mountID = KnownMount(item.id or id), stripe = stripe, tip = tip, entry = menu and entry or nil, values = {
+    boss = ShortBoss(ns.Shown(item, "boss")),
     diff = diff,
-    mount = "|cffc9a0ff" .. Safe(item.mount) .. "|r",
-    place = "|cff8c8c8c" .. Safe(item.place) .. "|r",
+    mount = "|cffc9a0ff" .. Safe(ns.Shown(item, "mount")) .. "|r",
+    place = "|cff8c8c8c" .. Safe(ns.Shown(item, "place")) .. "|r",
     n = n and n > 0 and tostring(n) or "|cff8c8c8c-|r",
     chance = chance,
-  } }
+  } }, item)
 end
 
 -- Вкладка «Осталось» у персонажа: строки «Нет» из таблицы, убитые после обновления списка — с галочкой внизу группы.
@@ -791,7 +1246,7 @@ local function RemainingView(r, own)
   for _, kind in ipairs(ns.KIND_ORDER) do
     local group = {}
     for _, entry in ipairs(r.items) do
-      if entry.item.kind == kind then
+      if kind ~= "reward" and ns.GroupOf(entry.item) == kind then   -- достижения — на своей вкладке
         group[#group + 1] = entry
       end
     end
@@ -818,6 +1273,120 @@ local function RemainingView(r, own)
     summary = "|cff8c8c8c" .. string.format(L.left_head, r.left, r.total, ns.FormatWhen(r.generated)) .. "|r" }
 end
 
+-- Вкладка «Достижения»: достижение (щелчок — открыть его), условие, маунт. Полученное — серое и внизу. Попыток у них нет.
+local achCols
+local function AchievementColumns()
+  if not achCols then
+    achCols = Columns({
+      { key = "icon", w = 18 },
+      { key = "boss", flex = 1.3, label = "col_ach" },
+      { key = "cond", flex = 1.6, label = "col_cond" },
+      { key = "mount", flex = 1.4, label = "col_mount" },
+    }, listWidth)
+  end
+  return achCols
+end
+
+-- Достижение из игры: получено ли (на аккаунте) и его условие на языке игры. nil — игра его не знает.
+local function AchievementInfo(id)
+  if not id or not GetAchievementInfo then
+    return nil
+  end
+  local ok, _, name, _, completed, _, _, _, description = pcall(GetAchievementInfo, id)
+  if not ok or not name then
+    return nil
+  end
+  return { completed = completed and true or false, description = type(description) == "string" and description or "" }
+end
+
+local ACH_GROUPS = { "raid", "dungeon", "mplus", "other" }
+
+local function AchievementGroupTitle(group)
+  if group == "mplus" then
+    return L.ach_group_mplus
+  elseif group == "other" then
+    return L.ach_group_other
+  end
+  return ns.KindTitle(group)
+end
+
+-- Достижение получено: оно есть на аккаунте, маунт уже собран («Собрано?») или есть в коллекции.
+local function AchievementDone(item, info)
+  -- у маунта за седло достижение — нынешнее, на седло: получено ли оно, о маунте не говорит
+  if (info and info.completed and item.via ~= "saddle") or item.got then
+    return true
+  end
+  local id = tonumber(item.id)
+  if id and C_MountJournal and C_MountJournal.GetMountInfoByID then
+    local ok, _, _, _, _, _, _, _, _, _, _, collected = pcall(C_MountJournal.GetMountInfoByID, id)
+    return ok and collected == true
+  end
+  return false
+end
+
+local function AchievementsView(rows)
+  if not rows then
+    return NoDataView()
+  end
+  if #rows == 0 then
+    return { list = {}, empty = L.ach_empty }
+  end
+  local cols = AchievementColumns()
+  local groups = {}
+  for _, item in ipairs(rows) do
+    local info = AchievementInfo(tonumber(item.ach))
+    local group = item.group or (item.kind == "raid" and "raid" or "dungeon")
+    groups[group] = groups[group] or {}
+    local saddle = item.via == "saddle"
+    -- маунт прошлого сезона: «Затерянное во времени седло», а чьей наградой он был — в подсказке
+    local was = saddle and Safe(ns.Shown(item, "boss")):match("^(.-)%s+/%s+") or nil
+    table.insert(groups[group], { item = item, info = info, saddle = saddle, was = was,
+      name = saddle and L.ach_saddle or Safe(ns.Shown(item, "boss")), done = AchievementDone(item, info) })
+  end
+  local list, earned, total = {}, 0, 0
+  for _, group in ipairs(ACH_GROUPS) do
+    local items = groups[group]
+    if items then
+      table.sort(items, function(a, b)
+        if a.saddle ~= b.saddle then
+          return not a.saddle   -- сначала достижения этого сезона, за ними маунты за седло
+        end
+        if a.done ~= b.done then
+          return not a.done   -- ещё не полученные — сверху
+        end
+        if a.name ~= b.name then
+          return a.name < b.name
+        end
+        return Safe(ns.Shown(a.item, "mount")) < Safe(ns.Shown(b.item, "mount"))
+      end)
+      list[#list + 1] = { text = "|cffffd200" .. AchievementGroupTitle(group) .. "|r", group = true }
+      for i, a in ipairs(items) do
+        local item = a.item
+        local cond = a.info and a.info.description ~= "" and a.info.description or Safe(item.diff)
+        local mount = Safe(ns.Shown(item, "mount"))
+        total = total + 1
+        if a.done then
+          earned = earned + 1
+        end
+        local tip = { mount, a.name, Safe(cond) }
+        if a.done then
+          tip[#tip + 1] = "|cff8cff8c" .. L.ach_done .. "|r"
+        end
+        if a.was then
+          tip[#tip + 1] = "|cff8c8c8c" .. string.format(L.ach_saddle_was, a.was) .. "|r"
+        end
+        list[#list + 1] = { cols = cols, icon = ns.MountIcon(item.id), mountID = KnownMount(item.id), achievement = tonumber(item.ach),
+          stripe = i % 2 == 0, tip = tip, values = {
+            boss = a.done and ("|cff8c8c8c" .. a.name .. "|r") or a.name,
+            cond = "|cff" .. (a.done and "8c8c8c" or "b7ae9a") .. Safe(cond) .. "|r",
+            mount = "|cff" .. (a.done and "8c8c8c" or "c9a0ff") .. mount .. "|r",
+          } }
+      end
+    end
+  end
+  return { list = list, cols = cols, summary = "|cff8c8c8c" .. string.format(L.ach_head, total, earned) .. "|r" }
+end
+
 -- Персонажи для столбцов сетки: имя, цвет класса (без класса — серый: персонаж другого аккаунта).
 local function GridChars(all)
   local chars = {}
@@ -836,7 +1405,12 @@ local function GridView(rows, all)
   local cols = GridColumns(#all)
   grid.offset = math.min(grid.offset, math.max(0, #all - grid.shown))
   local list, kind, stripe = {}, nil, false
+  local toKill, attempts = 0, 0
   for _, row in ipairs(rows) do
+    if row.kind ~= "reward" then
+      toKill = toKill + 1
+      attempts = attempts + row.total
+    end
     if row.kind ~= kind then
       kind = row.kind
       stripe = false
@@ -859,20 +1433,35 @@ local function GridView(rows, all)
       end
     end
     local _, _, id = ns.ItemAttempts(item)
-    list[#list + 1] = { cols = cols, names = names, killed = row.killed or false, icon = ns.MountIcon(id), stripe = stripe,
-      tip = { Safe(item.mount), BossAndDiff(item.boss, item.diff), table.concat(shownNames, ", ") }, values = {
-        boss = Safe(item.boss),
+    local tip = { Safe(ns.Shown(item, "mount")), BossAndDiff(ns.Shown(item, "boss"), item.diff), table.concat(shownNames, ", ") }
+    local killedThisWeek, notFarming = {}, {}
+    for _, c in ipairs(all) do
+      if row.done and row.done[c.name] then
+        killedThisWeek[#killedThisWeek + 1] = Safe(c.name)
+      elseif not names[c.name] then
+        notFarming[#notFarming + 1] = Safe(c.name)
+      end
+    end
+    if #killedThisWeek > 0 then
+      tip[#tip + 1] = "|cff8c8c8c" .. string.format(L.grid_tip_done, table.concat(killedThisWeek, ", ")) .. "|r"
+    end
+    if #notFarming > 0 then
+      tip[#tip + 1] = "|cff8c8c8c" .. string.format(L.grid_tip_none, table.concat(notFarming, ", ")) .. "|r"
+    end
+    list[#list + 1] = WithPlace({ cols = cols, names = names, killed = row.killed or false, done = row.done or false, icon = ns.MountIcon(item.id or id), mountID = KnownMount(item.id or id), stripe = stripe,
+      tip = tip, values = {
+        boss = ShortBoss(ns.Shown(item, "boss")),
         diff = "|cffb7ae9a" .. ShortDiff(item.diff) .. "|r",
-        mount = "|cffc9a0ff" .. Safe(item.mount) .. "|r",
+        mount = "|cffc9a0ff" .. Safe(ns.Shown(item, "mount")) .. "|r",
         total = "|cffd8c98f" .. row.total .. "|r",
-      } }
+      } }, item)
     stripe = not stripe
   end
   if #rows == 0 then
     list[#list + 1] = Line("|cff8cff8c" .. L.all_empty .. "|r")
   end
   return { list = list, cols = #rows > 0 and cols or nil, grid = #rows > 0,
-    summary = "|cff8c8c8c" .. string.format(L.all_head, #rows, #all) .. "|r" }
+    summary = "|cff8c8c8c" .. string.format(L.all_head, toKill, attempts, #all) .. "|r" }
 end
 
 -- Сортировка и фильтры вкладки «Попытки» (запоминаются): db.attemptsView.
@@ -937,14 +1526,14 @@ local function AttemptsView(rows, chars)
     if hasTries then
       color, bar, v = ChanceColor(m.n, m.p)
     end
-    list[i] = { cols = cols, icon = ns.MountIcon(m.id), stripe = i % 2 == 0, tip = tip, bar = v, barColor = bar, values = {
+    list[i] = WithPlace({ cols = cols, icon = ns.MountIcon(m.id), mountID = KnownMount(m.id), stripe = i % 2 == 0, tip = tip, bar = v, barColor = bar, values = {
       mount = "|cffc9a0ff" .. Safe(m.name) .. "|r",
-      boss = Safe(m.boss),
+      boss = ShortBoss(m.boss),
       diff = "|cffb7ae9a" .. ShortDiff(m.diff) .. "|r",
       n = hasTries and tostring(m.n) or "|cff8c8c8c-|r",
       chance = "|cff" .. color .. (hasTries and ns.FormatChance(m.n, m.p) or "-") .. "|r",
       left = (m.left > 0 and "|cff7fdc7f" or "|cff8c8c8c") .. m.left .. "/" .. chars .. "|r",
-    } }
+    } }, m)
   end
   return { list = list, cols = cols, attempts = true, count = #sorted }
 end
@@ -1136,14 +1725,14 @@ local function TotalLeft(all)
 end
 
 local function RefreshChars(all, sel)
-  local showAll = selectedChar == ALL_CHARS
+  local showAll = selectedChar == ALL_CHARS and #all > 1
   local key = tostring(all) .. "|" .. tostring(sel) .. "|" .. tostring(showAll)
   if key == shownChars then
     return
   end
   shownChars = key
   local elems = {}
-  if #all > 0 then
+  if #all > 1 then   -- один персонаж: сравнивать не с кем, сразу его «Осталось»
     elems[1] = { all = true, total = TotalLeft(all), selected = showAll }
   end
   for i, c in ipairs(all) do
@@ -1165,7 +1754,7 @@ function UI.Refresh()
   local sel = SelectedEntry(all)
   RefreshChars(all, sel)
   local own = ns.GetRemaining()
-  local showAll = selectedChar == ALL_CHARS and #all > 0
+  local showAll = selectedChar == ALL_CHARS and #all > 1
   UpdateTabTitle(sel and sel.r or own, showAll and TotalLeft(all) or nil)
 
   local tab = frame.selectedTab
@@ -1178,6 +1767,10 @@ function UI.Refresh()
     local r = sel and sel.r or own
     key = "left|" .. tostring(r)
     build = function() return RemainingView(r, not sel) end
+  elseif tab == TAB_ACH then
+    local rows = ns.GetAchievementRows()
+    key = "ach|" .. tostring(rows)
+    build = function() return AchievementsView(rows) end
   elseif tab == TAB_ATTEMPTS then
     local rows = ns.GetAttemptsList()
     local st = AttemptsState()
@@ -1382,9 +1975,26 @@ local function CreateWindow()
   frame.titleText:SetText("Mount Sheet Sync")
   frame:SetScript("OnDragStop", function(self)
     self:StopMovingOrSizing()
+    self.SnapToPixels(self)
     local point, _, relativePoint, x, y = self:GetPoint()
     ns.GetDB().window = { point = point, relativePoint = relativePoint, x = x, y = y }
   end)
+
+  -- Окно — на целых пикселях экрана: по центру его край часто попадает между пикселями, и текст в нём мутный.
+  local function SnapToPixels(self)
+    local left, top, scale = self:GetLeft(), self:GetTop(), self:GetEffectiveScale()
+    if not (left and top and scale and scale > 0 and GetPhysicalScreenSize) then
+      return
+    end
+    local _, height = GetPhysicalScreenSize()
+    if not height or height <= 0 then
+      return
+    end
+    local pixel = 768 / height / scale   -- один пиксель экрана в единицах окна
+    self:ClearAllPoints()
+    self:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", math.floor(left / pixel + 0.5) * pixel, math.floor(top / pixel + 0.5) * pixel)
+  end
+  frame.SnapToPixels = SnapToPixels
 
   local pos = ns.GetDB().window
   if type(pos) == "table" and pos.point then
@@ -1513,32 +2123,50 @@ local function CreateWindow()
   gear:SetScript("OnClick", function() UI.ToggleSettings() end)
   AttachTooltip(gear, "settings_title", "tip_settings")
 
+  -- Без программы (или пока она не подключена к таблице) строка заметнее: значок предупреждения, оранжевый текст;
+  -- аддон и так работает сам по себе, подробности — при наведении.
+  -- Вид строки — по состоянию программы на момент показа окна (и смены языка): окно живёт весь сеанс.
   local hint = frame:CreateFontString(nil, "OVERLAY", "MSSFontSmall")
-  hint:SetPoint("LEFT", syncButton, "RIGHT", 10, 0)
-  hint:SetPoint("RIGHT", gear, "LEFT", -10, 0)
   hint:SetJustifyH("LEFT")
   hint:SetWordWrap(false)
-  -- Без программы (или пока она не подключена к таблице) — та же неброская строка, но о том, что аддон
-  -- работает сам по себе; подробности — при наведении.
-  local state = ns.ProgramState()
-  if state == "online" then
-    Label(hint, "window_hint")
-  else
-    Label(hint, "window_" .. state)
-    local hover = CreateFrame("Frame", nil, frame)
-    hover:SetPoint("TOPLEFT", hint, "TOPLEFT", 0, 2)
-    hover:SetPoint("BOTTOMRIGHT", hint, "BOTTOMRIGHT", 0, -2)
-    hover:EnableMouse(true)
-    local old = state == "oldaddon" or state == "oldprogram"
-    AttachTooltip(hover, old and "update_title" or "offline_title", "tip_" .. state)
+  local warn = frame:CreateTexture(nil, "OVERLAY")
+  warn:SetSize(16, 16)
+  warn:SetTexture("Interface\\DialogFrame\\UI-Dialog-Icon-AlertNew")
+  warn:SetPoint("LEFT", syncButton, "RIGHT", 10, 0)
+  frame.offlineIcon = warn
+  local hover = CreateFrame("Frame", nil, frame)
+  hover:SetPoint("TOPLEFT", hint, "TOPLEFT", 0, 2)
+  hover:SetPoint("BOTTOMRIGHT", hint, "BOTTOMRIGHT", 0, -2)
+  hover:EnableMouse(true)
+  local function ShowProgramState()
+    local state = ns.ProgramState()
+    local online = state == "online"
+    hint:SetFontObject(online and MSSFontSmall or MSSFontWarn)
+    hint:ClearAllPoints()
+    hint:SetPoint("LEFT", online and syncButton or warn, "RIGHT", online and 10 or 6, 0)
+    hint:SetPoint("RIGHT", gear, "LEFT", -10, 0)
+    hint:SetText(L[online and "window_hint" or ("window_" .. state)])
+    warn:SetShown(not online)
+    hover:SetShown(not online)
+    if not online then
+      local old = state == "oldaddon" or state == "oldprogram"
+      AttachTooltip(hover, old and "update_title" or "offline_title", "tip_" .. state)
+    end
   end
+  ShowProgramState()
+  relabel[#relabel + 1] = ShowProgramState
+  frame.ShowProgramState = ShowProgramState
 
   -- другой язык — списки собрать заново
   relabel[#relabel + 1] = function()
     shownList, shownChars = nil, nil
   end
 
-  frame:SetScript("OnShow", UI.Refresh)
+  frame:SetScript("OnShow", function(self)
+    SnapToPixels(self)
+    self.ShowProgramState()
+    UI.Refresh()
+  end)
   local elapsedTotal = 0
   frame:SetScript("OnUpdate", function(_, elapsed)
     elapsedTotal = elapsedTotal + elapsed

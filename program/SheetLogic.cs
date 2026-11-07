@@ -666,6 +666,12 @@ namespace MountSheetSync
             {
                 return true;
             }
+            // персонажи — правее «Источника»: при одном персонаже «Осталось попыток» в старых таблицах считается в TRUE/FALSE
+            int cSource = data.Count > 0 ? FindCol(data[0], SourcePattern, -1) : -1;
+            if (cSource >= 0 && c <= cSource)
+            {
+                return false;
+            }
             int checkboxes = 0;
             for (int r = 1; r < data.Count; r++)
             {
@@ -1498,9 +1504,15 @@ namespace MountSheetSync
             reply["known"] = KnownDifficultyIds();
             reply["chars"] = order.Select(k => (object)chars[k]).ToList();
             List<object> mounts = StatusMounts(book, collected);
+            AddRowInfo(book, order.Select(k => chars[k]), mounts);
             if (mounts.Count > 0)
             {
                 reply["mounts"] = mounts;   // счётчик попыток (таблица программы 2.8+)
+            }
+            List<object> rewards = RewardRows(book);
+            if (rewards.Count > 0)
+            {
+                reply["rewards"] = rewards;   // вкладка «Достижения» в аддоне (программа 2.10+)
             }
             return reply;
         }
@@ -1834,6 +1846,10 @@ namespace MountSheetSync
         public string Creator = "";
 
         public string CreatorApp { get { return Creator; } }
+
+        public SheetLang Lang { get { return SheetLang.Russian; } }
+
+        public bool Reusable { get { return true; } }
 
         /// <summary>Правки структуры (для проверок): «column <лист>» / «delete <лист> <строки>».</summary>
         public readonly List<string> Structure = new List<string>();

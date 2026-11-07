@@ -103,6 +103,10 @@ def main():
         "content": {k: content[k] for k in sorted(used)},
         "mounts": {str(i): mounts[i] for i in sorted(ids)},
     }
+    # names from the game's tables in six languages and the reward rows' achievements (tools/catalog/game_names.py)
+    names_file = os.path.join(ROOT, "tools", "catalog", "game_names.json")
+    if os.path.exists(names_file):
+        data["names"] = json.load(open(names_file, encoding="utf-8"))
     text = json.dumps(data, ensure_ascii=False, indent=1, sort_keys=True) + "\n"
     if "--check" in sys.argv:
         same = os.path.exists(OUT) and open(OUT, encoding="utf-8").read() == text

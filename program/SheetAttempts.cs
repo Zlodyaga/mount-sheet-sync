@@ -191,6 +191,184 @@ namespace MountSheetSync
         /// Строки со счётчиком для аддона: несобранные маунты со случайным шансом — кто их роняет (как строки
         /// «Осталось»: имена босса, сложности), сколько попыток (n) и шанс за попытку (p).
         /// </summary>
+        /// <summary>«Тип источника» не про убийство босса: достижения, награды сезонов и испытаний.</summary>
+        static readonly Regex RewardSource = new Regex(@"achievement|достижен|ahead of the curve|mythic\+|challenge mode|timed / chest",
+            RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
+        /// <summary>
+        /// Что окну аддона нужно о строке «Осталось», кроме самого списка: ID маунта (значок), и у строк без шанса — у достижений и
+        /// гарантированной добычи; src = reward — не за убийство босса (своя группа). Из общего листа, ID ещё и из каталога.
+        /// </summary>
+        static readonly Regex RewardMythicPlus = new Regex(@"mythic\+|m\+|keystone|timelost|saddle|ключ", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
+        /// <summary>
+        /// Вкладка «Достижения» в аддоне: все строки-награды общих листов «Рейды» и «Подземелья», а не только то, что можно
+        /// сделать на этой неделе (у «Славы рейдеру…» сброс «Разово», в «Осталось» их нет). group — таблица на вкладке:
+        /// raid, dungeon, mplus (ключи и седло), other (Торгаст); got — «Собрано?» = «Да».
+        /// </summary>
+        static List<object> RewardRows(IBook book)
+        {
+            List<object> list = new List<object>();
+            foreach (string name in new[] { RaidPrefix, DungeonPrefix })
+            {
+                SheetEntry entry = ByName(book, name);
+                if (entry == null || entry.Data.Count < 2)
+                {
+                    continue;
+                }
+                object[] header = entry.Data[0];
+                int cSource = FindCol(header, "тип источника", -1);
+                if (cSource < 0)
+                {
+                    continue;
+                }
+                int cId = FindCol(header, "^id в игре$", -1);
+                int cMount = FindCol(header, "маунт", 3);
+                int cBoss = FindCol(header, "босс", 4);
+                int cDiff = FindCol(header, "сложност|режим", -1);
+                int cPlace = FindCol(header, "^рейд|подземел|локац", 2);
+                int cCollected = FindCol(header, "собрано", -1);
+                int cStatus = FindCol(header, "^статус", -1);
+                for (int r = 1; r < entry.Data.Count; r++)
+                {
+                    object[] row = entry.Data[r];
+                    string source = CellText(At(row, cSource));
+                    if (!RewardSource.IsMatch(source))
+                    {
+                        continue;
+                    }
+                    string status = cStatus >= 0 ? CellText(At(row, cStatus)) : "";
+                    if (status.StartsWith("Недоступ", StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;   // награду больше не дают (испытания Пандарии, старые «Герой своего времени»…)
+                    }
+                    string mount = CellText(At(row, cMount));
+                    string boss = CellText(At(row, cBoss));
+                    if (mount.Length == 0 && boss.Length == 0)
+                    {
+                        continue;
+                    }
+                    string diff = cDiff >= 0 ? CellText(At(row, cDiff)) : "";
+                    string place = CellText(At(row, cPlace));
+                    Dictionary<string, object> item = new Dictionary<string, object>();
+                    bool raid = name == RaidPrefix;
+                    item["kind"] = raid ? "raid" : "dungeon";
+                    item["group"] = RewardMythicPlus.IsMatch(source + " " + place + " " + diff) ? "mplus"
+                        : place.IndexOf("Torghast", StringComparison.OrdinalIgnoreCase) >= 0 || place.IndexOf("Торгаст", StringComparison.OrdinalIgnoreCase) >= 0 ? "other"
+                        : raid ? "raid" : "dungeon";
+                    item["boss"] = boss;
+                    item["mount"] = mount;
+                    item["diff"] = diff;
+                    item["place"] = place;
+                    item["src"] = "reward";
+                    long id = cId >= 0 ? MountIndex.IdOf(At(row, cId)) : 0;
+                    if (id <= 0)
+                    {
+                        id = CatalogIndex().Find(null, mount, boss);
+                    }
+                    bool saddle = status.IndexOf("Saddle", StringComparison.OrdinalIgnoreCase) >= 0
+                        || boss.IndexOf("Затерянное во времени седло", StringComparison.OrdinalIgnoreCase) >= 0;
+                    if (id > 0)
+                    {
+                        item["id"] = (double)id;
+                        Dictionary<string, string> titles;
+                        long achievement = saddle ? 0 : SheetLang.RewardAchievement(id, out titles);
+                        if (achievement > 0)
+                        {
+                            item["ach"] = (double)achievement;
+                        }
+                    }
+                    if (saddle)
+                    {
+                        // достижение прошлого сезона уже не получить: маунт покупают за седло, а седло дают за нынешний сезон
+                        item["via"] = "saddle";
+                        long now = SheetLang.SaddleAchievement();
+                        if (now > 0)
+                        {
+                            item["ach"] = (double)now;
+                        }
+                    }
+                    if (cCollected >= 0 && IsYes(At(row, cCollected)))
+                    {
+                        item["got"] = true;
+                    }
+                    list.Add(item);
+                }
+            }
+            return list;
+        }
+
+        static void AddRowInfo(IBook book, IEnumerable<Dictionary<string, object>> chars, List<object> mounts)
+        {
+            Dictionary<string, long> ids = new Dictionary<string, long>();
+            HashSet<string> rewards = new HashSet<string>();
+            foreach (string name in new[] { RaidPrefix, DungeonPrefix, WorldSheet, RareSheet })
+            {
+                SheetEntry entry = ByName(book, name);
+                if (entry == null || entry.Data.Count == 0)
+                {
+                    continue;
+                }
+                object[] header = entry.Data[0];
+                int cId = FindCol(header, "^id в игре$", -1);
+                int cMount = FindCol(header, "маунт", 3);
+                int cBoss = FindCol(header, "босс", 4);
+                int cSource = FindCol(header, "тип источника", -1);
+                for (int r = 1; r < entry.Data.Count; r++)
+                {
+                    string key = Norm(At(entry.Data[r], cMount)) + "|" + Norm(At(entry.Data[r], cBoss));
+                    long id = cId >= 0 ? MountIndex.IdOf(At(entry.Data[r], cId)) : 0;
+                    if (id > 0)
+                    {
+                        ids[key] = id;
+                    }
+                    if (cSource >= 0 && RewardSource.IsMatch(CellText(At(entry.Data[r], cSource))))
+                    {
+                        rewards.Add(key);
+                    }
+                }
+            }
+            List<object> rows = new List<object>(mounts);
+            foreach (Dictionary<string, object> ch in chars)
+            {
+                rows.AddRange((List<object>)ch["items"]);
+            }
+            foreach (object o in rows)
+            {
+                Dictionary<string, object> item = (Dictionary<string, object>)o;
+                string key = Norm(item["mount"]) + "|" + Norm(item["boss"]);
+                long id;
+                if (!ids.TryGetValue(key, out id))
+                {
+                    id = CatalogIndex().Find(null, item["mount"], item["boss"]);
+                }
+                if (id > 0)
+                {
+                    item["id"] = (double)id;
+                    long journal, place;
+                    CatalogIndex().Where(id, item["boss"], out journal, out place);
+                    if (journal > 0)
+                    {
+                        item["je"] = (double)journal;
+                    }
+                    if (place > 0)
+                    {
+                        item["im"] = (double)place;
+                    }
+                }
+                if (rewards.Contains(key))
+                {
+                    item["src"] = "reward";
+                    Dictionary<string, string> titles;
+                    long achievement = id > 0 ? SheetLang.RewardAchievement(id, out titles) : 0;
+                    if (achievement > 0)
+                    {
+                        item["ach"] = (double)achievement;   // щелчок по строке в окне аддона открывает это достижение
+                    }
+                }
+            }
+        }
+
         static MountIndex catalogIndex;
 
         static MountIndex CatalogIndex()

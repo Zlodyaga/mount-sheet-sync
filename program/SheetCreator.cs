@@ -149,11 +149,33 @@ namespace MountSheetSync
             return list;
         }
 
-        /// <summary>Добавить персонажей (листы, которых ещё нет); ничего не удаляет. Возвращает число новых листов.</summary>
-        public static int AddCharacters(string spreadsheetId, IList<BuildCharacter> chars, Action<string> progress)
+        /// <summary>Персонажи в данных, которые ведёт программа (Google или этот компьютер).</summary>
+        public static int AddCharacters(Settings settings, IList<BuildCharacter> chars, Action<string> progress)
         {
-            progress(Tr._("Читаю таблицу…"));
-            GoogleBook book = GoogleBook.Load(spreadsheetId);
+            using (settings.ExclusiveBook())
+            {
+                progress(settings.IsLocal ? Tr._("Читаю данные…") : Tr._("Читаю таблицу…"));
+                IStructuredBook book = settings.OpenBook();
+                List<string> before = TableCharacters(book).Select(c => c.Name).ToList();
+                int n = AddCharacters(book, chars, progress);
+                SyncEngine.AskReplay(settings, TableCharacters(book).Select(c => c.Name).Where(c => !before.Contains(c)));
+                return n;
+            }
+        }
+
+        public static CharacterChanges UpdateCharacters(Settings settings, IList<BuildCharacter> desired, Action<string> progress)
+        {
+            using (settings.ExclusiveBook())
+            {
+                progress(settings.IsLocal ? Tr._("Читаю данные…") : Tr._("Читаю таблицу…"));
+                CharacterChanges ch = UpdateCharacters(settings.OpenBook(), desired, progress);
+                SyncEngine.AskReplay(settings, ch.AddedCharacterNames());
+                return ch;
+            }
+        }
+
+        public static int AddCharacters(IStructuredBook book, IList<BuildCharacter> chars, Action<string> progress)
+        {
             GoogleSheetService.Upgrade(book);
             List<BuildCharacter> desired = new List<BuildCharacter>();
             foreach (CharacterInTable c in TableCharacters(book))
@@ -173,6 +195,7 @@ namespace MountSheetSync
                 have.World |= c.World;
             }
             CharacterChanges ch = Apply(book, desired, progress);
+            Remember(book, ch, chars);
             return ch.AddedSheets.Count;
         }
 
@@ -181,12 +204,28 @@ namespace MountSheetSync
         /// добавить, лишние — удалить (персонажа нет в списке или все галочки сняты — он уходит из таблицы).
         /// Формулы «Осталось попыток выбить» пересчитываются.
         /// </summary>
-        public static CharacterChanges UpdateCharacters(string spreadsheetId, IList<BuildCharacter> desired, Action<string> progress)
+        public static CharacterChanges UpdateCharacters(IStructuredBook book, IList<BuildCharacter> desired, Action<string> progress)
         {
-            progress(Tr._("Читаю таблицу…"));
-            GoogleBook book = GoogleBook.Load(spreadsheetId);
             GoogleSheetService.Upgrade(book);
-            return Apply(book, desired, progress);
+            CharacterChanges ch = Apply(book, desired, progress);
+            Remember(book, ch, desired);
+            return ch;
+        }
+
+        /// <summary>Данные на компьютере: кого человек убрал сам, того программа сама не вернёт.</summary>
+        static void Remember(IStructuredBook book, CharacterChanges ch, IEnumerable<BuildCharacter> chars)
+        {
+            LocalBook local = book as LocalBook;
+            if (local != null)
+            {
+                local.NoteCharacters(ch.RemovedCharacters, chars.Where(c => c.Raids || c.Dungeons || c.World).Select(c => c.Name));
+            }
+        }
+
+        /// <summary>Имя годится для названия листа.</summary>
+        public static bool NameFits(string name)
+        {
+            return name.Length > 0 && name.Length <= 60 && name.IndexOfAny(new[] { '[', ']', '*', '?', '/', '\\', ':' }) < 0;
         }
 
         /// <summary>Что поменяется (без записи в таблицу).</summary>
@@ -234,12 +273,12 @@ namespace MountSheetSync
             return ch;
         }
 
-        static CharacterChanges Apply(GoogleBook book, IList<BuildCharacter> desired, Action<string> progress)
+        static CharacterChanges Apply(IStructuredBook book, IList<BuildCharacter> desired, Action<string> progress)
         {
             foreach (BuildCharacter d in desired)
             {
                 string name = (d.Name ?? "").Trim();
-                if (name.Length == 0 || name.Length > 60 || name.IndexOfAny(new[] { '[', ']', '*', '?', '/', '\\', ':' }) >= 0)
+                if (!NameFits(name))
                 {
                     throw new SyncException(Tr.F("имя «{0}» не подходит для названия листа", name));
                 }
@@ -347,10 +386,20 @@ namespace MountSheetSync
             }
 
             req.AddRange(late);
-            book.Lang.Outgoing(req);
-            SheetBuilder.LocalizeFormulas(req, book.Locale);
             progress(Tr._("Меняю листы…"));
-            GoogleSheets.BatchUpdate(book.Id, req);
+            GoogleBook google = book as GoogleBook;
+            if (google != null)
+            {
+                google.Lang.Outgoing(req);
+                SheetBuilder.LocalizeFormulas(req, google.Locale);
+                GoogleSheets.BatchUpdate(google.Id, req);
+            }
+            else
+            {
+                LocalBook local = (LocalBook)book;   // листы внутри «русские», как и запросы
+                local.Run(req);
+                local.Flush();
+            }
             Log.Write(Tr.L("Персонажи в таблице: {0}.", ch.Summary(book.Lang)));
             return ch;
         }
@@ -379,6 +428,21 @@ namespace MountSheetSync
             get { return AddedSheets.Count + RemovedSheets.Count + AddedWorld.Count + RemovedWorld.Count > 0; }
         }
 
+        /// <summary>У кого появились листы или колонка: их отметки этой недели надо поставить заново.</summary>
+        public IEnumerable<string> AddedCharacterNames()
+        {
+            List<string> names = new List<string>(AddedWorld);
+            foreach (string sheet in AddedSheets)
+            {
+                int space = sheet.IndexOf(' ');
+                if (space > 0)
+                {
+                    names.Add(sheet.Substring(space + 1));
+                }
+            }
+            return names.Distinct();
+        }
+
         public bool RemovesSomething
         {
             get { return RemovedSheets.Count + RemovedWorld.Count > 0; }
@@ -387,6 +451,32 @@ namespace MountSheetSync
         public string Summary()
         {
             return Summary(SheetLang.Russian);
+        }
+
+        /// <summary>То же для данных на компьютере: там нет листов и колонок, только группы персонажа.</summary>
+        public string SummaryLocal()
+        {
+            List<string> parts = new List<string>();
+            List<string> added = Groups(AddedSheets, AddedWorld);
+            List<string> removed = Groups(RemovedSheets, RemovedWorld);
+            if (added.Count > 0)
+            {
+                parts.Add(Tr.F("добавлено: {0}", string.Join(", ", added.ToArray())));
+            }
+            if (removed.Count > 0)
+            {
+                parts.Add(Tr.F("убрано: {0}", string.Join(", ", removed.ToArray())));
+            }
+            return parts.Count == 0 ? Tr._("без изменений") : string.Join("; ", parts.ToArray());
+        }
+
+        /// <summary>Группы персонажей словами на языке программы.</summary>
+        public static List<string> Groups(IEnumerable<string> sheets, IEnumerable<string> world)
+        {
+            SheetLang lang = SheetLang.Get(Tr.Lang);
+            List<string> list = sheets.Select(n => lang.SheetName(n)).ToList();
+            list.AddRange(world.Select(n => Tr.F("мировые боссы: {0}", n)));
+            return list;
         }
 
         /// <summary>Что поменялось; названия листов — как в таблице (lang — её язык).</summary>

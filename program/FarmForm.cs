@@ -33,7 +33,7 @@ namespace MountSheetSync
         readonly Button cancelButton = new Button();
         readonly Dictionary<RowRef, bool> wanted = new Dictionary<RowRef, bool>();
         List<CharacterInTable> chars = new List<CharacterInTable>();
-        GoogleBook book;
+        IStructuredBook book;
         bool busy;
         bool updating;
 
@@ -125,14 +125,14 @@ namespace MountSheetSync
             base.OnShown(e);
             UiStyle.BringToFront(this);
             SetBusy(true);
-            string id = settings.SpreadsheetId;
+            Settings s = settings.Clone();
             ThreadPool.QueueUserWorkItem(delegate
             {
-                GoogleBook b = null;
+                IStructuredBook b = null;
                 string error = null;
                 try
                 {
-                    b = GoogleBook.Load(id);
+                    b = s.OpenBook();
                     GoogleSheetService.Upgrade(b);   // в таблице 2.0/2.1 колонки «Фармлю» ещё нет
                 }
                 catch (SyncException ex)
@@ -148,7 +148,7 @@ namespace MountSheetSync
             });
         }
 
-        void Loaded(GoogleBook b, string error)
+        void Loaded(IStructuredBook b, string error)
         {
             SetBusy(false);
             if (error != null)
@@ -373,14 +373,17 @@ namespace MountSheetSync
             }
             SetBusy(true);
             ShowStatus(Tr._("Сохраняю…"), SystemColors.ControlText);
-            string id = settings.SpreadsheetId;
+            Settings s = settings.Clone();
             ThreadPool.QueueUserWorkItem(delegate
             {
                 string error = null;
                 int written = 0;
                 try
                 {
-                    written = Save(id, changes);
+                    using (s.ExclusiveBook())
+                    {
+                        written = Save(s, changes);
+                    }
                 }
                 catch (SyncException ex)
                 {
@@ -410,9 +413,9 @@ namespace MountSheetSync
         /// Записать галочки. Таблицу читаем заново: пока окно было открыто, строки могли сдвинуться
         /// (собранные маунты уходят с листов) — строку узнаём по маунту, боссу и сложности.
         /// </summary>
-        static int Save(string spreadsheetId, List<KeyValuePair<RowRef, bool>> changes)
+        static int Save(Settings settings, List<KeyValuePair<RowRef, bool>> changes)
         {
-            GoogleBook fresh = GoogleBook.Load(spreadsheetId);
+            IStructuredBook fresh = settings.OpenBook();
             int written = 0;
             foreach (KeyValuePair<RowRef, bool> kv in changes)
             {

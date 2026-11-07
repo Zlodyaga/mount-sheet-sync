@@ -2,6 +2,22 @@
 
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
+## 3.0.4
+- Achievements and rewards have a tab of their own instead of a group in “Remaining”, in four tables: raids, dungeons, Mythic+ and other. Every achievement with a mount you can still get is there, the raid “Glory of…” ones too; past Mythic+ seasons' mounts appear as the Timelost Saddle with this season's requirement as the game words it: the full name, the requirement as the game words it and the mount; what is earned turns grey and goes to the bottom. Left-click the achievement to open it in the game's achievements window, the mount to open the Mount Journal. Needs the program 2.10.0.
+- Mount, boss and place names follow the addon's language in German, French, Spanish and Portuguese too, not only English and Russian.
+- Ctrl + click on a raid whose entrance is inside another zone (Dragon Soul in the Caverns of Time) leads to the Caverns of Time in Tanaris, and once you are inside, on to the entrance by itself. If you pick another target meanwhile, the addon leaves it alone. Entrances are looked for on every map, and by name too, so more dungeons are found.
+- The offline line at the bottom of the window stands out: a warning icon and bold orange text. The window sits on whole screen pixels, buttons, tabs and headings use the same plain font as the rest (the decorative one blurred in game), and the bottom line is a size larger, so the letters are crisper.
+- All characters: a character who doesn't farm a row (no tick in “Farming”, or no such group) now gets a faint cross instead of the same dash as a kill this week. The row tooltip names who killed it this week and who doesn't farm it.
+- Mount, boss and place names follow the addon's language, not the sheet's. In the game's language they come from the game itself; in another one from translations the program sends (English and Russian; other languages get English). Needs the program 2.10.0.
+- Without a Google sheet the addon talks about the list: the button is “Save marks”, and no text mentions a sheet. With a sheet everything stays as it was, including “Send to sheet”.
+- Achievements and rewards (Glory of the Hero, Keystone Master and the like) have a group of their own at the end of the table and no longer count as left to kill, because they aren't boss kills. Needs the program 2.10.0.
+- Clicks on a row, all named in its tooltip. Left-click the boss: the raid or dungeon in the Adventure Guide. Left-click the mount: the game's Mount Journal. Ctrl + left-click: the way to the entrance, or a map pin at the entrance when the game can't track it; for a world boss, a pin where the game shows it. The window steps aside and comes back when the game's window closes.
+- Mount icons on every row of “Remaining”, including achievements and guaranteed drops. Needs the program 2.10.0; with an older one those rows stay without an icon.
+- With one character there is no “All characters” row: it opens straight on that character. The all-characters table shows rows and attempts side by side.
+- The row tooltip stands beside the table, so it covers no rows. The boss column keeps just the boss; what follows it is in the tooltip.
+- The difficulty column is short and readable: “N10”, “Torg.”, “Ach.” and the like, with the full text in the tooltip. No word in it is cut off in any language.
+- The tooltip about the program no longer says that a Google Sheet is required.
+
 ## 3.0.3
 - Raids with separate lockouts (Normal/Heroic/Mythic rows): each difficulty now counts on its own. The letters N H M show what is still left, in "Remaining" and in the all-characters table. Needs the program 2.9.2.
 - A new look: the windows have their own dark style with gold accents, fonts (PT Sans, Philosopher) and round selectors.
