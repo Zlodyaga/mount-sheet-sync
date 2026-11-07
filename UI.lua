@@ -1983,32 +1983,37 @@ local function CreateWindow()
 
   -- Без программы (или пока она не подключена к таблице) строка заметнее: значок предупреждения, оранжевый текст;
   -- аддон и так работает сам по себе, подробности — при наведении.
-  local state = ns.ProgramState()
-  local hint = frame:CreateFontString(nil, "OVERLAY", state == "online" and "MSSFontSmall" or "MSSFontWarn")
-  if state == "online" then
-    hint:SetPoint("LEFT", syncButton, "RIGHT", 10, 0)
-  else
-    local warn = frame:CreateTexture(nil, "OVERLAY")
-    warn:SetSize(16, 16)
-    warn:SetTexture("Interface\\DialogFrame\\UI-Dialog-Icon-AlertNew")
-    warn:SetPoint("LEFT", syncButton, "RIGHT", 10, 0)
-    frame.offlineIcon = warn
-    hint:SetPoint("LEFT", warn, "RIGHT", 6, 0)
-  end
-  hint:SetPoint("RIGHT", gear, "LEFT", -10, 0)
+  -- Вид строки — по состоянию программы на момент показа окна (и смены языка): окно живёт весь сеанс.
+  local hint = frame:CreateFontString(nil, "OVERLAY", "MSSFontSmall")
   hint:SetJustifyH("LEFT")
   hint:SetWordWrap(false)
-  if state == "online" then
-    Label(hint, "window_hint")
-  else
-    Label(hint, "window_" .. state)
-    local hover = CreateFrame("Frame", nil, frame)
-    hover:SetPoint("TOPLEFT", hint, "TOPLEFT", 0, 2)
-    hover:SetPoint("BOTTOMRIGHT", hint, "BOTTOMRIGHT", 0, -2)
-    hover:EnableMouse(true)
-    local old = state == "oldaddon" or state == "oldprogram"
-    AttachTooltip(hover, old and "update_title" or "offline_title", "tip_" .. state)
+  local warn = frame:CreateTexture(nil, "OVERLAY")
+  warn:SetSize(16, 16)
+  warn:SetTexture("Interface\\DialogFrame\\UI-Dialog-Icon-AlertNew")
+  warn:SetPoint("LEFT", syncButton, "RIGHT", 10, 0)
+  frame.offlineIcon = warn
+  local hover = CreateFrame("Frame", nil, frame)
+  hover:SetPoint("TOPLEFT", hint, "TOPLEFT", 0, 2)
+  hover:SetPoint("BOTTOMRIGHT", hint, "BOTTOMRIGHT", 0, -2)
+  hover:EnableMouse(true)
+  local function ShowProgramState()
+    local state = ns.ProgramState()
+    local online = state == "online"
+    hint:SetFontObject(online and MSSFontSmall or MSSFontWarn)
+    hint:ClearAllPoints()
+    hint:SetPoint("LEFT", online and syncButton or warn, "RIGHT", online and 10 or 6, 0)
+    hint:SetPoint("RIGHT", gear, "LEFT", -10, 0)
+    hint:SetText(L[online and "window_hint" or ("window_" .. state)])
+    warn:SetShown(not online)
+    hover:SetShown(not online)
+    if not online then
+      local old = state == "oldaddon" or state == "oldprogram"
+      AttachTooltip(hover, old and "update_title" or "offline_title", "tip_" .. state)
+    end
   end
+  ShowProgramState()
+  relabel[#relabel + 1] = ShowProgramState
+  frame.ShowProgramState = ShowProgramState
 
   -- другой язык — списки собрать заново
   relabel[#relabel + 1] = function()
@@ -2017,6 +2022,7 @@ local function CreateWindow()
 
   frame:SetScript("OnShow", function(self)
     SnapToPixels(self)
+    self.ShowProgramState()
     UI.Refresh()
   end)
   local elapsedTotal = 0

@@ -533,8 +533,8 @@ end
 MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
 MSS_NS.OnChange()""")
 g.RunTimers()
-screen_hint = [x for x in regions("FontString") if under_window(x) and x._text == ns.L.window_offline][0]
-screen_hint.SetText(screen_hint, ns.L.window_hint)
+L.execute("MSS_SCREEN_STATE_SAVED = MSS_NS.ProgramState; MSS_NS.ProgramState = function() return 'online' end")
+win.ShowProgramState()   # the pictures show a running program: the quiet bottom line
 tabs[0].MockClick(tabs[0]); g.RunTimers()
 dump_layout(win, OUT_LAYOUT)
 LAYOUT_DIR = os.path.dirname(os.path.abspath(OUT_LAYOUT))
@@ -600,7 +600,8 @@ sf = g.MountSheetSyncSettingsFrame
 check("settings window opens for the screenshots", sf is not None and sf._shown)
 dump_layout(sf, os.path.join(LAYOUT_DIR, "layout_settings.json"))
 sf.Hide(sf)
-screen_hint.SetText(screen_hint, ns.L.window_offline)
+L.execute("MSS_NS.ProgramState = MSS_SCREEN_STATE_SAVED")
+win.ShowProgramState()
 L.execute(r"""
 MountSheetSyncSheet.resetAt, MSS_NS.ProgramState = SCREEN_RESET, SCREEN_STATE
 MSS_NS.UsesListWords = function() return false end

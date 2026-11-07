@@ -52,11 +52,11 @@ MakeFont("MSSFontBold", "PTSans-Bold.ttf", 12, Hex("e4dfd2"))
 MakeFont("MSSFontName", "PTSans-Regular.ttf", 13, Hex("e4dfd2"))
 MakeFont("MSSFontStrong", "PTSans-Bold.ttf", 13, Hex("e4dfd2"))
 MakeFont("MSSFontGold", "PTSans-Regular.ttf", 12, Hex("d8c98f"))
-MakeFont("MSSFontSmall", "PTSans-Regular.ttf", 11, Hex("a89f8b"))
+MakeFont("MSSFontSmall", "PTSans-Regular.ttf", 12, Hex("b3aa95"))   -- 11 px в игре расплывался
 MakeFont("MSSFontHead", "PTSans-Bold.ttf", 11, Hex("a89f8b"))
 MakeFont("MSSFontDim", "PTSans-Regular.ttf", 13, Hex("a89f8b"))
 MakeFont("MSSFontTitle", "Philosopher-Bold.ttf", 14, COLOR.gold)
-MakeFont("MSSFontButton", "Philosopher-Bold.ttf", 13, COLOR.gold, true)
+MakeFont("MSSFontButton", "PTSans-Bold.ttf", 14, COLOR.gold, true)   -- у Philosopher тонкие штрихи («К», «т») в игре мылились
 MakeFont("MSSFontWarn", "PTSans-Bold.ttf", 12, Hex("ffa04d"), true)
 
 ---------------------------------------------------------------------------

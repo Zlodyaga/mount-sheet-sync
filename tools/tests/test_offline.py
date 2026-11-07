@@ -85,6 +85,13 @@ def window_bits(L, g):
     return broker, (str(hint._text) if hint is not None else None), tip
 
 
+def hint_font():
+    win = g.MountSheetSyncFrame
+    regs = [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
+    small = [r for r in regs if r._type == "FontString" and r._font == "MSSFontSmall" and r._parent is not None and r._parent._uid == win._uid]
+    return small[0]._fontObject if small else None
+
+
 def first_kill_chat(L, g):
     before = len(g.CHAT)
     g.Fire("ENCOUNTER_END", 2423, "Тюремщик", 14, 20, 1)
@@ -112,7 +119,8 @@ check("Data Broker tooltip: one grey offline line, the click hints stay last",
 check("window bottom line: offline, kills remembered", hint is not None and hint.startswith("Офлайн") and "запоминаются" in hint, hint)
 icon = L.eval("rawget")(g.MountSheetSyncFrame, "offlineIcon")
 check("…and it stands out: a warning icon before it, bold orange text with a shadow",
-      icon is not None and str(icon._texture).endswith("UI-Dialog-Icon-AlertNew") and g.MSSFontWarn._shadowOffset is not None, icon and icon._texture)
+      icon is not None and icon._shown and str(icon._texture).endswith("UI-Dialog-Icon-AlertNew") and str(hint_font()) == str(g.MSSFontWarn)
+      and g.MSSFontWarn._shadowOffset is not None, icon and icon._texture)
 check("hover: why (addons can't go online) and when it is checked (login, /reload)",
       tip is not None and tip[0] == "Работа без программы" and any("/reload" in t and "сохранениях игры" in t for t in tip), tip)
 
@@ -125,7 +133,8 @@ check("first kill: the usual «goes to the sheet when you log out…» hint", an
 broker, hint, tip = window_bits(L, g)
 check("no offline line in the tooltip", not any("Офлайн" in t for t in broker), broker)
 check("window bottom line: the usual hint, no hover", hint is not None and hint.startswith("Отметки попадают") and tip is None, (hint, tip))
-check("…quiet: no warning icon", L.eval("rawget")(g.MountSheetSyncFrame, "offlineIcon") is None)
+quiet_icon = L.eval("rawget")(g.MountSheetSyncFrame, "offlineIcon")
+check("…quiet: no warning icon, the small grey font", (quiet_icon is None or not quiet_icon._shown) and str(hint_font()) == str(g.MSSFontSmall))
 
 # ---- the program runs, but has no sheet yet
 L, g, ns, _ = new_game(mark(NOW - 10, sheet=False))
