@@ -104,7 +104,7 @@ Windows). «Выйти» удаляет ключ и отзывает его у G
 ## Командная строка
 
 `--once` (одна синхронизация и выход), `--test`, `--autostart`, `--google-login`, `--create-sheet [название]`,
-`--sheet-lang <код>`, `--add-chars`, `--set-chars <json>`, `--sync-collection`, `--create-local [название]` (данные на этом компьютере), `--import-local` (копия таблицы из Google, отправленное копируется тоже), `--storage <local|google>` (куда вернуться, данные обоих мест сохраняются; существующие локальные данные оба `--…-local` не заменяют), `--install`, `--uninstall [--yes]`,
+`--sheet-lang <код>`, `--add-chars`, `--set-chars <json>`, `--sync-collection`, `--create-local [название]` (данные на этом компьютере), `--import-local [--yes]` (копия таблицы из Google, отправленное копируется тоже; с `--yes` поверх прежних данных, они откладываются в `local-data.before-import.json`), `--storage <local|google>` (куда вернуться, данные обоих мест сохраняются; существующие локальные данные оба `--…-local` не заменяют), `--install`, `--uninstall [--yes]`,
 `--check-update`, `--update`, `--data <папка>`; служебные: `--wait-instance`, `--wait-pid`, `--updated-from`.
 Один экземпляр на пользователя (`Local\MountSheetSync.*`); второй запуск — уведомление «уже запущен» (или окно настроек, если программа не настроена). `--test` — проверка связи с таблицей.
 

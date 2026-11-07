@@ -641,3 +641,17 @@ fr: retiré : {0}
 es: quitado: {0}
 pt: removido: {0}
 
+@ Заменить данные на этом компьютере копией таблицы «{0}»? Нынешние данные сохранятся рядом: {1}. Убийства, отмеченные только здесь, отметятся в копии заново.
+en: Replace the data on this computer with a copy of the spreadsheet “{0}”? The current data is kept next to it: {1}. Kills marked only here will be marked in the copy again.
+de: Die Daten auf diesem Computer durch eine Kopie der Tabelle „{0}“ ersetzen? Die jetzigen Daten bleiben daneben erhalten: {1}. Kills, die nur hier markiert sind, werden in der Kopie erneut markiert.
+fr: Remplacer les données de cet ordinateur par une copie du tableau « {0} » ? Les données actuelles sont gardées à côté : {1}. Les victoires marquées seulement ici seront marquées à nouveau dans la copie.
+es: ¿Sustituir los datos de este ordenador por una copia de la hoja «{0}»? Los datos actuales se guardan al lado: {1}. Las muertes marcadas solo aquí se marcarán de nuevo en la copia.
+pt: Substituir os dados deste computador por uma cópia da planilha “{0}”? Os dados atuais ficam guardados ao lado: {1}. As mortes marcadas só aqui serão marcadas de novo na cópia.
+
+@ Перенести данные из таблицы «{0}» на этот компьютер? Отметки, «Не фармлю», попытки и персонажи будут как в таблице. «Нет» — начать заново, без них.
+en: Move the data from the spreadsheet “{0}” to this computer? Marks, “not farming”, attempts and characters stay as in the spreadsheet. “No” starts anew without them.
+de: Die Daten aus der Tabelle „{0}“ auf diesen Computer übernehmen? Markierungen, „nicht farmen“, Versuche und Charaktere bleiben wie in der Tabelle. „Nein“ beginnt neu, ohne sie.
+fr: Transférer les données du tableau « {0} » sur cet ordinateur ? Les marques, « pas farmé », les tentatives et les personnages restent comme dans le tableau. « Non » repart de zéro, sans eux.
+es: ¿Pasar los datos de la hoja «{0}» a este ordenador? Las marcas, «no farmeo», los intentos y los personajes quedan como en la hoja. «No» empieza de nuevo, sin ellos.
+pt: Transferir os dados da planilha “{0}” para este computador? Marcas, “não farmo”, tentativas e personagens ficam como na planilha. “Não” começa do zero, sem eles.
+

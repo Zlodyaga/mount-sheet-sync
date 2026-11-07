@@ -14,7 +14,8 @@
 //   --add-chars   добавить в таблицу персонажей, которых в ней ещё нет;
 //   --sync-collection  сверить таблицу с коллекцией маунтов из игры;
 //   --create-local [название]  создать данные на этом компьютере (без Google) и перейти на них;
-//   --import-local  перенести таблицу из Google на этот компьютер и перейти на копию;
+//   --import-local [--yes]  перенести таблицу из Google на этот компьютер и перейти на копию (с --yes — поверх
+//                   прежних данных, они остаются рядом: local-data.before-import.json);
 //   --storage <local|google>  где вести данные: на этом компьютере или в таблице Google (данные должны уже быть);
 //   --set-chars <файл.json>  персонажи таблицы как в файле: [{"name":"Эйра","raids":true,"dungeons":false,"world":true}, …];
 //   --install     установить программу в %LOCALAPPDATA%\Programs\MountSheetSync (ярлык, «Установленные приложения»);
@@ -100,7 +101,7 @@ namespace MountSheetSync
             }
             if (opts.ImportLocal)
             {
-                return RunImportLocal();
+                return RunImportLocal(opts.Yes);
             }
             if (opts.Storage != null)
             {
@@ -437,11 +438,11 @@ namespace MountSheetSync
         }
 
         /// <summary>Копия таблицы из Google; что уже отправлено в неё, второй раз не считается.</summary>
-        static int RunImportLocal()
+        static int RunImportLocal(bool replace)
         {
             Settings settings = Settings.Load(AppPaths.SettingsFile);
             string file = AppPaths.LocalBookFile;
-            if (File.Exists(file))
+            if (File.Exists(file) && !replace)
             {
                 Log.Write(Tr.L("Данные на этом компьютере уже есть: {0}. Чтобы не потерять их, ничего не заменяю.", file));
                 return 1;
@@ -464,6 +465,12 @@ namespace MountSheetSync
             return 0;
         }
 
+        /// <summary>Куда откладываются прежние данные, когда таблицу переносят поверх них.</summary>
+        public static string BeforeImportFile
+        {
+            get { return Path.Combine(Path.GetDirectoryName(AppPaths.LocalBookFile), "local-data.before-import.json"); }
+        }
+
         /// <summary>Копия таблицы settings.SpreadsheetId в файл на этом компьютере; settings переходит на неё. Настройки сохраняет вызывающий.</summary>
         public static void ImportToLocal(Settings settings)
         {
@@ -472,6 +479,12 @@ namespace MountSheetSync
             {
                 GoogleBook book = GoogleBook.Load(settings.SpreadsheetId);
                 GoogleSheetService.Upgrade(book);
+                if (File.Exists(file))
+                {
+                    // поверх прежних данных: они остаются рядом, а убийства, отмеченные только в них, уйдут в копию заново
+                    File.Copy(file, BeforeImportFile, true);
+                    Log.Write(Tr.L("Прежние данные на этом компьютере сохранены: {0}", BeforeImportFile));
+                }
                 LocalBook.Import(file, book);
                 settings.Mode = Settings.ModeGoogle;
                 string sent = AppPaths.SentFileFor(settings);

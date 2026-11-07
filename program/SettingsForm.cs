@@ -290,9 +290,9 @@ namespace MountSheetSync
         void UpdateLocal()
         {
             bool have = File.Exists(AppPaths.LocalBookFile);
-            bool canImport = !have && working.SpreadsheetId.Length > 0 && GoogleSession.SignedIn;
+            bool canImport = working.SpreadsheetId.Length > 0 && GoogleSession.SignedIn;
             localLabel.Text = have ? Tr.F("Данные хранятся здесь: {0}", AppPaths.LocalBookFile)
-                : canImport ? Tr.F("Данных здесь ещё нет. Можно перенести их из таблицы «{0}» или начать заново.", working.SpreadsheetTitle)
+                : canImport && !have ? Tr.F("Данных здесь ещё нет. Можно перенести их из таблицы «{0}» или начать заново.", working.SpreadsheetTitle)
                 : Tr._("Данные появятся сами, когда аддон узнает персонажей.");
             localLabel.ForeColor = have ? Good : SystemColors.ControlText;
             localCharsButton.Visible = have;
@@ -302,6 +302,23 @@ namespace MountSheetSync
         /// <summary>Копия таблицы на этот компьютер; сама таблица остаётся в Google как есть.</summary>
         void OnImport()
         {
+            OnImport(false);
+        }
+
+        /// <summary>andSave — перенос по вопросу из «Сохранить»: после него окно сохраняет настройки и закрывается.</summary>
+        void OnImport(bool andSave)
+        {
+            if (File.Exists(AppPaths.LocalBookFile))
+            {
+                DialogResult replace = MessageBox.Show(this,
+                    Tr.F("Заменить данные на этом компьютере копией таблицы «{0}»? Нынешние данные сохранятся рядом: {1}. Убийства, отмеченные только здесь, отметятся в копии заново.",
+                        working.SpreadsheetTitle, Program.BeforeImportFile),
+                    Program.Title, MessageBoxButtons.OKCancel, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+                if (replace != DialogResult.OK)
+                {
+                    return;
+                }
+            }
             SetBusy(true);
             ShowStatus(Tr._("Переношу данные из таблицы…"), SystemColors.ControlText);
             Settings s = working.Clone();
@@ -328,6 +345,10 @@ namespace MountSheetSync
                     Commit(false);
                     UpdateLocal();
                     ShowStatus(Tr.F("Данные перенесены из таблицы «{0}». Сама таблица осталась в Google как есть.", working.SpreadsheetTitle), Good);
+                    if (andSave)
+                    {
+                        OnSave();
+                    }
                 });
             });
         }
@@ -766,6 +787,22 @@ namespace MountSheetSync
             {
                 ShowStatus(error, Bad);
                 return;
+            }
+            // на компьютер с готовой таблицей: без вопроса данные начались бы заново, без отметок и «Не фармлю»
+            if (candidate.IsLocal && !File.Exists(AppPaths.LocalBookFile) && working.SpreadsheetId.Length > 0 && GoogleSession.SignedIn)
+            {
+                DialogResult move = MessageBox.Show(this,
+                    Tr.F("Перенести данные из таблицы «{0}» на этот компьютер? Отметки, «Не фармлю», попытки и персонажи будут как в таблице. «Нет» — начать заново, без них.", working.SpreadsheetTitle),
+                    Program.Title, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if (move == DialogResult.Cancel)
+                {
+                    return;
+                }
+                if (move == DialogResult.Yes)
+                {
+                    OnImport(true);
+                    return;
+                }
             }
             Result = candidate;
             DialogResult = DialogResult.OK;

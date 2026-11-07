@@ -438,3 +438,6 @@ en: New characters added automatically: {0}
 @ Не удалось прочитать персонажей из файлов аддона: {0}
 en: Could not read the characters from the addon files: {0}
 
+@ Прежние данные на этом компьютере сохранены: {0}
+en: The previous data on this computer is kept: {0}
+
