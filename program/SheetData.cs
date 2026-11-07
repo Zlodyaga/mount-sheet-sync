@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace MountSheetSync
@@ -92,8 +93,11 @@ namespace MountSheetSync
             {
                 return null;
             }
-            Dictionary<string, object> en = new Dictionary<string, object>(StringComparer.Ordinal);
-            Dictionary<string, object> ru = new Dictionary<string, object>(StringComparer.Ordinal);
+            Dictionary<string, Dictionary<string, object>> byLang = new Dictionary<string, Dictionary<string, object>>();
+            foreach (string lang in NameLangs)
+            {
+                byLang[lang] = new Dictionary<string, object>(StringComparer.Ordinal);
+            }
             SheetLang english = SheetLang.Get("en");
             Catalog catalog = Catalog.Embedded();
             foreach (CatalogSheet sheet in new[] { catalog.Raids, catalog.Dungeons, catalog.World, catalog.Rare })
@@ -104,37 +108,114 @@ namespace MountSheetSync
                 }
                 int cMount = sheet.Col("Маунт");
                 int cId = sheet.Col(SheetBuilder.IdColumn);
+                int cJournal = sheet.Col("ID в журнале");
+                int cMap = sheet.Col("ID места");
                 int cBoss = sheet.Columns.FindIndex(c => c.StartsWith("Босс", StringComparison.Ordinal));
                 foreach (object[] row in sheet.Rows)
                 {
+                    long id = cId >= 0 && cId < row.Length ? MountIndex.IdOf(row[cId]) : 0;
+                    // маунт: по ID из таблиц игры, английское — и из каталога
                     string mount = Cell(row, cMount);
                     if (mount.Length > 0)
                     {
-                        long id = cId >= 0 && cId < row.Length ? MountIndex.IdOf(row[cId]) : 0;
-                        Pair(shown, en, ru, mount, SheetLang.EnglishMount(id) ?? english.Content(mount));
+                        Dictionary<string, string> names = SheetLang.GameName("mounts", id);
+                        names["ru"] = mount;
+                        if (!names.ContainsKey("en"))
+                        {
+                            names["en"] = SheetLang.EnglishMount(id) ?? english.Content(mount);
+                        }
+                        Add(shown, byLang, names, mount, names["en"]);
                     }
+                    // босс: у награды — название достижения; иначе первая часть («Король Дазар / Сундук…») — по ID боя
                     string boss = Cell(row, cBoss);
                     if (boss.Length > 0)
                     {
-                        Pair(shown, en, ru, boss, english.Content(boss));
+                        string bossEn = english.Content(boss);
+                        Dictionary<string, string> titles;
+                        Dictionary<string, string> names;
+                        if (id > 0 && SheetLang.RewardAchievement(id, out titles) > 0 && titles.Count > 0)
+                        {
+                            names = titles;
+                        }
+                        else
+                        {
+                            names = new Dictionary<string, string>();
+                            List<long> journal = cJournal >= 0 && cJournal < row.Length ? Encounters.Ids(row[cJournal]) : new List<long>();
+                            if (journal.Count == 1)
+                            {
+                                foreach (KeyValuePair<string, string> kv in SheetLang.GameName("bosses", journal[0]))
+                                {
+                                    names[kv.Key] = WithTail(kv.Value, kv.Key == "ru" ? boss : bossEn);
+                                }
+                            }
+                        }
+                        names["ru"] = boss;
+                        names["en"] = bossEn;
+                        Add(shown, byLang, names, boss, bossEn);
+                    }
+                    // место: английское из каталога, остальные — по ID карты подземелья
+                    string place = Cell(row, 1);
+                    List<long> maps = cMap >= 0 && cMap < row.Length ? Encounters.Ids(row[cMap]) : new List<long>();
+                    if (place.Length > 0 && maps.Count == 1)
+                    {
+                        Dictionary<string, string> names = new Dictionary<string, string>();
+                        foreach (KeyValuePair<string, string> kv in SheetLang.GameName("places", maps[0]))
+                        {
+                            names[kv.Key] = WithTail(kv.Value, place, "(");
+                        }
+                        names["en"] = place;
+                        Add(shown, byLang, names, place, place);
                     }
                 }
             }
-            Dictionary<string, object> names = new Dictionary<string, object>();
-            if (en.Count > 0)
+            Dictionary<string, object> result = new Dictionary<string, object>();
+            foreach (KeyValuePair<string, Dictionary<string, object>> kv in byLang)
             {
-                names["en"] = en;
+                if (kv.Value.Count > 0)
+                {
+                    result[kv.Key] = kv.Value;
+                }
             }
-            if (ru.Count > 0)
+            return result.Count > 0 ? result : null;
+        }
+
+        static readonly string[] NameLangs = { "ru", "en", "de", "fr", "es", "pt" };
+
+        /// <summary>Имя из игры и хвост строки каталога: «Король Дазар» + « / Сундук претендента», «Терраса» + « (Midnight)».</summary>
+        static string WithTail(string name, string text, string mark = " / ")
+        {
+            if (mark == "(")
             {
-                names["ru"] = ru;
+                int paren = text.LastIndexOf(" (", StringComparison.Ordinal);
+                return paren > 0 && text.EndsWith(")", StringComparison.Ordinal) ? name + text.Substring(paren) : name;
             }
-            return names.Count > 0 ? names : null;
+            int cut = text.IndexOf(" / ", StringComparison.Ordinal);
+            return cut > 0 ? name + text.Substring(cut) : name;
+        }
+
+        /// <summary>Перевод для каждого языка, где он есть: ключ — тот вид текста (русский или английский), что пришёл в списке.</summary>
+        static void Add(HashSet<string> shown, Dictionary<string, Dictionary<string, object>> byLang, Dictionary<string, string> names, params string[] variants)
+        {
+            foreach (string text in variants.Distinct())
+            {
+                if (string.IsNullOrEmpty(text) || !shown.Contains(text))
+                {
+                    continue;
+                }
+                foreach (string lang in NameLangs)
+                {
+                    string value;
+                    if (names.TryGetValue(lang, out value) && !string.IsNullOrEmpty(value) && value != text)
+                    {
+                        byLang[lang][text] = value;
+                    }
+                }
+            }
         }
 
         static void AddShown(HashSet<string> shown, Dictionary<string, object> item)
         {
-            foreach (string field in new[] { "boss", "mount" })
+            foreach (string field in new[] { "boss", "mount", "place" })
             {
                 string text = J.Str(item, field);
                 if (text.Length > 0)
@@ -147,22 +228,6 @@ namespace MountSheetSync
         static string Cell(object[] row, int c)
         {
             return c >= 0 && c < row.Length && row[c] is string ? ((string)row[c]).Trim() : "";
-        }
-
-        static void Pair(HashSet<string> shown, Dictionary<string, object> en, Dictionary<string, object> ru, string russian, string english)
-        {
-            if (string.IsNullOrEmpty(english) || english == russian)
-            {
-                return;
-            }
-            if (shown.Contains(russian))
-            {
-                en[russian] = english;
-            }
-            if (shown.Contains(english))
-            {
-                ru[english] = russian;
-            }
         }
 
         static void WriteValue(StringBuilder sb, object value, int depth)

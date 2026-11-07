@@ -43,9 +43,9 @@ local KIND_COLOR = {
 }
 
 -- Вкладки по порядку; в db.tab хранится ключ.
-local TAB_LEFT, TAB_ATTEMPTS, TAB_LOG = 1, 2, 3
-local TAB_KEYS = { "left", "attempts", "log" }
-local TAB_LABELS = { "tab_left", "tab_attempts", "tab_log" }
+local TAB_LEFT, TAB_ACH, TAB_ATTEMPTS, TAB_LOG = 1, 2, 3, 4
+local TAB_KEYS = { "left", "ach", "attempts", "log" }
+local TAB_LABELS = { "tab_left", "tab_ach", "tab_attempts", "tab_log" }
 local ALL_CHARS = {}      -- selectedChar: первая строка слева, «Все персонажи»
 local FILTER_KINDS = { "all", "raid", "dungeon", "world", "rare" }
 
@@ -296,6 +296,21 @@ local function StepAside(panel)
 end
 
 -- Журнал маунтов игры на этом маунте.
+-- Окно достижений игры на этом достижении.
+local function ShowAchievement(id)
+  local ok = pcall(function()
+    if not AchievementFrame then
+      C_AddOns.LoadAddOn("Blizzard_AchievementUI")
+    end
+    OpenAchievementFrameToAchievement(id)
+  end)
+  if not ok then
+    ns.Print(L.ach_open_failed)
+    return
+  end
+  StepAside(AchievementFrame)
+end
+
 local function ShowMountInJournal(id)
   local ok = pcall(function()
     if not MountJournal then
@@ -691,6 +706,8 @@ local function ClickRow(button, mouse)
     if elem.route then
       ShowRoute(elem)
     end
+  elseif elem.achievement and OverColumn(button, "boss") then
+    ShowAchievement(elem.achievement)
   elseif elem.instance and OverColumn(button, "boss") then
     ShowInGuide(elem.instance, elem.encounter)
   elseif elem.mountID then
@@ -714,6 +731,9 @@ local function ShowRowTooltip(button)
     end
     if elem.instance then
       GameTooltip:AddLine(L.tip_row_guide, 0.6, 0.6, 0.6, true)
+    end
+    if elem.achievement then
+      GameTooltip:AddLine(L.tip_row_ach, 0.6, 0.6, 0.6, true)
     end
     if elem.mountID then
       GameTooltip:AddLine(L.tip_row_open, 0.6, 0.6, 0.6, true)
@@ -1222,7 +1242,7 @@ local function RemainingView(r, own)
   for _, kind in ipairs(ns.KIND_ORDER) do
     local group = {}
     for _, entry in ipairs(r.items) do
-      if ns.GroupOf(entry.item) == kind then
+      if kind ~= "reward" and ns.GroupOf(entry.item) == kind then   -- достижения — на своей вкладке
         group[#group + 1] = entry
       end
     end
@@ -1247,6 +1267,71 @@ local function RemainingView(r, own)
   end
   return { list = list, cols = LeftColumns(),
     summary = "|cff8c8c8c" .. string.format(L.left_head, r.left, r.total, ns.FormatWhen(r.generated)) .. "|r" }
+end
+
+-- Вкладка «Достижения»: достижение (щелчок — открыть его), условие, маунт, получено ли. Попыток у них нет.
+local achCols
+local function AchievementColumns()
+  if not achCols then
+    achCols = Columns({
+      { key = "icon", w = 18 },
+      { key = "boss", flex = 1.3, label = "col_ach" },
+      { key = "cond", flex = 1.6, label = "col_cond" },
+      { key = "mount", flex = 1.1, label = "col_mount" },
+      { key = "status", w = 78, right = true, label = "col_status" },
+    }, listWidth)
+  end
+  return achCols
+end
+
+-- Достижение из игры: получено ли (на аккаунте) и его условие на языке игры. nil — игра его не знает.
+local function AchievementInfo(id)
+  if not id or not GetAchievementInfo then
+    return nil
+  end
+  local ok, _, name, _, completed, _, _, _, description = pcall(GetAchievementInfo, id)
+  if not ok or not name then
+    return nil
+  end
+  return { completed = completed and true or false, description = type(description) == "string" and description or "" }
+end
+
+local function AchievementsView(rows)
+  if not rows then
+    return NoDataView()
+  end
+  if #rows == 0 then
+    return { list = {}, empty = L.ach_empty }
+  end
+  local cols = AchievementColumns()
+  local items = {}
+  for i, item in ipairs(rows) do
+    local info = AchievementInfo(tonumber(item.ach))
+    items[i] = { item = item, info = info, name = Safe(ns.Shown(item, "boss")), done = info and info.completed or false }
+  end
+  table.sort(items, function(a, b)
+    if a.done ~= b.done then
+      return not a.done   -- ещё не полученные — сверху
+    end
+    return a.name < b.name
+  end)
+  local list, earned = {}, 0
+  for i, a in ipairs(items) do
+    local item = a.item
+    local cond = a.info and a.info.description ~= "" and a.info.description or Safe(item.diff)
+    local mount = Safe(ns.Shown(item, "mount"))
+    if a.done then
+      earned = earned + 1
+    end
+    list[i] = { cols = cols, icon = ns.MountIcon(item.id), mountID = KnownMount(item.id), achievement = tonumber(item.ach),
+      stripe = i % 2 == 0, tip = { mount, a.name, Safe(cond) }, values = {
+        boss = a.done and ("|cff8c8c8c" .. a.name .. "|r") or a.name,
+        cond = "|cffb7ae9a" .. Safe(cond) .. "|r",
+        mount = "|cffc9a0ff" .. mount .. "|r",
+        status = a.done and ("|cff8cff8c" .. L.ach_done .. "|r") or "|cff8c8c8c-|r",
+      } }
+  end
+  return { list = list, cols = cols, summary = "|cff8c8c8c" .. string.format(L.ach_head, #list, earned) .. "|r" }
 end
 
 -- Персонажи для столбцов сетки: имя, цвет класса (без класса — серый: персонаж другого аккаунта).
@@ -1629,6 +1714,10 @@ function UI.Refresh()
     local r = sel and sel.r or own
     key = "left|" .. tostring(r)
     build = function() return RemainingView(r, not sel) end
+  elseif tab == TAB_ACH then
+    local rows = ns.GetAchievementRows()
+    key = "ach|" .. tostring(rows)
+    build = function() return AchievementsView(rows) end
   elseif tab == TAB_ATTEMPTS then
     local rows = ns.GetAttemptsList()
     local st = AttemptsState()

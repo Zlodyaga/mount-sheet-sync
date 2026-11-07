@@ -541,6 +541,3051 @@
   "978": "Violet Spellwing",
   "995": "Sharkbait"
  },
+ "names": {
+  "bosses": {
+   "111": {
+    "de": "Plattenhaut",
+    "en": "Slabhide",
+    "es": "Pielpétrea",
+    "fr": "Peau-de-Pierre",
+    "pt": "Couro-pétreo",
+    "ru": "Камнешкур"
+   },
+   "115": {
+    "de": "Altairus",
+    "en": "Altairus",
+    "es": "Altairus",
+    "fr": "Altairus",
+    "pt": "Altairus",
+    "ru": "Альтаирий"
+   },
+   "1262": {
+    "de": "Rukhmar",
+    "en": "Rukhmar",
+    "es": "Rukhmar",
+    "fr": "Rukhmar",
+    "pt": "Rukhmar",
+    "ru": "Рухмар"
+   },
+   "1438": {
+    "de": "Archimonde",
+    "en": "Archimonde",
+    "es": "Archimonde",
+    "fr": "Archimonde",
+    "pt": "Arquimonde",
+    "ru": "Архимонд"
+   },
+   "155": {
+    "de": "Al'Akir",
+    "en": "Al'Akir",
+    "es": "Al'Akir",
+    "fr": "Al’Akir",
+    "pt": "Al'Akir",
+    "ru": "Ал'акир"
+   },
+   "1553": {
+    "de": "Attumen der Jäger",
+    "en": "Attumen the Huntsman",
+    "es": "Attumen el Montero",
+    "fr": "Attumen le Veneur",
+    "pt": "Attumen, o Caçador",
+    "ru": "Ловчий Аттумен"
+   },
+   "1576": {
+    "de": "Kael'thas Sonnenwanderer",
+    "en": "Kael'thas Sunstrider",
+    "es": "Kael'thas Caminante del Sol",
+    "fr": "Kael’thas Haut-Soleil",
+    "pt": "Kael'thas Andassol",
+    "ru": "Кель'тас Солнечный Скиталец"
+   },
+   "1616": {
+    "de": "Sartharion",
+    "en": "Sartharion",
+    "es": "Sartharion",
+    "fr": "Sartharion",
+    "pt": "Sartharion",
+    "ru": "Сартарион"
+   },
+   "1617": {
+    "de": "Malygos",
+    "en": "Malygos",
+    "es": "Malygos",
+    "fr": "Malygos",
+    "pt": "Malygos",
+    "ru": "Малигос"
+   },
+   "1636": {
+    "de": "Der Lichkönig",
+    "en": "The Lich King",
+    "es": "El Rey Exánime",
+    "fr": "Le roi-liche",
+    "pt": "O Lich Rei",
+    "ru": "Король-лич"
+   },
+   "1649": {
+    "de": "Yogg-Saron",
+    "en": "Yogg-Saron",
+    "es": "Yogg-Saron",
+    "fr": "Yogg-Saron",
+    "pt": "Yogg-Saron",
+    "ru": "Йогг-Сарон"
+   },
+   "1651": {
+    "de": "Onyxia",
+    "en": "Onyxia",
+    "es": "Onyxia",
+    "fr": "Onyxia",
+    "pt": "Onyxia",
+    "ru": "Ониксия"
+   },
+   "1737": {
+    "de": "Gul'dan",
+    "en": "Gul'dan",
+    "es": "Gul'dan",
+    "fr": "Gul’dan",
+    "pt": "Gul'dan",
+    "ru": "Гул'дан"
+   },
+   "176": {
+    "de": "Blutfürst Mandokir",
+    "en": "Bloodlord Mandokir",
+    "es": "Señor sangriento Mandokir",
+    "fr": "Seigneur sanglant Mandokir",
+    "pt": "Sangrelorde Mandokir",
+    "ru": "Мандокир Повелитель Крови"
+   },
+   "181": {
+    "de": "Hohepriesterin Kilnara",
+    "en": "High Priestess Kilnara",
+    "es": "Suma sacerdotisa Kilnara",
+    "fr": "Grande prêtresse Kilnara",
+    "pt": "Alta-sacerdotisa Kilnara",
+    "ru": "Верховная жрица Килнара"
+   },
+   "1835": {
+    "de": "Attumen der Jäger",
+    "en": "Attumen the Huntsman",
+    "es": "Attumen el Montero",
+    "fr": "Attumen le Veneur",
+    "pt": "Attumen, o Caçador",
+    "ru": "Ловчий Аттумен"
+   },
+   "1861": {
+    "de": "Herrin Sassz'ine",
+    "en": "Mistress Sassz'ine",
+    "es": "Maestra Sassz'ine",
+    "fr": "Maîtresse Sassz’ine",
+    "pt": "Senhora Sassz'ine",
+    "ru": "Госпожа Сашж'ин"
+   },
+   "194": {
+    "de": "Alysrazar",
+    "en": "Alysrazor",
+    "es": "Alysrazor",
+    "fr": "Alysrazor",
+    "pt": "Alysrazor",
+    "ru": "Алисразор"
+   },
+   "198": {
+    "de": "Ragnaros",
+    "en": "Ragnaros",
+    "es": "Ragnaros",
+    "fr": "Ragnaros",
+    "pt": "Ragnaros",
+    "ru": "Рагнарос"
+   },
+   "1987": {
+    "de": "Teufelshunde des Sargeras",
+    "en": "Felhounds of Sargeras",
+    "es": "Canes manáfagos de Sargeras",
+    "fr": "Molosses de Sargeras",
+    "pt": "Canisvis de Sargeras",
+    "ru": "Гончие Саргераса"
+   },
+   "2031": {
+    "de": "Argus, der Zerrütter",
+    "en": "Argus the Unmaker",
+    "es": "Argus el Aniquilador",
+    "fr": "Argus l’Annihilateur",
+    "pt": "Argus, o Descriador",
+    "ru": "Аргус Порабощенный"
+   },
+   "2095": {
+    "de": "Harlan der Schmierige",
+    "en": "Harlan Sweete",
+    "es": "Harlan Sweete",
+    "fr": "Harlan Sweete",
+    "pt": "Arlão Mel",
+    "ru": "Красавчик Харлан"
+   },
+   "2158": {
+    "de": "Entfesselte Monstrosität",
+    "en": "Unbound Abomination",
+    "es": "Abominación desatada",
+    "fr": "Monstruosité déchaînée",
+    "pt": "Abominação Liberta",
+    "ru": "Освобожденное чудовище"
+   },
+   "2172": {
+    "de": "Dazar, der erste König",
+    "en": "Dazar, The First King",
+    "es": "Dazar, el primer Rey",
+    "fr": "Dazar, le premier roi",
+    "pt": "Dazar, o Primeiro Rei",
+    "ru": "Дазар, первый король"
+   },
+   "2210": {
+    "de": "Dünenschlinger Kraulok",
+    "en": "Dunegorger Kraulok",
+    "es": "Tragadunas Kraulok",
+    "fr": "Kraulok le Gorgedune",
+    "pt": "Devoraduna Kraulok",
+    "ru": "Дюнный пожиратель Краулок"
+   },
+   "2331": {
+    "de": "König Mechagon",
+    "en": "King Mechagon",
+    "es": "Rey Mecandria",
+    "fr": "Roi Mécagone",
+    "pt": "Rei Gnomecan",
+    "ru": "Король Мехагон"
+   },
+   "2334": {
+    "de": "Hochtüftler Mekkadrill",
+    "en": "High Tinker Mekkatorque",
+    "es": "Manitas mayor Mekkatorque",
+    "fr": "Grand Bricoleur Mekkanivelle",
+    "pt": "Grão-faz-tudo Mekkatorque",
+    "ru": "Главный механик Меггакрут"
+   },
+   "2343": {
+    "de": "Lady Jaina Prachtmeer",
+    "en": "Lady Jaina Proudmoore",
+    "es": "Lady Jaina Valiente",
+    "fr": "Dame Jaina Portvaillant",
+    "pt": "Grã-senhora Jaina Proudmore",
+    "ru": "Леди Джайна Праудмур"
+   },
+   "2355": {
+    "de": "Fliegende Unterdrückungseinheit JK-8",
+    "en": "HK-8 Aerial Oppression Unit",
+    "es": "Unidad de opresión aérea KPU7",
+    "fr": "Unité d’oppression aérienne CT-8",
+    "pt": "Unidade de Opressão Aérea HK-8",
+    "ru": "Воздушный подавитель ОУ-8"
+   },
+   "2375": {
+    "de": "N'Zoth der Verderber",
+    "en": "N'Zoth the Corruptor",
+    "es": "N'Zoth, el Corruptor",
+    "fr": "N’Zoth le Corrupteur",
+    "pt": "N'Zoth, o Corruptor",
+    "ru": "Н'Зот Заразитель"
+   },
+   "2396": {
+    "de": "Nalthor der Eisbinder",
+    "en": "Nalthor the Rimebinder",
+    "es": "Nalthor Clamaescarcha",
+    "fr": "Nalthor le Lieur-de-Givre",
+    "pt": "Nalthor, o Senhor da Geada",
+    "ru": "Налтор Криомант"
+   },
+   "2439": {
+    "de": "Die Neun",
+    "en": "The Nine",
+    "es": "Las Nueve",
+    "fr": "Les Neuf",
+    "pt": "As nove",
+    "ru": "Девять"
+   },
+   "2441": {
+    "de": "Sylvanas Windläufer",
+    "en": "Sylvanas Windrunner",
+    "es": "Sylvanas Brisaveloz",
+    "fr": "Sylvanas Coursevent",
+    "pt": "Sylvana Correventos",
+    "ru": "Сильвана Ветрокрылая"
+   },
+   "2455": {
+    "de": "So'leah",
+    "en": "So'leah",
+    "es": "So'leah",
+    "fr": "So’leah",
+    "pt": "So'leah",
+    "ru": "Со'лея"
+   },
+   "2464": {
+    "de": "Der Kerkermeister",
+    "en": "The Jailer",
+    "es": "El Carcelero",
+    "fr": "Le Geôlier",
+    "pt": "O Carcereiro",
+    "ru": "Тюремщик"
+   },
+   "2519": {
+    "de": "Fyrakk der Lodernde",
+    "en": "Fyrakk the Blazing",
+    "es": "Fyrakk el Llameante",
+    "fr": "Fyrakka le Flamboyant",
+    "pt": "Fyrakk, o Fulgurante",
+    "ru": "Фиракк Пылающий"
+   },
+   "2561": {
+    "de": "Die Finsternis",
+    "en": "The Darkness",
+    "es": "La Oscuridad",
+    "fr": "Les Ténèbres",
+    "pt": "A Escuridão",
+    "ru": "Тьма"
+   },
+   "2582": {
+    "de": "Leerensprecher Eirich",
+    "en": "Void Speaker Eirich",
+    "es": "Portavoz del Vacío Eirich",
+    "fr": "Orateur du Vide Eirich",
+    "pt": "Voz do Caos Eirich",
+    "ru": "Вестник Бездны Эйрих"
+   },
+   "2602": {
+    "de": "Königin Ansurek",
+    "en": "Queen Ansurek",
+    "es": "Reina Ansurek",
+    "fr": "Reine Ansurek",
+    "pt": "Rainha Ansurek",
+    "ru": "Королева Ансурек"
+   },
+   "2646": {
+    "de": "Chromkönig Gallywix",
+    "en": "Chrome King Gallywix",
+    "es": "Rey Cromado Gallywix",
+    "fr": "Roi du chrome Gallywix",
+    "pt": "Rei do Cromo Gallywix",
+    "ru": "Хромовый король Галливикс"
+   },
+   "2658": {
+    "de": "Das rastlose Herz",
+    "en": "The Restless Heart",
+    "es": "El Corazón Inquieto",
+    "fr": "Le cœur fébrile",
+    "pt": "O Coração Inquieto",
+    "ru": "Неупокоенное сердце"
+   },
+   "2662": {
+    "de": "Degentrius",
+    "en": "Degentrius",
+    "es": "Degentrius",
+    "fr": "Dégentrius",
+    "pt": "Degentrius",
+    "ru": "Дегентрий"
+   },
+   "2691": {
+    "de": "Dimensius der alles Verschlingende",
+    "en": "Dimensius, the All-Devouring",
+    "es": "Dimensius el Devoratodo",
+    "fr": "Dimensius l’Omni-dévoreur",
+    "pt": "Dimensius, que Tudo Devora",
+    "ru": "Пространствус Всепоглощающий"
+   },
+   "2740": {
+    "de": "Anbruch der Mitternacht",
+    "en": "Midnight Falls",
+    "es": "L'ura",
+    "fr": "Glas de minuit",
+    "pt": "Queda da Meia-noite",
+    "ru": "Торжество Полуночи"
+   },
+   "2880": {
+    "de": "Zul'jan",
+    "en": "Zul'jan",
+    "es": "Zul'jan",
+    "fr": "Zul’jan",
+    "pt": "Zul'jan",
+    "ru": "Зул'джан"
+   },
+   "2895": {
+    "de": "Ula'tek",
+    "en": "Ula'tek",
+    "es": "Ula'tek",
+    "fr": "Ula’tek",
+    "pt": "Ula'tek",
+    "ru": "Ула'тек"
+   },
+   "331": {
+    "de": "Ultraxion",
+    "en": "Ultraxion",
+    "es": "Ultraxion",
+    "fr": "Ultraxion",
+    "pt": "Ultraxion",
+    "ru": "Ультраксион"
+   },
+   "333": {
+    "de": "Todesschwinges Wahnsinn",
+    "en": "Madness of Deathwing",
+    "es": "Locura de Alamuerte",
+    "fr": "Folie d'Aile de mort",
+    "pt": "Loucura do Asa da Morte",
+    "ru": "Безумие Смертокрыла"
+   },
+   "456": {
+    "de": "Baron Aurius Totenschwur",
+    "en": "Lord Aurius Rivendare",
+    "es": "Lord Aurius Osahendido",
+    "fr": "Seigneur Aurius Vaillefendre",
+    "pt": "Lorde Aurius Rivendare",
+    "ru": "Лорд Аурий Ривендер"
+   },
+   "533": {
+    "de": "Kael'thas Sonnenwanderer",
+    "en": "Kael'thas Sunstrider",
+    "es": "Kael'thas",
+    "fr": "Kael’thas Haut-Soleil",
+    "pt": "Kael'thas Andassol",
+    "ru": "Кель'тас Солнечный Скиталец"
+   },
+   "542": {
+    "de": "Anzu",
+    "en": "Anzu",
+    "es": "Anzu",
+    "fr": "Anzu",
+    "pt": "Anzu",
+    "ru": "Анзу"
+   },
+   "643": {
+    "de": "Skadi der Skrupellose",
+    "en": "Skadi the Ruthless",
+    "es": "Skadi el Despiadado",
+    "fr": "Skadi le Brutal",
+    "pt": "Skadi, o Impiedoso",
+    "ru": "Скади Безжалостный"
+   },
+   "691": {
+    "de": "Sha des Zorns",
+    "en": "Sha of Anger",
+    "es": "Sha de la ira",
+    "fr": "Sha de la colère",
+    "pt": "Sha da Raiva",
+    "ru": "Ша Злости"
+   },
+   "725": {
+    "de": "Salyis' Kriegsmeute",
+    "en": "Salyis's Warband",
+    "es": "Banda guerrera de Salyis",
+    "fr": "Troupe de guerre de Salyis",
+    "pt": "Bando Guerreiro de Salyis",
+    "ru": "Отряд Сальиса"
+   },
+   "726": {
+    "de": "Elegon",
+    "en": "Elegon",
+    "es": "Elegon",
+    "fr": "Elegon",
+    "pt": "Elegon",
+    "ru": "Элегон"
+   },
+   "814": {
+    "de": "Nalak, der Sturmfürst",
+    "en": "Nalak, The Storm Lord",
+    "es": "Nalak, el Señor de la Tormenta",
+    "fr": "Nalak, le seigneur des tempêtes",
+    "pt": "Nalak, o Senhor da Tempestade",
+    "ru": "Налак, Повелитель Гроз"
+   },
+   "819": {
+    "de": "Horridon",
+    "en": "Horridon",
+    "es": "Horridonte",
+    "fr": "Horridon",
+    "pt": "Horridon",
+    "ru": "Хорридон"
+   },
+   "826": {
+    "de": "Oondasta",
+    "en": "Oondasta",
+    "es": "Oondasta",
+    "fr": "Oondasta",
+    "pt": "Oondasta",
+    "ru": "Ундаста"
+   },
+   "828": {
+    "de": "Ji-Kun",
+    "en": "Ji-Kun",
+    "es": "Ji Kun",
+    "fr": "Ji Kun",
+    "pt": "Ji-Kun",
+    "ru": "Цзи-Кунь"
+   },
+   "869": {
+    "de": "Garrosh Höllschrei",
+    "en": "Garrosh Hellscream",
+    "es": "Garrosh Grito Infernal",
+    "fr": "Garrosh Hurlenfer",
+    "pt": "Garrosh Grito Infernal",
+    "ru": "Гаррош Адский Крик"
+   },
+   "959": {
+    "de": "Schwarzfaust",
+    "en": "Blackhand",
+    "es": "Puño Negro",
+    "fr": "Main-Noire",
+    "pt": "Mão Negra",
+    "ru": "Чернорук"
+   }
+  },
+  "mounts": {
+   "1040": {
+    "de": "Grabschleicher",
+    "en": "Tomb Stalker",
+    "es": "Acechador de tumbas",
+    "fr": "Traqueur des tombes",
+    "pt": "Espreitador das Tumbas",
+    "ru": "Погребальный ящер"
+   },
+   "1053": {
+    "de": "Tiefenpfuhlkrogg",
+    "en": "Underrot Crawg",
+    "es": "Tragadón de las Catacumbas Putrefactas",
+    "fr": "Crogg des tréfonds Putrides",
+    "pt": "Crorg da Terra Podre",
+    "ru": "Крог из Подгнилья"
+   },
+   "117": {
+    "de": "Blaue Qirajipanzerdrohne",
+    "en": "Blue Qiraji Battle Tank",
+    "es": "Tanque de batalla qiraji azul",
+    "fr": "Char d’assaut qiraji bleu",
+    "pt": "Tanque de Batalha Qiraji Azul",
+    "ru": "Синий киражский боевой танк"
+   },
+   "118": {
+    "de": "Rote Qirajipanzerdrohne",
+    "en": "Red Qiraji Battle Tank",
+    "es": "Tanque de batalla qiraji rojo",
+    "fr": "Char d’assaut qiraji rouge",
+    "pt": "Tanque de Batalha Qiraji Vermelho",
+    "ru": "Красный киражский боевой танк"
+   },
+   "119": {
+    "de": "Gelbe Qirajipanzerdrohne",
+    "en": "Yellow Qiraji Battle Tank",
+    "es": "Tanque de batalla qiraji amarillo",
+    "fr": "Char d’assaut qiraji jaune",
+    "pt": "Tanque de Batalha Qiraji Amarelo",
+    "ru": "Желтый киражский боевой танк"
+   },
+   "120": {
+    "de": "Grüne Qirajipanzerdrohne",
+    "en": "Green Qiraji Battle Tank",
+    "es": "Tanque de batalla qiraji verde",
+    "fr": "Char d’assaut qiraji vert",
+    "pt": "Tanque de Batalha Qiraji Verde",
+    "ru": "Зеленый киражский боевой танк"
+   },
+   "1217": {
+    "de": "G.M.O.D.",
+    "en": "G.M.O.D.",
+    "es": "MGOD",
+    "fr": "M.E.G.A.",
+    "pt": "G.M.O.D.",
+    "ru": "ГМЖС"
+   },
+   "1218": {
+    "de": "Windschnitter von Dazar'alor",
+    "en": "Dazar'alor Windreaver",
+    "es": "Atracavientos de Dazar'alor",
+    "fr": "Saccage-vent de Dazar’alor",
+    "pt": "Aniquilador dos Ventos de Dazar'alor",
+    "ru": "Дазар'алорский ветрорез"
+   },
+   "1219": {
+    "de": "Eisiger Gezeitensturm",
+    "en": "Glacial Tidestorm",
+    "es": "Tormenta glacial de las mareas",
+    "fr": "Vaguerage glaciaire",
+    "pt": "Borrasca Glacial",
+    "ru": "Ледяной шквал"
+   },
+   "1227": {
+    "de": "Lufteinheit R-21/X",
+    "en": "Aerial Unit R-21/X",
+    "es": "Unidad aérea R-21/X",
+    "fr": "Unité aérienne R-21/X",
+    "pt": "Unidade Aérea R-21/X",
+    "ru": "Воздушное судно R-21/X"
+   },
+   "1232": {
+    "de": "Azsharirochen",
+    "en": "Azshari Bloatray",
+    "es": "Raya hinchada azsh'ari",
+    "fr": "Raie boursouflée azshari",
+    "pt": "Aerorraia Azshari",
+    "ru": "Азшарский газовый скат"
+   },
+   "1250": {
+    "de": "Mollie",
+    "en": "Mollie",
+    "es": "Mollie",
+    "fr": "Mollie",
+    "pt": "Mollie",
+    "ru": "Молли"
+   },
+   "1252": {
+    "de": "Friedensbewahrer von Mechagon",
+    "en": "Mechagon Peacekeeper",
+    "es": "Pacificador de Mecandria",
+    "fr": "Garde-paix de Mécagone",
+    "pt": "Pacificador de Gnomecan",
+    "ru": "Мехагонский миротворец"
+   },
+   "1265": {
+    "de": "Unverderbte Leerenschwinge",
+    "en": "Uncorrupted Voidwing",
+    "es": "Alavacío incorrupto",
+    "fr": "Aile-du-Vide non corrompue",
+    "pt": "Asa do Caos Incorrupto",
+    "ru": "Нетронутый порчей змей Бездны"
+   },
+   "1293": {
+    "de": "Allseher von Ny'alotha",
+    "en": "Ny'alotha Allseer",
+    "es": "Omnividente de Ny'alotha",
+    "fr": "Omnivoyant de Ny’alotha",
+    "pt": "Onividente de Ny'alotha",
+    "ru": "Всевидец из Ни'алоты"
+   },
+   "1314": {
+    "de": "Drache der Vier Winde",
+    "en": "Drake of the Four Winds",
+    "es": "Draco de los Cuatro Vientos",
+    "fr": "Drake des quatre vents",
+    "pt": "Draco dos Quatro Ventos",
+    "ru": "Дракон Четырех Ветров"
+   },
+   "1322": {
+    "de": "Zuckender Parasit",
+    "en": "Wriggling Parasite",
+    "es": "Parásito sinuoso",
+    "fr": "Parasite frétillant",
+    "pt": "Parasita Contorcido",
+    "ru": "Извивающийся паразит"
+   },
+   "1326": {
+    "de": "Erweckter Gedankenbohrer",
+    "en": "Awakened Mindborer",
+    "es": "Perforamentes despierto",
+    "fr": "Taraudeur éveillé",
+    "pt": "Furamentes Desperto",
+    "ru": "Пробужденный червь сомнения"
+   },
+   "1377": {
+    "de": "Bollwerkkreischer",
+    "en": "Rampart Screecher",
+    "es": "Estridador de muralla",
+    "fr": "Hurleuse des remparts",
+    "pt": "Estridor da Muralha",
+    "ru": "Визгун с укреплений"
+   },
+   "1405": {
+    "de": "Todeswandler der Wiederherstellung",
+    "en": "Restoration Deathwalker",
+    "es": "Caminamuerte de restauración",
+    "fr": "Marche-mort Restauration",
+    "pt": "Mortívago da Restauração",
+    "ru": "Восстановленный вестник смерти"
+   },
+   "1406": {
+    "de": "Markzahn",
+    "en": "Marrowfang",
+    "es": "Colmimédula",
+    "fr": "Croc-de-Moelle",
+    "pt": "Rasga-medula",
+    "ru": "Костезубка"
+   },
+   "1417": {
+    "de": "Hand von Hrestimorak",
+    "en": "Hand of Hrestimorak",
+    "es": "Mano de Hrestimorak",
+    "fr": "Main d’Hrestimorak",
+    "pt": "Mão de Hrestimorak",
+    "ru": "Рука Хрестиморака"
+   },
+   "1419": {
+    "de": "Sündenbehafteter Todeswandler",
+    "en": "Sintouched Deathwalker",
+    "es": "Caminamuerte tocado por el pecado",
+    "fr": "Marche-mort touché par le vice",
+    "pt": "Mortívago Pecaminoso",
+    "ru": "Запятнанный грехом вестник смерти"
+   },
+   "1443": {
+    "de": "Gieriger Fresser",
+    "en": "Voracious Gorger",
+    "es": "Engullidor voraz",
+    "fr": "Goinfre vorace",
+    "pt": "Engolidor Voraz",
+    "ru": "Ненасытный поглотитель"
+   },
+   "1445": {
+    "de": "Schleimschlange",
+    "en": "Slime Serpent",
+    "es": "Serpiente de baba",
+    "fr": "Serpent visqueux",
+    "pt": "Serpente do Visgo",
+    "ru": "Слизистая змея"
+   },
+   "1446": {
+    "de": "Gleitscheibe von Tazavesh",
+    "en": "Tazavesh Gearglider",
+    "es": "Deslizador de carga de Tazavesh",
+    "fr": "Mécaplaneur de Tazavesh",
+    "pt": "Planador de Tazavesh",
+    "ru": "Тазавешский техноглайдер"
+   },
+   "1471": {
+    "de": "Rache",
+    "en": "Vengeance",
+    "es": "Venganza",
+    "fr": "Vengeance",
+    "pt": "Vingança",
+    "ru": "Отмщение"
+   },
+   "1481": {
+    "de": "Gleitscheibe des Kartellmeisters",
+    "en": "Cartel Master's Gearglider",
+    "es": "Deslizador de carga de maestro del cártel",
+    "fr": "Mécaplaneur de maître de cartel",
+    "pt": "Planador do Mestre do Cartel",
+    "ru": "Техноглайдер главы картеля"
+   },
+   "1500": {
+    "de": "Sanktumdämmerstreitross",
+    "en": "Sanctum Gloomcharger",
+    "es": "Destrero sombrío del Sagrario",
+    "fr": "Destrier sinistre du sanctum",
+    "pt": "Corcel Lúgubre do Sacrário",
+    "ru": "Темный скакун из Святилища"
+   },
+   "1520": {
+    "de": "Seelenverzerrter Todeswandler",
+    "en": "Soultwisted Deathwalker",
+    "es": "Caminamuerte de espíritu retorcido",
+    "fr": "Marche-mort âme-distordue",
+    "pt": "Mortívago Almatorpe",
+    "ru": "Искаженный вестник смерти"
+   },
+   "1544": {
+    "de": "Verlustverzerrter Todeswandler",
+    "en": "Wastewarped Deathwalker",
+    "es": "Caminamuerte distorsionado por los residuos",
+    "fr": "Marche-mort déformé par le désert",
+    "pt": "Mortívago Rebotalho",
+    "ru": "Искаженный вестник смерти Пустошей"
+   },
+   "1549": {
+    "de": "Schimmernder Aurelid",
+    "en": "Shimmering Aurelid",
+    "es": "Aurélido fulgurante",
+    "fr": "Aurélidé chatoyant",
+    "pt": "Aurelídeo Cintilante",
+    "ru": "Мерцающий аурелид"
+   },
+   "1552": {
+    "de": "Carzinisierter Zerethhirsch",
+    "en": "Carcinized Zerethsteed",
+    "es": "Corcel de Zereth carcinizado",
+    "fr": "Destrier de Zereth carcinisé",
+    "pt": "Corcel de Zereth Carcinizado",
+    "ru": "Крабовидный зеретский бегун"
+   },
+   "1564": {
+    "de": "Kolossale Seelenfetzerschlundratte",
+    "en": "Colossal Soulshredder Mawrat",
+    "es": "Rata de Las Fauces trituraalmas colosal",
+    "fr": "Rat de l’Antre lacère-âme colossal",
+    "pt": "Rato-da-gorja Destruidor de Almas Colossal",
+    "ru": "Громадная душераздирательница Утробы"
+   },
+   "1565": {
+    "de": "Kolossale Umbralederschlundratte",
+    "en": "Colossal Umbrahide Mawrat",
+    "es": "Rata de Las Fauces pellejo umbrío colosal",
+    "fr": "Rat de l’Antre peau-ombreuse colossal",
+    "pt": "Rato-da-gorja Courúmbreo Colossal",
+    "ru": "Громадная темношкурая крыса Утробы"
+   },
+   "1587": {
+    "de": "Zerethaufseher",
+    "en": "Zereth Overseer",
+    "es": "Sobrestante de Zereth",
+    "fr": "Surveillant de Zereth",
+    "pt": "Feitor de Zereth",
+    "ru": "Зеретский смотритель"
+   },
+   "1626": {
+    "de": "Panzerklatscher",
+    "en": "Shellack",
+    "es": "Caparazónido",
+    "fr": "Coquillack",
+    "pt": "Caracolack",
+    "ru": "Шеллак"
+   },
+   "1644": {
+    "de": "Wütendes Magmammut",
+    "en": "Raging Magmammoth",
+    "es": "Magmamut furibundo",
+    "fr": "Magmammouth déchaîné",
+    "pt": "Magmamute Furioso",
+    "ru": "Свирепый магмонт"
+   },
+   "168": {
+    "de": "Feuriges Schlachtross",
+    "en": "Fiery Warhorse",
+    "es": "Caballo de guerra ígneo",
+    "fr": "Cheval de guerre embrasé",
+    "pt": "Cavalo de Guerra Fogoso",
+    "ru": "Огненный боевой конь"
+   },
+   "1681": {
+    "de": "Hagelsturmpanzerdon",
+    "en": "Hailstorm Armoredon",
+    "es": "Rinoceronte blindado de pedrisca",
+    "fr": "Armoredon tempeste-grêle",
+    "pt": "Armadurado do Granizo",
+    "ru": "Штормовой бронедон"
+   },
+   "1725": {
+    "de": "Infernopanzerdon",
+    "en": "Inferno Armoredon",
+    "es": "Rinoceronte blindado infernal",
+    "fr": "Armoredon ardent",
+    "pt": "Armadurado Infernal",
+    "ru": "Инфернальный бронедон"
+   },
+   "1734": {
+    "de": "Schattenflammenschieferschwinge",
+    "en": "Shadowflame Shalewing",
+    "es": "Alaesquisto de Pirosombra",
+    "fr": "Aile-de-schiste ombreflamme",
+    "pt": "Asaxisto de Chama Sombria",
+    "ru": "Глинокрыл пламени Тьмы"
+   },
+   "1774": {
+    "de": "Tapferkeit",
+    "en": "Valiance",
+    "es": "Denuedo",
+    "fr": "Bravoure",
+    "pt": "Valentia",
+    "ru": "Отвага"
+   },
+   "1801": {
+    "de": "Tiefgrünes Panzerdon",
+    "en": "Verdant Armoredon",
+    "es": "Rinoceronte blindado verdeante",
+    "fr": "Armoredon verdoyant",
+    "pt": "Armadurado Verdejante",
+    "ru": "Изумрудный бронедон"
+   },
+   "1814": {
+    "de": "Schattendämmertraumsäbler",
+    "en": "Shadow Dusk Dreamsaber",
+    "es": "Sable onírico del anochecer sombrío",
+    "fr": "Sabre de rêve du soir ombragé",
+    "pt": "Sabre-do-sonho do Crepúsculo Sombrio",
+    "ru": "Сумеречный саблезуб из Сна"
+   },
+   "1818": {
+    "de": "Anu'relos, Wegweisung der Flamme",
+    "en": "Anu'relos, Flame's Guidance",
+    "es": "Anu'relos, Guía de la Llama",
+    "fr": "Anu’relos, Guide de la Flamme",
+    "pt": "Anu'relos, Guia das Chamas",
+    "ru": "Ану'релос Наставление Пламени"
+   },
+   "183": {
+    "de": "Al'ars Asche",
+    "en": "Ashes of Al'ar",
+    "es": "Cenizas de Al'ar",
+    "fr": "Cendres d’Al’ar",
+    "pt": "Cinzas de Al'ar",
+    "ru": "Пепел Ал'ара"
+   },
+   "185": {
+    "de": "Rabenfürst",
+    "en": "Raven Lord",
+    "es": "Lord Cuervo",
+    "fr": "Seigneur corbeau",
+    "pt": "Senhor dos Corvos",
+    "ru": "Повелитель воронов"
+   },
+   "199": {
+    "de": "Kriegsbär der Amani",
+    "en": "Amani War Bear",
+    "es": "Oso de guerra Amani",
+    "fr": "Ours de guerre amani",
+    "pt": "Urso Guerreiro Amani",
+    "ru": "Аманийский боевой медведь"
+   },
+   "2055": {
+    "de": "Ewiges Panzerdon",
+    "en": "Infinite Armoredon",
+    "es": "Rinoceronte blindado infinito",
+    "fr": "Armoredon infini",
+    "pt": "Armadurado Infinito",
+    "ru": "Бесконечный бронедон"
+   },
+   "2091": {
+    "de": "Reisender Wildling",
+    "en": "Voyaging Wilderling",
+    "es": "Salvajizo viajero",
+    "fr": "Lycodrac en voyage",
+    "pt": "Silvestrito Viajante",
+    "ru": "Чащобник-путешественник"
+   },
+   "2119": {
+    "de": "Steingewölbemechanzug",
+    "en": "Stonevault Mechsuit",
+    "es": "Mecatraje Grutacanto",
+    "fr": "Mécarmure cavepierre",
+    "pt": "Batedor de Traje de Meca",
+    "ru": "Мехакостюм из Каменного Свода"
+   },
+   "213": {
+    "de": "Schneller weißer Falkenschreiter",
+    "en": "Swift White Hawkstrider",
+    "es": "Halcón zancudo blanco presto",
+    "fr": "Faucon-pérégrin blanc rapide",
+    "pt": "Falcostruz Branco Veloz",
+    "ru": "Стремительный белый крылобег"
+   },
+   "2180": {
+    "de": "Schattenhafte Schwärmilbe",
+    "en": "Shadowed Swarmite",
+    "es": "Enjambrille ensombrecido",
+    "fr": "Essaimite ombreuse",
+    "pt": "Enxamito Obscuro",
+    "ru": "Помраченный летающий роевик"
+   },
+   "2204": {
+    "de": "Docht",
+    "en": "Wick",
+    "es": "Mecha",
+    "fr": "Mèche",
+    "pt": "Pavio",
+    "ru": "Фитиль"
+   },
+   "2219": {
+    "de": "Himmelsreißer der Sureki",
+    "en": "Sureki Skyrazor",
+    "es": "Cuchilla del cielo sureki",
+    "fr": "Rasoir-céleste sureki",
+    "pt": "Cindecéus Sureki",
+    "ru": "Суреки – рассекатель небес"
+   },
+   "2223": {
+    "de": "Aufsteigender Himmelsreißer",
+    "en": "Ascendant Skyrazor",
+    "es": "Cuchilla del cielo ascendente",
+    "fr": "Rasoir-céleste ascendant",
+    "pt": "Cindecéus Ascendente",
+    "ru": "Вознесенный рассекатель небес"
+   },
+   "2244": {
+    "de": "Diamantener Mechanzug",
+    "en": "Diamond Mechsuit",
+    "es": "Mecatraje de diamante",
+    "fr": "Mécarmure diamant",
+    "pt": "Traje de Meca de Diamante",
+    "ru": "Алмазный мехакостюм"
+   },
+   "2313": {
+    "de": "Magnetomech des Schrottmaestros",
+    "en": "Junkmaestro's Magnetomech",
+    "es": "Meca magnético de maestro chatarrero",
+    "fr": "Magnétoméca d’as de la casse",
+    "pt": "Mecaímã da Lixomestra",
+    "ru": "Магнитомеха хлам-маэстро"
+   },
+   "246": {
+    "de": "Azurblauer Drache",
+    "en": "Azure Drake",
+    "es": "Draco azur",
+    "fr": "Drake azur",
+    "pt": "Draco Lazúli",
+    "ru": "Лазурный дракон"
+   },
+   "247": {
+    "de": "Blaudrache",
+    "en": "Blue Drake",
+    "es": "Draco azul",
+    "fr": "Drake bleu",
+    "pt": "Draco Azul",
+    "ru": "Синий дракон"
+   },
+   "248": {
+    "de": "Bronzedrache",
+    "en": "Bronze Drake",
+    "es": "Draco bronce",
+    "fr": "Drake bronze",
+    "pt": "Draco Bronze",
+    "ru": "Бронзовый дракон"
+   },
+   "2480": {
+    "de": "Karmesinroter Schredderpanzer",
+    "en": "Crimson Shreddertank",
+    "es": "Tanque triturador carmesí",
+    "fr": "Déchiquetank cramoisi",
+    "pt": "Tanquetalhador Carmesim",
+    "ru": "Багровый танкокрошшер"
+   },
+   "2487": {
+    "de": "Chef G",
+    "en": "The Big G",
+    "es": "La gran G",
+    "fr": "Le G-néral",
+    "pt": "O Gezão",
+    "ru": "Большой Гэ"
+   },
+   "250": {
+    "de": "Zwielichtdrache",
+    "en": "Twilight Drake",
+    "es": "Draco Crepuscular",
+    "fr": "Drake du Crépuscule",
+    "pt": "Draco do Crepúsculo",
+    "ru": "Сумеречный дракон"
+   },
+   "2507": {
+    "de": "A.S.M.R.-Prototyp",
+    "en": "Prototype A.S.M.R.",
+    "es": "Prototipo de A.S.M.R.",
+    "fr": "Prototype d’A.S.M.R.",
+    "pt": "Protótipo do A.S.M.R.",
+    "ru": "Прототип АСМР"
+   },
+   "2508": {
+    "de": "Unternehmerischer Schredderpanzer",
+    "en": "Enterprising Shreddertank",
+    "es": "Tanque triturador de emprendimiento",
+    "fr": "Déchiquetank entreprenant",
+    "pt": "Tanquetalhador Empreendedor",
+    "ru": "Предприимчивый танкокрошшер"
+   },
+   "253": {
+    "de": "Schwarzdrache",
+    "en": "Black Drake",
+    "es": "Draco negro",
+    "fr": "Drake noir",
+    "pt": "Draco Preto",
+    "ru": "Черный дракон"
+   },
+   "2549": {
+    "de": "Umbralk'arroc",
+    "en": "Umbral K'arroc",
+    "es": "K'arroc umbrío",
+    "fr": "K’arroc ombreux",
+    "pt": "K'arroc Umbrático",
+    "ru": "Теневой к'аррух"
+   },
+   "2569": {
+    "de": "Ungebundener Sternenesser",
+    "en": "Unbound Star-Eater",
+    "es": "Devoraestrellas desvinculado",
+    "fr": "Dévoreur d’étoiles délié",
+    "pt": "Comestrela Desatado",
+    "ru": "Неприкаянный пожиратель звезд"
+   },
+   "2607": {
+    "de": "Asche von Belo'ren",
+    "en": "Ashes of Belo'ren",
+    "es": "Cenizas de Belo'ren",
+    "fr": "Cendres de Belo’ren",
+    "pt": "Cinzas de Belo'ren",
+    "ru": "Пепел Бело'рена"
+   },
+   "262": {
+    "de": "Roter Protodrache",
+    "en": "Red Proto-Drake",
+    "es": "Protodraco rojo",
+    "fr": "Proto-drake rouge",
+    "pt": "Protodraco Vermelho",
+    "ru": "Красный протодракон"
+   },
+   "263": {
+    "de": "Schwarzer Protodrache",
+    "en": "Black Proto-Drake",
+    "es": "Protodraco negro",
+    "fr": "Proto-drake noir",
+    "pt": "Protodraco Negro",
+    "ru": "Черный протодракон"
+   },
+   "2631": {
+    "de": "Karmesinroter Leerenflieger",
+    "en": "Scarlet Void Flyer",
+    "es": "Volador del Vacío escarlata",
+    "fr": "Voltigeur du Vide écarlate",
+    "pt": "Voador do Caos Escarlate",
+    "ru": "Багровый летун Бездны"
+   },
+   "2633": {
+    "de": "Azurblauer Leerenflieger",
+    "en": "Azure Void Flyer",
+    "es": "Volador del Vacío azur",
+    "fr": "Voltigeur du Vide azuré",
+    "pt": "Voador do Caos Lazúli",
+    "ru": "Лазурный летун Бездны"
+   },
+   "264": {
+    "de": "Blauer Protodrache",
+    "en": "Blue Proto-Drake",
+    "es": "Protodraco azul",
+    "fr": "Proto-drake bleu",
+    "pt": "Protodraco Azul",
+    "ru": "Синий протодракон"
+   },
+   "266": {
+    "de": "Verseuchter Protodrache",
+    "en": "Plagued Proto-Drake",
+    "es": "Protodraco apestado",
+    "fr": "Proto-drake pestiféré",
+    "pt": "Protodraco Pestilento",
+    "ru": "Чумной протодракон"
+   },
+   "2733": {
+    "de": "Abscheuliches Aas",
+    "en": "Calamitous Carrion",
+    "es": "Carroña calamitosa",
+    "fr": "Charogne calamiteuse",
+    "pt": "Carniça Calamitosa",
+    "ru": "Разрушительный падальщик"
+   },
+   "2734": {
+    "de": "Auflebendes Aas",
+    "en": "Convalescent Carrion",
+    "es": "Carroña convaleciente",
+    "fr": "Charogne convalescente",
+    "pt": "Carniça Convalescente",
+    "ru": "Восстанавливающийся падальщик"
+   },
+   "2805": {
+    "de": "Spektralfalkenschreiter",
+    "en": "Spectral Hawkstrider",
+    "es": "Halcón zancudo espectral",
+    "fr": "Faucon-pérégrin spectral",
+    "pt": "Falcostruz Espectral",
+    "ru": "Призрачный крылобег"
+   },
+   "2817": {
+    "de": "Leuchtender Falkenschreiter",
+    "en": "Lucent Hawkstrider",
+    "es": "Halcón zancudo luciente",
+    "fr": "Faucon-pérégrin lumineux",
+    "pt": "Falcostruz Luzidio",
+    "ru": "Светоносный крылобег"
+   },
+   "2831": {
+    "de": "Schattenhafter Plager",
+    "en": "Tenebrous Harrower",
+    "es": "Lacerante tenebroso",
+    "fr": "Persécuteur ténébreux",
+    "pt": "Consternador Tenebroso",
+    "ru": "Сумрачный боронитель"
+   },
+   "287": {
+    "de": "Großes schwarzes Kriegsmammut",
+    "en": "Grand Black War Mammoth",
+    "es": "Gran mamut de guerra negro",
+    "fr": "Grand mammouth de guerre noir",
+    "pt": "Grande Mamute de Guerra Preto",
+    "ru": "Большой черный боевой мамонт"
+   },
+   "2950": {
+    "de": "Leuchtender Sporengleiter",
+    "en": "Luminous Sporeglider",
+    "es": "Planeaesporas luminoso",
+    "fr": "Glissespore lumineux",
+    "pt": "Planasporo Luminoso",
+    "ru": "Светящийся споролет"
+   },
+   "3005": {
+    "de": "Himmelblauer Todeswandler",
+    "en": "Cerulean Deathwalker",
+    "es": "Caminamuerte cerúleo",
+    "fr": "Marche-mort céruléen",
+    "pt": "Mortívago Cerúleo",
+    "ru": "Лазурный вестник смерти"
+   },
+   "3006": {
+    "de": "Amethystfarbener Mechanzug",
+    "en": "Amethyst Mechsuit",
+    "es": "Mecatraje de amatista",
+    "fr": "Mécarmure d’améthyste",
+    "pt": "Traje de Meca de Ametista",
+    "ru": "Аметистовый мехакостюм"
+   },
+   "3007": {
+    "de": "Blaujetonschredderpanzer",
+    "en": "Blue-Chip Shreddertank",
+    "es": "Tanque triturador de gran fiabilidad",
+    "fr": "Déchiquetank au capital stable",
+    "pt": "Tanquetalhador Primeira-linha",
+    "ru": "Танкокрошшер \"Голубая фишка\""
+   },
+   "3008": {
+    "de": "Profitgrüner Schredderpanzer",
+    "en": "Profit-Green Shreddertank",
+    "es": "Tanque triturador verde rentable",
+    "fr": "Déchiquetank à liquidités",
+    "pt": "Tanquetalhador Verde-lucro",
+    "ru": "Танкокрошшер \"Зеленый куш\""
+   },
+   "3009": {
+    "de": "Spekulativer Schredderpanzer",
+    "en": "Speculative Shreddertank",
+    "es": "Tanque triturador especulativo",
+    "fr": "Déchiquetank spéculatif",
+    "pt": "Tanquetalhador Especulativo",
+    "ru": "Спекулятивный танкокрошшер"
+   },
+   "3010": {
+    "de": "Hochrentierlicher Schredderpanzer",
+    "en": "High-Yield Shreddertank",
+    "es": "Tanque triturador de alto rendimiento",
+    "fr": "Déchiquetank à haut rendement",
+    "pt": "Tanquetalhador Alto-rendimento",
+    "ru": "Высокодоходный танкокрошшер"
+   },
+   "3021": {
+    "de": "Blutroter Giftzahn",
+    "en": "Crimson Venomfang",
+    "es": "Colmillo de veneno carmesí",
+    "fr": "Crochet-venin cramoisi",
+    "pt": "Viperiveno Carmesim",
+    "ru": "Багровый ядоклык"
+   },
+   "3030": {
+    "de": "Urzeitlicher Himmelsfreund",
+    "en": "Primeval Skyfriend",
+    "es": "Cielosierpe primigenia",
+    "fr": "Firmami primitif",
+    "pt": "Amigo do Céu Primevo",
+    "ru": "Доисторический доброзмей"
+   },
+   "304": {
+    "de": "Mimirons Kopf",
+    "en": "Mimiron's Head",
+    "es": "Cabeza de Mimiron",
+    "fr": "Tête de Mimiron",
+    "pt": "Cabeça de Mimiron",
+    "ru": "Голова Мимирона"
+   },
+   "3058": {
+    "de": "Die windende Brut",
+    "en": "The Writhing Brood",
+    "es": "La prole retorcida",
+    "fr": "Progéniture grouillante",
+    "pt": "A Ninhada Retorcida",
+    "ru": "Извивающийся выводок"
+   },
+   "306": {
+    "de": "Eisenbeschlagener Protodrache",
+    "en": "Ironbound Proto-Drake",
+    "es": "Protodraco vinculahierro",
+    "fr": "Proto-drake bardé de fer",
+    "pt": "Protodraco Férreo",
+    "ru": "Протодракон в железной броне"
+   },
+   "3063": {
+    "de": "Seuchenhauch",
+    "en": "Breath of Blight",
+    "es": "Aliento de añublo",
+    "fr": "Souffle de chancre",
+    "pt": "Bafo Pestilento",
+    "ru": "Дыхание Чумы"
+   },
+   "3064": {
+    "de": "Ruinhauch",
+    "en": "Breath of Ruin",
+    "es": "Aliento de ruina",
+    "fr": "Souffle de ruine",
+    "pt": "Bafo da Ruína",
+    "ru": "Дыхание Разрушения"
+   },
+   "307": {
+    "de": "Rostiger Protodrache",
+    "en": "Rusted Proto-Drake",
+    "es": "Protodraco herrumbroso",
+    "fr": "Proto-drake rouillé",
+    "pt": "Protodraco Enferrujado",
+    "ru": "Ржавый протодракон"
+   },
+   "342": {
+    "de": "Schneller Wolf der Horde",
+    "en": "Swift Horde Wolf",
+    "es": "Lobo de la Horda presto",
+    "fr": "Loup rapide de la Horde",
+    "pt": "Lobo Veloz da Horda",
+    "ru": "Стремительный ордынский волк"
+   },
+   "343": {
+    "de": "Schnelles Ross der Allianz",
+    "en": "Swift Alliance Steed",
+    "es": "Corcel de la Alianza presto",
+    "fr": "Palefroi rapide de l’Alliance",
+    "pt": "Corcel Veloz da Aliança",
+    "ru": "Стремительный скакун Альянса"
+   },
+   "344": {
+    "de": "Weißes Schlachtross des Kreuzfahrers",
+    "en": "Crusader's White Warhorse",
+    "es": "Caballo de guerra blanco de cruzado",
+    "fr": "Cheval de guerre blanc de croisé",
+    "pt": "Cavalo de Guerra Branco do Cruzado",
+    "ru": "Белый боевой конь крестоносца"
+   },
+   "345": {
+    "de": "Schwarzes Schlachtross des Kreuzfahrers",
+    "en": "Crusader's Black Warhorse",
+    "es": "Caballo de guerra negro de cruzado",
+    "fr": "Cheval de guerre noir de croisé",
+    "pt": "Cavalo de Guerra Preto do Cruzado",
+    "ru": "Вороной боевой конь крестоносца"
+   },
+   "349": {
+    "de": "Drache von Onyxia",
+    "en": "Onyxian Drake",
+    "es": "Draco de Onyxia",
+    "fr": "Drake onyxien",
+    "pt": "Draco Onyxiano",
+    "ru": "Дракон Ониксии"
+   },
+   "363": {
+    "de": "Unbesiegbar",
+    "en": "Invincible",
+    "es": "Invencible",
+    "fr": "Invincible",
+    "pt": "Invencível",
+    "ru": "Непобедимый"
+   },
+   "364": {
+    "de": "Eisbeschlagener Frostbrutbezwinger",
+    "en": "Icebound Frostbrood Vanquisher",
+    "es": "Vencedor Razaescarcha vinculado al hielo",
+    "fr": "Vainqueur couvegivre lié aux glaces",
+    "pt": "Conquistador Ninhálgida Congélido",
+    "ru": "Неуклонный ледяной покоритель"
+   },
+   "365": {
+    "de": "Blutgebadeter Frostbrutbezwinger",
+    "en": "Bloodbathed Frostbrood Vanquisher",
+    "es": "Vencedor Razaescarcha bañado en sangre",
+    "fr": "Vainqueur couvegivre baigné de sang",
+    "pt": "Conquistador Ninhálgida Ensanguentado",
+    "ru": "Обагренный ледяной покоритель"
+   },
+   "391": {
+    "de": "Vulkansteindrache",
+    "en": "Volcanic Stone Drake",
+    "es": "Draco de piedra volcánico",
+    "fr": "Drake de pierre volcanique",
+    "pt": "Draco de Pedra Vulcânico",
+    "ru": "Вулканический дракон"
+   },
+   "392": {
+    "de": "Drache des Ostwinds",
+    "en": "Drake of the East Wind",
+    "es": "Draco del viento del Este",
+    "fr": "Drake du vent d’Est",
+    "pt": "Draco do Vento Leste",
+    "ru": "Дракон восточного ветра"
+   },
+   "395": {
+    "de": "Drache des Nordwinds",
+    "en": "Drake of the North Wind",
+    "es": "Draco del viento del Norte",
+    "fr": "Drake du vent du Nord",
+    "pt": "Draco do Vento Norte",
+    "ru": "Дракон северного ветра"
+   },
+   "396": {
+    "de": "Drache des Südwinds",
+    "en": "Drake of the South Wind",
+    "es": "Draco del viento del Sur",
+    "fr": "Drake du vent du Sud",
+    "pt": "Draco do Vento Sul",
+    "ru": "Дракон южного ветра"
+   },
+   "397": {
+    "de": "Vitriolsteindrache",
+    "en": "Vitreous Stone Drake",
+    "es": "Draco de piedra vítreo",
+    "fr": "Drake de pierre vitrifiée",
+    "pt": "Draco de Pedra Vítreo",
+    "ru": "Камнешкурый дракон"
+   },
+   "410": {
+    "de": "Gepanzerter Razzashiraptor",
+    "en": "Armored Razzashi Raptor",
+    "es": "Raptor Razzashi acorazado",
+    "fr": "Raptor razzashi cuirassé",
+    "pt": "Raptor Razzashi Armadurado",
+    "ru": "Бронированный ящер Раззаши"
+   },
+   "411": {
+    "de": "Schneller zulianischer Panther",
+    "en": "Swift Zulian Panther",
+    "es": "Pantera Zulian presta",
+    "fr": "Panthère zulienne rapide",
+    "pt": "Pantera Zulian Veloz",
+    "ru": "Стремительная зульская пантера"
+   },
+   "415": {
+    "de": "Reinblut-Feuerfalke",
+    "en": "Pureblood Fire Hawk",
+    "es": "Halcón de fuego purasangre",
+    "fr": "Faucon de feu sang-pur",
+    "pt": "Falcão de Fogo Puro-sangue",
+    "ru": "Чистокровный огнеястреб"
+   },
+   "417": {
+    "de": "Verderbter Feuerfalke",
+    "en": "Corrupted Fire Hawk",
+    "es": "Halcón de fuego corrupto",
+    "fr": "Faucon de feu corrompu",
+    "pt": "Falcão de Fogo Corrompido",
+    "ru": "Порочный огнеястреб"
+   },
+   "419": {
+    "de": "Kampfbär der Amani",
+    "en": "Amani Battle Bear",
+    "es": "Oso de batalla Amani",
+    "fr": "Ours de bataille amani",
+    "pt": "Urso de Batalha Amani",
+    "ru": "Аманийский боевой медведь"
+   },
+   "425": {
+    "de": "Flammenkralle von Alysrazar",
+    "en": "Flametalon of Alysrazor",
+    "es": "Garfa de fuego de Alysrazor",
+    "fr": "Serres-de-Flammes d’Alysrazor",
+    "pt": "Garrachama de Alysrazor",
+    "ru": "Пламенное Крыло Алисразор"
+   },
+   "442": {
+    "de": "Lodernder Drache",
+    "en": "Blazing Drake",
+    "es": "Draco llameante",
+    "fr": "Drake flamboyant",
+    "pt": "Draco Fulgurante",
+    "ru": "Пылающий дракон"
+   },
+   "443": {
+    "de": "Zwielichtbote",
+    "en": "Twilight Harbinger",
+    "es": "Presagista Crepuscular",
+    "fr": "Émissaire du Crépuscule",
+    "pt": "Precursor do Crepúsculo",
+    "ru": "Сумеречный предвестник"
+   },
+   "444": {
+    "de": "Erste Dame der Lebensbinderin",
+    "en": "Life-Binder's Handmaiden",
+    "es": "Fámula de la Protectora",
+    "fr": "Suivante de la Lieuse-de-Vie",
+    "pt": "Aia da Mãe da Vida",
+    "ru": "Служанка Хранительницы жизни"
+   },
+   "445": {
+    "de": "Experiment 12-B",
+    "en": "Experiment 12-B",
+    "es": "Experimento 12-B",
+    "fr": "Expérience 12-B",
+    "pt": "Experimento 12-B",
+    "ru": "Эксперимент 12-Б"
+   },
+   "466": {
+    "de": "Donnernde Jadewolkenschlange",
+    "en": "Thundering Jade Cloud Serpent",
+    "es": "Dragón nimbo de jade tronador",
+    "fr": "Serpent-nuage de jade fulminant",
+    "pt": "Serpente das Nuvens de Jade Trovejante",
+    "ru": "Грозовой нефритовый облачный змей"
+   },
+   "472": {
+    "de": "Purpurwolkenschlange",
+    "en": "Crimson Cloud Serpent",
+    "es": "Dragón nimbo carmesí",
+    "fr": "Serpent-nuage cramoisi",
+    "pt": "Serpente das Nuvens Carmesim",
+    "ru": "Багровый облачный змей"
+   },
+   "473": {
+    "de": "Himmlische Onyxwolkenschlange",
+    "en": "Heavenly Onyx Cloud Serpent",
+    "es": "Dragón nimbo ónice célico",
+    "fr": "Serpent-nuage céleste onyx",
+    "pt": "Serpente das Nuvens de Ônix Celestial",
+    "ru": "Небесный ониксовый облачный змей"
+   },
+   "474": {
+    "de": "Himmlische Purpurwolkenschlange",
+    "en": "Heavenly Crimson Cloud Serpent",
+    "es": "Dragón nimbo carmesí célico",
+    "fr": "Serpent-nuage céleste cramoisi",
+    "pt": "Serpente das Nuvens Carmesim Celestial",
+    "ru": "Небесный багровый облачный змей"
+   },
+   "478": {
+    "de": "Astrale Wolkenschlange",
+    "en": "Astral Cloud Serpent",
+    "es": "Dragón nimbo astral",
+    "fr": "Serpent-nuage astral",
+    "pt": "Serpente das Nuvens Astral",
+    "ru": "Астральный облачный змей"
+   },
+   "503": {
+    "de": "Purpurroter Pandarenphönix",
+    "en": "Crimson Pandaren Phoenix",
+    "es": "Fénix pandaren carmesí",
+    "fr": "Phénix pandaren cramoisi",
+    "pt": "Fênix Pandarênica Carmesim",
+    "ru": "Багровый пандаренский феникс"
+   },
+   "515": {
+    "de": "Sohn von Galleon",
+    "en": "Son of Galleon",
+    "es": "Hijo de Galeón",
+    "fr": "Fils de Galion",
+    "pt": "Filho de Gailleon",
+    "ru": "Сын Галеона"
+   },
+   "518": {
+    "de": "Aschegrauer Pandarenphönix",
+    "en": "Ashen Pandaren Phoenix",
+    "es": "Fénix pandaren cinéreo",
+    "fr": "Phénix pandaren cendré",
+    "pt": "Fênix Pandarênica Cinzenta",
+    "ru": "Пепельный пандаренский феникс"
+   },
+   "519": {
+    "de": "Smaragdgrüner Pandarenphönix",
+    "en": "Emerald Pandaren Phoenix",
+    "es": "Fénix pandaren esmeralda",
+    "fr": "Phénix pandaren émeraude",
+    "pt": "Fênix Pandarênica Esmeralda",
+    "ru": "Изумрудный пандаренский феникс"
+   },
+   "520": {
+    "de": "Violetter Pandarenphönix",
+    "en": "Violet Pandaren Phoenix",
+    "es": "Fénix pandaren violeta",
+    "fr": "Phénix pandaren pourpre",
+    "pt": "Fênix Pandarênica Violeta",
+    "ru": "Лиловый пандаренский феникс"
+   },
+   "530": {
+    "de": "Gepanzerter Himmelskreischer",
+    "en": "Armored Skyscreamer",
+    "es": "Vociferador de cielos acorazado",
+    "fr": "Hurleciel cuirassé",
+    "pt": "Gritacéu Encouraçado",
+    "ru": "Бронированный небесный крикун"
+   },
+   "531": {
+    "de": "Ausgeburt von Horridon",
+    "en": "Spawn of Horridon",
+    "es": "Engendro de Horridonte",
+    "fr": "Rejeton d’Horridon",
+    "pt": "Rebento de Horridon",
+    "ru": "Порождение Хорридона"
+   },
+   "533": {
+    "de": "Kobaltblaues Urterrorhorn",
+    "en": "Cobalt Primordial Direhorn",
+    "es": "Cuernoatroz primario de cobalto",
+    "fr": "Navrecorne primordial cobalt",
+    "pt": "Escornante Primordial de Cobalto",
+    "ru": "Кобальтовый доисторический дикорог"
+   },
+   "542": {
+    "de": "Donnernde Kobaltwolkenschlange",
+    "en": "Thundering Cobalt Cloud Serpent",
+    "es": "Dragón nimbo de cobalto tronador",
+    "fr": "Serpent-nuage de cobalt fulminant",
+    "pt": "Serpente das Nuvens Trovejante Cobalto",
+    "ru": "Грозовой кобальтовый облачный змей"
+   },
+   "543": {
+    "de": "Kralle von Ji-Kun",
+    "en": "Clutch of Ji-Kun",
+    "es": "Cría de Ji Kun",
+    "fr": "Couvée de Ji Kun",
+    "pt": "Garra de Ji-Kun",
+    "ru": "Дитя Цзи-Кунь"
+   },
+   "557": {
+    "de": "Brut von Galakras",
+    "en": "Spawn of Galakras",
+    "es": "Engendro de Galakras",
+    "fr": "Rejeton de Galakras",
+    "pt": "Prole de Galakras",
+    "ru": "Порождение Галакраса"
+   },
+   "558": {
+    "de": "Kriegswolf der Kor'kron",
+    "en": "Kor'kron War Wolf",
+    "es": "Lobo de guerra Kor'kron",
+    "fr": "Loup de guerre kor’kron",
+    "pt": "Lobo de Guerra Kor'kron",
+    "ru": "Кор'кронский боевой волк"
+   },
+   "559": {
+    "de": "Koloss der Kor'kron",
+    "en": "Kor'kron Juggernaut",
+    "es": "Gigante Kor'kron",
+    "fr": "Mastodonte kor’kron",
+    "pt": "Jaganata Kor'kron",
+    "ru": "Кор'кронский крушитель"
+   },
+   "607": {
+    "de": "Blutschreitergronnling",
+    "en": "Gorestrider Gronnling",
+    "es": "Gronnito Zancornada",
+    "fr": "Gronnlin trotte-sang",
+    "pt": "Gronnídeo Corneante",
+    "ru": "Верховой малый гронн"
+   },
+   "613": {
+    "de": "Eisenhufzerstörer",
+    "en": "Ironhoof Destroyer",
+    "es": "Destructor uñaférrea",
+    "fr": "Destructeur sabot-de-fer",
+    "pt": "Destruidor Cascoferro",
+    "ru": "Разрушитель-железноног"
+   },
+   "619": {
+    "de": "Schwarzstahlkampfeber",
+    "en": "Blacksteel Battleboar",
+    "es": "Jabaguerrero de acero negro",
+    "fr": "Sanglier de guerre en noiracier",
+    "pt": "Javali de Batalha de Aço Negro",
+    "ru": "Закованный в вороненую сталь боевой вепрь"
+   },
+   "623": {
+    "de": "Frostebenenkampfeber",
+    "en": "Frostplains Battleboar",
+    "es": "Jabaguerrero Llanuragélida",
+    "fr": "Sanglier de guerre des plaines givrées",
+    "pt": "Javaliço da Planície Congelada",
+    "ru": "Боевой вепрь ледяных равнин"
+   },
+   "633": {
+    "de": "Höllenfeuerbestie",
+    "en": "Hellfire Infernal",
+    "es": "Infernal de Fuego Infernal",
+    "fr": "Infernal des Flammes infernales",
+    "pt": "Infernal do Fogo do Inferno",
+    "ru": "Инфернал адского пламени"
+   },
+   "634": {
+    "de": "Sonnenfalke der Spitzen",
+    "en": "Solar Spirehawk",
+    "es": "Halcón saeta del sol",
+    "fr": "Faucon des flèches solaire",
+    "pt": "Falcão-agulha Solar",
+    "ru": "Солнечный ястреб пиков"
+   },
+   "654": {
+    "de": "Kriegsyeti des Herausforderers",
+    "en": "Challenger's War Yeti",
+    "es": "Yeti de guerra de contendiente",
+    "fr": "Yéti de guerre du prétendant",
+    "pt": "Yeti de Guerra do Desafiante",
+    "ru": "Боевой йети претендента"
+   },
+   "69": {
+    "de": "Totenschwurs Todesstreitross",
+    "en": "Rivendare's Deathcharger",
+    "es": "Destrero de la muerte de Osahendido",
+    "fr": "Destrier de la mort de Vaillefendre",
+    "pt": "Corcel da Morte de Rivendare",
+    "ru": "Конь смерти Ривендера"
+   },
+   "751": {
+    "de": "Teufelsstahlvernichter",
+    "en": "Felsteel Annihilator",
+    "es": "Aniquilador de acero vil",
+    "fr": "Annihilateur en gangracier",
+    "pt": "Aniquilador de Açovil",
+    "ru": "Аннигилятор из оскверненной стали"
+   },
+   "758": {
+    "de": "Lodernder Terrorwolf",
+    "en": "Infernal Direwolf",
+    "es": "Lobo temible infernal",
+    "fr": "Loup redoutable infernal",
+    "pt": "Lobo Atroz Infernal",
+    "ru": "Инфернальный лютый волк"
+   },
+   "764": {
+    "de": "Wächter des Hains",
+    "en": "Grove Warden",
+    "es": "Celador de arboleda",
+    "fr": "Gardien du Bosquet",
+    "pt": "Guardião do Bosque",
+    "ru": "Хранитель рощи"
+   },
+   "773": {
+    "de": "Entweiher des Hains",
+    "en": "Grove Defiler",
+    "es": "Profanador de la arboleda",
+    "fr": "Profanateur du bosquet",
+    "pt": "Profanador do Bosque",
+    "ru": "Осквернитель рощи"
+   },
+   "781": {
+    "de": "Ewiger Zeithäscher",
+    "en": "Infinite Timereaver",
+    "es": "Atracador del Tiempo Infinito",
+    "fr": "Saccageur temporel infini",
+    "pt": "Cronihilante Infinito",
+    "ru": "Попиратель времен из рода Бесконечности"
+   },
+   "791": {
+    "de": "Teufelsfeuerhöllenbestie",
+    "en": "Felblaze Infernal",
+    "es": "Infernal Llamarada Vil",
+    "fr": "Infernal du Brasier infernal",
+    "pt": "Infernal Brasavil",
+    "ru": "Инфернал пламени Скверны"
+   },
+   "846": {
+    "de": "Leyfederhippogryph",
+    "en": "Leyfeather Hippogryph",
+    "es": "Hipogrifo de pluma Ley",
+    "fr": "Hippogriffe à plumes telluriques",
+    "pt": "Hipogrifo Pena de Meridiano",
+    "ru": "Гиппогриф с чародейским оперением"
+   },
+   "875": {
+    "de": "Mittnacht",
+    "en": "Midnight",
+    "es": "Medianoche",
+    "fr": "Minuit",
+    "pt": "Meia-noite",
+    "ru": "Полночь"
+   },
+   "883": {
+    "de": "Glimmender Glutwyrm",
+    "en": "Smoldering Ember Wyrm",
+    "es": "Vermis de ascuas humeante",
+    "fr": "Wyrm des braises incandescentes",
+    "pt": "Serpe de Brasas Fumegantes",
+    "ru": "Пылающий угольный змей"
+   },
+   "899": {
+    "de": "Kluftwurm",
+    "en": "Abyss Worm",
+    "es": "Gusano del abismo",
+    "fr": "Ver abyssal",
+    "pt": "Verme Abissal",
+    "ru": "Червь бездны"
+   },
+   "933": {
+    "de": "Obsidiankrolusk",
+    "en": "Obsidian Krolusk",
+    "es": "Crolusco de obsidiana",
+    "fr": "Krolusk d’obsidienne",
+    "pt": "Crolusco de Obsidiana",
+    "ru": "Обсидиановый кролуск"
+   },
+   "954": {
+    "de": "Gefesselter Ur'zul",
+    "en": "Shackled Ur'zul",
+    "es": "Ur'zul encadenado",
+    "fr": "Ur’zul entravé",
+    "pt": "Ur'zul Agrilhoado",
+    "ru": "Укрощенный ур'зул"
+   },
+   "963": {
+    "de": "Blutgesättigter Krogg",
+    "en": "Bloodgorged Crawg",
+    "es": "Tragadón sangriento",
+    "fr": "Crogg gorgé de sang",
+    "pt": "Crorg Ensanguentado",
+    "ru": "Напившийся крови крог"
+   },
+   "971": {
+    "de": "Antorischer Aschenhund",
+    "en": "Antoran Charhound",
+    "es": "Sabueso calcinado antoran",
+    "fr": "Molosse embrasé antoréen",
+    "pt": "Canisvil das Chamas Antorano",
+    "ru": "Огнедышащая гончая из Анторуса"
+   },
+   "972": {
+    "de": "Antorischer Schattenhund",
+    "en": "Antoran Gloomhound",
+    "es": "Can umbrío antoran",
+    "fr": "Molosse ombreux antoréen",
+    "pt": "Canisvil das Trevas Antorano",
+    "ru": "Сумеречная гончая из Анторуса"
+   },
+   "978": {
+    "de": "Violette Zauberschwinge",
+    "en": "Violet Spellwing",
+    "es": "Alahechizo violeta",
+    "fr": "Aile-ensorcelée pourpre",
+    "pt": "Asamágis Violeta",
+    "ru": "Фиолетовый чарокрыл"
+   },
+   "995": {
+    "de": "Haihappen",
+    "en": "Sharkbait",
+    "es": "Cazatiburones",
+    "fr": "Jacasse",
+    "pt": "Isca de Tubarão",
+    "ru": "Живец"
+   }
+  },
+  "places": {
+   "1008": {
+    "de": "Mogu'shangewölbe",
+    "en": "Mogu'shan Vaults",
+    "es": "Cámaras Mogu'shan",
+    "fr": "Caveaux Mogu’shan",
+    "pt": "Galerias Mogu'shan",
+    "ru": "Подземелья Могу'шан"
+   },
+   "1098": {
+    "de": "Thron des Donners",
+    "en": "Throne of Thunder",
+    "es": "Solio del Trueno",
+    "fr": "Trône du tonnerre",
+    "pt": "Trono do Trovão",
+    "ru": "Престол Гроз"
+   },
+   "1136": {
+    "de": "Schlacht um Orgrimmar",
+    "en": "Siege of Orgrimmar",
+    "es": "Asedio de Orgrimmar",
+    "fr": "Siège d’Orgrimmar",
+    "pt": "Cerco a Orgrimmar",
+    "ru": "Осада Оргриммара"
+   },
+   "1205": {
+    "de": "Schwarzfelsgießerei",
+    "en": "Blackrock Foundry",
+    "es": "Fundición Roca Negra",
+    "fr": "Fonderie des Rochenoires",
+    "pt": "Fundição Rocha Negra",
+    "ru": "Литейная клана Черной горы"
+   },
+   "1448": {
+    "de": "Höllenfeuerzitadelle",
+    "en": "Hellfire Citadel",
+    "es": "Ciudadela del Fuego Infernal",
+    "fr": "Citadelle des Flammes infernales",
+    "pt": "Cidadela Fogo do Inferno",
+    "ru": "Цитадель Адского Пламени"
+   },
+   "1530": {
+    "de": "Die Nachtfestung",
+    "en": "The Nighthold",
+    "es": "Bastión Nocturno",
+    "fr": "Palais Sacrenuit",
+    "pt": "O Baluarte da Noite",
+    "ru": "Цитадель Ночи"
+   },
+   "1592": {
+    "de": "Sporenfall",
+    "en": "Sporefall",
+    "es": "Micosis",
+    "fr": "Chute-des-Spores",
+    "pt": "Esporasca",
+    "ru": "Споропад"
+   },
+   "1651": {
+    "de": "Rückkehr nach Karazhan",
+    "en": "Return to Karazhan",
+    "es": "Regreso a Karazhan",
+    "fr": "Retour à Karazhan",
+    "pt": "Retorno a Karazhan",
+    "ru": "Возвращение в Каражан"
+   },
+   "1676": {
+    "de": "Das Grabmal des Sargeras",
+    "en": "Tomb of Sargeras",
+    "es": "Tumba de Sargeras",
+    "fr": "Tombe de Sargeras",
+    "pt": "Tumba de Sargeras",
+    "ru": "Гробница Саргераса"
+   },
+   "1712": {
+    "de": "Antorus, der Brennende Thron",
+    "en": "Antorus, the Burning Throne",
+    "es": "Antorus, el Trono Ardiente",
+    "fr": "Antorus, le Trône ardent",
+    "pt": "Antorus, o Trono Ardente",
+    "ru": "Анторус, Пылающий Трон"
+   },
+   "1754": {
+    "de": "Freihafen",
+    "en": "Freehold",
+    "es": "Fuerte Libre",
+    "fr": "Port-Liberté",
+    "pt": "Angra do Facão",
+    "ru": "Вольная Гавань"
+   },
+   "1762": {
+    "de": "Die Königsruh",
+    "en": "Kings' Rest",
+    "es": "Reposo de los Reyes",
+    "fr": "Repos des rois",
+    "pt": "Repouso do Rei",
+    "ru": "Гробница королей"
+   },
+   "1841": {
+    "de": "Der Tiefenpfuhl",
+    "en": "The Underrot",
+    "es": "Catacumbas Putrefactas",
+    "fr": "Les tréfonds Putrides",
+    "pt": "A Terra Podre",
+    "ru": "Подгнилье"
+   },
+   "2070": {
+    "de": "Schlacht von Dazar'alor",
+    "en": "Battle of Dazar'alor",
+    "es": "Batalla de Dazar'alor",
+    "fr": "Bataille de Dazar’alor",
+    "pt": "Batalha de Dazar'alor",
+    "ru": "Битва за Дазар'алор"
+   },
+   "2097": {
+    "de": "Operation: Mechagon",
+    "en": "Operation: Mechagon",
+    "es": "Operación: Mecandria",
+    "fr": "Opération Mécagone",
+    "pt": "Operação: Gnomecan",
+    "ru": "Операция \"Мехагон\""
+   },
+   "2217": {
+    "de": "Ny'alotha, die Erwachte Stadt",
+    "en": "Ny'alotha, the Waking City",
+    "es": "Ny'alotha, Ciudad del Despertar",
+    "fr": "Ny’alotha, la cité en éveil",
+    "pt": "Ny'alotha, a Cidade Desperta",
+    "ru": "Ни'алота"
+   },
+   "2286": {
+    "de": "Die Nekrotische Schneise",
+    "en": "The Necrotic Wake",
+    "es": "Estela Necrótica",
+    "fr": "Sillage nécrotique",
+    "pt": "Chaga Necrótica",
+    "ru": "Смертельная тризна"
+   },
+   "2289": {
+    "de": "Seuchensturz",
+    "en": "Plaguefall",
+    "es": "Bajapeste",
+    "fr": "Malepeste",
+    "pt": "Empéstia",
+    "ru": "Чумные каскады"
+   },
+   "2441": {
+    "de": "Tazavesh, der Verhüllte Markt",
+    "en": "Tazavesh, the Veiled Market",
+    "es": "Tazavesh, el Mercado Velado",
+    "fr": "Tazavesh, le marché dissimulé",
+    "pt": "Tazavesh, o Mercado Oculto",
+    "ru": "Тайный рынок Тазавеш"
+   },
+   "2450": {
+    "de": "Sanktum der Herrschaft",
+    "en": "Sanctum of Domination",
+    "es": "Sagrario de Dominación",
+    "fr": "Sanctum de Domination",
+    "pt": "Sacrário da Dominação",
+    "ru": "Святилище Господства"
+   },
+   "2481": {
+    "de": "Mausoleum der Ersten",
+    "en": "Sepulcher of the First Ones",
+    "es": "Sepulcro de los Primeros",
+    "fr": "Sépulcre des Fondateurs",
+    "pt": "Sepulcro dos Primogênitos",
+    "ru": "Гробница Предвечных"
+   },
+   "249": {
+    "de": "Onyxias Hort",
+    "en": "Onyxia's Lair",
+    "es": "Guarida de Onyxia",
+    "fr": "Repaire d’Onyxia",
+    "pt": "Covil de Onyxia",
+    "ru": "Логово Ониксии"
+   },
+   "2549": {
+    "de": "Amirdrassil, Hoffnung des Traums",
+    "en": "Amirdrassil, the Dream's Hope",
+    "es": "Amirdrassil, la Esperanza del Sueño",
+    "fr": "Amirdrassil, l’Espoir du Rêve",
+    "pt": "Amirdrassil, a Esperança Onírica",
+    "ru": "Амирдрассил, Надежда Сна"
+   },
+   "2651": {
+    "de": "Dunkelflammenspalt",
+    "en": "Darkflame Cleft",
+    "es": "Grieta de Flama Oscura",
+    "fr": "Faille de Flamme-Noire",
+    "pt": "Fenda Chamanegra",
+    "ru": "Расселина Темного Пламени"
+   },
+   "2652": {
+    "de": "Das Steingewölbe",
+    "en": "The Stonevault",
+    "es": "La Petrocámara",
+    "fr": "La Cavepierre",
+    "pt": "Abóboda de Pedra",
+    "ru": "Каменный Свод"
+   },
+   "2657": {
+    "de": "Palast der Nerub'ar",
+    "en": "Nerub-ar Palace",
+    "es": "Palacio Nerub'ar",
+    "fr": "Palais des Nérub’ar",
+    "pt": "Palácio Nerub-ar",
+    "ru": "Неруб'арский дворец"
+   },
+   "2769": {
+    "de": "Befreiung von Lorenhall",
+    "en": "Liberation of Undermine",
+    "es": "Liberación de Minahonda",
+    "fr": "Libération de Terremine",
+    "pt": "Libertação da Inframina",
+    "ru": "Освобождение Нижней Шахты"
+   },
+   "2805": {
+    "de": "Windläuferturm",
+    "en": "Windrunner Spire",
+    "es": "Aguja Brisaveloz",
+    "fr": "Flèche de Coursevent",
+    "pt": "Pico dos Correventos",
+    "ru": "Шпили Ветрокрылых"
+   },
+   "2810": {
+    "de": "Manaschmiede Omega",
+    "en": "Manaforge Omega",
+    "es": "Forja de Maná Omega",
+    "fr": "Manaforge Oméga",
+    "pt": "Manaforja Ômega",
+    "ru": "Манагорн Омега"
+   },
+   "2811": {
+    "de": "Terrasse der Magister",
+    "en": "Magisters' Terrace",
+    "es": "Bancal del Magister",
+    "fr": "Terrasse des Magistères",
+    "pt": "Terraço dos Magísteres",
+    "ru": "Терраса Магистров"
+   },
+   "2913": {
+    "de": "Marsch auf Quel'Danas",
+    "en": "March on Quel'Danas",
+    "es": "Marcha a Quel'Danas",
+    "fr": "Marche sur Quel’Danas",
+    "pt": "Marcha em Quel'Danas",
+    "ru": "Марш на Кель'Данас"
+   },
+   "2993": {
+    "de": "Altar der Fänge",
+    "en": "Altar of Fangs",
+    "es": "Altar de los Colmillos",
+    "fr": "Autel des crochets",
+    "pt": "Altar das Presas",
+    "ru": "Алтарь Клыков"
+   },
+   "3004": {
+    "de": "Der Giftige Abgrund",
+    "en": "The Venomous Abyss",
+    "es": "Abismo Venenoso",
+    "fr": "L’abîme Venimeux",
+    "pt": "Abismo Peçonhento",
+    "ru": "Отравленная бездна"
+   },
+   "329": {
+    "de": "Stratholme - Haupttor",
+    "en": "Stratholme - Main Gate",
+    "es": "Stratholme: Entrada Principal",
+    "fr": "Stratholme – Grande porte",
+    "pt": "Stratholme – Portão Principal",
+    "ru": "Стратхольм – главные врата"
+   },
+   "531": {
+    "de": "Tempel von Ahn'Qiraj",
+    "en": "Temple of Ahn'Qiraj",
+    "es": "Templo de Ahn'Qiraj",
+    "fr": "Temple d’Ahn’Qiraj",
+    "pt": "Templo de Ahn'Qiraj",
+    "ru": "Храм Ан'Киража"
+   },
+   "532": {
+    "de": "Karazhan",
+    "en": "Karazhan",
+    "es": "Karazhan",
+    "fr": "Karazhan",
+    "pt": "Karazhan",
+    "ru": "Каражан"
+   },
+   "533": {
+    "de": "Naxxramas",
+    "en": "Naxxramas",
+    "es": "Naxxramas",
+    "fr": "Naxxramas",
+    "pt": "Naxxramas",
+    "ru": "Наксрамас"
+   },
+   "550": {
+    "de": "Das Auge",
+    "en": "The Eye",
+    "es": "El Ojo",
+    "fr": "L’Œil",
+    "pt": "O Olho",
+    "ru": "Око"
+   },
+   "556": {
+    "de": "Sethekkhallen",
+    "en": "Sethekk Halls",
+    "es": "Salas Sethekk",
+    "fr": "Les salles des Sethekk",
+    "pt": "Salões dos Sethekk",
+    "ru": "Сетеккские залы"
+   },
+   "568": {
+    "de": "Zul'Aman",
+    "en": "Zul'Aman",
+    "es": "Zul'Aman",
+    "fr": "Zul’Aman",
+    "pt": "Zul'Aman",
+    "ru": "Зул'Аман"
+   },
+   "575": {
+    "de": "Turm Utgarde",
+    "en": "Utgarde Pinnacle",
+    "es": "Pináculo de Utgarde",
+    "fr": "Cime d’Utgarde",
+    "pt": "Pináculo Utgarde",
+    "ru": "Вершина Утгард"
+   },
+   "578": {
+    "de": "Das Oculus",
+    "en": "The Oculus",
+    "es": "El Oculus",
+    "fr": "L’Oculus",
+    "pt": "O Óculus",
+    "ru": "Окулус"
+   },
+   "585": {
+    "de": "Terrasse der Magister",
+    "en": "Magisters' Terrace",
+    "es": "Bancal del Magister",
+    "fr": "Terrasse des Magistères",
+    "pt": "Terraço dos Magísteres",
+    "ru": "Терраса Магистров"
+   },
+   "595": {
+    "de": "Das Ausmerzen von Stratholme",
+    "en": "The Culling of Stratholme",
+    "es": "La Matanza de Stratholme",
+    "fr": "L’Épuration de Stratholme",
+    "pt": "O Expurgo de Stratholme",
+    "ru": "Очищение Стратхольма"
+   },
+   "603": {
+    "de": "Ulduar",
+    "en": "Ulduar",
+    "es": "Ulduar",
+    "fr": "Ulduar",
+    "pt": "Ulduar",
+    "ru": "Ульдуар"
+   },
+   "615": {
+    "de": "Das Obsidiansanktum",
+    "en": "The Obsidian Sanctum",
+    "es": "El Sagrario Obsidiana",
+    "fr": "Le sanctum Obsidien",
+    "pt": "O Santuário Obsidiano",
+    "ru": "Обсидиановое святилище"
+   },
+   "616": {
+    "de": "Das Auge der Ewigkeit",
+    "en": "The Eye of Eternity",
+    "es": "El Ojo de la Eternidad",
+    "fr": "L’Œil de l’éternité",
+    "pt": "Olho da Eternidade",
+    "ru": "Око Вечности"
+   },
+   "631": {
+    "de": "Die Eiskronenzitadelle",
+    "en": "Icecrown Citadel",
+    "es": "Ciudadela de la Corona de Hielo",
+    "fr": "Citadelle de la Couronne de glace",
+    "pt": "Cidadela da Coroa de Gelo",
+    "ru": "Цитадель Ледяной Короны"
+   },
+   "657": {
+    "de": "Der Vortexgipfel",
+    "en": "The Vortex Pinnacle",
+    "es": "La Cumbre del Vórtice",
+    "fr": "La cime du Vortex",
+    "pt": "Pináculo do Vórtice",
+    "ru": "Вершина Смерча"
+   },
+   "720": {
+    "de": "Feuerlande",
+    "en": "Firelands",
+    "es": "Tierras de Fuego",
+    "fr": "Terres de Feu",
+    "pt": "Terras do Fogo",
+    "ru": "Огненные Просторы"
+   },
+   "725": {
+    "de": "Der Steinerne Kern",
+    "en": "The Stonecore",
+    "es": "El Núcleo Pétreo",
+    "fr": "Le Cœur-de-Pierre",
+    "pt": "Litocerne",
+    "ru": "Каменные Недра"
+   },
+   "754": {
+    "de": "Thron der Vier Winde",
+    "en": "Throne of the Four Winds",
+    "es": "Trono de los Cuatro Vientos",
+    "fr": "Trône des quatre vents",
+    "pt": "Trono dos Quatro Ventos",
+    "ru": "Трон Четырех Ветров"
+   },
+   "859": {
+    "de": "Zul'Gurub",
+    "en": "Zul'Gurub",
+    "es": "Zul'Gurub",
+    "fr": "Zul’Gurub",
+    "pt": "Zul'Gurub",
+    "ru": "Зул'Гуруб"
+   },
+   "967": {
+    "de": "Drachenseele",
+    "en": "Dragon Soul",
+    "es": "Alma de Dragón",
+    "fr": "L’Âme des dragons",
+    "pt": "Alma Dragônica",
+    "ru": "Душа Дракона"
+   }
+  },
+  "rewards": {
+   "1218": {
+    "id": 13315,
+    "names": {
+     "de": "Ruhm des Schlachtzüglers von Dazar'alor",
+     "en": "Glory of the Dazar'alor Raider",
+     "es": "Gloria del asaltante de Dazar'alor",
+     "fr": "Gloire à l’écumeur de raid de Dazar’alor",
+     "pt": "Glória do Aventureiro de Dazar'alor",
+     "ru": "Слава рейдеру Дазар'алора"
+    }
+   },
+   "1232": {
+    "id": 13687,
+    "names": {
+     "de": "Ruhm des ewigen Schlachtzüglers",
+     "en": "Glory of the Eternal Raider",
+     "es": "Gloria del asaltante eterno",
+     "fr": "Gloire à l’écumeur éternel",
+     "pt": "Glória do saqueador eterno",
+     "ru": "Слава рейдеру Вечного дворца"
+    }
+   },
+   "1265": {
+    "id": 14068,
+    "names": {
+     "de": "Der Zeit voraus: N'Zoth der Verderber",
+     "en": "Ahead of the Curve: N'Zoth the Corruptor",
+     "es": "Aventajado: N'Zoth, el Corruptor",
+     "fr": "Une longueur d’avance : N’Zoth le Corrupteur",
+     "pt": "Acima do normal: N'Zoth, o Corruptor",
+     "ru": "Герой своего времени: Н'Зот Заразитель"
+    }
+   },
+   "1322": {
+    "id": 14146,
+    "names": {
+     "de": "Ruhm des Schlachtzüglers von Ny'alotha",
+     "en": "Glory of the Ny'alotha Raider",
+     "es": "Gloria del asaltante de Ny'alotha",
+     "fr": "Gloire à l’écumeur de Ny’alotha",
+     "pt": "Glória do Aventureiro de Ny'alotha",
+     "ru": "Слава рейдеру Ни'алоты"
+    }
+   },
+   "1326": {
+    "id": 14145,
+    "names": {
+     "de": "Schlüsselsteinmeister von Battle for Azeroth: Saison 4",
+     "en": "Battle for Azeroth Keystone Master: Season Four",
+     "es": "Maestro de la piedra angular de Battle for Azeroth: temporada 4",
+     "fr": "Maître mythique de Battle for Azeroth : saison 4",
+     "pt": "Mestre da Pedra-chave de Battle for Azeroth: Série 4",
+     "ru": "Мастер ключей Battle for Azeroth 4-го сезона"
+    }
+   },
+   "1377": {
+    "id": 14355,
+    "names": {
+     "de": "Ruhm des Schlachtzüglers von Nathria",
+     "en": "Glory of the Nathria Raider",
+     "es": "Gloria del asaltante de Nathria",
+     "fr": "Gloire à l’écumeur de raids de Nathria",
+     "pt": "Glória do Aventureiro de Nathria",
+     "ru": "Слава рейдеру Нафрии"
+    }
+   },
+   "1405": {
+    "id": 15690,
+    "names": {
+     "de": "Schlüsselsteinmeister von Shadowlands: Saison 4",
+     "en": "Shadowlands Keystone Master: Season Four",
+     "es": "Maestro de la piedra angular de Shadowlands: temporada 4",
+     "fr": "Maître mythique de Shadowlands : saison 4",
+     "pt": "Mestre da Pedra-chave de Shadowlands: Série 4",
+     "ru": "Властелин ключей Темных Земель: четвертый сезон"
+    }
+   },
+   "1417": {
+    "id": 15130,
+    "names": {
+     "de": "Ruhm des herrschenden Schlachtzüglers",
+     "en": "Glory of the Dominant Raider",
+     "es": "Gloria del asaltante dominante",
+     "fr": "Gloire à l’écumeur de raids de la Domination",
+     "pt": "Glória do Saqueador Dominante",
+     "ru": "Слава рейдеру Святилища Господства"
+    }
+   },
+   "1419": {
+    "id": 14532,
+    "names": {
+     "de": "Schlüsselsteinmeister von Shadowlands: Saison 1",
+     "en": "Shadowlands Keystone Master: Season One",
+     "es": "Maestro de la piedra angular de Shadowlands: temporada 1",
+     "fr": "Maître mythique de Shadowlands : saison 1",
+     "pt": "Mestre da Pedra-chave de Shadowlands: Série 1",
+     "ru": "Мастер ключей Shadowlands 1-го сезона"
+    }
+   },
+   "1443": {
+    "id": 14322,
+    "names": {
+     "de": "Ruhm des Helden der Schattenlande",
+     "en": "Glory of the Shadowlands Hero",
+     "es": "Gloria del héroe de Shadowlands",
+     "fr": "Gloire à l’héroïsme de l’Ombreterre",
+     "pt": "Glória do Herói das Terras Sombrias",
+     "ru": "Слава героя Темных Земель"
+    }
+   },
+   "1446": {
+    "id": 15178,
+    "names": {
+     "de": "Gut gefälscht ist halb gewonnen",
+     "en": "Fake It 'Til You Make It",
+     "es": "Disimulad, disimulad, malditos",
+     "fr": "Il faut savoir persévérer",
+     "pt": "Enganando bem",
+     "ru": "Делай как можешь, пока не сможешь как надо"
+    }
+   },
+   "1520": {
+    "id": 15078,
+    "names": {
+     "de": "Schlüsselsteinmeister von Shadowlands: Saison 2",
+     "en": "Shadowlands Keystone Master: Season Two",
+     "es": "Maestro de la piedra angular de Shadowlands: temporada 2",
+     "fr": "Maître mythique de Shadowlands : saison 2",
+     "pt": "Mestre da Pedra-chave de Shadowlands: Série 2",
+     "ru": "Властелин ключей Темных Земель: второй сезон"
+    }
+   },
+   "1544": {
+    "id": 15499,
+    "names": {
+     "de": "Schlüsselsteinmeister von Shadowlands: Saison 3",
+     "en": "Shadowlands Keystone Master: Season Three",
+     "es": "Maestro de la piedra angular de Shadowlands: temporada 3",
+     "fr": "Maître mythique de Shadowlands : saison 3",
+     "pt": "Mestre da Pedra-chave de Shadowlands: Série 3",
+     "ru": "Властелин ключей Темных Земель: третий сезон"
+    }
+   },
+   "1549": {
+    "id": 15491,
+    "names": {
+     "de": "Ruhm des Mausoleumsschlachtzüglers",
+     "en": "Glory of the Sepulcher Raider",
+     "es": "Gloria del asaltante del Sepulcro",
+     "fr": "Gloire à l’écumeur de raids du sépulcre",
+     "pt": "Glória do saqueador do Sepulcro",
+     "ru": "Слава рейдеру Гробницы"
+    }
+   },
+   "1552": {
+    "id": 15470,
+    "names": {
+     "de": "Der Zeit voraus: Der Kerkermeister",
+     "en": "Ahead of the Curve: The Jailer",
+     "es": "Aventajado: El Carcelero",
+     "fr": "Une longueur d’avance : le Geôlier",
+     "pt": "Acima do normal: o Carcereiro",
+     "ru": "Герой своего времени: Тюремщик"
+    }
+   },
+   "1564": {
+    "id": 15322,
+    "names": {
+     "de": "Makelloser Meister (Ebene 16)",
+     "en": "Flawless Master (Layer 16)",
+     "es": "Maestría impecable (capa 16)",
+     "fr": "Maître de la perfection (échelon 16)",
+     "pt": "Mestre Impecável (Camada 16)",
+     "ru": "Безупречное мастерство (16-й уровень)"
+    }
+   },
+   "1626": {
+    "id": 16295,
+    "names": {
+     "de": "Ruhm des Helden von Dragonflight",
+     "en": "Glory of the Dragonflight Hero",
+     "es": "Gloria del héroe de Dragonflight",
+     "fr": "Gloire à l’héroïsme de Dragonflight",
+     "pt": "Glória do Herói de Dragonflight",
+     "ru": "Слава герою Dragonflight"
+    }
+   },
+   "1644": {
+    "id": 16355,
+    "names": {
+     "de": "Ruhm des Gewölbeschlachtzüglers",
+     "en": "Glory of the Vault Raider",
+     "es": "Gloria del asaltante de la cámara",
+     "fr": "Gloire au pillage de caveaux",
+     "pt": "Glória do Aventureiro da Câmara",
+     "ru": "Слава рейдеру Хранилища Воплощений"
+    }
+   },
+   "1681": {
+    "id": 16649,
+    "names": {
+     "de": "Schlüsselsteinmeister von Dragonflight: Saison 1",
+     "en": "Dragonflight Keystone Master: Season One",
+     "es": "Maestro de la piedra angular de Dragonflight: temporada 1",
+     "fr": "Maîtrise mythique de Dragonflight : saison 1",
+     "pt": "Mestre da Pedra-chave de Dragonflight: Série 1",
+     "ru": "Властелин ключей Dragonflight: 1-й сезон"
+    }
+   },
+   "1725": {
+    "id": 17844,
+    "names": {
+     "de": "Schlüsselsteinmeister von Dragonflight: Saison 2",
+     "en": "Dragonflight Keystone Master: Season Two",
+     "es": "Maestro de la piedra angular de Dragonflight: temporada 2",
+     "fr": "Maîtrise mythique de Dragonflight : saison 2",
+     "pt": "Mestre da Pedra-chave de Dragonflight: Série 2",
+     "ru": "Властелин ключей Dragonflight: второй сезон"
+    }
+   },
+   "1734": {
+    "id": 18251,
+    "names": {
+     "de": "Ruhm des Schlachtzüglers von Aberrus",
+     "en": "Glory of the Aberrus Raider",
+     "es": "Gloria del asaltante de Aberrus",
+     "fr": "Gloire du pillage d’Aberrus",
+     "pt": "Glória do Aventureiro de Aberrus",
+     "ru": "Слава рейдеру Аберрия"
+    }
+   },
+   "1801": {
+    "id": 19011,
+    "names": {
+     "de": "Schlüsselsteinmeister von Dragonflight: Saison 3",
+     "en": "Dragonflight Keystone Master: Season Three",
+     "es": "Maestro de la piedra angular de Dragonflight: temporada 3",
+     "fr": "Maîtrise mythique de Dragonflight : saison 3",
+     "pt": "Mestre da Pedra-chave de Dragonflight: Série 3",
+     "ru": "Властелин ключей Dragonflight: третий сезон"
+    }
+   },
+   "1814": {
+    "id": 19349,
+    "names": {
+     "de": "Ruhm des Traumschlachtzüglers",
+     "en": "Glory of the Dream Raider",
+     "es": "Gloria del asaltante del Sueño",
+     "fr": "Gloire à l’écumeur ou l’écumeuse de raids oniriques",
+     "pt": "Glória do Aventureiro do Sonho",
+     "ru": "Слава рейдеру Сна"
+    }
+   },
+   "2055": {
+    "id": 19782,
+    "names": {
+     "de": "Schlüsselsteinmeister von Dragonflight: Saison 4",
+     "en": "Dragonflight Keystone Master: Season Four",
+     "es": "Maestro de la piedra angular de Dragonflight: temporada 4",
+     "fr": "Maîtrise mythique de Dragonflight : saison 4",
+     "pt": "Mestre da Pedra-chave de Dragonflight: Série 4",
+     "ru": "Властелин ключей Dragonflight: четвертый сезон"
+    }
+   },
+   "2091": {
+    "id": 19574,
+    "names": {
+     "de": "Erweckt die Schlachtzüge von Dragonflight",
+     "en": "Awakening the Dragonflight Raids",
+     "es": "El despertar de las bandas de Dragonflight",
+     "fr": "Éveil des raids de Dragonflight",
+     "pt": "Despertar os raides de Dragonflight",
+     "ru": "Пробуждение рейдов Dragonflight"
+    }
+   },
+   "2180": {
+    "id": 40232,
+    "names": {
+     "de": "Ruhm des Nerub'ar-Plünderers",
+     "en": "Glory of the Nerub-ar Raider",
+     "es": "Gloria del asaltante de Nerub'ar",
+     "fr": "Gloire du chevaucheur nérub’ar",
+     "pt": "Conquista - Glória do Aventureiro de Nerub-ar",
+     "ru": "Слава рейдеру Неруб'арского дворца"
+    }
+   },
+   "2244": {
+    "id": 20525,
+    "names": {
+     "de": "Schlüsselsteinmeister von The War Within: Saison 1",
+     "en": "The War Within Keystone Master: Season One",
+     "es": "Maestro de la piedra angular de The War Within: temporada 1",
+     "fr": "Maîtrise mythique de The War Within : saison 1",
+     "pt": "Mestre da Pedra-chave de The War Within: Série 1",
+     "ru": "Мастер ключей The War Within: 1-й сезон"
+    }
+   },
+   "2313": {
+    "id": 41286,
+    "names": {
+     "de": "Ruhm des Schlachtzüglers der Befreiung von Lorenhall",
+     "en": "Glory of the Liberation of Undermine Raider",
+     "es": "Gloria del asaltante de la liberación de Minahonda",
+     "fr": "Gloire du pillage de la Libération de Terremine",
+     "pt": "Glória do saqueador da Libertação da Inframina",
+     "ru": "Слава рейдеру Нижней Шахты"
+    }
+   },
+   "2480": {
+    "id": 41533,
+    "names": {
+     "de": "Schlüsselsteinmeister von The War Within: Saison 2",
+     "en": "The War Within Keystone Master: Season Two",
+     "es": "Maestro de la piedra angular de The War Within: temporada 2",
+     "fr": "Maîtrise mythique de The War Within : saison 2",
+     "pt": "Mestre da Pedra-chave de The War Within: Série 2",
+     "ru": "Мастер ключей The War Within: 2-й сезон"
+    }
+   },
+   "2508": {
+    "id": 40951,
+    "names": {
+     "de": "Schlüsselsteinlegende von The War Within: Saison 2",
+     "en": "The War Within Keystone Legend: Season Two",
+     "es": "Leyenda de la piedra angular de The War Within: temporada 2",
+     "fr": "Légende mythique de The War Within : saison 2",
+     "pt": "Lenda da Pedra-chave de The War Within: Série 2",
+     "ru": "Легенда ключей The War Within: 2-й сезон"
+    }
+   },
+   "2549": {
+    "id": 41597,
+    "names": {
+     "de": "Ruhm des Omegaschlachtzüglers",
+     "en": "Glory of the Omega Raider",
+     "es": "Gloria del asaltante omega",
+     "fr": "Gloire à l’écumage de raids Omega",
+     "pt": "Glória do Saqueador Ômega",
+     "ru": "Слава рейдеру Омега"
+    }
+   },
+   "262": {
+    "id": 2136,
+    "names": {
+     "de": "Ruhm des Helden",
+     "en": "Glory of the Hero",
+     "es": "La gloria del héroe",
+     "fr": "Gloire à l’héroïsme",
+     "pt": "A Glória do Herói",
+     "ru": "Слава герою"
+    }
+   },
+   "263": {
+    "id": 2138,
+    "names": {
+     "de": "Ruhm des Schlachtzüglers (25 Spieler)",
+     "en": "Glory of the Raider (25 player)",
+     "es": "La gloria del asaltante (25 j.)",
+     "fr": "Gloire à l'écumeur de raids (25 joueurs)",
+     "pt": "Glória do aventureiro (25 jogadores)",
+     "ru": "Слава рейдеру (25 игроков)"
+    }
+   },
+   "2631": {
+    "id": 42172,
+    "names": {
+     "de": "Schlüsselsteinlegende von The War Within: Saison 3",
+     "en": "The War Within Keystone Legend: Season Three",
+     "es": "Leyenda de la piedra angular de The War Within: temporada 3",
+     "fr": "Légende mythique de The War Within : saison 3",
+     "pt": "Lenda da Pedra-chave de The War Within: Série 3",
+     "ru": "Легенда ключей The War Within: 3-й сезон"
+    }
+   },
+   "2633": {
+    "id": 41973,
+    "names": {
+     "de": "Schlüsselsteinmeister von The War Within: Saison 3",
+     "en": "The War Within Keystone Master: Season Three",
+     "es": "Maestro de la piedra angular de The War Within: temporada 3",
+     "fr": "Maîtrise mythique de The War Within : saison 3",
+     "pt": "Mestre da Pedra-chave de The War Within: Série 3",
+     "ru": "Мастер ключей The War Within: 3-й сезон"
+    }
+   },
+   "266": {
+    "id": 2137,
+    "names": {
+     "de": "Ruhm des Schlachtzüglers (10 Spieler)",
+     "en": "Glory of the Raider (10 player)",
+     "es": "La gloria del asaltante (10 j.)",
+     "fr": "Gloire à l'écumeur de raids (10 joueurs)",
+     "pt": "Glória do aventureiro (10 jogadores)",
+     "ru": "Слава рейдеру (10 игроков)"
+    }
+   },
+   "2733": {
+    "id": 61256,
+    "names": {
+     "de": "Schlüsselsteinmeister von Midnight: Saison 1",
+     "en": "Midnight Keystone Master: Season 1",
+     "es": "Maestro de la piedra angular de Midnight: temporada 1",
+     "fr": "Maîtrise mythique de Midnight : saison 1",
+     "pt": "Mestre da Pedra-chave de Midnight: Série 1",
+     "ru": "Мастер ключей Midnight: 1-й сезон"
+    }
+   },
+   "2734": {
+    "id": 61258,
+    "names": {
+     "de": "Schlüsselsteinlegende von Midnight: Saison 1",
+     "en": "Midnight Keystone Legend: Season 1",
+     "es": "Leyenda de la piedra angular de Midnight: temporada 1",
+     "fr": "Légende mythique de Midnight : saison 1",
+     "pt": "Lenda da Pedra-chave de Midnight: Série 1",
+     "ru": "Легенда ключей Midnight: 1-й сезон"
+    }
+   },
+   "2831": {
+    "id": 61380,
+    "names": {
+     "de": "Ruhm des Schlachtzüglers von Midnight",
+     "en": "Glory of the Midnight Raider",
+     "es": "Gloria del asaltante de Midnight",
+     "fr": "Gloire à l’écumage des raids de Midnight",
+     "pt": "Glória do Saqueador de Midnight",
+     "ru": "Слава рейдеру Midnight"
+    }
+   },
+   "3021": {
+    "id": 63254,
+    "names": {
+     "de": "Ruhm des giftigen Schlachtzüglers",
+     "en": "Glory of the Venomous Raider",
+     "es": "Gloria del asaltante venenoso",
+     "fr": "Gloire à l’écumage de raids venimeux",
+     "pt": "Glória do Saqueador Peçonhento",
+     "ru": "Слава отравленному рейдеру"
+    }
+   },
+   "306": {
+    "id": 12401,
+    "names": {
+     "de": "Ruhm des Schlachtzüglers von Ulduar",
+     "en": "Glory of the Ulduar Raider",
+     "es": "La gloria del asaltante de Ulduar",
+     "fr": "Gloire à l’écumeur d’Ulduar",
+     "pt": "Glória do aventureiro de Ulduar",
+     "ru": "Слава рейдеру Ульдуара"
+    }
+   },
+   "3063": {
+    "id": 62447,
+    "names": {
+     "de": "Schlüsselsteinmeister von Midnight: Saison 2",
+     "en": "Midnight Keystone Master: Season 2",
+     "es": "Maestro de la piedra angular de Midnight: temporada 2",
+     "fr": "Maîtrise mythique de Midnight : saison 2",
+     "pt": "Mestre da Pedra-chave de Midnight: Série 2",
+     "ru": "Мастер ключей Midnight: 2-й сезон"
+    }
+   },
+   "3064": {
+    "id": 62449,
+    "names": {
+     "de": "Schlüsselsteinlegende von Midnight: Saison 2",
+     "en": "Midnight Keystone Legend: Season 2",
+     "es": "Leyenda de la piedra angular de Midnight: temporada 2",
+     "fr": "Légende mythique de Midnight : saison 2",
+     "pt": "Lenda da Pedra-chave de Midnight: Série 2",
+     "ru": "Легенда ключей Midnight: 2-й сезон"
+    }
+   },
+   "307": {
+    "id": 12401,
+    "names": {
+     "de": "Ruhm des Schlachtzüglers von Ulduar",
+     "en": "Glory of the Ulduar Raider",
+     "es": "La gloria del asaltante de Ulduar",
+     "fr": "Gloire à l’écumeur d’Ulduar",
+     "pt": "Glória do aventureiro de Ulduar",
+     "ru": "Слава рейдеру Ульдуара"
+    }
+   },
+   "344": {
+    "id": 4156,
+    "names": {
+     "de": "Ein Tribut an die Unsterblichkeit",
+     "en": "A Tribute to Immortality",
+     "es": "Un tributo a la inmortalidad",
+     "fr": "Une offrande à l'immortalité",
+     "pt": "Tributo à Imortalidade",
+     "ru": "Дань бессмертию"
+    }
+   },
+   "345": {
+    "id": 4079,
+    "names": {
+     "de": "Ein Tribut an die Unsterblichkeit",
+     "en": "A Tribute to Immortality",
+     "es": "Un tributo a la inmortalidad",
+     "fr": "Une offrande à l'immortalité",
+     "pt": "Tributo à Imortalidade",
+     "ru": "Дань бессмертию"
+    }
+   },
+   "364": {
+    "id": 4603,
+    "names": {
+     "de": "Ruhm des Schlachtzüglers von Eiskrone (25 Spieler)",
+     "en": "Glory of the Icecrown Raider (25 player)",
+     "es": "La gloria del asaltante de Corona de Hielo (25 j.)",
+     "fr": "Gloire à l'écumeur de raids de la Couronne de glace (25 joueurs)",
+     "pt": "Glória do Aventureiro da Coroa de Gelo (25 jogadores)",
+     "ru": "Слава рейдеру Ледяной Короны (25 игроков)"
+    }
+   },
+   "365": {
+    "id": 4602,
+    "names": {
+     "de": "Ruhm des Schlachtzüglers von Eiskrone (10 Spieler)",
+     "en": "Glory of the Icecrown Raider (10 player)",
+     "es": "La gloria del asaltante de Corona de Hielo (10 j.)",
+     "fr": "Gloire à l'écumeur de raids de la Couronne de glace (10 joueurs)",
+     "pt": "Glória do Aventureiro da Coroa de Gelo (10 jogadores)",
+     "ru": "Слава рейдеру Ледяной Короны (10 игроков)"
+    }
+   },
+   "391": {
+    "id": 4845,
+    "names": {
+     "de": "Heldenruhm des Kataklysmus",
+     "en": "Glory of the Cataclysm Hero",
+     "es": "La gloria del héroe de Cataclysm",
+     "fr": "Gloire à l’héroïsme du Cataclysme",
+     "pt": "Glória do Herói do Cataclismo",
+     "ru": "Слава герою Cataclysm"
+    }
+   },
+   "392": {
+    "id": 4853,
+    "names": {
+     "de": "Ruhm des Kataklysmus-Schlachtzüglers",
+     "en": "Glory of the Cataclysm Raider",
+     "es": "La gloria del asaltante de Cataclysm",
+     "fr": "Gloire à l'écumeur de raids du Cataclysme",
+     "pt": "Glória do Aventureiro do Cataclismo",
+     "ru": "Слава рейдеру Cataclysm"
+    }
+   },
+   "417": {
+    "id": 5828,
+    "names": {
+     "de": "Ruhm des Schlachtzüglers der Feuerlande",
+     "en": "Glory of the Firelands Raider",
+     "es": "La gloria del asaltante de las Tierras de Fuego",
+     "fr": "Gloire à l’écumeur de raids des terres de Feu",
+     "pt": "Glória do Aventureiro das Terras do Fogo",
+     "ru": "Слава рейдеру Огненных Просторов"
+    }
+   },
+   "443": {
+    "id": 6169,
+    "names": {
+     "de": "Ruhm des Schlachtzüglers der Drachenseele",
+     "en": "Glory of the Dragon Soul Raider",
+     "es": "La gloria del asaltante de Alma de Dragón",
+     "fr": "Gloire à l’écumeur de raids de l’Âme des dragons",
+     "pt": "Glória do aventureiro da Alma Dragônica",
+     "ru": "Слава рейдеру Души Дракона"
+    }
+   },
+   "466": {
+    "id": 6682,
+    "names": {
+     "de": "Gildenruhm des Pandaria-Schlachtzüglers",
+     "en": "Guild Glory of the Pandaria Raider",
+     "es": "Hermandad: La gloria del asaltante de Pandaria",
+     "fr": "Gloire à l'écumeur de raids de Pandarie en guilde",
+     "pt": "Glória da Guilda do Aventureiro de Pandária",
+     "ru": "Слава рейдеру Пандарии (гильдия)"
+    }
+   },
+   "472": {
+    "id": 6927,
+    "names": {
+     "de": "Heldenruhm von Pandaria",
+     "en": "Glory of the Pandaria Hero",
+     "es": "La gloria del héroe de Pandaria",
+     "fr": "Gloire à l’héroïsme de Pandarie",
+     "pt": "Glória do herói de Pandária",
+     "ru": "Слава герою Пандарии"
+    }
+   },
+   "474": {
+    "id": 6932,
+    "names": {
+     "de": "Ruhm des Pandaria-Schlachtzüglers",
+     "en": "Glory of the Pandaria Raider",
+     "es": "La gloria del asaltante de Pandaria",
+     "fr": "Gloire à l’écumeur de raids de Pandarie",
+     "pt": "Glória do Aventureiro de Pandária",
+     "ru": "Слава рейдеру Пандарии"
+    }
+   },
+   "503": {
+    "id": 6375,
+    "names": {
+     "de": "Herausforderungsmeister: Silber",
+     "en": "Challenge Conqueror: Silver",
+     "es": "Conquistador de desafíos: plata",
+     "fr": "Défi relevé : argent",
+     "pt": "Conquistador dos Desafios: Prata",
+     "ru": "Победитель в испытаниях: серебро"
+    }
+   },
+   "518": {
+    "id": 6375,
+    "names": {
+     "de": "Herausforderungsmeister: Silber",
+     "en": "Challenge Conqueror: Silver",
+     "es": "Conquistador de desafíos: plata",
+     "fr": "Défi relevé : argent",
+     "pt": "Conquistador dos Desafios: Prata",
+     "ru": "Победитель в испытаниях: серебро"
+    }
+   },
+   "519": {
+    "id": 6375,
+    "names": {
+     "de": "Herausforderungsmeister: Silber",
+     "en": "Challenge Conqueror: Silver",
+     "es": "Conquistador de desafíos: plata",
+     "fr": "Défi relevé : argent",
+     "pt": "Conquistador dos Desafios: Prata",
+     "ru": "Победитель в испытаниях: серебро"
+    }
+   },
+   "520": {
+    "id": 6375,
+    "names": {
+     "de": "Herausforderungsmeister: Silber",
+     "en": "Challenge Conqueror: Silver",
+     "es": "Conquistador de desafíos: plata",
+     "fr": "Défi relevé : argent",
+     "pt": "Conquistador dos Desafios: Prata",
+     "ru": "Победитель в испытаниях: серебро"
+    }
+   },
+   "530": {
+    "id": 8124,
+    "names": {
+     "de": "Ruhm des Donnernden Schlachtzüglers",
+     "en": "Glory of the Thundering Raider",
+     "es": "La gloria del Asaltante del Trueno",
+     "fr": "Gloire à l’écumeur de raids du tonnerre",
+     "pt": "Glória do aventureiro do trovão",
+     "ru": "Слава рейдеру Престола Гроз"
+    }
+   },
+   "557": {
+    "id": 8454,
+    "names": {
+     "de": "Ruhm des Schlachtzüglers von Orgrimmar",
+     "en": "Glory of the Orgrimmar Raider",
+     "es": "La gloria del asaltante de Orgrimmar",
+     "fr": "Gloire à l’écumeur de raids d’Orgrimmar",
+     "pt": "Glória do Saqueador de Orgrimmar",
+     "ru": "Слава рейдеру Оргриммара"
+    }
+   },
+   "558": {
+    "id": 8398,
+    "names": {
+     "de": "Der Zeit voraus: Garrosh Höllschrei (10 Spieler)",
+     "en": "Ahead of the Curve: Garrosh Hellscream (10 player)",
+     "es": "Aventajado: Garrosh Grito Infernal (10 j.)",
+     "fr": "Une longueur d’avance : Garrosh Hurlenfer (10 joueurs)",
+     "pt": "Acima do normal: Garrosh Grito Infernal (10 jogadores)",
+     "ru": "Герой своего времени: Гаррош Адский Крик (10 игроков)"
+    }
+   },
+   "607": {
+    "id": 8985,
+    "names": {
+     "de": "Ruhm des Draenorschlachtzüglers",
+     "en": "Glory of the Draenor Raider",
+     "es": "Gloria del asaltante de Draenor",
+     "fr": "Gloire à l’écumeur de raids de Draenor",
+     "pt": "Glória do Cavaleiro de Draenor",
+     "ru": "Слава рейдеру Дренора"
+    }
+   },
+   "619": {
+    "id": 9669,
+    "names": {
+     "de": "Gildenruhm des Draenorschlachtzüglers",
+     "en": "Guild Glory of the Draenor Raider",
+     "es": "La gloria del asaltante de Draenor (herm.)",
+     "fr": "Gloire à l’écumeur de raids de Draenor en guilde",
+     "pt": "Glória da Guilda do Aventureiro de Draenor",
+     "ru": "Слава рейдеру Дренора (гильдия)"
+    }
+   },
+   "623": {
+    "id": 9396,
+    "names": {
+     "de": "Ruhm des Draenorhelden",
+     "en": "Glory of the Draenor Hero",
+     "es": "Gloria del héroe de Draenor",
+     "fr": "Gloire à l’héroïsme de Draenor",
+     "pt": "Glória do Herói de Draenor",
+     "ru": "Слава герою Дренора"
+    }
+   },
+   "654": {
+    "id": 8898,
+    "names": {
+     "de": "Herausforderungskriegsherr: Silber",
+     "en": "Challenge Warlord: Silver",
+     "es": "Desafío del señor de la guerra: plata",
+     "fr": "Défi de Warlords of Draenor relevé : argent",
+     "pt": "Senhor da Guerra dos Desafios: Prata",
+     "ru": "Испытания Дренора: серебро"
+    }
+   },
+   "758": {
+    "id": 10149,
+    "names": {
+     "de": "Ruhm des Schlachtzüglers des Höllenfeuers",
+     "en": "Glory of the Hellfire Raider",
+     "es": "Gloria del asaltante de Fuego Infernal",
+     "fr": "Gloire à l’écumeur de raids des Flammes infernales",
+     "pt": "Glória do Saqueador do Fogo do Inferno",
+     "ru": "Слава рейдеру цитадели Адского Пламени"
+    }
+   },
+   "773": {
+    "id": 11180,
+    "names": {
+     "de": "Ruhm des Schlachtzüglers von Legion",
+     "en": "Glory of the Legion Raider",
+     "es": "Gloria del asaltante de Legion",
+     "fr": "Gloire à l’écumeur de raids de Legion",
+     "pt": "Glória do Saqueador de Legion",
+     "ru": "Слава рейдеру Legion"
+    }
+   },
+   "846": {
+    "id": 11163,
+    "names": {
+     "de": "Ruhm des Helden von Legion",
+     "en": "Glory of the Legion Hero",
+     "es": "Gloria del héroe de Legion",
+     "fr": "Gloire à l’héroïsme de Legion",
+     "pt": "Glória do herói de Legion",
+     "ru": "Слава герою Legion"
+    }
+   },
+   "933": {
+    "id": 12812,
+    "names": {
+     "de": "Ruhm des kriegsgezeichneten Helden",
+     "en": "Glory of the Wartorn Hero",
+     "es": "Gloria del héroe de guerra",
+     "fr": "Gloire à l’héroïsme marqué par la guerre",
+     "pt": "Glória do herói devastado pela guerra",
+     "ru": "Слава героя войны"
+    }
+   },
+   "963": {
+    "id": 12806,
+    "names": {
+     "de": "Ruhm des Schlachtzüglers von Uldir",
+     "en": "Glory of the Uldir Raider",
+     "es": "Gloria del asaltante de Uldir",
+     "fr": "Gloire à l’écumeur de raids d’Uldir",
+     "pt": "Glória do Aventureiro de Uldir",
+     "ru": "Слава рейдеру Ульдира"
+    }
+   },
+   "972": {
+    "id": 11987,
+    "names": {
+     "de": "Ruhm des Schlachtzüglers von Argus",
+     "en": "Glory of the Argus Raider",
+     "es": "Gloria del asaltante de Argus",
+     "fr": "Gloire à l’écumeur de raids d’Argus",
+     "pt": "Glória do Aventureiro de Argus",
+     "ru": "Слава рейдеру Аргуса"
+    }
+   },
+   "978": {
+    "id": 12110,
+    "names": {
+     "de": "Der Zeit voraus: Argus, der Zerrütter",
+     "en": "Ahead of the Curve: Argus the Unmaker",
+     "es": "Aventajado: Argus el Aniquilador",
+     "fr": "Une longueur d’avance : Argus l’Annihilateur",
+     "pt": "Acima do normal: Argus, o Descriador",
+     "ru": "Герой своего времени: Аргус Порабощенный"
+    }
+   }
+  }
+ },
  "patterns": {
   "Недоступ": {
    "de": "Nicht verfügbar",

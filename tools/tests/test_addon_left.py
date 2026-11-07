@@ -223,9 +223,9 @@ def under_window(x):
 
 
 tabs = [x for x in regions("Button") if x._isTab]
-check("three Blizzard top tabs above the list", [str(t._text) for t in tabs] == ["Осталось (26)", "Попытки", "Журнал"],
+check("four tabs above the list, achievements next to «Осталось»", [str(t._text) for t in tabs] == ["Осталось (26)", "Достижения", "Попытки", "Журнал"],
       [str(t._text) for t in tabs])
-check("3.0: «Осталось» selected by default", win.selectedTab == 1 and not tabs[0].IsEnabled(tabs[0]) and tabs[2].IsEnabled(tabs[2]))
+check("3.0: «Осталось» selected by default", win.selectedTab == 1 and not tabs[0].IsEnabled(tabs[0]) and tabs[3].IsEnabled(tabs[3]))
 
 
 def boxes(extent):
@@ -278,7 +278,7 @@ def char_rows():
 
 
 check("two ScrollBox lists with a scroll bar each", len(boxes(ROW)) == 1 and len(boxes(CHAR)) == 1 and boxes(ROW)[0]._managedBar)
-tabs[2].MockClick(tabs[2]); g.RunTimers()
+tabs[3].MockClick(tabs[3]); g.RunTimers()
 check("journal tab shows the journal", any("Тюремщик" in t for t in shown_rows()) and not any("Осталось" in t for t in shown_rows()))
 tabs[0].MockClick(tabs[0]); g.RunTimers()
 rows = shown_rows()
@@ -449,7 +449,7 @@ L.execute("MSS_NS.OnChange()"); g.RunTimers()
 eira = [f for f in pool(CHAR) if plain(f.name._text) == "Эйра"][0]
 eira.MockClick(eira); g.RunTimers()
 check("click on a character from another tab opens his «Осталось»", win.selectedTab == 1 and shown_rows()[0].startswith("|cff8c8c8cОсталось 26 из 38"))
-tabs[1].MockClick(tabs[1]); g.RunTimers()
+tabs[2].MockClick(tabs[2]); g.RunTimers()
 att = ns.GetAttemptsList()
 empty = [x for x in regions("FontString") if x._font == "MSSFontDim" and under_window(x)][0]
 check("«Попытки»: the counter or a word that there is none yet",
@@ -542,7 +542,7 @@ click_all()
 dump_layout(win, os.path.join(LAYOUT_DIR, "layout_all.json"))
 eira_row = pool(CHAR)[1]
 eira_row.MockClick(eira_row); g.RunTimers()
-tabs[2].MockClick(tabs[2]); g.RunTimers()
+tabs[3].MockClick(tabs[3]); g.RunTimers()
 dump_layout(win, os.path.join(LAYOUT_DIR, "layout_log.json"))
 # «Попытки» for the picture: the fixture's sheet is older than the counter — rows like a real player's (2.9 program)
 L.execute(r"""SCREEN_MOUNTS = {
@@ -561,7 +561,7 @@ local copy = {}
 for k, v in pairs(MountSheetSyncSheet) do copy[k] = v end
 copy.mounts = SCREEN_MOUNTS
 MountSheetSyncSheet = copy""")
-tabs[1].MockClick(tabs[1]); g.RunTimers()
+tabs[2].MockClick(tabs[2]); g.RunTimers()
 check("«Попытки» with rows (for the picture): most expected drops first", ns.GetAttemptsList()[1].name == "Пламенное Крыло Алисразор", ns.GetAttemptsList()[1].name)
 rows = shown_rows()
 check("3.0.3: «Попытки» in columns: mount, boss, difficulty, attempts, chance, characters left",
@@ -591,7 +591,7 @@ hide.MockClick(hide); g.RunTimers()
 check("«Скрыть без попыток»: gone", not any(" | - | - | " in plain(t) for t in shown_rows()))
 hide.MockClick(hide); g.RunTimers()
 L.execute("MountSheetSyncDB.attemptsView = nil")
-tabs[0].MockClick(tabs[0]); tabs[1].MockClick(tabs[1]); g.RunTimers()
+tabs[0].MockClick(tabs[0]); tabs[2].MockClick(tabs[2]); g.RunTimers()
 dump_layout(win, os.path.join(LAYOUT_DIR, "layout_attempts.json"))
 L.execute("MountSheetSyncSheet = SCREEN_OLD")
 tabs[0].MockClick(tabs[0]); g.RunTimers()
@@ -730,7 +730,7 @@ eira_first.MockClick(eira_first); g.RunTimers()
 L.execute("""
 for _, c in ipairs(MountSheetSyncSheet.chars) do
   for _, i in ipairs(c.items) do
-    if i.mount == "Поводья Повелителя воронов" then i.src = "reward" end
+    if i.mount == "Поводья Повелителя воронов" then i.src = "reward"; i.ach = 4321 end
   end
 end
 MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
@@ -747,11 +747,38 @@ def after_reward_title():
     return (texts[at[0] + 1] if at and at[0] + 1 < len(texts) else None), (len(at) == 1 and at[0] > [i for i, t in enumerate(texts) if t.startswith("Подземелья")][0])
 
 
-row_after, in_order = after_reward_title()
-check("3.0.4: a character's list: the reward in its own group, after the others", row_after is not None and "Поводья Повелителя воронов" in row_after and in_order, row_after)
+check("3.0.4: rewards are not in a character's «Осталось» any more", not any("Поводья Повелителя воронов" in plain(t) for t in shown_rows())
+      and not any("Достижения и награды" in plain(t) for t in shown_rows()), [plain(t) for t in shown_rows()][-4:])
 click_all(); g.RunTimers()
-row_after, in_order = after_reward_title()
-check("…and in the table of all characters", row_after is not None and "Поводья Повелителя воронов" in row_after and in_order, row_after)
+check("…nor in the table of all characters", not any("Поводья Повелителя воронов" in plain(t) for t in shown_rows()), [plain(t) for t in shown_rows()][-4:])
+# their own tab: the achievement, its requirement from the game, the mount, earned or not; a click on the name opens it
+L.execute('''
+GetAchievementInfo = function(id) if id == 4321 then return 4321, "Слава герою", 10, true, 1, 1, 24, "Выполните героические достижения" end end
+MOCK_ACH = nil
+OpenAchievementFrameToAchievement = function(id) MOCK_ACH = id; AchievementFrame:Show() end
+AchievementFrame = CreateFrame("Frame", "AchievementFrame")
+AchievementFrame:Hide()
+''')
+tabs[1].MockClick(tabs[1]); g.RunTimers()
+ach_rows = [f for f in pool(ROW) if f._shown and f.elem and f.elem.achievement is not None]
+ach_text = [plain(row_text(f)) for f in ach_rows]
+check("3.0.4: the «Достижения» tab: the reward row with its requirement from the game and «Получено»", tabs[1]._text == "Достижения" and len(ach_rows) == 1
+      and "Выполните героические достижения" in ach_text[0] and "Поводья Повелителя воронов" in ach_text[0] and ach_text[0].endswith("Получено"), (tabs[1]._text, ach_text))
+check("…no attempts or chance columns there", [plain(c.text._text) for c in head_cells()][:4] == ["Достижение", "Условие", "Маунт", "Статус"], [plain(c.text._text) for c in head_cells()])
+if ach_rows:
+    ach_row = ach_rows[0]
+    ach_row._scripts.OnEnter(ach_row)
+    tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
+    check("…the tooltip names the click on the achievement", any("по достижению" in t for t in tt), tt)
+    ach_row._scripts.OnLeave(ach_row)
+    boss_col = [c for c in lua_list(ach_row.elem.cols) if c.key == "boss"][0]
+    g.CURSOR[1] = boss_col.x + 1
+    ach_row.MockClick(ach_row)
+    check("…left click on the achievement opens it in the game's achievements window", g.MOCK_ACH == 4321 and not win._shown, g.MOCK_ACH)
+    g.AchievementFrame.Hide(g.AchievementFrame); g.RunTimers()
+    check("…and the window comes back", win._shown)
+    g.CURSOR[1] = 100000
+tabs[0].MockClick(tabs[0]); g.RunTimers()
 head_now = all_head_rows()
 check("…«Ещё убить» doesn't count the row of the reward", head_now == head_before - 1, (head_before, head_now))
 head_text = [plain(x._text) for x in regions("FontString") if under_window(x) and x._shown and x._text is not None and "Ещё убить на этой неделе" in plain(x._text)][0]
@@ -1055,7 +1082,7 @@ check("same mount twice -> one record", len(g.MountSheetSyncDB.kills) == n + 1)
 g.Fire("NEW_MOUNT_ADDED", 99999)
 g.Fire("NEW_MOUNT_ADDED", g.SECRET)
 check("unknown or secret mount id: nothing, no error", len(g.MountSheetSyncDB.kills) == n + 1 and "ошибка" not in chat_all())
-tabs[2].MockClick(tabs[2]); g.RunTimers()
+tabs[3].MockClick(tabs[3]); g.RunTimers()
 check("journal shows the mount in purple", any(t.startswith("|cff8c8c8c") and "|cffc77dffНовый маунт: Синий протодракон|r" in t for t in shown_rows()))
 check("mount record does not tick list rows", remaining().left == left_before_mount, (remaining().left, left_before_mount))
 g.MountSheetSyncDB.quiet = True
@@ -1138,7 +1165,7 @@ r = remaining()
 check("newer list from the sheet: local hiding dropped (the sheet decides now)", g.MountSheetSyncDB.notFarmed["Player-1602-0ABCDEF1"] is None
       and any(str(r["items"][i].item.boss) == boss0 for i in range(1, len(r["items"]) + 1)))
 g.MountSheetSyncSheet.generated = saved_generated
-tabs[2].MockClick(tabs[2]); g.RunTimers()
+tabs[3].MockClick(tabs[3]); g.RunTimers()
 check("journal shows «Не фармлю» in grey", any("|cff9d9d9dНе фармлю: " + boss0 in t for t in shown_rows()), [t for t in shown_rows() if "фармлю" in t])
 check("world rows have no «не фармлю» menu", ns.AddPlan(L.table_from({"kind": "world", "boss": "Галлеон"}), "row") is False)
 

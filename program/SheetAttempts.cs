@@ -260,6 +260,12 @@ namespace MountSheetSync
                 if (rewards.Contains(key))
                 {
                     item["src"] = "reward";
+                    Dictionary<string, string> titles;
+                    long achievement = id > 0 ? SheetLang.RewardAchievement(id, out titles) : 0;
+                    if (achievement > 0)
+                    {
+                        item["ach"] = (double)achievement;   // щелчок по строке в окне аддона открывает это достижение
+                    }
                 }
             }
         }

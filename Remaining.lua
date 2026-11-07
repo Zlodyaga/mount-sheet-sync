@@ -606,12 +606,15 @@ function ns.GetSummary()
           summaryKey[it] = k
         end
         local row = byKey[k]
-        if not row then
+        if not row and ns.GroupOf(it) == "reward" then
+          row = false   -- достижения и награды — на своей вкладке, не в сетке
+        elseif not row then
           row = { kind = ns.GroupOf(it), item = it, names = {}, total = 0, done = {} }
           byKey[k] = row
           rows[#rows + 1] = row
         end
-        if entry.done then
+        if not row then   -- luacheck: ignore (награда)
+        elseif entry.done then
           row.done[c.name] = true   -- убит на этой неделе; у кого строки нет совсем, тот её не фармит
         else
           row.names[#row.names + 1] = c.name
@@ -1124,6 +1127,33 @@ end
 
 function ns.InstanceName(id)
   return instanceName and instanceName[id]
+end
+
+-- Вкладка «Достижения»: строки-награды всех персонажей, по одной на маунт и достижение (у всех они одни и те же).
+local achFor, achGenerated, achRows
+
+function ns.GetAchievementRows()
+  local data = MountSheetSyncSheet
+  if type(data) ~= "table" or type(data.chars) ~= "table" then
+    return nil
+  end
+  if achFor == data and achGenerated == data.generated then
+    return achRows
+  end
+  local rows, seen = {}, {}
+  for _, ch in ipairs(data.chars) do
+    for _, item in ipairs(type(ch) == "table" and type(ch.items) == "table" and ch.items or {}) do
+      if type(item) == "table" and item.src == "reward" then
+        local k = tostring(item.id or "") .. "|" .. tostring(item.ach or "") .. "|" .. Norm(item.boss)
+        if not seen[k] then
+          seen[k] = true
+          rows[#rows + 1] = item
+        end
+      end
+    end
+  end
+  achFor, achGenerated, achRows = data, data.generated, rows
+  return rows
 end
 
 -- Группа строки в окне: достижения и награды (item.src, программа 2.10+) — отдельно, это не убийство босса. item.kind у них прежний.

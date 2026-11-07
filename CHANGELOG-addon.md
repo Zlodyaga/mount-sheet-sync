@@ -3,6 +3,8 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.4
+- Achievements and rewards have a tab of their own instead of a group in “Remaining”: the full name, the requirement as the game words it, the mount, and whether it is earned. Left-click the achievement to open it in the game's achievements window, the mount to open the Mount Journal. Needs the program 2.10.0.
+- Mount, boss and place names follow the addon's language in German, French, Spanish and Portuguese too, not only English and Russian.
 - Ctrl + click on a raid whose entrance is inside another zone (Dragon Soul in the Caverns of Time) leads to the Caverns of Time in Tanaris, and once you are inside, on to the entrance by itself. If you pick another target meanwhile, the addon leaves it alone. Entrances are looked for on every map, and by name too, so more dungeons are found.
 - The offline line at the bottom of the window stands out: a warning icon and bold orange text. The window sits on whole screen pixels, buttons, tabs and headings use the same plain font as the rest (the decorative one blurred in game), and the bottom line is a size larger, so the letters are crisper.
 - All characters: a character who doesn't farm a row (no tick in “Farming”, or no such group) now gets a faint cross instead of the same dash as a kill this week. The row tooltip names who killed it this week and who doesn't farm it.
