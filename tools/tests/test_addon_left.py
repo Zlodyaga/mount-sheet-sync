@@ -677,8 +677,8 @@ MSS_NS.OnChange()""")
 g.RunTimers()
 
 # 3.0.4: difficulties the catalog writes at length are short in the column
-SHORT = {"Normal 10, 3 drakes up": "N10", "Heroic 25": "H25", "Achievement": "Дост.", "Любая": "Любая", "Удалённая награда": "Удалена",
-         "Torghast": "Торгаст", "3400+ M+ rating in current season": "3400+", "MoP Challenge Mode": "CM", "Mythic, hard mode": "M", "Mythic dungeon achievements": "Дост."}
+SHORT = {"Normal 10, 3 drakes up": "N10", "Heroic 25": "H25", "Achievement": "Дост.", "Любая": "Любая", "Удалённая награда": "Удал.",
+         "Torghast": "Торг.", "3400+ M+ rating in current season": "3400+", "MoP Challenge Mode": "CM", "Mythic, hard mode": "M", "Mythic dungeon achievements": "Дост."}
 tabs[0].MockClick(tabs[0]); g.RunTimers()
 for long_text, short_text in SHORT.items():
     L.execute("""

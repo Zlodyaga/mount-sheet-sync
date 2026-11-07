@@ -10,7 +10,7 @@ The addon and the Windows program are released separately; the program's changes
 - Mount icons on every row of “Remaining”, including achievements and guaranteed drops. Needs the program 2.10.0; with an older one those rows stay without an icon.
 - With one character there is no “All characters” row: it opens straight on that character. The all-characters table shows rows and attempts side by side.
 - The row tooltip stands beside the table, so it covers no rows. The boss column keeps just the boss; what follows it is in the tooltip.
-- The difficulty column is short and readable: “N10”, “Torghast”, “Ach.” and the like, with the full text in the tooltip.
+- The difficulty column is short and readable: “N10”, “Torg.”, “Ach.” and the like, with the full text in the tooltip. No word in it is cut off in any language.
 - The tooltip about the program no longer says that a Google Sheet is required.
 
 ## 3.0.3

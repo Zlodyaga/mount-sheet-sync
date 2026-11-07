@@ -216,6 +216,10 @@ check("list words: the same %s / %d in the same order as the texts they replace"
 SHEET_WORD = re.compile(r"таблиц|sheet|Tabelle|tableau|tabla|planilha|Google", re.I)
 check("list words don't name a sheet", not [(c, k) for c in codes for k in list_keys["enUS"] if SHEET_WORD.search(str(LIST[c][k]).replace("Mount Sheet Sync", ""))], [(c, k) for c in codes for k in list_keys["enUS"] if SHEET_WORD.search(str(LIST[c][k]).replace("Mount Sheet Sync", ""))][:5])
 check("no glyphs missing from WoW fonts in list words", not [(c, k) for c in codes for k in list_keys["enUS"] if re.search("[·→←↑↓]", str(LIST[c][k]))])
+# the difficulty column is narrow: a longer word is cut to "Torgh..."
+long_diff = [(c, k, str(ns.TRANSLATIONS[c][k])) for c in ["enUS", "ruRU", "deDE", "frFR", "esES", "ptBR"]
+             for k in ("diff_ach", "diff_any", "diff_removed", "diff_torghast") if len(str(ns.TRANSLATIONS[c][k])) > 5]
+check("short difficulty words fit the column: at most 5 letters", not long_diff, long_diff)
 check("no glyphs missing from WoW fonts in addon texts (· → … shown as a box)", not bad, bad[:5])
 
 passed = sum(1 for _, ok in checks if ok)
