@@ -334,24 +334,71 @@ local function ShowInGuide(instance, encounter)
   StepAside(EncounterJournal)
 end
 
--- Вход в рейд или подземелье: игра отдаёт входы по картам зон. 946 — карта всего мира, зоны ищем в ней.
+-- Вход в рейд или подземелье: игра отдаёт входы по картам. 946 — карта всего мира: обходим все карты в ней, не только
+-- зоны — вход в «Душу Дракона» есть лишь на карте Пещер Времени. Ошибка на одной карте не обрывает поиск по остальным.
 local WORLD_MAP = 946
-local entrances = {}
+local MAP_ZONE = 3   -- Enum.UIMapType.Zone
+local entrances, entranceByName = {}, {}
 
-local function FindEntrance(instance)
-  if entrances[instance] then
-    return entrances[instance]
-  end
-  local ok = pcall(function()
-    for _, map in ipairs(C_Map.GetMapChildrenInfo(WORLD_MAP, Enum.UIMapType.Zone, true) or {}) do
+-- Имя без пробелов и знаков: «Операция: Мехагон» и «Операция "Мехагон"» — одно и то же.
+local function NameKey(name)
+  return (tostring(name or ""):lower():gsub("[%p%s]", ""))
+end
+
+local function ScanEntrances()
+  local ok, maps = pcall(C_Map.GetMapChildrenInfo, WORLD_MAP, nil, true)
+  for _, map in ipairs(ok and type(maps) == "table" and maps or {}) do
+    pcall(function()
       for _, e in ipairs(C_EncounterJournal.GetDungeonEntrancesForMap(map.mapID) or {}) do
-        if not entrances[e.journalInstanceID] then
-          entrances[e.journalInstanceID] = { map = map.mapID, poi = e.areaPoiID, x = e.position.x, y = e.position.y }
+        local spot = { map = map.mapID, zone = map.mapType == MAP_ZONE, poi = e.areaPoiID, x = e.position.x, y = e.position.y }
+        local old = entrances[e.journalInstanceID]
+        if not old or (spot.zone and not old.zone) then   -- метка на карте зоны удобнее
+          entrances[e.journalInstanceID] = spot
+        end
+        if e.name and e.name ~= "" then
+          entranceByName[NameKey(e.name)] = entrances[e.journalInstanceID]
         end
       end
+    end)
+  end
+end
+
+local function FindEntrance(instance, name)
+  -- запасной путь — по названию: у части подземелий в журнале и на карте разные номера
+  local function Known()
+    return entrances[instance] or (name and entranceByName[NameKey(name)]) or nil
+  end
+  if not Known() then
+    ScanEntrances()   -- нет в найденном — обходим карты заново: игра могла ещё не отдать их в прошлый раз
+  end
+  return Known()
+end
+
+-- Вход лежит на карте внутри другой зоны (Пещеры Времени в Танарисе): куда идти снаружи — та же точка на карте зоны.
+-- nil — карта входа сама зона или игрок уже внутри неё.
+local function OuterStep(e)
+  local ok, step = pcall(function()
+    local inner = C_Map.GetMapInfo(e.map)
+    local outer = inner and inner.parentMapID and C_Map.GetMapInfo(inner.parentMapID)
+    if not (outer and outer.mapType == MAP_ZONE) then
+      return nil
     end
+    local here = C_Map.GetBestMapForUnit and C_Map.GetBestMapForUnit("player")
+    while here do   -- уже внутри — сразу ко входу
+      if here == e.map then
+        return nil
+      end
+      local info = C_Map.GetMapInfo(here)
+      here = info and info.parentMapID ~= here and info.parentMapID or nil
+    end
+    local minX, maxX, minY, maxY = C_Map.GetMapRectOnMap(e.map, outer.mapID or inner.parentMapID)
+    if not (minX and maxX and minY and maxY) then
+      return nil
+    end
+    return { map = outer.mapID or inner.parentMapID, x = minX + e.x * (maxX - minX), y = minY + e.y * (maxY - minY),
+             name = inner.name, zone = outer.name }
   end)
-  return ok and entrances[instance] or nil
+  return ok and step or nil
 end
 
 -- Босс на карте зоны (мировые боссы: входа у них нет).
@@ -384,7 +431,21 @@ end
 
 -- Показать путь: игра ведёт к отметке входа, а если не вышло (не изучена территория и т. п.) — своя метка на карте у входа.
 -- У мировых боссов входа нет: метка там, где их показывает игра.
-local function ShowRoute(elem)
+-- Путь прямо ко входу: метка входа, а если игра её не ведёт — своя метка у входа.
+local function TrackEntrance(e, name)
+  local tracked = pcall(function()
+    C_SuperTrack.SetSuperTrackedMapPin(Enum.SuperTrackingMapPinType.AreaPOI, e.poi)
+    local _, id = C_SuperTrack.GetSuperTrackedMapPin()
+    assert(id == e.poi)
+  end)
+  if tracked then
+    ns.Print(string.format(L.route_set, name))
+    return
+  end
+  ns.Print(string.format(PinAndTrack(e.map, e.x, e.y) and L.route_pin or L.route_none, name))
+end
+
+local function ShowRoute(elem, button)
   if elem.world then
     local name = Safe(elem.bossName)
     local spot = elem.encounter and FindBossSpot(elem.encounter)
@@ -397,21 +458,26 @@ local function ShowRoute(elem)
   end
   local instance = elem.instance
   local name = Safe(elem.placeName) ~= "" and Safe(elem.placeName) or ns.InstanceName(instance) or "?"
-  local e = FindEntrance(instance)
+  local e = FindEntrance(instance, ns.InstanceName(instance) or elem.placeName)
   if not e then
     ns.Print(string.format(L.route_none, name))
     return
   end
-  local tracked = pcall(function()
-    C_SuperTrack.SetSuperTrackedMapPin(Enum.SuperTrackingMapPinType.AreaPOI, e.poi)
-    local _, id = C_SuperTrack.GetSuperTrackedMapPin()
-    assert(id == e.poi)
-  end)
-  if tracked then
-    ns.Print(string.format(L.route_set, name))
+  local outer = OuterStep(e)
+  if not (outer and button and MenuUtil and MenuUtil.CreateContextMenu) then
+    TrackEntrance(e, name)
     return
   end
-  ns.Print(string.format(PinAndTrack(e.map, e.x, e.y) and L.route_pin or L.route_none, name))
+  -- в два шага: сначала до зоны со входом (Пещеры Времени), а уже в ней — ко входу
+  MenuUtil.CreateContextMenu(button, function(owner, root)
+    root:CreateTitle(name)
+    root:CreateButton(string.format(L.route_outer, Safe(outer.name), Safe(outer.zone)), function()
+      ns.Print(string.format(PinAndTrack(outer.map, outer.x, outer.y) and L.route_pin or L.route_none, Safe(outer.name)))
+    end)
+    root:CreateButton(string.format(L.route_inner, name, Safe(outer.name)), function()
+      TrackEntrance(e, name)
+    end)
+  end)
 end
 
 -- Курсор над столбцом строки (key — ключ столбца)?
@@ -491,7 +557,7 @@ local function ClickRow(button, mouse)
   end
   if IsControlKeyDown() then
     if elem.route then
-      ShowRoute(elem)
+      ShowRoute(elem, button)
     end
   elseif elem.instance and OverColumn(button, "boss") then
     ShowInGuide(elem.instance, elem.encounter)

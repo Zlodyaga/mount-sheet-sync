@@ -826,6 +826,45 @@ L.execute("function C_EncounterJournal.GetDungeonEntrancesForMap() return {} end
 row.elem.instance = 778
 row.MockClick(row)
 check("…no entrance on any map: said in the chat", "На карте не нашлось" in chat_all(), chat_all()[-160:])
+# an entrance only on a map inside another zone (Dragon Soul: the Caverns of Time in Tanaris) — two steps to choose from
+L.execute('''
+MSS_ROUTE_ENTR = { [75] = { { journalInstanceID = 187, areaPoiID = 99, position = { x = 0.6, y = 0.4 }, name = "Душа Дракона" } } }
+C_Map.GetMapChildrenInfo = function() return { { mapID = 14, mapType = 3 }, { mapID = 71, mapType = 3 }, { mapID = 75, mapType = 5 } } end
+C_EncounterJournal.GetDungeonEntrancesForMap = function(map) if map == 14 then error("this map breaks") end return MSS_ROUTE_ENTR[map] or {} end
+C_Map.GetMapInfo = function(map)
+  return ({ [75] = { mapID = 75, name = "Пещеры Времени", parentMapID = 71, mapType = 5 },
+            [71] = { mapID = 71, name = "Танарис", parentMapID = 12, mapType = 3 },
+            [85] = { mapID = 85, name = "Оргриммар", parentMapID = 12, mapType = 3 },
+            [12] = { mapID = 12, name = "Калимдор", parentMapID = 946, mapType = 2 } })[map]
+end
+C_Map.GetMapRectOnMap = function(child, parent) return 0.5, 0.7, 0.2, 0.4 end
+C_Map.GetBestMapForUnit = function() return MSS_PLAYER_MAP end
+MSS_PLAYER_MAP = 85
+ROUTE.waypoint = nil; ROUTE.pin = nil; ROUTE.tracks = true
+''')
+L.eval("function(ns) end")(ns)
+row.elem.instance = 187
+n_menus = len(g.MENUS)
+row.MockClick(row)
+menu = g.MENUS[len(g.MENUS)] if len(g.MENUS) > n_menus else None
+items = [(str(menu["items"][i].kind), str(menu["items"][i].text)) for i in range(1, len(menu["items"]) + 1)] if menu else []
+check("3.0.4: an entrance inside another zone: Ctrl + click offers two steps, a broken map doesn't stop the search",
+      len(items) == 3 and items[1][1] == "Путь в: Пещеры Времени (Танарис)" and items[2][1].startswith("Вход в ") and "внутри: Пещеры Времени" in items[2][1], items)
+if menu:
+    L.eval("function(b) b.cb() end")(menu["items"][2])
+    check("…step one: a pin on the zone's map, where the inner map lies", g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 71
+          and abs(g.ROUTE.waypoint.x - 0.62) < 1e-9 and abs(g.ROUTE.waypoint.y - 0.28) < 1e-9, g.ROUTE.waypoint and (g.ROUTE.waypoint.map, g.ROUTE.waypoint.x, g.ROUTE.waypoint.y))
+    L.eval("function(b) b.cb() end")(menu["items"][3])
+    check("…step two: the entrance itself", g.ROUTE.pin == 99)
+L.execute("MSS_PLAYER_MAP = 75; ROUTE.pin = nil")
+n_menus = len(g.MENUS)
+row.MockClick(row)
+check("…already inside: straight to the entrance, no menu", len(g.MENUS) == n_menus and g.ROUTE.pin == 99, (len(g.MENUS), g.ROUTE.pin))
+row.elem.instance = 4242
+row.elem.placeName = "Душа  Дракона!"
+L.execute("ROUTE.pin = nil")
+row.MockClick(row)
+check("…a different number in the journal: found by name", g.ROUTE.pin == 99, g.ROUTE.pin)
 # a world boss has no entrance: a pin where the game shows the boss
 L.execute("""
 function C_EncounterJournal.GetEncountersOnMap() return { { encounterID = 555, mapX = 0.3, mapY = 0.7 } } end
