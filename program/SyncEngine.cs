@@ -368,10 +368,33 @@ namespace MountSheetSync
         /// </summary>
         public List<Dictionary<string, object>> GetSendList(List<Dictionary<string, object>> records)
         {
+            return GetSendList(records, new HashSet<string>());
+        }
+
+        /// <summary>
+        /// replay — персонажи, у которых листы созданы заново (убрали и вернули): их уже отправленные записи этой недели
+        /// уходят ещё раз, как после сброса недели — «Да» снова, попытка не считается.
+        /// </summary>
+        public List<Dictionary<string, object>> GetSendList(List<Dictionary<string, object>> records, HashSet<string> replay)
+        {
             List<Dictionary<string, object>> pending = records.Where(r => !sent.Contains(Id(r))).ToList();
             List<Dictionary<string, object>> resets = pending.Where(r => IsReset(r)).ToList();
             if (resets.Count == 0)
             {
+                if (replay.Count > 0)
+                {
+                    long now = Epoch.Now;
+                    foreach (Dictionary<string, object> r in records)
+                    {
+                        if (!IsReset(r) && sent.Contains(Id(r)) && J.Long(r, "weekEnd") > now
+                            && replay.Contains(SheetLogic.Norm(SheetLogic.StripNote(J.Str(r, "char")))))
+                        {
+                            Dictionary<string, object> again = new Dictionary<string, object>(r);
+                            again["again"] = true;
+                            pending.Add(again);
+                        }
+                    }
+                }
                 return pending;
             }
             Dictionary<string, object> reset = resets[resets.Count - 1];
@@ -442,7 +465,12 @@ namespace MountSheetSync
             {
                 records.Add(extra);
             }
-            List<Dictionary<string, object>> pending = GetSendList(records);
+            HashSet<string> replay = ReadReplay(Settings);
+            foreach (string name in sum.AddedCharacters)
+            {
+                replay.Add(SheetLogic.Norm(name));
+            }
+            List<Dictionary<string, object>> pending = GetSendList(records, replay);
             if (Settings.UsesScript)
             {
                 // «Не фармлю» из игры — только для таблицы программы; скрипт Code.gs принял бы её за убийство
@@ -461,6 +489,7 @@ namespace MountSheetSync
             }
             if (pending.Count == 0)
             {
+                ClearReplay(Settings);
                 sum.NothingToSend = true;
                 return sum;
             }
@@ -495,6 +524,7 @@ namespace MountSheetSync
                 sent.Save();
                 sum.SentRecords += batch.Count;
             }
+            ClearReplay(Settings);
             // более ранние «Сбросы недели» перекрыты последним
             long t = Epoch.Now;
             foreach (Dictionary<string, object> r in records)
@@ -521,6 +551,63 @@ namespace MountSheetSync
                 return new List<string>();
             }
             return ((LocalSheetService)Service()).AddNewCharacters(game);
+        }
+
+        static string ReplayFile(Settings settings)
+        {
+            return AppPaths.SentFileFor(settings) + ".replay";
+        }
+
+        /// <summary>У этих персонажей листы созданы заново: при следующей отправке их записи этой недели отметятся снова.</summary>
+        public static void AskReplay(Settings settings, IEnumerable<string> names)
+        {
+            List<string> list = names.Select(n => SheetLogic.StripNote(n).Trim()).Where(n => n.Length > 0).Distinct().ToList();
+            if (list.Count == 0)
+            {
+                return;
+            }
+            try
+            {
+                File.AppendAllText(ReplayFile(settings), string.Join("\n", list.ToArray()) + "\n", Encoding.UTF8);
+            }
+            catch (IOException ex)
+            {
+                Log.Write(Tr.L("Не удалось запомнить персонажей для повторной отметки: {0}", ex.Message));
+            }
+        }
+
+        static HashSet<string> ReadReplay(Settings settings)
+        {
+            HashSet<string> names = new HashSet<string>(StringComparer.Ordinal);
+            try
+            {
+                string file = ReplayFile(settings);
+                if (File.Exists(file))
+                {
+                    foreach (string line in File.ReadAllLines(file, Encoding.UTF8))
+                    {
+                        if (line.Trim().Length > 0)
+                        {
+                            names.Add(SheetLogic.Norm(line.Trim()));
+                        }
+                    }
+                }
+            }
+            catch (IOException)
+            {
+            }
+            return names;
+        }
+
+        static void ClearReplay(Settings settings)
+        {
+            try
+            {
+                File.Delete(ReplayFile(settings));
+            }
+            catch (IOException)
+            {
+            }
         }
 
         static void Report(List<object> results, SyncSummary sum, HashSet<string> mountIds, bool quietNoSheet)

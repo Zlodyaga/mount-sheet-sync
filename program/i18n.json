@@ -647,6 +647,7 @@
   "Не похоже на адрес веб-приложения. Скопируйте его из окна развертывания: он начинается с https://script.google.com/ и оканчивается на /exec.": "This does not look like a web app address. Copy it from the deployment window: it starts with https://script.google.com/ and ends in /exec.",
   "Не удалось записать {0}: {1}": "Could not write {0}: {1}",
   "Не удалось запомнить исправление названий в таблице: {0}": "Could not store the name fix in the spreadsheet: {0}",
+  "Не удалось запомнить персонажей для повторной отметки: {0}": "Could not note the characters whose marks are to be set again: {0}",
   "Не удалось изменить автозапуск: {0}": "Could not change start with Windows: {0}",
   "Не удалось открыть браузер: {0}": "Could not open the browser: {0}",
   "Не удалось открыть журнал: {0}\n\nОн лежит здесь: {1}": "Could not open the log: {0}\n\nIt is here: {1}",

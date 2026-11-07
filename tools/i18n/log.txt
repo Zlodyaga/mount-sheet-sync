@@ -441,3 +441,6 @@ en: Could not read the characters from the addon files: {0}
 @ Прежние данные на этом компьютере сохранены: {0}
 en: The previous data on this computer is kept: {0}
 
+@ Не удалось запомнить персонажей для повторной отметки: {0}
+en: Could not note the characters whose marks are to be set again: {0}
+

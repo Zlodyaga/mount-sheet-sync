@@ -155,7 +155,11 @@ namespace MountSheetSync
             using (settings.ExclusiveBook())
             {
                 progress(settings.IsLocal ? Tr._("Читаю данные…") : Tr._("Читаю таблицу…"));
-                return AddCharacters(settings.OpenBook(), chars, progress);
+                IStructuredBook book = settings.OpenBook();
+                List<string> before = TableCharacters(book).Select(c => c.Name).ToList();
+                int n = AddCharacters(book, chars, progress);
+                SyncEngine.AskReplay(settings, TableCharacters(book).Select(c => c.Name).Where(c => !before.Contains(c)));
+                return n;
             }
         }
 
@@ -164,7 +168,9 @@ namespace MountSheetSync
             using (settings.ExclusiveBook())
             {
                 progress(settings.IsLocal ? Tr._("Читаю данные…") : Tr._("Читаю таблицу…"));
-                return UpdateCharacters(settings.OpenBook(), desired, progress);
+                CharacterChanges ch = UpdateCharacters(settings.OpenBook(), desired, progress);
+                SyncEngine.AskReplay(settings, ch.AddedCharacterNames());
+                return ch;
             }
         }
 
@@ -420,6 +426,21 @@ namespace MountSheetSync
         public bool Any
         {
             get { return AddedSheets.Count + RemovedSheets.Count + AddedWorld.Count + RemovedWorld.Count > 0; }
+        }
+
+        /// <summary>У кого появились листы или колонка: их отметки этой недели надо поставить заново.</summary>
+        public IEnumerable<string> AddedCharacterNames()
+        {
+            List<string> names = new List<string>(AddedWorld);
+            foreach (string sheet in AddedSheets)
+            {
+                int space = sheet.IndexOf(' ');
+                if (space > 0)
+                {
+                    names.Add(sheet.Substring(space + 1));
+                }
+            }
+            return names.Distinct();
         }
 
         public bool RemovesSomething

@@ -261,6 +261,26 @@ code, out = run(A, "--set-chars", path)
 code, out = run(A, "--once")
 check("removing one more: remembered across runs", code == 0 and "Рейды Тарен" not in [s["name"] for s in book(A)["sheets"]], out[-400:])
 
+# ---------------------------------------------------------------- removed and ticked back: this week's marks come back
+n_before = attempts(A, "Сильвана Ветрокрылая")
+
+
+def tried(boss):
+    rows = sheet(A, "Рейды Эйра")
+    return row_of(rows, boss)[column(rows, "пытался")]
+
+
+check("(before) Эйра has her kill marked", tried("Сильвана Ветрокрылая") == "Да", tried("Сильвана Ветрокрылая"))
+json.dump([x for x in spec if x["name"] != "Эйра"], open(path, "w", encoding="utf-8"), ensure_ascii=False)
+code, out = run(A, "--set-chars", path)
+json.dump(spec, open(path, "w", encoding="utf-8"), ensure_ascii=False)
+code, out = run(A, "--set-chars", path)
+check("ticked back: the sheets are new, without marks", code == 0 and tried("Сильвана Ветрокрылая") != "Да", (tried("Сильвана Ветрокрылая"), out[-300:]))
+code, out = run(A, "--once")
+check("…the next pass marks this week's kills again", code == 0 and tried("Сильвана Ветрокрылая") == "Да", (tried("Сильвана Ветрокрылая"), out[-500:]))
+check("…without counting the attempt twice", attempts(A, "Сильвана Ветрокрылая") == n_before, (n_before, attempts(A, "Сильвана Ветрокрылая")))
+check("…and only once: the note is gone", not [f for f in os.listdir(A) if f.endswith(".replay")], os.listdir(A))
+
 # ---------------------------------------------------------------- a damaged file
 good = open(os.path.join(A, "local-data.json"), encoding="utf-8").read()
 open(os.path.join(A, "local-data.json"), "w", encoding="utf-8").write(good[:len(good) // 2])
