@@ -1635,9 +1635,26 @@ local function CreateWindow()
   frame.titleText:SetText("Mount Sheet Sync")
   frame:SetScript("OnDragStop", function(self)
     self:StopMovingOrSizing()
+    self.SnapToPixels(self)
     local point, _, relativePoint, x, y = self:GetPoint()
     ns.GetDB().window = { point = point, relativePoint = relativePoint, x = x, y = y }
   end)
+
+  -- Окно — на целых пикселях экрана: по центру его край часто попадает между пикселями, и текст в нём мутный.
+  local function SnapToPixels(self)
+    local left, top, scale = self:GetLeft(), self:GetTop(), self:GetEffectiveScale()
+    if not (left and top and scale and scale > 0 and GetPhysicalScreenSize) then
+      return
+    end
+    local _, height = GetPhysicalScreenSize()
+    if not height or height <= 0 then
+      return
+    end
+    local pixel = 768 / height / scale   -- один пиксель экрана в единицах окна
+    self:ClearAllPoints()
+    self:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", math.floor(left / pixel + 0.5) * pixel, math.floor(top / pixel + 0.5) * pixel)
+  end
+  frame.SnapToPixels = SnapToPixels
 
   local pos = ns.GetDB().window
   if type(pos) == "table" and pos.point then
@@ -1766,14 +1783,23 @@ local function CreateWindow()
   gear:SetScript("OnClick", function() UI.ToggleSettings() end)
   AttachTooltip(gear, "settings_title", "tip_settings")
 
-  local hint = frame:CreateFontString(nil, "OVERLAY", "MSSFontSmall")
-  hint:SetPoint("LEFT", syncButton, "RIGHT", 10, 0)
+  -- Без программы (или пока она не подключена к таблице) строка заметнее: значок предупреждения, оранжевый текст;
+  -- аддон и так работает сам по себе, подробности — при наведении.
+  local state = ns.ProgramState()
+  local hint = frame:CreateFontString(nil, "OVERLAY", state == "online" and "MSSFontSmall" or "MSSFontWarn")
+  if state == "online" then
+    hint:SetPoint("LEFT", syncButton, "RIGHT", 10, 0)
+  else
+    local warn = frame:CreateTexture(nil, "OVERLAY")
+    warn:SetSize(16, 16)
+    warn:SetTexture("Interface\\DialogFrame\\UI-Dialog-Icon-AlertNew")
+    warn:SetPoint("LEFT", syncButton, "RIGHT", 10, 0)
+    frame.offlineIcon = warn
+    hint:SetPoint("LEFT", warn, "RIGHT", 6, 0)
+  end
   hint:SetPoint("RIGHT", gear, "LEFT", -10, 0)
   hint:SetJustifyH("LEFT")
   hint:SetWordWrap(false)
-  -- Без программы (или пока она не подключена к таблице) — та же неброская строка, но о том, что аддон
-  -- работает сам по себе; подробности — при наведении.
-  local state = ns.ProgramState()
   if state == "online" then
     Label(hint, "window_hint")
   else
@@ -1791,7 +1817,10 @@ local function CreateWindow()
     shownList, shownChars = nil, nil
   end
 
-  frame:SetScript("OnShow", UI.Refresh)
+  frame:SetScript("OnShow", function(self)
+    SnapToPixels(self)
+    UI.Refresh()
+  end)
   local elapsedTotal = 0
   frame:SetScript("OnUpdate", function(_, elapsed)
     elapsedTotal = elapsedTotal + elapsed

@@ -36,10 +36,15 @@ local MARGINS = { Round3 = 4, Round6 = 8, Pill = 12 }
 local locale = GetLocale()
 local NO_LETTERS = locale == "zhCN" or locale == "zhTW" or locale == "koKR"
 
-local function MakeFont(name, file, size, color)
+local function MakeFont(name, file, size, color, shadow)
   local font = CreateFont(name)
   font:SetFont(NO_LETTERS and STANDARD_TEXT_FONT or (MEDIA .. file), size, "")
   font:SetTextColor(color[1], color[2], color[3])
+  if shadow then
+    -- тёмная тень на пиксель ниже: на красной кнопке и цветном фоне без неё буквы расплываются
+    font:SetShadowColor(0, 0, 0, 0.9)
+    font:SetShadowOffset(1, -1)
+  end
 end
 
 MakeFont("MSSFontBody", "PTSans-Regular.ttf", 12, Hex("e4dfd2"))
@@ -51,7 +56,8 @@ MakeFont("MSSFontSmall", "PTSans-Regular.ttf", 11, Hex("a89f8b"))
 MakeFont("MSSFontHead", "PTSans-Bold.ttf", 11, Hex("a89f8b"))
 MakeFont("MSSFontDim", "PTSans-Regular.ttf", 13, Hex("a89f8b"))
 MakeFont("MSSFontTitle", "Philosopher-Bold.ttf", 14, COLOR.gold)
-MakeFont("MSSFontButton", "Philosopher-Bold.ttf", 13, COLOR.gold)
+MakeFont("MSSFontButton", "Philosopher-Bold.ttf", 13, COLOR.gold, true)
+MakeFont("MSSFontWarn", "PTSans-Bold.ttf", 12, Hex("ffa04d"), true)
 
 ---------------------------------------------------------------------------
 -- Детали

@@ -86,6 +86,9 @@ function Region:LockHighlight() self._locked = true end
 function Region:UnlockHighlight() self._locked = false end
 function Region:SetVertexColor(...) self._vertex = { ... } end
 function Region:GetLeft() return self._left or 0 end
+function Region:GetTop() return self._top or 0 end
+function Region:SetShadowColor(...) self._shadowColor = { ... } end
+function Region:SetShadowOffset(...) self._shadowOffset = { ... } end
 function Region:GetPoint(i)
   local p = self._points[i or 1]
   if not p then return nil end

@@ -72,7 +72,7 @@ def window_bits(L, g):
     obj.OnClick(g.UIParent, "LeftButton")
     win = g.MountSheetSyncFrame
     regs = [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
-    small = [r for r in regs if r._type == "FontString" and r._font == "MSSFontSmall" and r._parent is not None
+    small = [r for r in regs if r._type == "FontString" and r._font in ("MSSFontSmall", "MSSFontWarn") and r._parent is not None
              and r._parent._uid == win._uid]
     hint = small[0] if small else None
     hovers = [r for r in regs if r._type == "Frame" and r._parent is not None and r._parent._uid == win._uid
@@ -110,6 +110,9 @@ broker, hint, tip = window_bits(L, g)
 check("Data Broker tooltip: one grey offline line, the click hints stay last",
       sum("Офлайн" in t for t in broker) == 1 and broker[-2].startswith("ЛКМ") and broker[-1].startswith("ПКМ"), broker)
 check("window bottom line: offline, kills remembered", hint is not None and hint.startswith("Офлайн") and "запоминаются" in hint, hint)
+icon = L.eval("rawget")(g.MountSheetSyncFrame, "offlineIcon")
+check("…and it stands out: a warning icon before it, bold orange text with a shadow",
+      icon is not None and str(icon._texture).endswith("UI-Dialog-Icon-AlertNew") and g.MSSFontWarn._shadowOffset is not None, icon and icon._texture)
 check("hover: why (addons can't go online) and when it is checked (login, /reload)",
       tip is not None and tip[0] == "Работа без программы" and any("/reload" in t and "сохранениях игры" in t for t in tip), tip)
 
@@ -122,6 +125,7 @@ check("first kill: the usual «goes to the sheet when you log out…» hint", an
 broker, hint, tip = window_bits(L, g)
 check("no offline line in the tooltip", not any("Офлайн" in t for t in broker), broker)
 check("window bottom line: the usual hint, no hover", hint is not None and hint.startswith("Отметки попадают") and tip is None, (hint, tip))
+check("…quiet: no warning icon", L.eval("rawget")(g.MountSheetSyncFrame, "offlineIcon") is None)
 
 # ---- the program runs, but has no sheet yet
 L, g, ns, _ = new_game(mark(NOW - 10, sheet=False))
