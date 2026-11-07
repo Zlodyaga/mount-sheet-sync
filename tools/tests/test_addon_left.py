@@ -787,6 +787,8 @@ MountSheetSyncSheet.rewards = {
   { kind = "dungeon", group = "mplus", boss = "Мастер ключей 1-го сезона", mount = "Бронедон", diff = "M+ rating / vendor", src = "reward" },
   { kind = "raid", group = "raid", boss = "Слава рейдеру Души Дракона", mount = "Сумеречный предвестник", diff = "Achievement", src = "reward", ach = 4321 },
   { kind = "dungeon", group = "dungeon", boss = "Слава герою", mount = "Красный протодракон", diff = "Heroic achievements", src = "reward", got = true },
+  { kind = "dungeon", group = "mplus", boss = "Мастер ключей 1-го сезона Dragonflight / Затерянное во времени седло", mount = "Штормовой бронедон",
+    diff = "M+ rating / vendor", src = "reward", via = "saddle", ach = 4321 },
 }
 MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
 MSS_NS.OnChange()''')
@@ -797,6 +799,16 @@ texts = [plain(t) for t in shown_rows()]
 check("3.0.4: every reward from the program, in four tables: raids, dungeons, Mythic+, other", heads == ["Рейды", "Подземелья", "Mythic+", "Другое"]
       and any("Слава рейдеру Души Дракона" in t for t in texts), texts)
 check("…a collected mount counts as earned", any("Слава герою" in t and t.endswith("Получено") for t in texts), texts)
+saddle_row = [f for f in pool(ROW) if f._shown and f.elem and f.elem["values"] and "Штормовой бронедон" in str(f.elem["values"]["mount"])]
+mplus_rows = [plain(t) for t in texts[texts.index("Mythic+") + 1:texts.index("Другое")]]
+check("3.0.4: a past season's mount is under «Затерянное во времени седло», after this season's achievements, and not «earned» for the saddle's achievement",
+      saddle_row and plain(str(saddle_row[0].elem["values"]["boss"])) == "Затерянное во времени седло" and mplus_rows[-1].startswith("Затерянное во времени седло")
+      and not mplus_rows[-1].endswith("Получено"), mplus_rows)
+if saddle_row:
+    saddle_row[0]._scripts.OnEnter(saddle_row[0])
+    tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
+    check("…its tooltip says whose reward it was", any("Раньше — награда за: Мастер ключей 1-го сезона Dragonflight" in t for t in tt), tt)
+    saddle_row[0]._scripts.OnLeave(saddle_row[0])
 L.execute("MountSheetSyncSheet.rewards = MSS_SAVED_REWARDS; MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1; MSS_NS.OnChange()")
 g.RunTimers()
 tabs[0].MockClick(tabs[0]); g.RunTimers()

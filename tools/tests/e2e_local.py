@@ -237,6 +237,9 @@ check("…German, French, Spanish and Portuguese ones from the game's tables too
 check("…and a reward row knows its achievement for the click in the addon", 'ach = 2136' in sheet_lua(), sheet_lua()[:300])
 check("every reward row goes to the addon's «Achievements» tab, raids too (their reset is «once»), in its table",
       '"Слава рейдеру Души Дракона"' in sheet_lua() and 'group = "raid"' in sheet_lua() and 'group = "mplus"' in sheet_lua() and 'group = "other"' in sheet_lua(), sheet_lua()[-400:])
+rewards_lua = sheet_lua()[sheet_lua().find("rewards = {"):]
+check("…without rewards the game no longer gives (status «Недоступен»)", "Дань бессмертию" not in rewards_lua and "Завоеватель испытаний" not in rewards_lua, rewards_lua[:300])
+check("…past seasons' mounts go by the Timelost Saddle and its achievement of this season", 'via = "saddle"' in rewards_lua and "ach = 63690" in rewards_lua, rewards_lua[:300])
 
 # ---------------------------------------------------------------- new characters join by themselves
 everyone = CHARS + [dict(CHARS[0], name="Тарен")]

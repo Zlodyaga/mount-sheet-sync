@@ -3584,6 +3584,17 @@
      "ru": "Герой своего времени: Аргус Порабощенный"
     }
    }
+  },
+  "saddle": {
+   "id": 63690,
+   "names": {
+    "de": "Schlüsselsteinmythos von Midnight: Saison 2",
+    "en": "Midnight Keystone Myth: Season 2",
+    "es": "Mito de la piedra angular de Midnight: temporada 2",
+    "fr": "Saga mythique de Midnight : saison 2",
+    "pt": "Mito da Pedra-chave de Midnight: Série 2",
+    "ru": "Эпохальный герой ключей Midnight: 2-й сезон"
+   }
   }
  },
  "patterns": {

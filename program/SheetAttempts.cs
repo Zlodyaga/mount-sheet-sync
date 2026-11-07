@@ -228,6 +228,7 @@ namespace MountSheetSync
                 int cDiff = FindCol(header, "сложност|режим", -1);
                 int cPlace = FindCol(header, "^рейд|подземел|локац", 2);
                 int cCollected = FindCol(header, "собрано", -1);
+                int cStatus = FindCol(header, "^статус", -1);
                 for (int r = 1; r < entry.Data.Count; r++)
                 {
                     object[] row = entry.Data[r];
@@ -235,6 +236,11 @@ namespace MountSheetSync
                     if (!RewardSource.IsMatch(source))
                     {
                         continue;
+                    }
+                    string status = cStatus >= 0 ? CellText(At(row, cStatus)) : "";
+                    if (status.StartsWith("Недоступ", StringComparison.OrdinalIgnoreCase))
+                    {
+                        continue;   // награду больше не дают (испытания Пандарии, старые «Герой своего времени»…)
                     }
                     string mount = CellText(At(row, cMount));
                     string boss = CellText(At(row, cBoss));
@@ -260,14 +266,26 @@ namespace MountSheetSync
                     {
                         id = CatalogIndex().Find(null, mount, boss);
                     }
+                    bool saddle = status.IndexOf("Saddle", StringComparison.OrdinalIgnoreCase) >= 0
+                        || boss.IndexOf("Затерянное во времени седло", StringComparison.OrdinalIgnoreCase) >= 0;
                     if (id > 0)
                     {
                         item["id"] = (double)id;
                         Dictionary<string, string> titles;
-                        long achievement = SheetLang.RewardAchievement(id, out titles);
+                        long achievement = saddle ? 0 : SheetLang.RewardAchievement(id, out titles);
                         if (achievement > 0)
                         {
                             item["ach"] = (double)achievement;
+                        }
+                    }
+                    if (saddle)
+                    {
+                        // достижение прошлого сезона уже не получить: маунт покупают за седло, а седло дают за нынешний сезон
+                        item["via"] = "saddle";
+                        long now = SheetLang.SaddleAchievement();
+                        if (now > 0)
+                        {
+                            item["ach"] = (double)now;
                         }
                     }
                     if (cCollected >= 0 && IsYes(At(row, cCollected)))

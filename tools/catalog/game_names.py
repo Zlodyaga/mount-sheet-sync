@@ -105,6 +105,12 @@ def main():
         a = found[0]
         out["rewards"][str(r["id"])] = {"id": a, "names": {lang: titles[lang][a]["Title_lang"] for lang in LOCALES if titles[lang].get(a)}}
 
+    # past seasons' mounts are bought with the Timelost Saddle; the newest achievement giving it is this season's
+    saddle = [i for i, t in titles["ru"].items() if "Затерянное во времени седло" in (t["Reward_lang"] or "")]
+    if saddle:
+        a = max(saddle)
+        out["saddle"] = {"id": a, "names": {lang: titles[lang][a]["Title_lang"] for lang in LOCALES if titles[lang].get(a)}}
+        print("saddle: %d %s" % (a, titles["ru"][a]["Title_lang"]))
     print("mounts %d/%d, bosses %d/%d, places %d/%d, achievements %d/%d"
           % (len(out["mounts"]), len(want_mounts), len(out["bosses"]), len(want_bosses), len(out["places"]), len(want_maps),
              len(out["rewards"]), sum(1 for r in rows if r["reward"] and r["id"])))

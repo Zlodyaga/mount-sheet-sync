@@ -345,6 +345,12 @@ namespace MountSheetSync
             return J.Long(one, "id");
         }
 
+        /// <summary>Достижение, за которое сейчас дают «Затерянное во времени седло» (маунты прошлых сезонов Mythic+). 0 — неизвестно.</summary>
+        public static long SaddleAchievement()
+        {
+            return J.Long(J.Obj(J.Get(Load().Names, "saddle")), "id");
+        }
+
         /// <summary>Английское название маунта по mountID (null — неизвестно).</summary>
         public static string EnglishMount(long id)
         {

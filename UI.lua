@@ -1313,7 +1313,8 @@ end
 
 -- Достижение получено: оно есть на аккаунте, маунт уже собран («Собрано?») или есть в коллекции.
 local function AchievementDone(item, info)
-  if (info and info.completed) or item.got then
+  -- у маунта за седло достижение — нынешнее, на седло: получено ли оно, о маунте не говорит
+  if (info and info.completed and item.via ~= "saddle") or item.got then
     return true
   end
   local id = tonumber(item.id)
@@ -1337,17 +1338,27 @@ local function AchievementsView(rows)
     local info = AchievementInfo(tonumber(item.ach))
     local group = item.group or (item.kind == "raid" and "raid" or "dungeon")
     groups[group] = groups[group] or {}
-    table.insert(groups[group], { item = item, info = info, name = Safe(ns.Shown(item, "boss")), done = AchievementDone(item, info) })
+    local saddle = item.via == "saddle"
+    -- маунт прошлого сезона: «Затерянное во времени седло», а чьей наградой он был — в подсказке
+    local was = saddle and Safe(ns.Shown(item, "boss")):match("^(.-)%s+/%s+") or nil
+    table.insert(groups[group], { item = item, info = info, saddle = saddle, was = was,
+      name = saddle and L.ach_saddle or Safe(ns.Shown(item, "boss")), done = AchievementDone(item, info) })
   end
   local list, earned, total = {}, 0, 0
   for _, group in ipairs(ACH_GROUPS) do
     local items = groups[group]
     if items then
       table.sort(items, function(a, b)
+        if a.saddle ~= b.saddle then
+          return not a.saddle   -- сначала достижения этого сезона, за ними маунты за седло
+        end
         if a.done ~= b.done then
           return not a.done   -- ещё не полученные — сверху
         end
-        return a.name < b.name
+        if a.name ~= b.name then
+          return a.name < b.name
+        end
+        return Safe(ns.Shown(a.item, "mount")) < Safe(ns.Shown(b.item, "mount"))
       end)
       list[#list + 1] = { text = "|cffffd200" .. AchievementGroupTitle(group) .. "|r", group = true }
       for i, a in ipairs(items) do
@@ -1358,8 +1369,12 @@ local function AchievementsView(rows)
         if a.done then
           earned = earned + 1
         end
+        local tip = { mount, a.name, Safe(cond) }
+        if a.was then
+          tip[#tip + 1] = "|cff8c8c8c" .. string.format(L.ach_saddle_was, a.was) .. "|r"
+        end
         list[#list + 1] = { cols = cols, icon = ns.MountIcon(item.id), mountID = KnownMount(item.id), achievement = tonumber(item.ach),
-          stripe = i % 2 == 0, tip = { mount, a.name, Safe(cond) }, values = {
+          stripe = i % 2 == 0, tip = tip, values = {
             boss = a.done and ("|cff8c8c8c" .. a.name .. "|r") or a.name,
             cond = "|cffb7ae9a" .. Safe(cond) .. "|r",
             mount = "|cffc9a0ff" .. mount .. "|r",
