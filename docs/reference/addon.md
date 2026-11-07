@@ -50,7 +50,7 @@ Midnight (`issecretvalue`) не читаются — имя босса тогд�
 
 ![Осталось](../screens/addon-remaining.png) ![Все персонажи](../screens/addon-all.png) ![Журнал](../screens/addon-log.png)
 
-Окно 1060×600 (3.0.3; на узком экране — `UIParent` минус 20, столбцы названий ужимаются), оформление своё (`Skin.lua`): шрифты PT Sans и Philosopher из `Media`, на zhCN/zhTW/koKR — шрифт игры (`STANDARD_TEXT_FONT`). От игры остались только полоса прокрутки ScrollBox (притушена, без стрелок; если шаблон изменится — `pcall`, останется как есть) и подсказки. Все списки — ScrollBox игры (`WowScrollBoxList` + `MinimalScrollBar`,
+Окно 1060×600 (3.0.3; на узком экране — `UIParent` минус 20, столбцы названий ужимаются), оформление своё (`Skin.lua`): шрифт PT Sans из `Media` (обычный и жирный; заголовки — жирный 15 с тенью), на zhCN/zhTW/koKR — шрифт игры (`STANDARD_TEXT_FONT`). От игры остались только полоса прокрутки ScrollBox (притушена, без стрелок; если шаблон изменится — `pcall`, останется как есть) и подсказки. Все списки — ScrollBox игры (`WowScrollBoxList` + `MinimalScrollBar`,
 `CreateScrollBoxListLinearView`, `ScrollUtil.InitScrollBoxListWithScrollBar`): кадры строк только для видимой части,
 переиспользуются. `UI.Refresh` перестраивает список (`SetDataProvider`), только если сменился ключ его данных —
 кэши `Remaining.lua` отдают ту же таблицу, пока не поменялись список таблицы, журнал, неделя или коллекция.

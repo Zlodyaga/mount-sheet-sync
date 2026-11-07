@@ -3,7 +3,7 @@ Mount Sheet Sync 3.0.4 — своё оформление окон
 =============================================
 Окна рисуются своими текстурами и шрифтами, а не шаблонами Blizzard: тёмный фон, золотая рамка, плоские кнопки,
 «таблетки» фильтров, круглые переключатели. Текстуры (Media/*.tga, белые, цвет — SetVertexColor) делает
-tools/skin/make_media.py. Шрифты — PT Sans и Philosopher (SIL OFL, файлы без изменений, лицензии рядом в Media);
+tools/skin/make_media.py. Шрифт — PT Sans (SIL OFL, файлы без изменений, лицензия рядом в Media; декоративный Philosopher убран в 3.0.4 — в игре мылился);
 на китайском и корейском клиентах в них нет букв, там остаётся шрифт игры.
 ]]
 
@@ -55,8 +55,8 @@ MakeFont("MSSFontGold", "PTSans-Regular.ttf", 12, Hex("d8c98f"))
 MakeFont("MSSFontSmall", "PTSans-Regular.ttf", 12, Hex("b3aa95"))   -- 11 px в игре расплывался
 MakeFont("MSSFontHead", "PTSans-Bold.ttf", 11, Hex("a89f8b"))
 MakeFont("MSSFontDim", "PTSans-Regular.ttf", 13, Hex("a89f8b"))
-MakeFont("MSSFontTitle", "Philosopher-Bold.ttf", 14, COLOR.gold)
-MakeFont("MSSFontButton", "PTSans-Bold.ttf", 14, COLOR.gold, true)   -- у Philosopher тонкие штрихи («К», «т») в игре мылились
+MakeFont("MSSFontTitle", "PTSans-Bold.ttf", 15, COLOR.gold, true)
+MakeFont("MSSFontButton", "PTSans-Bold.ttf", 14, COLOR.gold, true)
 MakeFont("MSSFontWarn", "PTSans-Bold.ttf", 12, Hex("ffa04d"), true)
 
 ---------------------------------------------------------------------------

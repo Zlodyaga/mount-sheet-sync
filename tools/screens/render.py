@@ -27,7 +27,7 @@ SCREENS = [
     ("addon-settings.png", "layout_settings.json"),
 ]
 W, H, MARGIN = 1140, 680, 28
-FONTS = {"PTSans-Regular": "PT Sans", "PTSans-Bold": "PT Sans Bold", "Philosopher-Bold": "Philosopher"}
+FONTS = {"PTSans-Regular": "PT Sans", "PTSans-Bold": "PT Sans Bold"}
 
 
 def tga_alpha_png(path):
