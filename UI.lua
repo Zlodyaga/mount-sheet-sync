@@ -404,11 +404,29 @@ local function OuterStep(e)
     if not (outer and outer.mapType == MAP_ZONE) then
       return nil
     end
-    local minX, maxX, minY, maxY = C_Map.GetMapRectOnMap(e.map, outer.mapID or inner.parentMapID)
+    local outerMap = outer.mapID or inner.parentMapID
+    -- лучше всего — значок входа в пещеру на карте зоны (ссылка на вложенную карту): там, где в неё входят
+    if C_Map.GetMapLinksForMap then
+      for _, link in ipairs(C_Map.GetMapLinksForMap(outerMap) or {}) do
+        local pos = link.linkedUiMapID == e.map and link.position
+        local x, y
+        if pos then
+          x, y = pos.x, pos.y
+          if not x and pos.GetXY then
+            x, y = pos:GetXY()
+          end
+        end
+        if x and y then
+          return { map = outerMap, x = x, y = y, name = inner.name, zone = outer.name }
+        end
+      end
+    end
+    -- иначе — где на карте зоны лежит сам вход (точка внутри пещеры, может быть в стороне от её входа)
+    local minX, maxX, minY, maxY = C_Map.GetMapRectOnMap(e.map, outerMap)
     if not (minX and maxX and minY and maxY) then
       return nil
     end
-    return { map = outer.mapID or inner.parentMapID, x = minX + e.x * (maxX - minX), y = minY + e.y * (maxY - minY),
+    return { map = outerMap, x = minX + e.x * (maxX - minX), y = minY + e.y * (maxY - minY),
              name = inner.name, zone = outer.name }
   end)
   return ok and step or nil

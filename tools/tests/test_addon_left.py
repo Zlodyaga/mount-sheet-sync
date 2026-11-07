@@ -865,6 +865,16 @@ g.Fire("SUPER_TRACKING_CHANGED")   # the player picked a quest instead
 L.execute("MSS_PLAYER_MAP = 75")
 g.Fire("ZONE_CHANGED")
 check("…but if the player chose another target meanwhile, the addon doesn't take it over", g.ROUTE.pin is None, g.ROUTE.pin)
+# the zone's map has a link to the inner map (the cave's mouth): the pin goes there, not where the entrance lies inside
+L.execute('''
+MSS_PLAYER_MAP = 85; ROUTE.waypoint = nil; ROUTE.pin = nil
+C_SuperTrack.IsSuperTrackingAnything = function() return false end
+C_Map.GetMapLinksForMap = function(map) if map == 71 then return { { linkedUiMapID = 70, position = { x = 0.1, y = 0.1 } }, { linkedUiMapID = 75, position = { x = 0.66, y = 0.49 } } } end return {} end
+''')
+row.elem.instance = 187
+row.MockClick(row)
+check("…the pin stands at the cave's mouth on the zone's map when the game gives it", g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 71
+      and abs(g.ROUTE.waypoint.x - 0.66) < 1e-9 and abs(g.ROUTE.waypoint.y - 0.49) < 1e-9, g.ROUTE.waypoint and (g.ROUTE.waypoint.x, g.ROUTE.waypoint.y))
 L.execute("MSS_PLAYER_MAP = 75; ROUTE.pin = nil")
 n_menus = len(g.MENUS)
 row.MockClick(row)
