@@ -298,11 +298,15 @@ end
 -- Журнал маунтов игры на этом маунте.
 -- Окно достижений игры на этом достижении.
 local function ShowAchievement(id)
+  -- OpenAchievementFrameToAchievement есть только в классической игре; в Retail — открыть окно и выбрать достижение
   local ok = pcall(function()
     if not AchievementFrame then
       C_AddOns.LoadAddOn("Blizzard_AchievementUI")
     end
-    OpenAchievementFrameToAchievement(id)
+    if not AchievementFrame:IsShown() then
+      AchievementFrame_ToggleAchievementFrame()
+    end
+    AchievementFrame_SelectAchievement(id, true)
   end)
   if not ok then
     ns.Print(L.ach_open_failed)
@@ -1296,6 +1300,30 @@ local function AchievementInfo(id)
   return { completed = completed and true or false, description = type(description) == "string" and description or "" }
 end
 
+local ACH_GROUPS = { "raid", "dungeon", "mplus", "other" }
+
+local function AchievementGroupTitle(group)
+  if group == "mplus" then
+    return L.ach_group_mplus
+  elseif group == "other" then
+    return L.ach_group_other
+  end
+  return ns.KindTitle(group)
+end
+
+-- Достижение получено: оно есть на аккаунте, маунт уже собран («Собрано?») или есть в коллекции.
+local function AchievementDone(item, info)
+  if (info and info.completed) or item.got then
+    return true
+  end
+  local id = tonumber(item.id)
+  if id and C_MountJournal and C_MountJournal.GetMountInfoByID then
+    local ok, _, _, _, _, _, _, _, _, _, _, collected = pcall(C_MountJournal.GetMountInfoByID, id)
+    return ok and collected == true
+  end
+  return false
+end
+
 local function AchievementsView(rows)
   if not rows then
     return NoDataView()
@@ -1304,34 +1332,43 @@ local function AchievementsView(rows)
     return { list = {}, empty = L.ach_empty }
   end
   local cols = AchievementColumns()
-  local items = {}
-  for i, item in ipairs(rows) do
+  local groups = {}
+  for _, item in ipairs(rows) do
     local info = AchievementInfo(tonumber(item.ach))
-    items[i] = { item = item, info = info, name = Safe(ns.Shown(item, "boss")), done = info and info.completed or false }
+    local group = item.group or (item.kind == "raid" and "raid" or "dungeon")
+    groups[group] = groups[group] or {}
+    table.insert(groups[group], { item = item, info = info, name = Safe(ns.Shown(item, "boss")), done = AchievementDone(item, info) })
   end
-  table.sort(items, function(a, b)
-    if a.done ~= b.done then
-      return not a.done   -- ещё не полученные — сверху
+  local list, earned, total = {}, 0, 0
+  for _, group in ipairs(ACH_GROUPS) do
+    local items = groups[group]
+    if items then
+      table.sort(items, function(a, b)
+        if a.done ~= b.done then
+          return not a.done   -- ещё не полученные — сверху
+        end
+        return a.name < b.name
+      end)
+      list[#list + 1] = { text = "|cffffd200" .. AchievementGroupTitle(group) .. "|r", group = true }
+      for i, a in ipairs(items) do
+        local item = a.item
+        local cond = a.info and a.info.description ~= "" and a.info.description or Safe(item.diff)
+        local mount = Safe(ns.Shown(item, "mount"))
+        total = total + 1
+        if a.done then
+          earned = earned + 1
+        end
+        list[#list + 1] = { cols = cols, icon = ns.MountIcon(item.id), mountID = KnownMount(item.id), achievement = tonumber(item.ach),
+          stripe = i % 2 == 0, tip = { mount, a.name, Safe(cond) }, values = {
+            boss = a.done and ("|cff8c8c8c" .. a.name .. "|r") or a.name,
+            cond = "|cffb7ae9a" .. Safe(cond) .. "|r",
+            mount = "|cffc9a0ff" .. mount .. "|r",
+            status = a.done and ("|cff8cff8c" .. L.ach_done .. "|r") or "|cff8c8c8c-|r",
+          } }
+      end
     end
-    return a.name < b.name
-  end)
-  local list, earned = {}, 0
-  for i, a in ipairs(items) do
-    local item = a.item
-    local cond = a.info and a.info.description ~= "" and a.info.description or Safe(item.diff)
-    local mount = Safe(ns.Shown(item, "mount"))
-    if a.done then
-      earned = earned + 1
-    end
-    list[i] = { cols = cols, icon = ns.MountIcon(item.id), mountID = KnownMount(item.id), achievement = tonumber(item.ach),
-      stripe = i % 2 == 0, tip = { mount, a.name, Safe(cond) }, values = {
-        boss = a.done and ("|cff8c8c8c" .. a.name .. "|r") or a.name,
-        cond = "|cffb7ae9a" .. Safe(cond) .. "|r",
-        mount = "|cffc9a0ff" .. mount .. "|r",
-        status = a.done and ("|cff8cff8c" .. L.ach_done .. "|r") or "|cff8c8c8c-|r",
-      } }
   end
-  return { list = list, cols = cols, summary = "|cff8c8c8c" .. string.format(L.ach_head, #list, earned) .. "|r" }
+  return { list = list, cols = cols, summary = "|cff8c8c8c" .. string.format(L.ach_head, total, earned) .. "|r" }
 end
 
 -- Персонажи для столбцов сетки: имя, цвет класса (без класса — серый: персонаж другого аккаунта).

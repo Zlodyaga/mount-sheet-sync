@@ -199,6 +199,87 @@ namespace MountSheetSync
         /// Что окну аддона нужно о строке «Осталось», кроме самого списка: ID маунта (значок), и у строк без шанса — у достижений и
         /// гарантированной добычи; src = reward — не за убийство босса (своя группа). Из общего листа, ID ещё и из каталога.
         /// </summary>
+        static readonly Regex RewardMythicPlus = new Regex(@"mythic\+|m\+|keystone|timelost|saddle|ключ", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+
+        /// <summary>
+        /// Вкладка «Достижения» в аддоне: все строки-награды общих листов «Рейды» и «Подземелья», а не только то, что можно
+        /// сделать на этой неделе (у «Славы рейдеру…» сброс «Разово», в «Осталось» их нет). group — таблица на вкладке:
+        /// raid, dungeon, mplus (ключи и седло), other (Торгаст); got — «Собрано?» = «Да».
+        /// </summary>
+        static List<object> RewardRows(IBook book)
+        {
+            List<object> list = new List<object>();
+            foreach (string name in new[] { RaidPrefix, DungeonPrefix })
+            {
+                SheetEntry entry = ByName(book, name);
+                if (entry == null || entry.Data.Count < 2)
+                {
+                    continue;
+                }
+                object[] header = entry.Data[0];
+                int cSource = FindCol(header, "тип источника", -1);
+                if (cSource < 0)
+                {
+                    continue;
+                }
+                int cId = FindCol(header, "^id в игре$", -1);
+                int cMount = FindCol(header, "маунт", 3);
+                int cBoss = FindCol(header, "босс", 4);
+                int cDiff = FindCol(header, "сложност|режим", -1);
+                int cPlace = FindCol(header, "^рейд|подземел|локац", 2);
+                int cCollected = FindCol(header, "собрано", -1);
+                for (int r = 1; r < entry.Data.Count; r++)
+                {
+                    object[] row = entry.Data[r];
+                    string source = CellText(At(row, cSource));
+                    if (!RewardSource.IsMatch(source))
+                    {
+                        continue;
+                    }
+                    string mount = CellText(At(row, cMount));
+                    string boss = CellText(At(row, cBoss));
+                    if (mount.Length == 0 && boss.Length == 0)
+                    {
+                        continue;
+                    }
+                    string diff = cDiff >= 0 ? CellText(At(row, cDiff)) : "";
+                    string place = CellText(At(row, cPlace));
+                    Dictionary<string, object> item = new Dictionary<string, object>();
+                    bool raid = name == RaidPrefix;
+                    item["kind"] = raid ? "raid" : "dungeon";
+                    item["group"] = RewardMythicPlus.IsMatch(source + " " + place + " " + diff) ? "mplus"
+                        : place.IndexOf("Torghast", StringComparison.OrdinalIgnoreCase) >= 0 || place.IndexOf("Торгаст", StringComparison.OrdinalIgnoreCase) >= 0 ? "other"
+                        : raid ? "raid" : "dungeon";
+                    item["boss"] = boss;
+                    item["mount"] = mount;
+                    item["diff"] = diff;
+                    item["place"] = place;
+                    item["src"] = "reward";
+                    long id = cId >= 0 ? MountIndex.IdOf(At(row, cId)) : 0;
+                    if (id <= 0)
+                    {
+                        id = CatalogIndex().Find(null, mount, boss);
+                    }
+                    if (id > 0)
+                    {
+                        item["id"] = (double)id;
+                        Dictionary<string, string> titles;
+                        long achievement = SheetLang.RewardAchievement(id, out titles);
+                        if (achievement > 0)
+                        {
+                            item["ach"] = (double)achievement;
+                        }
+                    }
+                    if (cCollected >= 0 && IsYes(At(row, cCollected)))
+                    {
+                        item["got"] = true;
+                    }
+                    list.Add(item);
+                }
+            }
+            return list;
+        }
+
         static void AddRowInfo(IBook book, IEnumerable<Dictionary<string, object>> chars, List<object> mounts)
         {
             Dictionary<string, long> ids = new Dictionary<string, long>();

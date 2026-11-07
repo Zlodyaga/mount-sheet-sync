@@ -1141,6 +1141,15 @@ function ns.GetAchievementRows()
     return achRows
   end
   local rows, seen = {}, {}
+  if type(data.rewards) == "table" then   -- программа 2.10+: все награды из таблицы, а не только недельные
+    for _, item in ipairs(data.rewards) do
+      if type(item) == "table" then
+        rows[#rows + 1] = item
+      end
+    end
+    achFor, achGenerated, achRows = data, data.generated, rows
+    return rows
+  end
   for _, ch in ipairs(data.chars) do
     for _, item in ipairs(type(ch) == "table" and type(ch.items) == "table" and ch.items or {}) do
       if type(item) == "table" and item.src == "reward" then

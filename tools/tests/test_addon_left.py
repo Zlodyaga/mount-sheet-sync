@@ -755,9 +755,10 @@ check("…nor in the table of all characters", not any("Поводья Пове�
 L.execute('''
 GetAchievementInfo = function(id) if id == 4321 then return 4321, "Слава герою", 10, true, 1, 1, 24, "Выполните героические достижения" end end
 MOCK_ACH = nil
-OpenAchievementFrameToAchievement = function(id) MOCK_ACH = id; AchievementFrame:Show() end
 AchievementFrame = CreateFrame("Frame", "AchievementFrame")
 AchievementFrame:Hide()
+AchievementFrame_ToggleAchievementFrame = function() AchievementFrame:Show() end
+AchievementFrame_SelectAchievement = function(id) assert(AchievementFrame:IsShown(), "select before the window is shown"); MOCK_ACH = id end
 ''')
 tabs[1].MockClick(tabs[1]); g.RunTimers()
 ach_rows = [f for f in pool(ROW) if f._shown and f.elem and f.elem.achievement is not None]
@@ -778,6 +779,26 @@ if ach_rows:
     g.AchievementFrame.Hide(g.AchievementFrame); g.RunTimers()
     check("…and the window comes back", win._shown)
     g.CURSOR[1] = 100000
+# the program 2.10 sends every reward row, in four tables: raids, dungeons, Mythic+, other
+L.execute('''
+MSS_SAVED_REWARDS = MountSheetSyncSheet.rewards
+MountSheetSyncSheet.rewards = {
+  { kind = "dungeon", group = "other", boss = "Безупречный мастер (16-й этаж)", mount = "Утробная крыса", diff = "Torghast", src = "reward" },
+  { kind = "dungeon", group = "mplus", boss = "Мастер ключей 1-го сезона", mount = "Бронедон", diff = "M+ rating / vendor", src = "reward" },
+  { kind = "raid", group = "raid", boss = "Слава рейдеру Души Дракона", mount = "Сумеречный предвестник", diff = "Achievement", src = "reward", ach = 4321 },
+  { kind = "dungeon", group = "dungeon", boss = "Слава герою", mount = "Красный протодракон", diff = "Heroic achievements", src = "reward", got = true },
+}
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()''')
+g.RunTimers()
+tabs[1].MockClick(tabs[1]); g.RunTimers()
+heads = [plain(t) for t in shown_rows() if plain(t) in ("Рейды", "Подземелья", "Mythic+", "Другое")]
+texts = [plain(t) for t in shown_rows()]
+check("3.0.4: every reward from the program, in four tables: raids, dungeons, Mythic+, other", heads == ["Рейды", "Подземелья", "Mythic+", "Другое"]
+      and any("Слава рейдеру Души Дракона" in t for t in texts), texts)
+check("…a collected mount counts as earned", any("Слава герою" in t and t.endswith("Получено") for t in texts), texts)
+L.execute("MountSheetSyncSheet.rewards = MSS_SAVED_REWARDS; MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1; MSS_NS.OnChange()")
+g.RunTimers()
 tabs[0].MockClick(tabs[0]); g.RunTimers()
 head_now = all_head_rows()
 check("…«Ещё убить» doesn't count the row of the reward", head_now == head_before - 1, (head_before, head_now))

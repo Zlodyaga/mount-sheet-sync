@@ -1509,6 +1509,11 @@ namespace MountSheetSync
             {
                 reply["mounts"] = mounts;   // счётчик попыток (таблица программы 2.8+)
             }
+            List<object> rewards = RewardRows(book);
+            if (rewards.Count > 0)
+            {
+                reply["rewards"] = rewards;   // вкладка «Достижения» в аддоне (программа 2.10+)
+            }
             return reply;
         }
 

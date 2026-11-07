@@ -235,6 +235,8 @@ check("--sync-collection works", code == 0 and "Сверка с коллекци
 check("a Russian list carries English names for an addon set to English", '["Сильвана Ветрокрылая"] = "Sylvanas Windrunner"' in sheet_lua(), sheet_lua()[-600:])
 check("…German, French, Spanish and Portuguese ones from the game's tables too", all(s in sheet_lua() for s in ('["Сильвана Ветрокрылая"] = "Sylvanas Windläufer"', '["Dragon Soul"] = "Drachenseele"', '["Dragon Soul"] = "Душа Дракона"')), sheet_lua()[-600:])
 check("…and a reward row knows its achievement for the click in the addon", 'ach = 2136' in sheet_lua(), sheet_lua()[:300])
+check("every reward row goes to the addon's «Achievements» tab, raids too (their reset is «once»), in its table",
+      '"Слава рейдеру Души Дракона"' in sheet_lua() and 'group = "raid"' in sheet_lua() and 'group = "mplus"' in sheet_lua() and 'group = "other"' in sheet_lua(), sheet_lua()[-400:])
 
 # ---------------------------------------------------------------- new characters join by themselves
 everyone = CHARS + [dict(CHARS[0], name="Тарен")]
