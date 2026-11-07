@@ -396,7 +396,7 @@ local function ShowRoute(elem)
     return
   end
   local instance = elem.instance
-  local name = ns.InstanceName(instance) or Safe(elem.placeName)
+  local name = Safe(elem.placeName) ~= "" and Safe(elem.placeName) or ns.InstanceName(instance) or "?"
   local e = FindEntrance(instance)
   if not e then
     ns.Print(string.format(L.route_none, name))
@@ -437,12 +437,12 @@ local function ShowRowMenu(button)
   end
   local item = entry.item
   MenuUtil.CreateContextMenu(button, function(owner, root)
-    root:CreateTitle(item.boss or "?")
+    root:CreateTitle(ns.Shown(item, "boss") or "?")
     root:CreateButton(L.menu_not_row, function()
       ns.AddPlan(item, "row")
     end)
-    if item.place and item.place ~= "" then
-      root:CreateButton(string.format(L.menu_not_place, item.place), function()
+    if ns.Shown(item, "place") and ns.Shown(item, "place") ~= "" then
+      root:CreateButton(string.format(L.menu_not_place, ns.Shown(item, "place")), function()
         ns.AddPlan(item, "place")
       end)
     end
@@ -959,8 +959,8 @@ local function WithPlace(elem, item)
   elem.encounter = tonumber(item.je)
   elem.world = item.kind == "world" or nil
   elem.route = (elem.instance and (item.kind == "raid" or item.kind == "dungeon")) or (elem.world and elem.encounter ~= nil) or nil
-  elem.placeName = item.place
-  elem.bossName = item.boss
+  elem.placeName = ns.Shown(item, "place")
+  elem.bossName = ns.Shown(item, "boss")
   return elem
 end
 
@@ -968,17 +968,17 @@ end
 local function RemainingRow(entry, menu, stripe)
   local cols, doneCols = LeftColumns()
   local item = entry.item
-  local tip = { Safe(item.mount), BossAndDiff(item.boss, item.diff) }
-  if Safe(item.place) ~= "" then
-    tip[#tip + 1] = Safe(item.place)
+  local tip = { Safe(ns.Shown(item, "mount")), BossAndDiff(ns.Shown(item, "boss"), item.diff) }
+  if Safe(ns.Shown(item, "place")) ~= "" then
+    tip[#tip + 1] = Safe(ns.Shown(item, "place"))
   end
   local n, p, id = ns.ItemAttempts(item)
   if entry.done then
     local status = (entry.again and string.format(L.left_again, ns.FormatDuration(entry.again)) or L.left_done):gsub("^%s*—%s*", "")
     return WithPlace({ cols = doneCols, done = true, icon = DONE_TEXTURE, mountID = KnownMount(item.id or id), stripe = stripe, tip = tip, values = {
-      boss = "|cff8c8c8c" .. ShortBoss(item.boss) .. "|r",
+      boss = "|cff8c8c8c" .. ShortBoss(ns.Shown(item, "boss")) .. "|r",
       diff = "|cff8c8c8c" .. ShortDiff(item.diff) .. "|r",
-      mount = "|cff8c8c8c" .. Safe(item.mount) .. "|r",
+      mount = "|cff8c8c8c" .. Safe(ns.Shown(item, "mount")) .. "|r",
       status = "|cff8c8c8c" .. status .. "|r",
     } }, item)
   end
@@ -992,10 +992,10 @@ local function RemainingRow(entry, menu, stripe)
     tip[#tip + 1] = string.format(L.boss_hint, n, ns.FormatChance(n, p))
   end
   return WithPlace({ cols = cols, icon = ns.MountIcon(item.id or id), mountID = KnownMount(item.id or id), stripe = stripe, tip = tip, entry = menu and entry or nil, values = {
-    boss = ShortBoss(item.boss),
+    boss = ShortBoss(ns.Shown(item, "boss")),
     diff = diff,
-    mount = "|cffc9a0ff" .. Safe(item.mount) .. "|r",
-    place = "|cff8c8c8c" .. Safe(item.place) .. "|r",
+    mount = "|cffc9a0ff" .. Safe(ns.Shown(item, "mount")) .. "|r",
+    place = "|cff8c8c8c" .. Safe(ns.Shown(item, "place")) .. "|r",
     n = n and n > 0 and tostring(n) or "|cff8c8c8c-|r",
     chance = chance,
   } }, item)
@@ -1092,10 +1092,10 @@ local function GridView(rows, all)
     end
     local _, _, id = ns.ItemAttempts(item)
     list[#list + 1] = WithPlace({ cols = cols, names = names, killed = row.killed or false, icon = ns.MountIcon(item.id or id), mountID = KnownMount(item.id or id), stripe = stripe,
-      tip = { Safe(item.mount), BossAndDiff(item.boss, item.diff), table.concat(shownNames, ", ") }, values = {
-        boss = ShortBoss(item.boss),
+      tip = { Safe(ns.Shown(item, "mount")), BossAndDiff(ns.Shown(item, "boss"), item.diff), table.concat(shownNames, ", ") }, values = {
+        boss = ShortBoss(ns.Shown(item, "boss")),
         diff = "|cffb7ae9a" .. ShortDiff(item.diff) .. "|r",
-        mount = "|cffc9a0ff" .. Safe(item.mount) .. "|r",
+        mount = "|cffc9a0ff" .. Safe(ns.Shown(item, "mount")) .. "|r",
         total = "|cffd8c98f" .. row.total .. "|r",
       } }, item)
     stripe = not stripe

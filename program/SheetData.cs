@@ -55,6 +55,11 @@ namespace MountSheetSync
                     data[kv.Key] = kv.Value;
                 }
             }
+            Dictionary<string, object> names = Names(data);
+            if (names != null)
+            {
+                data["names"] = names;
+            }
             StringBuilder sb = new StringBuilder();
             sb.Append("-- Mount Sheet Sync: what is left this week, made by the program.\r\n");
             sb.Append("-- MountSheetSync.exe rewrites this file; there is no need to edit it.\r\n");
@@ -62,6 +67,102 @@ namespace MountSheetSync
             WriteValue(sb, data, 0);
             sb.Append("\r\n");
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Названия на другом языке для окна аддона: язык аддона может быть не тем, что у таблицы. Ключ — текст, как его
+        /// прислала таблица, и только то, что есть в этом списке. Маунты и боссы по-русски и по-английски — из каталога;
+        /// на языке игры аддон берёт названия у самой игры.
+        /// </summary>
+        public static Dictionary<string, object> Names(Dictionary<string, object> data)
+        {
+            HashSet<string> shown = new HashSet<string>(StringComparer.Ordinal);
+            foreach (object ch in J.Arr(J.Get(data, "chars")))
+            {
+                foreach (object it in J.Arr(J.Get(J.Obj(ch), "items")))
+                {
+                    AddShown(shown, J.Obj(it));
+                }
+            }
+            foreach (object m in J.Arr(J.Get(data, "mounts")))
+            {
+                AddShown(shown, J.Obj(m));
+            }
+            if (shown.Count == 0)
+            {
+                return null;
+            }
+            Dictionary<string, object> en = new Dictionary<string, object>(StringComparer.Ordinal);
+            Dictionary<string, object> ru = new Dictionary<string, object>(StringComparer.Ordinal);
+            SheetLang english = SheetLang.Get("en");
+            Catalog catalog = Catalog.Embedded();
+            foreach (CatalogSheet sheet in new[] { catalog.Raids, catalog.Dungeons, catalog.World, catalog.Rare })
+            {
+                if (sheet == null)
+                {
+                    continue;
+                }
+                int cMount = sheet.Col("Маунт");
+                int cId = sheet.Col(SheetBuilder.IdColumn);
+                int cBoss = sheet.Columns.FindIndex(c => c.StartsWith("Босс", StringComparison.Ordinal));
+                foreach (object[] row in sheet.Rows)
+                {
+                    string mount = Cell(row, cMount);
+                    if (mount.Length > 0)
+                    {
+                        long id = cId >= 0 && cId < row.Length ? MountIndex.IdOf(row[cId]) : 0;
+                        Pair(shown, en, ru, mount, SheetLang.EnglishMount(id) ?? english.Content(mount));
+                    }
+                    string boss = Cell(row, cBoss);
+                    if (boss.Length > 0)
+                    {
+                        Pair(shown, en, ru, boss, english.Content(boss));
+                    }
+                }
+            }
+            Dictionary<string, object> names = new Dictionary<string, object>();
+            if (en.Count > 0)
+            {
+                names["en"] = en;
+            }
+            if (ru.Count > 0)
+            {
+                names["ru"] = ru;
+            }
+            return names.Count > 0 ? names : null;
+        }
+
+        static void AddShown(HashSet<string> shown, Dictionary<string, object> item)
+        {
+            foreach (string field in new[] { "boss", "mount" })
+            {
+                string text = J.Str(item, field);
+                if (text.Length > 0)
+                {
+                    shown.Add(text);
+                }
+            }
+        }
+
+        static string Cell(object[] row, int c)
+        {
+            return c >= 0 && c < row.Length && row[c] is string ? ((string)row[c]).Trim() : "";
+        }
+
+        static void Pair(HashSet<string> shown, Dictionary<string, object> en, Dictionary<string, object> ru, string russian, string english)
+        {
+            if (string.IsNullOrEmpty(english) || english == russian)
+            {
+                return;
+            }
+            if (shown.Contains(russian))
+            {
+                en[russian] = english;
+            }
+            if (shown.Contains(english))
+            {
+                ru[english] = russian;
+            }
         }
 
         static void WriteValue(StringBuilder sb, object value, int depth)

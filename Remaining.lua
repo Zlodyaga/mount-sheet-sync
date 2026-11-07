@@ -665,16 +665,69 @@ local function Collected(m)
   return ok and isCollected == true
 end
 
--- Имя маунта на языке игры (по ID), иначе — как в таблице.
-local function MountName(m)
-  local id = tonumber(m.id)
-  if id and C_MountJournal and C_MountJournal.GetMountInfoByID then
-    local ok, name = pcall(C_MountJournal.GetMountInfoByID, id)
-    if ok and type(name) == "string" and name ~= "" and not (issecretvalue and issecretvalue(name)) then
-      return name
+-- Названия в окне и в чате — на языке, выбранном в аддоне. Совпадает с языком игры — берём у игры по ID;
+-- другой — из переводов, которые прислала программа (names в SheetData.lua, программа 2.10+); иначе как в таблице.
+local LANG_OF = { enUS = "en", enGB = "en", ruRU = "ru", deDE = "de", frFR = "fr", esES = "es", esMX = "es", ptBR = "pt" }
+local fromGame = {}
+
+local function Plain(value)
+  if type(value) == "string" and not (issecretvalue and issecretvalue(value)) and value ~= "" then
+    return value
+  end
+  return nil
+end
+
+local function GameName(item, field, text)
+  local key, id
+  if field == "mount" then
+    id = tonumber(item.id)
+    key = id and C_MountJournal and C_MountJournal.GetMountInfoByID and ("m" .. id)
+  elseif field == "boss" then
+    id = tonumber(item.je)
+    -- «Босс / Сундук», «Мифик ключей > седло»: такую строку целиком игра не знает
+    key = id and EJ_GetEncounterInfo and not text:find(" / ", 1, true) and not text:find(" > ", 1, true) and ("b" .. id)
+  elseif field == "place" then
+    local inst = ns.ItemInstance and ns.ItemInstance(item)
+    local name = inst and ns.InstanceName and Plain(ns.InstanceName(inst))
+    return name and (name .. (text:match("( %b())$") or ""))   -- пометка «(Midnight)» остаётся
+  end
+  if not key then
+    return nil
+  end
+  if fromGame[key] == nil then
+    local ok, name
+    if field == "mount" then
+      ok, name = pcall(C_MountJournal.GetMountInfoByID, id)
+    else
+      ok, name = pcall(EJ_GetEncounterInfo, id)
+    end
+    fromGame[key] = ok and Plain(name) or false
+  end
+  return fromGame[key] or nil
+end
+
+--- Название из строки списка (field: boss, mount, place) на языке аддона.
+function ns.Shown(item, field)
+  local text = type(item) == "table" and item[field] or nil
+  if type(text) ~= "string" or text == "" then
+    return text
+  end
+  local want = LANG_OF[ns.CurrentLanguage and ns.CurrentLanguage() or ""] or "en"
+  if GetLocale and want == LANG_OF[GetLocale()] then
+    local own = GameName(item, field, text)
+    if own then
+      return own
     end
   end
-  return tostring(m.mount or "?")
+  local data = MountSheetSyncSheet
+  local names = type(data) == "table" and type(data.names) == "table" and data.names or nil
+  local words = names and (names[want] or (want ~= "ru" and names.en)) or nil
+  local v = type(words) == "table" and words[text] or nil
+  return type(v) == "string" and v ~= "" and v or text
+end
+
+local function MountName(m)
+  return ns.Shown(m, "mount") or "?"
 end
 
 local function AttemptRows()
@@ -844,7 +897,7 @@ local hintCount = 0
 local function SameStamp(data, kills, weekEnd, collected)
   local last = kills[#kills]
   return hintStamp.minute == RareMinute(data) and hintStamp.data == data and hintStamp.generated == data.generated and hintStamp.kills == #kills
-    and hintStamp.last == last and hintStamp.weekEnd == weekEnd and hintStamp.collected == collected
+    and hintStamp.last == last and hintStamp.weekEnd == weekEnd and hintStamp.collected == collected and hintStamp.lang == ns.CurrentLanguage()
 end
 
 -- Подсказка о боссе по имени из игры (подсказка юнита, Атлас приключений):
@@ -860,7 +913,7 @@ function ns.BossHint(bossName)
   local collected = db0 and type(db0.collection) == "table" and db0.collection.collected or nil
   if not SameStamp(data, kills0, weekEnd0, collected) then
     hintCache, hintCount = {}, 0
-    hintStamp = { data = data, generated = data.generated, kills = #kills0, last = kills0[#kills0], weekEnd = weekEnd0,
+    hintStamp = { lang = ns.CurrentLanguage(), data = data, generated = data.generated, kills = #kills0, last = kills0[#kills0], weekEnd = weekEnd0,
                   collected = collected, minute = RareMinute(data) }
   end
   local cached = hintCache[bossName]
@@ -916,7 +969,7 @@ function ns.GetAttemptsList()
   local weekEnd = ns.WeekEnd and ns.WeekEnd()
   local last = kills[#kills]
   local stamp = table.concat({ tostring(data), tostring(data.generated), #kills, last and tostring(last.id) or "",
-    tostring(weekEnd), tostring(db and type(db.collection) == "table" and db.collection.collected), RareMinute(data) }, "|")
+    tostring(weekEnd), tostring(db and type(db.collection) == "table" and db.collection.collected), RareMinute(data), ns.CurrentLanguage() }, "|")
   if stamp == attemptsStamp then
     return attemptsResult
   end
@@ -925,7 +978,7 @@ function ns.GetAttemptsList()
     local p = type(m) == "table" and tonumber(m.p)
     if p and p > 0 and p < 1 and not Collected(m) then
       local n = CountNow(m, data, kills, known)
-      out[#out + 1] = { name = MountName(m), n = n, p = p, left = CharactersLeft(m, data, kills, known, weekEnd), diff = m.diff, kind = m.kind, boss = m.boss, id = m.id, je = m.je, im = m.im }
+      out[#out + 1] = { name = MountName(m), n = n, p = p, left = CharactersLeft(m, data, kills, known, weekEnd), diff = m.diff, kind = m.kind, boss = ns.Shown(m, "boss"), id = m.id, je = m.je, im = m.im }
     end
   end
   table.sort(out, function(a, b)
@@ -1081,7 +1134,7 @@ local DONE_ICON = "|TInterface\\RaidFrame\\ReadyCheck-Ready:12:12|t "
 
 function ns.FormatRemaining(entry)
   local item = entry.item
-  local boss = Safe(item.boss) ~= "" and Safe(item.boss) or "?"
+  local boss = Safe(ns.Shown(item, "boss")) ~= "" and Safe(ns.Shown(item, "boss")) or "?"
   local diff = Safe(item.diff)
   if entry.killed and not entry.done then
     local left = {}
@@ -1101,11 +1154,11 @@ function ns.FormatRemaining(entry)
   if diff ~= "" then
     text = text .. " |cff8c8c8c(" .. diff .. ")|r"
   end
-  if Safe(item.mount) ~= "" then
-    text = text .. " — |cffc9a0ff" .. Safe(item.mount) .. "|r"
+  if Safe(ns.Shown(item, "mount")) ~= "" then
+    text = text .. " — |cffc9a0ff" .. Safe(ns.Shown(item, "mount")) .. "|r"
   end
-  if Safe(item.place) ~= "" then
-    text = text .. " |cff8c8c8c- " .. Safe(item.place) .. "|r"
+  if Safe(ns.Shown(item, "place")) ~= "" then
+    text = text .. " |cff8c8c8c- " .. Safe(ns.Shown(item, "place")) .. "|r"
   end
   return text
 end

@@ -232,6 +232,8 @@ check("Эйра keeps her marks", "Да" in row_of(sheet(A, "Рейды Эйра
 code, out = run(A, "--sync-collection")
 check("--sync-collection works", code == 0 and "Сверка с коллекцией" in out, out[-500:])
 
+check("a Russian list carries English names for an addon set to English", '["Сильвана Ветрокрылая"] = "Sylvanas Windrunner"' in sheet_lua(), sheet_lua()[-600:])
+
 # ---------------------------------------------------------------- new characters join by themselves
 everyone = CHARS + [dict(CHARS[0], name="Тарен")]
 write_sv(kills, chars=everyone)
@@ -277,6 +279,7 @@ check("English: created", code == 0, out[-500:])
 check("…sheets are kept in the program's inner form", "Рейды Эйра" in [s["name"] for s in book(E)["sheets"]] and book(E)["lang"] == "en", [s["name"] for s in book(E)["sheets"]][:3])
 code, out = run(E, "--once")
 check("…the addon gets the English names", code == 0 and 'spreadsheet = "WoW Mounts"' in sheet_lua() and "Sylvanas Windrunner" in sheet_lua(), sheet_lua()[:400])
+check("…and Russian ones for an addon set to Russian", '["Sylvanas Windrunner"] = "Сильвана Ветрокрылая"' in sheet_lua(), sheet_lua()[-600:])
 
 # ---------------------------------------------------------------- a table from Google moves here
 OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))

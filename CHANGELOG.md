@@ -3,6 +3,7 @@
 The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [CHANGELOG-addon.md](CHANGELOG-addon.md).
 
 ## 2.10.0
+- The list for the addon carries English and Russian names of its mounts and bosses, so the addon can show them in its own language (needs the addon 3.0.4).
 - The program no longer needs Google: new players start with the data in a file on this computer, with no sign-in and nothing to set up. It appears by itself as soon as the addon knows your characters, and the addon's window shows the list.
 - A Google Sheet is still there as an option in the settings, and players who already have one stay on it. “Move from the spreadsheet…” copies an existing sheet to this computer without counting kills twice; the sheet stays in Google as it is.
 - “Characters…” and “What to farm…” work with the data on this computer too. The menu, notifications and the “Characters…” window mention the spreadsheet only if there is one.

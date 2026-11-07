@@ -3,6 +3,7 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.4
+- Mount, boss and place names follow the addon's language, not the sheet's. In the game's language they come from the game itself; in another one from translations the program sends (English and Russian; other languages get English). Needs the program 2.10.0.
 - Without a Google sheet the addon talks about the list: the button is “Save marks”, and no text mentions a sheet. With a sheet everything stays as it was, including “Send to sheet”.
 - Achievements and rewards (Glory of the Hero, Keystone Master and the like) have a group of their own at the end of the table and no longer count as left to kill, because they aren't boss kills. Needs the program 2.10.0.
 - Clicks on a row, all named in its tooltip. Left-click the boss: the raid or dungeon in the Adventure Guide. Left-click the mount: the game's Mount Journal. Ctrl + left-click: the way to the entrance, or a map pin at the entrance when the game can't track it; for a world boss, a pin where the game shows it. The window steps aside and comes back when the game's window closes.

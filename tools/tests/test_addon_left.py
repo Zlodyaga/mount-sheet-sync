@@ -69,7 +69,7 @@ MOCK = {
   saved = {}, world = {},
   mounts = {
     [363] = { "Синий протодракон", 59996, "|cFFFFD200Добыча:|r Скади Безжалостный|n|cFFFFD200Подземелье:|r Вершина Утгард|n|cFFFFD200Сложность:|r Героический" },
-    [1471] = { "Смотритель Зерета", 368158, "|cFFFFD200Добыча:|r Тюремщик|n|cFFFFD200Рейд:|r Гробница Предвечных" },
+    [1587] = { "Смотритель Зерета", 368158, "|cFFFFD200Добыча:|r Тюремщик|n|cFFFFD200Рейд:|r Гробница Предвечных" },
   },
 }
 SECRET = setmetatable({}, { __tostring = function() error("addon touched a secret value!") end })
@@ -966,7 +966,7 @@ tabs[2].MockClick(tabs[2]); g.RunTimers()
 check("journal shows the mount in purple", any(t.startswith("|cff8c8c8c") and "|cffc77dffНовый маунт: Синий протодракон|r" in t for t in shown_rows()))
 check("mount record does not tick list rows", remaining().left == left_before_mount, (remaining().left, left_before_mount))
 g.MountSheetSyncDB.quiet = True
-g.Fire("NEW_MOUNT_ADDED", 1471)
+g.Fire("NEW_MOUNT_ADDED", 1587)
 check("quiet: recorded without a chat line", g.MountSheetSyncDB.kills[n + 2].kind == "mount" and "Смотритель Зерета" not in chat_all().split("\n")[-1])
 g.MountSheetSyncDB.quiet = None
 saved_journal = g.C_MountJournal

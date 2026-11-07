@@ -727,7 +727,7 @@ local function AddPlan(item, scope)
   mine[#mine + 1] = { scope = scope, list = rec.list, boss = rec.boss, mount = rec.mount, diff = rec.diff,
                       place = place, time = stamp }
   if scope == "place" then
-    Print(string.format(L.plan_place, place, player.name))
+    Print(string.format(L.plan_place, ns.Shown(item, "place") or place, player.name))
   else
     Print(string.format(L.plan_row, PlanWhat(rec), player.name))
   end
