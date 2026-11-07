@@ -338,18 +338,38 @@ end
 -- зоны — вход в «Душу Дракона» есть лишь на карте Пещер Времени. Ошибка на одной карте не обрывает поиск по остальным.
 local WORLD_MAP = 946
 local MAP_ZONE = 3   -- Enum.UIMapType.Zone
-local entrances, entranceByName = {}, {}
+local entrances, entranceByName, entranceList = {}, {}, {}
 
--- Имя без пробелов и знаков: «Операция: Мехагон» и «Операция "Мехагон"» — одно и то же.
+-- Строчные буквы и для кириллицы: string.lower в игре меняет только латиницу.
+local function Lower(s)
+  s = s:lower():gsub("\208([\144-\175])", function(c)
+    local b = c:byte()
+    return b < 160 and ("\208" .. string.char(b + 32)) or ("\209" .. string.char(b - 32))
+  end)
+  return (s:gsub("\208\129", "\209\145"))   -- Ё
+end
+
+-- Знаки, которых нет среди ASCII: кавычки-ёлочки и лапки, тире, многоточие, апостроф, неразрывный пробел.
+local WIDE_MARKS = { "\194\171", "\194\187", "\226\128\156", "\226\128\157", "\226\128\158", "\226\128\147", "\226\128\148",
+  "\226\128\166", "\226\128\153", "\226\128\152", "\194\160" }
+
+-- Имя без пробелов, знаков и регистра: «Операция: Мехагон» и «Операция "Мехагон"», «Стратхольм – черный ход» и
+-- «Стратхольм - черный ход» — одно и то же.
 local function NameKey(name)
-  return (tostring(name or ""):lower():gsub("[%p%s]", ""))
+  local s = Lower(tostring(name or ""))
+  for _, mark in ipairs(WIDE_MARKS) do
+    s = s:gsub(mark, "")
+  end
+  return (s:gsub("[%p%s]", ""))
 end
 
 local function ScanEntrances()
+  entranceList = {}
   local ok, maps = pcall(C_Map.GetMapChildrenInfo, WORLD_MAP, nil, true)
   for _, map in ipairs(ok and type(maps) == "table" and maps or {}) do
     pcall(function()
       for _, e in ipairs(C_EncounterJournal.GetDungeonEntrancesForMap(map.mapID) or {}) do
+        entranceList[#entranceList + 1] = { name = e.name, id = e.journalInstanceID, map = map.mapID, mapName = map.name }
         local spot = { map = map.mapID, zone = map.mapType == MAP_ZONE, poi = e.areaPoiID, x = e.position.x, y = e.position.y }
         local old = entrances[e.journalInstanceID]
         if not old or (spot.zone and not old.zone) then   -- метка на карте зоны удобнее
@@ -372,6 +392,47 @@ local function FindEntrance(instance, name)
     ScanEntrances()   -- нет в найденном — обходим карты заново: игра могла ещё не отдать их в прошлый раз
   end
   return Known()
+end
+
+-- /mss route <часть названия>: что игра отдаёт о входах — для разбора «На карте не нашлось» (по-английски, как /mss tip).
+function ns.RouteDebug(text)
+  local key = NameKey(text)
+  ScanEntrances()
+  local maps = {}
+  for _, e in ipairs(entranceList) do
+    maps[e.map] = true
+  end
+  local nMaps = 0
+  for _ in pairs(maps) do
+    nMaps = nMaps + 1
+  end
+  ns.Print(string.format("route: %d entrances on %d maps; looking for \"%s\"", #entranceList, nMaps, Safe(text)))
+  if key == "" then
+    return
+  end
+  local shown = 0
+  for _, e in ipairs(entranceList) do
+    if shown < 8 and NameKey(e.name):find(key, 1, true) then
+      shown = shown + 1
+      ns.Print(string.format("  entrance \"%s\": journal %s, map %s (%s)", Safe(e.name), tostring(e.id), tostring(e.map), Safe(e.mapName)))
+    end
+  end
+  if shown == 0 then
+    ns.Print("  no entrance by that name on any map")
+  end
+  local data = MountSheetSyncSheet
+  local seen, rows = {}, 0
+  for _, ch in ipairs(type(data) == "table" and type(data.chars) == "table" and data.chars or {}) do
+    for _, item in ipairs(type(ch) == "table" and type(ch.items) == "table" and ch.items or {}) do
+      local place = type(item) == "table" and item.place
+      if rows < 4 and type(place) == "string" and NameKey(place):find(key, 1, true) and not seen[place] then
+        seen[place] = true
+        rows = rows + 1
+        local inst = ns.ItemInstance(item)
+        ns.Print(string.format("  row \"%s\": journal %s (%s), map %s", Safe(place), tostring(inst), Safe(inst and ns.InstanceName(inst) or "?"), tostring(item.im)))
+      end
+    end
+  end
 end
 
 -- Игрок на этой карте или на карте внутри неё?

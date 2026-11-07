@@ -865,6 +865,21 @@ g.Fire("SUPER_TRACKING_CHANGED")   # the player picked a quest instead
 L.execute("MSS_PLAYER_MAP = 75")
 g.Fire("ZONE_CHANGED")
 check("…but if the player chose another target meanwhile, the addon doesn't take it over", g.ROUTE.pin is None, g.ROUTE.pin)
+# names that differ only in dashes, quotes and letter case still match
+L.execute('''
+MSS_ROUTE_ENTR[75] = { { journalInstanceID = 187, areaPoiID = 99, position = { x = 0.6, y = 0.4 }, name = "Душа Дракона" },
+                       { journalInstanceID = 1490, areaPoiID = 98, position = { x = 0.2, y = 0.2 }, name = "Стратхольм - черный ход" } }
+MSS_PLAYER_MAP = 75; ROUTE.pin = nil
+''')
+row.elem.instance = 9999
+row.elem.placeName = "Стратхольм – Черный ход"
+row.MockClick(row)
+check("…an en dash, a hyphen and the letter case don't stop the match by name", g.ROUTE.pin == 98, g.ROUTE.pin)
+before = len(g.CHAT)
+g.SlashCmdList.MOUNTSHEETSYNC("route черный ход")
+said = [str(g.CHAT[i]) for i in range(before + 1, len(g.CHAT) + 1)]
+check("/mss route <name>: what the game gives about entrances, for «not found on the map»",
+      any("route: " in t and "entrances on" in t for t in said) and any('entrance "Стратхольм - черный ход": journal 1490, map 75' in t for t in said), said)
 # the zone's map has a link to the inner map (the cave's mouth): the pin goes there, not where the entrance lies inside
 L.execute('''
 MSS_PLAYER_MAP = 85; ROUTE.waypoint = nil; ROUTE.pin = nil

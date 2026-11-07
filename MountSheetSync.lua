@@ -859,6 +859,11 @@ SlashCmdList["MOUNTSHEETSYNC"] = function(msg)
     -- проверка подсказки о боссе: пишет в чат, что видит аддон при наведении (до /reload)
     ns.tipDebug = not ns.tipDebug
     Print("tooltip check " .. (ns.tipDebug and "on — hover a boss" or "off"))
+  elseif cmd == "route" then
+    -- разбор «На карте не нашлось»: какие входы отдаёт игра и какой подземелье у строк списка
+    if ns.RouteDebug then
+      ns.RouteDebug(rest)
+    end
   elseif cmd == "sync" or cmd == "reload" then
     ns.SyncNow()
   elseif cmd == "left" or cmd == "осталось" then
