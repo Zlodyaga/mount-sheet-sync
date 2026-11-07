@@ -374,22 +374,35 @@ local function FindEntrance(instance, name)
   return Known()
 end
 
+-- Игрок на этой карте или на карте внутри неё?
+local function PlayerInside(map)
+  local ok, inside = pcall(function()
+    local here = C_Map.GetBestMapForUnit and C_Map.GetBestMapForUnit("player")
+    local steps = 0
+    while here and steps < 20 do
+      if here == map then
+        return true
+      end
+      local info = C_Map.GetMapInfo(here)
+      here = info and info.parentMapID ~= here and info.parentMapID or nil
+      steps = steps + 1
+    end
+    return false
+  end)
+  return ok and inside or false
+end
+
 -- Вход лежит на карте внутри другой зоны (Пещеры Времени в Танарисе): куда идти снаружи — та же точка на карте зоны.
 -- nil — карта входа сама зона или игрок уже внутри неё.
 local function OuterStep(e)
+  if PlayerInside(e.map) then
+    return nil   -- уже внутри — сразу ко входу
+  end
   local ok, step = pcall(function()
     local inner = C_Map.GetMapInfo(e.map)
     local outer = inner and inner.parentMapID and C_Map.GetMapInfo(inner.parentMapID)
     if not (outer and outer.mapType == MAP_ZONE) then
       return nil
-    end
-    local here = C_Map.GetBestMapForUnit and C_Map.GetBestMapForUnit("player")
-    while here do   -- уже внутри — сразу ко входу
-      if here == e.map then
-        return nil
-      end
-      local info = C_Map.GetMapInfo(here)
-      here = info and info.parentMapID ~= here and info.parentMapID or nil
     end
     local minX, maxX, minY, maxY = C_Map.GetMapRectOnMap(e.map, outer.mapID or inner.parentMapID)
     if not (minX and maxX and minY and maxY) then
@@ -431,6 +444,9 @@ end
 
 -- Показать путь: игра ведёт к отметке входа, а если не вышло (не изучена территория и т. п.) — своя метка на карте у входа.
 -- У мировых боссов входа нет: метка там, где их показывает игра.
+-- Путь, ждущий второго шага: { entrance, name, inner }. routeOwn — цель меняет сам аддон, это не выбор игрока.
+local pendingRoute, routeOwn, routeWatcher = nil, false, nil
+
 -- Путь прямо ко входу: метка входа, а если игра её не ведёт — своя метка у входа.
 local function TrackEntrance(e, name)
   local tracked = pcall(function()
@@ -445,7 +461,42 @@ local function TrackEntrance(e, name)
   ns.Print(string.format(PinAndTrack(e.map, e.x, e.y) and L.route_pin or L.route_none, name))
 end
 
-local function ShowRoute(elem, button)
+-- Второй шаг: игрок вошёл в зону со входом — путь ко входу. Игрок сам выбрал другую цель — ждать больше нечего.
+local function WatchRoute()
+  if routeWatcher then
+    return
+  end
+  routeWatcher = CreateFrame("Frame")
+  for _, event in ipairs({ "ZONE_CHANGED", "ZONE_CHANGED_INDOORS", "ZONE_CHANGED_NEW_AREA", "SUPER_TRACKING_CHANGED" }) do
+    pcall(routeWatcher.RegisterEvent, routeWatcher, event)
+  end
+  routeWatcher:SetScript("OnEvent", function(_, event)
+    local route = pendingRoute
+    if not route or routeOwn then
+      return
+    end
+    if event == "SUPER_TRACKING_CHANGED" then
+      -- метку у входа игра снимает сама, когда до неё дошли: это не повод забыть путь; другая цель — повод
+      local ok, other = pcall(function()
+        return C_SuperTrack.IsSuperTrackingAnything() and not C_SuperTrack.IsSuperTrackingUserWaypoint()
+      end)
+      if ok and other then
+        pendingRoute = nil
+      end
+      return
+    end
+    if PlayerInside(route.entrance.map) then
+      pendingRoute = nil
+      routeOwn = true
+      ns.Print(string.format(L.route_inside, route.inner, route.name))
+      TrackEntrance(route.entrance, route.name)
+      routeOwn = false
+    end
+  end)
+end
+
+local function ShowRoute(elem)
+  pendingRoute = nil   -- новый путь заменяет недоделанный
   if elem.world then
     local name = Safe(elem.bossName)
     local spot = elem.encounter and FindBossSpot(elem.encounter)
@@ -464,20 +515,22 @@ local function ShowRoute(elem, button)
     return
   end
   local outer = OuterStep(e)
-  if not (outer and button and MenuUtil and MenuUtil.CreateContextMenu) then
+  if not outer then
     TrackEntrance(e, name)
     return
   end
-  -- в два шага: сначала до зоны со входом (Пещеры Времени), а уже в ней — ко входу
-  MenuUtil.CreateContextMenu(button, function(owner, root)
-    root:CreateTitle(name)
-    root:CreateButton(string.format(L.route_outer, Safe(outer.name), Safe(outer.zone)), function()
-      ns.Print(string.format(PinAndTrack(outer.map, outer.x, outer.y) and L.route_pin or L.route_none, Safe(outer.name)))
-    end)
-    root:CreateButton(string.format(L.route_inner, name, Safe(outer.name)), function()
-      TrackEntrance(e, name)
-    end)
-  end)
+  -- в два шага, но одним щелчком: сначала метка у зоны со входом (Пещеры Времени), а когда игрок в неё войдёт,
+  -- аддон сам переключит путь на вход (RouteWatch)
+  routeOwn = true
+  local pinned = PinAndTrack(outer.map, outer.x, outer.y)
+  routeOwn = false
+  if not pinned then
+    ns.Print(string.format(L.route_none, Safe(outer.name)))
+    return
+  end
+  pendingRoute = { entrance = e, name = name, inner = Safe(outer.name) }
+  WatchRoute()
+  ns.Print(string.format(L.route_first, Safe(outer.name), Safe(outer.zone), name))
 end
 
 -- Курсор над столбцом строки (key — ключ столбца)?
@@ -557,7 +610,7 @@ local function ClickRow(button, mouse)
   end
   if IsControlKeyDown() then
     if elem.route then
-      ShowRoute(elem, button)
+      ShowRoute(elem)
     end
   elseif elem.instance and OverColumn(button, "boss") then
     ShowInGuide(elem.instance, elem.encounter)

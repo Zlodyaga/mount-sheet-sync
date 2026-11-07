@@ -846,16 +846,25 @@ L.eval("function(ns) end")(ns)
 row.elem.instance = 187
 n_menus = len(g.MENUS)
 row.MockClick(row)
-menu = g.MENUS[len(g.MENUS)] if len(g.MENUS) > n_menus else None
-items = [(str(menu["items"][i].kind), str(menu["items"][i].text)) for i in range(1, len(menu["items"]) + 1)] if menu else []
-check("3.0.4: an entrance inside another zone: Ctrl + click offers two steps, a broken map doesn't stop the search",
-      len(items) == 3 and items[1][1] == "Путь в: Пещеры Времени (Танарис)" and items[2][1].startswith("Вход в ") and "внутри: Пещеры Времени" in items[2][1], items)
-if menu:
-    L.eval("function(b) b.cb() end")(menu["items"][2])
-    check("…step one: a pin on the zone's map, where the inner map lies", g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 71
-          and abs(g.ROUTE.waypoint.x - 0.62) < 1e-9 and abs(g.ROUTE.waypoint.y - 0.28) < 1e-9, g.ROUTE.waypoint and (g.ROUTE.waypoint.map, g.ROUTE.waypoint.x, g.ROUTE.waypoint.y))
-    L.eval("function(b) b.cb() end")(menu["items"][3])
-    check("…step two: the entrance itself", g.ROUTE.pin == 99)
+check("3.0.4: an entrance inside another zone, one click: a pin on the zone's map where the inner map lies, no menu; a broken map doesn't stop the search",
+      len(g.MENUS) == n_menus and g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 71 and g.ROUTE.pin is None
+      and abs(g.ROUTE.waypoint.x - 0.62) < 1e-9 and abs(g.ROUTE.waypoint.y - 0.28) < 1e-9, g.ROUTE.waypoint and (g.ROUTE.waypoint.map, g.ROUTE.waypoint.x, g.ROUTE.waypoint.y))
+check("…the chat says the way goes on inside", "Путь в Пещеры Времени (Танарис)" in chat_all() and "внутри поведу дальше" in chat_all(), chat_all()[-200:])
+L.execute("MSS_PLAYER_MAP = 71")
+g.Fire("ZONE_CHANGED_NEW_AREA")
+check("…still in Tanaris: nothing changes yet", g.ROUTE.pin is None)
+L.execute("C_SuperTrack.IsSuperTrackingAnything = function() return false end; C_SuperTrack.IsSuperTrackingUserWaypoint = function() return false end")
+g.Fire("SUPER_TRACKING_CHANGED")   # the game drops the pin on arrival: the way is not forgotten
+L.execute("MSS_PLAYER_MAP = 75")
+g.Fire("ZONE_CHANGED")
+check("…inside the Caverns of Time: the way switches to the entrance by itself", g.ROUTE.pin == 99 and "теперь путь ко входу" in chat_all(), (g.ROUTE.pin, chat_all()[-200:]))
+L.execute("MSS_PLAYER_MAP = 85; ROUTE.pin = nil")
+row.MockClick(row)
+L.execute("C_SuperTrack.IsSuperTrackingAnything = function() return true end")
+g.Fire("SUPER_TRACKING_CHANGED")   # the player picked a quest instead
+L.execute("MSS_PLAYER_MAP = 75")
+g.Fire("ZONE_CHANGED")
+check("…but if the player chose another target meanwhile, the addon doesn't take it over", g.ROUTE.pin is None, g.ROUTE.pin)
 L.execute("MSS_PLAYER_MAP = 75; ROUTE.pin = nil")
 n_menus = len(g.MENUS)
 row.MockClick(row)
