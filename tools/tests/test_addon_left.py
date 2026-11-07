@@ -763,9 +763,10 @@ AchievementFrame_SelectAchievement = function(id) assert(AchievementFrame:IsShow
 tabs[1].MockClick(tabs[1]); g.RunTimers()
 ach_rows = [f for f in pool(ROW) if f._shown and f.elem and f.elem.achievement is not None]
 ach_text = [plain(row_text(f)) for f in ach_rows]
-check("3.0.4: the «Достижения» tab: the reward row with its requirement from the game and «Получено»", tabs[1]._text == "Достижения" and len(ach_rows) == 1
-      and "Выполните героические достижения" in ach_text[0] and "Поводья Повелителя воронов" in ach_text[0] and ach_text[0].endswith("Получено"), (tabs[1]._text, ach_text))
-check("…no attempts or chance columns there", [plain(c.text._text) for c in head_cells()][:4] == ["Достижение", "Условие", "Маунт", "Статус"], [plain(c.text._text) for c in head_cells()])
+check("3.0.4: the «Достижения» tab: the reward row with its requirement from the game, earned — grey", tabs[1]._text == "Достижения" and len(ach_rows) == 1
+      and "Выполните героические достижения" in ach_text[0] and "Поводья Повелителя воронов" in ach_text[0]
+      and str(ach_rows[0].elem["values"]["mount"]).startswith("|cff8c8c8c"), (tabs[1]._text, ach_text))
+check("…no attempts, chance or status columns there", [plain(c.text._text) for c in head_cells()][:4] == ["Достижение", "Условие", "Маунт"], [plain(c.text._text) for c in head_cells()])
 if ach_rows:
     ach_row = ach_rows[0]
     ach_row._scripts.OnEnter(ach_row)
@@ -798,12 +799,13 @@ heads = [plain(t) for t in shown_rows() if plain(t) in ("Рейды", "Подз�
 texts = [plain(t) for t in shown_rows()]
 check("3.0.4: every reward from the program, in four tables: raids, dungeons, Mythic+, other", heads == ["Рейды", "Подземелья", "Mythic+", "Другое"]
       and any("Слава рейдеру Души Дракона" in t for t in texts), texts)
-check("…a collected mount counts as earned", any("Слава герою" in t and t.endswith("Получено") for t in texts), texts)
+hero = [f for f in pool(ROW) if f._shown and f.elem and f.elem["values"] and "Красный протодракон" in str(f.elem["values"]["mount"])]
+check("…a collected mount counts as earned: grey, at the bottom of its table", hero and str(hero[0].elem["values"]["mount"]).startswith("|cff8c8c8c"), texts)
 saddle_row = [f for f in pool(ROW) if f._shown and f.elem and f.elem["values"] and "Штормовой бронедон" in str(f.elem["values"]["mount"])]
 mplus_rows = [plain(t) for t in texts[texts.index("Mythic+") + 1:texts.index("Другое")]]
 check("3.0.4: a past season's mount is under «Затерянное во времени седло», after this season's achievements, and not «earned» for the saddle's achievement",
       saddle_row and plain(str(saddle_row[0].elem["values"]["boss"])) == "Затерянное во времени седло" and mplus_rows[-1].startswith("Затерянное во времени седло")
-      and not mplus_rows[-1].endswith("Получено"), mplus_rows)
+      and not str(saddle_row[0].elem["values"]["mount"]).startswith("|cff8c8c8c"), mplus_rows)
 if saddle_row:
     saddle_row[0]._scripts.OnEnter(saddle_row[0])
     tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]

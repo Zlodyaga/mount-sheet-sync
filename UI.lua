@@ -1273,7 +1273,7 @@ local function RemainingView(r, own)
     summary = "|cff8c8c8c" .. string.format(L.left_head, r.left, r.total, ns.FormatWhen(r.generated)) .. "|r" }
 end
 
--- Вкладка «Достижения»: достижение (щелчок — открыть его), условие, маунт, получено ли. Попыток у них нет.
+-- Вкладка «Достижения»: достижение (щелчок — открыть его), условие, маунт. Полученное — серое и внизу. Попыток у них нет.
 local achCols
 local function AchievementColumns()
   if not achCols then
@@ -1281,8 +1281,7 @@ local function AchievementColumns()
       { key = "icon", w = 18 },
       { key = "boss", flex = 1.3, label = "col_ach" },
       { key = "cond", flex = 1.6, label = "col_cond" },
-      { key = "mount", flex = 1.1, label = "col_mount" },
-      { key = "status", w = 78, right = true, label = "col_status" },
+      { key = "mount", flex = 1.4, label = "col_mount" },
     }, listWidth)
   end
   return achCols
@@ -1370,15 +1369,17 @@ local function AchievementsView(rows)
           earned = earned + 1
         end
         local tip = { mount, a.name, Safe(cond) }
+        if a.done then
+          tip[#tip + 1] = "|cff8cff8c" .. L.ach_done .. "|r"
+        end
         if a.was then
           tip[#tip + 1] = "|cff8c8c8c" .. string.format(L.ach_saddle_was, a.was) .. "|r"
         end
         list[#list + 1] = { cols = cols, icon = ns.MountIcon(item.id), mountID = KnownMount(item.id), achievement = tonumber(item.ach),
           stripe = i % 2 == 0, tip = tip, values = {
             boss = a.done and ("|cff8c8c8c" .. a.name .. "|r") or a.name,
-            cond = "|cffb7ae9a" .. Safe(cond) .. "|r",
-            mount = "|cffc9a0ff" .. mount .. "|r",
-            status = a.done and ("|cff8cff8c" .. L.ach_done .. "|r") or "|cff8c8c8c-|r",
+            cond = "|cff" .. (a.done and "8c8c8c" or "b7ae9a") .. Safe(cond) .. "|r",
+            mount = "|cff" .. (a.done and "8c8c8c" or "c9a0ff") .. mount .. "|r",
           } }
       end
     end
