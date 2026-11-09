@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.3 — ядро
+Mount Sheet Sync 3.0.4 — ядро
 =============================
 Записывает убийства боссов на текущем персонаже и новые маунты, чтобы программа
 Mount Sheet Sync (MountSheetSync.exe в трее Windows) отметила их в Google-таблице маунтов:
@@ -26,7 +26,7 @@ SavedVariables. Игра сохраняет файл
 
 local ADDON_NAME, ns = ...
 
-local VERSION = "3.0.3"
+local VERSION = "3.0.4"
 local MAX_RECORDS = 400               -- храним не больше стольких записей
 local MAX_AGE = 21 * 24 * 60 * 60     -- и не старше трёх недель
 local DUPLICATE_WINDOW = 120          -- ENCOUNTER_END и BOSS_KILL об одном бое, сек
@@ -727,7 +727,7 @@ local function AddPlan(item, scope)
   mine[#mine + 1] = { scope = scope, list = rec.list, boss = rec.boss, mount = rec.mount, diff = rec.diff,
                       place = place, time = stamp }
   if scope == "place" then
-    Print(string.format(L.plan_place, place, player.name))
+    Print(string.format(L.plan_place, ns.Shown(item, "place") or place, player.name))
   else
     Print(string.format(L.plan_row, PlanWhat(rec), player.name))
   end
@@ -859,6 +859,11 @@ SlashCmdList["MOUNTSHEETSYNC"] = function(msg)
     -- проверка подсказки о боссе: пишет в чат, что видит аддон при наведении (до /reload)
     ns.tipDebug = not ns.tipDebug
     Print("tooltip check " .. (ns.tipDebug and "on — hover a boss" or "off"))
+  elseif cmd == "route" then
+    -- разбор «На карте не нашлось»: какие входы отдаёт игра и какой подземелье у строк списка
+    if ns.RouteDebug then
+      ns.RouteDebug(rest)
+    end
   elseif cmd == "sync" or cmd == "reload" then
     ns.SyncNow()
   elseif cmd == "left" or cmd == "осталось" then

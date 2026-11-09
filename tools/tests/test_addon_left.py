@@ -69,7 +69,7 @@ MOCK = {
   saved = {}, world = {},
   mounts = {
     [363] = { "Синий протодракон", 59996, "|cFFFFD200Добыча:|r Скади Безжалостный|n|cFFFFD200Подземелье:|r Вершина Утгард|n|cFFFFD200Сложность:|r Героический" },
-    [1471] = { "Смотритель Зерета", 368158, "|cFFFFD200Добыча:|r Тюремщик|n|cFFFFD200Рейд:|r Гробница Предвечных" },
+    [1587] = { "Смотритель Зерета", 368158, "|cFFFFD200Добыча:|r Тюремщик|n|cFFFFD200Рейд:|r Гробница Предвечных" },
   },
 }
 SECRET = setmetatable({}, { __tostring = function() error("addon touched a secret value!") end })
@@ -123,11 +123,21 @@ loader = L.eval("function(src, name) return assert(loadstring(src, '@' .. name))
 for name in files:
     src = sheet_src if name == "SheetData.lua" else open(os.path.join(ADDON_DIR, name), encoding="utf-8").read()
     loader(src, name)("MountSheetSync", ns)
+L.eval("function(n) n.UsesListWords = function() return false end end")(ns)   # the texts of a player with a Google sheet
 shipped = open(os.path.join(ADDON_DIR, "SheetData.lua"), encoding="utf-8").read()
 check("shipped SheetData.lua is valid Lua and empty", "MountSheetSyncSheet = nil" in shipped and loader(shipped, "x") is not None)
 
 g.Fire("ADDON_LOADED", "MountSheetSync")
 g.Fire("PLAYER_LOGIN"); g.RunTimers()
+
+
+def lua_list(t):
+    return [t[i] for i in range(1, len(t) + 1)]
+
+
+def all_head_rows():
+    heads = [plain(x._text) for x in regions("FontString") if under_window(x) and x._shown and x._text is not None and "Ещё убить на этой неделе" in plain(x._text)]
+    return int(heads[0].split("строк ")[1].split(",")[0])
 
 
 def chat_all():
@@ -213,9 +223,9 @@ def under_window(x):
 
 
 tabs = [x for x in regions("Button") if x._isTab]
-check("three Blizzard top tabs above the list", [str(t._text) for t in tabs] == ["Осталось (26)", "Попытки", "Журнал"],
+check("four tabs above the list, achievements next to «Осталось»", [str(t._text) for t in tabs] == ["Осталось (26)", "Достижения", "Попытки", "Журнал"],
       [str(t._text) for t in tabs])
-check("3.0: «Осталось» selected by default", win.selectedTab == 1 and not tabs[0].IsEnabled(tabs[0]) and tabs[2].IsEnabled(tabs[2]))
+check("3.0: «Осталось» selected by default", win.selectedTab == 1 and not tabs[0].IsEnabled(tabs[0]) and tabs[3].IsEnabled(tabs[3]))
 
 
 def boxes(extent):
@@ -268,7 +278,7 @@ def char_rows():
 
 
 check("two ScrollBox lists with a scroll bar each", len(boxes(ROW)) == 1 and len(boxes(CHAR)) == 1 and boxes(ROW)[0]._managedBar)
-tabs[2].MockClick(tabs[2]); g.RunTimers()
+tabs[3].MockClick(tabs[3]); g.RunTimers()
 check("journal tab shows the journal", any("Тюремщик" in t for t in shown_rows()) and not any("Осталось" in t for t in shown_rows()))
 tabs[0].MockClick(tabs[0]); g.RunTimers()
 rows = shown_rows()
@@ -334,7 +344,7 @@ click_all()
 rows = shown_rows()
 summ = ns.GetSummary()
 check("«Все персонажи»: head line with rows and characters",
-      rows[0] == "|cff8c8c8cЕщё убить на этой неделе: строк %d - персонажей в таблице: %d|r" % (len(summ), len(allr)), rows[0])
+      rows[0] == "|cff8c8c8cЕщё убить на этой неделе: строк %d, попыток %d - персонажей в таблице: %d|r" % (len(summ), sum(summ[i].total for i in range(1, len(summ) + 1)), len(allr)), rows[0])
 check("…grouped by kind", [t for t in rows if t.startswith("|cffffd200")] == ["|cffffd200Рейды|r", "|cffffd200Подземелья|r", "|cffffd200Мировые боссы|r"],
       [t for t in rows if t.startswith("|cffffd200")])
 check("…selected on the left, the tab counts everybody", char_rows()[0][2] and tabs[0]._text == "Осталось (%s)" % char_rows()[0][1], tabs[0]._text)
@@ -345,13 +355,32 @@ check("…a row of the sheet with the number of characters left",
 alive = [gr.dots[i]._w == 10 for i in range(1, len(allr) + 1)]
 want = [allr[i].name in [first.names[j] for j in range(1, len(first.names) + 1)] for i in range(1, len(allr) + 1)]
 check("…one column per character: a dot if the boss is still to kill, a dash if killed", alive == want, (alive, want))
+
+
+def cell_kinds(f):
+    out = []
+    for i in range(1, len(allr) + 1):
+        d, name = f.dots[i], allr[i].name
+        got = "dot" if d._w == 10 else "dash" if d._w == 8 and d._h == 2 else "cross" if str(d._texture).endswith("Media\\Close") else "?"
+        killed = f.elem.killed and f.elem.killed[name]
+        want = "letters" if killed else "dot" if f.elem.names[name] else "dash" if (f.elem.done and f.elem.done[name]) else "cross"
+        out.append((name, got if not killed else "letters", want))
+    return out
+
+
+grid_cells = [k for f in pool(ROW) if f.elem and f.elem.names is not None and f.dots for k in cell_kinds(f)]
+check("…killed this week is a dash, a row the character doesn't have at all is a faint cross", all(got == want for _, got, want in grid_cells),
+      [c for c in grid_cells if c[1] != c[2]][:5])
+check("…both kinds are in the sample, so the check above means something", {"dash", "cross"} <= {w for _, _, w in grid_cells}, sorted({w for _, _, w in grid_cells}))
 check("…the header: boss, difficulty, mount, a column per character, total",
       [plain(c.text._text) for c in head_cells()][:4] == ["Босс", "Слож.", "Маунт", "Всего"] and len(head_cells()) == 4 + len(allr)
       and plain(head_cells()[4].text._text) == str(allr[1].name)[:3], [plain(c.text._text) for c in head_cells()])
 check("…all fit: no scroll bar under the columns", not win.gridSlider._shown)
 gr._scripts.OnEnter(gr)
 tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
-check("…hover: every name in the tooltip", tt[-1] == ", ".join(str(first.names[i]) for i in range(1, len(first.names) + 1)), tt)
+check("…hover: every name in the tooltip", ", ".join(str(first.names[i]) for i in range(1, len(first.names) + 1)) in tt, tt)
+others = [str(allr[i].name) for i in range(1, len(allr) + 1) if not first.names or str(allr[i].name) not in [str(first.names[j]) for j in range(1, len(first.names) + 1)]]
+check("…and the rest: who killed it this week, who doesn't farm it", all(any(n in line and ("Убит на этой неделе" in line or "Не фармят" in line) for line in tt) for n in others), (others, tt))
 gr._scripts.OnLeave(gr)
 # a raid with separate lockouts: the program marks the row, the difficulties killed are in item.k
 sep_ch = None
@@ -372,7 +401,7 @@ sep_mark = sep_row[0].marks[sep_slot]
 check("…N is dark, H and M in the character's colour", plain(sep_mark._text) == "N H M" and "|cff5f5a4eN|r" in str(sep_mark._text), str(sep_mark._text))
 sep_row[0]._scripts.OnEnter(sep_row[0])
 tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
-check("…the tooltip says what is left", "(H, M)" in tt[-1], tt)
+check("…the tooltip says what is left", any("(H, M)" in t for t in tt), tt)
 sep_row[0]._scripts.OnLeave(sep_row[0])
 sep_entry = [e for e in pool(CHAR) if plain(e.name._text) == sep_name][0]
 sep_entry.MockClick(sep_entry); g.RunTimers()
@@ -420,7 +449,7 @@ L.execute("MSS_NS.OnChange()"); g.RunTimers()
 eira = [f for f in pool(CHAR) if plain(f.name._text) == "Эйра"][0]
 eira.MockClick(eira); g.RunTimers()
 check("click on a character from another tab opens his «Осталось»", win.selectedTab == 1 and shown_rows()[0].startswith("|cff8c8c8cОсталось 26 из 38"))
-tabs[1].MockClick(tabs[1]); g.RunTimers()
+tabs[2].MockClick(tabs[2]); g.RunTimers()
 att = ns.GetAttemptsList()
 empty = [x for x in regions("FontString") if x._font == "MSSFontDim" and under_window(x)][0]
 check("«Попытки»: the counter or a word that there is none yet",
@@ -493,6 +522,8 @@ L.execute(r"""
 SCREEN_RESET, SCREEN_STATE = MountSheetSyncSheet.resetAt, MSS_NS.ProgramState
 MountSheetSyncSheet.resetAt = MOCK.now
 MSS_NS.ProgramState = function() return "online" end
+MSS_NS.UsesListWords = function() return true end   -- a new player's words; ApplyLanguage redraws the labels
+MSS_NS.ApplyLanguage()
 RAID_CLASS_COLORS.DRUID = { colorStr = "ffff7c0a" }
 MountSheetSyncDB.chars["Каэлиия-Ревущий фьорд"] = { name = "Каэлиия", realm = "Ревущий фьорд", classFile = "DRUID" }
 for _, color in pairs(RAID_CLASS_COLORS) do
@@ -502,8 +533,8 @@ end
 MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
 MSS_NS.OnChange()""")
 g.RunTimers()
-screen_hint = [x for x in regions("FontString") if under_window(x) and x._text == ns.L.window_offline][0]
-screen_hint.SetText(screen_hint, ns.L.window_hint)
+L.execute("MSS_SCREEN_STATE_SAVED = MSS_NS.ProgramState; MSS_NS.ProgramState = function() return 'online' end")
+win.ShowProgramState()   # the pictures show a running program: the quiet bottom line
 tabs[0].MockClick(tabs[0]); g.RunTimers()
 dump_layout(win, OUT_LAYOUT)
 LAYOUT_DIR = os.path.dirname(os.path.abspath(OUT_LAYOUT))
@@ -511,7 +542,7 @@ click_all()
 dump_layout(win, os.path.join(LAYOUT_DIR, "layout_all.json"))
 eira_row = pool(CHAR)[1]
 eira_row.MockClick(eira_row); g.RunTimers()
-tabs[2].MockClick(tabs[2]); g.RunTimers()
+tabs[3].MockClick(tabs[3]); g.RunTimers()
 dump_layout(win, os.path.join(LAYOUT_DIR, "layout_log.json"))
 # «Попытки» for the picture: the fixture's sheet is older than the counter — rows like a real player's (2.9 program)
 L.execute(r"""SCREEN_MOUNTS = {
@@ -530,7 +561,7 @@ local copy = {}
 for k, v in pairs(MountSheetSyncSheet) do copy[k] = v end
 copy.mounts = SCREEN_MOUNTS
 MountSheetSyncSheet = copy""")
-tabs[1].MockClick(tabs[1]); g.RunTimers()
+tabs[2].MockClick(tabs[2]); g.RunTimers()
 check("«Попытки» with rows (for the picture): most expected drops first", ns.GetAttemptsList()[1].name == "Пламенное Крыло Алисразор", ns.GetAttemptsList()[1].name)
 rows = shown_rows()
 check("3.0.3: «Попытки» in columns: mount, boss, difficulty, attempts, chance, characters left",
@@ -560,7 +591,7 @@ hide.MockClick(hide); g.RunTimers()
 check("«Скрыть без попыток»: gone", not any(" | - | - | " in plain(t) for t in shown_rows()))
 hide.MockClick(hide); g.RunTimers()
 L.execute("MountSheetSyncDB.attemptsView = nil")
-tabs[0].MockClick(tabs[0]); tabs[1].MockClick(tabs[1]); g.RunTimers()
+tabs[0].MockClick(tabs[0]); tabs[2].MockClick(tabs[2]); g.RunTimers()
 dump_layout(win, os.path.join(LAYOUT_DIR, "layout_attempts.json"))
 L.execute("MountSheetSyncSheet = SCREEN_OLD")
 tabs[0].MockClick(tabs[0]); g.RunTimers()
@@ -569,14 +600,446 @@ sf = g.MountSheetSyncSettingsFrame
 check("settings window opens for the screenshots", sf is not None and sf._shown)
 dump_layout(sf, os.path.join(LAYOUT_DIR, "layout_settings.json"))
 sf.Hide(sf)
-screen_hint.SetText(screen_hint, ns.L.window_offline)
+L.execute("MSS_NS.ProgramState = MSS_SCREEN_STATE_SAVED")
+win.ShowProgramState()
 L.execute(r"""
 MountSheetSyncSheet.resetAt, MSS_NS.ProgramState = SCREEN_RESET, SCREEN_STATE
+MSS_NS.UsesListWords = function() return false end
+MSS_NS.ApplyLanguage()
 MountSheetSyncDB.chars["Каэлиия-Ревущий фьорд"] = nil
 MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
 MSS_NS.OnChange()""")
 g.RunTimers()
 tabs[0].MockClick(tabs[0]); g.RunTimers()
+
+# 3.0.4: an achievement or a guaranteed drop has no attempts, yet its row gets an icon: the ID comes with the row
+L.execute("""
+for _, c in ipairs(MountSheetSyncSheet.chars) do
+  for _, i in ipairs(c.items) do i.id = next(MOCK.mounts) end
+end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
+tabs[0].MockClick(tabs[0]); g.RunTimers()
+check("3.0.4: the row's own ID gives the icon", any(f.icon._shown and f.icon._texture == 132226 for f in pool(ROW)))
+# left click on a row: the game's Mount Journal on this mount; our window is above it, so it steps aside until the journal closes
+L.execute("""
+MountJournal = {}
+CollectionsJournal = CreateFrame("Frame", "CollectionsJournal")
+CollectionsJournal:Hide()
+function SetCollectionsJournalShown(shown, tab) MOCK_TAB = tab; CollectionsJournal:Show() end
+function MountJournal_SelectByMountID(id) MOCK_SELECTED = id end""")
+with_mount = [f for f in pool(ROW) if f.elem.mountID is not None][0]
+check("3.0.4: a row whose mount the game knows can be opened", with_mount.elem.mountID is not None)
+with_mount.MockClick(with_mount)
+check("3.0.4: left click opens the Mount Journal tab on that mount", g.MOCK_TAB == 1 and g.MOCK_SELECTED == with_mount.elem.mountID, (g.MOCK_TAB, g.MOCK_SELECTED))
+check("…our window steps aside", not win._shown)
+g.CollectionsJournal.Hide(g.CollectionsJournal); g.RunTimers()
+check("…and comes back when the journal closes", win._shown)
+L.execute("""
+SetCollectionsJournalShown = nil
+function ToggleCollectionsJournal(tab) MOCK_TAB = tab; CollectionsJournal:Show() end
+function CollectionsJournal_SetTab(frame, tab) MOCK_SET_TAB = tab end
+MOCK_SELECTED = nil""")
+with_mount = [f for f in pool(ROW) if f.elem.mountID is not None][0]
+with_mount.MockClick(with_mount)
+check("…the same with only the older way to show the journal", g.MOCK_SET_TAB == 1 and g.MOCK_SELECTED == with_mount.elem.mountID and not win._shown, (g.MOCK_SET_TAB, g.MOCK_SELECTED))
+g.CollectionsJournal.Hide(g.CollectionsJournal); g.RunTimers()
+L.execute("function MountJournal_SelectByMountID(id) error('no such function') end; CollectionsJournal:Hide()")
+win.Show(win); g.RunTimers()
+with_mount = [f for f in pool(ROW) if f.elem.mountID is not None][0]
+with_mount.MockClick(with_mount)
+check("a journal that fails: said so in the chat, our window stays", win._shown and "журнал маунтов" in chat_all(), chat_all()[-200:])
+L.execute("CollectionsJournal:Hide(); CollectionsJournal = nil; MountJournal = nil; ToggleCollectionsJournal = nil; CollectionsJournal_SetTab = nil; MountJournal_SelectByMountID = nil")
+g.RunTimers()
+win.Show(win); g.RunTimers()
+L.execute("""
+for _, c in ipairs(MountSheetSyncSheet.chars) do
+  for _, i in ipairs(c.items) do i.id = nil end
+end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
+
+# 3.0.4: one character: nothing to compare, so no «Все персонажи» row; the first row is that character
+L.execute("""
+SAVED_CHARS = MountSheetSyncSheet.chars
+MountSheetSyncSheet.chars = { SAVED_CHARS[1] }
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
+tabs[0].MockClick(tabs[0]); g.RunTimers()
+check("3.0.4: one character: no row for all of them", not [f for f in pool(CHAR) if f._shown and f.elem.all], [f.elem.name for f in pool(CHAR) if f._shown])
+L.execute("""
+MountSheetSyncSheet.chars = SAVED_CHARS
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
+tabs[0].MockClick(tabs[0]); g.RunTimers()
+check("…with more of them it is back", [f for f in pool(CHAR) if f._shown and f.elem.all])
+# 3.0.4: what follows the boss goes to the tooltip
+L.execute("""
+for _, i in ipairs(MountSheetSyncSheet.chars[1].items) do
+  if i.mount == "Поводья Повелителя воронов" then i.boss = "Анзу / Сундук претендента" end
+end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
+tabs[0].MockClick(tabs[0]); g.RunTimers()
+line = [plain(t) for t in shown_rows() if "Поводья Повелителя воронов" in plain(t)]
+check("3.0.4: the column keeps only the boss", line and line[0].startswith("Анзу | ") and "Сундук" not in line[0], line)
+L.execute("""
+for _, i in ipairs(MountSheetSyncSheet.chars[1].items) do
+  if i.mount == "Поводья Повелителя воронов" then i.boss = "Анзу" end
+end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
+
+# 3.0.4: difficulties the catalog writes at length are short in the column
+SHORT = {"Normal 10, 3 drakes up": "N10", "Heroic 25": "H25", "Achievement": "Дост.", "Любая": "Любая", "Удалённая награда": "Удал.",
+         "Torghast": "Торг.", "3400+ M+ rating in current season": "3400+", "MoP Challenge Mode": "CM", "Mythic, hard mode": "M", "Mythic dungeon achievements": "Дост."}
+tabs[0].MockClick(tabs[0]); g.RunTimers()
+for long_text, short_text in SHORT.items():
+    L.execute("""
+    for _, i in ipairs(MountSheetSyncSheet.chars[1].items) do
+      if i.mount == "Поводья Повелителя воронов" then i.diff = %s end
+    end
+    MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+    MSS_NS.OnChange()""" % lua_str(long_text))
+    g.RunTimers()
+    tabs[0].MockClick(tabs[0]); g.RunTimers()
+    line = [plain(t) for t in shown_rows() if "Поводья Повелителя воронов" in plain(t)]
+    check("3.0.4: «%s» reads «%s»" % (long_text, short_text), line and (" | %s | " % short_text) in line[0], line)
+L.execute("""
+for _, i in ipairs(MountSheetSyncSheet.chars[1].items) do
+  if i.mount == "Поводья Повелителя воронов" then i.diff = "H" end
+end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
+
+# 3.0.4: achievements and rewards have a group of their own at the end, in both tables
+tabs[0].MockClick(tabs[0]); g.RunTimers()
+before_reward = remaining()
+click_all(); g.RunTimers()
+head_before = all_head_rows()
+tabs[0].MockClick(tabs[0]); g.RunTimers()
+eira_first = pool(CHAR)[1]
+eira_first.MockClick(eira_first); g.RunTimers()
+L.execute("""
+for _, c in ipairs(MountSheetSyncSheet.chars) do
+  for _, i in ipairs(c.items) do
+    if i.mount == "Поводья Повелителя воронов" then i.src = "reward"; i.ach = 4321 end
+  end
+end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
+tabs[0].MockClick(tabs[0]); g.RunTimers()
+counted = remaining()
+check("3.0.4: a reward is not counted: one less to kill and one less in all", counted.left == before_reward.left - 1 and counted.total == before_reward.total - 1, (counted.left, counted.total, before_reward.left, before_reward.total))
+
+
+def after_reward_title():
+    texts = [plain(t) for t in shown_rows()]
+    at = [i for i, t in enumerate(texts) if "Достижения и награды" in t]
+    return (texts[at[0] + 1] if at and at[0] + 1 < len(texts) else None), (len(at) == 1 and at[0] > [i for i, t in enumerate(texts) if t.startswith("Подземелья")][0])
+
+
+check("3.0.4: rewards are not in a character's «Осталось» any more", not any("Поводья Повелителя воронов" in plain(t) for t in shown_rows())
+      and not any("Достижения и награды" in plain(t) for t in shown_rows()), [plain(t) for t in shown_rows()][-4:])
+click_all(); g.RunTimers()
+check("…nor in the table of all characters", not any("Поводья Повелителя воронов" in plain(t) for t in shown_rows()), [plain(t) for t in shown_rows()][-4:])
+# their own tab: the achievement, its requirement from the game, the mount, earned or not; a click on the name opens it
+L.execute('''
+GetAchievementInfo = function(id) if id == 4321 then return 4321, "Слава герою", 10, true, 1, 1, 24, "Выполните героические достижения" end end
+MOCK_ACH = nil
+AchievementFrame = CreateFrame("Frame", "AchievementFrame")
+AchievementFrame:Hide()
+AchievementFrame_ToggleAchievementFrame = function() AchievementFrame:Show() end
+AchievementFrame_SelectAchievement = function(id) assert(AchievementFrame:IsShown(), "select before the window is shown"); MOCK_ACH = id end
+''')
+tabs[1].MockClick(tabs[1]); g.RunTimers()
+ach_rows = [f for f in pool(ROW) if f._shown and f.elem and f.elem.achievement is not None]
+ach_text = [plain(row_text(f)) for f in ach_rows]
+check("3.0.4: the «Достижения» tab: the reward row with its requirement from the game, earned — grey", tabs[1]._text == "Достижения" and len(ach_rows) == 1
+      and "Выполните героические достижения" in ach_text[0] and "Поводья Повелителя воронов" in ach_text[0]
+      and str(ach_rows[0].elem["values"]["mount"]).startswith("|cff8c8c8c"), (tabs[1]._text, ach_text))
+check("…no attempts, chance or status columns there", [plain(c.text._text) for c in head_cells()][:4] == ["Достижение", "Условие", "Маунт"], [plain(c.text._text) for c in head_cells()])
+if ach_rows:
+    ach_row = ach_rows[0]
+    ach_row._scripts.OnEnter(ach_row)
+    tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
+    check("…the tooltip names the click on the achievement", any("по достижению" in t for t in tt), tt)
+    ach_row._scripts.OnLeave(ach_row)
+    boss_col = [c for c in lua_list(ach_row.elem.cols) if c.key == "boss"][0]
+    g.CURSOR[1] = boss_col.x + 1
+    ach_row.MockClick(ach_row)
+    check("…left click on the achievement opens it in the game's achievements window", g.MOCK_ACH == 4321 and not win._shown, g.MOCK_ACH)
+    g.AchievementFrame.Hide(g.AchievementFrame); g.RunTimers()
+    check("…and the window comes back", win._shown)
+    g.CURSOR[1] = 100000
+# the program 2.10 sends every reward row, in four tables: raids, dungeons, Mythic+, other
+L.execute('''
+MSS_SAVED_REWARDS = MountSheetSyncSheet.rewards
+MountSheetSyncSheet.rewards = {
+  { kind = "dungeon", group = "other", boss = "Безупречный мастер (16-й этаж)", mount = "Утробная крыса", diff = "Torghast", src = "reward" },
+  { kind = "dungeon", group = "mplus", boss = "Мастер ключей 1-го сезона", mount = "Бронедон", diff = "M+ rating / vendor", src = "reward" },
+  { kind = "raid", group = "raid", boss = "Слава рейдеру Души Дракона", mount = "Сумеречный предвестник", diff = "Achievement", src = "reward", ach = 4321 },
+  { kind = "dungeon", group = "dungeon", boss = "Слава герою", mount = "Красный протодракон", diff = "Heroic achievements", src = "reward", got = true },
+  { kind = "dungeon", group = "mplus", boss = "Мастер ключей 1-го сезона Dragonflight / Затерянное во времени седло", mount = "Штормовой бронедон",
+    diff = "M+ rating / vendor", src = "reward", via = "saddle", ach = 4321 },
+}
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()''')
+g.RunTimers()
+tabs[1].MockClick(tabs[1]); g.RunTimers()
+heads = [plain(t) for t in shown_rows() if plain(t) in ("Рейды", "Подземелья", "Mythic+", "Другое")]
+texts = [plain(t) for t in shown_rows()]
+check("3.0.4: every reward from the program, in four tables: raids, dungeons, Mythic+, other", heads == ["Рейды", "Подземелья", "Mythic+", "Другое"]
+      and any("Слава рейдеру Души Дракона" in t for t in texts), texts)
+hero = [f for f in pool(ROW) if f._shown and f.elem and f.elem["values"] and "Красный протодракон" in str(f.elem["values"]["mount"])]
+check("…a collected mount counts as earned: grey, at the bottom of its table", hero and str(hero[0].elem["values"]["mount"]).startswith("|cff8c8c8c"), texts)
+saddle_row = [f for f in pool(ROW) if f._shown and f.elem and f.elem["values"] and "Штормовой бронедон" in str(f.elem["values"]["mount"])]
+mplus_rows = [plain(t) for t in texts[texts.index("Mythic+") + 1:texts.index("Другое")]]
+check("3.0.4: a past season's mount is under «Затерянное во времени седло», after this season's achievements, and not «earned» for the saddle's achievement",
+      saddle_row and plain(str(saddle_row[0].elem["values"]["boss"])) == "Затерянное во времени седло" and mplus_rows[-1].startswith("Затерянное во времени седло")
+      and not str(saddle_row[0].elem["values"]["mount"]).startswith("|cff8c8c8c"), mplus_rows)
+if saddle_row:
+    saddle_row[0]._scripts.OnEnter(saddle_row[0])
+    tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
+    check("…its tooltip says whose reward it was", any("Раньше — награда за: Мастер ключей 1-го сезона Dragonflight" in t for t in tt), tt)
+    saddle_row[0]._scripts.OnLeave(saddle_row[0])
+L.execute("MountSheetSyncSheet.rewards = MSS_SAVED_REWARDS; MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1; MSS_NS.OnChange()")
+g.RunTimers()
+tabs[0].MockClick(tabs[0]); g.RunTimers()
+head_now = all_head_rows()
+check("…«Ещё убить» doesn't count the row of the reward", head_now == head_before - 1, (head_before, head_now))
+head_text = [plain(x._text) for x in regions("FontString") if under_window(x) and x._shown and x._text is not None and "Ещё убить на этой неделе" in plain(x._text)][0]
+check("…and shows rows and attempts side by side", "попыток" in head_text, head_text)
+eira_again = pool(CHAR)[1]
+eira_again.MockClick(eira_again); g.RunTimers()
+L.execute("""
+for _, c in ipairs(MountSheetSyncSheet.chars) do
+  for _, i in ipairs(c.items) do i.src = nil end
+end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
+
+# 3.0.4: clicks on a row. Left on the boss: the Adventure Guide; Ctrl + left: the way to the entrance, or a map pin if that fails
+L.execute("""
+SAVED_MAP, SAVED_EJ, SAVED_ST, SAVED_ENUM, SAVED_POINT = C_Map, C_EncounterJournal, C_SuperTrack, Enum, UiMapPoint
+SAVED_JOURNAL = MountSheetSyncDB.journal
+MountSheetSyncDB.journal = { instances = { { id = 777, name = "Тестовый рейд", raid = true, map = 2450 } }, encounters = { { id = 1, j = 555, name = "Босс", i = 777 } } }
+for _, c in ipairs(MountSheetSyncSheet.chars) do
+  for _, i in ipairs(c.items) do i.je = 555 end
+end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+function EncounterJournal_OpenJournal(difficulty, instance, encounter) MOCK_GUIDE = { instance, encounter }; EncounterJournal:Show() end
+EncounterJournal = CreateFrame("Frame", "EncounterJournal")
+EncounterJournal:Hide()
+function MountJournal_SelectByMountID(id) MOCK_SELECTED = id end
+ROUTE = { pin = nil, entrance = true, tracks = true }
+Enum = { UIMapType = { Zone = 3 }, SuperTrackingMapPinType = { AreaPOI = 0 } }
+C_Map = { GetMapChildrenInfo = function() return { { mapID = 14 } } end, CanSetUserWaypointOnMap = function() return true end,
+          SetUserWaypoint = function(point) ROUTE.waypoint = point end }
+C_EncounterJournal = { GetDungeonEntrancesForMap = function() return ROUTE.entrance and { { journalInstanceID = 777, areaPoiID = 42, position = { x = 0.5, y = 0.25 } } } or {} end }
+C_SuperTrack = { SetSuperTrackedMapPin = function(kind, id) ROUTE.pin = id end,
+                 GetSuperTrackedMapPin = function() if ROUTE.tracks then return 0, ROUTE.pin end end,
+                 SetSuperTrackedUserWaypoint = function(on) ROUTE.user = on end }
+UiMapPoint = { CreateFromCoordinates = function(map, x, y) return { map = map, x = x, y = y } end }
+MSS_NS.OnChange()""")
+g.RunTimers()
+tabs[0].MockClick(tabs[0]); g.RunTimers()
+row = [f for f in pool(ROW) if f.elem.instance is not None][0]
+check("3.0.4: a row knows its raid from the journal", row.elem.instance == 777 and row.elem.encounter == 555, (row.elem.instance, row.elem.encounter))
+boss_col = [c for c in lua_list(row.elem.cols) if c.key == "boss"][0]
+g.CURSOR[1] = boss_col.x + 1
+row._scripts.OnEnter(row)
+tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
+check("3.0.4: the tooltip names the clicks", any("по боссу" in t for t in tt) and any("Ctrl" in t for t in tt), tt)
+check("3.0.4: the tooltip stands beside the table, covering no rows", g.GameTooltip.anchor == "ANCHOR_NONE" and g.GameTooltip.relPoint == "LEFT", g.GameTooltip.anchor)
+row._scripts.OnLeave(row)
+row.MockClick(row)
+check("3.0.4: left click on the boss opens the guide on that raid and boss", g.MOCK_GUIDE[1] == 777 and g.MOCK_GUIDE[2] == 555 and not win._shown, g.MOCK_GUIDE)
+g.EncounterJournal.Hide(g.EncounterJournal); g.RunTimers()
+check("…and the window comes back with it", win._shown)
+row = [f for f in pool(ROW) if f.elem.instance is not None and f.elem.mountID is not None]
+g.CURSOR[1] = 100000
+g.MOCK_GUIDE = None
+if row:
+    row = row[0]
+    row.MockClick(row)
+    check("3.0.4: left click elsewhere on the row: the Mount Journal, not the guide", g.MOCK_GUIDE is None)
+    if g.CollectionsJournal is not None:
+        g.CollectionsJournal.Hide(g.CollectionsJournal)
+    g.RunTimers()
+win.Show(win); g.RunTimers()
+row = [f for f in pool(ROW) if f.elem.route][0]
+g.MOCK_CTRL = True
+row.MockClick(row)
+check("3.0.4: Ctrl + left click tracks the entrance", g.ROUTE.pin == 42 and g.ROUTE.waypoint is None and "Тестовый рейд" in chat_all(), g.ROUTE.pin)
+L.execute("ROUTE.tracks = false; ROUTE.pin = nil")
+row.MockClick(row)
+check("…if the game won't track it: a map pin at the entrance, tracked", g.ROUTE.waypoint.map == 14 and g.ROUTE.waypoint.x == 0.5 and g.ROUTE.user is True, g.ROUTE.user)
+check("…and the chat says so", "метка на карте" in chat_all(), chat_all()[-160:])
+L.execute("function C_EncounterJournal.GetDungeonEntrancesForMap() return {} end")
+row.elem.instance = 778
+row.MockClick(row)
+check("…no entrance on any map: said in the chat", "На карте не нашлось" in chat_all(), chat_all()[-160:])
+L.execute("ROUTE.tracks = true; ROUTE.pin = nil; ROUTE.waypoint = nil")
+row.elem.instance = 1001
+row.MockClick(row)
+check("…the game hides the entrance (Freehold, a character who never went there): a pin at the known point, no game pin to track",
+      g.ROUTE.pin is None and g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 895 and abs(g.ROUTE.waypoint.x - 0.8382) < 1e-9 and "метка на карте" in chat_all(), g.ROUTE.waypoint)
+# an entrance only on a map inside another zone (Dragon Soul: the Caverns of Time in Tanaris) — two steps to choose from
+L.execute('''
+MSS_ROUTE_ENTR = { [75] = { { journalInstanceID = 187, areaPoiID = 99, position = { x = 0.6, y = 0.4 }, name = "Душа Дракона" } } }
+C_Map.GetMapChildrenInfo = function() return { { mapID = 14, mapType = 3 }, { mapID = 71, mapType = 3 }, { mapID = 75, mapType = 5 } } end
+C_EncounterJournal.GetDungeonEntrancesForMap = function(map) if map == 14 then error("this map breaks") end return MSS_ROUTE_ENTR[map] or {} end
+C_Map.GetMapInfo = function(map)
+  return ({ [75] = { mapID = 75, name = "Пещеры Времени", parentMapID = 71, mapType = 5 },
+            [71] = { mapID = 71, name = "Танарис", parentMapID = 12, mapType = 3 },
+            [85] = { mapID = 85, name = "Оргриммар", parentMapID = 12, mapType = 3 },
+            [12] = { mapID = 12, name = "Калимдор", parentMapID = 946, mapType = 2 } })[map]
+end
+C_Map.GetMapRectOnMap = function(child, parent) return 0.5, 0.7, 0.2, 0.4 end
+C_Map.GetBestMapForUnit = function() return MSS_PLAYER_MAP end
+MSS_PLAYER_MAP = 85
+ROUTE.waypoint = nil; ROUTE.pin = nil; ROUTE.tracks = true
+''')
+L.eval("function(ns) end")(ns)
+L.execute('''
+local info, kids = C_Map.GetMapInfo, C_Map.GetMapChildrenInfo
+MSS_ROUTE_ENTR[77] = { { journalInstanceID = 188, areaPoiID = 97, position = { x = 0.6, y = 0.4 }, name = "Другой рейд" } }
+C_Map.GetMapInfo = function(map) if map == 77 then return { mapID = 77, name = "Другая пещера", parentMapID = 71, mapType = 5 } end return info(map) end
+C_Map.GetMapChildrenInfo = function() local t = kids(); t[#t + 1] = { mapID = 77, mapType = 5 }; return t end
+''')
+row.elem.instance = 188
+row.MockClick(row)
+check("3.0.4: a cave with no known mouth: the pin where the inner map lies on the zone's map", g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 71
+      and abs(g.ROUTE.waypoint.x - 0.62) < 1e-9 and abs(g.ROUTE.waypoint.y - 0.28) < 1e-9, g.ROUTE.waypoint and (g.ROUTE.waypoint.x, g.ROUTE.waypoint.y))
+L.execute("ROUTE.waypoint = nil; ROUTE.pin = nil")
+row.elem.instance = 187
+n_menus = len(g.MENUS)
+row.MockClick(row)
+check("3.0.4: an entrance inside the Caverns of Time, one click: a pin at the cave's mouth on the zone's map, not over the raid, no menu; a broken map doesn't stop the search",
+      len(g.MENUS) == n_menus and g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 71 and g.ROUTE.pin is None
+      and abs(g.ROUTE.waypoint.x - 0.6525) < 1e-9 and abs(g.ROUTE.waypoint.y - 0.4979) < 1e-9, g.ROUTE.waypoint and (g.ROUTE.waypoint.map, g.ROUTE.waypoint.x, g.ROUTE.waypoint.y))
+check("…the chat says the way goes on inside", "Путь в Пещеры Времени (Танарис)" in chat_all() and "внутри поведу дальше" in chat_all(), chat_all()[-200:])
+L.execute("MSS_PLAYER_MAP = 71")
+g.Fire("ZONE_CHANGED_NEW_AREA")
+check("…still in Tanaris: nothing changes yet", g.ROUTE.pin is None)
+L.execute("C_SuperTrack.IsSuperTrackingAnything = function() return false end; C_SuperTrack.IsSuperTrackingUserWaypoint = function() return false end")
+g.Fire("SUPER_TRACKING_CHANGED")   # the game drops the pin on arrival: the way is not forgotten
+L.execute("MSS_PLAYER_MAP = 75")
+g.Fire("ZONE_CHANGED")
+check("…inside the Caverns of Time: the way switches to the entrance by itself", g.ROUTE.pin == 99 and "теперь путь ко входу" in chat_all(), (g.ROUTE.pin, chat_all()[-200:]))
+L.execute("MSS_PLAYER_MAP = 85; ROUTE.pin = nil")
+row.MockClick(row)
+L.execute("C_SuperTrack.IsSuperTrackingAnything = function() return true end")
+g.Fire("SUPER_TRACKING_CHANGED")   # the player picked a quest instead
+L.execute("MSS_PLAYER_MAP = 75")
+g.Fire("ZONE_CHANGED")
+check("…but if the player chose another target meanwhile, the addon doesn't take it over", g.ROUTE.pin is None, g.ROUTE.pin)
+# names that differ only in dashes, quotes and letter case still match
+L.execute('''
+MSS_ROUTE_ENTR[75] = { { journalInstanceID = 187, areaPoiID = 99, position = { x = 0.6, y = 0.4 }, name = "Душа Дракона" },
+                       { journalInstanceID = 1490, areaPoiID = 98, position = { x = 0.2, y = 0.2 }, name = "Стратхольм - черный ход" } }
+MSS_PLAYER_MAP = 75; ROUTE.pin = nil
+''')
+row.elem.instance = 9999
+row.elem.placeName = "Стратхольм – Черный ход"
+row.MockClick(row)
+check("…an en dash, a hyphen and the letter case don't stop the match by name", g.ROUTE.pin == 98, g.ROUTE.pin)
+before = len(g.CHAT)
+g.SlashCmdList.MOUNTSHEETSYNC("route черный ход")
+said = [str(g.CHAT[i]) for i in range(before + 1, len(g.CHAT) + 1)]
+check("/mss route <name>: what the game gives about entrances, for «not found on the map»",
+      any("route: " in t and "entrances on" in t for t in said) and any('entrance "Стратхольм - черный ход": journal 1490, map 75' in t for t in said), said)
+# the zone's map has a link to the inner map (the cave's mouth): the pin goes there, not where the entrance lies inside
+L.execute('''
+MSS_PLAYER_MAP = 85; ROUTE.waypoint = nil; ROUTE.pin = nil
+C_SuperTrack.IsSuperTrackingAnything = function() return false end
+C_Map.GetMapLinksForMap = function(map) if map == 71 then return { { linkedUiMapID = 70, position = { x = 0.1, y = 0.1 } }, { linkedUiMapID = 75, position = { x = 0.66, y = 0.49 } } } end return {} end
+''')
+row.elem.instance = 187
+row.MockClick(row)
+check("…the pin stands at the cave's mouth on the zone's map when the game gives it", g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 71
+      and abs(g.ROUTE.waypoint.x - 0.66) < 1e-9 and abs(g.ROUTE.waypoint.y - 0.49) < 1e-9, g.ROUTE.waypoint and (g.ROUTE.waypoint.x, g.ROUTE.waypoint.y))
+L.execute("MSS_PLAYER_MAP = 75; ROUTE.pin = nil")
+n_menus = len(g.MENUS)
+row.MockClick(row)
+check("…already inside: straight to the entrance, no menu", len(g.MENUS) == n_menus and g.ROUTE.pin == 99, (len(g.MENUS), g.ROUTE.pin))
+L.execute('''
+local info = C_Map.GetMapInfo
+C_Map.GetMapInfo = function(map)
+  if map == 76 then return { mapID = 76, name = "Пещеры Времени", parentMapID = 71, mapType = 5 } end
+  return info(map)
+end
+MSS_PLAYER_MAP = 76; ROUTE.pin = nil; ROUTE.waypoint = nil
+''')
+row.MockClick(row)
+check("…on the other map of the same place (the Caverns of Time have two): inside too, not sent back to the cave's mouth", g.ROUTE.pin == 99 and g.ROUTE.waypoint is None, (g.ROUTE.pin, g.ROUTE.waypoint))
+L.execute("MSS_PLAYER_MAP = 85; ROUTE.pin = nil; ROUTE.waypoint = nil")
+row.MockClick(row)
+L.execute("MSS_PLAYER_MAP = 76")
+g.Fire("ZONE_CHANGED")
+check("…clicked outside, then walked in on that other map: the way switches to the entrance", g.ROUTE.pin == 99, g.ROUTE.pin)
+L.execute("MSS_PLAYER_MAP = 85; ROUTE.pin = nil; ROUTE.waypoint = nil")
+row.MockClick(row)
+L.execute("MSS_PLAYER_MAP = 75")
+g.RunTimers()
+check("…arrived by portal with no zone event: the timer switches the way to the entrance", g.ROUTE.pin == 99, g.ROUTE.pin)
+g.RunTimers()
+L.execute("MSS_PLAYER_MAP = 75")
+row.elem.instance = 4242
+row.elem.placeName = "Душа  Дракона!"
+L.execute("ROUTE.pin = nil")
+row.MockClick(row)
+check("…a different number in the journal: found by name", g.ROUTE.pin == 99, g.ROUTE.pin)
+# a world boss has no entrance: a pin where the game shows the boss
+L.execute("""
+function C_EncounterJournal.GetEncountersOnMap() return { { encounterID = 555, mapX = 0.3, mapY = 0.7 } } end
+ROUTE.waypoint = nil""")
+def kraulok(r):
+    old = r.elem.encounter
+    r.elem.encounter = 2210
+    L.execute("ROUTE.waypoint = nil")
+    r.MockClick(r)
+    check("…a world boss with no map in the game's journal (Kraulok): a pin at the known point", g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 864 and abs(g.ROUTE.waypoint.x - 0.44) < 1e-9, g.ROUTE.waypoint)
+    r.elem.encounter = old
+world_row = [f for f in pool(ROW) if f.elem.world]
+if world_row:
+    world_row[0].MockClick(world_row[0])
+    check("3.0.4: Ctrl + left click on a world boss: a pin where the game shows it", g.ROUTE.waypoint is not None and g.ROUTE.waypoint.x == 0.3 and "Поставлена метка" in chat_all(), g.ROUTE.waypoint)
+    kraulok(world_row[0])
+else:
+    click_all(); g.RunTimers()
+    world_row = [f for f in pool(ROW) if f.elem.world]
+    world_row[0].MockClick(world_row[0])
+    check("3.0.4: Ctrl + left click on a world boss: a pin where the game shows it", g.ROUTE.waypoint is not None and g.ROUTE.waypoint.x == 0.3 and "Поставлена метка" in chat_all(), g.ROUTE.waypoint)
+    kraulok(world_row[0])
+    eira_back = pool(CHAR)[1]
+    eira_back.MockClick(eira_back); g.RunTimers()
+g.MOCK_CTRL = False
+L.execute("""
+function EJ_GetEncounterInfo(id) if id == 691 then return "Ша", "d", 691, 1, "link", 322 end end
+MOCK_ITEM_INSTANCE = MSS_NS.ItemInstance({ je = 691 })
+EJ_GetEncounterInfo = nil""")
+check("3.0.4: a world boss the addon's journal doesn't list: its raid comes from the game", g.MOCK_ITEM_INSTANCE == 322, g.MOCK_ITEM_INSTANCE)
+L.execute("""
+C_Map, C_EncounterJournal, C_SuperTrack, Enum, UiMapPoint = SAVED_MAP, SAVED_EJ, SAVED_ST, SAVED_ENUM, SAVED_POINT
+MountSheetSyncDB.journal = SAVED_JOURNAL
+EncounterJournal:Hide(); EncounterJournal = nil; EncounterJournal_OpenJournal = nil; MountJournal_SelectByMountID = nil
+for _, c in ipairs(MountSheetSyncSheet.chars) do
+  for _, i in ipairs(c.items) do i.je = nil end
+end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+g.RunTimers()
 
 kill("Кто-то совсем другой", "Святилище Господства", "raid", 16)
 check("odd boss name does not tick anything new", remaining().left == 26, remaining().left)
@@ -701,11 +1164,11 @@ check("same mount twice -> one record", len(g.MountSheetSyncDB.kills) == n + 1)
 g.Fire("NEW_MOUNT_ADDED", 99999)
 g.Fire("NEW_MOUNT_ADDED", g.SECRET)
 check("unknown or secret mount id: nothing, no error", len(g.MountSheetSyncDB.kills) == n + 1 and "ошибка" not in chat_all())
-tabs[2].MockClick(tabs[2]); g.RunTimers()
+tabs[3].MockClick(tabs[3]); g.RunTimers()
 check("journal shows the mount in purple", any(t.startswith("|cff8c8c8c") and "|cffc77dffНовый маунт: Синий протодракон|r" in t for t in shown_rows()))
 check("mount record does not tick list rows", remaining().left == left_before_mount, (remaining().left, left_before_mount))
 g.MountSheetSyncDB.quiet = True
-g.Fire("NEW_MOUNT_ADDED", 1471)
+g.Fire("NEW_MOUNT_ADDED", 1587)
 check("quiet: recorded without a chat line", g.MountSheetSyncDB.kills[n + 2].kind == "mount" and "Смотритель Зерета" not in chat_all().split("\n")[-1])
 g.MountSheetSyncDB.quiet = None
 saved_journal = g.C_MountJournal
@@ -784,7 +1247,7 @@ r = remaining()
 check("newer list from the sheet: local hiding dropped (the sheet decides now)", g.MountSheetSyncDB.notFarmed["Player-1602-0ABCDEF1"] is None
       and any(str(r["items"][i].item.boss) == boss0 for i in range(1, len(r["items"]) + 1)))
 g.MountSheetSyncSheet.generated = saved_generated
-tabs[2].MockClick(tabs[2]); g.RunTimers()
+tabs[3].MockClick(tabs[3]); g.RunTimers()
 check("journal shows «Не фармлю» in grey", any("|cff9d9d9dНе фармлю: " + boss0 in t for t in shown_rows()), [t for t in shown_rows() if "фармлю" in t])
 check("world rows have no «не фармлю» menu", ns.AddPlan(L.table_from({"kind": "world", "boss": "Галлеон"}), "row") is False)
 

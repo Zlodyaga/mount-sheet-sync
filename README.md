@@ -2,18 +2,18 @@
 
 [Русский](README.ru.md) · [Home page](https://zlodyaga.github.io/) · [Privacy policy](https://zlodyaga.github.io/privacy.html)
 
-A World of Warcraft addon and a small Windows tray program that keep a Google Sheet of mount farming up to date for you:
+A World of Warcraft addon and a small Windows tray program that keep your mount farming list up to date for you (on your computer or, if you like, in a Google Sheet):
 which bosses each character has killed this week, which mounts you already own, and what is still left to farm.
 
 - **The addon** (WoW Retail, Midnight 12.x) records boss kills, your characters and your mount collection, and shows
   the “Remaining” list of every character from the sheet right in the game. After a kill that could drop a mount you still
   need it says which attempt that was and the chance over all attempts; the rare's tooltip and the Adventure Guide say the same. Attempts from
   before the addon come from the game's own kill statistics.
-- **The program** (Windows 10/11, one file, no administrator rights) watches the addon's saved data, creates the spreadsheet in your
-  own Google Drive and marks kills and collected mounts there. It also brings the “Remaining” list back into the game.
+- **The program** (Windows 10/11, one file, no administrator rights) watches the addon's saved data, keeps its data in a file on this
+  computer and marks kills and collected mounts there. It also brings the “Remaining” list back into the game. If you prefer, a spreadsheet in your own Google Drive takes the place of the file.
 
 ```
-WoW addon ──(SavedVariables file)──► tray program ──(Google Sheets API)──► your spreadsheet
+WoW addon ──(SavedVariables file)──► tray program ──► a file on this computer, or your Google Sheet
      ▲                                     │
      └──────────(SheetData.lua: what is left this week)──┘
 ```
@@ -61,9 +61,8 @@ sample marks (`tools/screens/program.py`).
    itself to `%LOCALAPPDATA%\Programs\MountSheetSync` (no administrator rights), adds a Start menu shortcut and appears
    in Windows' “Installed apps”, where it can be uninstalled. “No” runs it from where it is. The program from the full
    archive (`2-program\MountSheetSync.exe`) works the same way.
-3. In the settings window: **Sign in with Google…** → **Create spreadsheet…** → pick the spreadsheet language and tick
-   your characters. Done — log in to
-   the game, kill a boss, go back to character selection, and the row turns “Yes”.
+3. Nothing else to set up: log in to the game and go back to character selection. The data makes itself, and the “Remaining” list is in the addon's window after your next login.
+   Want a sheet in the browser? In the settings pick **Google Sheet**: **Sign in with Google…** → **Create spreadsheet…**.
 
 The full step-by-step guide (in Russian) is in [docs/README.ru.txt](docs/README.ru.txt); it is also `README.txt` in the
 release archive.
@@ -73,9 +72,10 @@ release archive.
 Full text: [privacy policy](https://zlodyaga.github.io/privacy.html).
 
 
-- The program asks Google only for `drive.file` (plus your e-mail address to show which account is signed in).
+- By default the data stays on your computer only (`%APPDATA%\MountSheetSync\local-data.json`), and no Google sign-in is needed.
+- If you pick the Google Sheet, the program asks Google only for `drive.file` (plus your e-mail address to show which account is signed in).
   With `drive.file` it can open **only the spreadsheets it created itself** — nothing else on your Google Drive.
-- Everything runs on your computer. There is no server of ours in between: the program talks to Google directly.
+- Everything runs on your computer. There is no server of ours in between: with a sheet, the program talks to Google directly.
 - Once a day it asks GitHub whether a new version is out (icon menu → “Check for updates” turns that off).
 - The sign-in key is stored in `%APPDATA%\MountSheetSync\google-token.dat`, encrypted by Windows (DPAPI) for your
   Windows user only. “Sign out” in the settings revokes it.

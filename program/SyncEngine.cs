@@ -143,6 +143,8 @@ namespace MountSheetSync
     sealed class SyncSummary
     {
         public bool NothingToSend;
+        /// <summary>Данные на компьютере: новые персонажи, которых программа добавила сама.</summary>
+        public List<string> AddedCharacters = new List<string>();
         public int SentRecords;
         /// <summary>«Не фармлю» из игры: «Имя: что».</summary>
         public List<string> Planned = new List<string>();
@@ -206,19 +208,19 @@ namespace MountSheetSync
             {
                 session = Settings.CreateService();
                 sessionFor = Settings;
-                GoogleSheetService google = session as GoogleSheetService;
-                if (google != null)
+                BookSheetService own = session as BookSheetService;
+                if (own != null)
                 {
-                    google.KeepBook = true;
+                    own.KeepBook = true;
                 }
             }
             return session;
         }
 
-        /// <summary>Таблица программы (Settings.UseGoogle) в рамках этого прохода.</summary>
-        public GoogleSheetService GoogleService()
+        /// <summary>Данные, которые ведёт программа (Settings.HasOwnBook), в рамках этого прохода.</summary>
+        public BookSheetService BookService()
         {
-            return Service() as GoogleSheetService ?? new GoogleSheetService(Settings.SpreadsheetId);
+            return (BookSheetService)Service();
         }
 
         static string Id(Dictionary<string, object> r)
@@ -366,10 +368,33 @@ namespace MountSheetSync
         /// </summary>
         public List<Dictionary<string, object>> GetSendList(List<Dictionary<string, object>> records)
         {
+            return GetSendList(records, new HashSet<string>());
+        }
+
+        /// <summary>
+        /// replay — персонажи, у которых листы созданы заново (убрали и вернули): их уже отправленные записи этой недели
+        /// уходят ещё раз, как после сброса недели — «Да» снова, попытка не считается.
+        /// </summary>
+        public List<Dictionary<string, object>> GetSendList(List<Dictionary<string, object>> records, HashSet<string> replay)
+        {
             List<Dictionary<string, object>> pending = records.Where(r => !sent.Contains(Id(r))).ToList();
             List<Dictionary<string, object>> resets = pending.Where(r => IsReset(r)).ToList();
             if (resets.Count == 0)
             {
+                if (replay.Count > 0)
+                {
+                    long now = Epoch.Now;
+                    foreach (Dictionary<string, object> r in records)
+                    {
+                        if (!IsReset(r) && sent.Contains(Id(r)) && J.Long(r, "weekEnd") > now
+                            && replay.Contains(SheetLogic.Norm(SheetLogic.StripNote(J.Str(r, "char")))))
+                        {
+                            Dictionary<string, object> again = new Dictionary<string, object>(r);
+                            again["again"] = true;
+                            pending.Add(again);
+                        }
+                    }
+                }
                 return pending;
             }
             Dictionary<string, object> reset = resets[resets.Count - 1];
@@ -431,13 +456,22 @@ namespace MountSheetSync
         public SyncSummary SyncAll(IList<string> files, Dictionary<string, object> extra = null)
         {
             SyncSummary sum = new SyncSummary();
+            if (Settings.IsLocal && Settings.HasOwnBook)
+            {
+                sum.AddedCharacters = AddNewCharacters(files);
+            }
             List<Dictionary<string, object>> records = ReadAllRecords(files);
             if (extra != null)
             {
                 records.Add(extra);
             }
-            List<Dictionary<string, object>> pending = GetSendList(records);
-            if (!Settings.UseGoogle)
+            HashSet<string> replay = ReadReplay(Settings);
+            foreach (string name in sum.AddedCharacters)
+            {
+                replay.Add(SheetLogic.Norm(name));
+            }
+            List<Dictionary<string, object>> pending = GetSendList(records, replay);
+            if (Settings.UsesScript)
             {
                 // «Не фармлю» из игры — только для таблицы программы; скрипт Code.gs принял бы её за убийство
                 List<Dictionary<string, object>> plans = pending.Where(r => J.Str(r, "kind") == "plan").ToList();
@@ -455,6 +489,7 @@ namespace MountSheetSync
             }
             if (pending.Count == 0)
             {
+                ClearReplay(Settings);
                 sum.NothingToSend = true;
                 return sum;
             }
@@ -476,7 +511,7 @@ namespace MountSheetSync
                 payload["kills"] = batch;
                 Dictionary<string, object> resp = Service().Call(payload);
                 List<object> results = J.Arr(J.Get(resp, "results"));
-                Report(results, sum, mountIds);
+                Report(results, sum, mountIds, Settings.IsLocal);
                 long now = Epoch.Now;
                 foreach (object o in results)
                 {
@@ -489,6 +524,7 @@ namespace MountSheetSync
                 sent.Save();
                 sum.SentRecords += batch.Count;
             }
+            ClearReplay(Settings);
             // более ранние «Сбросы недели» перекрыты последним
             long t = Epoch.Now;
             foreach (Dictionary<string, object> r in records)
@@ -502,7 +538,79 @@ namespace MountSheetSync
             return sum;
         }
 
-        static void Report(List<object> results, SyncSummary sum, HashSet<string> mountIds)
+        List<string> AddNewCharacters(IList<string> files)
+        {
+            GameSnapshot game;
+            try
+            {
+                game = GameData.Read(files);
+            }
+            catch (Exception ex)
+            {
+                Log.Write(Tr.L("Не удалось прочитать персонажей из файлов аддона: {0}", ex.Message));
+                return new List<string>();
+            }
+            return ((LocalSheetService)Service()).AddNewCharacters(game);
+        }
+
+        static string ReplayFile(Settings settings)
+        {
+            return AppPaths.SentFileFor(settings) + ".replay";
+        }
+
+        /// <summary>У этих персонажей листы созданы заново: при следующей отправке их записи этой недели отметятся снова.</summary>
+        public static void AskReplay(Settings settings, IEnumerable<string> names)
+        {
+            List<string> list = names.Select(n => SheetLogic.StripNote(n).Trim()).Where(n => n.Length > 0).Distinct().ToList();
+            if (list.Count == 0)
+            {
+                return;
+            }
+            try
+            {
+                File.AppendAllText(ReplayFile(settings), string.Join("\n", list.ToArray()) + "\n", Encoding.UTF8);
+            }
+            catch (IOException ex)
+            {
+                Log.Write(Tr.L("Не удалось запомнить персонажей для повторной отметки: {0}", ex.Message));
+            }
+        }
+
+        static HashSet<string> ReadReplay(Settings settings)
+        {
+            HashSet<string> names = new HashSet<string>(StringComparer.Ordinal);
+            try
+            {
+                string file = ReplayFile(settings);
+                if (File.Exists(file))
+                {
+                    foreach (string line in File.ReadAllLines(file, Encoding.UTF8))
+                    {
+                        if (line.Trim().Length > 0)
+                        {
+                            names.Add(SheetLogic.Norm(line.Trim()));
+                        }
+                    }
+                }
+            }
+            catch (IOException)
+            {
+            }
+            return names;
+        }
+
+        static void ClearReplay(Settings settings)
+        {
+            try
+            {
+                File.Delete(ReplayFile(settings));
+            }
+            catch (IOException)
+            {
+            }
+        }
+
+        static void Report(List<object> results, SyncSummary sum, HashSet<string> mountIds, bool quietNoSheet)
         {
             List<string> notFound = new List<string>();
             HashSet<string> shown = new HashSet<string>(StringComparer.Ordinal);
@@ -598,6 +706,11 @@ namespace MountSheetSync
                     // маунт с этой сложности не падает — делать ничего не нужно
                     Log.Write(Tr.L("[~] {0}: {1} — {2}", who, boss, message));
                     sum.WrongDifficulty++;
+                }
+                else if (status == "no_sheet" && quietNoSheet)
+                {
+                    // данные на компьютере: листов нет только у того, кого человек убрал сам, напоминать незачем
+                    Log.Write(Tr.L("[!] {0}: {1} — {2}", who, boss, message));
                 }
                 else if (shown.Add(status + "|" + message))
                 {

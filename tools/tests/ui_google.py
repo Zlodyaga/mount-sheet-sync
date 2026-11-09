@@ -41,7 +41,7 @@ kill = ('\t["kills"] = {\n\t\t{\n\t\t\t["id"] = "K-ui-1",\n\t\t\t["time"] = %d,\
         '\t\t\t["difficultyID"] = 16,\n\t\t\t["weekEnd"] = %d,\n\t\t},\n\t},\n' % (NOW - 60, NOW + 3 * 86400))
 sv = sv.replace('\t["kills"] = {\n', kill + '\t["oldkills"] = {\n', 1) if '\t["kills"] = {\n' in sv else sv.replace("MountSheetSyncDB = {\n", "MountSheetSyncDB = {\n" + kill, 1)
 open(os.path.join(SV_DIR, "MountSheetSync.lua"), "w", encoding="utf-8").write(sv)
-json.dump({"wowPath": WOW, "pollSeconds": 2}, open(os.path.join(DATA, "settings.json"), "w"))
+json.dump({"wowPath": WOW, "pollSeconds": 2, "mode": "google"}, open(os.path.join(DATA, "settings.json"), "w"))
 BROWSER_LOG = os.path.join(W, "browser.txt")
 
 env = dict(os.environ, DISPLAY=DISPLAY, MSS_GOOGLE_TEST=BASE, MSS_BROWSER_LOG=BROWSER_LOG, LANG="ru_RU.UTF-8", MSS_SYSTEM_LANG="ru",

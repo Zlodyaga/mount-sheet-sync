@@ -705,20 +705,6 @@ fr: Connectez-vous avec Google et créez un tableau — le programme fait le res
 es: Inicie sesión con Google y cree una tabla: el programa hará el resto.
 pt: Entre com o Google e crie uma planilha — o programa faz o resto.
 
-@ Где таблица:
-en: Where the spreadsheet is:
-de: Wo die Tabelle liegt:
-fr: Où se trouve le tableau :
-es: Dónde está la tabla:
-pt: Onde está a planilha:
-
-@ Таблица, которую создаёт программа (вход через Google) — рекомендуется
-en: A spreadsheet the program creates (sign in with Google) — recommended
-de: Eine Tabelle, die das Programm anlegt (Anmeldung mit Google) — empfohlen
-fr: Un tableau créé par le programme (connexion avec Google) — recommandé
-es: Una tabla que crea el programa (inicio de sesión con Google) — recomendado
-pt: Uma planilha criada pelo programa (login com o Google) — recomendado
-
 @ Своя таблица со скриптом Code.gs (как в версиях 1.x)
 en: Your own spreadsheet with the Code.gs script (as in versions 1.x)
 de: Eigene Tabelle mit dem Skript Code.gs (wie in Version 1.x)

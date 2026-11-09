@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Text;
 
 namespace MountSheetSync
@@ -55,13 +56,199 @@ namespace MountSheetSync
                     data[kv.Key] = kv.Value;
                 }
             }
+            Dictionary<string, object> names = Names(data);
+            if (names != null)
+            {
+                data["names"] = names;
+            }
             StringBuilder sb = new StringBuilder();
-            sb.Append("-- Mount Sheet Sync: what is left this week, copied from the Google sheet.\r\n");
+            sb.Append("-- Mount Sheet Sync: what is left this week, made by the program.\r\n");
             sb.Append("-- MountSheetSync.exe rewrites this file; there is no need to edit it.\r\n");
             sb.Append("MountSheetSyncSheet = ");
             WriteValue(sb, data, 0);
             sb.Append("\r\n");
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Названия на другом языке для окна аддона: язык аддона может быть не тем, что у таблицы. Ключ — текст, как его
+        /// прислала таблица, и только то, что есть в этом списке. Маунты и боссы по-русски и по-английски — из каталога;
+        /// на языке игры аддон берёт названия у самой игры.
+        /// </summary>
+        public static Dictionary<string, object> Names(Dictionary<string, object> data)
+        {
+            HashSet<string> shown = new HashSet<string>(StringComparer.Ordinal);
+            foreach (object ch in J.Arr(J.Get(data, "chars")))
+            {
+                foreach (object it in J.Arr(J.Get(J.Obj(ch), "items")))
+                {
+                    AddShown(shown, J.Obj(it));
+                }
+            }
+            foreach (object m in J.Arr(J.Get(data, "mounts")))
+            {
+                AddShown(shown, J.Obj(m));
+            }
+            foreach (object m in J.Arr(J.Get(data, "rewards")))
+            {
+                AddShown(shown, J.Obj(m));
+            }
+            if (shown.Count == 0)
+            {
+                return null;
+            }
+            Dictionary<string, Dictionary<string, object>> byLang = new Dictionary<string, Dictionary<string, object>>();
+            foreach (string lang in NameLangs)
+            {
+                byLang[lang] = new Dictionary<string, object>(StringComparer.Ordinal);
+            }
+            SheetLang english = SheetLang.Get("en");
+            Catalog catalog = Catalog.Embedded();
+            foreach (CatalogSheet sheet in new[] { catalog.Raids, catalog.Dungeons, catalog.World, catalog.Rare })
+            {
+                if (sheet == null)
+                {
+                    continue;
+                }
+                int cMount = sheet.Col("Маунт");
+                int cId = sheet.Col(SheetBuilder.IdColumn);
+                int cJournal = sheet.Col("ID в журнале");
+                int cMap = sheet.Col("ID места");
+                int cBoss = sheet.Columns.FindIndex(c => c.StartsWith("Босс", StringComparison.Ordinal));
+                foreach (object[] row in sheet.Rows)
+                {
+                    long id = cId >= 0 && cId < row.Length ? MountIndex.IdOf(row[cId]) : 0;
+                    // маунт: по ID из таблиц игры, английское — и из каталога
+                    string mount = Cell(row, cMount);
+                    if (mount.Length > 0)
+                    {
+                        Dictionary<string, string> names = SheetLang.GameName("mounts", id);
+                        names["ru"] = mount;
+                        if (!names.ContainsKey("en"))
+                        {
+                            names["en"] = SheetLang.EnglishMount(id) ?? english.Content(mount);
+                        }
+                        Add(shown, byLang, names, mount, names["en"]);
+                    }
+                    // босс: у награды — название достижения; иначе первая часть («Король Дазар / Сундук…») — по ID боя
+                    string boss = Cell(row, cBoss);
+                    if (boss.Length > 0)
+                    {
+                        string bossEn = english.Content(boss);
+                        Dictionary<string, string> titles;
+                        Dictionary<string, string> names;
+                        if (id > 0 && SheetLang.RewardAchievement(id, out titles) > 0 && titles.Count > 0)
+                        {
+                            names = titles;
+                        }
+                        else
+                        {
+                            names = new Dictionary<string, string>();
+                            List<long> journal = cJournal >= 0 && cJournal < row.Length ? Encounters.Ids(row[cJournal]) : new List<long>();
+                            if (journal.Count == 1)
+                            {
+                                foreach (KeyValuePair<string, string> kv in SheetLang.GameName("bosses", journal[0]))
+                                {
+                                    names[kv.Key] = WithTail(kv.Value, kv.Key == "ru" ? boss : bossEn);
+                                }
+                            }
+                        }
+                        foreach (KeyValuePair<string, string> kv in SheetLang.GameText(boss))
+                        {
+                            names[kv.Key] = kv.Value;
+                        }
+                        names["ru"] = boss;
+                        names["en"] = bossEn;
+                        Add(shown, byLang, names, boss, bossEn);
+                    }
+                    // место: английское из каталога, остальные — по ID карты подземелья
+                    string place = Cell(row, 1);
+                    List<long> maps = cMap >= 0 && cMap < row.Length ? Encounters.Ids(row[cMap]) : new List<long>();
+                    if (place.Length > 0 && maps.Count == 1)
+                    {
+                        Dictionary<string, string> names = new Dictionary<string, string>();
+                        foreach (KeyValuePair<string, string> kv in SheetLang.GameName("places", maps[0]))
+                        {
+                            names[kv.Key] = WithTail(kv.Value, place, "(");
+                        }
+                        names["en"] = place;
+                        Add(shown, byLang, names, place, place);
+                    }
+                    else if (place.Length > 0)
+                    {
+                        Add(shown, byLang, SheetLang.GameText(place), place);   // зона или общая строка: «Vol'dun», «Any Timewalking Dungeon»
+                    }
+                }
+            }
+            // условие достижения: игра отдаёт его только на языке клиента
+            foreach (object m in J.Arr(J.Get(data, "rewards")))
+            {
+                long achievement = J.Long(J.Obj(m), "ach");
+                foreach (KeyValuePair<string, string> kv in SheetLang.GameName("conditions", achievement))
+                {
+                    byLang[kv.Key]["ach:" + achievement.ToString(CultureInfo.InvariantCulture)] = kv.Value;
+                }
+            }
+            Dictionary<string, object> result = new Dictionary<string, object>();
+            foreach (KeyValuePair<string, Dictionary<string, object>> kv in byLang)
+            {
+                if (kv.Value.Count > 0)
+                {
+                    result[kv.Key] = kv.Value;
+                }
+            }
+            return result.Count > 0 ? result : null;
+        }
+
+        static readonly string[] NameLangs = { "ru", "en", "de", "fr", "es", "pt" };
+
+        /// <summary>Имя из игры и хвост строки каталога: «Король Дазар» + « / Сундук претендента», «Терраса» + « (Midnight)».</summary>
+        static string WithTail(string name, string text, string mark = " / ")
+        {
+            if (mark == "(")
+            {
+                int paren = text.LastIndexOf(" (", StringComparison.Ordinal);
+                return paren > 0 && text.EndsWith(")", StringComparison.Ordinal) ? name + text.Substring(paren) : name;
+            }
+            int cut = text.IndexOf(" / ", StringComparison.Ordinal);
+            return cut > 0 ? name + text.Substring(cut) : name;
+        }
+
+        /// <summary>Перевод для каждого языка, где он есть: ключ — тот вид текста (русский или английский), что пришёл в списке.</summary>
+        static void Add(HashSet<string> shown, Dictionary<string, Dictionary<string, object>> byLang, Dictionary<string, string> names, params string[] variants)
+        {
+            foreach (string text in variants.Distinct())
+            {
+                if (string.IsNullOrEmpty(text) || !shown.Contains(text))
+                {
+                    continue;
+                }
+                foreach (string lang in NameLangs)
+                {
+                    string value;
+                    if (names.TryGetValue(lang, out value) && !string.IsNullOrEmpty(value) && value != text)
+                    {
+                        byLang[lang][text] = value;
+                    }
+                }
+            }
+        }
+
+        static void AddShown(HashSet<string> shown, Dictionary<string, object> item)
+        {
+            foreach (string field in new[] { "boss", "mount", "place" })
+            {
+                string text = J.Str(item, field);
+                if (text.Length > 0)
+                {
+                    shown.Add(text);
+                }
+            }
+        }
+
+        static string Cell(object[] row, int c)
+        {
+            return c >= 0 && c < row.Length && row[c] is string ? ((string)row[c]).Trim() : "";
         }
 
         static void WriteValue(StringBuilder sb, object value, int depth)
@@ -193,6 +380,8 @@ namespace MountSheetSync
         /// <summary>Строка Lua в кавычках: \\, ", переводы строк и управляющие символы экранируются.</summary>
         static void WriteString(StringBuilder sb, string s)
         {
+            // шрифты игры не рисуют стрелку: в окне и в чате был бы квадратик
+            s = s.Replace("\u2192", ">");
             sb.Append('"');
             foreach (char c in s)
             {
@@ -236,6 +425,10 @@ namespace MountSheetSync
                     if (item == null)
                     {
                         continue;
+                    }
+                    if (J.Str(item, "src") == "reward")
+                    {
+                        continue;   // достижения и награды не считаем: их не убить
                     }
                     left.All++;
                     if (J.Truthy(item, "y"))

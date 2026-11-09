@@ -95,6 +95,8 @@ namespace MountSheetSync
             public Dictionary<string, Dictionary<string, string>> Patterns = new Dictionary<string, Dictionary<string, string>>();
             public Dictionary<string, string> Content = new Dictionary<string, string>(StringComparer.Ordinal);
             public Dictionary<long, string> Mounts = new Dictionary<long, string>();
+            /// <summary>Названия из таблиц игры: mounts / bosses / places → ID → язык → название; rewards → ID маунта → достижение.</summary>
+            public Dictionary<string, object> Names = new Dictionary<string, object>();
         }
 
         static Texts texts;
@@ -127,6 +129,7 @@ namespace MountSheetSync
                     {
                         t.Content[kv.Key] = SheetLogic.JsString(kv.Value);
                     }
+                    t.Names = J.Obj(J.Get(root, "names")) ?? new Dictionary<string, object>();
                     foreach (KeyValuePair<string, object> kv in J.Obj(J.Get(root, "mounts")) ?? new Dictionary<string, object>())
                     {
                         long id;
@@ -310,6 +313,53 @@ namespace MountSheetSync
             }
             string v;
             return Load().Content.TryGetValue(ru, out v) ? v : ru;
+        }
+
+        /// <summary>Название из таблиц игры на шести языках: kind — mounts, bosses (journalEncounterID), places (ID карты). Пусто — нет.</summary>
+        public static Dictionary<string, string> GameName(string kind, long id)
+        {
+            return GameEntry(kind, id.ToString(CultureInfo.InvariantCulture));
+        }
+
+        /// <summary>Перевод строки каталога, которой нет в журнале игры (рары, сундуки, зоны, общие строки). Пусто — нет.</summary>
+        public static Dictionary<string, string> GameText(string text)
+        {
+            return GameEntry("texts", text);
+        }
+
+        static Dictionary<string, string> GameEntry(string kind, string key)
+        {
+            Dictionary<string, string> names = new Dictionary<string, string>();
+            Dictionary<string, object> byId = J.Obj(J.Get(Load().Names, kind));
+            Dictionary<string, object> one = byId != null ? J.Obj(J.Get(byId, key)) : null;
+            foreach (KeyValuePair<string, object> kv in one ?? new Dictionary<string, object>())
+            {
+                names[kv.Key] = SheetLogic.JsString(kv.Value);
+            }
+            return names;
+        }
+
+        /// <summary>Достижение, за которое дают этот маунт (0 — нет), и его название на шести языках.</summary>
+        public static long RewardAchievement(long mountId, out Dictionary<string, string> titles)
+        {
+            titles = new Dictionary<string, string>();
+            Dictionary<string, object> rewards = J.Obj(J.Get(Load().Names, "rewards"));
+            Dictionary<string, object> one = rewards != null ? J.Obj(J.Get(rewards, mountId.ToString(CultureInfo.InvariantCulture))) : null;
+            if (one == null)
+            {
+                return 0;
+            }
+            foreach (KeyValuePair<string, object> kv in J.Obj(J.Get(one, "names")) ?? new Dictionary<string, object>())
+            {
+                titles[kv.Key] = SheetLogic.JsString(kv.Value);
+            }
+            return J.Long(one, "id");
+        }
+
+        /// <summary>Достижение, за которое сейчас дают «Затерянное во времени седло» (маунты прошлых сезонов Mythic+). 0 — неизвестно.</summary>
+        public static long SaddleAchievement()
+        {
+            return J.Long(J.Obj(J.Get(Load().Names, "saddle")), "id");
         }
 
         /// <summary>Английское название маунта по mountID (null — неизвестно).</summary>

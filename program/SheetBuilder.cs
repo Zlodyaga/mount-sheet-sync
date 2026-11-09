@@ -847,7 +847,8 @@ namespace MountSheetSync
                 names.Add(n);
                 sum.Add("(" + n + "=FALSE)");
             }
-            string body = count == 0 ? "0" : string.Join("+", sum.ToArray());
+            // один персонаж: без сложения сравнение осталось бы TRUE/FALSE, а не числом
+            string body = count == 0 ? "0" : count == 1 ? "N" + sum[0] : string.Join("+", sum.ToArray());
             return "=MAP(" + string.Join(", ", refs.ToArray()) + ", LAMBDA(" + string.Join(", ", names.ToArray())
                 + ", IF(mnt=\"\", \"\", IF(sob=\"Да\", 0, " + body + "))))";
         }

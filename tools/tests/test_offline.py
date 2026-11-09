@@ -72,7 +72,7 @@ def window_bits(L, g):
     obj.OnClick(g.UIParent, "LeftButton")
     win = g.MountSheetSyncFrame
     regs = [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
-    small = [r for r in regs if r._type == "FontString" and r._font == "MSSFontSmall" and r._parent is not None
+    small = [r for r in regs if r._type == "FontString" and r._font in ("MSSFontSmall", "MSSFontWarn") and r._parent is not None
              and r._parent._uid == win._uid]
     hint = small[0] if small else None
     hovers = [r for r in regs if r._type == "Frame" and r._parent is not None and r._parent._uid == win._uid
@@ -83,6 +83,13 @@ def window_bits(L, g):
         hovers[0]._scripts.OnEnter(hovers[0])
         tip = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
     return broker, (str(hint._text) if hint is not None else None), tip
+
+
+def hint_font():
+    win = g.MountSheetSyncFrame
+    regs = [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
+    small = [r for r in regs if r._type == "FontString" and r._font == "MSSFontSmall" and r._parent is not None and r._parent._uid == win._uid]
+    return small[0]._fontObject if small else None
 
 
 def first_kill_chat(L, g):
@@ -110,6 +117,10 @@ broker, hint, tip = window_bits(L, g)
 check("Data Broker tooltip: one grey offline line, the click hints stay last",
       sum("Офлайн" in t for t in broker) == 1 and broker[-2].startswith("ЛКМ") and broker[-1].startswith("ПКМ"), broker)
 check("window bottom line: offline, kills remembered", hint is not None and hint.startswith("Офлайн") and "запоминаются" in hint, hint)
+icon = L.eval("rawget")(g.MountSheetSyncFrame, "offlineIcon")
+check("…and it stands out: a warning icon before it, bold orange text with a shadow",
+      icon is not None and icon._shown and str(icon._texture).endswith("UI-Dialog-Icon-AlertNew") and str(hint_font()) == str(g.MSSFontWarn)
+      and g.MSSFontWarn._shadowOffset is not None, icon and icon._texture)
 check("hover: why (addons can't go online) and when it is checked (login, /reload)",
       tip is not None and tip[0] == "Работа без программы" and any("/reload" in t and "сохранениях игры" in t for t in tip), tip)
 
@@ -122,6 +133,8 @@ check("first kill: the usual «goes to the sheet when you log out…» hint", an
 broker, hint, tip = window_bits(L, g)
 check("no offline line in the tooltip", not any("Офлайн" in t for t in broker), broker)
 check("window bottom line: the usual hint, no hover", hint is not None and hint.startswith("Отметки попадают") and tip is None, (hint, tip))
+quiet_icon = L.eval("rawget")(g.MountSheetSyncFrame, "offlineIcon")
+check("…quiet: no warning icon, the small grey font", (quiet_icon is None or not quiet_icon._shown) and str(hint_font()) == str(g.MSSFontSmall))
 
 # ---- the program runs, but has no sheet yet
 L, g, ns, _ = new_game(mark(NOW - 10, sheet=False))
@@ -170,6 +183,23 @@ vl = ns.VersionLess
 check("version order like the program: 2.9 < 2.10, 2.9.0-alpha1 < alpha2 < beta1 < 2.9.0, 2.9.0 = 2.9",
       vl("2.9.0", "2.10.0") and vl("2.9.0-alpha1", "2.9.0-alpha2") and vl("2.9.0-alpha2", "2.9.0-beta1") and vl("2.9.0-beta1", "2.9.0")
       and not vl("2.9.0", "2.9") and not vl("2.9", "2.9.0") and not vl("2.10.0", "2.9.9"))
+
+# which words the window uses: a sheet is named only when there is one
+def words_with(program):
+    L2, g2, ns2, _ = new_game(program)
+    return str(ns2.L.button_sync), str(ns2.L.window_hint)
+
+
+local_words = words_with('MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.10.0", storage = "local" }\n' % NOW)
+check("data on this computer: «Сохранить отметки», no sheet named", local_words[0] == "Сохранить отметки" and "таблиц" not in local_words[1], local_words)
+google_words = words_with('MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.10.0", storage = "google" }\n' % NOW)
+check("a Google sheet: «Отправить в таблицу»", google_words[0] == "Отправить в таблицу" and "таблиц" in google_words[1], google_words)
+script_words = words_with('MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.10.0", storage = "script" }\n' % NOW)
+check("a sheet with the script: the same", script_words[0] == "Отправить в таблицу", script_words)
+old_words = words_with('MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.9.2" }\n' % NOW)
+check("an older program says nothing, it always has a sheet", old_words[0] == "Отправить в таблицу", old_words)
+none_words = words_with("MountSheetSyncProgram = nil\n")
+check("no program at all: no sheet to name", none_words[0] == "Сохранить отметки", none_words)
 
 failed = [n for n, ok in checks if not ok]
 print("%d/%d checks passed" % (len(checks) - len(failed), len(checks)))

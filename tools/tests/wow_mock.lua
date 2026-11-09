@@ -86,6 +86,9 @@ function Region:LockHighlight() self._locked = true end
 function Region:UnlockHighlight() self._locked = false end
 function Region:SetVertexColor(...) self._vertex = { ... } end
 function Region:GetLeft() return self._left or 0 end
+function Region:GetTop() return self._top or 0 end
+function Region:SetShadowColor(...) self._shadowColor = { ... } end
+function Region:SetShadowOffset(...) self._shadowOffset = { ... } end
 function Region:GetPoint(i)
   local p = self._points[i or 1]
   if not p then return nil end
@@ -302,6 +305,7 @@ Minimap:SetSize(140, 140)
 Minimap._center = { 1800, 950 }
 CURSOR = { 0, 0 }
 function GetCursorPosition() return CURSOR[1], CURSOR[2] end
+function IsControlKeyDown() return MOCK_CTRL == true end
 UISpecialFrames = {}
 ChatFontNormal = {}
 function GetBuildInfo() return "12.1.5", "65000", "Oct 1 2026", 120105 end
@@ -319,7 +323,8 @@ MOCK_LOCALE = "ruRU"   -- tests of the Russian texts; test_locale.py switches it
 function GetLocale() return MOCK_LOCALE end
 
 GameTooltip = { lines = {}, shown = false }
-function GameTooltip:SetOwner(owner, anchor) self.owner = owner; self.lines = {} end
+function GameTooltip:SetOwner(owner, anchor) self.owner = owner; self.anchor = anchor; self.lines = {} end
+function GameTooltip:SetPoint(point, rel, relPoint, x, y) self.point, self.relPoint = point, relPoint end
 function GameTooltip:SetText(t) self.lines = { t } end
 function GameTooltip:AddLine(t) self.lines[#self.lines + 1] = t end
 function GameTooltip:Show() self.shown = true end

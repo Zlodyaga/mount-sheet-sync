@@ -106,6 +106,7 @@ namespace MountSheetSync
             {
                 a();
             }
+            book.Flush();
             if (done.Count > 0)
             {
                 Log.Write(Tr.L("Таблица обновлена: {0}.", string.Join("; ", done.ToArray())));

@@ -13,6 +13,10 @@
 //   --sheet-lang <ru|en|de|fr|es|pt>  язык новой таблицы (по умолчанию — язык игры, иначе язык программы);
 //   --add-chars   добавить в таблицу персонажей, которых в ней ещё нет;
 //   --sync-collection  сверить таблицу с коллекцией маунтов из игры;
+//   --create-local [название]  создать данные на этом компьютере (без Google) и перейти на них;
+//   --import-local [--yes]  перенести таблицу из Google на этот компьютер и перейти на копию (с --yes — поверх
+//                   прежних данных, они остаются рядом: local-data.before-import.json);
+//   --storage <local|google>  где вести данные: на этом компьютере или в таблице Google (данные должны уже быть);
 //   --set-chars <файл.json>  персонажи таблицы как в файле: [{"name":"Эйра","raids":true,"dungeons":false,"world":true}, …];
 //   --install     установить программу в %LOCALAPPDATA%\Programs\MountSheetSync (ярлык, «Установленные приложения»);
 //   --uninstall [--yes]  удалить её (с --yes — без вопросов, настройки остаются);
@@ -33,14 +37,14 @@ namespace MountSheetSync
 {
     static class Program
     {
-        public const string Version = "2.9.2";
+        public const string Version = "2.10.0";
         /// <summary>Пробная сборка: «alpha1», «beta2» (подставляет release.yml по тегу v2.8.0-alpha1); "" — обычная.</summary>
         public const string Prerelease = "";
         /// <summary>
         /// Аддон, которого хватает этой программе. Программа и аддон выходят отдельно: аддон старше — подсказка
         /// «обновите аддон» (меню и уведомление), а в Program.lua — это же число, и аддон напишет то же у себя.
         /// </summary>
-        public const string MinAddon = "3.0.3";
+        public const string MinAddon = "3.0.4";
 
         /// <summary>Версия с пометкой пробной сборки: «2.8.0-alpha1» или просто «2.8.0».</summary>
         public static string FullVersion
@@ -72,6 +76,7 @@ namespace MountSheetSync
                 return 1;
             }
             bool console = opts.Once || opts.Test || opts.GoogleLogin || opts.CreateSheet || opts.AddChars || opts.SyncCollection
+                || opts.CreateLocal || opts.ImportLocal || opts.Storage != null
                 || opts.SetCharsFile != null || opts.CheckUpdate || opts.Update || opts.Install || (opts.Uninstall && opts.Yes);
             Tr.Use(Settings.Load(AppPaths.SettingsFile).Language);
             Log.Init(AppPaths.LogFile, console);
@@ -89,6 +94,18 @@ namespace MountSheetSync
             if (opts.CreateSheet)
             {
                 return RunCreateSheet(opts.SheetTitle, opts.SheetLang);
+            }
+            if (opts.CreateLocal)
+            {
+                return RunCreateLocal(opts.SheetTitle, opts.SheetLang);
+            }
+            if (opts.ImportLocal)
+            {
+                return RunImportLocal(opts.Yes);
+            }
+            if (opts.Storage != null)
+            {
+                return RunStorage(opts.Storage);
             }
             if (opts.AddChars)
             {
@@ -350,17 +367,7 @@ namespace MountSheetSync
                 Log.Write(Tr.L("Аддон пока не знает ни одного персонажа: зайдите в игру с аддоном Mount Sheet Sync и выйдите (или /reload)."));
                 return 1;
             }
-            BuildPlan plan = new BuildPlan();
-            plan.Lang = string.IsNullOrWhiteSpace(lang) ? SheetLang.DefaultFor(game) : SheetLang.Get(lang);
-            plan.Game = GameNames.From(game);
-            plan.Title = string.IsNullOrWhiteSpace(title) ? plan.Lang.Title : title.Trim();
-            foreach (GameCharacter c in game.Characters)
-            {
-                plan.Characters.Add(new BuildCharacter(c.Name, true, true));
-            }
-            plan.CollectedMounts = game.CollectedMounts;
-            plan.CollectedIds = game.CollectedIds;
-            plan.CollectionStamp = game.CollectionUpdated;
+            BuildPlan plan = PlanFor(game, title, lang);
             try
             {
                 CreatedSheet sheet = SheetCreator.Create(plan, Log.Write);
@@ -379,6 +386,138 @@ namespace MountSheetSync
             }
         }
 
+        /// <summary>Новые листы для всех персонажей из аддона.</summary>
+        public static BuildPlan PlanFor(GameSnapshot game, string title, string lang)
+        {
+            BuildPlan plan = new BuildPlan();
+            plan.Lang = string.IsNullOrWhiteSpace(lang) ? SheetLang.DefaultFor(game) : SheetLang.Get(lang);
+            plan.Game = GameNames.From(game);
+            plan.Title = string.IsNullOrWhiteSpace(title) ? plan.Lang.Title : title.Trim();
+            foreach (GameCharacter c in game.Characters)
+            {
+                plan.Characters.Add(new BuildCharacter(c.Name, true, true));
+            }
+            plan.CollectedMounts = game.CollectedMounts;
+            plan.CollectedIds = game.CollectedIds;
+            plan.CollectionStamp = game.CollectionUpdated;
+            return plan;
+        }
+
+        static int RunCreateLocal(string title, string lang)
+        {
+            Settings settings = Settings.Load(AppPaths.SettingsFile);
+            string file = AppPaths.LocalBookFile;
+            if (File.Exists(file))
+            {
+                Log.Write(Tr.L("Данные на этом компьютере уже есть: {0}. Чтобы не потерять их, ничего не заменяю.", file));
+                return 1;
+            }
+            GameSnapshot game = ReadGame(settings);
+            if (game.Characters.Count == 0)
+            {
+                Log.Write(Tr.L("Аддон пока не знает ни одного персонажа: зайдите в игру с аддоном Mount Sheet Sync и выйдите (или /reload)."));
+                return 1;
+            }
+            try
+            {
+                LocalBook.Create(file, PlanFor(game, title, lang));
+            }
+            catch (Exception ex)
+            {
+                if (!(ex is SyncException) && !(ex is ArgumentException))
+                {
+                    throw;
+                }
+                Log.Write(Tr.L("Данные на этом компьютере не созданы: {0}", ex.Message));
+                return 1;
+            }
+            settings.Mode = Settings.ModeLocal;
+            settings.Save(AppPaths.SettingsFile);
+            Log.Write(Tr.L("Данные программы созданы на этом компьютере: {0}", file));
+            return 0;
+        }
+
+        /// <summary>Копия таблицы из Google; что уже отправлено в неё, второй раз не считается.</summary>
+        static int RunImportLocal(bool replace)
+        {
+            Settings settings = Settings.Load(AppPaths.SettingsFile);
+            string file = AppPaths.LocalBookFile;
+            if (File.Exists(file) && !replace)
+            {
+                Log.Write(Tr.L("Данные на этом компьютере уже есть: {0}. Чтобы не потерять их, ничего не заменяю.", file));
+                return 1;
+            }
+            if (settings.SpreadsheetId.Length == 0)
+            {
+                Log.Write(Tr.L("Таблица, созданная программой, не выбрана — переносить нечего."));
+                return 1;
+            }
+            try
+            {
+                ImportToLocal(settings);
+                settings.Save(AppPaths.SettingsFile);
+            }
+            catch (SyncException ex)
+            {
+                Log.Write(Tr.L("Перенести данные не получилось: {0}", ex.Message));
+                return 1;
+            }
+            return 0;
+        }
+
+        /// <summary>Куда откладываются прежние данные, когда таблицу переносят поверх них.</summary>
+        public static string BeforeImportFile
+        {
+            get { return Path.Combine(Path.GetDirectoryName(AppPaths.LocalBookFile), "local-data.before-import.json"); }
+        }
+
+        /// <summary>Копия таблицы settings.SpreadsheetId в файл на этом компьютере; settings переходит на неё. Настройки сохраняет вызывающий.</summary>
+        public static void ImportToLocal(Settings settings)
+        {
+            string file = AppPaths.LocalBookFile;
+            using (LocalBook.Exclusive(file))
+            {
+                GoogleBook book = GoogleBook.Load(settings.SpreadsheetId);
+                GoogleSheetService.Upgrade(book);
+                if (File.Exists(file))
+                {
+                    // поверх прежних данных: они остаются рядом, а убийства, отмеченные только в них, уйдут в копию заново
+                    File.Copy(file, BeforeImportFile, true);
+                    Log.Write(Tr.L("Прежние данные на этом компьютере сохранены: {0}", BeforeImportFile));
+                }
+                LocalBook.Import(file, book);
+                settings.Mode = Settings.ModeGoogle;
+                string sent = AppPaths.SentFileFor(settings);
+                settings.Mode = Settings.ModeLocal;
+                if (File.Exists(sent))
+                {
+                    File.Copy(sent, AppPaths.SentFileFor(settings), true);
+                }
+            }
+            Log.Write(Tr.L("Данные перенесены из таблицы на этот компьютер: {0}", file));
+        }
+
+        static int RunStorage(string storage)
+        {
+            Settings settings = Settings.Load(AppPaths.SettingsFile);
+            if (storage != Settings.ModeLocal && storage != Settings.ModeGoogle)
+            {
+                Log.Write(Tr.L("Неизвестное хранилище: {0} (нужно local или google).", storage));
+                return 1;
+            }
+            settings.Mode = storage;
+            if (!settings.HasOwnBook)
+            {
+                Log.Write(storage == Settings.ModeLocal
+                    ? Tr.L("Данные на этом компьютере ещё не созданы: сначала --create-local или --import-local.")
+                    : Tr.L("Таблица, созданная программой, не выбрана — сначала --create-sheet."));
+                return 1;
+            }
+            settings.Save(AppPaths.SettingsFile);
+            Log.Write(Tr.L("Теперь данные хранятся: {0}.", storage));
+            return 0;
+        }
+
         /// <summary>Новая таблица — основная (у неё свой список отправленного, так что журнал аддона уйдёт в неё весь).</summary>
         public static void UseNewSheet(Settings settings, CreatedSheet sheet)
         {
@@ -392,7 +531,7 @@ namespace MountSheetSync
         static int RunAddChars()
         {
             Settings settings = Settings.Load(AppPaths.SettingsFile);
-            if (!settings.UseGoogle || settings.SpreadsheetId.Length == 0)
+            if (!settings.HasOwnBook)
             {
                 Log.Write(Tr.L("Таблица, созданная программой, не выбрана — сначала --create-sheet."));
                 return 1;
@@ -405,7 +544,7 @@ namespace MountSheetSync
             }
             try
             {
-                int n = SheetCreator.AddCharacters(settings.SpreadsheetId, chars, Log.Write);
+                int n = SheetCreator.AddCharacters(settings, chars, Log.Write);
                 Log.Write(n == 0 ? Tr.L("Все персонажи уже есть в таблице.") : Tr.L("Добавлено листов: {0}.", n));
                 return 0;
             }
@@ -419,7 +558,7 @@ namespace MountSheetSync
         static int RunSetChars(string file)
         {
             Settings settings = Settings.Load(AppPaths.SettingsFile);
-            if (!settings.UseGoogle || settings.SpreadsheetId.Length == 0)
+            if (!settings.HasOwnBook)
             {
                 Log.Write(Tr.L("Таблица, созданная программой, не выбрана — сначала --create-sheet."));
                 return 1;
@@ -440,7 +579,7 @@ namespace MountSheetSync
             }
             try
             {
-                CharacterChanges ch = SheetCreator.UpdateCharacters(settings.SpreadsheetId, chars, Log.Write);
+                CharacterChanges ch = SheetCreator.UpdateCharacters(settings, chars, Log.Write);
                 Log.Write(Tr.L("Персонажи: {0}.", ch.Summary()));
                 return 0;
             }
@@ -454,7 +593,7 @@ namespace MountSheetSync
         static int RunSyncCollection()
         {
             Settings settings = Settings.Load(AppPaths.SettingsFile);
-            if (!settings.UseGoogle || settings.SpreadsheetId.Length == 0)
+            if (!settings.HasOwnBook)
             {
                 Log.Write(Tr.L("Таблица, созданная программой, не выбрана — сверять не с чем."));
                 return 1;
@@ -467,7 +606,7 @@ namespace MountSheetSync
             }
             try
             {
-                CollectionResult res = new GoogleSheetService(settings.SpreadsheetId).SyncCollection(game, true);
+                CollectionResult res = ((BookSheetService)settings.CreateService()).SyncCollection(game, true);
                 Log.Write(Tr.L("Сверка с коллекцией: {0}.", res.Summary()));
                 return 0;
             }
@@ -544,6 +683,9 @@ namespace MountSheetSync
         public bool Autostart;
         public bool GoogleLogin;
         public bool CreateSheet;
+        public bool CreateLocal;
+        public bool ImportLocal;
+        public string Storage;
         public bool AddChars;
         public bool SyncCollection;
         public string SetCharsFile;
@@ -588,6 +730,22 @@ namespace MountSheetSync
                     {
                         o.SheetTitle = args[++i];
                     }
+                }
+                else if (a == "create-local")
+                {
+                    o.CreateLocal = true;
+                    if (i + 1 < args.Length && !args[i + 1].StartsWith("-", StringComparison.Ordinal))
+                    {
+                        o.SheetTitle = args[++i];
+                    }
+                }
+                else if (a == "import-local")
+                {
+                    o.ImportLocal = true;
+                }
+                else if (a == "storage" && i + 1 < args.Length)
+                {
+                    o.Storage = args[++i];
                 }
                 else if (a == "sheet-lang" && i + 1 < args.Length)
                 {
@@ -654,6 +812,10 @@ namespace MountSheetSync
         /// </summary>
         public static string SentFileFor(Settings s)
         {
+            if (s != null && s.IsLocal)
+            {
+                return Path.Combine(DataDir, "sent-ids-local.txt");
+            }
             if (s == null || !s.UseGoogle || string.IsNullOrEmpty(s.SpreadsheetId))
             {
                 return SentFile;
@@ -664,6 +826,12 @@ namespace MountSheetSync
                 safe.Append(char.IsLetterOrDigit(c) || c == '-' || c == '_' ? c : '_');
             }
             return Path.Combine(DataDir, "sent-ids-google-" + safe + ".txt");
+        }
+
+        /// <summary>Данные режима «на этом компьютере».</summary>
+        public static string LocalBookFile
+        {
+            get { return Path.Combine(DataDir, "local-data.json"); }
         }
 
         public static string DataDir;

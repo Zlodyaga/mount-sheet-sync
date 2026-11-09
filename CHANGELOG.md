@@ -2,6 +2,20 @@
 
 The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [CHANGELOG-addon.md](CHANGELOG-addon.md).
 
+## 2.10.0
+- Achievement requirements, rares, chests, zones and general rows now come in all six languages too.
+- The list for the addon carries names in all six languages, taken from the game's own tables, and every reward row of the sheet with its achievement, for the addon's “Achievements” tab.
+- A character removed and added back gets this week's kills marked again on the next pass, without counting attempts twice. Before, their rows stayed “killed, waiting for an update” in the addon.
+- Choosing “On this computer” with a spreadsheet already in place now asks whether to move its data over, so marks and “not farming” aren't lost. “Move from the spreadsheet…” also works over data already created here: the old data is kept next to it, and kills marked only here are marked in the copy again.
+- The list for the addon carries English and Russian names of its mounts and bosses, so the addon can show them in its own language (needs the addon 3.0.4).
+- The program no longer needs Google: new players start with the data in a file on this computer, with no sign-in and nothing to set up. It appears by itself as soon as the addon knows your characters, and the addon's window shows the list.
+- A Google Sheet is still there as an option in the settings, and players who already have one stay on it. “Move from the spreadsheet…” copies an existing sheet to this computer without counting kills twice; the sheet stays in Google as it is.
+- “Characters…” and “What to farm…” work with the data on this computer too. The menu, notifications and the “Characters…” window mention the spreadsheet only if there is one.
+- With the data on this computer, new characters join by themselves when you log in on them, and their kills count from the start. A character you remove in “Characters…” stays removed until you tick them again.
+- The list tells the addon which rows are achievements and rewards rather than boss kills, and where each row is in the Adventure Guide (needs the addon 3.0.4). The tray menu doesn't count achievements and rewards as left to kill.
+- A spreadsheet with one character no longer gets a phantom character named after its “Attempts left” column.
+- Every row sent to the addon carries its mount's ID, so achievements and guaranteed drops get an icon too (needs the addon 3.0.4).
+
 ## 2.9.2
 - Raids with separate lockouts: on a Normal/Heroic/Mythic row a kill on one difficulty no longer closes the row. It becomes “Yes” when all three are killed; the killed ones are kept in a hidden “N/H/M” column.
 - World boss mounts now reach the addon with their game ID: their icons show in its window, and a collected one leaves its lists.

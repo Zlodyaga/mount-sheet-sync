@@ -1,9 +1,9 @@
 --[[
-Mount Sheet Sync 3.0.3 — своё оформление окон
+Mount Sheet Sync 3.0.4 — своё оформление окон
 =============================================
 Окна рисуются своими текстурами и шрифтами, а не шаблонами Blizzard: тёмный фон, золотая рамка, плоские кнопки,
 «таблетки» фильтров, круглые переключатели. Текстуры (Media/*.tga, белые, цвет — SetVertexColor) делает
-tools/skin/make_media.py. Шрифты — PT Sans и Philosopher (SIL OFL, файлы без изменений, лицензии рядом в Media);
+tools/skin/make_media.py. Шрифт — PT Sans (SIL OFL, файлы без изменений, лицензия рядом в Media; декоративный Philosopher убран в 3.0.4 — в игре мылился);
 на китайском и корейском клиентах в них нет букв, там остаётся шрифт игры.
 ]]
 
@@ -36,10 +36,15 @@ local MARGINS = { Round3 = 4, Round6 = 8, Pill = 12 }
 local locale = GetLocale()
 local NO_LETTERS = locale == "zhCN" or locale == "zhTW" or locale == "koKR"
 
-local function MakeFont(name, file, size, color)
+local function MakeFont(name, file, size, color, shadow)
   local font = CreateFont(name)
   font:SetFont(NO_LETTERS and STANDARD_TEXT_FONT or (MEDIA .. file), size, "")
   font:SetTextColor(color[1], color[2], color[3])
+  if shadow then
+    -- тёмная тень на пиксель ниже: на красной кнопке и цветном фоне без неё буквы расплываются
+    font:SetShadowColor(0, 0, 0, 0.9)
+    font:SetShadowOffset(1, -1)
+  end
 end
 
 MakeFont("MSSFontBody", "PTSans-Regular.ttf", 12, Hex("e4dfd2"))
@@ -47,11 +52,12 @@ MakeFont("MSSFontBold", "PTSans-Bold.ttf", 12, Hex("e4dfd2"))
 MakeFont("MSSFontName", "PTSans-Regular.ttf", 13, Hex("e4dfd2"))
 MakeFont("MSSFontStrong", "PTSans-Bold.ttf", 13, Hex("e4dfd2"))
 MakeFont("MSSFontGold", "PTSans-Regular.ttf", 12, Hex("d8c98f"))
-MakeFont("MSSFontSmall", "PTSans-Regular.ttf", 11, Hex("a89f8b"))
+MakeFont("MSSFontSmall", "PTSans-Regular.ttf", 12, Hex("b3aa95"))   -- 11 px в игре расплывался
 MakeFont("MSSFontHead", "PTSans-Bold.ttf", 11, Hex("a89f8b"))
 MakeFont("MSSFontDim", "PTSans-Regular.ttf", 13, Hex("a89f8b"))
-MakeFont("MSSFontTitle", "Philosopher-Bold.ttf", 14, COLOR.gold)
-MakeFont("MSSFontButton", "Philosopher-Bold.ttf", 13, COLOR.gold)
+MakeFont("MSSFontTitle", "PTSans-Bold.ttf", 15, COLOR.gold, true)
+MakeFont("MSSFontButton", "PTSans-Bold.ttf", 14, COLOR.gold, true)
+MakeFont("MSSFontWarn", "PTSans-Bold.ttf", 12, Hex("ffa04d"), true)
 
 ---------------------------------------------------------------------------
 -- Детали
