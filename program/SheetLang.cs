@@ -318,9 +318,20 @@ namespace MountSheetSync
         /// <summary>Название из таблиц игры на шести языках: kind — mounts, bosses (journalEncounterID), places (ID карты). Пусто — нет.</summary>
         public static Dictionary<string, string> GameName(string kind, long id)
         {
+            return GameEntry(kind, id.ToString(CultureInfo.InvariantCulture));
+        }
+
+        /// <summary>Перевод строки каталога, которой нет в журнале игры (рары, сундуки, зоны, общие строки). Пусто — нет.</summary>
+        public static Dictionary<string, string> GameText(string text)
+        {
+            return GameEntry("texts", text);
+        }
+
+        static Dictionary<string, string> GameEntry(string kind, string key)
+        {
             Dictionary<string, string> names = new Dictionary<string, string>();
             Dictionary<string, object> byId = J.Obj(J.Get(Load().Names, kind));
-            Dictionary<string, object> one = byId != null ? J.Obj(J.Get(byId, id.ToString(CultureInfo.InvariantCulture))) : null;
+            Dictionary<string, object> one = byId != null ? J.Obj(J.Get(byId, key)) : null;
             foreach (KeyValuePair<string, object> kv in one ?? new Dictionary<string, object>())
             {
                 names[kv.Key] = SheetLogic.JsString(kv.Value);

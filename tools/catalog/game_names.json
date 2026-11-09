@@ -489,6 +489,568 @@
    "ru": "Чернорук"
   }
  },
+ "conditions": {
+  "10149": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge in der Höllenfeuerzitadelle ab.",
+   "en": "Complete the Hellfire Citadel raid achievements listed below.",
+   "es": "Completa los logros de banda de la Ciudadela del Fuego Infernal listados a continuación.",
+   "fr": "Accomplir les hauts faits de raid de la citadelle des Flammes infernales listés ci-dessous.",
+   "pt": "Obter as conquistas dos raides da Cidadela Fogo do Inferno listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в рейде \"Цитадель Адского Пламени\"."
+  },
+  "11163": {
+   "de": "Schließt die unten aufgelisteten mythischen Dungeonerfolge von Legion ab.",
+   "en": "Complete the Legion Mythic dungeon achievements listed below.",
+   "es": "Completa los logros de mazmorra mítica de Legion listados a continuación.",
+   "fr": "Accomplir les hauts faits des donjons mythiques de Legion listés ci-dessous.",
+   "pt": "Obter as conquistas de Masmorra Mítica da expansão Legion listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в подземельях Legion в эпохальном режиме."
+  },
+  "11180": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge von Legion ab.",
+   "en": "Complete the Legion raid achievements listed below.",
+   "es": "Completa los logros de banda de Legion listados a continuación.",
+   "fr": "Accomplir les hauts faits de raid de Legion listés ci-dessous.",
+   "pt": "Concluir as conquistas de raides de Legion listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в рейдах Legion."
+  },
+  "11987": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge von Antorus, dem Brennenden Thron, ab.",
+   "en": "Complete the Antorus, the Burning Throne raid achievements listed below.",
+   "es": "Completa los logros de banda de Antorus, el Trono Ardiente, listados a continuación.",
+   "fr": "Accomplir les hauts faits de raids d’Antorus, le Trône ardent listés ci-dessous.",
+   "pt": "Obter as conquistas do raide Antorus, o Trono Ardente, listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в рейде \"Анторус, Пылающий Трон\"."
+  },
+  "12110": {
+   "de": "Bezwingt Argus, den Zerrütter, in Antorus, dem Brennenden Thron, auf dem Schwierigkeitsgrad 'Heroisch' oder höher, bevor Patch 8.0 veröffentlicht wird.",
+   "en": "Defeat Argus the Unmaker in Antorus, the Burning Throne, on Heroic difficulty or higher, before the release of patch 8.0.",
+   "es": "Derrota a Argus el Aniquilador en Antorus, el Trono Ardiente, en dificultad heroica o superior antes del lanzamiento del parche 8.0.",
+   "fr": "Vaincre Argus l’Annihilateur à Antorus, le Trône ardent en mode héroïque ou supérieur, avant la mise à jour 8.0.",
+   "pt": "Derrotar o Argus, o Descriador em Antorus, o Trono Ardente no modo Heroico ou superior antes do lançamento do patch 8.0.",
+   "ru": "Победите Аргуса Порабощенного в Анторусе, Пылающем Троне в героическом или более сложном режиме до выхода дополнения 8.0."
+  },
+  "12401": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge in Ulduar ab.",
+   "en": "Complete the Ulduar raid achievements listed below.",
+   "es": "Completa los logros de banda de Ulduar listados a continuación.",
+   "fr": "Accomplir les hauts faits de raid d’Ulduar listés ci-dessous.",
+   "pt": "Obter as conquistas do raide de Ulduar listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в рейде \"Ульдуар\"."
+  },
+  "12806": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge in Uldir ab.",
+   "en": "Complete the Uldir raid achievements listed below.",
+   "es": "Completa los logros de banda de Uldir listados a continuación.",
+   "fr": "Accomplir les hauts faits de raid d’Uldir listés ci-dessous.",
+   "pt": "Obter as conquistas do raide de Uldir listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в рейде \"Ульдир\"."
+  },
+  "12812": {
+   "de": "Schließt die unten aufgelisteten mythischen Dungeonerfolge von Battle for Azeroth ab.",
+   "en": "Complete the Battle for Azeroth Mythic dungeon achievements listed below.",
+   "es": "Completa los logros de mazmorra mítica de Battle for Azeroth listados a continuación.",
+   "fr": "Accomplir les hauts faits des donjons mythiques de Battle for Azeroth listés ci-dessous.",
+   "pt": "Obter as conquistas de Masmorra Mítica de Battle for Azeroth listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в подземельях Battle for Azeroth в эпохальном режиме."
+  },
+  "13315": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge für die Schlacht von Dazar'alor ab.",
+   "en": "Complete the Battle of Dazar'alor raid achievements listed below.",
+   "es": "Completa los logros de banda de la batalla de Dazar'alor listados a continuación.",
+   "fr": "Accomplir les hauts faits de la bataille de Dazar’alor listés ci-dessous.",
+   "pt": "Obter as conquistas do raide da Batalha de Dazar'alor listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в битве за Дазар'алор."
+  },
+  "13687": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge im Ewigen Palast ab.",
+   "en": "Complete the Eternal Palace raid achievements listed below.",
+   "es": "Completa los logros de banda del Palacio Eterno listados a continuación.",
+   "fr": "Accomplir les hauts faits de raid du palais Éternel listés ci-dessous.",
+   "pt": "Obter as conquistas do raide de Palácio Eterno listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в Вечном дворце."
+  },
+  "14068": {
+   "de": "Bezwingt N'Zoth den Verderber in Ny'alotha, der Erwachten Stadt, auf dem Schwierigkeitsgrad 'Heroisch' oder höher, bevor die nächste Schlachtzugsstufe veröffentlicht wird.",
+   "en": "Defeat N'Zoth the Corruptor in Ny'alotha, the Waking City on Heroic difficulty or higher, before the release of the next raid tier.",
+   "es": "Derrota a N'Zoth, el Corruptor, en Ny'alotha, Ciudad del Despertar, en dificultad heroica o superior antes del lanzamiento del siguiente nivel de banda.",
+   "fr": "Vaincre N’Zoth le Corrupteur à Ny’alotha, la cité en éveil en mode héroïque ou supérieur avant l’ouverture du prochain palier de raid.",
+   "pt": "Derrotar N'Zoth, o Corruptor, em Ny'alotha, a Cidade Desperta, no modo Heroico ou superior, antes do lançamento do próximo nível de raide.",
+   "ru": "Победите Н'Зота Заразителя в Ни'алоте, Пробуждающемся Городе в героическом или более сложном режиме до выхода рейда более высокого уровня."
+  },
+  "14145": {
+   "de": "Schließt alle mythischen Dungeons aus Saison 4 von Battle for Azeroth auf Stufe 15 oder höher innerhalb des Zeitlimits ab.",
+   "en": "Complete all Battle for Azeroth Season Four dungeons at Mythic Level 15 or higher, within the time limit.",
+   "es": "Completa todas las mazmorras de la temporada 4 de Battle for Azeroth en nivel 15 mítico o superior dentro del límite de tiempo.",
+   "fr": "Terminer tous les donjons mythiques de la saison 4 de Battle for Azeroth de niveau 15 ou supérieur dans le temps imparti.",
+   "pt": "Concluir todas as masmorras Míticas, de nível 15 ou superior, da Série 4 de Battle for Azeroth dentro do limite de tempo.",
+   "ru": "Пройдите все подземелья 4-го сезона Battle for Azeroth в эпохальном режиме 15-го или более высокого уровня за отведенное время."
+  },
+  "14146": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge in Ny'alotha, der Erwachten Stadt, ab.",
+   "en": "Complete the Ny'alotha, the Waking City raid achievements listed below.",
+   "es": "Completa los logros de banda de Ny'alotha, Ciudad del Despertar, listados a continuación.",
+   "fr": "Accomplir les hauts faits de raids de Ny’alotha, la cité en éveil listés ci-dessous.",
+   "pt": "Obter as conquistas do raide de Ny'alotha, a Cidade Desperta, listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в рейде \"Ни'алота, Пробуждающийся Город\"."
+  },
+  "14322": {
+   "de": "Schließt die unten aufgelisteten mythischen Dungeonerfolge von Shadowlands ab.",
+   "en": "Complete the Shadowlands Mythic dungeon achievements listed below.",
+   "es": "Completa los logros de mazmorra mítica de Shadowlands listados a continuación.",
+   "fr": "Accomplir les hauts faits des donjons mythiques de l’Ombreterre listés ci-dessous.",
+   "pt": "Obter as conquistas de Masmorra Mítica da expansão Shadowlands listadas abaixo.",
+   "ru": "Заработайте указанные достижения в подземельях Темных Земель в эпохальном режиме."
+  },
+  "14355": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge in Schloss Nathria ab.",
+   "en": "Complete the Castle Nathria raid achievements listed below.",
+   "es": "Completa los logros de banda del Castillo de Nathria listados a continuación.",
+   "fr": "Accomplir les hauts faits de raid du château Nathria listés ci-dessous.",
+   "pt": "Obter as conquistas do raide do Castelo de Nathria listadas abaixo.",
+   "ru": "Заработайте указанные достижения в рейде \"Замок Нафрия\"."
+  },
+  "14532": {
+   "de": "Schließt alle mythischen Dungeons aus Saison 1 von Shadowlands auf Stufe 15 oder höher innerhalb des Zeitlimits ab.",
+   "en": "Complete all Shadowlands Season One dungeons at Mythic Level 15 or higher, within the time limit.",
+   "es": "Completa todas las mazmorras de la temporada 1 de Shadowlands en nivel 15 mítico o superior dentro del límite de tiempo.",
+   "fr": "Terminer tous les donjons mythiques de la saison 1 de Shadowlands de niveau 15 ou supérieur dans le temps imparti.",
+   "pt": "Concluir todas as masmorras Míticas, de nível 15 ou superior, da Série 1 de Shadowlands dentro do limite de tempo.",
+   "ru": "Пройдите все подземелья 1-го сезона Shadowlands в эпохальном режиме 15-го или более высокого уровня за отведенное время."
+  },
+  "15078": {
+   "de": "Erhaltet eine Wertung für Mythisch+ von mindestens 2.000 in Saison 2 von Shadowlands.",
+   "en": "Attain a Mythic+ Rating of at least 2000 during Shadowlands Season Two.",
+   "es": "Consigue un índice de mítica+ de al menos 2000 durante la temporada 2 de Shadowlands.",
+   "fr": "Obtenir une cote mythique + d’au moins 2000 lors de la saison 2 de Shadowlands.",
+   "pt": "Obter a Classificação Mítica+ de ao menos 2000 durante a Série 2 de Shadowlands.",
+   "ru": "Добейтесь счета не менее 2000 во втором сезоне Shadowlands в режиме \"Эпохальный+\"."
+  },
+  "15130": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge im Sanktum der Herrschaft ab.",
+   "en": "Complete the Sanctum of Domination raid achievements listed below.",
+   "es": "Completa los logros de banda del Sagrario de Dominación listados a continuación.",
+   "fr": "Accomplir tous les hauts faits de raid du sanctum de Domination listés ci-dessous.",
+   "pt": "Obter as conquistas do raide do Sacrário da Dominação listadas abaixo.",
+   "ru": "Заработайте указанные достижения в рейде \"Святилище Господства\"."
+  },
+  "15178": {
+   "de": "Besiegt So'leah in Tazavesh, dem Verhüllten Markt, auf dem Schwierigkeitsgrad 'Mythisch', nachdem Ihr bei der Verwendung gefälschter Legitimation erwischt wurdet.",
+   "en": "Defeat So'leah in Tazavesh, the Veiled Market after being caught using forged credentials on Mythic Difficulty.",
+   "es": "Derrota a So'leah en Tazavesh, el Mercado Velado, después de que te descubran usando credenciales falsificadas en dificultad mítica.",
+   "fr": "Vaincre So’leah à Tazavesh, le marché dissimulé, après avoir tenté d’utiliser une fausse identité en mode mythique.",
+   "pt": "Derrotar So'leah em Tazavesh, o Mercado Oculto, depois de ser pego com credenciais falsificadas no modo Mítico.",
+   "ru": "Победите Со'лею на тайном рынке Тазавеш в эпохальном режиме после того, как вас разоблачат при попытке использовать поддельные документы."
+  },
+  "15322": {
+   "de": "Erzielt einen makellosen Durchlauf auf Ebene 16 in jedem Flügel von Torghast, Turm der Verdammten.",
+   "en": "Achieve a Flawless run on layer 16 in each wing of Torghast, Tower of the Damned.",
+   "es": "Realiza una incursión impecable en la capa 16 de cada ala de Torghast, Torre de los Condenados.",
+   "fr": "Réussir une tentative parfaite à l’échelon 16 dans chaque aile de Tourment, la tour des Damnés.",
+   "pt": "Realizar uma incursão Impecável na camada 16 de cada ala da Thanator, a Torre dos Malditos.",
+   "ru": "Добейтесь безупречного прохождения 16-го уровня всех секций Торгаста, Башни Проклятых."
+  },
+  "15470": {
+   "de": "Bezwingt den Kerkermeister im Mausoleum der Ersten auf dem Schwierigkeitsgrad 'Heroisch' oder höher, bevor die nächste Schlachtzugsstufe veröffentlicht wird.",
+   "en": "Defeat The Jailer in the Sepulcher of the First Ones on Heroic difficulty or higher, before the release of the next raid tier.",
+   "es": "Derrota al Carcelero en el Sepulcro de los Primeros en dificultad heroica o superior antes del lanzamiento del siguiente nivel de banda.",
+   "fr": "Vaincre le Geôlier dans le sépulcre des Fondateurs en mode héroïque ou supérieur, avant l’ouverture du prochain palier de raid.",
+   "pt": "Derrotar o Carcereiro no Sepulcro dos Primogênitos, no modo Heroico ou superior, antes do lançamento do próximo grau de raide.",
+   "ru": "Победите Тюремщика в Гробнице Предвечных в героическом или более сложном режиме до открытия рейда более высокого уровня."
+  },
+  "15491": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge im Mausoleum der Ersten ab.",
+   "en": "Complete the Sepulcher of the First Ones raid achievements listed below.",
+   "es": "Completa los logros de banda del Sepulcro de los Primeros listados a continuación.",
+   "fr": "Accomplir les hauts faits de raid du sépulcre des Fondateurs listés ci-dessous.",
+   "pt": "Concluir as conquistas de raides do Sepulcro dos Primogênitos listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в Гробнице Предвечных."
+  },
+  "15499": {
+   "de": "Erhaltet eine Wertung für Mythisch+ von mindestens 2.500 in Saison 3 von Shadowlands.",
+   "en": "Attain a Mythic+ Rating of at least 2500 during Shadowlands Season Three.",
+   "es": "Consigue un índice de mítica+ de al menos 2500 durante la temporada 3 de Shadowlands.",
+   "fr": "Obtenir une cote mythique + d’au moins 2500 lors de la saison 3 de Shadowlands.",
+   "pt": "Obter a Classificação Mítica+ de ao menos 2500 durante a Série 3 de Shadowlands.",
+   "ru": "Добейтесь счета не менее 2500 в третьем сезоне Shadowlands в режиме \"Эпохальный+\"."
+  },
+  "15690": {
+   "de": "Erhaltet eine Wertung für Mythisch+ von mindestens 2.000 in Saison 4 von Shadowlands.",
+   "en": "Attain a Mythic+ Rating of at least 2000 during Shadowlands Season Four.",
+   "es": "Consigue un índice de mítica+ de al menos 2000 durante la temporada 4 de Shadowlands.",
+   "fr": "Obtenir une cote mythique + d’au moins 2000 lors de la saison 4 de Shadowlands.",
+   "pt": "Obter a Classificação Mítica+ de ao menos 2000 durante a Série 4 de Shadowlands.",
+   "ru": "Добейтесь счета не менее 2000 в четвертом сезоне Shadowlands в режиме \"Эпохальный+\"."
+  },
+  "16295": {
+   "de": "Schließt die unten aufgelisteten mythischen Dungeonerfolge von Dragonflight ab.",
+   "en": "Complete the Dragonflight Mythic dungeon achievements listed below.",
+   "es": "Completa los logros de mazmorra mítica de Dragonflight listados a continuación.",
+   "fr": "Accomplir les hauts faits des donjons mythiques de Dragonflight listés ci-dessous.",
+   "pt": "Obter as conquistas de Masmorra Mítica da expansão Dragonflight listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в подземельях Dragonflight в эпохальном режиме."
+  },
+  "16355": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge im Gewölbe der Inkarnationen ab.",
+   "en": "Complete the Vault of the Incarnates raid achievements listed below.",
+   "es": "Completa los logros de banda de la Cámara de las Encarnaciones listados a continuación.",
+   "fr": "Accomplir les hauts faits de raid du caveau des Incarnations listés ci-dessous.",
+   "pt": "Obter as conquistas de raide da Câmara dos Encarnados listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в Хранилище Воплощений."
+  },
+  "16649": {
+   "de": "Erhaltet eine Wertung für Mythisch+ von mindestens 2.000 in Saison 1 von Dragonflight.",
+   "en": "Attain a Mythic+ Rating of at least 2000 during Dragonflight Season One.",
+   "es": "Consigue un índice de mítica+ de al menos 2000 durante la temporada 1 de Dragonflight.",
+   "fr": "Obtenir une cote mythique + d’au moins 2000 lors de la saison 1 de Dragonflight.",
+   "pt": "Obter a Classificação Mítica+ de ao menos 2000 durante a Série 1 de Dragonflight.",
+   "ru": "Добейтесь счета не менее 2000 в первом сезоне Dragonflight в режиме \"Эпохальный+\"."
+  },
+  "17844": {
+   "de": "Erhaltet eine Wertung für Mythisch+ von mindestens 2.000 in Saison 2 von Dragonflight.",
+   "en": "Attain a Mythic+ Rating of at least 2000 during Dragonflight Season Two.",
+   "es": "Consigue un índice de mítica+ de al menos 2000 durante la temporada 2 de Dragonflight.",
+   "fr": "Obtenir une cote mythique + d’au moins 2000 lors de la saison 2 de Dragonflight.",
+   "pt": "Obter a Classificação Mítica+ de ao menos 2000 durante a Série 2 de Dragonflight.",
+   "ru": "Добейтесь счета не менее 2000 во втором сезоне Dragonflight в режиме \"Эпохальный+\"."
+  },
+  "18251": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge in Aberrus, Schmelztiegel der Schatten ab.",
+   "en": "Complete the Aberrus, the Shadowed Crucible raid achievements listed below.",
+   "es": "Completa los logros de banda de Aberrus, el Crisol Ensombrecido, listados a continuación.",
+   "fr": "Accomplir les hauts faits de raid d’Aberrus, le creuset de l’Ombre listés ci-dessous.",
+   "pt": "Obter as conquistas do raide de Aberrus, o Crisol Sombrio, listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в Аберрии, Затененном Горниле."
+  },
+  "19011": {
+   "de": "Erhaltet eine Wertung für Mythisch+ von mindestens 2.000 in Saison 3 von Dragonflight.",
+   "en": "Attain a Mythic+ Rating of at least 2000 during Dragonflight Season Three.",
+   "es": "Consigue un índice de mítica+ de al menos 2000 durante la temporada 3 de Dragonflight.",
+   "fr": "Obtenir une cote mythique + d’au moins 2 000 lors de la saison 3 de Dragonflight.",
+   "pt": "Obter a Classificação Mítica+ de ao menos 2000 durante a Série 3 de Dragonflight.",
+   "ru": "Добейтесь счета не менее 2000 в третьем сезоне Dragonflight в режиме \"Эпохальный+\"."
+  },
+  "19349": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge in Amirdrassil, Hoffnung des Traums, ab.",
+   "en": "Complete the Amirdrassil, the Dream's Hope raid achievements listed below.",
+   "es": "Completa los logros de banda de Amirdrassil, la Esperanza del Sueño, listados a continuación.",
+   "fr": "Accomplir les hauts faits de raid d’Amirdrassil, l’Espoir du Rêve listés ci-dessous.",
+   "pt": "Concluir as conquistas do raide Amirdrassil, a Esperança Onírica, listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в Амирдрассиле, Надежде Сна."
+  },
+  "19574": {
+   "de": "Schließt alle drei erweckte Schlachtzüge in Saison 4 von Dragonflight auf Schwierigkeitsgrad 'Normal' oder höher ab.",
+   "en": "Complete all three Awakened raids on Normal difficulty or higher in Dragonflight Season 4.",
+   "es": "Completa las tres bandas despiertas en dificultad normal o superior en la temporada 4 de Dragonflight.",
+   "fr": "Terminer les trois raids éveillés en mode normal ou supérieur dans la saison 4 de Dragonflight.",
+   "pt": "Concluir todos os três raides Despertos no modo Normal ou superior na Série 4 de Dragonflight.",
+   "ru": "Пройдите все три пробужденных рейда в четвертом сезоне Dragonflight в обычном или более сложном режиме."
+  },
+  "19782": {
+   "de": "Erhaltet eine Wertung für Mythisch+ von mindestens 2.000 in Saison 4 von Dragonflight.",
+   "en": "Attain a Mythic+ Rating of at least 2000 during Dragonflight Season Four.",
+   "es": "Consigue un índice de mítica+ de al menos 2000 durante la temporada 4 de Dragonflight.",
+   "fr": "Obtenir une cote mythique + d’au moins 2 000 lors de la saison 4 de Dragonflight.",
+   "pt": "Obter a Classificação Mítica+ de ao menos 2000 durante a Série 4 de Dragonflight.",
+   "ru": "Добейтесь счета не менее 2000 в четвертом сезоне Dragonflight в режиме \"Эпохальный+\"."
+  },
+  "20525": {
+   "de": "Erhaltet eine Wertung für Mythisch+ von mindestens 2.000 in Saison 1 von The War Within.",
+   "en": "Attain a Mythic+ Rating of at least 2000 during The War Within Season One.",
+   "es": "Consigue un índice de mítica+ de al menos 2000 durante la temporada 1 de The War Within.",
+   "fr": "Obtenir une cote mythique + d’au moins 2 000 lors de la saison 1 de The War Within.",
+   "pt": "Obter a Classificação Mítica+ de ao menos 2000 durante a Série 1 de The War Within.",
+   "ru": "Добейтесь счета не менее 2000 в первом сезоне The War Within в режиме \"Эпохальный+\"."
+  },
+  "2136": {
+   "de": "Schließt die unten aufgelisteten heroischen Dungeonerfolge ab.",
+   "en": "Complete the Heroic dungeon achievements listed below.",
+   "es": "Completa los logros de mazmorra heroica listados a continuación.",
+   "fr": "Accomplir les hauts faits dans les donjons héroïques listés ci-dessous.",
+   "pt": "Obter as conquistas de masmorra heroica listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в подземельях в героическом режиме."
+  },
+  "2137": {
+   "de": "Schließt die unten aufgelisteten Erfolge für 10-Spieler-Schlachtzüge ab.",
+   "en": "Complete the 10-player raid achievements listed below.",
+   "es": "Completa los logros de banda de 10 jugadores listados a continuación.",
+   "fr": "Accomplir les hauts faits dans les raids à 10 listés ci-dessous.",
+   "pt": "Obter as conquistas de raide de 10 jogadores listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в рейдах на 10 игроков."
+  },
+  "2138": {
+   "de": "Schließt die unten aufgelisteten Erfolge für 25-Spieler-Schlachtzüge ab.",
+   "en": "Complete the 25-player raid achievements listed below.",
+   "es": "Completa los logros de banda de 25 jugadores listados a continuación.",
+   "fr": "Accomplir les hauts faits dans les raids à 25 listés ci-dessous.",
+   "pt": "Obter as conquistas de raide de 25 jogadores listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в рейдах на 25 игроков."
+  },
+  "40232": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge im Palast der Nerub'ar ab.",
+   "en": "Complete the Nerub-ar Palace raid achievements listed below.",
+   "es": "Completa los logros de banda del Palacio Nerub'ar listados a continuación.",
+   "fr": "Accomplir les hauts faits de raid du palais des Nérub’ar listés ci-dessous.",
+   "pt": "Obter as conquistas do raide de Palácio Nerub-ar listadas abaixo:",
+   "ru": "Заработайте указанные ниже достижения в Неруб'арском дворце."
+  },
+  "4079": {
+   "de": "Erreicht in der Prüfung des Obersten Kreuzfahrers im 25-Spieler-Modus eine Tributtruhe mit 50 verbleibenden Versuchen und ohne dass ein Schlachtzugsmitglied während der Bosskämpfe stirbt.",
+   "en": "In the Trial of the Grand Crusader, reach a Tribute Chest with 50 attempts remaining and without allowing any raid member to die during any of the boss encounters in 25-player mode.",
+   "es": "En la Prueba del Gran Cruzado, consigue un cofre de tributo con 50 intentos restantes sin que muera ningún jugador en los encuentros contra los jefes en el modo de 25 jugadores.",
+   "fr": "Durant l'épreuve du grand croisé, atteindre un coffre d'offrande avec 50 tentatives restantes sans qu'un seul membre du raid meure dans les combats contre les boss à 25.",
+   "pt": "No modo 25 jogadores da Prova do Grande Cruzado, chegar a um Baú do Tributo com pelo menos 50 tentativas sobrando e sem permitir que nenhum integrante do raide morra durante os encontros com os chefes.",
+   "ru": "Проходя испытание великого крестоносца в рейде из 25 игроков, доберитесь до сундука с наградами. При этом у вас должно остаться не менее 50 попыток и ни один участник рейда не должен погибнуть во время битв с боссами."
+  },
+  "40951": {
+   "de": "Erhaltet eine Wertung für Mythisch+ von mindestens 3.000 in Saison 2 von The War Within.",
+   "en": "Attain a Mythic+ Rating of at least 3000 during The War Within Season Two.",
+   "es": "Consigue un índice de mítica+ de al menos 3000 durante la temporada 2 de The War Within.",
+   "fr": "Obtenir une cote mythique + d’au moins 3 000 lors de la saison 2 de The War Within.",
+   "pt": "Obter a Classificação Mítica+ de ao menos 3000 durante a Série 2 de The War Within.",
+   "ru": "Добейтесь счета не менее 3000 во втором сезоне The War Within в режиме \"Эпохальный+\"."
+  },
+  "41286": {
+   "de": "Schließt die unten aufgeführten Schlachtzugserfolge für die Befreiung von Lorenhall ab.",
+   "en": "Complete the Liberation of Undermine raid achievements listed below.",
+   "es": "Completa los logros de banda de Liberación de Minahonda listados a continuación.",
+   "fr": "Accomplir les hauts faits de raid de la Libération de Terremine listés ci-dessous.",
+   "pt": "Obtenha as conquistas do raide Libertação da Inframina listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в рейде \"Освобождение Нижней Шахты\"."
+  },
+  "41533": {
+   "de": "Erhaltet eine Wertung für Mythisch+ von mindestens 2.000 in Saison 2 von The War Within.",
+   "en": "Attain a Mythic+ Rating of at least 2000 during The War Within Season Two.",
+   "es": "Consigue un índice de mítica+ de al menos 2000 durante la temporada 2 de The War Within.",
+   "fr": "Obtenir une cote mythique + d’au moins 2 000 lors de la saison 2 de The War Within.",
+   "pt": "Obter a Classificação Mítica+ de ao menos 2000 durante a Série 2 de The War Within.",
+   "ru": "Добейтесь счета не менее 2000 во втором сезоне The War Within в режиме \"Эпохальный+\"."
+  },
+  "4156": {
+   "de": "Erreicht in der Prüfung des Obersten Kreuzfahrers im 25-Spieler-Modus eine Tributtruhe mit 50 verbleibenden Versuchen und ohne dass ein Schlachtzugsmitglied während der Bosskämpfe stirbt.",
+   "en": "In the Trial of the Grand Crusader, reach a Tribute Chest with 50 attempts remaining and without allowing any raid member to die during any of the boss encounters in 25-player mode.",
+   "es": "En la Prueba del Gran Cruzado, consigue un cofre de tributo con 50 intentos restantes sin que muera ningún jugador en los encuentros contra los jefes en el modo de 25 jugadores.",
+   "fr": "Durant l'épreuve du grand croisé, atteindre un coffre d'offrande avec 50 tentatives restantes sans qu'un seul membre du raid meure dans les combats contre les boss à 25.",
+   "pt": "No modo 25 jogadores da Prova do Grande Cruzado, chegar a um Baú do Tributo com pelo menos 50 tentativas sobrando e sem permitir que nenhum integrante do raide morra durante os encontros com os chefes.",
+   "ru": "Проходя испытание великого крестоносца в рейде из 25 игроков, доберитесь до сундука с наградами. При этом у вас должно остаться не менее 50 попыток и ни один участник рейда не должен погибнуть во время битв с боссами."
+  },
+  "41597": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge der Manaschmiede Omega ab.",
+   "en": "Complete the Manaforge Omega raid achievements listed below.",
+   "es": "Completa los logros de banda de la Forja de Maná Omega listados a continuación.",
+   "fr": "Accomplir les hauts faits du raid de la manaforge Oméga listés ci-dessous.",
+   "pt": "Obter as conquistas do raide da Manaforja Ômega listadas abaixo:",
+   "ru": "Заработайте указанные ниже достижения в рейде \"Манагорн Омега\"."
+  },
+  "41973": {
+   "de": "Erhaltet eine Wertung für Mythisch+ von mindestens 2.000 in Saison 3 von The War Within.",
+   "en": "Attain a Mythic+ Rating of at least 2000 during The War Within Season Three.",
+   "es": "Consigue un índice de mítica+ de al menos 2000 durante la temporada 3 de The War Within.",
+   "fr": "Obtenir une cote mythique + d’au moins 2 000 lors de la saison 3 de The War Within.",
+   "pt": "Obter a Classificação Mítica+ de ao menos 2000 durante a Série 3 de The War Within.",
+   "ru": "Добейтесь счета не менее 2000 в третьем сезоне The War Within в режиме \"Эпохальный+\"."
+  },
+  "42172": {
+   "de": "Erhaltet eine Wertung für Mythisch+ von mindestens 3.000 in Saison 3 von The War Within.",
+   "en": "Attain a Mythic+ Rating of at least 3000 during The War Within Season Three.",
+   "es": "Consigue un índice de mítica+ de al menos 3000 durante la temporada 3 de The War Within.",
+   "fr": "Obtenir une cote mythique + d’au moins 3 000 lors de la saison 3 de The War Within.",
+   "pt": "Obter a Classificação Mítica+ de ao menos 3000 durante a Série 3 de The War Within.",
+   "ru": "Добейтесь счета не менее 3000 в третьем сезоне The War Within в режиме \"Эпохальный+\"."
+  },
+  "4602": {
+   "de": "Schließt die unten aufgelisteten Erfolge für 10-Spieler-Schlachtzüge ab.",
+   "en": "Complete the 10-player raid achievements listed below.",
+   "es": "Completa los logros de banda de 10 jugadores listados a continuación.",
+   "fr": "Accomplir les hauts faits dans les raids à 10 listés ci-dessous.",
+   "pt": "Obter as conquistas de raide de 10 jogadores listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в рейдах на 10 игроков."
+  },
+  "4603": {
+   "de": "Schließt die unten aufgelisteten Erfolge für 25-Spieler-Schlachtzüge ab.",
+   "en": "Complete the 25-player raid achievements listed below.",
+   "es": "Completa los logros de banda de 25 jugadores listados a continuación.",
+   "fr": "Accomplir les hauts faits dans les raids à 25 listés ci-dessous.",
+   "pt": "Obter as conquistas de raide de 25 jogadores listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в рейдах на 25 игроков."
+  },
+  "4845": {
+   "de": "Schließt die unten aufgelisteten heroischen Cataclysm-Dungeonerfolge ab.",
+   "en": "Complete the Cataclysm Heroic dungeon achievements listed below.",
+   "es": "Completa los logros de mazmorra heroica de Cataclysm listados a continuación.",
+   "fr": "Accomplir les hauts faits des donjons héroïques de Cataclysm listés ci-dessous.",
+   "pt": "Obter as conquistas de masmorra heroica do Cataclysm listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в подземельях Cataclysm в героическом режиме."
+  },
+  "4853": {
+   "de": "Schließt jeden Schlachtzugserfolg von Cataclysm ab.",
+   "en": "Complete the Cataclysm raid achievements listed below.",
+   "es": "Completa todos los logros de banda de Cataclysm listados a continuación.",
+   "fr": "Accomplir tous les hauts faits de raid de Cataclysm listés ci-dessous.",
+   "pt": "Obter as conquistas do raide do Cataclysm listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в рейдах Cataclysm."
+  },
+  "5828": {
+   "de": "Schließt die unten aufgelisteten \"Feuerlande\"-Schlachtzugserfolge ab.",
+   "en": "Complete the Firelands raid achievements listed below.",
+   "es": "Completa los logros de banda de las Tierras de Fuego listados a continuación.",
+   "fr": "Accomplir les hauts faits de raid des terres de Feu listés ci-dessous.",
+   "pt": "Obter as conquistas das Terras do Fogo listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в рейде \"Огненные Просторы\"."
+  },
+  "61256": {
+   "de": "Erhaltet eine Wertung für Mythisch+ von mindestens 2.000 in Saison 1 von Midnight.",
+   "en": "Attain a Mythic+ Rating of at least 2000 during Midnight Season 1.",
+   "es": "Consigue un índice de mítica+ de al menos 2000 durante la temporada 1 de Midnight.",
+   "fr": "Obtenir une cote mythique + d’au moins 2 000 lors de la saison 1 de Midnight.",
+   "pt": "Obter a classificação Mítica+ de ao menos 2000 durante a Série 1 de Midnight.",
+   "ru": "Добейтесь счета не менее 2000 в первом сезоне Midnight в режиме \"Эпохальный+\"."
+  },
+  "61258": {
+   "de": "Erhaltet eine Wertung für Mythisch+ von mindestens 3.000 in Saison 1 von Midnight.",
+   "en": "Attain a Mythic+ Rating of at least 3000 during Midnight Season 1.",
+   "es": "Consigue un índice de mítica+ de al menos 3000 durante la temporada 1 de Midnight.",
+   "fr": "Obtenir une cote mythique + d’au moins 3 000 lors de la saison 1 de Midnight.",
+   "pt": "Obter a classificação Mítica+ de ao menos 3000 durante a Série 1 de Midnight.",
+   "ru": "Добейтесь счета не менее 3000 в первом сезоне Midnight в режиме \"Эпохальный+\"."
+  },
+  "61380": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge ab:",
+   "en": "Complete the raid achievements listed below.",
+   "es": "Completa los logros de banda listados a continuación.",
+   "fr": "Accomplir les hauts faits de raid listés ci-dessous.",
+   "pt": "Obter as conquistas de raide indicadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения рейдов."
+  },
+  "6169": {
+   "de": "Schließt die unten aufgelisteten Erfolge des Drachenseele-Schlachtzugs ab.",
+   "en": "Complete the Dragon Soul raid achievements listed below.",
+   "es": "Completa los logros de la banda Alma de Dragón listados a continuación.",
+   "fr": "Accomplir les hauts faits de raid de l’Âme des dragons listés ci-dessous.",
+   "pt": "Obter as conquistas do raide Alma Dragônica listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в рейде \"Душа Дракона\"."
+  },
+  "62447": {
+   "de": "Erhaltet eine Wertung für Mythisch+ von mindestens 2.000 in Saison 2 von Midnight.",
+   "en": "Attain a Mythic+ Rating of at least 2000 during Midnight Season 2.",
+   "es": "Consigue un índice de mítica+ de al menos 2000 durante la temporada 2 de Midnight.",
+   "fr": "Obtenir une cote mythique + d’au moins 2 000 lors de la saison 2 de Midnight.",
+   "pt": "Obter a classificação Mítica+ de ao menos 2000 durante a Série 2 de Midnight.",
+   "ru": "Добейтесь счета не менее 2000 во втором сезоне Midnight в режиме \"Эпохальный+\"."
+  },
+  "62449": {
+   "de": "Erhaltet eine Wertung für Mythisch+ von mindestens 3.000 in Saison 2 von Midnight.",
+   "en": "Attain a Mythic+ Rating of at least 3000 during Midnight Season 2.",
+   "es": "Consigue un índice de mítica+ de al menos 3000 durante la temporada 2 de Midnight.",
+   "fr": "Obtenir une cote mythique + d’au moins 3 000 lors de la saison 2 de Midnight.",
+   "pt": "Obter a classificação Mítica+ de ao menos 3000 durante a Série 2 de Midnight.",
+   "ru": "Добейтесь счета не менее 3000 во втором сезоне Midnight в режиме \"Эпохальный+\"."
+  },
+  "63254": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge ab.",
+   "en": "Complete the raid achievements listed below.",
+   "es": "Completa los logros de banda listados a continuación.",
+   "fr": "Accomplir les hauts faits de raid listés ci-dessous.",
+   "pt": "Obter as conquistas de raide indicadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения рейдов."
+  },
+  "63690": {
+   "de": "Erhaltet eine Wertung für Mythisch+ von mindestens 3.600 in Saison 2 von Midnight.",
+   "en": "Attain a Mythic+ Rating of at least 3600 during Midnight Season 2.",
+   "es": "Consigue un índice de mítica+ de al menos 3600 durante la temporada 2 de Midnight.",
+   "fr": "Obtenir une cote mythique + d’au moins 3 600 lors de la saison 2 de Midnight.",
+   "pt": "Obter a classificação Mítica+ de ao menos 3600 durante a Série 2 de Midnight.",
+   "ru": "Добейтесь счета не менее 3600 во втором сезоне Midnight в режиме \"Эпохальный+\"."
+  },
+  "6375": {
+   "de": "Schließt jeden Herausforderungsdungeon mit der Bewertung 'Silber' oder besser ab.",
+   "en": "Complete every Challenge Mode dungeon with a rating of Silver or better.",
+   "es": "Completa todas las mazmorras en modo desafío con una mención de plata o superior.",
+   "fr": "Terminer chacun des donjons en mode Défi avec une médaille d’argent ou meilleure.",
+   "pt": "Completar todas as masmorras no Modo Desafio com classificação Prata ou melhor.",
+   "ru": "Пройдите все подземелья в режиме испытаний, получив рейтинг не ниже серебряного."
+  },
+  "6682": {
+   "de": "Schließt die unten aufgelisteten Pandaria-Schlachtzugserfolge ab, während Ihr in einer Gildengruppe seid.",
+   "en": "Complete the Pandaria raid achievements listed below while in a guild group.",
+   "es": "Completa los logros de banda de Pandaria listados a continuación en un grupo de hermandad.",
+   "fr": "Accomplir les hauts faits de raids de Pandarie listés ci-dessous en groupe de guilde.",
+   "pt": "Obter as conquistas dos raides de Pandária listadas abaixo, participando de um grupo da guilda.",
+   "ru": "Добейтесь указанных ниже достижений в рейдах Пандарии в составе группы гильдии."
+  },
+  "6927": {
+   "de": "Schließt die unten aufgelisteten heroischen Dungeonerfolge von Pandaria ab.",
+   "en": "Complete the Pandaria Heroic dungeon achievements listed below.",
+   "es": "Completa los logros de mazmorra heroica de Pandaria listados a continuación.",
+   "fr": "Accomplir les hauts faits des donjons héroïques de Pandarie listés ci-dessous.",
+   "pt": "Obter as conquistas de masmorra heroica de Pandária listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в подземельях Mists of Pandaria в героическом режиме."
+  },
+  "6932": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge in Pandaria ab.",
+   "en": "Complete the Pandaria raid achievements listed below.",
+   "es": "Completa los logros de banda de Pandaria listados a continuación.",
+   "fr": "Accomplir les hauts faits de raid de Pandarie listés ci-dessous.",
+   "pt": "Obter as conquistas dos raides de Pandária listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в рейдах Mists of Pandaria."
+  },
+  "8124": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge im Thron des Donners ab.",
+   "en": "Complete the Throne of Thunder raid achievements listed below.",
+   "es": "Completa los logros de banda del Solio del Trueno listados a continuación.",
+   "fr": "Accomplir tous les hauts faits du raid Trône du tonnerre listés ci-dessous.",
+   "pt": "Completar as conquistas do raide do Trono do Trovão listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в рейде \"Престол Гроз\"."
+  },
+  "8398": {
+   "de": "Bezwingt Garrosh Höllschrei im 10-Spieler-Modus auf dem Schwierigkeitsgrad 'Normal' oder höher, bevor Patch 6.0 veröffentlicht wird.",
+   "en": "Defeat Garrosh Hellscream on 10-Player Normal difficulty or higher, before the release of patch 6.0.",
+   "es": "Derrota a Garrosh Grito Infernal en dificultad normal o superior en una banda de 10 jugadores antes del lanzamiento del parche 6.0.",
+   "fr": "Vaincre Garrosh Hurlenfer à 10 joueurs en mode normal ou supérieur, avant la sortie de la mise à jour 6.0.",
+   "pt": "Derrotar Garrosh Grito Infernal no modo Normal de 10 jogadores ou superior antes do lançamento do patch 6.0.",
+   "ru": "Победите Гарроша Адского Крика в обычном или более сложном режиме рейда на 10 человек до выхода обновления 6.0."
+  },
+  "8454": {
+   "de": "Schließt die unten aufgelisteten Schlachtzugserfolge in der Schlacht um Orgrimmar ab.",
+   "en": "Complete the Siege of Orgrimmar raid achievements listed below.",
+   "es": "Completa los logros de banda del Asedio de Orgrimmar listados a continuación.",
+   "fr": "Accomplir tous les hauts faits du siège d’Orgrimmar listés ci-dessous.",
+   "pt": "Completar as conquistas de raide do Cerco a Orgrimmar listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в рейде \"Осада Оргриммара\"."
+  },
+  "8898": {
+   "de": "Schließt jeden Herausforderungsdungeon von Warlords of Draenor mit der Bewertung 'Silber' oder besser ab.",
+   "en": "Complete every Challenge Mode dungeon from the Warlords of Draenor expansion with a rating of Silver or better.",
+   "es": "Completa todas las mazmorras en modo desafío de la expansión Warlords of Draenor con una mención de plata o superior.",
+   "fr": "Terminer chacun des donjons de l’extension Warlords of Draenor en mode Défi avec une médaille d’argent ou meilleure.",
+   "pt": "Completar todas as masmorras no Modo Desafio da expansão Warlords of Draenor com classificação Prata ou melhor.",
+   "ru": "Пройдите все подземелья из дополнения Warlords of Draenor в режиме испытаний, получив рейтинг не ниже серебряного."
+  },
+  "8985": {
+   "de": "Schließt die unten aufgelisteten Draenor-Schlachtzugserfolge ab.",
+   "en": "Complete the Draenor raid achievements listed below.",
+   "es": "Completa los logros de banda de Draenor listados a continuación.",
+   "fr": "Accomplir les hauts faits de raid de Draenor listés ci-dessous.",
+   "pt": "Obter as conquistas de Draenor listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в рейдах Дренора."
+  },
+  "9396": {
+   "de": "Schließt die unten aufgelisteten heroischen Draenor-Dungeonerfolge ab.",
+   "en": "Complete the Draenor Heroic dungeon achievements listed below.",
+   "es": "Completa los logros de mazmorra heroica de Draenor listados a continuación.",
+   "fr": "Accomplir les hauts faits des donjons héroïques de Draenor listés ci-dessous.",
+   "pt": "Obter as conquistas de Masmorra Heroica de Draenor listadas abaixo.",
+   "ru": "Заработайте указанные ниже достижения в подземельях Дренора в героическом режиме."
+  },
+  "9669": {
+   "de": "Schließt die unten aufgelisteten Draenor-Schlachtzugserfolge ab, während Ihr in einer Gildengruppe seid.",
+   "en": "Complete the Draenor raid achievements listed below while in a guild group.",
+   "es": "Completa los logros de banda de Draenor listados a continuación en un grupo de hermandad.",
+   "fr": "Accomplir les hauts faits de raids de Draenor listés ci-dessous en groupe de guilde.",
+   "pt": "Obter as conquistas dos raides de Draenor listadas abaixo, participando de um grupo da guilda.",
+   "ru": "Добейтесь указанных рейдовых достижений на Дреноре в составе группы гильдии."
+  }
+ },
  "mounts": {
   "1040": {
    "de": "Grabschleicher",
@@ -3051,6 +3613,165 @@
    "fr": "Saga mythique de Midnight : saison 2",
    "pt": "Mito da Pedra-chave de Midnight: Série 2",
    "ru": "Эпохальный герой ключей Midnight: 2-й сезон"
+  }
+ },
+ "texts": {
+  "Any Timewalking Dungeon": {
+   "de": "Beliebiger Zeitwanderungsdungeon",
+   "es": "Cualquier mazmorra de Paseo en el tiempo",
+   "fr": "N'importe quel donjon des Marcheurs du temps",
+   "pt": "Qualquer masmorra de Caminhada Temporal",
+   "ru": "Любое подземелье путешествий во времени"
+  },
+  "Isle of Giants": {
+   "de": "Insel der Riesen",
+   "en": "Isle of Giants",
+   "es": "Isla de los Gigantes",
+   "fr": "Île des Géants",
+   "pt": "Ilha de Gigantes",
+   "ru": "Остров Великанов"
+  },
+  "Isle of Thunder": {
+   "de": "Insel des Donners",
+   "en": "Isle of Thunder",
+   "es": "Isla del Trueno",
+   "fr": "Île du Tonnerre",
+   "pt": "Ilha do Trovão",
+   "ru": "Остров Грома"
+  },
+  "Kun-Lai Summit": {
+   "de": "Kun-Lai-Gipfel",
+   "en": "Kun-Lai Summit",
+   "es": "Cima Kun-Lai",
+   "fr": "Sommet de Kun-Lai",
+   "pt": "Monte Kun-Lai",
+   "ru": "Вершина Кунь-Лай"
+  },
+  "Spires of Arak": {
+   "de": "Spitzen von Arak",
+   "en": "Spires of Arak",
+   "es": "Cumbres de Arak",
+   "fr": "Flèches d’Arak",
+   "pt": "Agulhas de Arak",
+   "ru": "Пики Арака"
+  },
+  "Torghast, Tower of the Damned": {
+   "de": "Torghast, Turm der Verdammten",
+   "en": "Torghast, Tower of the Damned",
+   "es": "Torghast, Torre de los Condenados",
+   "fr": "Tourment, la tour des Damnés",
+   "pt": "Thanator, a Torre dos Malditos",
+   "ru": "Торгаст, Башня Проклятых"
+  },
+  "Uldum": {
+   "de": "Uldum",
+   "en": "Uldum",
+   "es": "Uldum",
+   "fr": "Uldum",
+   "pt": "Uldum",
+   "ru": "Ульдум"
+  },
+  "Valley of the Four Winds": {
+   "de": "Tal der Vier Winde",
+   "en": "Valley of the Four Winds",
+   "es": "Valle de los Cuatro Vientos",
+   "fr": "Vallée des Quatre vents",
+   "pt": "Vale dos Quatro Ventos",
+   "ru": "Долина Четырех Ветров"
+  },
+  "Vault of Archavon": {
+   "de": "Archavons Kammer",
+   "en": "Vault of Archavon",
+   "es": "La Cámara de Archavon",
+   "fr": "Caveau d’Archavon",
+   "pt": "Abóbada de Arcavon",
+   "ru": "Хранилище Аркавона"
+  },
+  "Vol'dun": {
+   "de": "Vol'dun",
+   "en": "Vol'dun",
+   "es": "Vol'dun",
+   "fr": "Vol’dun",
+   "pt": "Vol'dun",
+   "ru": "Вол'дун"
+  },
+  "Боссы Торгаста": {
+   "de": "Beliebiger Boss: Torghast",
+   "es": "Cualquier jefe: Torghast",
+   "fr": "N'importe quel boss : Tourment",
+   "pt": "Qualquer chefe: Thanator"
+  },
+  "Вкусный споролакомец из Гнилотопи": {
+   "de": "Leckerer Sporenfresser (Rottmoor)",
+   "es": "Comeesporas sabroso (Pudrelodo)",
+   "fr": "Brouteur de spores savoureux (Embourbe-pourri)",
+   "pt": "Pastador de esporos saboroso (Necrocharco)"
+  },
+  "Инструктор Разувий (секрет с конём Храбрецом)": {
+   "de": "Instrukteur Razuvious",
+   "es": "Instructor Razuvious",
+   "fr": "Instructeur Razuvious",
+   "pt": "Instrutor Razúvio"
+  },
+  "Исхак Повелитель Четырех Ветров": {
+   "de": "Ishak von den Vier Winden",
+   "es": "Ishak de los Cuatro Vientos",
+   "fr": "Ishak des Quatre vents",
+   "pt": "Ishak dos Quatro Ventos"
+  },
+  "Любой босс Склепа Аркавона": {
+   "de": "Beliebiger Boss: Archavons Kammer",
+   "es": "Cualquier jefe: La Cámara de Archavon",
+   "fr": "N'importe quel boss : Caveau d’Archavon",
+   "pt": "Qualquer chefe: Abóbada de Arcavon"
+  },
+  "Любой босс подземелий путешествий во времени": {
+   "de": "Beliebiger Boss in Zeitwanderungsdungeons",
+   "es": "Cualquier jefe de mazmorras de Paseo en el tiempo",
+   "fr": "N'importe quel boss des donjons des Marcheurs du temps",
+   "pt": "Qualquer chefe de masmorras de Caminhada Temporal"
+  },
+  "Любопытный слизневый змей": {
+   "de": "Schleimschlange",
+   "es": "Serpiente de baba",
+   "fr": "Serpent visqueux",
+   "pt": "Serpente do Visgo"
+  },
+  "Мешок Каши": {
+   "de": "Kashas Tasche",
+   "es": "Bolsa de Kasha",
+   "fr": "Sac de Kasha",
+   "pt": "Sacola da Kasha"
+  },
+  "Ночная Погибель": {
+   "de": "Schrecken der Nacht",
+   "es": "Nocturno",
+   "fr": "Plaie-de-Nuit",
+   "pt": "Nocturno"
+  },
+  "Обычные NPC внутри AQ40": {
+   "de": "Normale NPCs in AQ40",
+   "es": "PNJ normales en AQ40",
+   "fr": "PNJ ordinaires dans AQ40",
+   "pt": "PNJs comuns em AQ40"
+  },
+  "Осквернитель из рода Бесконечности": {
+   "de": "Ewiger Verderber",
+   "es": "Corruptor Infinito",
+   "fr": "Corrupteur infini",
+   "pt": "Corruptor Infinito"
+  },
+  "Старый тайм-ран в Зул'Амане": {
+   "de": "Alter Zeitlauf in Zul'Aman",
+   "es": "Antigua contrarreloj de Zul'Aman",
+   "fr": "Ancienne course contre la montre à Zul'Aman",
+   "pt": "Antiga corrida contra o tempo em Zul'Aman"
+  },
+  "Сундук хранителя силовых линий": {
+   "de": "Eregos' Lager",
+   "es": "Alijo de Eregos",
+   "fr": "Cache d'Eregos",
+   "pt": "Baú de Éregos"
   }
  }
 }

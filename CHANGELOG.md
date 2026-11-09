@@ -3,6 +3,7 @@
 The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [CHANGELOG-addon.md](CHANGELOG-addon.md).
 
 ## 2.10.0
+- Achievement requirements, rares, chests, zones and general rows now come in all six languages too.
 - The list for the addon carries names in all six languages, taken from the game's own tables, and every reward row of the sheet with its achievement, for the addon's “Achievements” tab.
 - A character removed and added back gets this week's kills marked again on the next pass, without counting attempts twice. Before, their rows stayed “killed, waiting for an update” in the addon.
 - Choosing “On this computer” with a spreadsheet already in place now asks whether to move its data over, so marks and “not farming” aren't lost. “Move from the spreadsheet…” also works over data already created here: the old data is kept next to it, and kills marked only here are marked in the copy again.

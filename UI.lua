@@ -1413,7 +1413,7 @@ local function AchievementsView(rows)
       list[#list + 1] = { text = "|cffffd200" .. AchievementGroupTitle(group) .. "|r", group = true }
       for i, a in ipairs(items) do
         local item = a.item
-        local cond = a.info and a.info.description ~= "" and a.info.description or Safe(item.diff)
+        local cond = ns.ConditionText(tonumber(item.ach), a.info and a.info.description ~= "" and a.info.description or nil) or Safe(item.diff)
         local mount = Safe(ns.Shown(item, "mount"))
         total = total + 1
         if a.done then

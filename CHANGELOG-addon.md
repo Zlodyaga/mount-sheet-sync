@@ -3,6 +3,7 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.4
+- Achievement requirements, rare monsters, chests and zones follow the addon's language when it differs from the game's.
 - Ctrl + click now also works where the game shows no entrance icon or has no map for the boss: Freehold, Operation: Mechagon, Return to Karazhan, the Stratholme service entrance and Dunegorger Kraulok get a map pin at the known spot.
 - Achievements and rewards have a tab of their own instead of a group in “Remaining”, in four tables: raids, dungeons, Mythic+ and other. Every achievement with a mount you can still get is there, the raid “Glory of…” ones too; past Mythic+ seasons' mounts appear as the Timelost Saddle with this season's requirement as the game words it: the full name, the requirement as the game words it and the mount; what is earned turns grey and goes to the bottom. Left-click the achievement to open it in the game's achievements window, the mount to open the Mount Journal. Needs the program 2.10.0.
 - Mount, boss and place names follow the addon's language in German, French, Spanish and Portuguese too, not only English and Russian.

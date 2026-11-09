@@ -31,6 +31,24 @@ MANUAL = {
     3005: 0, 3006: 0, 3007: 0, 3008: 0, 3009: 0, 3010: 0,   # bought with the Time-Lost Saddle; the saddle comes from a season achievement
 }
 
+# Names the game's tables don't carry: creatures and chests (official names from Wowhead tooltips).
+NAMED = {
+    "Осквернитель из рода Бесконечности": {"de": "Ewiger Verderber", "fr": "Corrupteur infini", "es": "Corruptor Infinito", "pt": "Corruptor Infinito"},
+    "Исхак Повелитель Четырех Ветров": {"de": "Ishak von den Vier Winden", "fr": "Ishak des Quatre vents", "es": "Ishak de los Cuatro Vientos", "pt": "Ishak dos Quatro Ventos"},
+    "Ночная Погибель": {"de": "Schrecken der Nacht", "fr": "Plaie-de-Nuit", "es": "Nocturno", "pt": "Nocturno"},
+    "Сундук хранителя силовых линий": {"de": "Eregos' Lager", "fr": "Cache d'Eregos", "es": "Alijo de Eregos", "pt": "Baú de Éregos"},
+    "Мешок Каши": {"de": "Kashas Tasche", "fr": "Sac de Kasha", "es": "Bolsa de Kasha", "pt": "Sacola da Kasha"},
+    # descriptions of a row, not names in the game: translated by hand
+    "Обычные NPC внутри AQ40": {"de": "Normale NPCs in AQ40", "fr": "PNJ ordinaires dans AQ40", "es": "PNJ normales en AQ40", "pt": "PNJs comuns em AQ40"},
+    "Старый тайм-ран в Зул'Амане": {"de": "Alter Zeitlauf in Zul'Aman", "fr": "Ancienne course contre la montre à Zul'Aman", "es": "Antigua contrarreloj de Zul'Aman", "pt": "Antiga corrida contra o tempo em Zul'Aman"},
+    "Любой босс подземелий путешествий во времени": {"de": "Beliebiger Boss in Zeitwanderungsdungeons", "fr": "N'importe quel boss des donjons des Marcheurs du temps", "es": "Cualquier jefe de mazmorras de Paseo en el tiempo", "pt": "Qualquer chefe de masmorras de Caminhada Temporal"},
+}
+ANY_BOSS = {"de": "Beliebiger Boss: %s", "fr": "N'importe quel boss : %s", "es": "Cualquier jefe: %s", "pt": "Qualquer chefe: %s"}
+TASTY = {"de": "Leckerer Sporenfresser (%s)", "fr": "Brouteur de spores savoureux (%s)", "es": "Comeesporas sabroso (%s)", "pt": "Pastador de esporos saboroso (%s)"}
+ANY_DUNGEON = {"ru": "Любое подземелье путешествий во времени", "de": "Beliebiger Zeitwanderungsdungeon", "fr": "N'importe quel donjon des Marcheurs du temps", "es": "Cualquier mazmorra de Paseo en el tiempo", "pt": "Qualquer masmorra de Caminhada Temporal"}
+ZONES = {"Kun-Lai Summit": 379, "Valley of the Four Winds": 376, "Isle of Giants": 507, "Isle of Thunder": 504, "Spires of Arak": 542, "Vol'dun": 864, "Uldum": 1527}
+ARCHAVON, TORGHAST_AREA, RAZUVIOUS, ROTMIRE = 753, 10472, 1607, 2711
+
 
 def table(name, locale, cache):
     path = os.path.join(cache, "%s-%s.csv" % (name, locale))
@@ -70,9 +88,17 @@ def main():
     want_bosses = {j for r in rows for j in r["journal"]}
     want_maps = {m for r in rows for m in r["map"]}
 
-    out = {"mounts": {}, "bosses": {}, "places": {}, "rewards": {}}
+    out = {"mounts": {}, "bosses": {}, "places": {}, "rewards": {}, "conditions": {}, "texts": {}}
     titles = {}
+    extra = {"zone": {}, "archavon": {}, "torghast": {}, "razuvious": {}, "rotmire": {}}
     for lang, loc in LOCALES.items():
+        for t in table("UiMap", loc, cache):
+            for place, i in ZONES.items():
+                if int(t["ID"]) == i:
+                    extra["zone"].setdefault(place, {})[lang] = t["Name_lang"]
+        for t in table("AreaTable", loc, cache):
+            if int(t["ID"]) == TORGHAST_AREA:
+                extra["torghast"][lang] = t["AreaName_lang"]
         for t in table("Mount", loc, cache):
             i = int(t["ID"])
             if i in want_mounts and t["Name_lang"]:
@@ -81,7 +107,13 @@ def main():
             i = int(t["ID"])
             if i in want_bosses and t["Name_lang"]:
                 out["bosses"].setdefault(str(i), {})[lang] = t["Name_lang"]
+            if i == RAZUVIOUS:
+                extra["razuvious"][lang] = t["Name_lang"]
+            if i == ROTMIRE:
+                extra["rotmire"][lang] = t["Name_lang"]
         for t in table("JournalInstance", loc, cache):
+            if int(t["ID"]) == ARCHAVON:
+                extra["archavon"][lang] = t["Name_lang"]
             m = int(t.get("MapID") or 0)
             if m in want_maps and t["Name_lang"] and lang not in out["places"].get(str(m), {}):
                 out["places"].setdefault(str(m), {})[lang] = t["Name_lang"]
@@ -111,6 +143,25 @@ def main():
         a = max(saddle)
         out["saddle"] = {"id": a, "names": {lang: titles[lang][a]["Title_lang"] for lang in LOCALES if titles[lang].get(a)}}
         print("saddle: %d %s" % (a, titles["ru"][a]["Title_lang"]))
+    # the achievement's requirement: the game gives it only in the client's language
+    wanted = {r["id"] for r in out["rewards"].values()} | ({out["saddle"]["id"]} if "saddle" in out else set())
+    for a in wanted:
+        out["conditions"][str(a)] = {lang: titles[lang][a]["Description_lang"] for lang in LOCALES if titles[lang].get(a) and titles[lang][a]["Description_lang"]}
+
+    texts = out["texts"]
+    texts.update(NAMED)
+    four = ("de", "fr", "es", "pt")
+    short = lambda name: name.split(",")[0].split("،")[0].strip()
+    texts["Любой босс Склепа Аркавона"] = {l: ANY_BOSS[l] % extra["archavon"][l] for l in four}
+    texts["Боссы Торгаста"] = {l: ANY_BOSS[l] % short(extra["torghast"][l]) for l in four}
+    texts["Вкусный споролакомец из Гнилотопи"] = {l: TASTY[l] % extra["rotmire"][l] for l in four}
+    texts["Инструктор Разувий (секрет с конём Храбрецом)"] = {l: extra["razuvious"][l] for l in four}
+    serpent = next(r for r in rows if r["boss"] == "Любопытный слизневый змей")
+    texts["Любопытный слизневый змей"] = {l: out["mounts"][str(serpent["id"])][l] for l in four}
+    texts.update(extra["zone"])
+    texts["Vault of Archavon"] = extra["archavon"]
+    texts["Torghast, Tower of the Damned"] = extra["torghast"]
+    texts["Any Timewalking Dungeon"] = ANY_DUNGEON
     print("mounts %d/%d, bosses %d/%d, places %d/%d, achievements %d/%d"
           % (len(out["mounts"]), len(want_mounts), len(out["bosses"]), len(want_bosses), len(out["places"]), len(want_maps),
              len(out["rewards"]), sum(1 for r in rows if r["reward"] and r["id"])))

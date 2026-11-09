@@ -153,6 +153,10 @@ namespace MountSheetSync
                                 }
                             }
                         }
+                        foreach (KeyValuePair<string, string> kv in SheetLang.GameText(boss))
+                        {
+                            names[kv.Key] = kv.Value;
+                        }
                         names["ru"] = boss;
                         names["en"] = bossEn;
                         Add(shown, byLang, names, boss, bossEn);
@@ -170,6 +174,19 @@ namespace MountSheetSync
                         names["en"] = place;
                         Add(shown, byLang, names, place, place);
                     }
+                    else if (place.Length > 0)
+                    {
+                        Add(shown, byLang, SheetLang.GameText(place), place);   // зона или общая строка: «Vol'dun», «Any Timewalking Dungeon»
+                    }
+                }
+            }
+            // условие достижения: игра отдаёт его только на языке клиента
+            foreach (object m in J.Arr(J.Get(data, "rewards")))
+            {
+                long achievement = J.Long(J.Obj(m), "ach");
+                foreach (KeyValuePair<string, string> kv in SheetLang.GameName("conditions", achievement))
+                {
+                    byLang[kv.Key]["ach:" + achievement.ToString(CultureInfo.InvariantCulture)] = kv.Value;
                 }
             }
             Dictionary<string, object> result = new Dictionary<string, object>();

@@ -222,6 +222,32 @@ long_diff = [(c, k, str(ns.TRANSLATIONS[c][k])) for c in ["enUS", "ruRU", "deDE"
 check("short difficulty words fit the column: at most 5 letters", not long_diff, long_diff)
 check("no glyphs missing from WoW fonts in addon texts (· → … shown as a box)", not bad, bad[:5])
 
+# every row the window shows has its boss and place in the six languages (reward rows go by their achievement; their place is not shown)
+import json as _json
+_root = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
+_names = _json.load(open(os.path.join(_root, "tools", "catalog", "game_names.json"), encoding="utf-8"))
+_catalog = _json.load(open(os.path.join(_root, "program", "catalog.json"), encoding="utf-8"))
+_reward = re.compile(r"achievement|достижен|ahead of the curve|mythic\+|challenge mode|timed / chest", re.I)
+_four, _gaps = ("de", "fr", "es", "pt"), []
+for _sheet in _catalog["sheets"]:
+    _cols = _sheet["columns"]
+    _col = lambda name: _cols.index(name) if name in _cols else -1
+    _boss = next(i for i, c in enumerate(_cols) if c.startswith("Босс"))
+    for _r in _sheet["rows"]:
+        if _col("Тип источника") >= 0 and _reward.search(str(_r[_col("Тип источника")] or "")):
+            continue
+        _j = re.findall(r"\d+", str(_r[_col("ID в журнале")] or ""))
+        _m = re.findall(r"\d+", str(_r[_col("ID места")] or ""))
+        _b = _names["texts"].get(_r[_boss]) or (len(_j) == 1 and _names["bosses"].get(_j[0])) or {}
+        _p = (len(_m) == 1 and _names["places"].get(_m[0])) or _names["texts"].get(_r[1]) or {}
+        if not all(_b.get(l) for l in _four):
+            _gaps.append("boss: " + _r[_boss])
+        if not all(_p.get(l) for l in _four + ("ru",)):
+            _gaps.append("place: " + _r[1])
+check("every row of the window has its boss and place translated into all six languages", not _gaps, sorted(set(_gaps)))
+check("every reward achievement has its requirement in all six languages", all(len(_names["conditions"].get(str(r["id"]), {})) == 6 for r in _names["rewards"].values()),
+      [r["id"] for r in _names["rewards"].values() if len(_names["conditions"].get(str(r["id"]), {})) != 6])
+
 passed = sum(1 for _, ok in checks if ok)
 print("\n%d/%d checks passed" % (passed, len(checks)))
 raise SystemExit(0 if passed == len(checks) else 1)

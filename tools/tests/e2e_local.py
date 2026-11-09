@@ -240,6 +240,8 @@ check("every reward row goes to the addon's «Achievements» tab, raids too (the
 rewards_lua = sheet_lua()[sheet_lua().find("rewards = {"):]
 check("…without rewards the game no longer gives (status «Недоступен»)", "Дань бессмертию" not in rewards_lua and "Завоеватель испытаний" not in rewards_lua, rewards_lua[:300])
 check("…past seasons' mounts go by the Timelost Saddle and its achievement of this season", 'via = "saddle"' in rewards_lua and "ach = 63690" in rewards_lua, rewards_lua[:300])
+check("achievement requirements come in the six languages, keyed by achievement", sheet_lua().count('["ach:63690"] = "') == 6, sheet_lua().count('["ach:63690"]'))
+check("names outside the game's journal are translated too: rares, chests, zones", all(w in sheet_lua() for w in ("Ishak von den Vier Winden", "Ewiger Verderber", "Schrecken der Nacht", "Eregos' Lager")), None)
 
 # ---------------------------------------------------------------- new characters join by themselves
 everyone = CHARS + [dict(CHARS[0], name="Тарен")]

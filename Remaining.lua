@@ -718,6 +718,15 @@ local function GameName(item, field, text)
   return fromGame[key] or nil
 end
 
+-- Перевод из names в SheetData.lua; нет языка — английский (но не вместо русского).
+local function Translated(want, key)
+  local data = MountSheetSyncSheet
+  local names = type(data) == "table" and type(data.names) == "table" and data.names or nil
+  local words = names and (names[want] or (want ~= "ru" and names.en)) or nil
+  local v = type(words) == "table" and words[key] or nil
+  return type(v) == "string" and v ~= "" and v or nil
+end
+
 --- Название из строки списка (field: boss, mount, place) на языке аддона.
 function ns.Shown(item, field)
   local text = type(item) == "table" and item[field] or nil
@@ -731,11 +740,16 @@ function ns.Shown(item, field)
       return own
     end
   end
-  local data = MountSheetSyncSheet
-  local names = type(data) == "table" and type(data.names) == "table" and data.names or nil
-  local words = names and (names[want] or (want ~= "ru" and names.en)) or nil
-  local v = type(words) == "table" and words[text] or nil
-  return type(v) == "string" and v ~= "" and v or text
+  return Translated(want, text) or text
+end
+
+--- Условие достижения на языке аддона. own — текст из игры: он на языке клиента.
+function ns.ConditionText(id, own)
+  local want = LANG_OF[ns.CurrentLanguage and ns.CurrentLanguage() or ""] or "en"
+  if GetLocale and want == LANG_OF[GetLocale()] and Plain(own) then
+    return own
+  end
+  return id and Translated(want, "ach:" .. id) or own
 end
 
 local function MountName(m)
