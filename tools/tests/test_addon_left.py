@@ -972,6 +972,12 @@ MSS_PLAYER_MAP = 76; ROUTE.pin = nil; ROUTE.waypoint = nil
 ''')
 row.MockClick(row)
 check("…on the other map of the same place (the Caverns of Time have two): inside too, not sent back to the cave's mouth", g.ROUTE.pin == 99 and g.ROUTE.waypoint is None, (g.ROUTE.pin, g.ROUTE.waypoint))
+L.execute("MSS_PLAYER_MAP = 85; ROUTE.pin = nil; ROUTE.waypoint = nil")
+row.MockClick(row)
+L.execute("MSS_PLAYER_MAP = 76")
+g.Fire("ZONE_CHANGED")
+check("…clicked outside, then walked in on that other map: the way switches to the entrance", g.ROUTE.pin == 99, g.ROUTE.pin)
+L.execute("MSS_PLAYER_MAP = 75")
 row.elem.instance = 4242
 row.elem.placeName = "Душа  Дракона!"
 L.execute("ROUTE.pin = nil")
