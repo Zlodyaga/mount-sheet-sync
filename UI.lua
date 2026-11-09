@@ -467,16 +467,21 @@ function ns.RouteDebug(text)
   end
 end
 
--- Игрок на этой карте или на карте внутри неё?
+-- Игрок на этой карте или на карте внутри неё? У Пещер Времени две карты с одним названием и одной родительской (74 и 75),
+-- вход записан на одной: стоя на другой, игрок тоже внутри.
 local function PlayerInside(map)
   local ok, inside = pcall(function()
     local here = C_Map.GetBestMapForUnit and C_Map.GetBestMapForUnit("player")
+    local target = C_Map.GetMapInfo(map)
     local steps = 0
     while here and steps < 20 do
       if here == map then
         return true
       end
       local info = C_Map.GetMapInfo(here)
+      if info and target and info.name == target.name and info.parentMapID == target.parentMapID then
+        return true
+      end
       here = info and info.parentMapID ~= here and info.parentMapID or nil
       steps = steps + 1
     end

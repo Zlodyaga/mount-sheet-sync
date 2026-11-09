@@ -962,6 +962,16 @@ L.execute("MSS_PLAYER_MAP = 75; ROUTE.pin = nil")
 n_menus = len(g.MENUS)
 row.MockClick(row)
 check("…already inside: straight to the entrance, no menu", len(g.MENUS) == n_menus and g.ROUTE.pin == 99, (len(g.MENUS), g.ROUTE.pin))
+L.execute('''
+local info = C_Map.GetMapInfo
+C_Map.GetMapInfo = function(map)
+  if map == 76 then return { mapID = 76, name = "Пещеры Времени", parentMapID = 71, mapType = 5 } end
+  return info(map)
+end
+MSS_PLAYER_MAP = 76; ROUTE.pin = nil; ROUTE.waypoint = nil
+''')
+row.MockClick(row)
+check("…on the other map of the same place (the Caverns of Time have two): inside too, not sent back to the cave's mouth", g.ROUTE.pin == 99 and g.ROUTE.waypoint is None, (g.ROUTE.pin, g.ROUTE.waypoint))
 row.elem.instance = 4242
 row.elem.placeName = "Душа  Дракона!"
 L.execute("ROUTE.pin = nil")
