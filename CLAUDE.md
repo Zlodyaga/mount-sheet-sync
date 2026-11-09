@@ -59,6 +59,9 @@
   (layout 5, Исхак переезжает сам), своя группа в окне, откат у каждого свой (`every`), считает аддон; кнопка «Сброс недели» —
   в настройках; окно 1060×600 со своим оформлением (`Skin.lua`, шрифты и текстуры в `Media`) и таблицами, «Все персонажи» — первая строка слева, сетка с прокруткой или «все столбцы сразу» (настройки), ручная отметка и поиск — в «Журнале»; раздельные сохранения N/H/M (скрытая колонка `N/H/M`, буквы в окне). Обе половины требуют друг друга: `Program.MinAddon` = 3.0.3, `MIN_PROGRAM` = 2.9.2. Окно проверено в игре на альфах. Картинки окна в README и галерее CurseForge обновлены 04.11.2026: их рисует `tools/screens/render.py`, имена вымышленные, значки маунтов — заглушки.
 
+- **Аддон 3.0.5** (в работе, не выпущен, 10.11.2026): запасная точка входа у каждого из 55 рейдов и подземелий каталога
+  (`Entrances.lua` из `tools/catalog/entrances.py`, тест `test_entrances.py`); в игре не проверено.
+
 - **Discord** (02.11.2026): сервер «MountSheetSync WoW», бессрочное приглашение https://discord.gg/DKPGJP222d, ссылка стоит в Social Links проекта на CurseForge.
 
 - Открыто / на потом:
@@ -85,7 +88,8 @@
   → `python3 tools/i18n/build.py`. Русские слова таблицы — `tools/i18n/sheet_words.txt` → `build_sheet.py`.
 - Концы строк сохранять как в файле (`.gitattributes`: `* -text`): часть файлов аддона CRLF (Collection.lua,
   Tooltip.lua, toc, Statistics.lua…), часть LF. Правя файл, не превращать CRLF в LF и наоборот.
-- `Statistics.lua` не править руками — генерирует `python3 tools/catalog/statistic_ids.py --write`.
+- `Statistics.lua` не править руками — генерирует `python3 tools/catalog/statistic_ids.py --write`. `Entrances.lua` — тоже:
+  `python3 tools/catalog/entrances.py --write` (таблицы игры с wago.tools); после новых мест в каталоге — перезапустить.
 - `SheetData.lua` и `Program.lua` в репозитории — пустые (`= nil`); их пишет программа у пользователя.
 - Тесты: `bash tools/run_tests.sh` (или `--no-ui`) — нужны Linux, mono, python3 + lupa, node, Xvfb и т. п.
   (на Windows — WSL; иначе полагаться на CI `ci.yml`: на push в `main`, PR и Run workflow, ~4 мин). На ПК

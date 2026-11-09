@@ -33,6 +33,7 @@ run test_offline.py
 run test_attempts_addon.py
 run test_collection.py
 run test_locale.py
+run test_entrances.py
 run test_gamedata.py
 run test_collection_sync.py
 run test_layout22.py

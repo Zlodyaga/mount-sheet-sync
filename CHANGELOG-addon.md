@@ -2,6 +2,9 @@
 
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
+## 3.0.5
+- Ctrl + click pins the entrance of every raid and dungeon in the list on the map when the game shows no entrance icon (a character who has never been there, newer raids), not only of a few places.
+
 ## 3.0.4
 - Achievement requirements, rare monsters, chests and zones follow the addon's language when it differs from the game's.
 - Ctrl + click now also works where the game shows no entrance icon or has no map for the boss: Freehold, Operation: Mechagon, Return to Karazhan, the Stratholme service entrance and Dunegorger Kraulok get a map pin at the known spot.
