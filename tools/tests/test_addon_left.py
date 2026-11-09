@@ -911,12 +911,23 @@ MSS_PLAYER_MAP = 85
 ROUTE.waypoint = nil; ROUTE.pin = nil; ROUTE.tracks = true
 ''')
 L.eval("function(ns) end")(ns)
+L.execute('''
+local info, kids = C_Map.GetMapInfo, C_Map.GetMapChildrenInfo
+MSS_ROUTE_ENTR[77] = { { journalInstanceID = 188, areaPoiID = 97, position = { x = 0.6, y = 0.4 }, name = "Другой рейд" } }
+C_Map.GetMapInfo = function(map) if map == 77 then return { mapID = 77, name = "Другая пещера", parentMapID = 71, mapType = 5 } end return info(map) end
+C_Map.GetMapChildrenInfo = function() local t = kids(); t[#t + 1] = { mapID = 77, mapType = 5 }; return t end
+''')
+row.elem.instance = 188
+row.MockClick(row)
+check("3.0.4: a cave with no known mouth: the pin where the inner map lies on the zone's map", g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 71
+      and abs(g.ROUTE.waypoint.x - 0.62) < 1e-9 and abs(g.ROUTE.waypoint.y - 0.28) < 1e-9, g.ROUTE.waypoint and (g.ROUTE.waypoint.x, g.ROUTE.waypoint.y))
+L.execute("ROUTE.waypoint = nil; ROUTE.pin = nil")
 row.elem.instance = 187
 n_menus = len(g.MENUS)
 row.MockClick(row)
-check("3.0.4: an entrance inside another zone, one click: a pin on the zone's map where the inner map lies, no menu; a broken map doesn't stop the search",
+check("3.0.4: an entrance inside the Caverns of Time, one click: a pin at the cave's mouth on the zone's map, not over the raid, no menu; a broken map doesn't stop the search",
       len(g.MENUS) == n_menus and g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 71 and g.ROUTE.pin is None
-      and abs(g.ROUTE.waypoint.x - 0.62) < 1e-9 and abs(g.ROUTE.waypoint.y - 0.28) < 1e-9, g.ROUTE.waypoint and (g.ROUTE.waypoint.map, g.ROUTE.waypoint.x, g.ROUTE.waypoint.y))
+      and abs(g.ROUTE.waypoint.x - 0.6525) < 1e-9 and abs(g.ROUTE.waypoint.y - 0.4979) < 1e-9, g.ROUTE.waypoint and (g.ROUTE.waypoint.map, g.ROUTE.waypoint.x, g.ROUTE.waypoint.y))
 check("…the chat says the way goes on inside", "Путь в Пещеры Времени (Танарис)" in chat_all() and "внутри поведу дальше" in chat_all(), chat_all()[-200:])
 L.execute("MSS_PLAYER_MAP = 71")
 g.Fire("ZONE_CHANGED_NEW_AREA")
@@ -977,6 +988,12 @@ row.MockClick(row)
 L.execute("MSS_PLAYER_MAP = 76")
 g.Fire("ZONE_CHANGED")
 check("…clicked outside, then walked in on that other map: the way switches to the entrance", g.ROUTE.pin == 99, g.ROUTE.pin)
+L.execute("MSS_PLAYER_MAP = 85; ROUTE.pin = nil; ROUTE.waypoint = nil")
+row.MockClick(row)
+L.execute("MSS_PLAYER_MAP = 75")
+g.RunTimers()
+check("…arrived by portal with no zone event: the timer switches the way to the entrance", g.ROUTE.pin == 99, g.ROUTE.pin)
+g.RunTimers()
 L.execute("MSS_PLAYER_MAP = 75")
 row.elem.instance = 4242
 row.elem.placeName = "Душа  Дракона!"

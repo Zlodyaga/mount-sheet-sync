@@ -490,6 +490,13 @@ local function PlayerInside(map)
   return ok and inside or false
 end
 
+-- Вход в пещеру на карте зоны: ссылки на вложенную карту у Пещер Времени в данных игры нет, а сам вход в рейд лежит глубоко
+-- под землёй. Точка — из навигации игры (WaypointSafeLocs 7655 «Caverns of Time»).
+local CAVE_MOUTHS = {
+  [74] = { x = 0.6525, y = 0.4979 },
+  [75] = { x = 0.6525, y = 0.4979 },
+}
+
 -- Вход лежит на карте внутри другой зоны (Пещеры Времени в Танарисе): куда идти снаружи — та же точка на карте зоны.
 -- nil — карта входа сама зона или игрок уже внутри неё.
 local function OuterStep(e)
@@ -518,6 +525,10 @@ local function OuterStep(e)
           return { map = outerMap, x = x, y = y, name = inner.name, zone = outer.name }
         end
       end
+    end
+    local mouth = CAVE_MOUTHS[e.map]
+    if mouth then
+      return { map = outerMap, x = mouth.x, y = mouth.y, name = inner.name, zone = outer.name }
     end
     -- иначе — где на карте зоны лежит сам вход (точка внутри пещеры, может быть в стороне от её входа)
     local minX, maxX, minY, maxY = C_Map.GetMapRectOnMap(e.map, outerMap)
@@ -578,8 +589,35 @@ local function TrackEntrance(e, name)
   ns.Print(string.format(PinAndTrack(e.map, e.x, e.y) and L.route_pin or L.route_none, name))
 end
 
--- Второй шаг: игрок вошёл в зону со входом — путь ко входу. Игрок сам выбрал другую цель — ждать больше нечего.
+-- Второй шаг: игрок внутри зоны со входом — путь ко входу.
+local function StepInside()
+  local route = pendingRoute
+  if route and not routeOwn and PlayerInside(route.entrance.map) then
+    pendingRoute = nil
+    routeOwn = true
+    ns.Print(string.format(L.route_inside, route.inner, route.name))
+    TrackEntrance(route.entrance, route.name)
+    routeOwn = false
+  end
+end
+
+-- Событие смены зоны приходит не всегда (попал внутрь порталом): пока путь не завершён, раз в 2 секунды проверяем сами.
+local routeTicking = false
+local function TickRoute()
+  StepInside()
+  if pendingRoute then
+    C_Timer.After(2, TickRoute)
+  else
+    routeTicking = false
+  end
+end
+
+-- Игрок вошёл в зону со входом — второй шаг. Игрок сам выбрал другую цель — ждать больше нечего.
 local function WatchRoute()
+  if not routeTicking then
+    routeTicking = true
+    C_Timer.After(2, TickRoute)
+  end
   if routeWatcher then
     return
   end
@@ -602,13 +640,7 @@ local function WatchRoute()
       end
       return
     end
-    if PlayerInside(route.entrance.map) then
-      pendingRoute = nil
-      routeOwn = true
-      ns.Print(string.format(L.route_inside, route.inner, route.name))
-      TrackEntrance(route.entrance, route.name)
-      routeOwn = false
-    end
+    StepInside()
   end)
 end
 
