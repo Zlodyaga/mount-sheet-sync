@@ -2,7 +2,7 @@
 
 **All your alts in one table: which boss is still worth killing this week, and on whom.** One window, right in the game, with a row per boss and a column per character — only the bosses whose mount you don't have yet. The addon records every kill by itself, and a free companion program keeps the list for you: on your computer, no sign-in needed, or in a Google Sheet if you want one.
 
-![All your characters in one table: what is still to kill this week](https://media.forgecdn.net/attachments/2145/79/addon-all-png.png)
+![All your characters in one table: what is still to kill this week](https://media.forgecdn.net/attachments/2172/572/addon-all-png.png)
 
 ## Why it's handy
 
@@ -10,13 +10,13 @@
 - **"Remaining" list for each character.** Click a character for their own list, with the attempts and chance for every mount. Kills are ticked off as they happen.
 - **Nothing to type.** Kills are recorded automatically, with difficulty. New mounts are noticed the moment you learn them. Kills from before you installed the addon are picked up from your lockouts with one click.
 - **Attempt counter.** After a kill that could drop a mount you still need, the chat says which attempt it was and the chance over all attempts ("attempt 37 · 31%"); the Adventure Guide (and a rare's tooltip) shows the same and how many of your characters still have that boss this week. Counted in the spreadsheet, all characters together — including the kills from before you installed the addon, taken from the game's own statistics.
-- **A list that fills itself.** With the companion Windows program: about 165 mounts from raids, dungeons and world bosses A kill is ticked off on its own, collected mounts drop off the list. Want a sheet with skip and farming tips? Choose a Google Sheet in the program's settings: a sheet per character in your own Google Drive.
+- **A list that fills itself.** With the companion Windows program: about 165 mounts from raids, dungeons and world bosses. A kill is ticked off on its own, collected mounts drop off the list. Want a sheet with skip and farming tips? Choose a Google Sheet in the program's settings: a sheet per character in your own Google Drive.
 - **Six languages.** English, Russian, German, French, Spanish and Portuguese — the addon, the program and the spreadsheet.
 - **Light and private.** The addon never sends anything anywhere (WoW addons can't). By default the data stays on your computer. With a Google Sheet, the program can open only the spreadsheets it created itself.
 
-![The "Remaining" list of any character](https://media.forgecdn.net/attachments/2145/78/addon-remaining-png.png)
+![The "Remaining" list of any character](https://media.forgecdn.net/attachments/2172/574/addon-remaining-png.png)
 
-![Attempts and chance for every mount you still need](https://media.forgecdn.net/attachments/2145/80/addon-attempts-png.png)
+![Attempts and chance for every mount you still need](https://media.forgecdn.net/attachments/2172/575/addon-attempts-png.png)
 
 ![The spreadsheet the program keeps](https://media.forgecdn.net/attachments/2096/846/sheet-png.png)
 
@@ -28,7 +28,7 @@
 
 Without the program the addon still records kills, characters and mounts; the "Remaining" list and the spreadsheet need the program.
 
-![Every kill in the log](https://media.forgecdn.net/attachments/2145/81/addon-log-png.png)
+![Every kill in the log](https://media.forgecdn.net/attachments/2172/576/addon-log-png.png)
 
 ## Commands
 
