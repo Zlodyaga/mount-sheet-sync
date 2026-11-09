@@ -889,6 +889,11 @@ L.execute("function C_EncounterJournal.GetDungeonEntrancesForMap() return {} end
 row.elem.instance = 778
 row.MockClick(row)
 check("…no entrance on any map: said in the chat", "На карте не нашлось" in chat_all(), chat_all()[-160:])
+L.execute("ROUTE.tracks = true; ROUTE.pin = nil; ROUTE.waypoint = nil")
+row.elem.instance = 1001
+row.MockClick(row)
+check("…the game hides the entrance (Freehold, a character who never went there): a pin at the known point, no game pin to track",
+      g.ROUTE.pin is None and g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 895 and abs(g.ROUTE.waypoint.x - 0.8382) < 1e-9 and "метка на карте" in chat_all(), g.ROUTE.waypoint)
 # an entrance only on a map inside another zone (Dragon Soul: the Caverns of Time in Tanaris) — two steps to choose from
 L.execute('''
 MSS_ROUTE_ENTR = { [75] = { { journalInstanceID = 187, areaPoiID = 99, position = { x = 0.6, y = 0.4 }, name = "Душа Дракона" } } }
@@ -966,15 +971,24 @@ check("…a different number in the journal: found by name", g.ROUTE.pin == 99, 
 L.execute("""
 function C_EncounterJournal.GetEncountersOnMap() return { { encounterID = 555, mapX = 0.3, mapY = 0.7 } } end
 ROUTE.waypoint = nil""")
+def kraulok(r):
+    old = r.elem.encounter
+    r.elem.encounter = 2210
+    L.execute("ROUTE.waypoint = nil")
+    r.MockClick(r)
+    check("…a world boss with no map in the game's journal (Kraulok): a pin at the known point", g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 864 and abs(g.ROUTE.waypoint.x - 0.44) < 1e-9, g.ROUTE.waypoint)
+    r.elem.encounter = old
 world_row = [f for f in pool(ROW) if f.elem.world]
 if world_row:
     world_row[0].MockClick(world_row[0])
     check("3.0.4: Ctrl + left click on a world boss: a pin where the game shows it", g.ROUTE.waypoint is not None and g.ROUTE.waypoint.x == 0.3 and "Поставлена метка" in chat_all(), g.ROUTE.waypoint)
+    kraulok(world_row[0])
 else:
     click_all(); g.RunTimers()
     world_row = [f for f in pool(ROW) if f.elem.world]
     world_row[0].MockClick(world_row[0])
     check("3.0.4: Ctrl + left click on a world boss: a pin where the game shows it", g.ROUTE.waypoint is not None and g.ROUTE.waypoint.x == 0.3 and "Поставлена метка" in chat_all(), g.ROUTE.waypoint)
+    kraulok(world_row[0])
     eira_back = pool(CHAR)[1]
     eira_back.MockClick(eira_back); g.RunTimers()
 g.MOCK_CTRL = False
