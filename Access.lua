@@ -3,35 +3,68 @@ Mount Sheet Sync 3.0.5 — входы, закрытые сюжетом или ф
 
 ns.ACCESS[journalInstanceID]: что нужно, чтобы дойти до входа.
   quests  — задания, любое из которых открывает доступ (C_QuestLog.IsQuestFlaggedCompleted);
+  inlog   — доступ открыт уже тогда, когда такое задание взято (вход в Ни'алоту — с «Surfacing Threats» в журнале);
   ach     — достижения, любое из которых получено этим персонажем (GetAchievementInfo → wasEarnedByMe);
   account — доступ общий на весь аккаунт: раз увидели его у одного персонажа — помним в MountSheetSyncDB.access
             (и спрашиваем игру C_QuestLog.IsQuestFlaggedCompletedOnAccount, где она это умеет);
-  hint    — ключ подсказки в Locales (access_<hint>); без quests/ach — только подсказка, проверки нет.
-Номера — с Wowhead (ноябрь 2026): проверить в игре на персонаже без цепочки (docs/TODO.md).
+  steps   — шаги цепочки по порядку: { quest, faction, name (английское, если игра не знает названия), map, x, y,
+            where (ключ L.access_where_<…>) }; первый невыполненный — следующий шаг: задание в журнале — цель на него,
+            иначе метка там, где его выдают (map, x, y), иначе слова «где»;
+  hint    — ключ подсказки в Locales (access_<hint>); без quests/ach — только подсказка, проверки нет;
+  after   — пометка, когда доступ уже открыт (access_<after>: вход в Ни'алоту в другой фазе зоны — Зидорми).
+Номера и места — с Wowhead (ноябрь 2026): проверить в игре на персонаже без цепочки (docs/TODO.md).
 ]]
 local _, ns = ...
 
 ns.ACCESS = {
-  [946] = { quests = { 47221, 47835, 48506, 48507 }, hint = "argus" },   -- Анторус: «Рука судьбы» (Аргус), каждому персонажу
-  [1178] = { ach = { 13553, 13700 }, hint = "mechagon" },               -- Операция «Мехагон»: «Мехагонская угроза»
-  [1180] = { hint = "nyalotha" },                                       -- Ни'алота: вход раз в неделю в Ульдуме или в долине, Зидорми
-  [1207] = { hint = "dream" },                                          -- Амирдрассил: доступ в Изумрудный Сон
+  -- Анторус: «Рука судьбы» (Аргус), каждому персонажу
+  [946] = { quests = { 47221, 47835, 48506, 48507 }, hint = "argus" },
+  -- Операция «Мехагон»: «Мехагонская угроза»
+  [1178] = { ach = { 13553, 13700 }, hint = "mechagon" },
+  -- Ни'алота: цепочка «Видения Н'Зота» до «Surfacing Threats» (взять его достаточно); потом вход раз в неделю
+  -- в Ульдуме или в долине, другую фазу показывает Зидорми
+  [1180] = {
+    quests = { 56376 }, inlog = true, hint = "nyalotha", after = "nyalotha_phase",
+    steps = {
+      { quest = 57010, name = "Harnessing the Power", where = "heart" },
+      { quest = 58582, faction = "Horde", name = "Return of the Black Prince", where = "wrathion" },
+      { quest = 58496, faction = "Alliance", name = "An Unwelcome Advisor", where = "wrathion" },
+      { quest = 56376, name = "Surfacing Threats", map = 1527, x = 0.548, y = 0.328 },
+    },
+  },
+  -- Амирдрассил: доступ в Изумрудный Сон; «Emerald Welcome» открывает портал в Вальдраккене всем персонажам
+  [1207] = {
+    quests = { 76318 }, account = true, hint = "dream",
+    steps = {
+      { quest = 75918, name = "Fire Season", map = 2112, x = 0.502, y = 0.53 },
+      { quest = 76317, name = "Call of the Dream", map = 2023, x = 0.186, y = 0.518 },
+      { quest = 76318, name = "Emerald Welcome", map = 2023, x = 0.186, y = 0.518 },
+    },
+  },
 }
+
+local function Call(f, ...)
+  if not f then
+    return nil
+  end
+  local ok, v = pcall(f, ...)
+  return ok and v or nil
+end
 
 local function QuestDone(id, account)
   local q = C_QuestLog
   if not q then
     return false
   end
-  local ok, done = pcall(q.IsQuestFlaggedCompleted, id)
-  if ok and done == true then
+  if Call(q.IsQuestFlaggedCompleted, id) == true then
     return true
   end
-  if account and q.IsQuestFlaggedCompletedOnAccount then
-    ok, done = pcall(q.IsQuestFlaggedCompletedOnAccount, id)
-    return ok and done == true
-  end
-  return false
+  return account and Call(q.IsQuestFlaggedCompletedOnAccount, id) == true or false
+end
+
+local function QuestInLog(id)
+  local q = C_QuestLog
+  return q and (Call(q.IsOnQuest, id) == true or (tonumber(Call(q.GetLogIndexForQuestID, id)) or 0) > 0) or false
 end
 
 local function AchievementEarnedHere(id)
@@ -53,10 +86,33 @@ local function AchievementName(list)
   return nil
 end
 
--- Что известно о доступе к входу: nil — ограничений не знаем;
--- { open = true/false/nil, hint = текст } — open = false: проверка говорит «не пройдено», nil — проверить нечем.
+-- Название задания: у игры (на языке клиента), иначе английское из таблицы.
+function ns.QuestTitle(step)
+  local title = C_QuestLog and Call(C_QuestLog.GetTitleForQuestID, step.quest)
+  if type(title) == "string" and title ~= "" and not (issecretvalue and issecretvalue(title)) then
+    return title
+  end
+  return step.name or tostring(step.quest)
+end
+
+-- Первый невыполненный шаг цепочки для фракции этого персонажа; inLog — задание уже взято.
+local function NextStep(a)
+  local faction = UnitFactionGroup and Call(UnitFactionGroup, "player")
+  for _, s in ipairs(a.steps or {}) do
+    if not s.faction or s.faction == faction then
+      if not QuestDone(s.quest, a.account) then
+        return s, QuestInLog(s.quest)
+      end
+    end
+  end
+  return nil
+end
+
+-- Что известно о доступе к входу: nil — ограничений не знаем; иначе { open, hint, step, stepInLog }:
+-- open = false — проверка говорит «не пройдено», nil — проверить нечем; step — следующий шаг цепочки.
 function ns.AccessCheck(instance)
-  local a = ns.ACCESS[tonumber(instance) or 0]
+  instance = tonumber(instance) or 0
+  local a = ns.ACCESS[instance]
   if not a then
     return nil
   end
@@ -66,12 +122,9 @@ function ns.AccessCheck(instance)
   end
   local open
   if a.quests or a.ach then
-    open = false
-    if a.account and db and db.access[instance] then
-      open = true
-    end
+    open = a.account and db and db.access[instance] == true or false
     for _, id in ipairs(a.quests or {}) do
-      open = open or QuestDone(id, a.account)
+      open = open or QuestDone(id, a.account) or (a.inlog and QuestInLog(id)) or false
     end
     for _, id in ipairs(a.ach or {}) do
       open = open or AchievementEarnedHere(id)
@@ -85,7 +138,11 @@ function ns.AccessCheck(instance)
   if text:find("%%s") then
     text = string.format(text, AchievementName(a.ach) or "?")
   end
-  return { open = open, hint = text }
+  local result = { open = open, hint = text, after = a.after and L["access_" .. a.after] or nil }
+  if open == false then
+    result.step, result.stepInLog = NextStep(a)
+  end
+  return result
 end
 
 -- При входе в игру: открытый доступ «на весь аккаунт» запоминается сразу, а не при первом Ctrl + щелчке.

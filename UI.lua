@@ -641,6 +641,22 @@ end
 
 local accessAsked, accessAskedAt = nil, 0   -- вход, про который только что сказали «не пройдено»
 
+-- Следующий шаг цепочки доступа (Access.lua): задание уже взято — цель на него (путь покажет игра); иначе метка там,
+-- где его выдают; места нет — слова, где искать.
+local function ShowAccessStep(step, inLog)
+  if not step then
+    return
+  end
+  local title = ns.QuestTitle(step)
+  if inLog and pcall(C_SuperTrack.SetSuperTrackedQuestID, step.quest) then
+    ns.Print(string.format(L.access_step_track, title))
+  elseif step.map and PinAndTrack(step.map, step.x, step.y) then
+    ns.Print(string.format(L.access_step_pin, title))
+  else
+    ns.Print(string.format(L.access_step_text, title, L["access_where_" .. tostring(step.where)] or "?"))
+  end
+end
+
 local function ShowRoute(elem)
   pendingRoute = nil   -- новый путь заменяет недоделанный
   if elem.spot then
@@ -676,10 +692,13 @@ local function ShowRoute(elem)
     if access.open == false and not (accessAsked == instance and now - accessAskedAt < 60) then
       accessAsked, accessAskedAt = instance, now
       ns.Print(string.format(L.access_need, name, access.hint))
+      ShowAccessStep(access.step, access.stepInLog)
       return
     end
     if access.open == nil then
       ns.Print(string.format(L.access_note, name, access.hint))
+    elseif access.after then
+      ns.Print(string.format(L.access_note, name, access.after))
     end
   end
   local e = FindEntrance(instance, ns.InstanceName(instance) or elem.placeName)

@@ -912,10 +912,34 @@ check("3.0.5: access shared by the account, seen at login on one character: reme
 n_chat = len(chat_all())
 row.MockClick(row)
 check("…another character without the quest goes straight to the entrance", g.ROUTE.pin == 42 and "сначала нужно" not in chat_all()[n_chat:], chat_all()[n_chat:])
-L.execute('MSS_NS.ACCESS[777] = { hint = "nyalotha" }; ROUTE.pin = nil')
+L.execute('MSS_NS.ACCESS[777] = { hint = "dream" }; ROUTE.pin = nil')
 n_chat = len(chat_all())
 row.MockClick(row)
-check("3.0.5: nothing to check (Ny'alotha, phase): a note before the pin", g.ROUTE.pin == 42 and "учтите" in chat_all()[n_chat:] and "Зидорми" in chat_all()[n_chat:], chat_all()[n_chat:])
+check("3.0.5: nothing to check: a note before the pin", g.ROUTE.pin == 42 and "учтите" in chat_all()[n_chat:] and "Изумрудный Сон" in chat_all()[n_chat:], chat_all()[n_chat:])
+# the chain's next step (Ny'alotha): where to go, a pin at the quest giver, then the entrance once the last quest is taken
+L.execute("""
+MOCK.gt = (MOCK.gt or 0) + 1000
+QUEST_DONE, QUEST_LOG = {}, {}
+C_QuestLog.IsOnQuest = function(id) return QUEST_LOG[id] == true end
+MSS_NS.ACCESS[777] = { quests = { 56376 }, inlog = true, hint = "nyalotha", after = "nyalotha_phase", steps = {
+  { quest = 57010, name = "Harnessing the Power", where = "heart" },
+  { quest = 56376, name = "Surfacing Threats", map = 1527, x = 0.548, y = 0.328 } } }
+ROUTE.pin = nil; ROUTE.waypoint = nil""")
+n_chat = len(chat_all())
+row.MockClick(row)
+said = chat_all()[n_chat:]
+check("3.0.5: the chain's next step has no place: where to go, in words; no pin", g.ROUTE.pin is None and g.ROUTE.waypoint is None
+      and "Harnessing the Power" in said and "Магни в Палате Сердца" in said,
+      said)
+L.execute("MOCK.gt = MOCK.gt + 1000; QUEST_DONE[57010] = true")
+row.MockClick(row)
+check("…the next step has a quest giver's spot: a pin there, not at the entrance", g.ROUTE.pin is None and g.ROUTE.waypoint is not None
+      and g.ROUTE.waypoint.map == 1527 and abs(g.ROUTE.waypoint.x - 0.548) < 1e-9 and "метка там, где его выдают" in chat_all(), g.ROUTE.waypoint)
+L.execute("MOCK.gt = MOCK.gt + 1000; QUEST_LOG[56376] = true; ROUTE.pin = nil")
+n_chat = len(chat_all())
+row.MockClick(row)
+check("…the last quest only taken (enough for Ny'alotha): the entrance, with the note about Zidormi", g.ROUTE.pin == 42
+      and "Зидорми" in chat_all()[n_chat:] and "сначала нужно" not in chat_all()[n_chat:], chat_all()[n_chat:])
 L.execute("MSS_NS.ACCESS[777] = nil; MountSheetSyncDB.access = nil; ROUTE.tracks = false; ROUTE.pin = nil")
 L.execute("function C_EncounterJournal.GetDungeonEntrancesForMap() return {} end")
 row.elem.instance = 778

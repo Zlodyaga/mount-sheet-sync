@@ -3,7 +3,7 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.5
-- Entrances closed by a story chain or a zone phase (Antorus on Argus, Operation: Mechagon, Ny'alotha, Amirdrassil): Ctrl + click first says what to do; if the chain is not done on this character there is no pin, and a second Ctrl + click pins it anyway.
+- Entrances closed by a story chain or a zone phase (Antorus on Argus, Operation: Mechagon, Ny'alotha, Amirdrassil): Ctrl + click first says what to do and leads to the chain's next quest (tracks it when it is in your log, otherwise pins where it is given); if the chain is not done on this character there is no pin to the entrance, and a second Ctrl + click pins it anyway. Access the whole account shares (the Emerald Dream) is remembered once any character has it.
 - Ctrl + click on a rare monster's row pins where it appears; for a rare with several spawn points the map of its zone opens.
 - A rare is also recognised by the creature's number: each of the three Zandalari Warbringers counts for its own direhorn, and any rare of a Midnight zone counts for that zone's mounts, even when its name is unknown. Needs the program 2.10.1.
 - Ctrl + click pins the entrance of every raid and dungeon in the list on the map when the game shows no entrance icon (a character who has never been there, newer raids), not only of a few places.
