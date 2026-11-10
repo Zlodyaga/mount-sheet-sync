@@ -940,6 +940,54 @@ n_chat = len(chat_all())
 row.MockClick(row)
 check("…the last quest only taken (enough for Ny'alotha): the entrance, with the note about Zidormi", g.ROUTE.pin == 42
       and "Зидорми" in chat_all()[n_chat:] and "сначала нужно" not in chat_all()[n_chat:], chat_all()[n_chat:])
+# the next step's quest is already in the log: the game tracks it, no pin
+L.execute("""
+MOCK.gt = MOCK.gt + 1000
+QUEST_DONE, QUEST_LOG = {}, { [57010] = true }
+C_SuperTrack.SetSuperTrackedQuestID = function(id) ROUTE.quest = id end
+ROUTE.pin = nil; ROUTE.waypoint = nil; ROUTE.quest = nil""")
+n_chat = len(chat_all())
+row.MockClick(row)
+said = chat_all()[n_chat:]
+check("3.0.5: the next step's quest is in the log: tracked, no pin", g.ROUTE.quest == 57010 and g.ROUTE.pin is None
+      and g.ROUTE.waypoint is None and "уже в журнале заданий" in said, said)
+# a chain with one step per faction: the step of the other faction is skipped
+L.execute("""
+MOCK.gt = MOCK.gt + 1000
+QUEST_DONE, QUEST_LOG = { [57010] = true }, {}
+OLD_UFG = UnitFactionGroup
+UnitFactionGroup = function() return "Alliance" end
+MSS_NS.ACCESS[777].steps = {
+  { quest = 57010, name = "Harnessing the Power", where = "heart" },
+  { quest = 58582, faction = "Horde", name = "Return of the Black Prince", map = 85, x = 0.1, y = 0.1 },
+  { quest = 58496, faction = "Alliance", name = "An Unwelcome Advisor", map = 84, x = 0.2, y = 0.2 },
+  { quest = 56376, name = "Surfacing Threats", map = 1527, x = 0.548, y = 0.328 } }
+ROUTE.pin = nil; ROUTE.waypoint = nil; ROUTE.quest = nil""")
+n_chat = len(chat_all())
+row.MockClick(row)
+said = chat_all()[n_chat:]
+check("3.0.5: a step of the other faction is skipped: an Alliance character goes to its own quest", g.ROUTE.waypoint is not None
+      and g.ROUTE.waypoint.map == 84 and "An Unwelcome Advisor" in said and "Black Prince" not in said, (g.ROUTE.waypoint, said))
+# an entrance gated by an achievement of this character (Mechagon): its name in the warning
+L.execute("""
+MOCK.gt = MOCK.gt + 1000
+ACH_EARNED = false
+OLD_GAI = GetAchievementInfo
+GetAchievementInfo = function(id)
+  if id == 13553 then return id, "Мехагонская угроза", 10, true, 1, 1, 24, "", 0, 0, "", false, ACH_EARNED end
+end
+MSS_NS.ACCESS[777] = { ach = { 13553 }, hint = "mechagon" }
+ROUTE.pin = nil; ROUTE.waypoint = nil""")
+n_chat = len(chat_all())
+row.MockClick(row)
+said = chat_all()[n_chat:]
+check("3.0.5: gated by an achievement this character has not earned: its name in what to do, no pin", g.ROUTE.pin is None
+      and g.ROUTE.waypoint is None and "сначала нужно" in said and "Мехагонская угроза" in said, said)
+L.execute("MOCK.gt = MOCK.gt + 1000; ACH_EARNED = true; ROUTE.pin = nil")
+n_chat = len(chat_all())
+row.MockClick(row)
+check("…earned by this character: straight to the entrance", g.ROUTE.pin == 42 and "сначала нужно" not in chat_all()[n_chat:], chat_all()[n_chat:])
+L.execute("GetAchievementInfo = OLD_GAI; UnitFactionGroup = OLD_UFG")
 L.execute("MSS_NS.ACCESS[777] = nil; MountSheetSyncDB.access = nil; ROUTE.tracks = false; ROUTE.pin = nil")
 missing = L.eval("""(function()
   local out = {}

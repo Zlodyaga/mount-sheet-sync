@@ -536,6 +536,15 @@ check("…a weekly rare: done until the weekly reset", e.done is True)
 L6.execute('C_DateAndTime.GetSecondsUntilDailyReset = nil; RARE_ITEM.every = "daily"; MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1; MOCK.now = MOCK.now + 3600')
 e, r = entry(ns6)
 check("…no daily reset from the game: a day since the kill", e.done is True and 0 < e.again < 86400, (e.done, e.again))
+L6.execute('RARE_ITEM.every = 0; MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1')
+e, r = entry(ns6)
+check("3.0.5: no cooldown (every = 0: sure-drop rares, mob farming): left even right after a kill", e.done is False, (e.done, e.again))
+left_before = r.left
+L6.execute('RARE_ITEM.group = "guaranteed"; MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1')
+e, r = entry(ns6)
+check("…a row of its own group (program 2.10.1): still listed, not counted in «осталось»", e is not None and r.left == left_before - 1,
+      (r.left, left_before))
+L6.execute('RARE_ITEM.group = nil; MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1')
 check("no Lua errors with rares", not any("Ошибка" in c for c in chat(g6, 0)), chat(g6, 0)[-3:])
 
 # ---- bug report in the settings (right click)
