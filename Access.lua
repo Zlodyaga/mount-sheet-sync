@@ -32,6 +32,18 @@ ns.ACCESS = {
       { quest = 56376, name = "Surfacing Threats", map = 1527, x = 0.548, y = 0.328 },
     },
   },
+  -- Тазавеш: цепочка от трактирщицы Та'релы в Орибосе до «The Veiled Market»; точка полёта потом открыта всем персонажам
+  [1194] = {
+    quests = { 63985 }, account = true, hint = "tazavesh",
+    steps = { { quest = 63985, name = "The Veiled Market", where = "tarela" } },
+  },
+  -- Гробница Предвечных: Древний транслокатор после 4-й главы кампании 9.2 (номера нет — только подсказка)
+  [1195] = { hint = "sepulcher" },
+  -- Манагорн Омега: без плаща «Reshii Wraps» не пустят; плащ — кампания К'ареша, глава 3, «The Tabiqa»
+  [1302] = {
+    quests = { 84910 }, hint = "karesh",
+    steps = { { quest = 84910, name = "The Tabiqa", map = 2371, x = 0.758, y = 0.342 } },
+  },
   -- Амирдрассил: доступ в Изумрудный Сон; «Emerald Welcome» открывает портал в Вальдраккене всем персонажам
   [1207] = {
     quests = { 76318 }, account = true, hint = "dream",

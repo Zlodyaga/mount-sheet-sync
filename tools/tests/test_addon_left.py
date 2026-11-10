@@ -941,6 +941,19 @@ row.MockClick(row)
 check("…the last quest only taken (enough for Ny'alotha): the entrance, with the note about Zidormi", g.ROUTE.pin == 42
       and "Зидорми" in chat_all()[n_chat:] and "сначала нужно" not in chat_all()[n_chat:], chat_all()[n_chat:])
 L.execute("MSS_NS.ACCESS[777] = nil; MountSheetSyncDB.access = nil; ROUTE.tracks = false; ROUTE.pin = nil")
+missing = L.eval("""(function()
+  local out = {}
+  for id, a in pairs(MSS_NS.ACCESS) do
+    for _, key in ipairs({ a.hint, a.after }) do
+      if key and (MSS_NS.L["access_" .. key] or "") == "" then out[#out + 1] = id .. ":" .. key end
+    end
+    for _, s in ipairs(a.steps or {}) do
+      if not s.map and (MSS_NS.L["access_where_" .. tostring(s.where)] or "") == "" then out[#out + 1] = id .. ":where" end
+    end
+  end
+  return table.concat(out, ",")
+end)()""")
+check("3.0.5: every gated entrance of Access.lua has its texts (hint, note, where)", missing == "", missing)
 L.execute("function C_EncounterJournal.GetDungeonEntrancesForMap() return {} end")
 row.elem.instance = 778
 row.MockClick(row)
