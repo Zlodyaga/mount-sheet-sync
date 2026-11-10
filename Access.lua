@@ -47,6 +47,13 @@ ns.ACCESS = {
     quests = { 64844 }, ach = { 15514 }, hint = "sepulcher",
     steps = { { quest = 64844, name = "The Pilgrimage Ends", map = 1970, x = 0.474, y = 0.884 } },
   },
+  -- Святилище Господства: сюжетом не закрыто, вход в Утробе (Десмотарон) — только пометка о дороге
+  [1193] = { hint = "sanctum" },
+  -- Освобождение Нижней Шахты: в зону попадают заданием «When Opportunity Explodes» (Рензик в Дорногале, после кампании Каз Алгара)
+  [1296] = {
+    quests = { 83137 }, hint = "undermine",
+    steps = { { quest = 83137, name = "When Opportunity Explodes", map = 2339, x = 0.422, y = 0.27 } },
+  },
   -- Манагорн Омега: без плаща «Reshii Wraps» не пустят; плащ — кампания К'ареша, глава 3, «The Tabiqa»
   [1302] = {
     quests = { 84910 }, hint = "karesh",

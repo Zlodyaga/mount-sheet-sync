@@ -1013,6 +1013,13 @@ sep = L.eval("""(function()
 end)""")()
 check("Sepulcher: closed until «The Pilgrimage Ends» (64844), the step pins Elder Ara in Zereth Mortis; done — open",
       list(sep) == [False, 64844, 1970, True], list(sep))
+und = L.eval("""(function()
+  QUEST_DONE = {}
+  local u, d = MSS_NS.AccessCheck(1296), MSS_NS.AccessCheck(1193)
+  return u and u.open, u and u.step and u.step.quest, u and u.step and u.step.map, d and d.open, d and d.hint
+end)""")()
+check("Undermine: closed until «When Opportunity Explodes» (83137), the step pins Renzik in Dornogal; Sanctum: only a note",
+      list(und)[:4] == [False, 83137, 2339, None] and "Утробе" in str(und[4]), list(und))
 L.execute("function C_EncounterJournal.GetDungeonEntrancesForMap() return {} end")
 row.elem.instance = 778
 row.MockClick(row)
