@@ -1494,3 +1494,42 @@ en: Alani
 
 @ Вечноцветущий дол (фаза Пандарии): щит снимает Небесный кристалл из 10 небесных осколков, они падают с мобов дола. Маунт падает всегда.
 en: Vale of Eternal Blossoms (the Pandaria phase): a Sky Crystal made of 10 Skyshards, dropped by the Vale's mobs, takes down her shield. The mount always drops.
+
+@ Посейдус
+en: Poseidus
+
+@ Плавает по Вайш'иру (Мерцающий простор, Бездонные глубины), появляется раз в несколько часов. Маунт падает всегда.
+en: Swims around Vashj'ir (Shimmering Expanse, Abyssal Depths), appears every few hours. The mount always drops.
+
+@ Накк Громогласный
+en: Nakk the Thunderer
+
+@ Награнд (Дренор), появляется раз в много часов. Маунт падает всегда.
+en: Nagrand (Draenor), appears once in many hours. The mount always drops.
+
+@ Лук'хок
+en: Luk'hok
+
+@ Сильфида
+en: Silthide
+
+@ Таладор, появляется раз в много часов. Маунт падает всегда.
+en: Talador, appears once in many hours. The mount always drops.
+
+@ Торопун
+en: Pathrunner
+
+@ Долина Призрачной Луны (Дренор), появляется раз в много часов. Маунт падает всегда.
+en: Shadowmoon Valley (Draenor), appears once in many hours. The mount always drops.
+
+@ Ночная кобыла
+en: Night Mare
+
+@ Арденвельд: появляется после короткой цепочки заданий (подробности — на Wowhead). Маунт падает почти всегда.
+en: Ardenweald: appears after a short quest chain (details on Wowhead). The mount almost always drops.
+
+@ Дормус Погонщик Верблюдов
+en: Dormus the Camel-Hoarder
+
+@ Сначала найти фигурку верблюда (Ульдум; появляется редко и в разных местах): она перенесёт к Дормусу. Маунт падает всегда.
+en: First find a camel figurine in Uldum (it appears rarely, in different places): it takes you to Dormus. The mount always drops.

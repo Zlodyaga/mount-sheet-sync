@@ -79,6 +79,12 @@
    "es": "Gorok",
    "pt": "Gorok"
   },
+  "Дормус Погонщик Верблюдов": {
+   "de": "Dormus der Kameltreiber",
+   "fr": "Dormus le Collectionneur de dromadaires",
+   "es": "Dormus el Camellero",
+   "pt": "Dormus, o Colecionador de Camelos"
+  },
   "Зандаларский завоеватель №1": {
    "de": "Kriegshetzer der Zandalari Nr. 1",
    "fr": "Porteguerre zandalari n° 1",
@@ -132,6 +138,12 @@
    "fr": "Croque-bise",
    "es": "Mascabrisas",
    "pt": "Mascabrisa"
+  },
+  "Лук'хок": {
+   "de": "Luk'hok",
+   "fr": "Luk'hok",
+   "es": "Luk'hok",
+   "pt": "Luk'hok"
   },
   "Любой боец Театра Боли": {
    "de": "Beliebiger Champion des Theaters der Schmerzen",
@@ -193,6 +205,12 @@
    "es": "Sobrestante Krix",
    "pt": "Feitor Krix"
   },
+  "Накк Громогласный": {
+   "de": "Nakk der Donnerer",
+   "fr": "Nakk le Foudroyeur",
+   "es": "Nakk el Tronador",
+   "pt": "Nakk, o Trovoador"
+  },
   "Нерисса Бессердечная": {
    "de": "Nerissa Herzlos",
    "fr": "Nerissa Sans-Cœur",
@@ -216,6 +234,12 @@
    "fr": "Nok-Karosh",
    "es": "Nok-Karosh",
    "pt": "Nok-Karosh"
+  },
+  "Ночная кобыла": {
+   "de": "Nachtmähre",
+   "fr": "Jument nocturne",
+   "es": "Yegua nocturna",
+   "pt": "Égua Noturna"
   },
   "Обожравшаяся темная гончая": {
    "de": "Vollgefressener Schemenhund",
@@ -277,6 +301,12 @@
    "es": "Engendro de Beledar",
    "pt": "Cria de Beledar"
   },
+  "Посейдус": {
+   "de": "Poseidus",
+   "fr": "Poséidus",
+   "es": "Poseidus",
+   "pt": "Poseidus"
+  },
   "Псарь Керракс": {
    "de": "Hundemeister Kerrax",
    "fr": "Dresseur de molosses Kerrax",
@@ -319,6 +349,12 @@
    "es": "Sabriel la Rajahuesos",
    "pt": "Sabriel, a Cutilóssea"
   },
+  "Сильфида": {
+   "de": "Schlickhaut",
+   "fr": "Silthide",
+   "es": "Cienopiel",
+   "pt": "Silthide"
+  },
   "Скрииг Пожиратель": {
    "de": "Skreeg der Verschlinger",
    "fr": "Skreeg le Dévoreur",
@@ -354,6 +390,12 @@
    "fr": "Tahonta",
    "es": "Tahonta",
    "pt": "Tahonta"
+  },
+  "Торопун": {
+   "de": "Pfadläufer",
+   "fr": "Cours-les-Routes",
+   "es": "Correcaminos",
+   "pt": "Vencetrilha"
   },
   "Укротитель Кама": {
    "de": "Bestienreiter Kama",
@@ -433,11 +475,14 @@
   "Korthia": 1961,
   "Maldraxxus": 1536,
   "Mechagon Island": 1462,
+  "Nagrand": 550,
   "Nazjatar": 1355,
   "Nazmir": 863,
   "Pandaria": 424,
   "Revendreth": 1525,
+  "Shadowmoon Valley": 539,
   "Stormsong Valley": 942,
+  "Talador": 535,
   "Tanaan Jungle": 534,
   "The Azure Span": 2024,
   "The Forbidden Reach": 2151,
@@ -445,9 +490,10 @@
   "The Ringing Deeps": 2214,
   "The Storm Peaks": 120,
   "Timeless Isle": 554,
-  "Uldum": 1527,
+  "Uldum": 249,
   "Undermine": 2346,
   "Vale of Eternal Blossoms": 390,
+  "Vashj'ir": 203,
   "Voidstorm": 2405,
   "Vol'dun": 864,
   "Zaralek Cavern": 2133,

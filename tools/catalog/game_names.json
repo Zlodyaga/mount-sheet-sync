@@ -1316,6 +1316,14 @@
    "pt": "Caçador de Almas Górjuro",
    "ru": "Верный Утробе ловец душ"
   },
+  "1306": {
+   "de": "Schneller Düsterhuf",
+   "en": "Swift Gloomhoof",
+   "es": "Pezuñasombría presto",
+   "fr": "Sabot-sinistre rapide",
+   "pt": "Cascocaso Veloz",
+   "ru": "Быстрая чернокопытная лошадь"
+  },
   "1310": {
    "de": "Schreckliche Fledderschwinge",
    "en": "Horrid Dredwing",
@@ -2388,6 +2396,14 @@
    "pt": "Draco de Pedra Vítreo",
    "ru": "Камнешкурый дракон"
   },
+  "400": {
+   "de": "Graues Reitkamel",
+   "en": "Grey Riding Camel",
+   "es": "Camello de montar gris",
+   "fr": "Dromadaire gris",
+   "pt": "Camelo Cinza de Montaria",
+   "ru": "Серый ездовой верблюд"
+  },
   "410": {
    "de": "Gepanzerter Razzashiraptor",
    "en": "Armored Razzashi Raptor",
@@ -2427,6 +2443,14 @@
    "fr": "Ours de bataille amani",
    "pt": "Urso de Batalha Amani",
    "ru": "Аманийский боевой медведь"
+  },
+  "420": {
+   "de": "Beruhigtes Seepferdchen",
+   "en": "Subdued Seahorse",
+   "es": "Caballito de mar subyugado",
+   "fr": "Hippocampe assujetti",
+   "pt": "Cavalo-marinho Dominado",
+   "ru": "Подчиненный морской конек"
   },
   "425": {
    "de": "Flammenkralle von Alysrazar",
@@ -2668,6 +2692,14 @@
    "pt": "Casco Gélido da Tundra",
    "ru": "Тундровый ледяной копытень"
   },
+  "612": {
+   "de": "Bluthufbulle",
+   "en": "Bloodhoof Bull",
+   "es": "Macho Pezuña de Sangre",
+   "fr": "Étalon sabot-de-sang",
+   "pt": "Boi Casco Sangrento",
+   "ru": "Самец-кровокопыт"
+  },
   "613": {
    "de": "Eisenhufzerstörer",
    "en": "Ironhoof Destroyer",
@@ -2675,6 +2707,14 @@
    "fr": "Destructeur sabot-de-fer",
    "pt": "Destruidor Cascoferro",
    "ru": "Разрушитель-железноног"
+  },
+  "614": {
+   "de": "Scheckiger Wiesentrampler",
+   "en": "Mottled Meadowstomper",
+   "es": "Pisallanuras jaspeado",
+   "fr": "Foule-prairie tacheté",
+   "pt": "Campinante Mosqueado",
+   "ru": "Пятнистый лугопотам"
   },
   "619": {
    "de": "Schwarzstahlkampfeber",
@@ -2708,6 +2748,14 @@
    "pt": "Grande Cinzatusco",
    "ru": "Огромный сероклык"
   },
+  "630": {
+   "de": "Saphirblaue Flussbestie",
+   "en": "Sapphire Riverbeast",
+   "es": "Bestia fluvial de zafiro",
+   "fr": "Potamodonte saphir",
+   "pt": "Fera-do-rio Safira",
+   "ru": "Сапфировое речное чудище"
+  },
   "633": {
    "de": "Höllenfeuerbestie",
    "en": "Hellfire Infernal",
@@ -2723,6 +2771,14 @@
    "fr": "Faucon des flèches solaire",
    "pt": "Falcão-agulha Solar",
    "ru": "Солнечный ястреб пиков"
+  },
+  "636": {
+   "de": "Flinker Brisenschreiter",
+   "en": "Swift Breezestrider",
+   "es": "Brizancada presto",
+   "fr": "Trotte-brise rapide",
+   "pt": "Pé-de-brisa Ligeiro",
+   "ru": "Быстрый ветробег"
   },
   "643": {
    "de": "Terrorzahn des Kriegshymnenklans",
@@ -4375,6 +4431,14 @@
    "pt": "Ilha de Gnomecan",
    "ru": "Остров Мехагон"
   },
+  "Nagrand": {
+   "de": "Nagrand",
+   "en": "Nagrand",
+   "es": "Nagrand",
+   "fr": "Nagrand",
+   "pt": "Nagrand",
+   "ru": "Награнд"
+  },
   "Nazjatar": {
    "de": "Nazjatar",
    "en": "Nazjatar",
@@ -4407,6 +4471,14 @@
    "pt": "Revendreth",
    "ru": "Ревендрет"
   },
+  "Shadowmoon Valley": {
+   "de": "Schattenmondtal",
+   "en": "Shadowmoon Valley",
+   "es": "Valle Sombraluna",
+   "fr": "Vallée d’Ombrelune",
+   "pt": "Vale da Lua Negra",
+   "ru": "Долина Призрачной Луны"
+  },
   "Spires of Arak": {
    "de": "Spitzen von Arak",
    "en": "Spires of Arak",
@@ -4422,6 +4494,14 @@
    "fr": "Vallée Chantorage",
    "pt": "Vale Trovamare",
    "ru": "Долина Штормов"
+  },
+  "Talador": {
+   "de": "Talador",
+   "en": "Talador",
+   "es": "Talador",
+   "fr": "Talador",
+   "pt": "Talador",
+   "ru": "Таладор"
   },
   "Tanaan Jungle": {
    "de": "Tanaandschungel",
@@ -4518,6 +4598,14 @@
    "fr": "Vallée des Quatre vents",
    "pt": "Vale dos Quatro Ventos",
    "ru": "Долина Четырех Ветров"
+  },
+  "Vashj'ir": {
+   "de": "Vashj'ir",
+   "en": "Vashj'ir",
+   "es": "Vashj'ir",
+   "fr": "Vashj’ir",
+   "pt": "Vashj'ir",
+   "ru": "Вайш'ир"
   },
   "Vault of Archavon": {
    "de": "Archavons Kammer",
@@ -4649,6 +4737,12 @@
    "fr": "Gorok",
    "pt": "Gorok"
   },
+  "Дормус Погонщик Верблюдов": {
+   "de": "Dormus der Kameltreiber",
+   "es": "Dormus el Camellero",
+   "fr": "Dormus le Collectionneur de dromadaires",
+   "pt": "Dormus, o Colecionador de Camelos"
+  },
   "Зандаларский завоеватель №1": {
    "de": "Kriegshetzer der Zandalari Nr. 1",
    "es": "Belisario Zandalari n.º 1",
@@ -4714,6 +4808,12 @@
    "es": "Mascabrisas",
    "fr": "Croque-bise",
    "pt": "Mascabrisa"
+  },
+  "Лук'хок": {
+   "de": "Luk'hok",
+   "es": "Luk'hok",
+   "fr": "Luk'hok",
+   "pt": "Luk'hok"
   },
   "Любой боец Театра Боли": {
    "de": "Beliebiger Champion des Theaters der Schmerzen",
@@ -4799,6 +4899,12 @@
    "fr": "Surveillant Krix",
    "pt": "Feitor Krix"
   },
+  "Накк Громогласный": {
+   "de": "Nakk der Donnerer",
+   "es": "Nakk el Tronador",
+   "fr": "Nakk le Foudroyeur",
+   "pt": "Nakk, o Trovoador"
+  },
   "Нерисса Бессердечная": {
    "de": "Nerissa Herzlos",
    "es": "Nerissa Despiadada",
@@ -4828,6 +4934,12 @@
    "es": "Nocturno",
    "fr": "Plaie-de-Nuit",
    "pt": "Nocturno"
+  },
+  "Ночная кобыла": {
+   "de": "Nachtmähre",
+   "es": "Yegua nocturna",
+   "fr": "Jument nocturne",
+   "pt": "Égua Noturna"
   },
   "Обожравшаяся темная гончая": {
    "de": "Vollgefressener Schemenhund",
@@ -4901,6 +5013,12 @@
    "fr": "Engeance de Beledar",
    "pt": "Cria de Beledar"
   },
+  "Посейдус": {
+   "de": "Poseidus",
+   "es": "Poseidus",
+   "fr": "Poséidus",
+   "pt": "Poseidus"
+  },
   "Псарь Керракс": {
    "de": "Hundemeister Kerrax",
    "es": "Maestro de canes Kerrax",
@@ -4942,6 +5060,12 @@
    "es": "Sabriel la Rajahuesos",
    "fr": "Sabrielle l'Ostéoclaste",
    "pt": "Sabriel, a Cutilóssea"
+  },
+  "Сильфида": {
+   "de": "Schlickhaut",
+   "es": "Cienopiel",
+   "fr": "Silthide",
+   "pt": "Silthide"
   },
   "Скрииг Пожиратель": {
    "de": "Skreeg der Verschlinger",
@@ -4990,6 +5114,12 @@
    "es": "Tahonta",
    "fr": "Tahonta",
    "pt": "Tahonta"
+  },
+  "Торопун": {
+   "de": "Pfadläufer",
+   "es": "Correcaminos",
+   "fr": "Cours-les-Routes",
+   "pt": "Vencetrilha"
   },
   "Укротитель Кама": {
    "de": "Bestienreiter Kama",
