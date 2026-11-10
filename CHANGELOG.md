@@ -3,7 +3,7 @@
 The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [CHANGELOG-addon.md](CHANGELOG-addon.md).
 
 ## 2.10.1
-- 82 more rare-monster mounts on the “Rare monsters” sheet, from Wrath of the Lich King to Midnight (13 of them a sure drop): drop chance, loot cooldown, and the zone and map point in the farming tip; names in all six languages. Sheets made earlier get the new rows at the end of that sheet by themselves.
+- 88 more rare-monster mounts on the “Rare monsters” sheet, from Wrath of the Lich King to Midnight (13 of them a sure drop): drop chance, loot cooldown, and the zone and map point in the farming tip; names in all six languages. Sheets made earlier get the new rows at the end of that sheet by themselves.
 - Rares the addon can't tell by name are told by the creature's number: the three Zandalari Warbringers (№1–№3, each with its own direhorn) and “Any rare: <zone>” rows of Midnight. Rows with several rares have “No cooldown”. Needs the addon 3.0.5.
 - The drop chance on the rare sheet shows tenths (0.3%, not 0%).
 - Raid drops with the status “Current content” and “Farmable / needs content grouping” now go to the character's raid sheet and to “Remaining” too; sheets made earlier get these rows by themselves.

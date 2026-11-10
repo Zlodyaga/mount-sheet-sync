@@ -246,3 +246,9 @@
 636	Swift Breezestrider
 630	Sapphire Riverbeast
 1306	Swift Gloomhoof
+1057	Nazjatar Blood Serpent
+1415	Arboreal Gulper
+1434	Deepstar Aurelid
+2176	Alunira
+3051	Topaz Skyfang
+3061	Ruby Writhe

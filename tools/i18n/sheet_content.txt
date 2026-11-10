@@ -1533,3 +1533,33 @@ en: Dormus the Camel-Hoarder
 
 @ Сначала найти фигурку верблюда (Ульдум; появляется редко и в разных местах): она перенесёт к Дормусу. Маунт падает всегда.
 en: First find a camel figurine in Uldum (it appears rarely, in different places): it takes you to Dormus. The mount always drops.
+
+@ Гирукон
+en: Hirukon
+
+@ Появляется, только если призвать приманкой (Aurelid Lure; подробности — на Wowhead).
+en: Comes only when summoned with a lure (Aurelid Lure; details on Wowhead).
+
+@ Алунира
+en: Alunira
+
+@ Появляется на Острове Дорн нечасто (подробности — на Wowhead).
+en: Appears on the Isle of Dorn now and then (details on Wowhead).
+
+@ Служитель глубин
+en: Adherent of the Abyss
+
+@ Его призывают (подробности — на Wowhead).
+en: It has to be summoned (details on Wowhead).
+
+@ Вел'иккан
+en: Humon'gozz
+
+@ Вырастает из Быстрорастущего гриба (подробности — на Wowhead).
+en: Grows out of a Rapidly Growing Mushroom (details on Wowhead).
+
+@ Любой редкий монстр: Спиральный остров
+en: Any rare: The Coiled Isle
+
+@ Падает с любого редкого монстра острова (их здесь 9), очень редко. Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.
+en: Drops from any rare of the isle (9 of them), very rarely. Each one gives loot once a day per character, so the row has no cooldown of its own.

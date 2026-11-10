@@ -74,6 +74,7 @@
   "Алани": "Alani",
   "Алаш'анир": "Alash'anir",
   "Алисразор": "Alysrazor",
+  "Алунира": "Alunira",
   "Альтаирий": "Altairus",
   "Анзу": "Anzu",
   "Анх-Де Верный": "Anh-De the Loyal",
@@ -103,6 +104,7 @@
   "В Retail не фармится через достижение; может появляться на Black Market Auction House.": "Not farmable through the achievement in Retail; may appear on the Black Market Auction House.",
   "В отличие от старого Amani War Bear, этот фармится.": "Unlike the old Amani War Bear, this one is farmable.",
   "Валфир Непреклонный": "Valfir the Unrelenting",
+  "Вел'иккан": "Humon'gozz",
   "Верховная жрица Килнара": "High Priestess Kilnara",
   "Верховный оратор Эйрих": "Void Speaker Eirich",
   "Вестник войны Мал'Корак": "Warbringer Mal'Korak",
@@ -111,6 +113,7 @@
   "Владыка испытаний: серебро": "Challenge Warlord: Silver",
   "Воздушное судно подавления HK-8": "HK-8 Aerial Oppression Unit",
   "Всадник рока Хелгрим": "Doomrider Helgrim",
+  "Вырастает из Быстрорастущего гриба (подробности — на Wowhead).": "Grows out of a Rapidly Growing Mushroom (details on Wowhead).",
   "Высокий приоритет: скип сильно сокращает путь к Sylvanas.": "High priority: the skip cuts the way to Sylvanas a lot.",
   "Галеон": "Galleon",
   "Гаррош Адский Крик": "Garrosh Hellscream",
@@ -121,6 +124,7 @@
   "Герой своего времени: Тюремщик": "Ahead of the Curve: The Jailer",
   "Гибломрак": "Doomshadow",
   "Гигер": "Gieger",
+  "Гирукон": "Hirukon",
   "Главный DF raid-skip для маунт-фарма.": "The main DF raid skip for mount farming.",
   "Главный механик Меггакрут": "High Tinker Mekkatorque",
   "Главный полезный скип MoP для маунт-фарма.": "The most useful MoP skip for mount farming.",
@@ -148,6 +152,7 @@
   "Дормус Погонщик Верблюдов": "Dormus the Camel-Hoarder",
   "Достижения лучше закрывать группой, если соло-механики ломаются.": "Better to do the achievements in a group if the mechanics break solo.",
   "Дропает предмет, который запускает короткую цепочку.": "Drops an item that starts a short quest chain.",
+  "Его призывают (подробности — на Wowhead).": "It has to be summoned (details on Wowhead).",
   "Ежедневно / random queue": "Daily / random queue",
   "Еженедельно / M+ по сезону": "Weekly / M+ per season",
   "Еженедельно / daily зависит от режима": "Weekly / daily depending on the mode",
@@ -196,6 +201,7 @@
   "Любой редкий монстр: Запретный край": "Any rare: The Forbidden Reach",
   "Любой редкий монстр: Зул'Аман": "Any rare: Zul'Aman",
   "Любой редкий монстр: Леса Вечной Песни": "Any rare: Eversong Woods",
+  "Любой редкий монстр: Спиральный остров": "Any rare: The Coiled Isle",
   "Любой редкий монстр: Харандар": "Any rare: Harandar",
   "Любопытный слизневый змей": "The curious Slime Serpent",
   "Малбог": "Malbog",
@@ -292,6 +298,7 @@
   "Падает с любого редкого монстра зоны (их здесь 13). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Drops from any rare of the zone (13 of them). Each one gives loot once a day per character, so the row has no cooldown of its own.",
   "Падает с любого редкого монстра зоны (их здесь 15). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Drops from any rare of the zone (15 of them). Each one gives loot once a day per character, so the row has no cooldown of its own.",
   "Падает с любого редкого монстра зоны (их здесь 16). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Drops from any rare of the zone (16 of them). Each one gives loot once a day per character, so the row has no cooldown of its own.",
+  "Падает с любого редкого монстра острова (их здесь 9), очень редко. Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Drops from any rare of the isle (9 of them), very rarely. Each one gives loot once a day per character, so the row has no cooldown of its own.",
   "Падает с обычных мобов зоны (видов 16), например: Тролль крови - проклинательница, Тролль крови - изверг, Ловчая из племени Охотников Крови. Отката нет: каждое убийство — попытка.": "Drops from the zone's common mobs (16 kinds), e.g. Blood Troll Hexxer, Blood Troll Brutalizer, Bloodhunter Stalker. No cooldown: every kill is an attempt.",
   "Падает с обычных мобов зоны (видов 20), например: Отступник - призыватель небес, Отступник-целитель, Сетрак-опустошитель. Отката нет: каждое убийство — попытка.": "Drops from the zone's common mobs (20 kinds), e.g. Faithless Skycaller, Faithless Mender, Sethrak Ravager. No cooldown: every kill is an attempt.",
   "Падает с обычных мобов зоны (видов 25), например: Стрелок из племени Шипошкурых, Лоялист дома Штормсонгов, Канонир из Просоленных мастерских. Отката нет: каждое убийство — попытка.": "Drops from the zone's common mobs (25 kinds), e.g. Briarback Skirmisher, Stormsong Loyalist, Brinebrawn Cannoneer. No cooldown: every kill is an attempt.",
@@ -306,6 +313,8 @@
   "Порождение Беледар": "Beledar's Spawn",
   "Посейдус": "Poseidus",
   "Появляется в разных зонах Пандарии. Три завоевателя на вид одинаковы, у каждого свой ящер; номер — только для таблицы, аддон различает их сам. Отката добычи нет.": "Appears in several zones of Pandaria. The three Warbringers look the same, each has its own direhorn; the number is only for the sheet, the addon tells them apart. No loot cooldown.",
+  "Появляется на Острове Дорн нечасто (подробности — на Wowhead).": "Appears on the Isle of Dorn now and then (details on Wowhead).",
+  "Появляется, только если призвать приманкой (Aurelid Lure; подробности — на Wowhead).": "Comes only when summoned with a lure (Aurelid Lure; details on Wowhead).",
   "Притворяйся, пока не получится": "Fake It 'Til You Make It",
   "Пробуждение рейдов Dragonflight": "Dragonflight Awakened raids",
   "Проверь актуальные условия: важно пройти последние бои корректно.": "Check the current conditions: the last fights must be done correctly.",
@@ -441,6 +450,7 @@
   "Слава рейдеру Ульдуара": "Glory of the Ulduar Raider",
   "Слава рейдеру Хранилища": "Glory of the Vault Raider",
   "Слава рейдеру Цитадели Адского Пламени": "Glory of the Hellfire Raider",
+  "Служитель глубин": "Adherent of the Abyss",
   "Сначала закрывай ачивки, потом используй скип для Jaina.": "Do the achievements first, then use the skip for Jaina.",
   "Сначала найти фигурку верблюда (Ульдум; появляется редко и в разных местах): она перенесёт к Дормусу. Маунт падает всегда.": "First find a camel figurine in Uldum (it appears rarely, in different places): it takes you to Dormus. The mount always drops.",
   "Со'лея": "So'leah",
@@ -526,6 +536,7 @@
   "1019": "Goldenmane",
   "1040": "Tomb Stalker",
   "1053": "Underrot Crawg",
+  "1057": "Nazjatar Blood Serpent",
   "117": "Blue Qiraji Battle Tank",
   "1173": "Broken Highland Mustang",
   "1174": "Highland Mustang",
@@ -575,8 +586,10 @@
   "1406": "Marrowfang",
   "1410": "Hulking Deathroc",
   "1411": "Predatory Plagueroc",
+  "1415": "Arboreal Gulper",
   "1417": "Hand of Hrestimorak",
   "1419": "Sintouched Deathwalker",
+  "1434": "Deepstar Aurelid",
   "1437": "Battle-Bound Warhound",
   "1443": "Voracious Gorger",
   "1445": "Slime Serpent",
@@ -616,6 +629,7 @@
   "2091": "Voyaging Wilderling",
   "2119": "Stonevault Mechsuit",
   "213": "Swift White Hawkstrider",
+  "2176": "Alunira",
   "2180": "Shadowed Swarmite",
   "2192": "Beledar's Spawn",
   "2204": "Wick",
@@ -671,8 +685,10 @@
   "3021": "Crimson Venomfang",
   "3030": "Primeval Skyfriend",
   "304": "Mimiron's Head",
+  "3051": "Topaz Skyfang",
   "3058": "The Writhing Brood",
   "306": "Ironbound Proto-Drake",
+  "3061": "Ruby Writhe",
   "3063": "Breath of Blight",
   "3064": "Breath of Ruin",
   "307": "Rusted Proto-Drake",
@@ -2087,6 +2103,14 @@
     "pt": "Caçador de Almas Górjuro",
     "ru": "Верный Утробе ловец душ"
    },
+   "1306": {
+    "de": "Schneller Düsterhuf",
+    "en": "Swift Gloomhoof",
+    "es": "Pezuñasombría presto",
+    "fr": "Sabot-sinistre rapide",
+    "pt": "Cascocaso Veloz",
+    "ru": "Быстрая чернокопытная лошадь"
+   },
    "1310": {
     "de": "Schreckliche Fledderschwinge",
     "en": "Horrid Dredwing",
@@ -3159,6 +3183,14 @@
     "pt": "Draco de Pedra Vítreo",
     "ru": "Камнешкурый дракон"
    },
+   "400": {
+    "de": "Graues Reitkamel",
+    "en": "Grey Riding Camel",
+    "es": "Camello de montar gris",
+    "fr": "Dromadaire gris",
+    "pt": "Camelo Cinza de Montaria",
+    "ru": "Серый ездовой верблюд"
+   },
    "410": {
     "de": "Gepanzerter Razzashiraptor",
     "en": "Armored Razzashi Raptor",
@@ -3198,6 +3230,14 @@
     "fr": "Ours de bataille amani",
     "pt": "Urso de Batalha Amani",
     "ru": "Аманийский боевой медведь"
+   },
+   "420": {
+    "de": "Beruhigtes Seepferdchen",
+    "en": "Subdued Seahorse",
+    "es": "Caballito de mar subyugado",
+    "fr": "Hippocampe assujetti",
+    "pt": "Cavalo-marinho Dominado",
+    "ru": "Подчиненный морской конек"
    },
    "425": {
     "de": "Flammenkralle von Alysrazar",
@@ -3439,6 +3479,14 @@
     "pt": "Casco Gélido da Tundra",
     "ru": "Тундровый ледяной копытень"
    },
+   "612": {
+    "de": "Bluthufbulle",
+    "en": "Bloodhoof Bull",
+    "es": "Macho Pezuña de Sangre",
+    "fr": "Étalon sabot-de-sang",
+    "pt": "Boi Casco Sangrento",
+    "ru": "Самец-кровокопыт"
+   },
    "613": {
     "de": "Eisenhufzerstörer",
     "en": "Ironhoof Destroyer",
@@ -3446,6 +3494,14 @@
     "fr": "Destructeur sabot-de-fer",
     "pt": "Destruidor Cascoferro",
     "ru": "Разрушитель-железноног"
+   },
+   "614": {
+    "de": "Scheckiger Wiesentrampler",
+    "en": "Mottled Meadowstomper",
+    "es": "Pisallanuras jaspeado",
+    "fr": "Foule-prairie tacheté",
+    "pt": "Campinante Mosqueado",
+    "ru": "Пятнистый лугопотам"
    },
    "619": {
     "de": "Schwarzstahlkampfeber",
@@ -3479,6 +3535,14 @@
     "pt": "Grande Cinzatusco",
     "ru": "Огромный сероклык"
    },
+   "630": {
+    "de": "Saphirblaue Flussbestie",
+    "en": "Sapphire Riverbeast",
+    "es": "Bestia fluvial de zafiro",
+    "fr": "Potamodonte saphir",
+    "pt": "Fera-do-rio Safira",
+    "ru": "Сапфировое речное чудище"
+   },
    "633": {
     "de": "Höllenfeuerbestie",
     "en": "Hellfire Infernal",
@@ -3494,6 +3558,14 @@
     "fr": "Faucon des flèches solaire",
     "pt": "Falcão-agulha Solar",
     "ru": "Солнечный ястреб пиков"
+   },
+   "636": {
+    "de": "Flinker Brisenschreiter",
+    "en": "Swift Breezestrider",
+    "es": "Brizancada presto",
+    "fr": "Trotte-brise rapide",
+    "pt": "Pé-de-brisa Ligeiro",
+    "ru": "Быстрый ветробег"
    },
    "643": {
     "de": "Terrorzahn des Kriegshymnenklans",
@@ -5146,6 +5218,14 @@
     "pt": "Ilha de Gnomecan",
     "ru": "Остров Мехагон"
    },
+   "Nagrand": {
+    "de": "Nagrand",
+    "en": "Nagrand",
+    "es": "Nagrand",
+    "fr": "Nagrand",
+    "pt": "Nagrand",
+    "ru": "Награнд"
+   },
    "Nazjatar": {
     "de": "Nazjatar",
     "en": "Nazjatar",
@@ -5178,6 +5258,14 @@
     "pt": "Revendreth",
     "ru": "Ревендрет"
    },
+   "Shadowmoon Valley": {
+    "de": "Schattenmondtal",
+    "en": "Shadowmoon Valley",
+    "es": "Valle Sombraluna",
+    "fr": "Vallée d’Ombrelune",
+    "pt": "Vale da Lua Negra",
+    "ru": "Долина Призрачной Луны"
+   },
    "Spires of Arak": {
     "de": "Spitzen von Arak",
     "en": "Spires of Arak",
@@ -5193,6 +5281,14 @@
     "fr": "Vallée Chantorage",
     "pt": "Vale Trovamare",
     "ru": "Долина Штормов"
+   },
+   "Talador": {
+    "de": "Talador",
+    "en": "Talador",
+    "es": "Talador",
+    "fr": "Talador",
+    "pt": "Talador",
+    "ru": "Таладор"
    },
    "Tanaan Jungle": {
     "de": "Tanaandschungel",
@@ -5289,6 +5385,14 @@
     "fr": "Vallée des Quatre vents",
     "pt": "Vale dos Quatro Ventos",
     "ru": "Долина Четырех Ветров"
+   },
+   "Vashj'ir": {
+    "de": "Vashj'ir",
+    "en": "Vashj'ir",
+    "es": "Vashj'ir",
+    "fr": "Vashj’ir",
+    "pt": "Vashj'ir",
+    "ru": "Вайш'ир"
    },
    "Vault of Archavon": {
     "de": "Archavons Kammer",
@@ -5420,6 +5524,12 @@
     "fr": "Gorok",
     "pt": "Gorok"
    },
+   "Дормус Погонщик Верблюдов": {
+    "de": "Dormus der Kameltreiber",
+    "es": "Dormus el Camellero",
+    "fr": "Dormus le Collectionneur de dromadaires",
+    "pt": "Dormus, o Colecionador de Camelos"
+   },
    "Зандаларский завоеватель №1": {
     "de": "Kriegshetzer der Zandalari Nr. 1",
     "es": "Belisario Zandalari n.º 1",
@@ -5485,6 +5595,12 @@
     "es": "Mascabrisas",
     "fr": "Croque-bise",
     "pt": "Mascabrisa"
+   },
+   "Лук'хок": {
+    "de": "Luk'hok",
+    "es": "Luk'hok",
+    "fr": "Luk'hok",
+    "pt": "Luk'hok"
    },
    "Любой боец Театра Боли": {
     "de": "Beliebiger Champion des Theaters der Schmerzen",
@@ -5570,6 +5686,12 @@
     "fr": "Surveillant Krix",
     "pt": "Feitor Krix"
    },
+   "Накк Громогласный": {
+    "de": "Nakk der Donnerer",
+    "es": "Nakk el Tronador",
+    "fr": "Nakk le Foudroyeur",
+    "pt": "Nakk, o Trovoador"
+   },
    "Нерисса Бессердечная": {
     "de": "Nerissa Herzlos",
     "es": "Nerissa Despiadada",
@@ -5599,6 +5721,12 @@
     "es": "Nocturno",
     "fr": "Plaie-de-Nuit",
     "pt": "Nocturno"
+   },
+   "Ночная кобыла": {
+    "de": "Nachtmähre",
+    "es": "Yegua nocturna",
+    "fr": "Jument nocturne",
+    "pt": "Égua Noturna"
    },
    "Обожравшаяся темная гончая": {
     "de": "Vollgefressener Schemenhund",
@@ -5672,6 +5800,12 @@
     "fr": "Engeance de Beledar",
     "pt": "Cria de Beledar"
    },
+   "Посейдус": {
+    "de": "Poseidus",
+    "es": "Poseidus",
+    "fr": "Poséidus",
+    "pt": "Poseidus"
+   },
    "Псарь Керракс": {
     "de": "Hundemeister Kerrax",
     "es": "Maestro de canes Kerrax",
@@ -5713,6 +5847,12 @@
     "es": "Sabriel la Rajahuesos",
     "fr": "Sabrielle l'Ostéoclaste",
     "pt": "Sabriel, a Cutilóssea"
+   },
+   "Сильфида": {
+    "de": "Schlickhaut",
+    "es": "Cienopiel",
+    "fr": "Silthide",
+    "pt": "Silthide"
    },
    "Скрииг Пожиратель": {
     "de": "Skreeg der Verschlinger",
@@ -5761,6 +5901,12 @@
     "es": "Tahonta",
     "fr": "Tahonta",
     "pt": "Tahonta"
+   },
+   "Торопун": {
+    "de": "Pfadläufer",
+    "es": "Correcaminos",
+    "fr": "Cours-les-Routes",
+    "pt": "Vencetrilha"
    },
    "Укротитель Кама": {
     "de": "Bestienreiter Kama",
