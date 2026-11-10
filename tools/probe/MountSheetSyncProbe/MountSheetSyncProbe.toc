@@ -1,0 +1,7 @@
+## Interface: 120105, 120100, 120007
+## Title: Mount Sheet Sync Probe
+## Notes: Temporary: collects game data for checking Mount Sheet Sync (quests of gated entrances, dungeon entrances, rare spots). /mssprobe
+## Version: 1
+## SavedVariables: MountSheetSyncProbeDB
+
+Probe.lua

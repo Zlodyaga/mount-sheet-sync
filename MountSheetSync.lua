@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.4 — ядро
+Mount Sheet Sync 3.0.5 — ядро
 =============================
 Записывает убийства боссов на текущем персонаже и новые маунты, чтобы программа
 Mount Sheet Sync (MountSheetSync.exe в трее Windows) отметила их в Google-таблице маунтов:
@@ -26,7 +26,7 @@ SavedVariables. Игра сохраняет файл
 
 local ADDON_NAME, ns = ...
 
-local VERSION = "3.0.4"
+local VERSION = "3.0.5"
 local MAX_RECORDS = 400               -- храним не больше стольких записей
 local MAX_AGE = 21 * 24 * 60 * 60     -- и не старше трёх недель
 local DUPLICATE_WINDOW = 120          -- ENCOUNTER_END и BOSS_KILL об одном бое, сек
@@ -438,14 +438,17 @@ local function NameOfGuid(guid)
   return rareNames[guid]
 end
 
-local function RecentlyRecorded(player, boss, stamp)
+-- npc — строка узнана по номеру существа: у неё одно название на много раров («любой редкий монстр зоны»), поэтому повтором
+-- считается только тот же номер.
+local function RecentlyRecorded(player, boss, stamp, npc)
   local want = ns.Norm and ns.Norm(boss) or boss
   for i = #db.kills, 1, -1 do
     local rec = db.kills[i]
     if (tonumber(rec.time) or 0) < stamp - LOOT_REPEAT then
       break
     end
-    if rec.charKey == player.key and rec.kind == "world" and (ns.Norm and ns.Norm(rec.boss) or rec.boss) == want then
+    if rec.charKey == player.key and rec.kind == "world" and (ns.Norm and ns.Norm(rec.boss) or rec.boss) == want
+        and (not npc or tostring(rec.id or ""):find("-" .. npc .. "-", 1, true)) then
       return true
     end
   end
@@ -468,13 +471,15 @@ local function OnLootReady()
   end
   local player = GetPlayer()
   for guid in pairs(guids) do
-    local name = Clean(NameOfGuid(guid))
+    local npc = guid:match("^Creature%-%d+%-%d+%-%d+%-%d+%-(%d+)%-") or "0"
+    -- сначала по номеру существа: строка, которую по имени не узнать (завоеватель Зандалари №2, любой рар зоны)
+    local byNpc = ns.RareRowForNpc and ns.RareRowForNpc(npc)
+    local name = byNpc or Clean(NameOfGuid(guid))
     if name then
       lootedGuids[guid] = true   -- имени нет — труп ещё не решён: может, откроют снова, выбрав его целью
     end
     local stamp = time()
-    if name and player.name and ns.RareRow(name) and not RecentlyRecorded(player, name, stamp) then
-      local npc = guid:match("^Creature%-%d+%-%d+%-%d+%-%d+%-(%d+)%-") or "0"
+    if name and player.name and (byNpc or ns.RareRow(name)) and not RecentlyRecorded(player, name, stamp, byNpc and npc) then
       local rec = BaseRecord(player, stamp)
       rec.id = string.format("D-%s-%s-%d", player.key, npc, stamp)
       rec.boss = name
@@ -959,6 +964,9 @@ frame:SetScript("OnEvent", function(self, event, ...)
     end
     if ns.OnLoginCollection then
       SafeCall(ns.OnLoginCollection)
+    end
+    if ns.RememberAccess then
+      SafeCall(ns.RememberAccess)   -- доступ к входу, общий на аккаунт: запомнить у этого персонажа (Access.lua)
     end
     C_Timer.After(3, RequestLockouts)
   elseif event == "ENCOUNTER_END" then

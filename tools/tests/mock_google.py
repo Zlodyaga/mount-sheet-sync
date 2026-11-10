@@ -12,12 +12,14 @@ Control (test only):
 import base64
 import hashlib
 import json
+import os
 import re
 import sys
 import threading
 import time
 import urllib.parse
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+ThreadingHTTPServer.allow_reuse_address = os.name != "nt"   # Windows: reuse = two servers on one port
 
 PORT = int(sys.argv[1])
 STATE_OUT = sys.argv[2]

@@ -58,13 +58,14 @@ OLD = [
 
 # ---------------------------------------------------------------- upgrade 2.0/2.1 → 2.2
 up = run({"catalog": None, "sheets": OLD, "mode": "upgrade"})
-check("upgrade ran once, layout=5 stored in the same batch", up["changed"] is True and up["properties"].get("layout") == "5"
-      and len(up["applied"]) == 1 and "apply" in up["structure"][0] and "layout=5" in up["structure"][0], up["structure"])
+check("upgrade ran once, layout=6 stored in the same batch", up["changed"] is True and up["properties"].get("layout") == "6"
+      and len(up["applied"]) == 1 and "apply" in up["structure"][0] and "layout=6" in up["structure"][0], up["structure"])
 reqs = up["applied"][0]
 cf = [r["addConditionalFormatRule"]["rule"] for r in reqs if "addConditionalFormatRule" in r]
 texteq = [(c["ranges"][0]["sheetId"], c["ranges"][0]["startColumnIndex"], c["booleanRule"]["condition"]["values"][0]["userEnteredValue"])
           for c in cf if c["booleanRule"]["condition"]["type"] == "TEXT_EQ"]
 ids = {s["name"]: 100 + i for i, s in enumerate(OLD)}
+texteq = [t for t in texteq if t[0] in ids.values()]   # the new «Редкие монстры» sheet (layout 6) has its own
 check("«Да»/«Нет» colours on «Собрано?» (masters) and «Пытался…» (character sheets)",
       sorted(texteq) == sorted([(ids[n], 0, v) for n in ("Рейды", "Рейды Эйра", "Подземелья Эйра", "Подземелья Мирна", "Мировые боссы") for v in ("Нет", "Да")]), texteq)
 yes_rule = [c for c in cf if c["booleanRule"]["condition"]["type"] == "TEXT_EQ" and c["booleanRule"]["condition"]["values"][0]["userEnteredValue"] == "Да"][0]
@@ -78,12 +79,12 @@ check("unticked rows grey: one rule per character sheet on its own column", sort
       == sorted([(ids["Рейды Эйра"], "=$H2=FALSE"), (ids["Подземелья Эйра"], "=$H2=FALSE"), (ids["Подземелья Мирна"], "=$H2=FALSE")]), gray)
 appends = [r for r in reqs if "appendDimension" in r]
 check("grid widened where needed (7 → 8 columns)", len(appends) == 3 and all(a["appendDimension"]["length"] == 1 for a in appends))
-checkbox = [r["setDataValidation"] for r in reqs if "setDataValidation" in r]
+checkbox = [r["setDataValidation"] for r in reqs if "setDataValidation" in r and r["setDataValidation"]["range"]["sheetId"] in ids.values()]
 check("checkbox validation on the new column", all(v["rule"]["condition"]["type"] == "BOOLEAN" and v["range"]["startColumnIndex"] == 7 for v in checkbox) and len(checkbox) == 3)
 left = [r["updateCells"] for r in reqs if "updateCells" in r and r["updateCells"].get("start", {}).get("sheetId") == ids["Рейды"]]
 f = left[0]["rows"][0]["values"][0]["userEnteredValue"]["formulaValue"] if left else ""
 check("«Осталось попыток выбить» counts only rows ticked «Фармлю»", "COUNTIFS('Рейды Эйра'!D:D, m, 'Рейды Эйра'!A:A, \"Нет\", 'Рейды Эйра'!H:H, TRUE)" in f, f)
-again = run({"catalog": None, "sheets": up["sheets"], "mode": "upgrade", "properties": {"layout": "5"}})
+again = run({"catalog": None, "sheets": up["sheets"], "mode": "upgrade", "properties": {"layout": "6"}})
 check("already current: nothing to do", again["changed"] is False and again["applied"] == [])
 mixed = copy.deepcopy(OLD)
 mixed[1]["rows"][0].append("Фармлю")
@@ -96,7 +97,7 @@ check("a sheet that already has «Фармлю» keeps it (no second column)", l
 # ---------------------------------------------------------------- «Осталось» without unticked rows
 book = up["sheets"]
 st = run({"catalog": None, "sheets": book, "mode": "handle", "request": {"action": "status"}})
-items = {c["name"]: [i["mount"] for i in c["items"] if i["kind"] != "world"] for c in st["reply"]["chars"]}
+items = {c["name"]: [i["mount"] for i in c["items"] if i["kind"] not in ("world", "rare")] for c in st["reply"]["chars"]}
 check("status before: all rows of Эйра (raid + dungeon)", items["Эйра"] == ["Отмщение", "Темный скакун из Святилища", "Конь смерти Ривендера",
       "Бронированный ящер Раззаши", "Стремительная зульская пантера"] or sorted(items["Эйра"]) == sorted(["Отмщение", "Темный скакун из Святилища",
       "Конь смерти Ривендера", "Бронированный ящер Раззаши", "Стремительная зульская пантера"]), items)
@@ -105,7 +106,7 @@ sheet({"sheets": b2}, "Подземелья Эйра")["rows"][2][7] = False
 sheet({"sheets": b2}, "Рейды Эйра")["rows"][1][7] = "Нет"
 sheet({"sheets": b2}, "Подземелья Эйра")["rows"][3][7] = ""
 st = run({"catalog": None, "sheets": b2, "mode": "handle", "request": {"action": "status"}})
-items = {c["name"]: [i["mount"] for i in c["items"] if i["kind"] != "world"] for c in st["reply"]["chars"]}
+items = {c["name"]: [i["mount"] for i in c["items"] if i["kind"] not in ("world", "rare")] for c in st["reply"]["chars"]}
 check("unticked «Фармлю» (FALSE or «Нет») is not in «Осталось»; an empty cell counts as ticked",
       sorted(items["Эйра"]) == sorted(["Темный скакун из Святилища", "Конь смерти Ривендера", "Стремительная зульская пантера"]), items["Эйра"])
 check("other characters unaffected", items["Мирна"] == ["Конь смерти Ривендера"], items["Мирна"])

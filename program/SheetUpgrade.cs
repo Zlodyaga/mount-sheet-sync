@@ -3,6 +3,7 @@
 //       «Осталось попыток выбить» без строк, которые персонаж не фармит.
 //   3 — счётчик попыток: «Попыток» и «Шанс за все попытки» справа от «Шанса выпадения» на общих листах (2.8).
 //   5 — рары из каталога (Исхак) — с «Мировых боссов» на отдельный лист «Редкие монстры» (2.9.2).
+//   6 — рары, которых нет на листе «Редкие монстры», дописываются из каталога; нет листа — он создаётся (2.10.1).
 // Колонку «ID в игре» добавляет CollectionSync — ей нужна коллекция из игры.
 
 using System;
@@ -14,7 +15,7 @@ namespace MountSheetSync
 {
     static class SheetUpgrade
     {
-        public const int Current = 5;
+        public const int Current = 6;
         public const string Property = "layout";
 
         static readonly string[] Masters = { SheetBuilder.RaidsSheet, SheetBuilder.DungeonsSheet, SheetBuilder.WorldSheet };
@@ -93,12 +94,35 @@ namespace MountSheetSync
                     done.Add(Tr.L("формат «Попыток» и «Шанса за все попытки» в строках, скрытых фильтром ({0})", fixedSheets));
                 }
             }
+            string moved = null;
             if (layout < 5)
             {
-                string moved = MoveRares(book, req, memory);
+                moved = MoveRares(book, req, memory);
                 if (moved != null)
                 {
                     done.Add(moved);
+                }
+            }
+            if (layout < 6 && moved == null)   // перенос уже взял весь нынешний каталог рар
+            {
+                string added = AddRares(book, req, memory);
+                if (added != null)
+                {
+                    done.Add(added);
+                }
+            }
+            if (layout < 6)
+            {
+                // листы в памяти — как после запросов выше: «Фармлю» вида 2 уже на листах персонажей, и новые строки получат галочку
+                foreach (Action a in memory)
+                {
+                    a();
+                }
+                memory.Clear();
+                string raids = AddRaidRows(book, req, memory);
+                if (raids != null)
+                {
+                    done.Add(raids);
                 }
             }
             book.Apply(req, Property, Current.ToString(CultureInfo.InvariantCulture));
@@ -194,6 +218,191 @@ namespace MountSheetSync
                 book.Entries.Insert(index, entry);
             });
             return Tr.L("редкие монстры перенесены на отдельный лист ({0})", remove.Count);
+        }
+
+        /// <summary>
+        /// Вид 6: рары каталога, которых нет на листе «Редкие монстры» (по mountID, иначе по названию маунта), — в конец
+        /// листа, с «Нет» в «Собрано?» (собранные отметит CollectionSync) и счётчиком попыток с нуля. Листа нет, а
+        /// «Мировые боссы» есть (таблица программы) — лист создаётся из всех рар каталога.
+        /// </summary>
+        static string AddRares(IStructuredBook book, List<object> req, List<Action> memory)
+        {
+            Catalog catalog = Catalog.Embedded();
+            SheetEntry world = SheetLogic.ByName(book, SheetBuilder.WorldSheet);
+            SheetEntry rare = SheetLogic.ByName(book, SheetBuilder.RareSheet);
+            if (catalog.Rare == null || (rare == null && world == null))
+            {
+                return null;
+            }
+            string[] header = SheetBuilder.RareMaster;
+            BuildPlan plan = new BuildPlan { Catalog = catalog, Lang = book.Lang ?? SheetLang.Russian };
+            List<object[]> rows = SheetBuilder.RareRows(plan);
+            int rChance = Array.IndexOf(header, SheetBuilder.ChanceColumn);
+            if (rare == null)
+            {
+                long sheetId = book.Entries.Max(e => e.SheetId) + 1;
+                int index = book.Entries.IndexOf(world) + 1;
+                SheetBuilder.AddRare(req, (int)sheetId, index, rows);
+                memory.Add(() =>
+                {
+                    SheetEntry entry = new SheetEntry { Name = SheetBuilder.RareSheet, SheetId = sheetId, GridColumns = header.Length };
+                    entry.Data.Add(header.Cast<object>().ToArray());
+                    AddRows(entry, rows, rChance);
+                    book.Entries.Insert(index, entry);
+                });
+                return Tr.L("лист «Редкие монстры» ({0})", rows.Count);
+            }
+            if (rare.Data.Count == 0 || !SameHeader(rare.Data[0], header))
+            {
+                return null;   // лист с другими колонками (правили руками): строки встали бы не в свои колонки
+            }
+            int rId = Array.IndexOf(header, SheetBuilder.IdColumn);
+            int rMount = Array.IndexOf(header, "Маунт");
+            int rDrop = Array.IndexOf(header, "Шанс выпадения");
+            int rAttempts = Array.IndexOf(header, SheetBuilder.AttemptsColumn);
+            HashSet<long> ids = new HashSet<long>();
+            HashSet<string> names = new HashSet<string>();
+            for (int r = 1; r < rare.Data.Count; r++)
+            {
+                object[] row = rare.Data[r];
+                long id = rId < row.Length ? MountIndex.IdOf(row[rId]) : 0;
+                if (id > 0)
+                {
+                    ids.Add(id);
+                }
+                if (rMount < row.Length)
+                {
+                    names.Add(SheetLogic.Norm(row[rMount]));
+                }
+            }
+            List<object[]> add = new List<object[]>();
+            foreach (object[] row in rows)
+            {
+                long id = MountIndex.IdOf(row[rId]);
+                if ((id > 0 && ids.Contains(id)) || names.Contains(SheetLogic.Norm(row[rMount])))
+                {
+                    continue;
+                }
+                object[] cells = (object[])row.Clone();
+                object[] attempt = SheetLogic.AttemptCells(cells[rDrop], rAttempts, rare.Data.Count + add.Count);
+                cells[rAttempts] = attempt[0];
+                cells[rChance] = attempt[1];
+                add.Add(cells);
+            }
+            if (add.Count == 0)
+            {
+                return null;
+            }
+            int start = rare.Data.Count;
+            SheetBuilder.AppendRare(req, (int)rare.SheetId, start, add);
+            memory.Add(() => AddRows(rare, add, rChance));
+            return Tr.L("новые редкие монстры из каталога ({0})", add.Count);
+        }
+
+        /// <summary>
+        /// Вид 6: на листы «Рейды &lt;Имя&gt;» — рейдовая добыча «Текущий контент» и «Фармится / нужен контент-группинг»
+        /// (с 2.10.1 она тоже в «Осталось»). Только строки этих статусов, которых на листе ещё нет: убранное игроком не
+        /// возвращаем. Собранные маунты отсеивает SheetBuilder.CharacterRows, как и у новой таблицы.
+        /// </summary>
+        static string AddRaidRows(IStructuredBook book, List<object> req, List<Action> memory)
+        {
+            SheetEntry master = SheetLogic.ByName(book, SheetBuilder.RaidsSheet);
+            if (master == null || master.Data.Count < 2)
+            {
+                return null;
+            }
+            string[] mh = master.Data[0].Select(h => SheetLogic.CellText(h)).ToArray();
+            int cStatus = Array.IndexOf(mh, "Статус");
+            if (cStatus < 0)
+            {
+                return null;
+            }
+            List<object[]> fresh = master.Data.Skip(1)
+                .Where(m => SheetBuilder.RaidStatusesAdded.Contains(SheetLogic.CellText(SheetLogic.At(m, cStatus)))).ToList();
+            List<object[]> rows = SheetBuilder.CharacterRows(mh, fresh, true);
+            if (rows.Count == 0)
+            {
+                return null;
+            }
+            string[] rc = SheetBuilder.RaidCharHeader;
+            int iMount = Array.IndexOf(rc, "Маунт");
+            int iBoss = Array.IndexOf(rc, "Босс / достижение / сундук");
+            int iDiff = Array.IndexOf(rc, "Сложность / режим");
+            int added = 0;
+            foreach (SheetEntry e in book.Entries.ToList())
+            {
+                if (SheetLogic.SheetOwner(e.Name, SheetLogic.RaidPrefix) == null || !IsCharacterSheet(e))
+                {
+                    continue;
+                }
+                object[] h = e.Data[0];
+                int cMount = SheetLogic.FindCol(h, "маунт", -1);
+                int cBoss = SheetLogic.FindCol(h, "босс", -1);
+                int cDiff = SheetLogic.FindCol(h, "сложност|режим", -1);
+                HashSet<string> have = new HashSet<string>();
+                for (int r = 1; r < e.Data.Count; r++)
+                {
+                    object[] row = e.Data[r];
+                    have.Add(SheetLogic.Norm(SheetLogic.At(row, cMount)) + "|" + SheetLogic.Norm(SheetLogic.At(row, cBoss)) + "|"
+                        + SheetLogic.Norm(SheetLogic.At(row, cDiff)));
+                }
+                List<object[]> add = new List<object[]>();
+                foreach (object[] row in rows)
+                {
+                    string key = SheetLogic.Norm(row[iMount]) + "|" + SheetLogic.Norm(row[iBoss]) + "|" + SheetLogic.Norm(row[iDiff]);
+                    if (!have.Add(key))
+                    {
+                        continue;
+                    }
+                    object[] cells = new object[h.Length];
+                    for (int c = 0; c < h.Length; c++)
+                    {
+                        int i = Array.FindIndex(rc, x => SheetLogic.Norm(x) == SheetLogic.Norm(h[c]));
+                        cells[c] = i >= 0 ? row[i] : "";
+                    }
+                    add.Add(cells);
+                }
+                if (add.Count == 0)
+                {
+                    continue;
+                }
+                SheetBuilder.AppendCharacterRows(req, (int)e.SheetId, e.Data.Count, add, h);
+                SheetEntry target = e;
+                memory.Add(() => target.Data.AddRange(add));
+                added += add.Count;
+            }
+            return added > 0 ? Tr.L("рейдовые маунты текущего контента на листах персонажей ({0})", added) : null;
+        }
+
+        /// <summary>Строки в копию листа в памяти: формула «Шанса за все попытки» — пустая ячейка с отметкой в Formulas.</summary>
+        static void AddRows(SheetEntry entry, List<object[]> rows, int rChance)
+        {
+            foreach (object[] source in rows)
+            {
+                object[] row = (object[])source.Clone();
+                if (rChance >= 0 && row[rChance] is SheetBuilder.Formula)
+                {
+                    entry.Formulas.Add(SheetLogic.Key(entry.Data.Count, rChance));
+                    row[rChance] = "";
+                }
+                entry.Data.Add(row);
+            }
+        }
+
+        static bool SameHeader(object[] have, string[] want)
+        {
+            if (have.Length < want.Length)
+            {
+                return false;
+            }
+            for (int c = 0; c < want.Length; c++)
+            {
+                if (SheetLogic.Norm(have[c]) != SheetLogic.Norm(want[c]))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         /// <summary>Вид 2: «Да»/«Нет» цветом, «Фармлю» на листах персонажей, новая «Осталось попыток выбить».</summary>

@@ -1095,3 +1095,771 @@ en: BfA world boss rotation
 
 @ Рар в Ульдуме, появляется во время нападений Н'Зота; лут раз в день на персонажа.
 en: A rare in Uldum during N'Zoth assaults; loot once a day per character.
+de: Rar: Uldum, während der Angriffe von N'Zoth; Beute einmal am Tag pro Charakter.
+fr: Rare : Uldum, pendant les assauts de N'Zoth ; butin une fois par jour et par personnage.
+es: Raro: Uldum, durante los asaltos de N'Zoth; botín una vez al día por personaje.
+pt: Raro: Uldum, durante os ataques de N'Zoth; saque uma vez por dia por personagem.
+
+@ Нимар Душегуб
+en: Nimar the Slayer
+
+@ Рар: Нагорье Арати, точка 67.48, 60.58. Лут раз в день на персонажа.
+en: A rare in Arathi Highlands, at 67.48, 60.58. Loot once a day per character.
+de: Rar: Arathihochland, Punkt 67.48, 60.58. Beute einmal am Tag pro Charakter.
+fr: Rare : Hautes-terres Arathies, point 67.48, 60.58. Butin une fois par jour et par personnage.
+es: Raro: Tierras Altas de Arathi, punto 67.48, 60.58. Botín una vez al día por personaje.
+pt: Raro: Planalto Arathi, ponto 67.48, 60.58. Saque uma vez por dia por personagem.
+
+@ Надзиратель Крикс
+en: Overseer Krix
+
+@ Рар: Нагорье Арати, точка 33.44, 36.94. Вход в пещеру — у точки. Лут раз в день на персонажа.
+en: A rare in Arathi Highlands, at 33.44, 36.94. The cave entrance is at the point. Loot once a day per character.
+de: Rar: Arathihochland, Punkt 33.44, 36.94. Der Höhleneingang ist am Punkt. Beute einmal am Tag pro Charakter.
+fr: Rare : Hautes-terres Arathies, point 33.44, 36.94. L'entrée de la grotte est au point indiqué. Butin une fois par jour et par personnage.
+es: Raro: Tierras Altas de Arathi, punto 33.44, 36.94. La entrada de la cueva está en el punto. Botín una vez al día por personaje.
+pt: Raro: Planalto Arathi, ponto 33.44, 36.94. A entrada da caverna fica no ponto. Saque uma vez por dia por personagem.
+
+@ Головокуска
+en: Skullripper
+
+@ Рар: Нагорье Арати, точка 57.15, 45.75. Лут раз в день на персонажа.
+en: A rare in Arathi Highlands, at 57.15, 45.75. Loot once a day per character.
+de: Rar: Arathihochland, Punkt 57.15, 45.75. Beute einmal am Tag pro Charakter.
+fr: Rare : Hautes-terres Arathies, point 57.15, 45.75. Butin une fois par jour et par personnage.
+es: Raro: Tierras Altas de Arathi, punto 57.15, 45.75. Botín una vez al día por personaje.
+pt: Raro: Planalto Arathi, ponto 57.15, 45.75. Saque uma vez por dia por personagem.
+
+@ Укротитель Кама
+en: Beastrider Kama
+
+@ Рар: Нагорье Арати, точка 67.06, 65.89. Лут раз в день на персонажа.
+en: A rare in Arathi Highlands, at 67.06, 65.89. Loot once a day per character.
+de: Rar: Arathihochland, Punkt 67.06, 65.89. Beute einmal am Tag pro Charakter.
+fr: Rare : Hautes-terres Arathies, point 67.06, 65.89. Butin une fois par jour et par personnage.
+es: Raro: Tierras Altas de Arathi, punto 67.06, 65.89. Botín una vez al día por personaje.
+pt: Raro: Planalto Arathi, ponto 67.06, 65.89. Saque uma vez por dia por personagem.
+
+@ Всадник рока Хелгрим
+en: Doomrider Helgrim
+
+@ Рар: Нагорье Арати, точек появления несколько. Добыча только для Альянса.
+en: A rare in Arathi Highlands, several spawn points. Alliance only.
+de: Rar: Arathihochland, mehrere Fundorte. Nur für die Allianz.
+fr: Rare : Hautes-terres Arathies, plusieurs points d'apparition. Alliance uniquement.
+es: Raro: Tierras Altas de Arathi, varios puntos de aparición. Solo para la Alianza.
+pt: Raro: Planalto Arathi, vários pontos de surgimento. Só para a Aliança.
+
+@ Рыцарь-капитан Алдрин
+en: Knight-Captain Aldrin
+
+@ Рар: Нагорье Арати, точек появления несколько. Добыча только для Орды.
+en: A rare in Arathi Highlands, several spawn points. Horde only.
+de: Rar: Arathihochland, mehrere Fundorte. Nur für die Horde.
+fr: Rare : Hautes-terres Arathies, plusieurs points d'apparition. Horde uniquement.
+es: Raro: Tierras Altas de Arathi, varios puntos de aparición. Solo para la Horda.
+pt: Raro: Planalto Arathi, vários pontos de surgimento. Só para a Horda.
+
+@ Алаш'анир
+en: Alash'anir
+
+@ Рар: Темные берега, точка 56.4, 30.8. Лут раз в день на персонажа.
+en: A rare in Darkshore, at 56.4, 30.8. Loot once a day per character.
+de: Rar: Dunkelküste, Punkt 56.4, 30.8. Beute einmal am Tag pro Charakter.
+fr: Rare : Sombrivage, point 56.4, 30.8. Butin une fois par jour et par personnage.
+es: Raro: Costa Oscura, punto 56.4, 30.8. Botín una vez al día por personaje.
+pt: Raro: Costa Negra, ponto 56.4, 30.8. Saque uma vez por dia por personagem.
+
+@ Агата Вирмвуд / Чернолап
+en: Agathe Wyrmwood / Blackpaw
+
+@ Рар: Темные берега, точек появления несколько. Альянсу — Агата Вирмвуд, Орде — Чернолап. Лут раз в день на персонажа.
+en: A rare in Darkshore, several spawn points. Alliance: Agathe Wyrmwood, Horde: Blackpaw. Loot once a day per character.
+de: Rar: Dunkelküste, mehrere Fundorte. Allianz: Agathe Wyrmholz, Horde: Schwarzpranke. Beute einmal am Tag pro Charakter.
+fr: Rare : Sombrivage, plusieurs points d'apparition. Alliance : Agathe Wyrmebois, Horde : Patte-Noire. Butin une fois par jour et par personnage.
+es: Raro: Costa Oscura, varios puntos de aparición. Alianza: Agathe Wyrmwood, Horda: Zarpanegra. Botín una vez al día por personaje.
+pt: Raro: Costa Negra, vários pontos de surgimento. Aliança: Ágata Bosque da Serpe, Horda: Patanegra. Saque uma vez por dia por personagem.
+
+@ Кроз Ярость Крови / Тенекоготь
+en: Croz Bloodrage / Shadowclaw
+
+@ Рар: Темные берега, точек появления несколько. Альянсу — Кроз Ярость Крови, Орде — Тенекоготь. Лут раз в день на персонажа.
+en: A rare in Darkshore, several spawn points. Alliance: Croz Bloodrage, Horde: Shadowclaw. Loot once a day per character.
+de: Rar: Dunkelküste, mehrere Fundorte. Allianz: Croz Blutzorn, Horde: Schattenklaue. Beute einmal am Tag pro Charakter.
+fr: Rare : Sombrivage, plusieurs points d'apparition. Alliance : Croz Ragesang, Horde : Ombregriffe. Butin une fois par jour et par personnage.
+es: Raro: Costa Oscura, varios puntos de aparición. Alianza: Croz Sanguinarius, Horda: Garrasombría. Botín una vez al día por personaje.
+pt: Raro: Costa Negra, vários pontos de surgimento. Aliança: Croz Fúria Sanguinária, Horda: Garrassombra. Saque uma vez por dia por personagem.
+
+@ Палач Мохо / Атилия Огненная Роса
+en: Moxo the Beheader / Athil Dewfire
+
+@ Рар: Темные берега, точек появления несколько. Альянсу — Палач Мохо, Орде — Атилия Огненная Роса. Лут раз в день на персонажа.
+en: A rare in Darkshore, several spawn points. Alliance: Moxo the Beheader, Horde: Athil Dewfire. Loot once a day per character.
+de: Rar: Dunkelküste, mehrere Fundorte. Allianz: Moxo der Köpfer, Horde: Athil Tauglanz. Beute einmal am Tag pro Charakter.
+fr: Rare : Sombrivage, plusieurs points d'apparition. Alliance : Moxo le Tranche-Tête, Horde : Athil Brûlerosée. Butin une fois par jour et par personnage.
+es: Raro: Costa Oscura, varios puntos de aparición. Alianza: Moxo el Decapitador, Horda: Athil Condensafuego. Botín una vez al día por personaje.
+pt: Raro: Costa Negra, vários pontos de surgimento. Aliança: Moxo, o Decapitador, Horda: Athil Fogorvalha. Saque uma vez por dia por personagem.
+
+@ Ржавое Перо
+en: Rustfeather
+
+@ Рар: Остров Мехагон, точка 65.8, 79.6. Лут раз в день на персонажа.
+en: A rare in Mechagon Island, at 65.8, 79.6. Loot once a day per character.
+de: Rar: Mechagon, Punkt 65.8, 79.6. Beute einmal am Tag pro Charakter.
+fr: Rare : Île de Mécagone, point 65.8, 79.6. Butin une fois par jour et par personnage.
+es: Raro: Isla de Mecandria, punto 65.8, 79.6. Botín una vez al día por personaje.
+pt: Raro: Ilha de Gnomecan, ponto 65.8, 79.6. Saque uma vez por dia por personagem.
+
+@ Арахноид-пожинатель
+en: Arachnoid Harvester
+
+@ Рар: Остров Мехагон, точка 52, 41.4. Лут раз в день на персонажа.
+en: A rare in Mechagon Island, at 52, 41.4. Loot once a day per character.
+de: Rar: Mechagon, Punkt 52, 41.4. Beute einmal am Tag pro Charakter.
+fr: Rare : Île de Mécagone, point 52, 41.4. Butin une fois par jour et par personnage.
+es: Raro: Isla de Mecandria, punto 52, 41.4. Botín una vez al día por personaje.
+pt: Raro: Ilha de Gnomecan, ponto 52, 41.4. Saque uma vez por dia por personagem.
+
+@ Неслышимка
+en: Soundless
+
+@ Рар: Назжатар, точек появления несколько. Лут раз в день на персонажа.
+en: A rare in Nazjatar, several spawn points. Loot once a day per character.
+de: Rar: Nazjatar, mehrere Fundorte. Beute einmal am Tag pro Charakter.
+fr: Rare : Nazjatar, plusieurs points d'apparition. Butin une fois par jour et par personnage.
+es: Raro: Nazjatar, varios puntos de aparición. Botín una vez al día por personaje.
+pt: Raro: Nazjatar, vários pontos de surgimento. Saque uma vez por dia por personagem.
+
+@ Анх-Де Верный
+en: Anh-De the Loyal
+
+@ Рар: Вечноцветущий дол, точка 34.15, 68.05. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.
+en: A rare in Vale of Eternal Blossoms, at 34.15, 68.05. Appears during N'Zoth assaults. Loot once a day per character.
+de: Rar: Tal der Ewigen Blüten, Punkt 34.15, 68.05. Erscheint während der Angriffe von N'Zoth. Beute einmal am Tag pro Charakter.
+fr: Rare : Val de l’Éternel printemps, point 34.15, 68.05. Apparaît pendant les assauts de N'Zoth. Butin une fois par jour et par personnage.
+es: Raro: Valle de la Flor Eterna, punto 34.15, 68.05. Aparece durante los asaltos de N'Zoth. Botín una vez al día por personaje.
+pt: Raro: Vale das Flores Eternas, ponto 34.15, 68.05. Aparece durante os ataques de N'Zoth. Saque uma vez por dia por personagem.
+
+@ Ха-Ли
+en: Ha-Li
+
+@ Рар: Вечноцветущий дол, точка 36.6, 37.6. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.
+en: A rare in Vale of Eternal Blossoms, at 36.6, 37.6. Appears during N'Zoth assaults. Loot once a day per character.
+de: Rar: Tal der Ewigen Blüten, Punkt 36.6, 37.6. Erscheint während der Angriffe von N'Zoth. Beute einmal am Tag pro Charakter.
+fr: Rare : Val de l’Éternel printemps, point 36.6, 37.6. Apparaît pendant les assauts de N'Zoth. Butin une fois par jour et par personnage.
+es: Raro: Valle de la Flor Eterna, punto 36.6, 37.6. Aparece durante los asaltos de N'Zoth. Botín una vez al día por personaje.
+pt: Raro: Vale das Flores Eternas, ponto 36.6, 37.6. Aparece durante os ataques de N'Zoth. Saque uma vez por dia por personagem.
+
+@ Мастер-псарь Жэнь
+en: Houndlord Ren
+
+@ Рар: Вечноцветущий дол, точка 10, 33. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.
+en: A rare in Vale of Eternal Blossoms, at 10, 33. Appears during N'Zoth assaults. Loot once a day per character.
+de: Rar: Tal der Ewigen Blüten, Punkt 10, 33. Erscheint während der Angriffe von N'Zoth. Beute einmal am Tag pro Charakter.
+fr: Rare : Val de l’Éternel printemps, point 10, 33. Apparaît pendant les assauts de N'Zoth. Butin une fois par jour et par personnage.
+es: Raro: Valle de la Flor Eterna, punto 10, 33. Aparece durante los asaltos de N'Zoth. Botín una vez al día por personaje.
+pt: Raro: Vale das Flores Eternas, ponto 10, 33. Aparece durante os ataques de N'Zoth. Saque uma vez por dia por personagem.
+
+@ Пожиратель трупов
+en: Corpse Eater
+
+@ Рар: Ульдум, точка 30.85, 49.71. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.
+en: A rare in Uldum, at 30.85, 49.71. Appears during N'Zoth assaults. Loot once a day per character.
+de: Rar: Uldum, Punkt 30.85, 49.71. Erscheint während der Angriffe von N'Zoth. Beute einmal am Tag pro Charakter.
+fr: Rare : Uldum, point 30.85, 49.71. Apparaît pendant les assauts de N'Zoth. Butin une fois par jour et par personnage.
+es: Raro: Uldum, punto 30.85, 49.71. Aparece durante los asaltos de N'Zoth. Botín una vez al día por personaje.
+pt: Raro: Uldum, ponto 30.85, 49.71. Aparece durante os ataques de N'Zoth. Saque uma vez por dia por personagem.
+
+@ Гниложор
+en: Rotfeaster
+
+@ Рар: Ульдум, точка 68.23, 31.97. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.
+en: A rare in Uldum, at 68.23, 31.97. Appears during N'Zoth assaults. Loot once a day per character.
+de: Rar: Uldum, Punkt 68.23, 31.97. Erscheint während der Angriffe von N'Zoth. Beute einmal am Tag pro Charakter.
+fr: Rare : Uldum, point 68.23, 31.97. Apparaît pendant les assauts de N'Zoth. Butin une fois par jour et par personnage.
+es: Raro: Uldum, punto 68.23, 31.97. Aparece durante los asaltos de N'Zoth. Botín una vez al día por personaje.
+pt: Raro: Uldum, ponto 68.23, 31.97. Aparece durante os ataques de N'Zoth. Saque uma vez por dia por personagem.
+
+@ Ядовитый небесный скат
+en: Venomtail Skyfin
+
+@ Рар: Эредат, точка 34.01, 47.83. Лут раз в день на персонажа.
+en: A rare in Eredath, at 34.01, 47.83. Loot once a day per character.
+de: Rar: Eredath, Punkt 34.01, 47.83. Beute einmal am Tag pro Charakter.
+fr: Rare : Érédath, point 34.01, 47.83. Butin une fois par jour et par personnage.
+es: Raro: Eredath, punto 34.01, 47.83. Botín una vez al día por personaje.
+pt: Raro: Eredath, ponto 34.01, 47.83. Saque uma vez por dia por personagem.
+
+@ Пастух Кравос
+en: Wrangler Kravos
+
+@ Рар: Эредат, точка 55.65, 59.95. Лут раз в день на персонажа.
+en: A rare in Eredath, at 55.65, 59.95. Loot once a day per character.
+de: Rar: Eredath, Punkt 55.65, 59.95. Beute einmal am Tag pro Charakter.
+fr: Rare : Érédath, point 55.65, 59.95. Butin une fois par jour et par personnage.
+es: Raro: Eredath, punto 55.65, 59.95. Botín una vez al día por personaje.
+pt: Raro: Eredath, ponto 55.65, 59.95. Saque uma vez por dia por personagem.
+
+@ Скрииг Пожиратель
+en: Skreeg the Devourer
+
+@ Рар: Эредат, точка 49.79, 9.4. Лут раз в день на персонажа.
+en: A rare in Eredath, at 49.79, 9.4. Loot once a day per character.
+de: Rar: Eredath, Punkt 49.79, 9.4. Beute einmal am Tag pro Charakter.
+fr: Rare : Érédath, point 49.79, 9.4. Butin une fois par jour et par personnage.
+es: Raro: Eredath, punto 49.79, 9.4. Botín una vez al día por personaje.
+pt: Raro: Eredath, ponto 49.79, 9.4. Saque uma vez por dia por personagem.
+
+@ Псарь Керракс
+en: Houndmaster Kerrax
+
+@ Рар: Пустоши Анторуса, точка 62.96, 24.86. Лут раз в день на персонажа.
+en: A rare in Antoran Wastes, at 62.96, 24.86. Loot once a day per character.
+de: Rar: Antorische Ödnis, Punkt 62.96, 24.86. Beute einmal am Tag pro Charakter.
+fr: Rare : Étendues Antoréennes, point 62.96, 24.86. Butin une fois par jour et par personnage.
+es: Raro: Baldío Antoran, punto 62.96, 24.86. Botín una vez al día por personaje.
+pt: Raro: Ermos Antoranos, ponto 62.96, 24.86. Saque uma vez por dia por personagem.
+
+@ Язвоглот
+en: Blistermaw
+
+@ Рар: Пустоши Анторуса, точка 61.78, 36.97. Лут раз в день на персонажа.
+en: A rare in Antoran Wastes, at 61.78, 36.97. Loot once a day per character.
+de: Rar: Antorische Ödnis, Punkt 61.78, 36.97. Beute einmal am Tag pro Charakter.
+fr: Rare : Étendues Antoréennes, point 61.78, 36.97. Butin une fois par jour et par personnage.
+es: Raro: Baldío Antoran, punto 61.78, 36.97. Botín una vez al día por personaje.
+pt: Raro: Ermos Antoranos, ponto 61.78, 36.97. Saque uma vez por dia por personagem.
+
+@ Пузцилла / Вракс'тул
+en: Puscilla / Vrax'thul
+
+@ Рар: Пустоши Анторуса, точка 64.42, 20.35. Лут раз в день на персонажа.
+en: A rare in Antoran Wastes, at 64.42, 20.35. Loot once a day per character.
+de: Rar: Antorische Ödnis, Punkt 64.42, 20.35. Beute einmal am Tag pro Charakter.
+fr: Rare : Étendues Antoréennes, point 64.42, 20.35. Butin une fois par jour et par personnage.
+es: Raro: Baldío Antoran, punto 64.42, 20.35. Botín una vez al día por personaje.
+pt: Raro: Ermos Antoranos, ponto 64.42, 20.35. Saque uma vez por dia por personagem.
+
+@ Холон
+en: Huolon
+
+@ Рар: Вневременный остров, точек появления несколько.
+en: A rare in Timeless Isle, several spawn points.
+de: Rar: Zeitlose Insel, mehrere Fundorte.
+fr: Rare : Île du Temps figé, plusieurs points d'apparition.
+es: Raro: Isla Intemporal, varios puntos de aparición.
+pt: Raro: Ilha Perene, vários pontos de surgimento.
+
+@ Харика Ужасающая
+en: Harika the Horrid
+
+@ Рар: Ревендрет, точка 46, 78.5. Его можно и купить у торговца. Лут раз в день на персонажа.
+en: A rare in Revendreth, at 46, 78.5. Can also be bought from a vendor. Loot once a day per character.
+de: Rar: Revendreth, Punkt 46, 78.5. Kann auch bei einem Händler gekauft werden. Beute einmal am Tag pro Charakter.
+fr: Rare : Revendreth, point 46, 78.5. Peut aussi s'acheter chez un marchand. Butin une fois par jour et par personnage.
+es: Raro: Revendreth, punto 46, 78.5. También se puede comprar a un vendedor. Botín una vez al día por personaje.
+pt: Raro: Revendreth, ponto 46, 78.5. Também pode ser comprada de um vendedor. Saque uma vez por dia por personagem.
+
+@ Сокрушитель Надежд
+en: Hopecrusher
+
+@ Рар: Ревендрет, точка 51.98, 51.8. Лут раз в день на персонажа.
+en: A rare in Revendreth, at 51.98, 51.8. Loot once a day per character.
+de: Rar: Revendreth, Punkt 51.98, 51.8. Beute einmal am Tag pro Charakter.
+fr: Rare : Revendreth, point 51.98, 51.8. Butin une fois par jour et par personnage.
+es: Raro: Revendreth, punto 51.98, 51.8. Botín una vez al día por personaje.
+pt: Raro: Revendreth, ponto 51.98, 51.8. Saque uma vez por dia por personagem.
+
+@ Фаму Бесконечный
+en: Famu the Infinite
+
+@ Рар: Ревендрет, точка 62, 47. Лут раз в день на персонажа.
+en: A rare in Revendreth, at 62, 47. Loot once a day per character.
+de: Rar: Revendreth, Punkt 62, 47. Beute einmal am Tag pro Charakter.
+fr: Rare : Revendreth, point 62, 47. Butin une fois par jour et par personnage.
+es: Raro: Revendreth, punto 62, 47. Botín una vez al día por personaje.
+pt: Raro: Revendreth, ponto 62, 47. Saque uma vez por dia por personagem.
+
+@ Тахонта
+en: Tahonta
+
+@ Рар: Малдраксус, точка 44.2, 51.2. Падает, только если вашим спутником сейчас конструкт Нина (Некролорды). Лут раз в день на персонажа.
+en: A rare in Maldraxxus, at 44.2, 51.2. Drops only while the construct Neena is your active companion (Necrolords). Loot once a day per character.
+de: Rar: Maldraxxus, Punkt 44.2, 51.2. Fällt nur, solange das Konstrukt Neena dein aktiver Begleiter ist (Nekrolords). Beute einmal am Tag pro Charakter.
+fr: Rare : Maldraxxus, point 44.2, 51.2. Tombe seulement si la construction Neena est votre compagnon actif (Nécro-seigneurs). Butin une fois par jour et par personnage.
+es: Raro: Maldraxxus, punto 44.2, 51.2. Solo cae si el ensamblaje Neena es tu compañero activo (Necroseñores). Botín una vez al día por personaje.
+pt: Raro: Maldraxxus, ponto 44.2, 51.2. Só cai enquanto o constructo Neena for seu companheiro ativo (Necrossenhores). Saque uma vez por dia por personagem.
+
+@ Сабриэль Косторуб
+en: Sabriel the Bonecleaver
+
+@ Рар: Малдраксус, точка 50.67, 47.37. Его можно и купить у торговца. Лут раз в день на персонажа.
+en: A rare in Maldraxxus, at 50.67, 47.37. Can also be bought from a vendor. Loot once a day per character.
+de: Rar: Maldraxxus, Punkt 50.67, 47.37. Kann auch bei einem Händler gekauft werden. Beute einmal am Tag pro Charakter.
+fr: Rare : Maldraxxus, point 50.67, 47.37. Peut aussi s'acheter chez un marchand. Butin une fois par jour et par personnage.
+es: Raro: Maldraxxus, punto 50.67, 47.37. También se puede comprar a un vendedor. Botín una vez al día por personaje.
+pt: Raro: Maldraxxus, ponto 50.67, 47.37. Também pode ser comprada de um vendedor. Saque uma vez por dia por personagem.
+
+@ Гигер
+en: Gieger
+
+@ Рар: Малдраксус, точка 31.4, 35.6. Лут раз в день на персонажа.
+en: A rare in Maldraxxus, at 31.4, 35.6. Loot once a day per character.
+de: Rar: Maldraxxus, Punkt 31.4, 35.6. Beute einmal am Tag pro Charakter.
+fr: Rare : Maldraxxus, point 31.4, 35.6. Butin une fois par jour et par personnage.
+es: Raro: Maldraxxus, punto 31.4, 35.6. Botín una vez al día por personaje.
+pt: Raro: Maldraxxus, ponto 31.4, 35.6. Saque uma vez por dia por personagem.
+
+@ Фиолетовая ошибка
+en: Violet Mistake
+
+@ Рар: Малдраксус, точка 58.6, 74.2. Лут раз в день на персонажа.
+en: A rare in Maldraxxus, at 58.6, 74.2. Loot once a day per character.
+de: Rar: Maldraxxus, Punkt 58.6, 74.2. Beute einmal am Tag pro Charakter.
+fr: Rare : Maldraxxus, point 58.6, 74.2. Butin une fois par jour et par personnage.
+es: Raro: Maldraxxus, punto 58.6, 74.2. Botín una vez al día por personaje.
+pt: Raro: Maldraxxus, ponto 58.6, 74.2. Saque uma vez por dia por personagem.
+
+@ Нерисса Бессердечная
+en: Nerissa Heartless
+
+@ Рар: Малдраксус, точка 65.8, 35.3. Лут раз в день на персонажа.
+en: A rare in Maldraxxus, at 65.8, 35.3. Loot once a day per character.
+de: Rar: Maldraxxus, Punkt 65.8, 35.3. Beute einmal am Tag pro Charakter.
+fr: Rare : Maldraxxus, point 65.8, 35.3. Butin une fois par jour et par personnage.
+es: Raro: Maldraxxus, punto 65.8, 35.3. Botín una vez al día por personaje.
+pt: Raro: Maldraxxus, ponto 65.8, 35.3. Saque uma vez por dia por personagem.
+
+@ Вестник войны Мал'Корак
+en: Warbringer Mal'Korak
+
+@ Рар: Малдраксус, точка 33.6, 80.6. Лут раз в день на персонажа.
+en: A rare in Maldraxxus, at 33.6, 80.6. Loot once a day per character.
+de: Rar: Maldraxxus, Punkt 33.6, 80.6. Beute einmal am Tag pro Charakter.
+fr: Rare : Maldraxxus, point 33.6, 80.6. Butin une fois par jour et par personnage.
+es: Raro: Maldraxxus, punto 33.6, 80.6. Botín una vez al día por personaje.
+pt: Raro: Maldraxxus, ponto 33.6, 80.6. Saque uma vez por dia por personagem.
+
+@ Валфир Непреклонный
+en: Valfir the Unrelenting
+
+@ Рар: Арденвельд, точка 30.4, 55.2. Его можно и купить у торговца. Лут раз в день на персонажа.
+en: A rare in Ardenweald, at 30.4, 55.2. Can also be bought from a vendor. Loot once a day per character.
+de: Rar: Ardenwald, Punkt 30.4, 55.2. Kann auch bei einem Händler gekauft werden. Beute einmal am Tag pro Charakter.
+fr: Rare : Sylvarden, point 30.4, 55.2. Peut aussi s'acheter chez un marchand. Butin une fois par jour et par personnage.
+es: Raro: Ardenweald, punto 30.4, 55.2. También se puede comprar a un vendedor. Botín una vez al día por personaje.
+pt: Raro: Ardena, ponto 30.4, 55.2. Também pode ser comprada de um vendedor. Saque uma vez por dia por personagem.
+
+@ Обожравшаяся темная гончая
+en: Gorged Shadehound
+
+@ Рар: Утроба, точка 53.5, 79.5.
+en: A rare in The Maw, at 53.5, 79.5.
+de: Rar: Der Schlund, Punkt 53.5, 79.5.
+fr: Rare : Antre, point 53.5, 79.5.
+es: Raro: Las Fauces, punto 53.5, 79.5.
+pt: Raro: A Gorja, ponto 53.5, 79.5.
+
+@ Павший боевой конь
+en: Fallen Charger
+
+@ Рар: Утроба, точек появления несколько.
+en: A rare in The Maw, several spawn points.
+de: Rar: Der Schlund, mehrere Fundorte.
+fr: Rare : Antre, plusieurs points d'apparition.
+es: Raro: Las Fauces, varios puntos de aparición.
+pt: Raro: A Gorja, vários pontos de surgimento.
+
+@ Контрогз Уничтожитель
+en: Konthrogz the Obliterator
+
+@ Рар: Кортия, точек появления несколько. Лут раз в день на персонажа.
+en: A rare in Korthia, several spawn points. Loot once a day per character.
+de: Rar: Korthia, mehrere Fundorte. Beute einmal am Tag pro Charakter.
+fr: Rare : Korthia, plusieurs points d'apparition. Butin une fois par jour et par personnage.
+es: Raro: Korthia, varios puntos de aparición. Botín una vez al día por personaje.
+pt: Raro: Korthia, vários pontos de surgimento. Saque uma vez por dia por personagem.
+
+@ Реливик Непокорный
+en: Reliwik the Defiant
+
+@ Рар: Кортия, точка 56.3, 66.3. Лут раз в день на персонажа.
+en: A rare in Korthia, at 56.3, 66.3. Loot once a day per character.
+de: Rar: Korthia, Punkt 56.3, 66.3. Beute einmal am Tag pro Charakter.
+fr: Rare : Korthia, point 56.3, 66.3. Butin une fois par jour et par personnage.
+es: Raro: Korthia, punto 56.3, 66.3. Botín una vez al día por personaje.
+pt: Raro: Korthia, ponto 56.3, 66.3. Saque uma vez por dia por personagem.
+
+@ Малбог
+en: Malbog
+
+@ Рар: Кортия, точка 45.35, 30.34. Лут раз в день на персонажа.
+en: A rare in Korthia, at 45.35, 30.34. Loot once a day per character.
+de: Rar: Korthia, Punkt 45.35, 30.34. Beute einmal am Tag pro Charakter.
+fr: Rare : Korthia, point 45.35, 30.34. Butin une fois par jour et par personnage.
+es: Raro: Korthia, punto 45.35, 30.34. Botín una vez al día por personaje.
+pt: Raro: Korthia, ponto 45.35, 30.34. Saque uma vez por dia por personagem.
+
+@ Кусачий Ветер
+en: Breezebiter
+
+@ Рар: Лазурный Простор, точек появления несколько.
+en: A rare in The Azure Span, several spawn points.
+de: Rar: Azurblaues Gebirge, mehrere Fundorte.
+fr: Rare : Travée d’Azur, plusieurs points d'apparition.
+es: Raro: Las Tierras Azures, varios puntos de aparición.
+pt: Raro: Vasta Lazúli, vários pontos de surgimento.
+
+@ Гибломрак
+en: Doomshadow
+
+@ Рар: Лазурный Простор, точка 27.8, 46.
+en: A rare in The Azure Span, at 27.8, 46.
+de: Rar: Azurblaues Gebirge, Punkt 27.8, 46.
+fr: Rare : Travée d’Azur, point 27.8, 46.
+es: Raro: Las Tierras Azures, punto 27.8, 46.
+pt: Raro: Vasta Lazúli, ponto 27.8, 46.
+
+@ Карокта
+en: Karokta
+
+@ Рар: Пещера Заралек, точек появления несколько.
+en: A rare in Zaralek Cavern, several spawn points.
+de: Rar: Zaralekhöhle, mehrere Fundorte.
+fr: Rare : Grotte de Zaralek, plusieurs points d'apparition.
+es: Raro: Caverna Zaralek, varios puntos de aparición.
+pt: Raro: Caverna Zaralek, vários pontos de surgimento.
+
+@ Порождение Беледар
+en: Beledar's Spawn
+
+@ Рар: Тайносводье, точек появления несколько.
+en: A rare in Hallowfall, several spawn points.
+de: Rar: Heilsturz, mehrere Fundorte.
+fr: Rare : Sainte-Chute, plusieurs points d'apparition.
+es: Raro: Santificación, varios puntos de aparición.
+pt: Raro: Pouso Santo, vários pontos de surgimento.
+
+@ Мусор из Галаджио
+en: Gallagio Garbage
+
+@ Рар: Нижняя Шахта, точка 32.2, 21.8.
+en: A rare in Undermine, at 32.2, 21.8.
+de: Rar: Lorenhall, Punkt 32.2, 21.8.
+fr: Rare : Terremine, point 32.2, 21.8.
+es: Raro: Minahonda, punto 32.2, 21.8.
+pt: Raro: Inframina, ponto 32.2, 21.8.
+
+@ Стимулирующий реагент Мрачных Минеров
+en: Darkfuse Precipitant
+
+@ Рар: Нижняя Шахта, точка 41.2, 41.2.
+en: A rare in Undermine, at 41.2, 41.2.
+de: Rar: Lorenhall, Punkt 41.2, 41.2.
+fr: Rare : Terremine, point 41.2, 41.2.
+es: Raro: Minahonda, punto 41.2, 41.2.
+pt: Raro: Inframina, ponto 41.2, 41.2.
+
+@ Стаарбс
+en: Sthaarbs
+
+@ Рар: К'ареш, точек появления несколько.
+en: A rare in K'aresh, several spawn points.
+de: Rar: K'aresh, mehrere Fundorte.
+fr: Rare : K’aresh, plusieurs points d'apparition.
+es: Raro: K'aresh, varios puntos de aparición.
+pt: Raro: K'aresh, vários pontos de surgimento.
+
+@ Урмаг
+en: Urmag
+
+@ Без отката
+en: No cooldown
+
+@ Зандаларский завоеватель №1
+en: Zandalari Warbringer #1
+
+@ Появляется в разных зонах Пандарии. Три завоевателя на вид одинаковы, у каждого свой ящер; номер — только для таблицы, аддон различает их сам. Отката добычи нет.
+en: Appears in several zones of Pandaria. The three Warbringers look the same, each has its own direhorn; the number is only for the sheet, the addon tells them apart. No loot cooldown.
+de: Erscheint in mehreren Zonen von Pandaria. Die drei sehen gleich aus, jeder hat sein eigenes Terrorhorn; die Nummer ist nur für die Tabelle, das Addon unterscheidet sie. Keine Abklingzeit für Beute.
+fr: Apparaît dans plusieurs zones de Pandarie. Les trois se ressemblent, chacun a sa propre corne-fourche ; le numéro ne sert qu'au tableau, l'addon les distingue. Pas de délai de butin.
+es: Aparece en varias zonas de Pandaria. Los tres parecen iguales, cada uno tiene su propio cuernoatroz; el número es solo para la hoja, el accesorio los distingue. Sin reutilización de botín.
+pt: Aparece em várias zonas de Pandária. Os três parecem iguais, cada um tem seu próprio chifre-terror; o número é só para a planilha, o addon os distingue. Sem recarga de saque.
+
+@ Зандаларский завоеватель №2
+en: Zandalari Warbringer #2
+
+@ Зандаларский завоеватель №3
+en: Zandalari Warbringer #3
+
+@ Коготь Смерти / Кулак Страха / Пушка Смерти / Отмщение
+en: Deathtalon / Terrorfist / Doomroller / Vengeance
+
+@ Четыре рара Танаанских джунглей, маунт падает с любого из них. Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.
+en: Four rares of Tanaan Jungle; the mount drops from any of them. Each one gives loot once a day per character, so the row has no cooldown of its own.
+de: Vier seltene Gegner im Tanaandschungel; das Reittier fällt bei jedem von ihnen. Jeder gibt einmal am Tag pro Charakter Beute, daher hat die Zeile keine eigene Abklingzeit.
+fr: Quatre monstres rares de Jungle de Tanaan ; la monture tombe sur n'importe lequel. Chacun donne du butin une fois par jour et par personnage : la ligne n'a donc pas de délai propre.
+es: Cuatro raros de Selva de Tanaan; la montura cae de cualquiera de ellos. Cada uno da botín una vez al día por personaje, así que la fila no tiene reutilización propia.
+pt: Quatro raros de Selva de Tanaan; a montaria cai de qualquer um deles. Cada um dá saque uma vez por dia por personagem, então a linha não tem recarga própria.
+
+@ Скрытень со Дна
+en: Lurker of the Deeps
+
+@ Рара нужно призвать: пять игроков почти одновременно (за ~10 секунд) дёргают пять неприметных рычагов по Звенящим глубинам, рар появляется у озера через минуту. Лут раз в день на персонажа.
+en: It has to be summoned: five players pull the five Inconspicuous Levers around the Ringing Deeps within about 10 seconds; it appears at the lake a minute later. Loot once a day per character.
+de: Er muss beschworen werden: fünf Spieler ziehen innerhalb von etwa 10 Sekunden die fünf Hebel (Inconspicuous Lever) in den Die Schallenden Tiefen; eine Minute später erscheint er am See. Beute einmal am Tag pro Charakter.
+fr: Il faut l'invoquer : cinq joueurs actionnent les cinq leviers (Inconspicuous Lever) des Les abîmes Retentissants en 10 secondes environ ; il apparaît au lac une minute plus tard. Butin une fois par jour et par personnage.
+es: Hay que invocarlo: cinco jugadores accionan las cinco palancas (Inconspicuous Lever) de Cavernas Resonantes en unos 10 segundos; aparece en el lago un minuto después. Botín una vez al día por personaje.
+pt: É preciso invocá-lo: cinco jogadores puxam as cinco alavancas (Inconspicuous Lever) de Fosso Ressonante em cerca de 10 segundos; ele aparece no lago um minuto depois. Saque uma vez por dia por personagem.
+
+@ Любой редкий монстр: Буря Бездны
+en: Any rare: Voidstorm
+
+@ Любой редкий монстр: Зул'Аман
+en: Any rare: Zul'Aman
+
+@ Падает с любого редкого монстра зоны (их здесь 15). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.
+en: Drops from any rare of the zone (15 of them). Each one gives loot once a day per character, so the row has no cooldown of its own.
+de: Fällt bei jedem seltenen Gegner der Zone (es gibt 15). Jeder gibt einmal am Tag pro Charakter Beute, daher hat die Zeile keine eigene Abklingzeit.
+fr: Tombe sur n'importe quel monstre rare de la zone (il y en a 15). Chacun donne du butin une fois par jour et par personnage : la ligne n'a donc pas de délai propre.
+es: Cae de cualquier raro de la zona (hay 15). Cada uno da botín una vez al día por personaje, así que la fila no tiene reutilización propia.
+pt: Cai de qualquer raro da zona (são 15). Cada um dá saque uma vez por dia por personagem, então a linha não tem recarga própria.
+
+@ Любой редкий монстр: Леса Вечной Песни
+en: Any rare: Eversong Woods
+
+@ Любой редкий монстр: Харандар
+en: Any rare: Harandar
+
+@ Падает с любого редкого монстра зоны (их здесь 16). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.
+en: Drops from any rare of the zone (16 of them). Each one gives loot once a day per character, so the row has no cooldown of its own.
+de: Fällt bei jedem seltenen Gegner der Zone (es gibt 16). Jeder gibt einmal am Tag pro Charakter Beute, daher hat die Zeile keine eigene Abklingzeit.
+fr: Tombe sur n'importe quel monstre rare de la zone (il y en a 16). Chacun donne du butin une fois par jour et par personnage : la ligne n'a donc pas de délai propre.
+es: Cae de cualquier raro de la zona (hay 16). Cada uno da botín una vez al día por personaje, así que la fila no tiene reutilización propia.
+pt: Cai de qualquer raro da zona (são 16). Cada um dá saque uma vez por dia por personagem, então a linha não tem recarga própria.
+
+@ Любой редкий монстр: Запретный край
+en: Any rare: The Forbidden Reach
+
+@ Любой боец Театра Боли
+en: Any Theater of Pain champion
+
+@ Бойцы Театра Боли в Малдраксусе выходят на арену по очереди; маунт падает с любого из них.
+en: The Theater of Pain champions in Maldraxxus come out to the arena in turn; the mount drops from any of them.
+de: Die Champions des Theaters der Schmerzen in Maldraxxus betreten nacheinander die Arena; das Reittier fällt bei jedem von ihnen.
+fr: Les champions du Théâtre de la Souffrance à Maldraxxus entrent tour à tour dans l'arène ; la monture tombe sur n'importe lequel.
+es: Los campeones del Teatro del Dolor en Maldraxxus salen a la arena por turnos; la montura cae de cualquiera de ellos.
+pt: Os campeões do Teatro da Dor em Maldraxxus entram na arena um após o outro; a montaria cai de qualquer um deles.
+
+@ Обычные мобы: Вол'дун
+en: Common mobs: Vol'dun
+
+@ Падает с обычных мобов зоны (видов 20), например: Отступник - призыватель небес, Отступник-целитель, Сетрак-опустошитель. Отката нет: каждое убийство — попытка.
+en: Drops from the zone's common mobs (20 kinds), e.g. Faithless Skycaller, Faithless Mender, Sethrak Ravager. No cooldown: every kill is an attempt.
+de: Fällt bei gewöhnlichen Gegnern der Zone (20 Arten), z. B. Treuloser Himmelsrufer, Treuloser Heiler, Verheerer der Sethrak. Keine Abklingzeit: jeder Kill ist ein Versuch.
+fr: Tombe sur les monstres communs de la zone (20 sortes), par ex. Mandeciel infidèle, Soigneur infidèle, Ravageur sephrak. Pas de délai : chaque victime est une tentative.
+es: Cae de los enemigos comunes de la zona (20 tipos), p. ej. Clamacielos infiel, Ensalmador infiel, Devastador sethrak. Sin reutilización: cada muerte es un intento.
+pt: Cai dos inimigos comuns da zona (20 tipos), por ex. Clamacéus Ímpio, Reparador Ímpio, Assolador Sethrak. Sem recarga: cada abate é uma tentativa.
+
+@ Обычные мобы: Друствар
+en: Common mobs: Drustvar
+
+@ Падает с обычных мобов зоны (видов 9), например: Порабощенный проклятием сокольничий, Порабощенный проклятием арбалетчик, Порабощенный проклятием стражник. Отката нет: каждое убийство — попытка.
+en: Drops from the zone's common mobs (9 kinds), e.g. Hexthralled Falconer, Hexthralled Crossbowman, Hexthralled Guardsman. No cooldown: every kill is an attempt.
+de: Fällt bei gewöhnlichen Gegnern der Zone (9 Arten), z. B. Behexter Falkner, Behexter Armbrustschütze, Behexter Gardist. Keine Abklingzeit: jeder Kill ist ein Versuch.
+fr: Tombe sur les monstres communs de la zone (9 sortes), par ex. Fauconnier serficié, Arbalétrier serficié, Garde serficié. Pas de délai : chaque victime est une tentative.
+es: Cae de los enemigos comunes de la zona (9 tipos), p. ej. Halconero hechizado, Ballestero hechizado, Custodio hechizado. Sin reutilización: cada muerte es un intento.
+pt: Cai dos inimigos comuns da zona (9 tipos), por ex. Falcoeiro Embagatado, Besteiro Embagatado, Guarda Embagatado. Sem recarga: cada abate é uma tentativa.
+
+@ Обычные мобы: Назмир
+en: Common mobs: Nazmir
+
+@ Падает с обычных мобов зоны (видов 16), например: Тролль крови - проклинательница, Тролль крови - изверг, Ловчая из племени Охотников Крови. Отката нет: каждое убийство — попытка.
+en: Drops from the zone's common mobs (16 kinds), e.g. Blood Troll Hexxer, Blood Troll Brutalizer, Bloodhunter Stalker. No cooldown: every kill is an attempt.
+de: Fällt bei gewöhnlichen Gegnern der Zone (16 Arten), z. B. Verhexerin der Bluttrolle, Metzler der Bluttrolle, Pirscherin der Blutjäger. Keine Abklingzeit: jeder Kill ist ein Versuch.
+fr: Tombe sur les monstres communs de la zone (16 sortes), par ex. Maléficieuse trolle de sang, Brutaliseur troll de sang, Traqueuse chasse-sang. Pas de délai : chaque victime est une tentative.
+es: Cae de los enemigos comunes de la zona (16 tipos), p. ej. Aojadora trol de sangre, Brutalizador trol de sangre, Acechadora Cazasangre. Sin reutilización: cada muerte es un intento.
+pt: Cai dos inimigos comuns da zona (16 tipos), por ex. Bagateira Sanguitrólica, Brutalizador Sanguitrólico, Espreitadora Caça-sangue. Sem recarga: cada abate é uma tentativa.
+
+@ Обычные мобы: Долина Штормов
+en: Common mobs: Stormsong Valley
+
+@ Падает с обычных мобов зоны (видов 25), например: Стрелок из племени Шипошкурых, Лоялист дома Штормсонгов, Канонир из Просоленных мастерских. Отката нет: каждое убийство — попытка.
+en: Drops from the zone's common mobs (25 kinds), e.g. Briarback Skirmisher, Stormsong Loyalist, Brinebrawn Cannoneer. No cooldown: every kill is an attempt.
+de: Fällt bei gewöhnlichen Gegnern der Zone (25 Arten), z. B. Scharmützler der Borstenrücken, Sturmsangloyalist, Salzkraftkanonier. Keine Abklingzeit: jeder Kill ist ein Versuch.
+fr: Tombe sur les monstres communs de la zone (25 sortes), par ex. Tirailleur roncedos, Loyaliste chantorage, Canonnier saumeforce. Pas de délai : chaque victime est une tentative.
+es: Cae de los enemigos comunes de la zona (25 tipos), p. ej. Hostigador Lomozarza, Leal a los Canto Tormenta, Cañonero Forzasalmuera. Sin reutilización: cada muerte es un intento.
+pt: Cai dos inimigos comuns da zona (25 tipos), por ex. Escaramuçador Dorsarça, Legalista de Trovamare, Canhoneiro de Brutomar. Sem recarga: cada abate é uma tentativa.
+
+@ Затерянный во времени протодракон
+en: Time-Lost Proto-Drake
+
+@ Летает по Грозовой Гряде, появляется раз в 6–24 часа (вместо него может появиться Вирагоса). Маунт падает всегда.
+en: Flies around the Storm Peaks, appears every 6-24 hours (Vyragosa may come instead). The mount always drops.
+de: Fliegt über die Die Sturmgipfel, erscheint alle 6-24 Stunden (stattdessen kann Vyragosa kommen). Das Reittier fällt immer.
+fr: Vole autour des Les pics Foudroyés, apparaît toutes les 6 à 24 heures (Vyragosa peut venir à sa place). La monture tombe toujours.
+es: Vuela por Las Cumbres Tormentosas, aparece cada 6-24 horas (en su lugar puede venir Vyragosa). La montura siempre cae.
+pt: Voa por Picos Tempestuosos, aparece a cada 6-24 horas (Viragosa pode vir no lugar). A montaria sempre cai.
+
+@ Эонакс
+en: Aeonaxx
+
+@ Летает по Подземью; появляется раз в несколько часов, его нужно оседлать и победить. Маунт падает всегда.
+en: Flies around Deepholm; appears every few hours, you have to mount it and win. The mount always drops.
+de: Fliegt über Tiefenheim; erscheint alle paar Stunden, man muss ihn besteigen und besiegen. Das Reittier fällt immer.
+fr: Vole au-dessus du Le Tréfonds ; apparaît toutes les quelques heures, il faut le chevaucher et gagner. La monture tombe toujours.
+es: Vuela por Infralar; aparece cada pocas horas, hay que montarlo y vencer. La montura siempre cae.
+pt: Voa por Geodomo; aparece a cada poucas horas, é preciso montá-lo e vencer. A montaria sempre cai.
+
+@ Нок-Карош
+en: Nok-Karosh
+
+@ Хребет Ледяного Огня, появляется редко. Маунт падает всегда.
+en: Frostfire Ridge, appears rarely. The mount always drops.
+de: Frostfeuergrat, erscheint selten. Das Reittier fällt immer.
+fr: Crête de Givrefeu, apparaît rarement. La monture tombe toujours.
+es: Cresta Fuego Glacial, aparece rara vez. La montura siempre cae.
+pt: Serra Fogofrio, aparece raramente. A montaria sempre cai.
+
+@ Горок
+en: Gorok
+
+@ Пудовый Кулак
+en: Poundfist
+
+@ Горгронд, появляется раз в много часов. Маунт падает всегда.
+en: Gorgrond, appears once in many hours. The mount always drops.
+de: Gorgrond, erscheint nur alle paar Stunden. Das Reittier fällt immer.
+fr: Gorgrond, apparaît une fois toutes les nombreuses heures. La monture tombe toujours.
+es: Gorgrond, aparece una vez cada muchas horas. La montura siempre cae.
+pt: Gorgrond, aparece uma vez a cada muitas horas. A montaria sempre cai.
+
+@ Алани
+en: Alani
+
+@ Вечноцветущий дол (фаза Пандарии): щит снимает Небесный кристалл из 10 небесных осколков, они падают с мобов дола. Маунт падает всегда.
+en: Vale of Eternal Blossoms (the Pandaria phase): a Sky Crystal made of 10 Skyshards, dropped by the Vale's mobs, takes down her shield. The mount always drops.
+de: Tal der Ewigen Blüten (Pandaria-Phase): ein Himmelskristall (Sky Crystal) aus 10 Himmelssplittern (Skyshard) von den Gegnern des Tals nimmt ihr den Schild. Das Reittier fällt immer.
+fr: Val de l’Éternel printemps (phase de Pandarie) : un cristal céleste (Sky Crystal) fait de 10 éclats célestes (Skyshard), lâchés par les monstres du val, brise son bouclier. La monture tombe toujours.
+es: Valle de la Flor Eterna (fase de Pandaria): un cristal celeste (Sky Crystal) hecho de 10 fragmentos celestes (Skyshard), que sueltan los enemigos del valle, le quita el escudo. La montura siempre cae.
+pt: Vale das Flores Eternas (fase de Pandária): um cristal celeste (Sky Crystal) feito de 10 fragmentos celestes (Skyshard), que os inimigos do vale deixam cair, tira o escudo dela. A montaria sempre cai.
+
+@ Посейдус
+en: Poseidus
+
+@ Плавает по Вайш'иру (Мерцающий простор, Бездонные глубины), появляется раз в несколько часов. Маунт падает всегда.
+en: Swims around Vashj'ir (Shimmering Expanse, Abyssal Depths), appears every few hours. The mount always drops.
+de: Schwimmt durch Vashj'ir (Schimmernde Weiten, Abyssische Tiefen), erscheint alle paar Stunden. Das Reittier fällt immer.
+fr: Nage dans Vashj’ir (Étendues Chatoyantes, Profondeurs Abyssales), apparaît toutes les quelques heures. La monture tombe toujours.
+es: Nada por Vashj'ir (Extensión Bruñida, Profundidades Abisales), aparece cada pocas horas. La montura siempre cae.
+pt: Nada por Vashj'ir (Vastidão Cintilante, Profundezas Abissais), aparece a cada poucas horas. A montaria sempre cai.
+
+@ Накк Громогласный
+en: Nakk the Thunderer
+
+@ Награнд (Дренор), появляется раз в много часов. Маунт падает всегда.
+en: Nagrand (Draenor), appears once in many hours. The mount always drops.
+de: Nagrand (Draenor), erscheint nur alle paar Stunden. Das Reittier fällt immer.
+fr: Nagrand (Draenor), apparaît une fois toutes les nombreuses heures. La monture tombe toujours.
+es: Nagrand (Draenor), aparece una vez cada muchas horas. La montura siempre cae.
+pt: Nagrand (Draenor), aparece uma vez a cada muitas horas. A montaria sempre cai.
+
+@ Лук'хок
+en: Luk'hok
+
+@ Сильфида
+en: Silthide
+
+@ Таладор, появляется раз в много часов. Маунт падает всегда.
+en: Talador, appears once in many hours. The mount always drops.
+de: Talador, erscheint nur alle paar Stunden. Das Reittier fällt immer.
+fr: Talador, apparaît une fois toutes les nombreuses heures. La monture tombe toujours.
+es: Talador, aparece una vez cada muchas horas. La montura siempre cae.
+pt: Talador, aparece uma vez a cada muitas horas. A montaria sempre cai.
+
+@ Торопун
+en: Pathrunner
+
+@ Долина Призрачной Луны (Дренор), появляется раз в много часов. Маунт падает всегда.
+en: Shadowmoon Valley (Draenor), appears once in many hours. The mount always drops.
+de: Schattenmondtal (Draenor), erscheint nur alle paar Stunden. Das Reittier fällt immer.
+fr: Vallée d’Ombrelune (Draenor), apparaît une fois toutes les nombreuses heures. La monture tombe toujours.
+es: Valle Sombraluna (Draenor), aparece una vez cada muchas horas. La montura siempre cae.
+pt: Vale da Lua Negra (Draenor), aparece uma vez a cada muitas horas. A montaria sempre cai.
+
+@ Ночная кобыла
+en: Night Mare
+
+@ Арденвельд: появляется после короткой цепочки заданий (подробности — на Wowhead). Маунт падает почти всегда.
+en: Ardenweald: appears after a short quest chain (details on Wowhead). The mount almost always drops.
+de: Ardenwald: erscheint nach einer kurzen Questreihe (Details auf Wowhead). Das Reittier fällt fast immer.
+fr: Sylvarden : apparaît après une courte suite de quêtes (détails sur Wowhead). La monture tombe presque toujours.
+es: Ardenweald: aparece tras una breve cadena de misiones (detalles en Wowhead). La montura cae casi siempre.
+pt: Ardena: aparece depois de uma curta série de missões (detalhes no Wowhead). A montaria cai quase sempre.
+
+@ Дормус Погонщик Верблюдов
+en: Dormus the Camel-Hoarder
+
+@ Сначала найти фигурку верблюда (Ульдум; появляется редко и в разных местах): она перенесёт к Дормусу. Маунт падает всегда.
+en: First find a camel figurine in Uldum (it appears rarely, in different places): it takes you to Dormus. The mount always drops.
+de: Zuerst eine Kamelfigur in Uldum finden (erscheint selten und an verschiedenen Orten): sie bringt dich zu Dormus der Kameltreiber. Das Reittier fällt immer.
+fr: Trouver d'abord une figurine de chameau en Uldum (rare, à divers endroits) : elle vous emmène chez Dormus le Collectionneur de dromadaires. La monture tombe toujours.
+es: Primero hay que encontrar una figurilla de camello en Uldum (aparece rara vez y en distintos lugares): te lleva con Dormus el Camellero. La montura siempre cae.
+pt: Primeiro encontre uma estatueta de camelo em Uldum (aparece raramente, em lugares diferentes): ela leva você até Dormus, o Colecionador de Camelos. A montaria sempre cai.
+
+@ Гирукон
+en: Hirukon
+
+@ Появляется, только если призвать приманкой (Aurelid Lure; подробности — на Wowhead).
+en: Comes only when summoned with a lure (Aurelid Lure; details on Wowhead).
+de: Kommt nur, wenn er mit einem Köder beschworen wird (Aurelid Lure; Details auf Wowhead).
+fr: Ne vient que s'il est invoqué avec un appât (Aurelid Lure ; détails sur Wowhead).
+es: Solo aparece si se invoca con un cebo (Aurelid Lure; detalles en Wowhead).
+pt: Só aparece quando invocado com uma isca (Aurelid Lure; detalhes no Wowhead).
+
+@ Алунира
+en: Alunira
+
+@ Появляется на Острове Дорн нечасто (подробности — на Wowhead).
+en: Appears on the Isle of Dorn now and then (details on Wowhead).
+de: Erscheint ab und zu auf der Insel von Dorn (Details auf Wowhead).
+fr: Apparaît de temps en temps sur l'Île de Dorn (détails sur Wowhead).
+es: Aparece de vez en cuando en Isla de Dorn (detalles en Wowhead).
+pt: Aparece de vez em quando em Ilha de Dorn (detalhes no Wowhead).
+
+@ Служитель глубин
+en: Adherent of the Abyss
+
+@ Его призывают (подробности — на Wowhead).
+en: It has to be summoned (details on Wowhead).
+de: Er muss beschworen werden (Details auf Wowhead).
+fr: Il faut l'invoquer (détails sur Wowhead).
+es: Hay que invocarlo (detalles en Wowhead).
+pt: É preciso invocá-lo (detalhes no Wowhead).
+
+@ Вел'иккан
+en: Humon'gozz
+
+@ Вырастает из Быстрорастущего гриба (подробности — на Wowhead).
+en: Grows out of a Rapidly Growing Mushroom (details on Wowhead).
+de: Wächst aus einem Schnell wachsender Pilz (Details auf Wowhead).
+fr: Sort d'un Champignon à croissance rapide (détails sur Wowhead).
+es: Sale de un Champiñón de crecimiento rápido (detalles en Wowhead).
+pt: Cresce de um Cogumelo de Crescimento Rápido (detalhes no Wowhead).
+
+@ Любой редкий монстр: Спиральный остров
+en: Any rare: The Coiled Isle
+
+@ Падает с любого редкого монстра зоны (их здесь 21). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.
+en: Drops from any rare of the zone (21 of them). Each one gives loot once a day per character, so the row has no cooldown of its own.
+de: Fällt bei jedem seltenen Gegner der Zone (es gibt 21). Jeder gibt einmal am Tag pro Charakter Beute, daher hat die Zeile keine eigene Abklingzeit.
+fr: Tombe sur n'importe quel monstre rare de la zone (il y en a 21). Chacun donne du butin une fois par jour et par personnage : la ligne n'a donc pas de délai propre.
+es: Cae de cualquier raro de la zona (hay 21). Cada uno da botín una vez al día por personaje, así que la fila no tiene reutilización propia.
+pt: Cai de qualquer raro da zona (são 21). Cada um dá saque uma vez por dia por personagem, então a linha não tem recarga própria.
+
+@ Падает с любого редкого монстра острова (их здесь 15), очень редко. Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.
+en: Drops from any rare of the isle (15 of them), very rarely. Each one gives loot once a day per character, so the row has no cooldown of its own.
+de: Fällt bei jedem seltenen Gegner der Insel (es gibt 15), sehr selten. Jeder gibt einmal am Tag pro Charakter Beute, daher hat die Zeile keine eigene Abklingzeit.
+fr: Tombe sur n'importe quel monstre rare de l'île (il y en a 15), très rarement. Chacun donne du butin une fois par jour et par personnage : la ligne n'a donc pas de délai propre.
+es: Cae de cualquier raro de la isla (hay 15), muy rara vez. Cada uno da botín una vez al día por personaje, así que la fila no tiene reutilización propia.
+pt: Cai de qualquer raro da ilha (são 15), muito raramente. Cada um dá saque uma vez por dia por personagem, então a linha não tem recarga própria.

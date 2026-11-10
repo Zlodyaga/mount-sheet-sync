@@ -59,6 +59,17 @@
   (layout 5, Исхак переезжает сам), своя группа в окне, откат у каждого свой (`every`), считает аддон; кнопка «Сброс недели» —
   в настройках; окно 1060×600 со своим оформлением (`Skin.lua`, шрифты и текстуры в `Media`) и таблицами, «Все персонажи» — первая строка слева, сетка с прокруткой или «все столбцы сразу» (настройки), ручная отметка и поиск — в «Журнале»; раздельные сохранения N/H/M (скрытая колонка `N/H/M`, буквы в окне). Обе половины требуют друг друга: `Program.MinAddon` = 3.0.3, `MIN_PROGRAM` = 2.9.2. Окно проверено в игре на альфах. Картинки окна в README и галерее CurseForge обновлены 04.11.2026: их рисует `tools/screens/render.py`, имена вымышленные, значки маунтов — заглушки.
 
+- **Аддон 3.0.5** (в работе, не выпущен, 10.11.2026): запасная точка входа у каждого из 55 рейдов и подземелий каталога
+  (`Entrances.lua` из `tools/catalog/entrances.py`, тест `test_entrances.py`); в игре не проверено.
+- **Программа 2.10.1** (в работе, не выпущена, 10.11.2026): 88 маунтов с раров в каталоге (вкл. группы «100 %» и «фарм мобов», колонка «Вид») (`2026-11-10`, источник — база Rarity,
+  имена — Wowhead, `tools/catalog/rare_names.json`); вид таблицы 6 дописывает их в готовые листы (`SheetUpgrade.AddRares`);
+  рар узнаётся и по номеру существа (колонка каталога «ID существ» → `npcs` → `ns.RareRowForNpc`), `MinAddon` = 3.0.5.
+  В аддоне 3.0.5 ещё: Ctrl + щелчок по рару (`ns.RARE_SPOTS`), закрытые сюжетом входы (`Access.lua`; номера заданий с Wowhead — проверить в игре).
+  В программе 2.10.1 ещё: рейдовая добыча «Текущий контент» и «контент-группинг» — в «Осталось» (вид 6 дописывает её в готовые листы).
+  Что не удалось — `docs/TODO.md`, раздел «На углублённое изучение».
+  Лист раров собирает `tools/catalog/rares/rare_rows.py --write` (сам запускает game_names.py и build_sheet.py); советы раров —
+  на 6 языках (`tip_l10n.py`), в игре и носителем языка не проверены. Ручная проверка перед выпуском — `docs/ingame-check.md`.
+
 - **Discord** (02.11.2026): сервер «MountSheetSync WoW», бессрочное приглашение https://discord.gg/DKPGJP222d, ссылка стоит в Social Links проекта на CurseForge.
 
 - Открыто / на потом:
@@ -85,7 +96,10 @@
   → `python3 tools/i18n/build.py`. Русские слова таблицы — `tools/i18n/sheet_words.txt` → `build_sheet.py`.
 - Концы строк сохранять как в файле (`.gitattributes`: `* -text`): часть файлов аддона CRLF (Collection.lua,
   Tooltip.lua, toc, Statistics.lua…), часть LF. Правя файл, не превращать CRLF в LF и наоборот.
-- `Statistics.lua` не править руками — генерирует `python3 tools/catalog/statistic_ids.py --write`.
+- `Statistics.lua` не править руками — генерирует `python3 tools/catalog/statistic_ids.py --write`. `Entrances.lua` — тоже:
+  `python3 tools/catalog/entrances.py --write` (таблицы игры с wago.tools; там же точки раров из колонки «Точка»); после новых мест и раров в каталоге — перезапустить.
+  Точки, которые показала сама игра, — `tools/catalog/entrances_game.json` (их собирает аддон-сборщик `tools/probe/MountSheetSyncProbe`,
+  файл делает `entrances_from_probe.py <его SavedVariables>`); они важнее таблиц.
 - `SheetData.lua` и `Program.lua` в репозитории — пустые (`= nil`); их пишет программа у пользователя.
 - Тесты: `bash tools/run_tests.sh` (или `--no-ui`) — нужны Linux, mono, python3 + lupa, node, Xvfb и т. п.
   (на Windows — WSL; иначе полагаться на CI `ci.yml`: на push в `main`, PR и Run workflow, ~4 мин). На ПК

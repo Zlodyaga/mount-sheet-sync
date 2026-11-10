@@ -48,7 +48,7 @@ for k in ("http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY", "no_proxy", 
 
 def run(exe, *args):
     p = subprocess.run(["mono", exe, "--data", DATA] + list(args), env=env, capture_output=True, timeout=120)
-    return p.returncode, (p.stdout + p.stderr).decode("utf-8", "replace")
+    return p.returncode, paths.out_text(p.stdout + p.stderr)
 
 
 def uninstall_values():
@@ -64,7 +64,7 @@ check("--install exits 0 and says where", code == 0 and "Program installed: " + 
 check("the installed exe is a copy of the downloaded one", os.path.exists(inst_exe) and open(inst_exe, "rb").read() == open(EXE, "rb").read())
 vals = uninstall_values()
 check("registered in Installed apps: name, version, uninstall command", vals is not None and "Mount Sheet Sync" in vals
-      and "--uninstall" in vals and inst_exe in vals and "2.10.0" in vals, vals)
+      and "--uninstall" in vals and inst_exe in vals and "2.10.1" in vals, vals)
 
 newer = open(EXE, "rb").read() + b"\0A-NEWER-DOWNLOAD"
 open(dl_exe, "wb").write(newer)

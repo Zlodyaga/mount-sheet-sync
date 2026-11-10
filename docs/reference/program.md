@@ -57,7 +57,7 @@ Windows). «Выйти» удаляет ключ и отзывает его у G
   записи журнала). Запись `R-auto-<weekEnd>` от «Mount Sheet Sync» идёт через обычный `SyncAll` (за ней заново убийства
   этой недели), потом список запрашивается заново. Номер в списке отправленного не даёт повторить за неделю; другой
   компьютер с той же таблицей увидит `resetAt`. Журнала нет — неделя неизвестна, сброса нет. Работает и в режиме скрипта.
-- **Рары** (`SheetLogic.MarkInRare`, `RareEvery`, `SheetUpgrade.MoveRares`): запись `kind = world` дополнительно ищется на
+- **Рары** (`SheetLogic.MarkInRare`, `RareEvery`, `SheetUpgrade.MoveRares`): запись `kind = world` дополнительно ищется на «Без отката» / «No cooldown» — `every` = 0. Строкам рар в `mounts` — `npcs` из каталога (`SheetLogic.RareNpcs`, колонка «ID существ»); `Program.MinAddon` = 3.0.5.
   листе «Редкие монстры» — там «Последнее убийство» и +1 в «Попыток». В `status` — строки `rare` каждому владельцу колонки
   «Мировых боссов», откат `every` — из «Сброс / частота» на любом языке таблицы. `Program.MinAddon` = 3.0.3: старый аддон не знает `rare`.
 - **Один проход цикла — одна загрузка таблицы** (`SyncEngine.BeginSession` в `IterationInSession`, `GoogleSheetService.KeepBook`):

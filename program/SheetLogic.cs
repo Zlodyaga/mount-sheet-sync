@@ -879,12 +879,20 @@ namespace MountSheetSync
         static readonly Regex EveryHours = new Regex(@"(\d+)\s*(ч|h)", RegexOptions.IgnoreCase);
 
         /// <summary>
-        /// Откат рара из «Сброс / частота» (на любом языке таблицы): "weekly", число секунд («каждые 8 ч») или "daily" —
-        /// ежедневный сброс игры, он же значение по умолчанию.
+        /// Откат рара из «Сброс / частота» (на любом языке таблицы): "weekly", число секунд («каждые 8 ч»; «Без отката» — 0)
+        /// или "daily" — ежедневный сброс игры, он же значение по умолчанию.
         /// </summary>
         public static object RareEvery(object cell)
         {
             string text = JsString(cell).ToLowerInvariant();
+            // маунт с любого из нескольких раров, у каждого своя добыча на день: общего отката у строки нет
+            foreach (string w in new[] { "без отката", "no cooldown" })
+            {
+                if (text.Contains(w))
+                {
+                    return 0.0;
+                }
+            }
             foreach (string w in new[] { "еженедельно", "раз в неделю", "weekly", "wöchentlich", "hebdomadaire", "semanal" })
             {
                 if (text.Contains(w))
@@ -1471,6 +1479,7 @@ namespace MountSheetSync
                 int cPlace = FindCol(header, "локац", 2);
                 int cCollected = FindCol(header, "собрано", -1);
                 int cEvery = FindCol(header, "сброс|частота", -1);
+                int cRareId = FindCol(header, "^id в игре$", -1);
                 for (int r = 1; r < rare.Data.Count; r++)
                 {
                     object[] row = rare.Data[r];
@@ -1480,10 +1489,15 @@ namespace MountSheetSync
                     {
                         continue;
                     }
+                    string group = RareGroup(cRareId >= 0 ? MountIndex.IdOf(At(row, cRareId)) : 0);
                     foreach (string owner in worldOwners)
                     {
                         Dictionary<string, object> item = StatusItem("rare", rare.Name, r, At(row, cPlace), boss, "", mount, false);
                         item["every"] = RareEvery(cEvery >= 0 ? At(row, cEvery) : "");
+                        if (group != null)
+                        {
+                            item["group"] = group;   // своя группа в окне аддона: «100 %» или «Фарм мобов»
+                        }
                         ((List<object>)charFor(owner)["items"]).Add(item);
                     }
                 }
@@ -1656,6 +1670,12 @@ namespace MountSheetSync
             }).ToList();
         }
 
+        // Колонка «Фармлю» на листе персонажа (-1 — нет).
+        public static int FarmCol(object[] header)
+        {
+            return FindCol(header, "^фармлю", -1);
+        }
+
         public static int FindCol(object[] header, string pattern, int fallback)
         {
             Regex re = new Regex(pattern);
@@ -1756,7 +1776,7 @@ namespace MountSheetSync
             return At(data[r], c);
         }
 
-        static object At(object[] row, int c)
+        public static object At(object[] row, int c)
         {
             // как row[c] в JS: за пределами строки — undefined
             return c >= 0 && c < row.Length ? row[c] : null;

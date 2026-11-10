@@ -51,7 +51,7 @@ json.dump({"wowPath": WOW, "pollSeconds": 2, "mode": "google"}, open(os.path.joi
 OLD_LEDGER = "K-1\t%d\r\n" % int(time.time())
 open(os.path.join(DATA, "sent-ids.txt"), "w", newline="").write(OLD_LEDGER)
 
-mock = subprocess.Popen(["python3", os.path.join(HERE, "mock_google.py"), str(PORT), os.path.join(W, "mock_state.json"),
+mock = subprocess.Popen([sys.executable, os.path.join(HERE, "mock_google.py"), str(PORT), os.path.join(W, "mock_state.json"),
                          os.path.join(W, "mock.log")])
 time.sleep(0.8)
 
@@ -72,7 +72,7 @@ def state():
 
 def run(*args, timeout=120):
     p = subprocess.run(["mono", EXE, "--data", DATA] + list(args), env=ENV, capture_output=True, timeout=timeout)
-    return p.returncode, (p.stdout + p.stderr).decode("utf-8", "replace")
+    return p.returncode, paths.out_text(p.stdout + p.stderr)
 
 
 def login(expect_browser=True, retry=None, idle=0):
@@ -112,7 +112,7 @@ def login(expect_browser=True, retry=None, idle=0):
                 page = [page, get(redirect.rstrip("/") + m.group(1)) if m else None]
             break
         time.sleep(0.2)
-    out = proc.communicate(timeout=60)[0].decode("utf-8", "replace")
+    out = paths.out_text(proc.communicate(timeout=60)[0])
     return proc.returncode, out, page
 
 

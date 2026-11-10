@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.4 — окно, иконка и настройки
+Mount Sheet Sync 3.0.5 — окно, иконка и настройки
 ==================================================
   * окно (ЛКМ по иконке или /mss): слева «Все персонажи» и персонажи из таблицы (сколько каждому осталось), справа
     вкладки «Осталось» (таблица выбранного персонажа или сетка всех), «Попытки» (счётчик маунтов, сортировка и
@@ -359,14 +359,9 @@ local WORLD_MAP = 946
 local MAP_ZONE = 3   -- Enum.UIMapType.Zone
 local entrances, entranceByName, entranceList = {}, {}, {}
 
--- Входы, которых игра может не отдать: значка на карте нет (у персонажа, не бывавшего там, или вообще). Сначала всегда
--- спрашиваем игру. Координаты — из таблиц игры (JournalInstanceEntrance, AreaTrigger; у Мехагона записи нет, точка из гайдов).
-local KNOWN_ENTRANCES = {
-  [860] = { map = 42, x = 0.4637, y = 0.7066 },     -- Возвращение в Каражан, Перевал Мертвого Ветра
-  [1001] = { map = 895, x = 0.8382, y = 0.7925 },   -- Вольная Гавань, Тирагардское поморье
-  [1178] = { map = 1462, x = 0.736, y = 0.360 },    -- Операция «Мехагон», остров Мехагон
-  [1292] = { map = 23, x = 0.4345, y = 0.1959 },    -- Стратхольм, черный ход, Восточные Чумные земли
-}
+-- Входы, которых игра может не отдать (значка на карте нет: персонаж там не бывал, или вообще), — запасная точка у
+-- каждого рейда и подземелья каталога: ns.ENTRANCES из Entrances.lua (его пишет tools/catalog/entrances.py по таблицам
+-- игры). Сначала всегда спрашиваем игру.
 -- Мировой босс, у которого в журнале игры нет карты (UiMapID 0). Координаты — Warcraft Wiki.
 local KNOWN_BOSS_SPOTS = {
   [2210] = { map = 864, x = 0.44, y = 0.558 },      -- Краулок, Вол'дун
@@ -423,7 +418,7 @@ local function FindEntrance(instance, name)
   if not Known() then
     ScanEntrances()   -- нет в найденном — обходим карты заново: игра могла ещё не отдать их в прошлый раз
   end
-  return Known() or KNOWN_ENTRANCES[instance]
+  return Known() or (ns.ENTRANCES and ns.ENTRANCES[instance])
 end
 
 -- /mss route <часть названия>: что игра отдаёт о входах — для разбора «На карте не нашлось» (по-английски, как /mss tip).
@@ -577,7 +572,7 @@ local pendingRoute, routeOwn, routeWatcher = nil, false, nil
 -- Путь прямо ко входу: метка входа, а если игра её не ведёт — своя метка у входа.
 local function TrackEntrance(e, name)
   local tracked = pcall(function()
-    assert(e.poi)   -- своя точка (KNOWN_ENTRANCES): значка игры нет, вести не к чему
+    assert(e.poi)   -- запасная точка (ns.ENTRANCES): значка игры нет, вести не к чему
     C_SuperTrack.SetSuperTrackedMapPin(Enum.SuperTrackingMapPinType.AreaPOI, e.poi)
     local _, id = C_SuperTrack.GetSuperTrackedMapPin()
     assert(id == e.poi)
@@ -644,8 +639,39 @@ local function WatchRoute()
   end)
 end
 
+local accessAsked, accessAskedAt = nil, 0   -- вход, про который только что сказали «не пройдено»
+
+-- Следующий шаг цепочки доступа (Access.lua): задание уже взято — цель на него (путь покажет игра); иначе метка там,
+-- где его выдают; места нет — слова, где искать.
+local function ShowAccessStep(step, inLog)
+  if not step then
+    return
+  end
+  local title = ns.QuestTitle(step)
+  if inLog and pcall(C_SuperTrack.SetSuperTrackedQuestID, step.quest) then
+    ns.Print(string.format(L.access_step_track, title))
+  elseif step.map and PinAndTrack(step.map, step.x, step.y) then
+    ns.Print(string.format(L.access_step_pin, title))
+  else
+    ns.Print(string.format(L.access_step_text, title, L["access_where_" .. tostring(step.where)] or "?"))
+  end
+end
+
 local function ShowRoute(elem)
   pendingRoute = nil   -- новый путь заменяет недоделанный
+  if elem.spot then
+    -- рар: точка из каталога (ns.RARE_SPOTS); точек появления несколько — карта его зоны
+    local name, s = Safe(elem.bossName), elem.spot
+    if s.x and PinAndTrack(s.map, s.x, s.y) then
+      ns.Print(string.format(L.route_boss, name))
+    elseif not s.x and pcall(OpenWorldMap, s.map) then
+      ns.Print(string.format(L.route_zone, name))
+      StepAside(WorldMapFrame)
+    else
+      ns.Print(string.format(L.route_none, name))
+    end
+    return
+  end
   if elem.world then
     local name = Safe(elem.bossName)
     local spot = elem.encounter and FindBossSpot(elem.encounter)
@@ -658,6 +684,23 @@ local function ShowRoute(elem)
   end
   local instance = elem.instance
   local name = Safe(elem.placeName) ~= "" and Safe(elem.placeName) or ns.InstanceName(instance) or "?"
+  -- вход, закрытый сюжетом или фазой (Access.lua): сначала — что сделать; «не пройдено» — без метки, но повторный
+  -- Ctrl + щелчок в течение минуты ставит её всё равно (номер задания мог устареть)
+  local access = ns.AccessCheck and ns.AccessCheck(instance)
+  if access and access.hint ~= "" then
+    local now = GetTime and GetTime() or 0
+    if access.open == false and not (accessAsked == instance and now - accessAskedAt < 60) then
+      accessAsked, accessAskedAt = instance, now
+      ns.Print(string.format(L.access_need, name, access.hint))
+      ShowAccessStep(access.step, access.stepInLog)
+      return
+    end
+    if access.open == nil then
+      ns.Print(string.format(L.access_note, name, access.hint))
+    elseif access.after then
+      ns.Print(string.format(L.access_note, name, access.after))
+    end
+  end
   local e = FindEntrance(instance, ns.InstanceName(instance) or elem.placeName)
   if not e then
     ns.Print(string.format(L.route_none, name))
@@ -1237,7 +1280,9 @@ local function WithPlace(elem, item)
   elem.instance = ns.ItemInstance(item)
   elem.encounter = tonumber(item.je)
   elem.world = item.kind == "world" or nil
-  elem.route = (elem.instance and (item.kind == "raid" or item.kind == "dungeon")) or (elem.world and elem.encounter ~= nil) or nil
+  elem.spot = item.kind == "rare" and ns.RARE_SPOTS and ns.RARE_SPOTS[tonumber(item.id)] or nil
+  elem.route = (elem.instance and (item.kind == "raid" or item.kind == "dungeon")) or (elem.world and elem.encounter ~= nil)
+    or elem.spot ~= nil or nil
   elem.placeName = ns.Shown(item, "place")
   elem.bossName = ns.Shown(item, "boss")
   return elem
@@ -1307,7 +1352,7 @@ local function RemainingView(r, own)
       for pass = 1, 2 do   -- сначала то, что осталось, потом убитые
         for _, entry in ipairs(group) do
           if entry.done == (pass == 2) then
-            local menu = own and kind ~= "world" and kind ~= "rare" and not entry.done
+            local menu = own and kind ~= "world" and kind ~= "rare" and kind ~= "guaranteed" and kind ~= "mobs" and not entry.done
             list[#list + 1] = RemainingRow(entry, menu, stripe)
             stripe = not stripe
           end

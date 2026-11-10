@@ -262,6 +262,15 @@ en: The “Remaining” list is unavailable: {0}.
 @ редкие монстры перенесены на отдельный лист ({0})
 en: rare monsters moved to their own sheet ({0})
 
+@ лист «Редкие монстры» ({0})
+en: the “Rare monsters” sheet ({0})
+
+@ новые редкие монстры из каталога ({0})
+en: new rare monsters from the catalog ({0})
+
+@ рейдовые маунты текущего контента на листах персонажей ({0})
+en: current-content raid mounts on the character sheets ({0})
+
 @ Автоматический сброс недели не прошёл: {0} Попробую позже.
 en: Automatic weekly reset failed: {0} Will try later.
 

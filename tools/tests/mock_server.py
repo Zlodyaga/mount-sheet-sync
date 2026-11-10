@@ -12,6 +12,7 @@ import sys
 import tempfile
 import uuid
 from http.server import BaseHTTPRequestHandler, HTTPServer
+HTTPServer.allow_reuse_address = os.name != "nt"   # Windows: reuse = two servers on one port
 from urllib.parse import parse_qs, urlparse
 
 PORT = int(sys.argv[1])

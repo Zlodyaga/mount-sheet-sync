@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.4 — «Осталось на этой неделе»
+Mount Sheet Sync 3.0.5 — «Осталось на этой неделе»
 ==================================================
 Список приходит из Google-таблицы: программа MountSheetSync.exe записывает его
 в SheetData.lua (глобальная MountSheetSyncSheet), а игра читает этот файл при
@@ -450,8 +450,12 @@ function ns.BuildRemaining(data, player, weekEnd, kills, ch)
   local now = time()
   for _, item in ipairs(type(ch.items) == "table" and ch.items or {}) do
     if type(item) == "table" and item.kind == "rare" then
-      -- откат свой, неделя ни при чём: последнее убийство этим персонажем из всего журнала
-      total = total + 1
+      -- откат свой, неделя ни при чём: последнее убийство этим персонажем из всего журнала. Рары «100 %» и фарм мобов
+      -- (item.group) показываем своими группами, но не считаем: это не «убить на этой неделе»
+      local counts = item.group ~= "guaranteed" and item.group ~= "mobs"
+      if counts then
+        total = total + 1
+      end
       local by, byTime
       for _, rec in ipairs(kills) do
         local t = tonumber(rec.time) or 0
@@ -463,7 +467,7 @@ function ns.BuildRemaining(data, player, weekEnd, kills, ch)
       end
       local wait = by and RareWait(byTime, item.every, now, weekEnd) or 0
       items[#items + 1] = { item = item, done = wait > 0, by = by, again = wait > 0 and wait or nil }
-      if wait <= 0 then
+      if wait <= 0 and counts then
         left = left + 1
       end
     elseif type(item) == "table" and item.sep and not ns.IsNotFarmed(hidden, item) then
@@ -606,8 +610,9 @@ function ns.GetSummary()
           summaryKey[it] = k
         end
         local row = byKey[k]
-        if not row and ns.GroupOf(it) == "reward" then
-          row = false   -- достижения и награды — на своей вкладке, не в сетке
+        local group = not row and ns.GroupOf(it)
+        if not row and (group == "reward" or group == "guaranteed" or group == "mobs") then
+          row = false   -- достижения и награды — на своей вкладке, рары «100 %» и фарм мобов — не «на этой неделе»: не в сетке
         elseif not row then
           row = { kind = ns.GroupOf(it), item = it, names = {}, total = 0, done = {} }
           byKey[k] = row
@@ -828,6 +833,26 @@ function ns.RareRow(name)
     end
   end
   return false
+end
+
+-- Строка рара по номеру существа (список программы 2.10.1+, `npcs`): у трёх завоевателей Зандалари одно имя, а «любой
+-- редкий монстр зоны» — десятки имён. Отдаёт название строки — его аддон и пишет в журнал, чтобы программа нашла строку.
+function ns.RareRowForNpc(npc)
+  local data = AttemptRows()
+  npc = tonumber(npc)
+  if not data or not npc then
+    return nil
+  end
+  for _, m in ipairs(data.mounts) do
+    if type(m) == "table" and m.kind == "rare" and type(m.npcs) == "table" and type(m.boss) == "string" and not Collected(m) then
+      for _, n in ipairs(m.npcs) do
+        if tonumber(n) == npc then
+          return m.boss
+        end
+      end
+    end
+  end
+  return nil
 end
 
 -- Персонаж из списка — тот, кто сделал запись (имена записи нормализуются один раз на запись).
@@ -1104,7 +1129,7 @@ end
 function ns.KindTitle(kind)
   return L["kind_" .. kind]
 end
-ns.KIND_ORDER = { "raid", "dungeon", "world", "rare", "reward" }
+ns.KIND_ORDER = { "raid", "dungeon", "world", "rare", "guaranteed", "mobs", "reward" }
 
 -- Рейд или подземелье строки в путеводителе: journalInstanceID по боссу (item.je) или месту (item.im), из журнала, который читает аддон.
 local journalFor, instanceByEncounter, instanceByMap, instanceName
@@ -1180,8 +1205,17 @@ function ns.GetAchievementRows()
 end
 
 -- Группа строки в окне: достижения и награды (item.src, программа 2.10+) — отдельно, это не убийство босса. item.kind у них прежний.
+-- Рары с гарантированной добычей и фарм мобов (item.group, программа 2.10.1) — свои группы, вид остаётся "rare".
+local OWN_GROUPS = { guaranteed = true, mobs = true }
+
 function ns.GroupOf(item)
-  return item.src == "reward" and "reward" or item.kind
+  if item.src == "reward" then
+    return "reward"
+  end
+  if item.kind == "rare" and OWN_GROUPS[item.group] then
+    return item.group
+  end
+  return item.kind
 end
 
 -- «|» в тексте ячейки игра приняла бы за код цвета — удваиваем его.

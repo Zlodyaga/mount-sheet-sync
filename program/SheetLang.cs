@@ -94,6 +94,9 @@ namespace MountSheetSync
             public Dictionary<string, Dictionary<string, string>> Words = new Dictionary<string, Dictionary<string, string>>();
             public Dictionary<string, Dictionary<string, string>> Patterns = new Dictionary<string, Dictionary<string, string>>();
             public Dictionary<string, string> Content = new Dictionary<string, string>(StringComparer.Ordinal);
+            /// <summary>Свои переводы текстов каталога (советы по фарму раров): язык → русский текст → перевод.</summary>
+            public Dictionary<string, Dictionary<string, string>> ContentL10n =
+                new Dictionary<string, Dictionary<string, string>>(StringComparer.Ordinal);
             public Dictionary<long, string> Mounts = new Dictionary<long, string>();
             /// <summary>Названия из таблиц игры: mounts / bosses / places → ID → язык → название; rewards → ID маунта → достижение.</summary>
             public Dictionary<string, object> Names = new Dictionary<string, object>();
@@ -128,6 +131,15 @@ namespace MountSheetSync
                     foreach (KeyValuePair<string, object> kv in J.Obj(J.Get(root, "content")) ?? new Dictionary<string, object>())
                     {
                         t.Content[kv.Key] = SheetLogic.JsString(kv.Value);
+                    }
+                    foreach (KeyValuePair<string, object> lang in J.Obj(J.Get(root, "contentL10n")) ?? new Dictionary<string, object>())
+                    {
+                        Dictionary<string, string> own = new Dictionary<string, string>(StringComparer.Ordinal);
+                        foreach (KeyValuePair<string, object> kv in J.Obj(lang.Value) ?? new Dictionary<string, object>())
+                        {
+                            own[kv.Key] = SheetLogic.JsString(kv.Value);
+                        }
+                        t.ContentL10n[lang.Key] = own;
                     }
                     t.Names = J.Obj(J.Get(root, "names")) ?? new Dictionary<string, object>();
                     foreach (KeyValuePair<string, object> kv in J.Obj(J.Get(root, "mounts")) ?? new Dictionary<string, object>())
@@ -304,7 +316,8 @@ namespace MountSheetSync
             return name;
         }
 
-        /// <summary>Текст каталога (босс, совет, скип…): для нерусской таблицы — английский перевод.</summary>
+        /// <summary>Текст каталога (босс, совет, скип…): для нерусской таблицы — свой перевод (советы по фарму раров),
+        /// иначе английский.</summary>
         public string Content(string ru)
         {
             if (IsRussian || ru == null)
@@ -312,6 +325,11 @@ namespace MountSheetSync
                 return ru;
             }
             string v;
+            Dictionary<string, string> own;
+            if (Load().ContentL10n.TryGetValue(Code, out own) && own.TryGetValue(ru, out v))
+            {
+                return v;
+            }
             return Load().Content.TryGetValue(ru, out v) ? v : ru;
         }
 

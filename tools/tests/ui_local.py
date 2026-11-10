@@ -87,7 +87,7 @@ def start(*args):
 def stop(app):
     app.terminate()
     try:
-        return app.communicate(timeout=10)[0].decode("utf-8", "replace")
+        return paths.out_text(app.communicate(timeout=10)[0])
     except Exception:
         app.kill()
         return ""

@@ -48,6 +48,11 @@ TASTY = {"de": "Leckerer Sporenfresser (%s)", "fr": "Brouteur de spores savoureu
 ANY_DUNGEON = {"ru": "Любое подземелье путешествий во времени", "de": "Beliebiger Zeitwanderungsdungeon", "fr": "N'importe quel donjon des Marcheurs du temps", "es": "Cualquier mazmorra de Paseo en el tiempo", "pt": "Qualquer masmorra de Caminhada Temporal"}
 ZONES = {"Kun-Lai Summit": 379, "Valley of the Four Winds": 376, "Isle of Giants": 507, "Isle of Thunder": 504, "Spires of Arak": 542, "Vol'dun": 864, "Uldum": 1527}
 ARCHAVON, TORGHAST_AREA, RAZUVIOUS, ROTMIRE = 753, 10472, 1607, 2711
+# rare monsters of the "rare" sheet: their names (Wowhead tooltips) and zones, gathered with the rows (see decisions.md)
+with open(os.path.join(HERE, "rare_names.json"), encoding="utf-8") as _f:
+    _rares = json.load(_f)
+NAMED.update(_rares["names"])
+ZONES.update(_rares["zones"])
 
 
 def table(name, locale, cache):

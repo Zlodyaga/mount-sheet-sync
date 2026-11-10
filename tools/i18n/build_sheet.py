@@ -2,7 +2,8 @@
 
   sheet_words.txt    sheet names, headers, Yes/No, statuses and other values of the lists, the "Summary" sheet:
                      Russian → en, de, fr, es, pt (all five).
-  sheet_content.txt  catalog texts (bosses, tips, skips…): Russian → English. German, French, Spanish and
+  sheet_content.txt  catalog texts (bosses, tips, skips…): Russian → English; the rare farming tips also → de, fr,
+                     es, pt (tools/catalog/rares/tip_l10n.py). Otherwise German, French, Spanish and
                      Portuguese spreadsheets get English texts; boss and instance names come from the game
                      (the addon's Encounter Journal dump) when the game speaks the spreadsheet's language.
   mounts_en.txt      English mount names by mountID.
@@ -13,7 +14,7 @@ import json, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-from sheet_files import LANGS, parse_words, parse_content, parse_mounts  # noqa: E402
+from sheet_files import LANGS, parse_words, parse_content, parse_content_l10n, parse_mounts  # noqa: E402
 
 ROOT = os.path.join(HERE, "..", "..")
 OUT = os.path.join(ROOT, "program", "sheet-i18n.json")
@@ -23,7 +24,7 @@ LOCALES = {"ru": "ru_RU", "en": "en_US", "de": "de_DE", "fr": "fr_FR", "es": "es
 # Parts of statuses searched inside formulas (SEARCH, COUNTIF "…*"), not values of their own
 PATTERNS = ["Недоступ", "Текущий"]
 # Catalog-only columns (never written to a spreadsheet) and name prefixes the code looks for
-INTERNAL = {"ID босса", "ID в журнале", "ID места", "ID статистики", "Босс"}
+INTERNAL = {"ID босса", "ID в журнале", "ID места", "ID статистики", "ID существ", "Точка", "Вид", "Босс"}
 CYR = re.compile("[А-Яа-яЁё]")
 
 
@@ -72,7 +73,7 @@ def main():
                     if v:
                         ids.add(int(v))
                     continue
-                if c == "Маунт" or not isinstance(v, str) or not CYR.search(v):
+                if c == "Маунт" or c in INTERNAL or not isinstance(v, str) or not CYR.search(v):
                     continue
                 if v not in words and v not in content:
                     problems.append("catalog text without a translation (%s): %r" % (c, v))
@@ -101,6 +102,8 @@ def main():
         "words": {k: {lang: words[k][lang] for lang in LANGS} for k in words if k not in PATTERNS},
         "patterns": {k: {lang: words[k][lang] for lang in LANGS} for k in PATTERNS},
         "content": {k: content[k] for k in sorted(used)},
+        # the rare farming tips also in de/fr/es/pt (SheetLang.Content takes them before the English text)
+        "contentL10n": {lang: {k: v for k, v in sorted(t.items()) if k in used} for lang, t in parse_content_l10n().items()},
         "mounts": {str(i): mounts[i] for i in sorted(ids)},
     }
     # names from the game's tables in six languages and the reward rows' achievements (tools/catalog/game_names.py)

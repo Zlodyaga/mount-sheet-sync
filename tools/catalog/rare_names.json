@@ -1,0 +1,535 @@
+{
+ "note": "Rare monsters: official names from Wowhead tooltips (npc ID -> name), zones -> UiMap. Loaded by game_names.py.",
+ "names": {
+  "Агата Вирмвуд / Чернолап": {
+   "de": "Agathe Wyrmholz / Schwarzpranke",
+   "fr": "Agathe Wyrmebois / Patte-Noire",
+   "es": "Agathe Wyrmwood / Zarpanegra",
+   "pt": "Ágata Bosque da Serpe / Patanegra"
+  },
+  "Алани": {
+   "de": "Alani",
+   "fr": "Alani",
+   "es": "Alani",
+   "pt": "Alani"
+  },
+  "Алаш'анир": {
+   "de": "Alash'anir",
+   "fr": "Alash'anir",
+   "es": "Alash'anir",
+   "pt": "Alash'anir"
+  },
+  "Алунира": {
+   "de": "Alunira",
+   "fr": "Alunira",
+   "es": "Alunira",
+   "pt": "Alunira"
+  },
+  "Анх-Де Верный": {
+   "de": "Anh-De der Loyale",
+   "fr": "Anh De le Loyal",
+   "es": "Anh-De el Leal",
+   "pt": "Anh-De, o Leal"
+  },
+  "Арахноид-пожинатель": {
+   "de": "Arachnoider Ernter",
+   "fr": "Arachnoïde moissonneur",
+   "es": "Cosechadora arácnida",
+   "pt": "Ceifador Aracnídeo"
+  },
+  "Валфир Непреклонный": {
+   "de": "Valfir der Unerbittliche",
+   "fr": "Valfir le Tenace",
+   "es": "Valfir el Inflexible",
+   "pt": "Valfir, o Implacável"
+  },
+  "Вел'иккан": {
+   "de": "Ri'sich",
+   "fr": "Gargan'tuzz",
+   "es": "Coloss'ahl",
+   "pt": "Graw'uhdo"
+  },
+  "Вестник войны Мал'Корак": {
+   "de": "Kriegshetzer Mal'korak",
+   "fr": "Porteguerre Mal'korak",
+   "es": "Belisario Mal'korak",
+   "pt": "Armipotente Mal'korak"
+  },
+  "Всадник рока Хелгрим": {
+   "de": "Verdammnisreiter Helgrim",
+   "fr": "Chevauche-malheur Sombrenfer",
+   "es": "Jinete de fatalidad Helgrim",
+   "pt": "Cavaleiro da Perdição Helgueiro"
+  },
+  "Гибломрак": {
+   "de": "Verdammnisschatten",
+   "fr": "Ombre de malheur",
+   "es": "Sombra de fatalidad",
+   "pt": "Sombra da Ruína"
+  },
+  "Гигер": {
+   "de": "Gieger",
+   "fr": "Gieger",
+   "es": "Gieger",
+   "pt": "Gieger"
+  },
+  "Гирукон": {
+   "de": "Hirukon",
+   "fr": "Hirukon",
+   "es": "Hirukon",
+   "pt": "Hirukon"
+  },
+  "Гниложор": {
+   "de": "Fäulnisverschlinger",
+   "fr": "Croque-Charogne",
+   "es": "Comecarroña",
+   "pt": "Putrífago"
+  },
+  "Головокуска": {
+   "de": "Schädelreißer",
+   "fr": "Arrache-Crâne",
+   "es": "Rompecalaveras",
+   "pt": "Estripacrânio"
+  },
+  "Горок": {
+   "de": "Gorok",
+   "fr": "Gorok",
+   "es": "Gorok",
+   "pt": "Gorok"
+  },
+  "Дормус Погонщик Верблюдов": {
+   "de": "Dormus der Kameltreiber",
+   "fr": "Dormus le Collectionneur de dromadaires",
+   "es": "Dormus el Camellero",
+   "pt": "Dormus, o Colecionador de Camelos"
+  },
+  "Зандаларский завоеватель №1": {
+   "de": "Kriegshetzer der Zandalari Nr. 1",
+   "fr": "Porteguerre zandalari n° 1",
+   "es": "Belisario Zandalari n.º 1",
+   "pt": "Armipotente Zandalari nº 1"
+  },
+  "Зандаларский завоеватель №2": {
+   "de": "Kriegshetzer der Zandalari Nr. 2",
+   "fr": "Porteguerre zandalari n° 2",
+   "es": "Belisario Zandalari n.º 2",
+   "pt": "Armipotente Zandalari nº 2"
+  },
+  "Зандаларский завоеватель №3": {
+   "de": "Kriegshetzer der Zandalari Nr. 3",
+   "fr": "Porteguerre zandalari n° 3",
+   "es": "Belisario Zandalari n.º 3",
+   "pt": "Armipotente Zandalari nº 3"
+  },
+  "Затерянный во времени протодракон": {
+   "de": "Zeitverlorener Protodrache",
+   "fr": "Proto-drake perdu dans le temps",
+   "es": "Protodraco Tiempo Perdido",
+   "pt": "Protodraco Perdido no Tempo"
+  },
+  "Карокта": {
+   "de": "Karokta",
+   "fr": "Karokta",
+   "es": "Karokta",
+   "pt": "Karokta"
+  },
+  "Коготь Смерти / Кулак Страха / Пушка Смерти / Отмщение": {
+   "de": "Todeskralle / Terrorfaust / Verdammniswalze / Rache",
+   "fr": "Serres-mort / Poing-de-terreur / Compresseur funeste / Vengeance",
+   "es": "Garramuerte / Horropuño / Fatalitas / Venganza",
+   "pt": "Mortísporo / Punho do Terror / Rolador Ruinoso / Vingança"
+  },
+  "Контрогз Уничтожитель": {
+   "de": "Konthrogz der Zerstörer",
+   "fr": "Konthrogz l'Oblitérateur",
+   "es": "Konthrogz el Obliterador",
+   "pt": "Konthrogz, o Obliterador"
+  },
+  "Кроз Ярость Крови / Тенекоготь": {
+   "de": "Croz Blutzorn / Schattenklaue",
+   "fr": "Croz Ragesang / Ombregriffe",
+   "es": "Croz Sanguinarius / Garrasombría",
+   "pt": "Croz Fúria Sanguinária / Garrassombra"
+  },
+  "Кусачий Ветер": {
+   "de": "Brisenbiss",
+   "fr": "Croque-bise",
+   "es": "Mascabrisas",
+   "pt": "Mascabrisa"
+  },
+  "Лук'хок": {
+   "de": "Luk'hok",
+   "fr": "Luk'hok",
+   "es": "Luk'hok",
+   "pt": "Luk'hok"
+  },
+  "Любой боец Театра Боли": {
+   "de": "Beliebiger Champion des Theaters der Schmerzen",
+   "fr": "N'importe quel champion du Théâtre de la Souffrance",
+   "es": "Cualquier campeón del Teatro del Dolor",
+   "pt": "Qualquer campeão do Teatro da Dor"
+  },
+  "Любой редкий монстр: Буря Бездны": {
+   "de": "Beliebiger seltener Gegner: Leerensturm",
+   "fr": "N'importe quel monstre rare : Tempête du Vide",
+   "es": "Cualquier monstruo raro: Tormenta del Vacío",
+   "pt": "Qualquer monstro raro: Tempestade do Caos"
+  },
+  "Любой редкий монстр: Запретный край": {
+   "de": "Beliebiger seltener Gegner: Verbotene Insel",
+   "fr": "N'importe quel monstre rare : Confins Interdits",
+   "es": "Cualquier monstruo raro: El Confín Olvidado",
+   "pt": "Qualquer monstro raro: Recôndito Proibido"
+  },
+  "Любой редкий монстр: Зул'Аман": {
+   "de": "Beliebiger seltener Gegner: Zul'Aman",
+   "fr": "N'importe quel monstre rare : Zul’Aman",
+   "es": "Cualquier monstruo raro: Zul'Aman",
+   "pt": "Qualquer monstro raro: Zul'Aman"
+  },
+  "Любой редкий монстр: Леса Вечной Песни": {
+   "de": "Beliebiger seltener Gegner: Immersangwald",
+   "fr": "N'importe quel monstre rare : Bois des Chants éternels",
+   "es": "Cualquier monstruo raro: Bosque Canción Eterna",
+   "pt": "Qualquer monstro raro: Floresta do Canto Eterno"
+  },
+  "Любой редкий монстр: Спиральный остров": {
+   "de": "Beliebiger seltener Gegner: Gewundene Insel",
+   "fr": "N'importe quel monstre rare : Île Annelée",
+   "es": "Cualquier monstruo raro: Isla Serpenteante",
+   "pt": "Qualquer monstro raro: A Ilha Enrolada"
+  },
+  "Любой редкий монстр: Харандар": {
+   "de": "Beliebiger seltener Gegner: Harandar",
+   "fr": "N'importe quel monstre rare : Harandar",
+   "es": "Cualquier monstruo raro: Harandar",
+   "pt": "Qualquer monstro raro: Harandar"
+  },
+  "Малбог": {
+   "de": "Malbog",
+   "fr": "Malbog",
+   "es": "Malbog",
+   "pt": "Malbog"
+  },
+  "Мастер-псарь Жэнь": {
+   "de": "Hundmeister Ren",
+   "fr": "Grand-veneur Ren",
+   "es": "Señor de los canes Ren",
+   "pt": "Senhor dos Cães Ren"
+  },
+  "Мусор из Галаджио": {
+   "de": "Müll des Garbagio",
+   "fr": "Détritus du Gallagio",
+   "es": "Basura del Gallagio",
+   "pt": "Entulho do Gallagio"
+  },
+  "Надзиратель Крикс": {
+   "de": "Aufseher Krix",
+   "fr": "Surveillant Krix",
+   "es": "Sobrestante Krix",
+   "pt": "Feitor Krix"
+  },
+  "Накк Громогласный": {
+   "de": "Nakk der Donnerer",
+   "fr": "Nakk le Foudroyeur",
+   "es": "Nakk el Tronador",
+   "pt": "Nakk, o Trovoador"
+  },
+  "Нерисса Бессердечная": {
+   "de": "Nerissa Herzlos",
+   "fr": "Nerissa Sans-Cœur",
+   "es": "Nerissa Despiadada",
+   "pt": "Nerissa, a Desalmada"
+  },
+  "Неслышимка": {
+   "de": "Lautlos",
+   "fr": "Le grand Silence",
+   "es": "Silente",
+   "pt": "Silente"
+  },
+  "Нимар Душегуб": {
+   "de": "Nimar der Töter",
+   "fr": "Nimar le Pourfendeur",
+   "es": "Nimar el Destripador",
+   "pt": "Nimar, o Matador"
+  },
+  "Нок-Карош": {
+   "de": "Nok-Karosh",
+   "fr": "Nok-Karosh",
+   "es": "Nok-Karosh",
+   "pt": "Nok-Karosh"
+  },
+  "Ночная кобыла": {
+   "de": "Nachtmähre",
+   "fr": "Jument nocturne",
+   "es": "Yegua nocturna",
+   "pt": "Égua Noturna"
+  },
+  "Обожравшаяся темная гончая": {
+   "de": "Vollgefressener Schemenhund",
+   "fr": "Molosse d'ombre rassasié",
+   "es": "Can de sombras atiborrado",
+   "pt": "Canaz-sombra Empanturrado"
+  },
+  "Обычные мобы: Вол'дун": {
+   "de": "Gewöhnliche Gegner: Vol'dun",
+   "fr": "Monstres communs : Vol’dun",
+   "es": "Enemigos comunes: Vol'dun",
+   "pt": "Inimigos comuns: Vol'dun"
+  },
+  "Обычные мобы: Долина Штормов": {
+   "de": "Gewöhnliche Gegner: Sturmsangtal",
+   "fr": "Monstres communs : Vallée Chantorage",
+   "es": "Enemigos comunes: Valle Canto Tormenta",
+   "pt": "Inimigos comuns: Vale Trovamare"
+  },
+  "Обычные мобы: Друствар": {
+   "de": "Gewöhnliche Gegner: Drustvar",
+   "fr": "Monstres communs : Drustvar",
+   "es": "Enemigos comunes: Drustvar",
+   "pt": "Inimigos comuns: Drustvar"
+  },
+  "Обычные мобы: Назмир": {
+   "de": "Gewöhnliche Gegner: Nazmir",
+   "fr": "Monstres communs : Nazmir",
+   "es": "Enemigos comunes: Nazmir",
+   "pt": "Inimigos comuns: Nazmir"
+  },
+  "Павший боевой конь": {
+   "de": "Gefallenes Streitross",
+   "fr": "Destrier déchu",
+   "es": "Destrero caído",
+   "pt": "Corcel Decaído"
+  },
+  "Палач Мохо / Атилия Огненная Роса": {
+   "de": "Moxo der Köpfer / Athil Tauglanz",
+   "fr": "Moxo le Tranche-Tête / Athil Brûlerosée",
+   "es": "Moxo el Decapitador / Athil Condensafuego",
+   "pt": "Moxo, o Decapitador / Athil Fogorvalha"
+  },
+  "Пастух Кравос": {
+   "de": "Treiber Kravos",
+   "fr": "Kravos le Dompteur",
+   "es": "Retador Kravos",
+   "pt": "Enlaçador Kravos"
+  },
+  "Пожиратель трупов": {
+   "de": "Leichenfresser",
+   "fr": "Mange-cadavres",
+   "es": "Comecadáveres",
+   "pt": "Comedor de Cadáveres"
+  },
+  "Порождение Беледар": {
+   "de": "Beledars Brut",
+   "fr": "Engeance de Beledar",
+   "es": "Engendro de Beledar",
+   "pt": "Cria de Beledar"
+  },
+  "Посейдус": {
+   "de": "Poseidus",
+   "fr": "Poséidus",
+   "es": "Poseidus",
+   "pt": "Poseidus"
+  },
+  "Псарь Керракс": {
+   "de": "Hundemeister Kerrax",
+   "fr": "Dresseur de molosses Kerrax",
+   "es": "Maestro de canes Kerrax",
+   "pt": "Mestre de Matilha Kerrax"
+  },
+  "Пудовый Кулак": {
+   "de": "Rammfaust",
+   "fr": "Martèlepoing",
+   "es": "Librapuño",
+   "pt": "Esmagador"
+  },
+  "Пузцилла / Вракс'тул": {
+   "de": "Puscilla / Vrax'thul",
+   "fr": "Puscilla / Vrax'thul",
+   "es": "Puscilla / Vrax'thul",
+   "pt": "Puscilla / Vrax'thul"
+  },
+  "Реливик Непокорный": {
+   "de": "Reliwik der Trotzige",
+   "fr": "Réliwik le Provocateur",
+   "es": "Reliwik el Desafiante",
+   "pt": "Reliwik, o Desafiador"
+  },
+  "Ржавое Перо": {
+   "de": "Rostfeder",
+   "fr": "Rouille-Plume",
+   "es": "Alarroña",
+   "pt": "Ferrujão"
+  },
+  "Рыцарь-капитан Алдрин": {
+   "de": "Kürassier Aldrin",
+   "fr": "Chevalier-capitaine Aldrin",
+   "es": "Capitán caballero Aldrin",
+   "pt": "Capitão-cavaleiro Alderico"
+  },
+  "Сабриэль Косторуб": {
+   "de": "Sabriel die Knochenspalterin",
+   "fr": "Sabrielle l'Ostéoclaste",
+   "es": "Sabriel la Rajahuesos",
+   "pt": "Sabriel, a Cutilóssea"
+  },
+  "Сильфида": {
+   "de": "Schlickhaut",
+   "fr": "Silthide",
+   "es": "Cienopiel",
+   "pt": "Silthide"
+  },
+  "Скрииг Пожиратель": {
+   "de": "Skreeg der Verschlinger",
+   "fr": "Skreeg le Dévoreur",
+   "es": "Skreeg el Devorador",
+   "pt": "Escrargo, o Devorador"
+  },
+  "Скрытень со Дна": {
+   "de": "Lauerer der Tiefen",
+   "fr": "Rôdeur des profondeurs",
+   "es": "Rondador de las profundidades",
+   "pt": "Tocaieiro das Profundezas"
+  },
+  "Служитель глубин": {
+   "de": "Jünger des Abgrunds",
+   "fr": "Adhérent des abysses",
+   "es": "Adepto del abismo",
+   "pt": "Seguidor do Abismo"
+  },
+  "Сокрушитель Надежд": {
+   "de": "Hoffnungsvernichter",
+   "fr": "Brise-Espoir",
+   "es": "Machacaesperanzas",
+   "pt": "Esmaga-esperanças"
+  },
+  "Стаарбс": {
+   "de": "Sthaarbs",
+   "fr": "Sthaarbs",
+   "es": "Sthaarbs",
+   "pt": "Sthaarbs"
+  },
+  "Стимулирующий реагент Мрачных Минеров": {
+   "de": "Fällmittel der Düsternisverschmolzenen",
+   "fr": "Précipitant imprégné de ténèbres",
+   "es": "Precipitante de Fundisombras",
+   "pt": "Precipitante de Sombrafuso"
+  },
+  "Тахонта": {
+   "de": "Tahonta",
+   "fr": "Tahonta",
+   "es": "Tahonta",
+   "pt": "Tahonta"
+  },
+  "Торопун": {
+   "de": "Pfadläufer",
+   "fr": "Cours-les-Routes",
+   "es": "Correcaminos",
+   "pt": "Vencetrilha"
+  },
+  "Укротитель Кама": {
+   "de": "Bestienreiter Kama",
+   "fr": "Chevaucheur de bêtes Kama",
+   "es": "Jinete de bestias Kama",
+   "pt": "Cavalga-feras Kama"
+  },
+  "Урмаг": {
+   "de": "Urmag",
+   "fr": "Urmag",
+   "es": "Urmag",
+   "pt": "Urmag"
+  },
+  "Фаму Бесконечный": {
+   "de": "Famu der Unendliche",
+   "fr": "Famu l'Infini",
+   "es": "Famu el Infinito",
+   "pt": "Famu, o Infinito"
+  },
+  "Фиолетовая ошибка": {
+   "de": "Violetter Fehler",
+   "fr": "Erreur pourpre",
+   "es": "Error violeta",
+   "pt": "Erro Violeta"
+  },
+  "Ха-Ли": {
+   "de": "Ha-Li",
+   "fr": "Ha Li",
+   "es": "Ha-Li",
+   "pt": "Ha-Li"
+  },
+  "Харика Ужасающая": {
+   "de": "Harika die Schreckliche",
+   "fr": "Harika l'Horrible",
+   "es": "Harika la Horrible",
+   "pt": "Hárika, a Hórrida"
+  },
+  "Холон": {
+   "de": "Huolon",
+   "fr": "Huolon",
+   "es": "Huolon",
+   "pt": "Huolon"
+  },
+  "Эонакс": {
+   "de": "Aeonaxx",
+   "fr": "Aeonaxx",
+   "es": "Aeonaxx",
+   "pt": "Aeonaxx"
+  },
+  "Ядовитый небесный скат": {
+   "de": "Giftschwanzhimmelsflosse",
+   "fr": "Ciaileron queue-venin",
+   "es": "Aletacielo Colaveneno",
+   "pt": "Corta-céu Caudaçonha"
+  },
+  "Язвоглот": {
+   "de": "Blasenmaul",
+   "fr": "Gueule putride",
+   "es": "Faucellaga",
+   "pt": "Gorjapus"
+  }
+ },
+ "zones": {
+  "Antoran Wastes": 885,
+  "Arathi Highlands": 14,
+  "Ardenweald": 1565,
+  "Darkshore": 62,
+  "Deepholm": 207,
+  "Drustvar": 896,
+  "Eredath": 882,
+  "Eversong Woods": 2395,
+  "Frostfire Ridge": 525,
+  "Gorgrond": 543,
+  "Hallowfall": 2215,
+  "Harandar": 2413,
+  "Isle of Dorn": 2248,
+  "K'aresh": 2371,
+  "Korthia": 1961,
+  "Maldraxxus": 1536,
+  "Mechagon Island": 1462,
+  "Nagrand": 550,
+  "Nazjatar": 1355,
+  "Nazmir": 863,
+  "Pandaria": 424,
+  "Revendreth": 1525,
+  "Shadowmoon Valley": 539,
+  "Stormsong Valley": 942,
+  "Talador": 535,
+  "Tanaan Jungle": 534,
+  "The Azure Span": 2024,
+  "The Coiled Isle": 2512,
+  "The Forbidden Reach": 2151,
+  "The Maw": 1543,
+  "The Ringing Deeps": 2214,
+  "The Storm Peaks": 120,
+  "Timeless Isle": 554,
+  "Uldum": 249,
+  "Undermine": 2346,
+  "Vale of Eternal Blossoms": 390,
+  "Vashj'ir": 203,
+  "Voidstorm": 2405,
+  "Vol'dun": 864,
+  "Zaralek Cavern": 2133,
+  "Zereth Mortis": 1970,
+  "Zul'Aman": 2437
+ }
+}

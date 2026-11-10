@@ -2,6 +2,13 @@
 
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
+## 3.0.5
+- Two new groups in “Remaining”: rare monsters with a guaranteed drop and common mob farming. They are not counted in what is left this week and are not in the “All characters” grid.
+- Entrances closed by a story chain or a zone phase (Antorus on Argus, Ny'alotha, Amirdrassil, Tazavesh, Sepulcher of the First Ones, Liberation of Undermine, Manaforge Omega; notes for Operation: Mechagon, the Underrot and the road to the Sanctum of Domination): Ctrl + click first says what to do and leads to the chain's next quest (tracks it when it is in your log, otherwise pins where it is given); if the chain is not done on this character there is no pin to the entrance, and a second Ctrl + click pins it anyway. Access the whole account shares (the Emerald Dream) is remembered once any character has it.
+- Ctrl + click on a rare monster's row pins where it appears; for a rare with several spawn points the map of its zone opens.
+- A rare is also recognised by the creature's number: each of the three Zandalari Warbringers counts for its own direhorn, and any rare of a Midnight zone counts for that zone's mounts, even when its name is unknown. Needs the program 2.10.1.
+- Ctrl + click pins the entrance of every raid and dungeon in the list on the map when the game shows no entrance icon (a character who has never been there, newer raids), not only of a few places.
+
 ## 3.0.4
 - Achievement requirements, rare monsters, chests and zones follow the addon's language when it differs from the game's.
 - Ctrl + click now also works where the game shows no entrance icon or has no map for the boss: Freehold, Operation: Mechagon, Return to Karazhan, the Stratholme service entrance and Dunegorger Kraulok get a map pin at the known spot.

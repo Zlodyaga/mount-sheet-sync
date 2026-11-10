@@ -38,7 +38,7 @@ for d in (DATA, SV_DIR, ADDON):
 open(os.path.join(ADDON, "MountSheetSync.toc"), "w").write("## Interface: 120105\n")
 json.dump({"wowPath": WOW, "pollSeconds": 2, "mode": "google"}, open(os.path.join(DATA, "settings.json"), "w"))
 BROWSER_LOG = os.path.join(W, "browser.txt")
-mock = subprocess.Popen(["python3", os.path.join(HERE, "mock_google.py"), str(PORT), os.path.join(W, "mock_state.json"),
+mock = subprocess.Popen([sys.executable, os.path.join(HERE, "mock_google.py"), str(PORT), os.path.join(W, "mock_state.json"),
                          os.path.join(W, "mock.log")])
 time.sleep(0.8)
 ENV = dict(os.environ, MSS_GOOGLE_TEST=BASE, MSS_BROWSER_LOG=BROWSER_LOG, LANG="C.UTF-8", MSS_SYSTEM_LANG="ru")
@@ -53,7 +53,7 @@ def state():
 
 def run(exe, *args):
     p = subprocess.run(["mono", exe, "--data", DATA] + list(args), env=ENV, capture_output=True, timeout=300)
-    return p.returncode, (p.stdout + p.stderr).decode("utf-8", "replace")
+    return p.returncode, paths.out_text(p.stdout + p.stderr)
 
 
 def login(exe):
@@ -133,7 +133,7 @@ try:
     raids, _ = cells(book, "Рейды")
     check("raid «left» formula now asks for «Фармлю» = TRUE (in ru_RU form)", "'Рейды Эйра'!H:H; TRUE" in raids[1][8] and "'Рейды Мирна'!H:H; TRUE" in raids[1][8], raids[1][8])
     meta = {m["metadataKey"]: m["metadataValue"] for m in book["devmeta"]}
-    check("layout 5 remembered in the table", meta.get("mountSheetSync.layout") == "5", meta)
+    check("layout 6 remembered in the table", meta.get("mountSheetSync.layout") == "6", meta)
     code, out = run(EXE, "--once")
     check("second run: no second upgrade", "Таблица обновлена" not in out and cells(state()["spreadsheets"][sid], "Рейды Эйра")[1]["cols"] == 8)
 
@@ -195,7 +195,7 @@ try:
     rows, sh = cells(nb, "Подземелья Мирна")
     check("new table: «Фармлю» on character sheets", code == 0 and rows[0].get(7) == "Фармлю" and sh["cols"] == 8, rows[0])
     meta = {m["metadataKey"]: m["metadataValue"] for m in nb["devmeta"]}
-    check("new table: layout 5 written at creation", meta.get("mountSheetSync.layout") == "5", meta)
+    check("new table: layout 6 written at creation", meta.get("mountSheetSync.layout") == "6", meta)
     settings = json.load(open(os.path.join(DATA, "settings.json"), encoding="utf-8-sig"))
     code, out = run(EXE, "--once")
     check("…so the sync loop does not «upgrade» it", code == 0 and "Таблица обновлена" not in out, out[-600:])

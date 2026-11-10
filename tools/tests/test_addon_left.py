@@ -885,6 +885,142 @@ L.execute("ROUTE.tracks = false; ROUTE.pin = nil")
 row.MockClick(row)
 check("…if the game won't track it: a map pin at the entrance, tracked", g.ROUTE.waypoint.map == 14 and g.ROUTE.waypoint.x == 0.5 and g.ROUTE.user is True, g.ROUTE.user)
 check("…and the chat says so", "метка на карте" in chat_all(), chat_all()[-160:])
+# 3.0.5: an entrance closed by a quest chain (Access.lua): first what to do, no pin; Ctrl + click again — the pin anyway
+L.execute("""
+QUEST_DONE = {}
+C_QuestLog = { IsQuestFlaggedCompleted = function(id) return QUEST_DONE[id] == true end }
+MSS_NS.ACCESS[777] = { quests = { 111 }, hint = "argus" }
+ROUTE.tracks = true; ROUTE.pin = nil; ROUTE.waypoint = nil""")
+n_chat = len(chat_all())
+row.MockClick(row)
+said = chat_all()[n_chat:]
+check("3.0.5: a gated entrance, chain not done on this character: what to do, and no pin", g.ROUTE.pin is None and g.ROUTE.waypoint is None
+      and "сначала нужно открыть Аргус" in said and "Ctrl + щелчок ещё раз" in said, said)
+row.MockClick(row)
+check("…Ctrl + click again: the pin anyway (the quest number may be stale)", g.ROUTE.pin == 42, g.ROUTE.pin)
+L.execute("QUEST_DONE[111] = true; ROUTE.pin = nil; MSS_NS.ACCESS[777] = { quests = { 111 }, hint = \"argus\" }")
+n_chat = len(chat_all())
+row.MockClick(row)
+check("…the chain done: straight to the entrance, no warning", g.ROUTE.pin == 42 and "сначала нужно" not in chat_all()[n_chat:], chat_all()[n_chat:])
+L.execute("""
+QUEST_DONE = { [222] = true }
+MSS_NS.ACCESS[777] = { quests = { 222 }, account = true, hint = "argus" }
+MSS_NS.RememberAccess()
+QUEST_DONE = {}
+ROUTE.pin = nil""")
+check("3.0.5: access shared by the account, seen at login on one character: remembered", g.MountSheetSyncDB.access is not None and g.MountSheetSyncDB.access[777] is True)
+n_chat = len(chat_all())
+row.MockClick(row)
+check("…another character without the quest goes straight to the entrance", g.ROUTE.pin == 42 and "сначала нужно" not in chat_all()[n_chat:], chat_all()[n_chat:])
+L.execute('MSS_NS.ACCESS[777] = { hint = "dream" }; ROUTE.pin = nil')
+n_chat = len(chat_all())
+row.MockClick(row)
+check("3.0.5: nothing to check: a note before the pin", g.ROUTE.pin == 42 and "учтите" in chat_all()[n_chat:] and "Изумрудный Сон" in chat_all()[n_chat:], chat_all()[n_chat:])
+# the chain's next step (Ny'alotha): where to go, a pin at the quest giver, then the entrance once the last quest is taken
+L.execute("""
+MOCK.gt = (MOCK.gt or 0) + 1000
+QUEST_DONE, QUEST_LOG = {}, {}
+C_QuestLog.IsOnQuest = function(id) return QUEST_LOG[id] == true end
+MSS_NS.ACCESS[777] = { quests = { 56376 }, inlog = true, hint = "nyalotha", after = "nyalotha_phase", steps = {
+  { quest = 57010, name = "Harnessing the Power", where = "heart" },
+  { quest = 56376, name = "Surfacing Threats", map = 1527, x = 0.548, y = 0.328 } } }
+ROUTE.pin = nil; ROUTE.waypoint = nil""")
+n_chat = len(chat_all())
+row.MockClick(row)
+said = chat_all()[n_chat:]
+check("3.0.5: the chain's next step has no place: where to go, in words; no pin", g.ROUTE.pin is None and g.ROUTE.waypoint is None
+      and "Harnessing the Power" in said and "Магни в Палате Сердца" in said,
+      said)
+L.execute("MOCK.gt = MOCK.gt + 1000; QUEST_DONE[57010] = true")
+row.MockClick(row)
+check("…the next step has a quest giver's spot: a pin there, not at the entrance", g.ROUTE.pin is None and g.ROUTE.waypoint is not None
+      and g.ROUTE.waypoint.map == 1527 and abs(g.ROUTE.waypoint.x - 0.548) < 1e-9 and "метка там, где его выдают" in chat_all(), g.ROUTE.waypoint)
+L.execute("MOCK.gt = MOCK.gt + 1000; QUEST_LOG[56376] = true; ROUTE.pin = nil")
+n_chat = len(chat_all())
+row.MockClick(row)
+check("…the last quest only taken (enough for Ny'alotha): the entrance, with the note about Zidormi", g.ROUTE.pin == 42
+      and "Зидорми" in chat_all()[n_chat:] and "сначала нужно" not in chat_all()[n_chat:], chat_all()[n_chat:])
+# the next step's quest is already in the log: the game tracks it, no pin
+L.execute("""
+MOCK.gt = MOCK.gt + 1000
+QUEST_DONE, QUEST_LOG = {}, { [57010] = true }
+C_SuperTrack.SetSuperTrackedQuestID = function(id) ROUTE.quest = id end
+ROUTE.pin = nil; ROUTE.waypoint = nil; ROUTE.quest = nil""")
+n_chat = len(chat_all())
+row.MockClick(row)
+said = chat_all()[n_chat:]
+check("3.0.5: the next step's quest is in the log: tracked, no pin", g.ROUTE.quest == 57010 and g.ROUTE.pin is None
+      and g.ROUTE.waypoint is None and "уже в журнале заданий" in said, said)
+# a chain with one step per faction: the step of the other faction is skipped
+L.execute("""
+MOCK.gt = MOCK.gt + 1000
+QUEST_DONE, QUEST_LOG = { [57010] = true }, {}
+OLD_UFG = UnitFactionGroup
+UnitFactionGroup = function() return "Alliance" end
+MSS_NS.ACCESS[777].steps = {
+  { quest = 57010, name = "Harnessing the Power", where = "heart" },
+  { quest = 58582, faction = "Horde", name = "Return of the Black Prince", map = 85, x = 0.1, y = 0.1 },
+  { quest = 58496, faction = "Alliance", name = "An Unwelcome Advisor", map = 84, x = 0.2, y = 0.2 },
+  { quest = 56376, name = "Surfacing Threats", map = 1527, x = 0.548, y = 0.328 } }
+ROUTE.pin = nil; ROUTE.waypoint = nil; ROUTE.quest = nil""")
+n_chat = len(chat_all())
+row.MockClick(row)
+said = chat_all()[n_chat:]
+check("3.0.5: a step of the other faction is skipped: an Alliance character goes to its own quest", g.ROUTE.waypoint is not None
+      and g.ROUTE.waypoint.map == 84 and "An Unwelcome Advisor" in said and "Black Prince" not in said, (g.ROUTE.waypoint, said))
+# an entrance gated by an achievement of this character (Mechagon): its name in the warning
+L.execute("""
+MOCK.gt = MOCK.gt + 1000
+ACH_EARNED = false
+OLD_GAI = GetAchievementInfo
+GetAchievementInfo = function(id)
+  if id == 13553 then return id, "Мехагонская угроза", 10, true, 1, 1, 24, "", 0, 0, "", false, ACH_EARNED end
+end
+MSS_NS.L.access_test_ach = "получить достижение «%s»"
+MSS_NS.ACCESS[777] = { ach = { 13553 }, hint = "test_ach" }
+ROUTE.pin = nil; ROUTE.waypoint = nil""")
+n_chat = len(chat_all())
+row.MockClick(row)
+said = chat_all()[n_chat:]
+check("3.0.5: gated by an achievement this character has not earned: its name in what to do, no pin", g.ROUTE.pin is None
+      and g.ROUTE.waypoint is None and "сначала нужно" in said and "Мехагонская угроза" in said, said)
+L.execute("MOCK.gt = MOCK.gt + 1000; ACH_EARNED = true; ROUTE.pin = nil")
+n_chat = len(chat_all())
+row.MockClick(row)
+check("…earned by this character: straight to the entrance", g.ROUTE.pin == 42 and "сначала нужно" not in chat_all()[n_chat:], chat_all()[n_chat:])
+L.execute("GetAchievementInfo = OLD_GAI; UnitFactionGroup = OLD_UFG")
+L.execute("MSS_NS.ACCESS[777] = nil; MountSheetSyncDB.access = nil; ROUTE.tracks = false; ROUTE.pin = nil")
+missing = L.eval("""(function()
+  local out = {}
+  for id, a in pairs(MSS_NS.ACCESS) do
+    for _, key in ipairs({ a.hint, a.after }) do
+      if key and (MSS_NS.L["access_" .. key] or "") == "" then out[#out + 1] = id .. ":" .. key end
+    end
+    for _, s in ipairs(a.steps or {}) do
+      if not s.map and (MSS_NS.L["access_where_" .. tostring(s.where)] or "") == "" then out[#out + 1] = id .. ":where" end
+    end
+  end
+  return table.concat(out, ",")
+end)()""")
+check("3.0.5: every gated entrance of Access.lua has its texts (hint, note, where)", missing == "", missing)
+sep = L.eval("""(function()
+  QUEST_DONE = {}
+  local a = MSS_NS.AccessCheck(1195)
+  local s = a and a.step
+  QUEST_DONE[64844] = true
+  local b = MSS_NS.AccessCheck(1195)
+  QUEST_DONE = {}
+  return a and a.open, s and s.quest, s and s.map, b and b.open
+end)""")()
+check("Sepulcher: closed until «The Pilgrimage Ends» (64844), the step pins Elder Ara in Zereth Mortis; done — open",
+      list(sep) == [False, 64844, 1970, True], list(sep))
+und = L.eval("""(function()
+  QUEST_DONE = {}
+  local u, d = MSS_NS.AccessCheck(1296), MSS_NS.AccessCheck(1193)
+  return u and u.open, u and u.step and u.step.quest, u and u.step and u.step.map, d and d.open, d and d.hint
+end)""")()
+check("Undermine: closed until «When Opportunity Explodes» (83137), the step pins Renzik in Dornogal; Sanctum: only a note",
+      list(und)[:4] == [False, 83137, 2339, None] and "Утробе" in str(und[4]), list(und))
 L.execute("function C_EncounterJournal.GetDungeonEntrancesForMap() return {} end")
 row.elem.instance = 778
 row.MockClick(row)
@@ -1011,6 +1147,31 @@ def kraulok(r):
     r.MockClick(r)
     check("…a world boss with no map in the game's journal (Kraulok): a pin at the known point", g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 864 and abs(g.ROUTE.waypoint.x - 0.44) < 1e-9, g.ROUTE.waypoint)
     r.elem.encounter = old
+    rare_route(r)
+def rare_route(r):
+    # 3.0.5: a rare's row (kind rare) has its point in ns.RARE_SPOTS by mount ID — a pin, or its zone's map
+    L.execute("""
+    MOCK_WORLDMAP = nil
+    WorldMapFrame = WorldMapFrame or CreateFrame("Frame", "WorldMapFrame")
+    function OpenWorldMap(map) MOCK_WORLDMAP = map; WorldMapFrame:Show() end""")
+    world, spot = r.elem.world, r.elem.spot
+    spots = g.MSS_NS.RARE_SPOTS
+    check("3.0.5: Entrances.lua gives every rare of the catalog a point (Ishak at Uldum)", spots is not None and spots[1314] is not None and spots[1314].map == 1527, spots and spots[1314])
+    r.elem.world, r.elem.spot = None, spots[1314]
+    L.execute("ROUTE.waypoint = nil")
+    r.MockClick(r)
+    check("3.0.5: Ctrl + left click on a rare with one spawn point: a pin there", g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 1527
+          and abs(g.ROUTE.waypoint.x - 0.7396) < 1e-9, g.ROUTE.waypoint)
+    r.elem.spot = spots[2827]
+    L.execute("ROUTE.waypoint = nil")
+    r.MockClick(r)
+    check("3.0.5: …a rare with several spawn points (any rare of Voidstorm): the zone's map opens, no pin", g.MOCK_WORLDMAP == 2405
+          and g.ROUTE.waypoint is None and "открыта карта его зоны" in chat_all(), (g.MOCK_WORLDMAP, chat_all()[-200:]))
+    w = g.MountSheetSyncFrame
+    hidden = w is not None and not w._shown
+    L.execute("WorldMapFrame:Hide()")
+    check("3.0.5: …the window steps aside while the map is open and comes back when it closes", hidden and w._shown, hidden)
+    r.elem.world, r.elem.spot = world, spot
 world_row = [f for f in pool(ROW) if f.elem.world]
 if world_row:
     world_row[0].MockClick(world_row[0])

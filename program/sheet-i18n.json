@@ -69,18 +69,27 @@
   "The Heart of Argus скипает к поздней части рейда; Warband-wide.": "The Heart of Argus skips to the late part of the raid; Warband-wide.",
   "The Voidspire: Quest: Flicker in the Hollow; у The Dreamrift и March on Quel'Danas скипов нет.": "The Voidspire: Quest: Flicker in the Hollow; The Dreamrift and March on Quel'Danas have no skips.",
   "Timed-run награда": "Timed-run reward",
+  "Агата Вирмвуд / Чернолап": "Agathe Wyrmwood / Blackpaw",
   "Ал'акир": "Al'Akir",
+  "Алани": "Alani",
+  "Алаш'анир": "Alash'anir",
   "Алисразор": "Alysrazor",
+  "Алунира": "Alunira",
   "Альтаирий": "Altairus",
   "Анзу": "Anzu",
+  "Анх-Де Верный": "Anh-De the Loyal",
+  "Арахноид-пожинатель": "Arachnoid Harvester",
   "Аргус Порабощенный": "Argus the Unmaker",
+  "Арденвельд: появляется после короткой цепочки заданий (подробности — на Wowhead). Маунт падает почти всегда.": "Ardenweald: appears after a short quest chain (details on Wowhead). The mount almost always drops.",
   "Архимонд": "Archimonde",
   "Беги до Altairus": "Run to Altairus",
   "Беги до Slabhide": "Run to Slabhide",
   "Беги к Anzu": "Run to Anzu",
+  "Без отката": "No cooldown",
   "Безумие Смертокрыла": "Madness of Deathwing",
   "Безупречный мастер (16-й этаж)": "Flawless Master (Layer 16)",
   "Бой «Падение Полночи»": "Midnight Falls",
+  "Бойцы Театра Боли в Малдраксусе выходят на арену по очереди; маунт падает с любого из них.": "The Theater of Pain champions in Maldraxxus come out to the arena in turn; the mount drops from any of them.",
   "Босс / секретный Naxxramas источник": "Boss / secret Naxxramas source",
   "Босс-дроп / cache": "Boss drop / cache",
   "Босс-дроп / quest item": "Boss drop / quest item",
@@ -94,11 +103,17 @@
   "В Retail не фармится через достижение; историческая строка.": "Not farmable through the achievement in Retail; historical row.",
   "В Retail не фармится через достижение; может появляться на Black Market Auction House.": "Not farmable through the achievement in Retail; may appear on the Black Market Auction House.",
   "В отличие от старого Amani War Bear, этот фармится.": "Unlike the old Amani War Bear, this one is farmable.",
+  "Валфир Непреклонный": "Valfir the Unrelenting",
+  "Вел'иккан": "Humon'gozz",
   "Верховная жрица Килнара": "High Priestess Kilnara",
   "Верховный оратор Эйрих": "Void Speaker Eirich",
+  "Вестник войны Мал'Корак": "Warbringer Mal'Korak",
+  "Вечноцветущий дол (фаза Пандарии): щит снимает Небесный кристалл из 10 небесных осколков, они падают с мобов дола. Маунт падает всегда.": "Vale of Eternal Blossoms (the Pandaria phase): a Sky Crystal made of 10 Skyshards, dropped by the Vale's mobs, takes down her shield. The mount always drops.",
   "Вкусный споролакомец из Гнилотопи": "Tasty sporegrazer from Rotmire",
   "Владыка испытаний: серебро": "Challenge Warlord: Silver",
   "Воздушное судно подавления HK-8": "HK-8 Aerial Oppression Unit",
+  "Всадник рока Хелгрим": "Doomrider Helgrim",
+  "Вырастает из Быстрорастущего гриба (подробности — на Wowhead).": "Grows out of a Rapidly Growing Mushroom (details on Wowhead).",
   "Высокий приоритет: скип сильно сокращает путь к Sylvanas.": "High priority: the skip cuts the way to Sylvanas a lot.",
   "Галеон": "Galleon",
   "Гаррош Адский Крик": "Garrosh Hellscream",
@@ -107,10 +122,17 @@
   "Герой своего времени: Гаррош Адский Крик": "Ahead of the Curve: Garrosh Hellscream",
   "Герой своего времени: Н'Зот Заразитель": "Ahead of the Curve: N'Zoth the Corruptor",
   "Герой своего времени: Тюремщик": "Ahead of the Curve: The Jailer",
+  "Гибломрак": "Doomshadow",
+  "Гигер": "Gieger",
+  "Гирукон": "Hirukon",
   "Главный DF raid-skip для маунт-фарма.": "The main DF raid skip for mount farming.",
   "Главный механик Меггакрут": "High Tinker Mekkatorque",
   "Главный полезный скип MoP для маунт-фарма.": "The most useful MoP skip for mount farming.",
+  "Гниложор": "Rotfeaster",
+  "Головокуска": "Skullripper",
   "Гончие Саргераса / Шатуг": "Felhounds of Sargeras / Shatug",
+  "Горгронд, появляется раз в много часов. Маунт падает всегда.": "Gorgrond, appears once in many hours. The mount always drops.",
+  "Горок": "Gorok",
   "Госпожа Сашж'ин": "Mistress Sassz'ine",
   "Гул'дан": "Gul'dan",
   "Дань бессмертию": "A Tribute to Immortality",
@@ -126,13 +148,20 @@
   "Для TBC официальных raid-skip нет": "No official raid skips for TBC",
   "До 10 инстансов/час": "Up to 10 instances/hour",
   "До Elegon идти недолго; один из лучших быстрых MoP-забегов.": "Elegon is not far in; one of the best quick MoP runs.",
+  "Долина Призрачной Луны (Дренор), появляется раз в много часов. Маунт падает всегда.": "Shadowmoon Valley (Draenor), appears once in many hours. The mount always drops.",
+  "Дормус Погонщик Верблюдов": "Dormus the Camel-Hoarder",
   "Достижения лучше закрывать группой, если соло-механики ломаются.": "Better to do the achievements in a group if the mechanics break solo.",
   "Дропает предмет, который запускает короткую цепочку.": "Drops an item that starts a short quest chain.",
+  "Его призывают (подробности — на Wowhead).": "It has to be summoned (details on Wowhead).",
   "Ежедневно / random queue": "Daily / random queue",
   "Еженедельно / M+ по сезону": "Weekly / M+ per season",
   "Еженедельно / daily зависит от режима": "Weekly / daily depending on the mode",
   "Если нужен только Ragnaros, после Alysrazor можно ускорить маршрут перьями.": "If you only need Ragnaros, the feathers after Alysrazor make the route faster.",
   "Завоеватель испытаний: серебро": "Challenge Conqueror: Silver",
+  "Зандаларский завоеватель №1": "Zandalari Warbringer #1",
+  "Зандаларский завоеватель №2": "Zandalari Warbringer #2",
+  "Зандаларский завоеватель №3": "Zandalari Warbringer #3",
+  "Затерянный во времени протодракон": "Time-Lost Proto-Drake",
   "Зул'джан": "Zul'jan",
   "Инструктор Разувий (секрет с конём Храбрецом)": "Instructor Razuvious (the Valiance horse secret)",
   "Испытание великого крестоносца": "Trial of the Grand Crusader",
@@ -140,26 +169,42 @@
   "Исхак Повелитель Четырех Ветров": "Ishak of the Four Winds",
   "Йогг-Сарон": "Yogg-Saron",
   "Камнедроб": "Slabhide",
+  "Карокта": "Karokta",
   "Кель'тас Солнечный Скиталец": "Kael'thas Sunstrider",
+  "Коготь Смерти / Кулак Страха / Пушка Смерти / Отмщение": "Deathtalon / Terrorfist / Doomroller / Vengeance",
+  "Контрогз Уничтожитель": "Konthrogz the Obliterator",
   "Королева Ансурек": "Queen Ansurek",
   "Король Дазар / Сундук претендента": "Dazar, The First King / Challenger's Cache",
   "Король Мехагон": "King Mechagon",
   "Король-лич": "The Lich King",
   "Короткий маршрут к Baron/Rivendare": "Short route to Baron Rivendare",
   "Красавчик Харлан / Сундук претендента": "Harlan Sweete / Challenger's Cache",
+  "Кроз Ярость Крови / Тенекоготь": "Croz Bloodrage / Shadowclaw",
+  "Кусачий Ветер": "Breezebiter",
   "Легенда ключей 2-го сезона The War Within / Затерянное во времени седло": "Keystone Legend: The War Within Season Two / Timelost Saddle",
   "Легенда ключей 3-го сезона The War Within / Затерянное во времени седло": "Keystone Legend: The War Within Season Three / Timelost Saddle",
   "Легенда ключей Midnight: 1-й сезон / Затерянное во времени седло": "Keystone Legend: Midnight Season 1 / Timelost Saddle",
   "Легенда ключей Midnight: 2-й сезон": "Keystone Legend: Midnight Season 2",
   "Леди Джайна Праудмур": "Lady Jaina Proudmoore",
+  "Летает по Грозовой Гряде, появляется раз в 6–24 часа (вместо него может появиться Вирагоса). Маунт падает всегда.": "Flies around the Storm Peaks, appears every 6-24 hours (Vyragosa may come instead). The mount always drops.",
+  "Летает по Подземью; появляется раз в несколько часов, его нужно оседлать и победить. Маунт падает всегда.": "Flies around Deepholm; appears every few hours, you have to mount it and win. The mount always drops.",
   "Ловчий Аттумен": "Attumen the Huntsman",
   "Лорд Аурий Ривендер": "Lord Aurius Rivendare",
+  "Лук'хок": "Luk'hok",
   "Лучше делать отдельным achievement-run, а не в скоростном маунт-забеге.": "Better done as a separate achievement run rather than in a fast mount run.",
   "Лучше делать отдельным забегом, потому что часть ачивок мешает speed-clear.": "Better done as a separate run, because some achievements get in the way of a speed clear.",
   "Любая": "Any",
+  "Любой боец Театра Боли": "Any Theater of Pain champion",
   "Любой босс Склепа Аркавона": "Any boss of Vault of Archavon",
   "Любой босс подземелий путешествий во времени": "Any boss of Timewalking dungeons",
+  "Любой редкий монстр: Буря Бездны": "Any rare: Voidstorm",
+  "Любой редкий монстр: Запретный край": "Any rare: The Forbidden Reach",
+  "Любой редкий монстр: Зул'Аман": "Any rare: Zul'Aman",
+  "Любой редкий монстр: Леса Вечной Песни": "Any rare: Eversong Woods",
+  "Любой редкий монстр: Спиральный остров": "Any rare: The Coiled Isle",
+  "Любой редкий монстр: Харандар": "Any rare: Harandar",
   "Любопытный слизневый змей": "The curious Slime Serpent",
+  "Малбог": "Malbog",
   "Малигос": "Malygos",
   "Мандокир Повелитель Крови": "Bloodlord Mandokir",
   "Маршрут до Kilnara": "Route to Kilnara",
@@ -179,6 +224,7 @@
   "Мастер ключей 4-го сезона Shadowlands / Затерянное во времени седло": "Keystone Master: Shadowlands Season Four / Timelost Saddle",
   "Мастер ключей Midnight: 1-й сезон / Затерянное во времени седло": "Keystone Master: Midnight Season 1 / Timelost Saddle",
   "Мастер ключей Midnight: 2-й сезон": "Keystone Master: Midnight Season 2",
+  "Мастер-псарь Жэнь": "Houndlord Ren",
   "Мешок Каши": "Kasha's Bag",
   "Мифик ключей → Затерянное во времени седло": "Keystone Myth → Timelost Saddle",
   "Многие ачивки легко закрываются соло, но проверь механики.": "Many achievements are easy solo, but check the mechanics.",
@@ -189,7 +235,11 @@
   "Можно повторять по условиям": "Repeatable if the conditions are met",
   "Можно фармить на любой сложности, где доступен лут.": "Farmable on any difficulty where the loot is available.",
   "Можно фармить чаще на Normal, если дроп доступен в текущей версии.": "Can be farmed more often on Normal if the drop is available in the current version.",
+  "Мусор из Галаджио": "Gallagio Garbage",
   "Н'Зот Заразитель": "N'Zoth the Corruptor",
+  "Награнд (Дренор), появляется раз в много часов. Маунт падает всегда.": "Nagrand (Draenor), appears once in many hours. The mount always drops.",
+  "Надзиратель Крикс": "Overseer Krix",
+  "Накк Громогласный": "Nakk the Thunderer",
   "Налак": "Nalak",
   "Налтор Призыватель Зимы": "Nalthor the Rimebinder",
   "Не 5-player dungeon, но инстансовый Shadowlands-фарм; оставлено для полноты.": "Not a 5-player dungeon, but an instanced Shadowlands farm; kept for completeness.",
@@ -202,20 +252,30 @@
   "Не используй скип, если цель — Sanctum Gloomcharger.": "Do not use the skip if you are after the Sanctum Gloomcharger.",
   "Не используй скип, пока не закрыты нужные боссы/ачивки.": "Do not use the skip until the bosses/achievements you need are done.",
   "Не пропускай Alysrazor, если фармишь именно Flametalon.": "Do not skip Alysrazor if you are farming the Flametalon.",
+  "Нерисса Бессердечная": "Nerissa Heartless",
+  "Неслышимка": "Soundless",
   "Неспокойное Сердце": "Restless Heart",
   "Нет постоянного маршрута": "No fixed route",
   "Неупокоенное чудовище / Сундук претендента": "Unbound Abomination / Challenger's Cache",
+  "Нимар Душегуб": "Nimar the Slayer",
   "Новый Midnight recolor из Timelost Saddle pool.": "A new Midnight recolor from the Timelost Saddle pool.",
   "Новый маунт патча 12.1; Altar of Fangs есть в пуле M+ 2-го сезона.": "A new mount of patch 12.1; Altar of Fangs is in the Season 2 M+ pool.",
+  "Нок-Карош": "Nok-Karosh",
   "Ночная Погибель": "Nightbane",
+  "Ночная кобыла": "Night Mare",
   "Нужен random dungeon reward cache": "Needs the random dungeon reward cache",
   "Нужен доступ к Wintergrasp / старой зоне; шанс с любого босса.": "Needs access to Wintergrasp / the old zone; a chance from any boss.",
   "Нужен правильный маршрут и таймер; соло шанс 20%, полная группа без маунта — 100%.": "Needs the right route and timer; 20% solo, 100% with a full group without the mount.",
   "Нужно дойти до Ji-Kun; рейд без скипа.": "You have to get to Ji-Kun; the raid has no skip.",
   "Нужны условия guild achievement.": "Needs the guild achievement conditions.",
+  "Обожравшаяся темная гончая": "Gorged Shadehound",
   "Обычно 100% при выполнении timed run.": "Usually 100% when the timed run is done.",
   "Обычно нужен solo-kill последних двух боссов": "Usually needs a solo kill of the last two bosses",
   "Обычные NPC внутри AQ40": "Regular NPCs inside AQ40",
+  "Обычные мобы: Вол'дун": "Common mobs: Vol'dun",
+  "Обычные мобы: Долина Штормов": "Common mobs: Stormsong Valley",
+  "Обычные мобы: Друствар": "Common mobs: Drustvar",
+  "Обычные мобы: Назмир": "Common mobs: Nazmir",
   "Обычный рейд": "Normal raid",
   "Один из главных BfA-скипов.": "One of the main BfA skips.",
   "Один из главных Legion-скипов для маунт-фарма.": "One of the main Legion skips for mount farming.",
@@ -234,9 +294,27 @@
   "Официальных скипов нет": "No official skips",
   "Очень быстрый забег: Attumen находится в начале Karazhan.": "A very quick run: Attumen is at the start of Karazhan.",
   "Очень полезный скип для Mythic Jaina.": "A very useful skip for Mythic Jaina.",
+  "Павший боевой конь": "Fallen Charger",
+  "Падает с любого редкого монстра зоны (их здесь 15). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Drops from any rare of the zone (15 of them). Each one gives loot once a day per character, so the row has no cooldown of its own.",
+  "Падает с любого редкого монстра зоны (их здесь 16). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Drops from any rare of the zone (16 of them). Each one gives loot once a day per character, so the row has no cooldown of its own.",
+  "Падает с любого редкого монстра зоны (их здесь 21). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Drops from any rare of the zone (21 of them). Each one gives loot once a day per character, so the row has no cooldown of its own.",
+  "Падает с любого редкого монстра острова (их здесь 15), очень редко. Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Drops from any rare of the isle (15 of them), very rarely. Each one gives loot once a day per character, so the row has no cooldown of its own.",
+  "Падает с обычных мобов зоны (видов 16), например: Тролль крови - проклинательница, Тролль крови - изверг, Ловчая из племени Охотников Крови. Отката нет: каждое убийство — попытка.": "Drops from the zone's common mobs (16 kinds), e.g. Blood Troll Hexxer, Blood Troll Brutalizer, Bloodhunter Stalker. No cooldown: every kill is an attempt.",
+  "Падает с обычных мобов зоны (видов 20), например: Отступник - призыватель небес, Отступник-целитель, Сетрак-опустошитель. Отката нет: каждое убийство — попытка.": "Drops from the zone's common mobs (20 kinds), e.g. Faithless Skycaller, Faithless Mender, Sethrak Ravager. No cooldown: every kill is an attempt.",
+  "Падает с обычных мобов зоны (видов 25), например: Стрелок из племени Шипошкурых, Лоялист дома Штормсонгов, Канонир из Просоленных мастерских. Отката нет: каждое убийство — попытка.": "Drops from the zone's common mobs (25 kinds), e.g. Briarback Skirmisher, Stormsong Loyalist, Brinebrawn Cannoneer. No cooldown: every kill is an attempt.",
+  "Падает с обычных мобов зоны (видов 9), например: Порабощенный проклятием сокольничий, Порабощенный проклятием арбалетчик, Порабощенный проклятием стражник. Отката нет: каждое убийство — попытка.": "Drops from the zone's common mobs (9 kinds), e.g. Hexthralled Falconer, Hexthralled Crossbowman, Hexthralled Guardsman. No cooldown: every kill is an attempt.",
+  "Палач Мохо / Атилия Огненная Роса": "Moxo the Beheader / Athil Dewfire",
+  "Пастух Кравос": "Wrangler Kravos",
   "Песчаный проглот Кролок": "Dunegorger Kraulok",
+  "Плавает по Вайш'иру (Мерцающий простор, Бездонные глубины), появляется раз в несколько часов. Маунт падает всегда.": "Swims around Vashj'ir (Shimmering Expanse, Abyssal Depths), appears every few hours. The mount always drops.",
   "По lockout/ротации Torghast": "By Torghast lockout/rotation",
+  "Пожиратель трупов": "Corpse Eater",
   "Полезен, если фармишь Mythic Jailer.": "Useful if you are farming Mythic Jailer.",
+  "Порождение Беледар": "Beledar's Spawn",
+  "Посейдус": "Poseidus",
+  "Появляется в разных зонах Пандарии. Три завоевателя на вид одинаковы, у каждого свой ящер; номер — только для таблицы, аддон различает их сам. Отката добычи нет.": "Appears in several zones of Pandaria. The three Warbringers look the same, each has its own direhorn; the number is only for the sheet, the addon tells them apart. No loot cooldown.",
+  "Появляется на Острове Дорн нечасто (подробности — на Wowhead).": "Appears on the Isle of Dorn now and then (details on Wowhead).",
+  "Появляется, только если призвать приманкой (Aurelid Lure; подробности — на Wowhead).": "Comes only when summoned with a lure (Aurelid Lure; details on Wowhead).",
   "Притворяйся, пока не получится": "Fake It 'Til You Make It",
   "Пробуждение рейдов Dragonflight": "Dragonflight Awakened raids",
   "Проверь актуальные условия: важно пройти последние бои корректно.": "Check the current conditions: the last fights must be done correctly.",
@@ -244,6 +322,9 @@
   "Проверь требования guild group.": "Check the guild group requirements.",
   "Проверь, открыт ли у персонажа/аккаунта актуальный доступ к старым Naxxramas-секретам.": "Check that the character/account has current access to the old Naxxramas secrets.",
   "Просто спамь Timewalking dungeons во время события.": "Just spam Timewalking dungeons during the event.",
+  "Псарь Керракс": "Houndmaster Kerrax",
+  "Пудовый Кулак": "Poundfist",
+  "Пузцилла / Вракс'тул": "Puscilla / Vrax'thul",
   "Рагнарос": "Ragnaros",
   "Разные BfA dungeons": "Various BfA dungeons",
   "Разные Cataclysm dungeons": "Various Cataclysm dungeons",
@@ -254,18 +335,71 @@
   "Разные WoD dungeons": "Various WoD dungeons",
   "Разные подземелья WotLK": "Various WotLK dungeons",
   "Рар в Ульдуме, появляется во время нападений Н'Зота; лут раз в день на персонажа.": "A rare in Uldum during N'Zoth assaults; loot once a day per character.",
+  "Рар: Арденвельд, точка 30.4, 55.2. Его можно и купить у торговца. Лут раз в день на персонажа.": "A rare in Ardenweald, at 30.4, 55.2. Can also be bought from a vendor. Loot once a day per character.",
+  "Рар: Вечноцветущий дол, точка 10, 33. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "A rare in Vale of Eternal Blossoms, at 10, 33. Appears during N'Zoth assaults. Loot once a day per character.",
+  "Рар: Вечноцветущий дол, точка 34.15, 68.05. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "A rare in Vale of Eternal Blossoms, at 34.15, 68.05. Appears during N'Zoth assaults. Loot once a day per character.",
+  "Рар: Вечноцветущий дол, точка 36.6, 37.6. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "A rare in Vale of Eternal Blossoms, at 36.6, 37.6. Appears during N'Zoth assaults. Loot once a day per character.",
+  "Рар: Вневременный остров, точек появления несколько.": "A rare in Timeless Isle, several spawn points.",
+  "Рар: К'ареш, точек появления несколько.": "A rare in K'aresh, several spawn points.",
+  "Рар: Кортия, точек появления несколько. Лут раз в день на персонажа.": "A rare in Korthia, several spawn points. Loot once a day per character.",
+  "Рар: Кортия, точка 45.35, 30.34. Лут раз в день на персонажа.": "A rare in Korthia, at 45.35, 30.34. Loot once a day per character.",
+  "Рар: Кортия, точка 56.3, 66.3. Лут раз в день на персонажа.": "A rare in Korthia, at 56.3, 66.3. Loot once a day per character.",
+  "Рар: Лазурный Простор, точек появления несколько.": "A rare in The Azure Span, several spawn points.",
+  "Рар: Лазурный Простор, точка 27.8, 46.": "A rare in The Azure Span, at 27.8, 46.",
+  "Рар: Малдраксус, точка 31.4, 35.6. Лут раз в день на персонажа.": "A rare in Maldraxxus, at 31.4, 35.6. Loot once a day per character.",
+  "Рар: Малдраксус, точка 33.6, 80.6. Лут раз в день на персонажа.": "A rare in Maldraxxus, at 33.6, 80.6. Loot once a day per character.",
+  "Рар: Малдраксус, точка 44.2, 51.2. Падает, только если вашим спутником сейчас конструкт Нина (Некролорды). Лут раз в день на персонажа.": "A rare in Maldraxxus, at 44.2, 51.2. Drops only while the construct Neena is your active companion (Necrolords). Loot once a day per character.",
+  "Рар: Малдраксус, точка 50.67, 47.37. Его можно и купить у торговца. Лут раз в день на персонажа.": "A rare in Maldraxxus, at 50.67, 47.37. Can also be bought from a vendor. Loot once a day per character.",
+  "Рар: Малдраксус, точка 58.6, 74.2. Лут раз в день на персонажа.": "A rare in Maldraxxus, at 58.6, 74.2. Loot once a day per character.",
+  "Рар: Малдраксус, точка 65.8, 35.3. Лут раз в день на персонажа.": "A rare in Maldraxxus, at 65.8, 35.3. Loot once a day per character.",
+  "Рар: Нагорье Арати, точек появления несколько. Добыча только для Альянса.": "A rare in Arathi Highlands, several spawn points. Alliance only.",
+  "Рар: Нагорье Арати, точек появления несколько. Добыча только для Орды.": "A rare in Arathi Highlands, several spawn points. Horde only.",
+  "Рар: Нагорье Арати, точка 33.44, 36.94. Вход в пещеру — у точки. Лут раз в день на персонажа.": "A rare in Arathi Highlands, at 33.44, 36.94. The cave entrance is at the point. Loot once a day per character.",
+  "Рар: Нагорье Арати, точка 57.15, 45.75. Лут раз в день на персонажа.": "A rare in Arathi Highlands, at 57.15, 45.75. Loot once a day per character.",
+  "Рар: Нагорье Арати, точка 67.06, 65.89. Лут раз в день на персонажа.": "A rare in Arathi Highlands, at 67.06, 65.89. Loot once a day per character.",
+  "Рар: Нагорье Арати, точка 67.48, 60.58. Лут раз в день на персонажа.": "A rare in Arathi Highlands, at 67.48, 60.58. Loot once a day per character.",
+  "Рар: Назжатар, точек появления несколько. Лут раз в день на персонажа.": "A rare in Nazjatar, several spawn points. Loot once a day per character.",
+  "Рар: Нижняя Шахта, точка 32.2, 21.8.": "A rare in Undermine, at 32.2, 21.8.",
+  "Рар: Нижняя Шахта, точка 41.2, 41.2.": "A rare in Undermine, at 41.2, 41.2.",
+  "Рар: Остров Мехагон, точка 52, 41.4. Лут раз в день на персонажа.": "A rare in Mechagon Island, at 52, 41.4. Loot once a day per character.",
+  "Рар: Остров Мехагон, точка 65.8, 79.6. Лут раз в день на персонажа.": "A rare in Mechagon Island, at 65.8, 79.6. Loot once a day per character.",
+  "Рар: Пещера Заралек, точек появления несколько.": "A rare in Zaralek Cavern, several spawn points.",
+  "Рар: Пустоши Анторуса, точка 61.78, 36.97. Лут раз в день на персонажа.": "A rare in Antoran Wastes, at 61.78, 36.97. Loot once a day per character.",
+  "Рар: Пустоши Анторуса, точка 62.96, 24.86. Лут раз в день на персонажа.": "A rare in Antoran Wastes, at 62.96, 24.86. Loot once a day per character.",
+  "Рар: Пустоши Анторуса, точка 64.42, 20.35. Лут раз в день на персонажа.": "A rare in Antoran Wastes, at 64.42, 20.35. Loot once a day per character.",
+  "Рар: Ревендрет, точка 46, 78.5. Его можно и купить у торговца. Лут раз в день на персонажа.": "A rare in Revendreth, at 46, 78.5. Can also be bought from a vendor. Loot once a day per character.",
+  "Рар: Ревендрет, точка 51.98, 51.8. Лут раз в день на персонажа.": "A rare in Revendreth, at 51.98, 51.8. Loot once a day per character.",
+  "Рар: Ревендрет, точка 62, 47. Лут раз в день на персонажа.": "A rare in Revendreth, at 62, 47. Loot once a day per character.",
+  "Рар: Тайносводье, точек появления несколько.": "A rare in Hallowfall, several spawn points.",
+  "Рар: Темные берега, точек появления несколько. Альянсу — Агата Вирмвуд, Орде — Чернолап. Лут раз в день на персонажа.": "A rare in Darkshore, several spawn points. Alliance: Agathe Wyrmwood, Horde: Blackpaw. Loot once a day per character.",
+  "Рар: Темные берега, точек появления несколько. Альянсу — Кроз Ярость Крови, Орде — Тенекоготь. Лут раз в день на персонажа.": "A rare in Darkshore, several spawn points. Alliance: Croz Bloodrage, Horde: Shadowclaw. Loot once a day per character.",
+  "Рар: Темные берега, точек появления несколько. Альянсу — Палач Мохо, Орде — Атилия Огненная Роса. Лут раз в день на персонажа.": "A rare in Darkshore, several spawn points. Alliance: Moxo the Beheader, Horde: Athil Dewfire. Loot once a day per character.",
+  "Рар: Темные берега, точка 56.4, 30.8. Лут раз в день на персонажа.": "A rare in Darkshore, at 56.4, 30.8. Loot once a day per character.",
+  "Рар: Ульдум, точка 30.85, 49.71. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "A rare in Uldum, at 30.85, 49.71. Appears during N'Zoth assaults. Loot once a day per character.",
+  "Рар: Ульдум, точка 68.23, 31.97. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "A rare in Uldum, at 68.23, 31.97. Appears during N'Zoth assaults. Loot once a day per character.",
+  "Рар: Утроба, точек появления несколько.": "A rare in The Maw, several spawn points.",
+  "Рар: Утроба, точка 53.5, 79.5.": "A rare in The Maw, at 53.5, 79.5.",
+  "Рар: Эредат, точка 34.01, 47.83. Лут раз в день на персонажа.": "A rare in Eredath, at 34.01, 47.83. Loot once a day per character.",
+  "Рар: Эредат, точка 49.79, 9.4. Лут раз в день на персонажа.": "A rare in Eredath, at 49.79, 9.4. Loot once a day per character.",
+  "Рар: Эредат, точка 55.65, 59.95. Лут раз в день на персонажа.": "A rare in Eredath, at 55.65, 59.95. Loot once a day per character.",
+  "Рара нужно призвать: пять игроков почти одновременно (за ~10 секунд) дёргают пять неприметных рычагов по Звенящим глубинам, рар появляется у озера через минуту. Лут раз в день на персонажа.": "It has to be summoned: five players pull the five Inconspicuous Levers around the Ringing Deeps within about 10 seconds; it appears at the lake a minute later. Loot once a day per character.",
   "Редкий трэш-дроп / рейдовый маунт": "Rare trash drop / raid mount",
   "Рейд 2-го сезона Midnight; пока аддон актуален — 3 маунта за килл (персональный лут), нужна Mythic-группа.": "Midnight Season 2 raid; while the expansion is current, 3 mounts per kill (personal loot), needs a Mythic group.",
   "Рейд короткий; один из удобных еженедельных маршрутов.": "A short raid; one of the handy weekly routes.",
+  "Реливик Непокорный": "Reliwik the Defiant",
   "Респ 15 минут": "Respawns in 15 minutes",
+  "Ржавое Перо": "Rustfeather",
   "Ротация ворлд боссов BfA": "BfA world boss rotation",
   "Рухмар": "Rukhmar",
+  "Рыцарь-капитан Алдрин": "Knight-Captain Aldrin",
   "С Patch 12.0.5 старые KSM/KSL маунты возвращены через Timelost Saddle.": "Since patch 12.0.5 the old KSM/KSL mounts are back through the Timelost Saddle.",
+  "Сабриэль Косторуб": "Sabriel the Bonecleaver",
   "Самый редкий из AQ battle tank дропов; проверь, нужен ли он тебе именно для коллекции.": "The rarest of the AQ battle tank drops; check whether you really need it for the collection.",
   "Сартарион": "Sartharion",
   "Сезонно / через Timelost Saddle": "Seasonal / via Timelost Saddle",
   "Секретный timed boss": "Secret timed boss",
   "Сильвана Ветрокрылая": "Sylvanas Windrunner",
+  "Сильфида": "Silthide",
   "Скади Безжалостный": "Skadi the Ruthless",
   "Скип для Sporefall в актуальном skip-списке не указан.": "No skip for Sporefall in the current skip list.",
   "Скип к Garrosh есть, но для Glory обычно нужны разные боссы, поэтому скип не всегда использовать.": "There is a skip to Garrosh, but Glory usually needs several different bosses, so the skip is not always worth using.",
@@ -274,6 +408,8 @@
   "Скип полезен, если нужен только Gul'dan. На Mythic шанс есть сразу на оба инфернала.": "The skip helps if you only need Gul'dan. On Mythic there is a chance for both infernals at once.",
   "Скипа нет; рейд короткий": "No skip; the raid is short",
   "Скипа нет; рейд состоит из одного босса": "No skip; the raid is a single boss",
+  "Скрииг Пожиратель": "Skreeg the Devourer",
+  "Скрытень со Дна": "Lurker of the Deeps",
   "Слава герою": "Glory of the Hero",
   "Слава герою Dragonflight": "Glory of the Dragonflight Hero",
   "Слава герою Legion": "Glory of the Legion Hero",
@@ -314,20 +450,28 @@
   "Слава рейдеру Ульдуара": "Glory of the Ulduar Raider",
   "Слава рейдеру Хранилища": "Glory of the Vault Raider",
   "Слава рейдеру Цитадели Адского Пламени": "Glory of the Hellfire Raider",
+  "Служитель глубин": "Adherent of the Abyss",
   "Сначала закрывай ачивки, потом используй скип для Jaina.": "Do the achievements first, then use the skip for Jaina.",
+  "Сначала найти фигурку верблюда (Ульдум; появляется редко и в разных местах): она перенесёт к Дормусу. Маунт падает всегда.": "First find a camel figurine in Uldum (it appears rarely, in different places): it takes you to Dormus. The mount always drops.",
   "Со'лея": "So'leah",
   "Собери кристаллы для Nightbane": "Collect the crystals for Nightbane",
+  "Сокрушитель Надежд": "Hopecrusher",
+  "Стаарбс": "Sthaarbs",
   "Ставь Heroic, если нужен этот маунт.": "Set Heroic if you need this mount.",
   "Старый тайм-ран в Зул'Амане": "Old Zul'Aman timed run",
+  "Стимулирующий реагент Мрачных Минеров": "Darkfuse Precipitant",
   "Сундук / cache": "Chest / cache",
   "Сундук хранителя силовых линий": "Cache of the Ley-Guardian",
   "Считай как коллекционный AQ-маунт; обычно используется только внутри Temple of Ahn'Qiraj.": "Count it as a collectible AQ mount; it is usually only usable inside Temple of Ahn'Qiraj.",
   "Также есть dungeon-источник через Oculus cache; см. лист Подземелья.": "There is also a dungeon source through the Oculus cache; see the Dungeons sheet.",
+  "Таладор, появляется раз в много часов. Маунт падает всегда.": "Talador, appears once in many hours. The mount always drops.",
+  "Тахонта": "Tahonta",
   "Текущий KSL-маунт Midnight Season 2.": "The current KSL mount of Midnight Season 2.",
   "Текущий KSM-маунт Midnight Season 2.": "The current KSM mount of Midnight Season 2.",
   "Текущий Mythic-гейт; нужна рейдовая группа.": "Current Mythic gate; needs a raid group.",
   "Теперь это подвиг (Feat of Strength): маунт больше не получить; историческая строка.": "Now a Feat of Strength: the mount can no longer be obtained; historical row.",
   "Только во время Timewalking": "Only during Timewalking",
+  "Торопун": "Pathrunner",
   "Требует группу и выполнение условий в трёх Midnight рейдах.": "Needs a group and the conditions in three Midnight raids.",
   "Трэш-дроп / рейдовый маунт": "Trash drop / raid mount",
   "Тьма": "The Darkness",
@@ -339,11 +483,14 @@
   "Удалённая награда Retail": "Reward removed in Retail",
   "Удалённый режим": "Removed mode",
   "Указанный босс": "Named boss",
+  "Укротитель Кама": "Beastrider Kama",
   "Ула'тек": "Ula'tek",
   "Ультраксион": "Ultraxion",
   "Ундаста": "Oondasta",
+  "Урмаг": "Urmag",
   "Успей в таймер": "Beat the timer",
   "Успей спасти пленников": "Save the prisoners in time",
+  "Фаму Бесконечный": "Famu the Infinite",
   "Фарм Torghast bosses": "Farm the Torghast bosses",
   "Фармится вместе с Life-Binder's Handmaiden.": "Farmed together with Life-Binder's Handmaiden.",
   "Фармить вместе с Aerial Unit R-21/X.": "Farm together with the Aerial Unit R-21/X.",
@@ -357,15 +504,334 @@
   "Финальный босс": "Final boss",
   "Финальный босс Tazavesh": "Tazavesh final boss",
   "Финальный/указанный босс": "Final/named boss",
+  "Фиолетовая ошибка": "Violet Mistake",
   "Фиракк": "Fyrakk the Blazing",
+  "Ха-Ли": "Ha-Li",
+  "Харика Ужасающая": "Harika the Horrid",
+  "Холон": "Huolon",
   "Хорридон": "Horridon",
+  "Хребет Ледяного Огня, появляется редко. Маунт падает всегда.": "Frostfire Ridge, appears rarely. The mount always drops.",
   "Хромовый король Галливикс": "Chrome King Gallywix",
   "Цзи-Кунь": "Ji-Kun",
   "Часть достижений может требовать контроля урона, чтобы не убить босса слишком быстро.": "Some achievements may need damage control so the boss does not die too fast.",
   "Чернорук": "Blackhand",
+  "Четыре рара Танаанских джунглей, маунт падает с любого из них. Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Four rares of Tanaan Jungle; the mount drops from any of them. Each one gives loot once a day per character, so the row has no cooldown of its own.",
   "Ша Злости": "Sha of Anger",
   "Элегон": "Elegon",
-  "Этот же маунт есть с Malygos в рейде Eye of Eternity.": "The same mount also drops from Malygos in the Eye of Eternity raid."
+  "Эонакс": "Aeonaxx",
+  "Этот же маунт есть с Malygos в рейде Eye of Eternity.": "The same mount also drops from Malygos in the Eye of Eternity raid.",
+  "Ядовитый небесный скат": "Venomtail Skyfin",
+  "Язвоглот": "Blistermaw"
+ },
+ "contentL10n": {
+  "de": {
+   "Арденвельд: появляется после короткой цепочки заданий (подробности — на Wowhead). Маунт падает почти всегда.": "Ardenwald: erscheint nach einer kurzen Questreihe (Details auf Wowhead). Das Reittier fällt fast immer.",
+   "Бойцы Театра Боли в Малдраксусе выходят на арену по очереди; маунт падает с любого из них.": "Die Champions des Theaters der Schmerzen in Maldraxxus betreten nacheinander die Arena; das Reittier fällt bei jedem von ihnen.",
+   "Вечноцветущий дол (фаза Пандарии): щит снимает Небесный кристалл из 10 небесных осколков, они падают с мобов дола. Маунт падает всегда.": "Tal der Ewigen Blüten (Pandaria-Phase): ein Himmelskristall (Sky Crystal) aus 10 Himmelssplittern (Skyshard) von den Gegnern des Tals nimmt ihr den Schild. Das Reittier fällt immer.",
+   "Вырастает из Быстрорастущего гриба (подробности — на Wowhead).": "Wächst aus einem Schnell wachsender Pilz (Details auf Wowhead).",
+   "Горгронд, появляется раз в много часов. Маунт падает всегда.": "Gorgrond, erscheint nur alle paar Stunden. Das Reittier fällt immer.",
+   "Долина Призрачной Луны (Дренор), появляется раз в много часов. Маунт падает всегда.": "Schattenmondtal (Draenor), erscheint nur alle paar Stunden. Das Reittier fällt immer.",
+   "Его призывают (подробности — на Wowhead).": "Er muss beschworen werden (Details auf Wowhead).",
+   "Летает по Грозовой Гряде, появляется раз в 6–24 часа (вместо него может появиться Вирагоса). Маунт падает всегда.": "Fliegt über die Die Sturmgipfel, erscheint alle 6-24 Stunden (stattdessen kann Vyragosa kommen). Das Reittier fällt immer.",
+   "Летает по Подземью; появляется раз в несколько часов, его нужно оседлать и победить. Маунт падает всегда.": "Fliegt über Tiefenheim; erscheint alle paar Stunden, man muss ihn besteigen und besiegen. Das Reittier fällt immer.",
+   "Награнд (Дренор), появляется раз в много часов. Маунт падает всегда.": "Nagrand (Draenor), erscheint nur alle paar Stunden. Das Reittier fällt immer.",
+   "Падает с любого редкого монстра зоны (их здесь 15). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Fällt bei jedem seltenen Gegner der Zone (es gibt 15). Jeder gibt einmal am Tag pro Charakter Beute, daher hat die Zeile keine eigene Abklingzeit.",
+   "Падает с любого редкого монстра зоны (их здесь 16). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Fällt bei jedem seltenen Gegner der Zone (es gibt 16). Jeder gibt einmal am Tag pro Charakter Beute, daher hat die Zeile keine eigene Abklingzeit.",
+   "Падает с любого редкого монстра зоны (их здесь 21). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Fällt bei jedem seltenen Gegner der Zone (es gibt 21). Jeder gibt einmal am Tag pro Charakter Beute, daher hat die Zeile keine eigene Abklingzeit.",
+   "Падает с любого редкого монстра острова (их здесь 15), очень редко. Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Fällt bei jedem seltenen Gegner der Insel (es gibt 15), sehr selten. Jeder gibt einmal am Tag pro Charakter Beute, daher hat die Zeile keine eigene Abklingzeit.",
+   "Падает с обычных мобов зоны (видов 16), например: Тролль крови - проклинательница, Тролль крови - изверг, Ловчая из племени Охотников Крови. Отката нет: каждое убийство — попытка.": "Fällt bei gewöhnlichen Gegnern der Zone (16 Arten), z. B. Verhexerin der Bluttrolle, Metzler der Bluttrolle, Pirscherin der Blutjäger. Keine Abklingzeit: jeder Kill ist ein Versuch.",
+   "Падает с обычных мобов зоны (видов 20), например: Отступник - призыватель небес, Отступник-целитель, Сетрак-опустошитель. Отката нет: каждое убийство — попытка.": "Fällt bei gewöhnlichen Gegnern der Zone (20 Arten), z. B. Treuloser Himmelsrufer, Treuloser Heiler, Verheerer der Sethrak. Keine Abklingzeit: jeder Kill ist ein Versuch.",
+   "Падает с обычных мобов зоны (видов 25), например: Стрелок из племени Шипошкурых, Лоялист дома Штормсонгов, Канонир из Просоленных мастерских. Отката нет: каждое убийство — попытка.": "Fällt bei gewöhnlichen Gegnern der Zone (25 Arten), z. B. Scharmützler der Borstenrücken, Sturmsangloyalist, Salzkraftkanonier. Keine Abklingzeit: jeder Kill ist ein Versuch.",
+   "Падает с обычных мобов зоны (видов 9), например: Порабощенный проклятием сокольничий, Порабощенный проклятием арбалетчик, Порабощенный проклятием стражник. Отката нет: каждое убийство — попытка.": "Fällt bei gewöhnlichen Gegnern der Zone (9 Arten), z. B. Behexter Falkner, Behexter Armbrustschütze, Behexter Gardist. Keine Abklingzeit: jeder Kill ist ein Versuch.",
+   "Плавает по Вайш'иру (Мерцающий простор, Бездонные глубины), появляется раз в несколько часов. Маунт падает всегда.": "Schwimmt durch Vashj'ir (Schimmernde Weiten, Abyssische Tiefen), erscheint alle paar Stunden. Das Reittier fällt immer.",
+   "Появляется в разных зонах Пандарии. Три завоевателя на вид одинаковы, у каждого свой ящер; номер — только для таблицы, аддон различает их сам. Отката добычи нет.": "Erscheint in mehreren Zonen von Pandaria. Die drei sehen gleich aus, jeder hat sein eigenes Terrorhorn; die Nummer ist nur für die Tabelle, das Addon unterscheidet sie. Keine Abklingzeit für Beute.",
+   "Появляется на Острове Дорн нечасто (подробности — на Wowhead).": "Erscheint ab und zu auf der Insel von Dorn (Details auf Wowhead).",
+   "Появляется, только если призвать приманкой (Aurelid Lure; подробности — на Wowhead).": "Kommt nur, wenn er mit einem Köder beschworen wird (Aurelid Lure; Details auf Wowhead).",
+   "Рар в Ульдуме, появляется во время нападений Н'Зота; лут раз в день на персонажа.": "Rar: Uldum, während der Angriffe von N'Zoth; Beute einmal am Tag pro Charakter.",
+   "Рар: Арденвельд, точка 30.4, 55.2. Его можно и купить у торговца. Лут раз в день на персонажа.": "Rar: Ardenwald, Punkt 30.4, 55.2. Kann auch bei einem Händler gekauft werden. Beute einmal am Tag pro Charakter.",
+   "Рар: Вечноцветущий дол, точка 10, 33. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "Rar: Tal der Ewigen Blüten, Punkt 10, 33. Erscheint während der Angriffe von N'Zoth. Beute einmal am Tag pro Charakter.",
+   "Рар: Вечноцветущий дол, точка 34.15, 68.05. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "Rar: Tal der Ewigen Blüten, Punkt 34.15, 68.05. Erscheint während der Angriffe von N'Zoth. Beute einmal am Tag pro Charakter.",
+   "Рар: Вечноцветущий дол, точка 36.6, 37.6. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "Rar: Tal der Ewigen Blüten, Punkt 36.6, 37.6. Erscheint während der Angriffe von N'Zoth. Beute einmal am Tag pro Charakter.",
+   "Рар: Вневременный остров, точек появления несколько.": "Rar: Zeitlose Insel, mehrere Fundorte.",
+   "Рар: К'ареш, точек появления несколько.": "Rar: K'aresh, mehrere Fundorte.",
+   "Рар: Кортия, точек появления несколько. Лут раз в день на персонажа.": "Rar: Korthia, mehrere Fundorte. Beute einmal am Tag pro Charakter.",
+   "Рар: Кортия, точка 45.35, 30.34. Лут раз в день на персонажа.": "Rar: Korthia, Punkt 45.35, 30.34. Beute einmal am Tag pro Charakter.",
+   "Рар: Кортия, точка 56.3, 66.3. Лут раз в день на персонажа.": "Rar: Korthia, Punkt 56.3, 66.3. Beute einmal am Tag pro Charakter.",
+   "Рар: Лазурный Простор, точек появления несколько.": "Rar: Azurblaues Gebirge, mehrere Fundorte.",
+   "Рар: Лазурный Простор, точка 27.8, 46.": "Rar: Azurblaues Gebirge, Punkt 27.8, 46.",
+   "Рар: Малдраксус, точка 31.4, 35.6. Лут раз в день на персонажа.": "Rar: Maldraxxus, Punkt 31.4, 35.6. Beute einmal am Tag pro Charakter.",
+   "Рар: Малдраксус, точка 33.6, 80.6. Лут раз в день на персонажа.": "Rar: Maldraxxus, Punkt 33.6, 80.6. Beute einmal am Tag pro Charakter.",
+   "Рар: Малдраксус, точка 44.2, 51.2. Падает, только если вашим спутником сейчас конструкт Нина (Некролорды). Лут раз в день на персонажа.": "Rar: Maldraxxus, Punkt 44.2, 51.2. Fällt nur, solange das Konstrukt Neena dein aktiver Begleiter ist (Nekrolords). Beute einmal am Tag pro Charakter.",
+   "Рар: Малдраксус, точка 50.67, 47.37. Его можно и купить у торговца. Лут раз в день на персонажа.": "Rar: Maldraxxus, Punkt 50.67, 47.37. Kann auch bei einem Händler gekauft werden. Beute einmal am Tag pro Charakter.",
+   "Рар: Малдраксус, точка 58.6, 74.2. Лут раз в день на персонажа.": "Rar: Maldraxxus, Punkt 58.6, 74.2. Beute einmal am Tag pro Charakter.",
+   "Рар: Малдраксус, точка 65.8, 35.3. Лут раз в день на персонажа.": "Rar: Maldraxxus, Punkt 65.8, 35.3. Beute einmal am Tag pro Charakter.",
+   "Рар: Нагорье Арати, точек появления несколько. Добыча только для Альянса.": "Rar: Arathihochland, mehrere Fundorte. Nur für die Allianz.",
+   "Рар: Нагорье Арати, точек появления несколько. Добыча только для Орды.": "Rar: Arathihochland, mehrere Fundorte. Nur für die Horde.",
+   "Рар: Нагорье Арати, точка 33.44, 36.94. Вход в пещеру — у точки. Лут раз в день на персонажа.": "Rar: Arathihochland, Punkt 33.44, 36.94. Der Höhleneingang ist am Punkt. Beute einmal am Tag pro Charakter.",
+   "Рар: Нагорье Арати, точка 57.15, 45.75. Лут раз в день на персонажа.": "Rar: Arathihochland, Punkt 57.15, 45.75. Beute einmal am Tag pro Charakter.",
+   "Рар: Нагорье Арати, точка 67.06, 65.89. Лут раз в день на персонажа.": "Rar: Arathihochland, Punkt 67.06, 65.89. Beute einmal am Tag pro Charakter.",
+   "Рар: Нагорье Арати, точка 67.48, 60.58. Лут раз в день на персонажа.": "Rar: Arathihochland, Punkt 67.48, 60.58. Beute einmal am Tag pro Charakter.",
+   "Рар: Назжатар, точек появления несколько. Лут раз в день на персонажа.": "Rar: Nazjatar, mehrere Fundorte. Beute einmal am Tag pro Charakter.",
+   "Рар: Нижняя Шахта, точка 32.2, 21.8.": "Rar: Lorenhall, Punkt 32.2, 21.8.",
+   "Рар: Нижняя Шахта, точка 41.2, 41.2.": "Rar: Lorenhall, Punkt 41.2, 41.2.",
+   "Рар: Остров Мехагон, точка 52, 41.4. Лут раз в день на персонажа.": "Rar: Mechagon, Punkt 52, 41.4. Beute einmal am Tag pro Charakter.",
+   "Рар: Остров Мехагон, точка 65.8, 79.6. Лут раз в день на персонажа.": "Rar: Mechagon, Punkt 65.8, 79.6. Beute einmal am Tag pro Charakter.",
+   "Рар: Пещера Заралек, точек появления несколько.": "Rar: Zaralekhöhle, mehrere Fundorte.",
+   "Рар: Пустоши Анторуса, точка 61.78, 36.97. Лут раз в день на персонажа.": "Rar: Antorische Ödnis, Punkt 61.78, 36.97. Beute einmal am Tag pro Charakter.",
+   "Рар: Пустоши Анторуса, точка 62.96, 24.86. Лут раз в день на персонажа.": "Rar: Antorische Ödnis, Punkt 62.96, 24.86. Beute einmal am Tag pro Charakter.",
+   "Рар: Пустоши Анторуса, точка 64.42, 20.35. Лут раз в день на персонажа.": "Rar: Antorische Ödnis, Punkt 64.42, 20.35. Beute einmal am Tag pro Charakter.",
+   "Рар: Ревендрет, точка 46, 78.5. Его можно и купить у торговца. Лут раз в день на персонажа.": "Rar: Revendreth, Punkt 46, 78.5. Kann auch bei einem Händler gekauft werden. Beute einmal am Tag pro Charakter.",
+   "Рар: Ревендрет, точка 51.98, 51.8. Лут раз в день на персонажа.": "Rar: Revendreth, Punkt 51.98, 51.8. Beute einmal am Tag pro Charakter.",
+   "Рар: Ревендрет, точка 62, 47. Лут раз в день на персонажа.": "Rar: Revendreth, Punkt 62, 47. Beute einmal am Tag pro Charakter.",
+   "Рар: Тайносводье, точек появления несколько.": "Rar: Heilsturz, mehrere Fundorte.",
+   "Рар: Темные берега, точек появления несколько. Альянсу — Агата Вирмвуд, Орде — Чернолап. Лут раз в день на персонажа.": "Rar: Dunkelküste, mehrere Fundorte. Allianz: Agathe Wyrmholz, Horde: Schwarzpranke. Beute einmal am Tag pro Charakter.",
+   "Рар: Темные берега, точек появления несколько. Альянсу — Кроз Ярость Крови, Орде — Тенекоготь. Лут раз в день на персонажа.": "Rar: Dunkelküste, mehrere Fundorte. Allianz: Croz Blutzorn, Horde: Schattenklaue. Beute einmal am Tag pro Charakter.",
+   "Рар: Темные берега, точек появления несколько. Альянсу — Палач Мохо, Орде — Атилия Огненная Роса. Лут раз в день на персонажа.": "Rar: Dunkelküste, mehrere Fundorte. Allianz: Moxo der Köpfer, Horde: Athil Tauglanz. Beute einmal am Tag pro Charakter.",
+   "Рар: Темные берега, точка 56.4, 30.8. Лут раз в день на персонажа.": "Rar: Dunkelküste, Punkt 56.4, 30.8. Beute einmal am Tag pro Charakter.",
+   "Рар: Ульдум, точка 30.85, 49.71. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "Rar: Uldum, Punkt 30.85, 49.71. Erscheint während der Angriffe von N'Zoth. Beute einmal am Tag pro Charakter.",
+   "Рар: Ульдум, точка 68.23, 31.97. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "Rar: Uldum, Punkt 68.23, 31.97. Erscheint während der Angriffe von N'Zoth. Beute einmal am Tag pro Charakter.",
+   "Рар: Утроба, точек появления несколько.": "Rar: Der Schlund, mehrere Fundorte.",
+   "Рар: Утроба, точка 53.5, 79.5.": "Rar: Der Schlund, Punkt 53.5, 79.5.",
+   "Рар: Эредат, точка 34.01, 47.83. Лут раз в день на персонажа.": "Rar: Eredath, Punkt 34.01, 47.83. Beute einmal am Tag pro Charakter.",
+   "Рар: Эредат, точка 49.79, 9.4. Лут раз в день на персонажа.": "Rar: Eredath, Punkt 49.79, 9.4. Beute einmal am Tag pro Charakter.",
+   "Рар: Эредат, точка 55.65, 59.95. Лут раз в день на персонажа.": "Rar: Eredath, Punkt 55.65, 59.95. Beute einmal am Tag pro Charakter.",
+   "Рара нужно призвать: пять игроков почти одновременно (за ~10 секунд) дёргают пять неприметных рычагов по Звенящим глубинам, рар появляется у озера через минуту. Лут раз в день на персонажа.": "Er muss beschworen werden: fünf Spieler ziehen innerhalb von etwa 10 Sekunden die fünf Hebel (Inconspicuous Lever) in den Die Schallenden Tiefen; eine Minute später erscheint er am See. Beute einmal am Tag pro Charakter.",
+   "Сначала найти фигурку верблюда (Ульдум; появляется редко и в разных местах): она перенесёт к Дормусу. Маунт падает всегда.": "Zuerst eine Kamelfigur in Uldum finden (erscheint selten und an verschiedenen Orten): sie bringt dich zu Dormus der Kameltreiber. Das Reittier fällt immer.",
+   "Таладор, появляется раз в много часов. Маунт падает всегда.": "Talador, erscheint nur alle paar Stunden. Das Reittier fällt immer.",
+   "Хребет Ледяного Огня, появляется редко. Маунт падает всегда.": "Frostfeuergrat, erscheint selten. Das Reittier fällt immer.",
+   "Четыре рара Танаанских джунглей, маунт падает с любого из них. Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Vier seltene Gegner im Tanaandschungel; das Reittier fällt bei jedem von ihnen. Jeder gibt einmal am Tag pro Charakter Beute, daher hat die Zeile keine eigene Abklingzeit."
+  },
+  "es": {
+   "Арденвельд: появляется после короткой цепочки заданий (подробности — на Wowhead). Маунт падает почти всегда.": "Ardenweald: aparece tras una breve cadena de misiones (detalles en Wowhead). La montura cae casi siempre.",
+   "Бойцы Театра Боли в Малдраксусе выходят на арену по очереди; маунт падает с любого из них.": "Los campeones del Teatro del Dolor en Maldraxxus salen a la arena por turnos; la montura cae de cualquiera de ellos.",
+   "Вечноцветущий дол (фаза Пандарии): щит снимает Небесный кристалл из 10 небесных осколков, они падают с мобов дола. Маунт падает всегда.": "Valle de la Flor Eterna (fase de Pandaria): un cristal celeste (Sky Crystal) hecho de 10 fragmentos celestes (Skyshard), que sueltan los enemigos del valle, le quita el escudo. La montura siempre cae.",
+   "Вырастает из Быстрорастущего гриба (подробности — на Wowhead).": "Sale de un Champiñón de crecimiento rápido (detalles en Wowhead).",
+   "Горгронд, появляется раз в много часов. Маунт падает всегда.": "Gorgrond, aparece una vez cada muchas horas. La montura siempre cae.",
+   "Долина Призрачной Луны (Дренор), появляется раз в много часов. Маунт падает всегда.": "Valle Sombraluna (Draenor), aparece una vez cada muchas horas. La montura siempre cae.",
+   "Его призывают (подробности — на Wowhead).": "Hay que invocarlo (detalles en Wowhead).",
+   "Летает по Грозовой Гряде, появляется раз в 6–24 часа (вместо него может появиться Вирагоса). Маунт падает всегда.": "Vuela por Las Cumbres Tormentosas, aparece cada 6-24 horas (en su lugar puede venir Vyragosa). La montura siempre cae.",
+   "Летает по Подземью; появляется раз в несколько часов, его нужно оседлать и победить. Маунт падает всегда.": "Vuela por Infralar; aparece cada pocas horas, hay que montarlo y vencer. La montura siempre cae.",
+   "Награнд (Дренор), появляется раз в много часов. Маунт падает всегда.": "Nagrand (Draenor), aparece una vez cada muchas horas. La montura siempre cae.",
+   "Падает с любого редкого монстра зоны (их здесь 15). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Cae de cualquier raro de la zona (hay 15). Cada uno da botín una vez al día por personaje, así que la fila no tiene reutilización propia.",
+   "Падает с любого редкого монстра зоны (их здесь 16). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Cae de cualquier raro de la zona (hay 16). Cada uno da botín una vez al día por personaje, así que la fila no tiene reutilización propia.",
+   "Падает с любого редкого монстра зоны (их здесь 21). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Cae de cualquier raro de la zona (hay 21). Cada uno da botín una vez al día por personaje, así que la fila no tiene reutilización propia.",
+   "Падает с любого редкого монстра острова (их здесь 15), очень редко. Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Cae de cualquier raro de la isla (hay 15), muy rara vez. Cada uno da botín una vez al día por personaje, así que la fila no tiene reutilización propia.",
+   "Падает с обычных мобов зоны (видов 16), например: Тролль крови - проклинательница, Тролль крови - изверг, Ловчая из племени Охотников Крови. Отката нет: каждое убийство — попытка.": "Cae de los enemigos comunes de la zona (16 tipos), p. ej. Aojadora trol de sangre, Brutalizador trol de sangre, Acechadora Cazasangre. Sin reutilización: cada muerte es un intento.",
+   "Падает с обычных мобов зоны (видов 20), например: Отступник - призыватель небес, Отступник-целитель, Сетрак-опустошитель. Отката нет: каждое убийство — попытка.": "Cae de los enemigos comunes de la zona (20 tipos), p. ej. Clamacielos infiel, Ensalmador infiel, Devastador sethrak. Sin reutilización: cada muerte es un intento.",
+   "Падает с обычных мобов зоны (видов 25), например: Стрелок из племени Шипошкурых, Лоялист дома Штормсонгов, Канонир из Просоленных мастерских. Отката нет: каждое убийство — попытка.": "Cae de los enemigos comunes de la zona (25 tipos), p. ej. Hostigador Lomozarza, Leal a los Canto Tormenta, Cañonero Forzasalmuera. Sin reutilización: cada muerte es un intento.",
+   "Падает с обычных мобов зоны (видов 9), например: Порабощенный проклятием сокольничий, Порабощенный проклятием арбалетчик, Порабощенный проклятием стражник. Отката нет: каждое убийство — попытка.": "Cae de los enemigos comunes de la zona (9 tipos), p. ej. Halconero hechizado, Ballestero hechizado, Custodio hechizado. Sin reutilización: cada muerte es un intento.",
+   "Плавает по Вайш'иру (Мерцающий простор, Бездонные глубины), появляется раз в несколько часов. Маунт падает всегда.": "Nada por Vashj'ir (Extensión Bruñida, Profundidades Abisales), aparece cada pocas horas. La montura siempre cae.",
+   "Появляется в разных зонах Пандарии. Три завоевателя на вид одинаковы, у каждого свой ящер; номер — только для таблицы, аддон различает их сам. Отката добычи нет.": "Aparece en varias zonas de Pandaria. Los tres parecen iguales, cada uno tiene su propio cuernoatroz; el número es solo para la hoja, el accesorio los distingue. Sin reutilización de botín.",
+   "Появляется на Острове Дорн нечасто (подробности — на Wowhead).": "Aparece de vez en cuando en Isla de Dorn (detalles en Wowhead).",
+   "Появляется, только если призвать приманкой (Aurelid Lure; подробности — на Wowhead).": "Solo aparece si se invoca con un cebo (Aurelid Lure; detalles en Wowhead).",
+   "Рар в Ульдуме, появляется во время нападений Н'Зота; лут раз в день на персонажа.": "Raro: Uldum, durante los asaltos de N'Zoth; botín una vez al día por personaje.",
+   "Рар: Арденвельд, точка 30.4, 55.2. Его можно и купить у торговца. Лут раз в день на персонажа.": "Raro: Ardenweald, punto 30.4, 55.2. También se puede comprar a un vendedor. Botín una vez al día por personaje.",
+   "Рар: Вечноцветущий дол, точка 10, 33. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "Raro: Valle de la Flor Eterna, punto 10, 33. Aparece durante los asaltos de N'Zoth. Botín una vez al día por personaje.",
+   "Рар: Вечноцветущий дол, точка 34.15, 68.05. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "Raro: Valle de la Flor Eterna, punto 34.15, 68.05. Aparece durante los asaltos de N'Zoth. Botín una vez al día por personaje.",
+   "Рар: Вечноцветущий дол, точка 36.6, 37.6. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "Raro: Valle de la Flor Eterna, punto 36.6, 37.6. Aparece durante los asaltos de N'Zoth. Botín una vez al día por personaje.",
+   "Рар: Вневременный остров, точек появления несколько.": "Raro: Isla Intemporal, varios puntos de aparición.",
+   "Рар: К'ареш, точек появления несколько.": "Raro: K'aresh, varios puntos de aparición.",
+   "Рар: Кортия, точек появления несколько. Лут раз в день на персонажа.": "Raro: Korthia, varios puntos de aparición. Botín una vez al día por personaje.",
+   "Рар: Кортия, точка 45.35, 30.34. Лут раз в день на персонажа.": "Raro: Korthia, punto 45.35, 30.34. Botín una vez al día por personaje.",
+   "Рар: Кортия, точка 56.3, 66.3. Лут раз в день на персонажа.": "Raro: Korthia, punto 56.3, 66.3. Botín una vez al día por personaje.",
+   "Рар: Лазурный Простор, точек появления несколько.": "Raro: Las Tierras Azures, varios puntos de aparición.",
+   "Рар: Лазурный Простор, точка 27.8, 46.": "Raro: Las Tierras Azures, punto 27.8, 46.",
+   "Рар: Малдраксус, точка 31.4, 35.6. Лут раз в день на персонажа.": "Raro: Maldraxxus, punto 31.4, 35.6. Botín una vez al día por personaje.",
+   "Рар: Малдраксус, точка 33.6, 80.6. Лут раз в день на персонажа.": "Raro: Maldraxxus, punto 33.6, 80.6. Botín una vez al día por personaje.",
+   "Рар: Малдраксус, точка 44.2, 51.2. Падает, только если вашим спутником сейчас конструкт Нина (Некролорды). Лут раз в день на персонажа.": "Raro: Maldraxxus, punto 44.2, 51.2. Solo cae si el ensamblaje Neena es tu compañero activo (Necroseñores). Botín una vez al día por personaje.",
+   "Рар: Малдраксус, точка 50.67, 47.37. Его можно и купить у торговца. Лут раз в день на персонажа.": "Raro: Maldraxxus, punto 50.67, 47.37. También se puede comprar a un vendedor. Botín una vez al día por personaje.",
+   "Рар: Малдраксус, точка 58.6, 74.2. Лут раз в день на персонажа.": "Raro: Maldraxxus, punto 58.6, 74.2. Botín una vez al día por personaje.",
+   "Рар: Малдраксус, точка 65.8, 35.3. Лут раз в день на персонажа.": "Raro: Maldraxxus, punto 65.8, 35.3. Botín una vez al día por personaje.",
+   "Рар: Нагорье Арати, точек появления несколько. Добыча только для Альянса.": "Raro: Tierras Altas de Arathi, varios puntos de aparición. Solo para la Alianza.",
+   "Рар: Нагорье Арати, точек появления несколько. Добыча только для Орды.": "Raro: Tierras Altas de Arathi, varios puntos de aparición. Solo para la Horda.",
+   "Рар: Нагорье Арати, точка 33.44, 36.94. Вход в пещеру — у точки. Лут раз в день на персонажа.": "Raro: Tierras Altas de Arathi, punto 33.44, 36.94. La entrada de la cueva está en el punto. Botín una vez al día por personaje.",
+   "Рар: Нагорье Арати, точка 57.15, 45.75. Лут раз в день на персонажа.": "Raro: Tierras Altas de Arathi, punto 57.15, 45.75. Botín una vez al día por personaje.",
+   "Рар: Нагорье Арати, точка 67.06, 65.89. Лут раз в день на персонажа.": "Raro: Tierras Altas de Arathi, punto 67.06, 65.89. Botín una vez al día por personaje.",
+   "Рар: Нагорье Арати, точка 67.48, 60.58. Лут раз в день на персонажа.": "Raro: Tierras Altas de Arathi, punto 67.48, 60.58. Botín una vez al día por personaje.",
+   "Рар: Назжатар, точек появления несколько. Лут раз в день на персонажа.": "Raro: Nazjatar, varios puntos de aparición. Botín una vez al día por personaje.",
+   "Рар: Нижняя Шахта, точка 32.2, 21.8.": "Raro: Minahonda, punto 32.2, 21.8.",
+   "Рар: Нижняя Шахта, точка 41.2, 41.2.": "Raro: Minahonda, punto 41.2, 41.2.",
+   "Рар: Остров Мехагон, точка 52, 41.4. Лут раз в день на персонажа.": "Raro: Isla de Mecandria, punto 52, 41.4. Botín una vez al día por personaje.",
+   "Рар: Остров Мехагон, точка 65.8, 79.6. Лут раз в день на персонажа.": "Raro: Isla de Mecandria, punto 65.8, 79.6. Botín una vez al día por personaje.",
+   "Рар: Пещера Заралек, точек появления несколько.": "Raro: Caverna Zaralek, varios puntos de aparición.",
+   "Рар: Пустоши Анторуса, точка 61.78, 36.97. Лут раз в день на персонажа.": "Raro: Baldío Antoran, punto 61.78, 36.97. Botín una vez al día por personaje.",
+   "Рар: Пустоши Анторуса, точка 62.96, 24.86. Лут раз в день на персонажа.": "Raro: Baldío Antoran, punto 62.96, 24.86. Botín una vez al día por personaje.",
+   "Рар: Пустоши Анторуса, точка 64.42, 20.35. Лут раз в день на персонажа.": "Raro: Baldío Antoran, punto 64.42, 20.35. Botín una vez al día por personaje.",
+   "Рар: Ревендрет, точка 46, 78.5. Его можно и купить у торговца. Лут раз в день на персонажа.": "Raro: Revendreth, punto 46, 78.5. También se puede comprar a un vendedor. Botín una vez al día por personaje.",
+   "Рар: Ревендрет, точка 51.98, 51.8. Лут раз в день на персонажа.": "Raro: Revendreth, punto 51.98, 51.8. Botín una vez al día por personaje.",
+   "Рар: Ревендрет, точка 62, 47. Лут раз в день на персонажа.": "Raro: Revendreth, punto 62, 47. Botín una vez al día por personaje.",
+   "Рар: Тайносводье, точек появления несколько.": "Raro: Santificación, varios puntos de aparición.",
+   "Рар: Темные берега, точек появления несколько. Альянсу — Агата Вирмвуд, Орде — Чернолап. Лут раз в день на персонажа.": "Raro: Costa Oscura, varios puntos de aparición. Alianza: Agathe Wyrmwood, Horda: Zarpanegra. Botín una vez al día por personaje.",
+   "Рар: Темные берега, точек появления несколько. Альянсу — Кроз Ярость Крови, Орде — Тенекоготь. Лут раз в день на персонажа.": "Raro: Costa Oscura, varios puntos de aparición. Alianza: Croz Sanguinarius, Horda: Garrasombría. Botín una vez al día por personaje.",
+   "Рар: Темные берега, точек появления несколько. Альянсу — Палач Мохо, Орде — Атилия Огненная Роса. Лут раз в день на персонажа.": "Raro: Costa Oscura, varios puntos de aparición. Alianza: Moxo el Decapitador, Horda: Athil Condensafuego. Botín una vez al día por personaje.",
+   "Рар: Темные берега, точка 56.4, 30.8. Лут раз в день на персонажа.": "Raro: Costa Oscura, punto 56.4, 30.8. Botín una vez al día por personaje.",
+   "Рар: Ульдум, точка 30.85, 49.71. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "Raro: Uldum, punto 30.85, 49.71. Aparece durante los asaltos de N'Zoth. Botín una vez al día por personaje.",
+   "Рар: Ульдум, точка 68.23, 31.97. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "Raro: Uldum, punto 68.23, 31.97. Aparece durante los asaltos de N'Zoth. Botín una vez al día por personaje.",
+   "Рар: Утроба, точек появления несколько.": "Raro: Las Fauces, varios puntos de aparición.",
+   "Рар: Утроба, точка 53.5, 79.5.": "Raro: Las Fauces, punto 53.5, 79.5.",
+   "Рар: Эредат, точка 34.01, 47.83. Лут раз в день на персонажа.": "Raro: Eredath, punto 34.01, 47.83. Botín una vez al día por personaje.",
+   "Рар: Эредат, точка 49.79, 9.4. Лут раз в день на персонажа.": "Raro: Eredath, punto 49.79, 9.4. Botín una vez al día por personaje.",
+   "Рар: Эредат, точка 55.65, 59.95. Лут раз в день на персонажа.": "Raro: Eredath, punto 55.65, 59.95. Botín una vez al día por personaje.",
+   "Рара нужно призвать: пять игроков почти одновременно (за ~10 секунд) дёргают пять неприметных рычагов по Звенящим глубинам, рар появляется у озера через минуту. Лут раз в день на персонажа.": "Hay que invocarlo: cinco jugadores accionan las cinco palancas (Inconspicuous Lever) de Cavernas Resonantes en unos 10 segundos; aparece en el lago un minuto después. Botín una vez al día por personaje.",
+   "Сначала найти фигурку верблюда (Ульдум; появляется редко и в разных местах): она перенесёт к Дормусу. Маунт падает всегда.": "Primero hay que encontrar una figurilla de camello en Uldum (aparece rara vez y en distintos lugares): te lleva con Dormus el Camellero. La montura siempre cae.",
+   "Таладор, появляется раз в много часов. Маунт падает всегда.": "Talador, aparece una vez cada muchas horas. La montura siempre cae.",
+   "Хребет Ледяного Огня, появляется редко. Маунт падает всегда.": "Cresta Fuego Glacial, aparece rara vez. La montura siempre cae.",
+   "Четыре рара Танаанских джунглей, маунт падает с любого из них. Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Cuatro raros de Selva de Tanaan; la montura cae de cualquiera de ellos. Cada uno da botín una vez al día por personaje, así que la fila no tiene reutilización propia."
+  },
+  "fr": {
+   "Арденвельд: появляется после короткой цепочки заданий (подробности — на Wowhead). Маунт падает почти всегда.": "Sylvarden : apparaît après une courte suite de quêtes (détails sur Wowhead). La monture tombe presque toujours.",
+   "Бойцы Театра Боли в Малдраксусе выходят на арену по очереди; маунт падает с любого из них.": "Les champions du Théâtre de la Souffrance à Maldraxxus entrent tour à tour dans l'arène ; la monture tombe sur n'importe lequel.",
+   "Вечноцветущий дол (фаза Пандарии): щит снимает Небесный кристалл из 10 небесных осколков, они падают с мобов дола. Маунт падает всегда.": "Val de l’Éternel printemps (phase de Pandarie) : un cristal céleste (Sky Crystal) fait de 10 éclats célestes (Skyshard), lâchés par les monstres du val, brise son bouclier. La monture tombe toujours.",
+   "Вырастает из Быстрорастущего гриба (подробности — на Wowhead).": "Sort d'un Champignon à croissance rapide (détails sur Wowhead).",
+   "Горгронд, появляется раз в много часов. Маунт падает всегда.": "Gorgrond, apparaît une fois toutes les nombreuses heures. La monture tombe toujours.",
+   "Долина Призрачной Луны (Дренор), появляется раз в много часов. Маунт падает всегда.": "Vallée d’Ombrelune (Draenor), apparaît une fois toutes les nombreuses heures. La monture tombe toujours.",
+   "Его призывают (подробности — на Wowhead).": "Il faut l'invoquer (détails sur Wowhead).",
+   "Летает по Грозовой Гряде, появляется раз в 6–24 часа (вместо него может появиться Вирагоса). Маунт падает всегда.": "Vole autour des Les pics Foudroyés, apparaît toutes les 6 à 24 heures (Vyragosa peut venir à sa place). La monture tombe toujours.",
+   "Летает по Подземью; появляется раз в несколько часов, его нужно оседлать и победить. Маунт падает всегда.": "Vole au-dessus du Le Tréfonds ; apparaît toutes les quelques heures, il faut le chevaucher et gagner. La monture tombe toujours.",
+   "Награнд (Дренор), появляется раз в много часов. Маунт падает всегда.": "Nagrand (Draenor), apparaît une fois toutes les nombreuses heures. La monture tombe toujours.",
+   "Падает с любого редкого монстра зоны (их здесь 15). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Tombe sur n'importe quel monstre rare de la zone (il y en a 15). Chacun donne du butin une fois par jour et par personnage : la ligne n'a donc pas de délai propre.",
+   "Падает с любого редкого монстра зоны (их здесь 16). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Tombe sur n'importe quel monstre rare de la zone (il y en a 16). Chacun donne du butin une fois par jour et par personnage : la ligne n'a donc pas de délai propre.",
+   "Падает с любого редкого монстра зоны (их здесь 21). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Tombe sur n'importe quel monstre rare de la zone (il y en a 21). Chacun donne du butin une fois par jour et par personnage : la ligne n'a donc pas de délai propre.",
+   "Падает с любого редкого монстра острова (их здесь 15), очень редко. Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Tombe sur n'importe quel monstre rare de l'île (il y en a 15), très rarement. Chacun donne du butin une fois par jour et par personnage : la ligne n'a donc pas de délai propre.",
+   "Падает с обычных мобов зоны (видов 16), например: Тролль крови - проклинательница, Тролль крови - изверг, Ловчая из племени Охотников Крови. Отката нет: каждое убийство — попытка.": "Tombe sur les monstres communs de la zone (16 sortes), par ex. Maléficieuse trolle de sang, Brutaliseur troll de sang, Traqueuse chasse-sang. Pas de délai : chaque victime est une tentative.",
+   "Падает с обычных мобов зоны (видов 20), например: Отступник - призыватель небес, Отступник-целитель, Сетрак-опустошитель. Отката нет: каждое убийство — попытка.": "Tombe sur les monstres communs de la zone (20 sortes), par ex. Mandeciel infidèle, Soigneur infidèle, Ravageur sephrak. Pas de délai : chaque victime est une tentative.",
+   "Падает с обычных мобов зоны (видов 25), например: Стрелок из племени Шипошкурых, Лоялист дома Штормсонгов, Канонир из Просоленных мастерских. Отката нет: каждое убийство — попытка.": "Tombe sur les monstres communs de la zone (25 sortes), par ex. Tirailleur roncedos, Loyaliste chantorage, Canonnier saumeforce. Pas de délai : chaque victime est une tentative.",
+   "Падает с обычных мобов зоны (видов 9), например: Порабощенный проклятием сокольничий, Порабощенный проклятием арбалетчик, Порабощенный проклятием стражник. Отката нет: каждое убийство — попытка.": "Tombe sur les monstres communs de la zone (9 sortes), par ex. Fauconnier serficié, Arbalétrier serficié, Garde serficié. Pas de délai : chaque victime est une tentative.",
+   "Плавает по Вайш'иру (Мерцающий простор, Бездонные глубины), появляется раз в несколько часов. Маунт падает всегда.": "Nage dans Vashj’ir (Étendues Chatoyantes, Profondeurs Abyssales), apparaît toutes les quelques heures. La monture tombe toujours.",
+   "Появляется в разных зонах Пандарии. Три завоевателя на вид одинаковы, у каждого свой ящер; номер — только для таблицы, аддон различает их сам. Отката добычи нет.": "Apparaît dans plusieurs zones de Pandarie. Les trois se ressemblent, chacun a sa propre corne-fourche ; le numéro ne sert qu'au tableau, l'addon les distingue. Pas de délai de butin.",
+   "Появляется на Острове Дорн нечасто (подробности — на Wowhead).": "Apparaît de temps en temps sur l'Île de Dorn (détails sur Wowhead).",
+   "Появляется, только если призвать приманкой (Aurelid Lure; подробности — на Wowhead).": "Ne vient que s'il est invoqué avec un appât (Aurelid Lure ; détails sur Wowhead).",
+   "Рар в Ульдуме, появляется во время нападений Н'Зота; лут раз в день на персонажа.": "Rare : Uldum, pendant les assauts de N'Zoth ; butin une fois par jour et par personnage.",
+   "Рар: Арденвельд, точка 30.4, 55.2. Его можно и купить у торговца. Лут раз в день на персонажа.": "Rare : Sylvarden, point 30.4, 55.2. Peut aussi s'acheter chez un marchand. Butin une fois par jour et par personnage.",
+   "Рар: Вечноцветущий дол, точка 10, 33. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "Rare : Val de l’Éternel printemps, point 10, 33. Apparaît pendant les assauts de N'Zoth. Butin une fois par jour et par personnage.",
+   "Рар: Вечноцветущий дол, точка 34.15, 68.05. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "Rare : Val de l’Éternel printemps, point 34.15, 68.05. Apparaît pendant les assauts de N'Zoth. Butin une fois par jour et par personnage.",
+   "Рар: Вечноцветущий дол, точка 36.6, 37.6. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "Rare : Val de l’Éternel printemps, point 36.6, 37.6. Apparaît pendant les assauts de N'Zoth. Butin une fois par jour et par personnage.",
+   "Рар: Вневременный остров, точек появления несколько.": "Rare : Île du Temps figé, plusieurs points d'apparition.",
+   "Рар: К'ареш, точек появления несколько.": "Rare : K’aresh, plusieurs points d'apparition.",
+   "Рар: Кортия, точек появления несколько. Лут раз в день на персонажа.": "Rare : Korthia, plusieurs points d'apparition. Butin une fois par jour et par personnage.",
+   "Рар: Кортия, точка 45.35, 30.34. Лут раз в день на персонажа.": "Rare : Korthia, point 45.35, 30.34. Butin une fois par jour et par personnage.",
+   "Рар: Кортия, точка 56.3, 66.3. Лут раз в день на персонажа.": "Rare : Korthia, point 56.3, 66.3. Butin une fois par jour et par personnage.",
+   "Рар: Лазурный Простор, точек появления несколько.": "Rare : Travée d’Azur, plusieurs points d'apparition.",
+   "Рар: Лазурный Простор, точка 27.8, 46.": "Rare : Travée d’Azur, point 27.8, 46.",
+   "Рар: Малдраксус, точка 31.4, 35.6. Лут раз в день на персонажа.": "Rare : Maldraxxus, point 31.4, 35.6. Butin une fois par jour et par personnage.",
+   "Рар: Малдраксус, точка 33.6, 80.6. Лут раз в день на персонажа.": "Rare : Maldraxxus, point 33.6, 80.6. Butin une fois par jour et par personnage.",
+   "Рар: Малдраксус, точка 44.2, 51.2. Падает, только если вашим спутником сейчас конструкт Нина (Некролорды). Лут раз в день на персонажа.": "Rare : Maldraxxus, point 44.2, 51.2. Tombe seulement si la construction Neena est votre compagnon actif (Nécro-seigneurs). Butin une fois par jour et par personnage.",
+   "Рар: Малдраксус, точка 50.67, 47.37. Его можно и купить у торговца. Лут раз в день на персонажа.": "Rare : Maldraxxus, point 50.67, 47.37. Peut aussi s'acheter chez un marchand. Butin une fois par jour et par personnage.",
+   "Рар: Малдраксус, точка 58.6, 74.2. Лут раз в день на персонажа.": "Rare : Maldraxxus, point 58.6, 74.2. Butin une fois par jour et par personnage.",
+   "Рар: Малдраксус, точка 65.8, 35.3. Лут раз в день на персонажа.": "Rare : Maldraxxus, point 65.8, 35.3. Butin une fois par jour et par personnage.",
+   "Рар: Нагорье Арати, точек появления несколько. Добыча только для Альянса.": "Rare : Hautes-terres Arathies, plusieurs points d'apparition. Alliance uniquement.",
+   "Рар: Нагорье Арати, точек появления несколько. Добыча только для Орды.": "Rare : Hautes-terres Arathies, plusieurs points d'apparition. Horde uniquement.",
+   "Рар: Нагорье Арати, точка 33.44, 36.94. Вход в пещеру — у точки. Лут раз в день на персонажа.": "Rare : Hautes-terres Arathies, point 33.44, 36.94. L'entrée de la grotte est au point indiqué. Butin une fois par jour et par personnage.",
+   "Рар: Нагорье Арати, точка 57.15, 45.75. Лут раз в день на персонажа.": "Rare : Hautes-terres Arathies, point 57.15, 45.75. Butin une fois par jour et par personnage.",
+   "Рар: Нагорье Арати, точка 67.06, 65.89. Лут раз в день на персонажа.": "Rare : Hautes-terres Arathies, point 67.06, 65.89. Butin une fois par jour et par personnage.",
+   "Рар: Нагорье Арати, точка 67.48, 60.58. Лут раз в день на персонажа.": "Rare : Hautes-terres Arathies, point 67.48, 60.58. Butin une fois par jour et par personnage.",
+   "Рар: Назжатар, точек появления несколько. Лут раз в день на персонажа.": "Rare : Nazjatar, plusieurs points d'apparition. Butin une fois par jour et par personnage.",
+   "Рар: Нижняя Шахта, точка 32.2, 21.8.": "Rare : Terremine, point 32.2, 21.8.",
+   "Рар: Нижняя Шахта, точка 41.2, 41.2.": "Rare : Terremine, point 41.2, 41.2.",
+   "Рар: Остров Мехагон, точка 52, 41.4. Лут раз в день на персонажа.": "Rare : Île de Mécagone, point 52, 41.4. Butin une fois par jour et par personnage.",
+   "Рар: Остров Мехагон, точка 65.8, 79.6. Лут раз в день на персонажа.": "Rare : Île de Mécagone, point 65.8, 79.6. Butin une fois par jour et par personnage.",
+   "Рар: Пещера Заралек, точек появления несколько.": "Rare : Grotte de Zaralek, plusieurs points d'apparition.",
+   "Рар: Пустоши Анторуса, точка 61.78, 36.97. Лут раз в день на персонажа.": "Rare : Étendues Antoréennes, point 61.78, 36.97. Butin une fois par jour et par personnage.",
+   "Рар: Пустоши Анторуса, точка 62.96, 24.86. Лут раз в день на персонажа.": "Rare : Étendues Antoréennes, point 62.96, 24.86. Butin une fois par jour et par personnage.",
+   "Рар: Пустоши Анторуса, точка 64.42, 20.35. Лут раз в день на персонажа.": "Rare : Étendues Antoréennes, point 64.42, 20.35. Butin une fois par jour et par personnage.",
+   "Рар: Ревендрет, точка 46, 78.5. Его можно и купить у торговца. Лут раз в день на персонажа.": "Rare : Revendreth, point 46, 78.5. Peut aussi s'acheter chez un marchand. Butin une fois par jour et par personnage.",
+   "Рар: Ревендрет, точка 51.98, 51.8. Лут раз в день на персонажа.": "Rare : Revendreth, point 51.98, 51.8. Butin une fois par jour et par personnage.",
+   "Рар: Ревендрет, точка 62, 47. Лут раз в день на персонажа.": "Rare : Revendreth, point 62, 47. Butin une fois par jour et par personnage.",
+   "Рар: Тайносводье, точек появления несколько.": "Rare : Sainte-Chute, plusieurs points d'apparition.",
+   "Рар: Темные берега, точек появления несколько. Альянсу — Агата Вирмвуд, Орде — Чернолап. Лут раз в день на персонажа.": "Rare : Sombrivage, plusieurs points d'apparition. Alliance : Agathe Wyrmebois, Horde : Patte-Noire. Butin une fois par jour et par personnage.",
+   "Рар: Темные берега, точек появления несколько. Альянсу — Кроз Ярость Крови, Орде — Тенекоготь. Лут раз в день на персонажа.": "Rare : Sombrivage, plusieurs points d'apparition. Alliance : Croz Ragesang, Horde : Ombregriffe. Butin une fois par jour et par personnage.",
+   "Рар: Темные берега, точек появления несколько. Альянсу — Палач Мохо, Орде — Атилия Огненная Роса. Лут раз в день на персонажа.": "Rare : Sombrivage, plusieurs points d'apparition. Alliance : Moxo le Tranche-Tête, Horde : Athil Brûlerosée. Butin une fois par jour et par personnage.",
+   "Рар: Темные берега, точка 56.4, 30.8. Лут раз в день на персонажа.": "Rare : Sombrivage, point 56.4, 30.8. Butin une fois par jour et par personnage.",
+   "Рар: Ульдум, точка 30.85, 49.71. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "Rare : Uldum, point 30.85, 49.71. Apparaît pendant les assauts de N'Zoth. Butin une fois par jour et par personnage.",
+   "Рар: Ульдум, точка 68.23, 31.97. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "Rare : Uldum, point 68.23, 31.97. Apparaît pendant les assauts de N'Zoth. Butin une fois par jour et par personnage.",
+   "Рар: Утроба, точек появления несколько.": "Rare : Antre, plusieurs points d'apparition.",
+   "Рар: Утроба, точка 53.5, 79.5.": "Rare : Antre, point 53.5, 79.5.",
+   "Рар: Эредат, точка 34.01, 47.83. Лут раз в день на персонажа.": "Rare : Érédath, point 34.01, 47.83. Butin une fois par jour et par personnage.",
+   "Рар: Эредат, точка 49.79, 9.4. Лут раз в день на персонажа.": "Rare : Érédath, point 49.79, 9.4. Butin une fois par jour et par personnage.",
+   "Рар: Эредат, точка 55.65, 59.95. Лут раз в день на персонажа.": "Rare : Érédath, point 55.65, 59.95. Butin une fois par jour et par personnage.",
+   "Рара нужно призвать: пять игроков почти одновременно (за ~10 секунд) дёргают пять неприметных рычагов по Звенящим глубинам, рар появляется у озера через минуту. Лут раз в день на персонажа.": "Il faut l'invoquer : cinq joueurs actionnent les cinq leviers (Inconspicuous Lever) des Les abîmes Retentissants en 10 secondes environ ; il apparaît au lac une minute plus tard. Butin une fois par jour et par personnage.",
+   "Сначала найти фигурку верблюда (Ульдум; появляется редко и в разных местах): она перенесёт к Дормусу. Маунт падает всегда.": "Trouver d'abord une figurine de chameau en Uldum (rare, à divers endroits) : elle vous emmène chez Dormus le Collectionneur de dromadaires. La monture tombe toujours.",
+   "Таладор, появляется раз в много часов. Маунт падает всегда.": "Talador, apparaît une fois toutes les nombreuses heures. La monture tombe toujours.",
+   "Хребет Ледяного Огня, появляется редко. Маунт падает всегда.": "Crête de Givrefeu, apparaît rarement. La monture tombe toujours.",
+   "Четыре рара Танаанских джунглей, маунт падает с любого из них. Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Quatre monstres rares de Jungle de Tanaan ; la monture tombe sur n'importe lequel. Chacun donne du butin une fois par jour et par personnage : la ligne n'a donc pas de délai propre."
+  },
+  "pt": {
+   "Арденвельд: появляется после короткой цепочки заданий (подробности — на Wowhead). Маунт падает почти всегда.": "Ardena: aparece depois de uma curta série de missões (detalhes no Wowhead). A montaria cai quase sempre.",
+   "Бойцы Театра Боли в Малдраксусе выходят на арену по очереди; маунт падает с любого из них.": "Os campeões do Teatro da Dor em Maldraxxus entram na arena um após o outro; a montaria cai de qualquer um deles.",
+   "Вечноцветущий дол (фаза Пандарии): щит снимает Небесный кристалл из 10 небесных осколков, они падают с мобов дола. Маунт падает всегда.": "Vale das Flores Eternas (fase de Pandária): um cristal celeste (Sky Crystal) feito de 10 fragmentos celestes (Skyshard), que os inimigos do vale deixam cair, tira o escudo dela. A montaria sempre cai.",
+   "Вырастает из Быстрорастущего гриба (подробности — на Wowhead).": "Cresce de um Cogumelo de Crescimento Rápido (detalhes no Wowhead).",
+   "Горгронд, появляется раз в много часов. Маунт падает всегда.": "Gorgrond, aparece uma vez a cada muitas horas. A montaria sempre cai.",
+   "Долина Призрачной Луны (Дренор), появляется раз в много часов. Маунт падает всегда.": "Vale da Lua Negra (Draenor), aparece uma vez a cada muitas horas. A montaria sempre cai.",
+   "Его призывают (подробности — на Wowhead).": "É preciso invocá-lo (detalhes no Wowhead).",
+   "Летает по Грозовой Гряде, появляется раз в 6–24 часа (вместо него может появиться Вирагоса). Маунт падает всегда.": "Voa por Picos Tempestuosos, aparece a cada 6-24 horas (Viragosa pode vir no lugar). A montaria sempre cai.",
+   "Летает по Подземью; появляется раз в несколько часов, его нужно оседлать и победить. Маунт падает всегда.": "Voa por Geodomo; aparece a cada poucas horas, é preciso montá-lo e vencer. A montaria sempre cai.",
+   "Награнд (Дренор), появляется раз в много часов. Маунт падает всегда.": "Nagrand (Draenor), aparece uma vez a cada muitas horas. A montaria sempre cai.",
+   "Падает с любого редкого монстра зоны (их здесь 15). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Cai de qualquer raro da zona (são 15). Cada um dá saque uma vez por dia por personagem, então a linha não tem recarga própria.",
+   "Падает с любого редкого монстра зоны (их здесь 16). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Cai de qualquer raro da zona (são 16). Cada um dá saque uma vez por dia por personagem, então a linha não tem recarga própria.",
+   "Падает с любого редкого монстра зоны (их здесь 21). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Cai de qualquer raro da zona (são 21). Cada um dá saque uma vez por dia por personagem, então a linha não tem recarga própria.",
+   "Падает с любого редкого монстра острова (их здесь 15), очень редко. Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Cai de qualquer raro da ilha (são 15), muito raramente. Cada um dá saque uma vez por dia por personagem, então a linha não tem recarga própria.",
+   "Падает с обычных мобов зоны (видов 16), например: Тролль крови - проклинательница, Тролль крови - изверг, Ловчая из племени Охотников Крови. Отката нет: каждое убийство — попытка.": "Cai dos inimigos comuns da zona (16 tipos), por ex. Bagateira Sanguitrólica, Brutalizador Sanguitrólico, Espreitadora Caça-sangue. Sem recarga: cada abate é uma tentativa.",
+   "Падает с обычных мобов зоны (видов 20), например: Отступник - призыватель небес, Отступник-целитель, Сетрак-опустошитель. Отката нет: каждое убийство — попытка.": "Cai dos inimigos comuns da zona (20 tipos), por ex. Clamacéus Ímpio, Reparador Ímpio, Assolador Sethrak. Sem recarga: cada abate é uma tentativa.",
+   "Падает с обычных мобов зоны (видов 25), например: Стрелок из племени Шипошкурых, Лоялист дома Штормсонгов, Канонир из Просоленных мастерских. Отката нет: каждое убийство — попытка.": "Cai dos inimigos comuns da zona (25 tipos), por ex. Escaramuçador Dorsarça, Legalista de Trovamare, Canhoneiro de Brutomar. Sem recarga: cada abate é uma tentativa.",
+   "Падает с обычных мобов зоны (видов 9), например: Порабощенный проклятием сокольничий, Порабощенный проклятием арбалетчик, Порабощенный проклятием стражник. Отката нет: каждое убийство — попытка.": "Cai dos inimigos comuns da zona (9 tipos), por ex. Falcoeiro Embagatado, Besteiro Embagatado, Guarda Embagatado. Sem recarga: cada abate é uma tentativa.",
+   "Плавает по Вайш'иру (Мерцающий простор, Бездонные глубины), появляется раз в несколько часов. Маунт падает всегда.": "Nada por Vashj'ir (Vastidão Cintilante, Profundezas Abissais), aparece a cada poucas horas. A montaria sempre cai.",
+   "Появляется в разных зонах Пандарии. Три завоевателя на вид одинаковы, у каждого свой ящер; номер — только для таблицы, аддон различает их сам. Отката добычи нет.": "Aparece em várias zonas de Pandária. Os três parecem iguais, cada um tem seu próprio chifre-terror; o número é só para a planilha, o addon os distingue. Sem recarga de saque.",
+   "Появляется на Острове Дорн нечасто (подробности — на Wowhead).": "Aparece de vez em quando em Ilha de Dorn (detalhes no Wowhead).",
+   "Появляется, только если призвать приманкой (Aurelid Lure; подробности — на Wowhead).": "Só aparece quando invocado com uma isca (Aurelid Lure; detalhes no Wowhead).",
+   "Рар в Ульдуме, появляется во время нападений Н'Зота; лут раз в день на персонажа.": "Raro: Uldum, durante os ataques de N'Zoth; saque uma vez por dia por personagem.",
+   "Рар: Арденвельд, точка 30.4, 55.2. Его можно и купить у торговца. Лут раз в день на персонажа.": "Raro: Ardena, ponto 30.4, 55.2. Também pode ser comprada de um vendedor. Saque uma vez por dia por personagem.",
+   "Рар: Вечноцветущий дол, точка 10, 33. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "Raro: Vale das Flores Eternas, ponto 10, 33. Aparece durante os ataques de N'Zoth. Saque uma vez por dia por personagem.",
+   "Рар: Вечноцветущий дол, точка 34.15, 68.05. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "Raro: Vale das Flores Eternas, ponto 34.15, 68.05. Aparece durante os ataques de N'Zoth. Saque uma vez por dia por personagem.",
+   "Рар: Вечноцветущий дол, точка 36.6, 37.6. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "Raro: Vale das Flores Eternas, ponto 36.6, 37.6. Aparece durante os ataques de N'Zoth. Saque uma vez por dia por personagem.",
+   "Рар: Вневременный остров, точек появления несколько.": "Raro: Ilha Perene, vários pontos de surgimento.",
+   "Рар: К'ареш, точек появления несколько.": "Raro: K'aresh, vários pontos de surgimento.",
+   "Рар: Кортия, точек появления несколько. Лут раз в день на персонажа.": "Raro: Korthia, vários pontos de surgimento. Saque uma vez por dia por personagem.",
+   "Рар: Кортия, точка 45.35, 30.34. Лут раз в день на персонажа.": "Raro: Korthia, ponto 45.35, 30.34. Saque uma vez por dia por personagem.",
+   "Рар: Кортия, точка 56.3, 66.3. Лут раз в день на персонажа.": "Raro: Korthia, ponto 56.3, 66.3. Saque uma vez por dia por personagem.",
+   "Рар: Лазурный Простор, точек появления несколько.": "Raro: Vasta Lazúli, vários pontos de surgimento.",
+   "Рар: Лазурный Простор, точка 27.8, 46.": "Raro: Vasta Lazúli, ponto 27.8, 46.",
+   "Рар: Малдраксус, точка 31.4, 35.6. Лут раз в день на персонажа.": "Raro: Maldraxxus, ponto 31.4, 35.6. Saque uma vez por dia por personagem.",
+   "Рар: Малдраксус, точка 33.6, 80.6. Лут раз в день на персонажа.": "Raro: Maldraxxus, ponto 33.6, 80.6. Saque uma vez por dia por personagem.",
+   "Рар: Малдраксус, точка 44.2, 51.2. Падает, только если вашим спутником сейчас конструкт Нина (Некролорды). Лут раз в день на персонажа.": "Raro: Maldraxxus, ponto 44.2, 51.2. Só cai enquanto o constructo Neena for seu companheiro ativo (Necrossenhores). Saque uma vez por dia por personagem.",
+   "Рар: Малдраксус, точка 50.67, 47.37. Его можно и купить у торговца. Лут раз в день на персонажа.": "Raro: Maldraxxus, ponto 50.67, 47.37. Também pode ser comprada de um vendedor. Saque uma vez por dia por personagem.",
+   "Рар: Малдраксус, точка 58.6, 74.2. Лут раз в день на персонажа.": "Raro: Maldraxxus, ponto 58.6, 74.2. Saque uma vez por dia por personagem.",
+   "Рар: Малдраксус, точка 65.8, 35.3. Лут раз в день на персонажа.": "Raro: Maldraxxus, ponto 65.8, 35.3. Saque uma vez por dia por personagem.",
+   "Рар: Нагорье Арати, точек появления несколько. Добыча только для Альянса.": "Raro: Planalto Arathi, vários pontos de surgimento. Só para a Aliança.",
+   "Рар: Нагорье Арати, точек появления несколько. Добыча только для Орды.": "Raro: Planalto Arathi, vários pontos de surgimento. Só para a Horda.",
+   "Рар: Нагорье Арати, точка 33.44, 36.94. Вход в пещеру — у точки. Лут раз в день на персонажа.": "Raro: Planalto Arathi, ponto 33.44, 36.94. A entrada da caverna fica no ponto. Saque uma vez por dia por personagem.",
+   "Рар: Нагорье Арати, точка 57.15, 45.75. Лут раз в день на персонажа.": "Raro: Planalto Arathi, ponto 57.15, 45.75. Saque uma vez por dia por personagem.",
+   "Рар: Нагорье Арати, точка 67.06, 65.89. Лут раз в день на персонажа.": "Raro: Planalto Arathi, ponto 67.06, 65.89. Saque uma vez por dia por personagem.",
+   "Рар: Нагорье Арати, точка 67.48, 60.58. Лут раз в день на персонажа.": "Raro: Planalto Arathi, ponto 67.48, 60.58. Saque uma vez por dia por personagem.",
+   "Рар: Назжатар, точек появления несколько. Лут раз в день на персонажа.": "Raro: Nazjatar, vários pontos de surgimento. Saque uma vez por dia por personagem.",
+   "Рар: Нижняя Шахта, точка 32.2, 21.8.": "Raro: Inframina, ponto 32.2, 21.8.",
+   "Рар: Нижняя Шахта, точка 41.2, 41.2.": "Raro: Inframina, ponto 41.2, 41.2.",
+   "Рар: Остров Мехагон, точка 52, 41.4. Лут раз в день на персонажа.": "Raro: Ilha de Gnomecan, ponto 52, 41.4. Saque uma vez por dia por personagem.",
+   "Рар: Остров Мехагон, точка 65.8, 79.6. Лут раз в день на персонажа.": "Raro: Ilha de Gnomecan, ponto 65.8, 79.6. Saque uma vez por dia por personagem.",
+   "Рар: Пещера Заралек, точек появления несколько.": "Raro: Caverna Zaralek, vários pontos de surgimento.",
+   "Рар: Пустоши Анторуса, точка 61.78, 36.97. Лут раз в день на персонажа.": "Raro: Ermos Antoranos, ponto 61.78, 36.97. Saque uma vez por dia por personagem.",
+   "Рар: Пустоши Анторуса, точка 62.96, 24.86. Лут раз в день на персонажа.": "Raro: Ermos Antoranos, ponto 62.96, 24.86. Saque uma vez por dia por personagem.",
+   "Рар: Пустоши Анторуса, точка 64.42, 20.35. Лут раз в день на персонажа.": "Raro: Ermos Antoranos, ponto 64.42, 20.35. Saque uma vez por dia por personagem.",
+   "Рар: Ревендрет, точка 46, 78.5. Его можно и купить у торговца. Лут раз в день на персонажа.": "Raro: Revendreth, ponto 46, 78.5. Também pode ser comprada de um vendedor. Saque uma vez por dia por personagem.",
+   "Рар: Ревендрет, точка 51.98, 51.8. Лут раз в день на персонажа.": "Raro: Revendreth, ponto 51.98, 51.8. Saque uma vez por dia por personagem.",
+   "Рар: Ревендрет, точка 62, 47. Лут раз в день на персонажа.": "Raro: Revendreth, ponto 62, 47. Saque uma vez por dia por personagem.",
+   "Рар: Тайносводье, точек появления несколько.": "Raro: Pouso Santo, vários pontos de surgimento.",
+   "Рар: Темные берега, точек появления несколько. Альянсу — Агата Вирмвуд, Орде — Чернолап. Лут раз в день на персонажа.": "Raro: Costa Negra, vários pontos de surgimento. Aliança: Ágata Bosque da Serpe, Horda: Patanegra. Saque uma vez por dia por personagem.",
+   "Рар: Темные берега, точек появления несколько. Альянсу — Кроз Ярость Крови, Орде — Тенекоготь. Лут раз в день на персонажа.": "Raro: Costa Negra, vários pontos de surgimento. Aliança: Croz Fúria Sanguinária, Horda: Garrassombra. Saque uma vez por dia por personagem.",
+   "Рар: Темные берега, точек появления несколько. Альянсу — Палач Мохо, Орде — Атилия Огненная Роса. Лут раз в день на персонажа.": "Raro: Costa Negra, vários pontos de surgimento. Aliança: Moxo, o Decapitador, Horda: Athil Fogorvalha. Saque uma vez por dia por personagem.",
+   "Рар: Темные берега, точка 56.4, 30.8. Лут раз в день на персонажа.": "Raro: Costa Negra, ponto 56.4, 30.8. Saque uma vez por dia por personagem.",
+   "Рар: Ульдум, точка 30.85, 49.71. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "Raro: Uldum, ponto 30.85, 49.71. Aparece durante os ataques de N'Zoth. Saque uma vez por dia por personagem.",
+   "Рар: Ульдум, точка 68.23, 31.97. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.": "Raro: Uldum, ponto 68.23, 31.97. Aparece durante os ataques de N'Zoth. Saque uma vez por dia por personagem.",
+   "Рар: Утроба, точек появления несколько.": "Raro: A Gorja, vários pontos de surgimento.",
+   "Рар: Утроба, точка 53.5, 79.5.": "Raro: A Gorja, ponto 53.5, 79.5.",
+   "Рар: Эредат, точка 34.01, 47.83. Лут раз в день на персонажа.": "Raro: Eredath, ponto 34.01, 47.83. Saque uma vez por dia por personagem.",
+   "Рар: Эредат, точка 49.79, 9.4. Лут раз в день на персонажа.": "Raro: Eredath, ponto 49.79, 9.4. Saque uma vez por dia por personagem.",
+   "Рар: Эредат, точка 55.65, 59.95. Лут раз в день на персонажа.": "Raro: Eredath, ponto 55.65, 59.95. Saque uma vez por dia por personagem.",
+   "Рара нужно призвать: пять игроков почти одновременно (за ~10 секунд) дёргают пять неприметных рычагов по Звенящим глубинам, рар появляется у озера через минуту. Лут раз в день на персонажа.": "É preciso invocá-lo: cinco jogadores puxam as cinco alavancas (Inconspicuous Lever) de Fosso Ressonante em cerca de 10 segundos; ele aparece no lago um minuto depois. Saque uma vez por dia por personagem.",
+   "Сначала найти фигурку верблюда (Ульдум; появляется редко и в разных местах): она перенесёт к Дормусу. Маунт падает всегда.": "Primeiro encontre uma estatueta de camelo em Uldum (aparece raramente, em lugares diferentes): ela leva você até Dormus, o Colecionador de Camelos. A montaria sempre cai.",
+   "Таладор, появляется раз в много часов. Маунт падает всегда.": "Talador, aparece uma vez a cada muitas horas. A montaria sempre cai.",
+   "Хребет Ледяного Огня, появляется редко. Маунт падает всегда.": "Serra Fogofrio, aparece raramente. A montaria sempre cai.",
+   "Четыре рара Танаанских джунглей, маунт падает с любого из них. Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Quatro raros de Selva de Tanaan; a montaria cai de qualquer um deles. Cada um dá saque uma vez por dia por personagem, então a linha não tem recarga própria."
+  }
  },
  "locales": {
   "de": "de_DE",
@@ -376,47 +842,90 @@
   "ru": "ru_RU"
  },
  "mounts": {
+  "1018": "Terrified Pack Mule",
+  "1019": "Goldenmane",
   "1040": "Tomb Stalker",
   "1053": "Underrot Crawg",
+  "1057": "Nazjatar Blood Serpent",
   "117": "Blue Qiraji Battle Tank",
+  "1173": "Broken Highland Mustang",
+  "1174": "Highland Mustang",
   "118": "Red Qiraji Battle Tank",
+  "1180": "Swift Albino Raptor",
+  "1182": "Lil' Donkey",
+  "1183": "Skullripper",
+  "1185": "Witherbark Direwing",
   "119": "Yellow Qiraji Battle Tank",
+  "1199": "Blackpaw",
   "120": "Green Qiraji Battle Tank",
+  "1200": "Ashenvale Chimaera",
+  "1203": "Umber Nightsaber",
+  "1205": "Kaldorei Nightsaber",
   "1217": "G.M.O.D.",
   "1218": "Dazar'alor Windreaver",
   "1219": "Glacial Tidestorm",
   "1227": "Aerial Unit R-21/X",
+  "1229": "Rusty Mechanocrawler",
   "1232": "Azshari Bloatray",
+  "1248": "Junkheap Drifter",
   "1250": "Mollie",
   "1252": "Mechagon Peacekeeper",
+  "1257": "Silent Glider",
   "1265": "Uncorrupted Voidwing",
   "1293": "Ny'alotha Allseer",
+  "1297": "Clutch of Ha-Li",
+  "1298": "Hopecrusher Gargon",
+  "1304": "Mawsworn Soulhunter",
+  "1306": "Swift Gloomhoof",
+  "1310": "Horrid Dredwing",
   "1314": "Drake of the Four Winds",
+  "1317": "Waste Marauder",
+  "1319": "Malevolent Drone",
   "1322": "Wriggling Parasite",
   "1326": "Awakened Mindborer",
+  "1327": "Ren's Stalwart Hound",
+  "1328": "Xinlao",
+  "1366": "Bonehoof Tauralus",
+  "1370": "Armored Bonehoof Tauralus",
+  "1372": "Blisterback Bloodtusk",
+  "1373": "Gorespine",
   "1377": "Rampart Screecher",
+  "1379": "Endmire Flyer",
+  "1393": "Wild Glimmerfur Prowler",
   "1405": "Restoration Deathwalker",
   "1406": "Marrowfang",
+  "1410": "Hulking Deathroc",
+  "1411": "Predatory Plagueroc",
+  "1415": "Arboreal Gulper",
   "1417": "Hand of Hrestimorak",
   "1419": "Sintouched Deathwalker",
+  "1434": "Deepstar Aurelid",
+  "1437": "Battle-Bound Warhound",
   "1443": "Voracious Gorger",
   "1445": "Slime Serpent",
   "1446": "Tazavesh Gearglider",
   "1471": "Vengeance",
   "1481": "Cartel Master's Gearglider",
   "1500": "Sanctum Gloomcharger",
+  "1502": "Fallen Charger",
+  "1506": "Crimson Shardhide",
+  "1509": "Garnet Razorwing",
+  "1514": "Rampaging Mauler",
   "1520": "Soultwisted Deathwalker",
   "1544": "Wastewarped Deathwalker",
   "1549": "Shimmering Aurelid",
   "1552": "Carcinized Zerethsteed",
+  "1553": "Liberated Slyvern",
   "1564": "Colossal Soulshredder Mawrat",
   "1565": "Colossal Umbrahide Mawrat",
   "1587": "Zereth Overseer",
+  "1619": "Ancient Salamanther",
   "1626": "Shellack",
   "1644": "Raging Magmammoth",
   "168": "Fiery Warhorse",
   "1681": "Hailstorm Armoredon",
   "1725": "Inferno Armoredon",
+  "1732": "Cobalt Shalewing",
   "1734": "Shadowflame Shalewing",
   "1774": "Valiance",
   "1801": "Verdant Armoredon",
@@ -425,15 +934,21 @@
   "183": "Ashes of Al'ar",
   "185": "Raven Lord",
   "199": "Amani War Bear",
+  "2038": "Clayscale Hornstrider",
   "2055": "Infinite Armoredon",
   "2091": "Voyaging Wilderling",
   "2119": "Stonevault Mechsuit",
   "213": "Swift White Hawkstrider",
+  "2176": "Alunira",
   "2180": "Shadowed Swarmite",
+  "2192": "Beledar's Spawn",
   "2204": "Wick",
+  "2205": "Ol' Mole Rufus",
   "2219": "Sureki Skyrazor",
   "2223": "Ascendant Skyrazor",
   "2244": "Diamond Mechsuit",
+  "2291": "Salvaged Goblin Gazillionaire's Flying Machine",
+  "2293": "Darkfuse Spy-Eye",
   "2313": "Junkmaestro's Magnetomech",
   "246": "Azure Drake",
   "247": "Blue Drake",
@@ -446,17 +961,28 @@
   "253": "Black Drake",
   "2549": "Umbral K'arroc",
   "2569": "Unbound Star-Eater",
+  "2601": "Pearlescent Krolusk",
+  "2603": "Sthaarbs's Last Lunch",
   "2607": "Ashes of Belo'ren",
+  "2615": "Rootstalker Grimlynx",
   "262": "Red Proto-Drake",
   "263": "Black Proto-Drake",
   "2631": "Scarlet Void Flyer",
   "2633": "Azure Void Flyer",
   "264": "Blue Proto-Drake",
+  "265": "Time-Lost Proto-Drake",
   "266": "Plagued Proto-Drake",
+  "2708": "Vibrant Petalwing",
   "2733": "Calamitous Carrion",
   "2734": "Convalescent Carrion",
+  "2751": "Augmented Stormray",
+  "2758": "Cobalt Dragonhawk",
+  "2760": "Amani Sharptalon",
+  "2762": "Cerulean Hawkstrider",
+  "2775": "Witherbark Pango",
   "2805": "Spectral Hawkstrider",
   "2817": "Lucent Hawkstrider",
+  "2827": "Sanguine Harrower",
   "2831": "Tenebrous Harrower",
   "287": "Grand Black War Mammoth",
   "2950": "Luminous Sporeglider",
@@ -469,8 +995,10 @@
   "3021": "Crimson Venomfang",
   "3030": "Primeval Skyfriend",
   "304": "Mimiron's Head",
+  "3051": "Topaz Skyfang",
   "3058": "The Writhing Brood",
   "306": "Ironbound Proto-Drake",
+  "3061": "Ruby Writhe",
   "3063": "Breath of Blight",
   "3064": "Breath of Ruin",
   "307": "Rusted Proto-Drake",
@@ -484,14 +1012,17 @@
   "365": "Bloodbathed Frostbrood Vanquisher",
   "391": "Volcanic Stone Drake",
   "392": "Drake of the East Wind",
+  "393": "Phosphorescent Stone Drake",
   "395": "Drake of the North Wind",
   "396": "Drake of the South Wind",
   "397": "Vitreous Stone Drake",
+  "400": "Grey Riding Camel",
   "410": "Armored Razzashi Raptor",
   "411": "Swift Zulian Panther",
   "415": "Pureblood Fire Hawk",
   "417": "Corrupted Fire Hawk",
   "419": "Amani Battle Bear",
+  "420": "Subdued Seahorse",
   "425": "Flametalon of Alysrazor",
   "442": "Blazing Drake",
   "443": "Twilight Harbinger",
@@ -504,24 +1035,39 @@
   "478": "Astral Cloud Serpent",
   "503": "Crimson Pandaren Phoenix",
   "515": "Son of Galleon",
+  "517": "Thundering Ruby Cloud Serpent",
   "518": "Ashen Pandaren Phoenix",
   "519": "Emerald Pandaren Phoenix",
   "520": "Violet Pandaren Phoenix",
   "530": "Armored Skyscreamer",
   "531": "Spawn of Horridon",
   "533": "Cobalt Primordial Direhorn",
+  "534": "Amber Primordial Direhorn",
+  "535": "Slate Primordial Direhorn",
+  "536": "Jade Primordial Direhorn",
   "542": "Thundering Cobalt Cloud Serpent",
   "543": "Clutch of Ji-Kun",
   "557": "Spawn of Galakras",
   "558": "Kor'kron War Wolf",
   "559": "Kor'kron Juggernaut",
+  "561": "Thundering Onyx Cloud Serpent",
   "607": "Gorestrider Gronnling",
+  "611": "Tundra Icehoof",
+  "612": "Bloodhoof Bull",
   "613": "Ironhoof Destroyer",
+  "614": "Mottled Meadowstomper",
   "619": "Blacksteel Battleboar",
+  "622": "Armored Razorback",
   "623": "Frostplains Battleboar",
+  "627": "Great Greytusk",
+  "630": "Sapphire Riverbeast",
   "633": "Hellfire Infernal",
   "634": "Solar Spirehawk",
+  "636": "Swift Breezestrider",
+  "643": "Warsong Direfang",
   "654": "Challenger's War Yeti",
+  "655": "Sunhide Gronnling",
+  "657": "Garn Nighthowl",
   "69": "Rivendare's Deathcharger",
   "751": "Felsteel Annihilator",
   "758": "Infernal Direwolf",
@@ -533,12 +1079,20 @@
   "875": "Midnight",
   "883": "Smoldering Ember Wyrm",
   "899": "Abyss Worm",
+  "928": "Dune Scavenger",
   "933": "Obsidian Krolusk",
   "954": "Shackled Ur'zul",
+  "955": "Vile Fiend",
+  "956": "Leaping Veinseeker",
   "963": "Bloodgorged Crawg",
+  "970": "Maddened Chaosrunner",
   "971": "Antoran Charhound",
   "972": "Antoran Gloomhound",
+  "973": "Lambent Mana Ray",
   "978": "Violet Spellwing",
+  "979": "Crimson Slavermaw",
+  "980": "Acid Belcher",
+  "981": "Biletooth Gnasher",
   "995": "Sharkbait"
  },
  "names": {
@@ -1595,6 +2149,22 @@
    }
   },
   "mounts": {
+   "1018": {
+    "de": "Verängstigtes Packmuli",
+    "en": "Terrified Pack Mule",
+    "es": "Mula de carga aterrorizada",
+    "fr": "Mule de bât terrifiée",
+    "pt": "Mula de Carga Aterrorizada",
+    "ru": "Испуганный вьючный мул"
+   },
+   "1019": {
+    "de": "Goldmähne",
+    "en": "Goldenmane",
+    "es": "Crindorada",
+    "fr": "Crin d’or",
+    "pt": "Crina d'Ouro",
+    "ru": "Златогривка"
+   },
    "1040": {
     "de": "Grabschleicher",
     "en": "Tomb Stalker",
@@ -1611,6 +2181,14 @@
     "pt": "Crorg da Terra Podre",
     "ru": "Крог из Подгнилья"
    },
+   "1057": {
+    "de": "Blutschlange von Nazjatar",
+    "en": "Nazjatar Blood Serpent",
+    "es": "Serpiente sangrienta Nazjatar",
+    "fr": "Serpent de sang de Nazjatar",
+    "pt": "Serpente Sanguínea de Nazjatar",
+    "ru": "Назжатарский кровозмей"
+   },
    "117": {
     "de": "Blaue Qirajipanzerdrohne",
     "en": "Blue Qiraji Battle Tank",
@@ -1618,6 +2196,22 @@
     "fr": "Char d’assaut qiraji bleu",
     "pt": "Tanque de Batalha Qiraji Azul",
     "ru": "Синий киражский боевой танк"
+   },
+   "1173": {
+    "de": "Gezähmter Hochlandmustang",
+    "en": "Broken Highland Mustang",
+    "es": "Mesteño de las Tierras Altas domado",
+    "fr": "Mustang des hautes-terres dressé",
+    "pt": "Mustangue das Terras Altas Domado",
+    "ru": "Объезженный нагорный мустанг"
+   },
+   "1174": {
+    "de": "Hochlandmustang",
+    "en": "Highland Mustang",
+    "es": "Caballo mesteño de las Tierras Altas",
+    "fr": "Mustang des hautes-terres",
+    "pt": "Mustangue das Terras Altas",
+    "ru": "Нагорный мустанг"
    },
    "118": {
     "de": "Rote Qirajipanzerdrohne",
@@ -1627,6 +2221,38 @@
     "pt": "Tanque de Batalha Qiraji Vermelho",
     "ru": "Красный киражский боевой танк"
    },
+   "1180": {
+    "de": "Schneller Albinoraptor",
+    "en": "Swift Albino Raptor",
+    "es": "Raptor albino presto",
+    "fr": "Raptor albinos véloce",
+    "pt": "Raptor Albino Veloz",
+    "ru": "Стремительный ящер-альбинос"
+   },
+   "1182": {
+    "de": "Eselchen",
+    "en": "Lil' Donkey",
+    "es": "Burrito",
+    "fr": "P’tit âne",
+    "pt": "Burrinho",
+    "ru": "Ослик"
+   },
+   "1183": {
+    "de": "Schädelreißer",
+    "en": "Skullripper",
+    "es": "Rompecalaveras",
+    "fr": "Arrache-Crâne",
+    "pt": "Estripacrânio",
+    "ru": "Головокуска"
+   },
+   "1185": {
+    "de": "Düsterschwinge der Bleichborken",
+    "en": "Witherbark Direwing",
+    "es": "Alafunesta Secacorteza",
+    "fr": "Redoutaile fanécorce",
+    "pt": "Asacruel Cascasseca",
+    "ru": "Лютокрыл племени Сухокожих"
+   },
    "119": {
     "de": "Gelbe Qirajipanzerdrohne",
     "en": "Yellow Qiraji Battle Tank",
@@ -1635,6 +2261,14 @@
     "pt": "Tanque de Batalha Qiraji Amarelo",
     "ru": "Желтый киражский боевой танк"
    },
+   "1199": {
+    "de": "Schwarzpranke",
+    "en": "Blackpaw",
+    "es": "Zarpanegra",
+    "fr": "Patte-Noire",
+    "pt": "Patanegra",
+    "ru": "Чернолап"
+   },
    "120": {
     "de": "Grüne Qirajipanzerdrohne",
     "en": "Green Qiraji Battle Tank",
@@ -1642,6 +2276,30 @@
     "fr": "Char d’assaut qiraji vert",
     "pt": "Tanque de Batalha Qiraji Verde",
     "ru": "Зеленый киражский боевой танк"
+   },
+   "1200": {
+    "de": "Schimäre des Eschentals",
+    "en": "Ashenvale Chimaera",
+    "es": "Quimera de Vallefresno",
+    "fr": "Chimère d’Orneval",
+    "pt": "Quimera do Vale Gris",
+    "ru": "Химера из Ясеневого леса"
+   },
+   "1203": {
+    "de": "Umbrabrauner Nachtsäbler",
+    "en": "Umber Nightsaber",
+    "es": "Sable de la noche pardo",
+    "fr": "Sabre-de-nuit acajou",
+    "pt": "Sabre-da-noite Umbero",
+    "ru": "Темный ночной саблезуб"
+   },
+   "1205": {
+    "de": "Nachtsäbler der Kaldorei",
+    "en": "Kaldorei Nightsaber",
+    "es": "Sable de la noche kaldorei",
+    "fr": "Sabre-de-nuit kaldorei",
+    "pt": "Sabre-da-noite Kaldorei",
+    "ru": "Калдорайский ночной саблезуб"
    },
    "1217": {
     "de": "G.M.O.D.",
@@ -1675,6 +2333,14 @@
     "pt": "Unidade Aérea R-21/X",
     "ru": "Воздушное судно R-21/X"
    },
+   "1229": {
+    "de": "Rostiger Mechanokrabbler",
+    "en": "Rusty Mechanocrawler",
+    "es": "Mecanorreptador oxidado",
+    "fr": "Mécaraignée rouillée",
+    "pt": "Mecarrastejante Enferrujado",
+    "ru": "Ржавый механопаук"
+   },
    "1232": {
     "de": "Azsharirochen",
     "en": "Azshari Bloatray",
@@ -1682,6 +2348,14 @@
     "fr": "Raie boursouflée azshari",
     "pt": "Aerorraia Azshari",
     "ru": "Азшарский газовый скат"
+   },
+   "1248": {
+    "de": "Schrotthaufendrifter",
+    "en": "Junkheap Drifter",
+    "es": "Itinerante de Chatarralandia",
+    "fr": "Dériveur de la Décharge",
+    "pt": "Errante da Pilha de Sucata",
+    "ru": "Свалочный скиталец"
    },
    "1250": {
     "de": "Mollie",
@@ -1699,6 +2373,14 @@
     "pt": "Pacificador de Gnomecan",
     "ru": "Мехагонский миротворец"
    },
+   "1257": {
+    "de": "Leisegleiter",
+    "en": "Silent Glider",
+    "es": "Planeador silencioso",
+    "fr": "Onduleuse silencieuse",
+    "pt": "Planador Silencioso",
+    "ru": "Бесшумный скат"
+   },
    "1265": {
     "de": "Unverderbte Leerenschwinge",
     "en": "Uncorrupted Voidwing",
@@ -1715,6 +2397,46 @@
     "pt": "Onividente de Ny'alotha",
     "ru": "Всевидец из Ни'алоты"
    },
+   "1297": {
+    "de": "Kralle von Ha-Li",
+    "en": "Clutch of Ha-Li",
+    "es": "Cría de Ha-Li",
+    "fr": "Couvée de Ha Li",
+    "pt": "Ninhada de Ha-Li",
+    "ru": "Дитя Ха-Ли"
+   },
+   "1298": {
+    "de": "Hoffnungsvernichtergargon",
+    "en": "Hopecrusher Gargon",
+    "es": "Gargon Machacaesperanzas",
+    "fr": "Gargon Brise-Espoir",
+    "pt": "Gargono Esmaga-esperanças",
+    "ru": "Сокрушитель Надежд"
+   },
+   "1304": {
+    "de": "Schlundgebundener Seelenjäger",
+    "en": "Mawsworn Soulhunter",
+    "es": "Depredador de almas jurafauces",
+    "fr": "Chasseur d’âmes antrelige",
+    "pt": "Caçador de Almas Górjuro",
+    "ru": "Верный Утробе ловец душ"
+   },
+   "1306": {
+    "de": "Schneller Düsterhuf",
+    "en": "Swift Gloomhoof",
+    "es": "Pezuñasombría presto",
+    "fr": "Sabot-sinistre rapide",
+    "pt": "Cascocaso Veloz",
+    "ru": "Быстрая чернокопытная лошадь"
+   },
+   "1310": {
+    "de": "Schreckliche Fledderschwinge",
+    "en": "Horrid Dredwing",
+    "es": "Alatemible horrible",
+    "fr": "Aile de l’effroi horrible",
+    "pt": "Terrorasa Hórrido",
+    "ru": "Ужасающий грознокрыл"
+   },
    "1314": {
     "de": "Drache der Vier Winde",
     "en": "Drake of the Four Winds",
@@ -1722,6 +2444,22 @@
     "fr": "Drake des quatre vents",
     "pt": "Draco dos Quatro Ventos",
     "ru": "Дракон Четырех Ветров"
+   },
+   "1317": {
+    "de": "Wüstenmarodeur",
+    "en": "Waste Marauder",
+    "es": "Merodeador del desierto",
+    "fr": "Maraudeur du désert",
+    "pt": "Espoliador do Deserto",
+    "ru": "Пустынный мародер"
+   },
+   "1319": {
+    "de": "Bösartige Drohne",
+    "en": "Malevolent Drone",
+    "es": "Zángano malévolo",
+    "fr": "Bourdon malveillant",
+    "pt": "Zangão Malevolente",
+    "ru": "Злобный трутень"
    },
    "1322": {
     "de": "Zuckender Parasit",
@@ -1739,6 +2477,54 @@
     "pt": "Furamentes Desperto",
     "ru": "Пробужденный червь сомнения"
    },
+   "1327": {
+    "de": "Rens tapferer Jagdhund",
+    "en": "Ren's Stalwart Hound",
+    "es": "Can leal de Ren",
+    "fr": "Fidèle quilen de Ren",
+    "pt": "Canaz Vigoroso de Ren",
+    "ru": "Верная гончая Жэня"
+   },
+   "1328": {
+    "de": "Xinlao",
+    "en": "Xinlao",
+    "es": "Xinlao",
+    "fr": "Xinlao",
+    "pt": "Xinlao",
+    "ru": "Синьлао"
+   },
+   "1366": {
+    "de": "Knochenhuftauralus",
+    "en": "Bonehoof Tauralus",
+    "es": "Tauralus Cascohueso",
+    "fr": "Tauralus sabot-d’os",
+    "pt": "Tauralus Casco Ósseo",
+    "ru": "Костекопытный таурал"
+   },
+   "1370": {
+    "de": "Gepanzerter Knochenhuftauralus",
+    "en": "Armored Bonehoof Tauralus",
+    "es": "Tauralus Cascohueso acorazado",
+    "fr": "Tauralus sabot-d’os cuirassé",
+    "pt": "Tauralus Casco Ósseo Couraçado",
+    "ru": "Бронированный костекопытный таурал"
+   },
+   "1372": {
+    "de": "Pustelrückenbluthauer",
+    "en": "Blisterback Bloodtusk",
+    "es": "Sangrecolmillo Lomomórbido",
+    "fr": "Défenses-de-sang cloquéchine",
+    "pt": "Presa de Sangue Pustulante",
+    "ru": "Обугленный кровобивень"
+   },
+   "1373": {
+    "de": "Blutstachel",
+    "en": "Gorespine",
+    "es": "Puasangre",
+    "fr": "Tripépine",
+    "pt": "Espinogorja",
+    "ru": "Кровоспин"
+   },
    "1377": {
     "de": "Bollwerkkreischer",
     "en": "Rampart Screecher",
@@ -1746,6 +2532,22 @@
     "fr": "Hurleuse des remparts",
     "pt": "Estridor da Muralha",
     "ru": "Визгун с укреплений"
+   },
+   "1379": {
+    "de": "Flieger des Endmorasts",
+    "en": "Endmire Flyer",
+    "es": "Volador del Cenagal del Fin",
+    "fr": "Volant du marais des Affres",
+    "pt": "Voador do Charco Derradeiro",
+    "ru": "Летун из Гиблотопи"
+   },
+   "1393": {
+    "de": "Wilder Glimmerpelzstreuner",
+    "en": "Wild Glimmerfur Prowler",
+    "es": "Merodeador pieltitilo salvaje",
+    "fr": "Rôdeur mantelume sauvage",
+    "pt": "Predador Pelo-rútilo Selvagem",
+    "ru": "Дикий мерцающий лисохвост"
    },
    "1405": {
     "de": "Todeswandler der Wiederherstellung",
@@ -1763,6 +2565,30 @@
     "pt": "Rasga-medula",
     "ru": "Костезубка"
    },
+   "1410": {
+    "de": "Bulliger Todesroc",
+    "en": "Hulking Deathroc",
+    "es": "Roc mortífero descomunal",
+    "fr": "Rocmort massif",
+    "pt": "Roca-da-morte Gigante",
+    "ru": "Громадный некрорух"
+   },
+   "1411": {
+    "de": "Räuberischer Seuchenroc",
+    "en": "Predatory Plagueroc",
+    "es": "Carnerroc depredador",
+    "fr": "Pesteroc prédateur",
+    "pt": "Roca-da-peste Predadora",
+    "ru": "Хищный чумной рух"
+   },
+   "1415": {
+    "de": "Waldschlucker",
+    "en": "Arboreal Gulper",
+    "es": "Zampón arbóreo",
+    "fr": "Gobeur arboricole",
+    "pt": "Bufo Arbóreo",
+    "ru": "Древесный мешкорот"
+   },
    "1417": {
     "de": "Hand von Hrestimorak",
     "en": "Hand of Hrestimorak",
@@ -1778,6 +2604,22 @@
     "fr": "Marche-mort touché par le vice",
     "pt": "Mortívago Pecaminoso",
     "ru": "Запятнанный грехом вестник смерти"
+   },
+   "1434": {
+    "de": "Tiefensternaurelid",
+    "en": "Deepstar Aurelid",
+    "es": "Aurélido estrellabismal",
+    "fr": "Aurélidé stellaire des profondeurs",
+    "pt": "Aurelídeo Estrelafunda",
+    "ru": "Аурелид звездных глубин"
+   },
+   "1437": {
+    "de": "Schlachtgebundener Kriegshund",
+    "en": "Battle-Bound Warhound",
+    "es": "Can de guerra ligado a la batalla",
+    "fr": "Chien de guerre lié par le combat",
+    "pt": "Cão de Guerra Feito Para a Batalha",
+    "ru": "Закаленный бойцовский пес"
    },
    "1443": {
     "de": "Gieriger Fresser",
@@ -1827,6 +2669,38 @@
     "pt": "Corcel Lúgubre do Sacrário",
     "ru": "Темный скакун из Святилища"
    },
+   "1502": {
+    "de": "Gefallenes Streitross",
+    "en": "Fallen Charger",
+    "es": "Destrero caído",
+    "fr": "Destrier déchu",
+    "pt": "Corcel Decaído",
+    "ru": "Павший боевой конь"
+   },
+   "1506": {
+    "de": "Blutrotes Splitterfell",
+    "en": "Crimson Shardhide",
+    "es": "Pellejosquirla carmesí",
+    "fr": "Cuirasaure écarlate",
+    "pt": "Couraça-de-cristal-carmesim",
+    "ru": "Багровый кристаллошкур"
+   },
+   "1509": {
+    "de": "Granatklingenschwinge",
+    "en": "Garnet Razorwing",
+    "es": "Alafilada granate",
+    "fr": "Rasaile grenat",
+    "pt": "Talhasa Granada",
+    "ru": "Гранатовый острокрыл"
+   },
+   "1514": {
+    "de": "Tobender Zerfleischer",
+    "en": "Rampaging Mauler",
+    "es": "Magullador desenfrenado",
+    "fr": "Mutilateur enragé",
+    "pt": "Espancador Descontrolado",
+    "ru": "Буйный терзатель"
+   },
    "1520": {
     "de": "Seelenverzerrter Todeswandler",
     "en": "Soultwisted Deathwalker",
@@ -1859,6 +2733,14 @@
     "pt": "Corcel de Zereth Carcinizado",
     "ru": "Крабовидный зеретский бегун"
    },
+   "1553": {
+    "de": "Befreiter Slyvern",
+    "en": "Liberated Slyvern",
+    "es": "Astudraco liberado",
+    "fr": "Rusarde libérée",
+    "pt": "Astutícora Liberta",
+    "ru": "Освобожденная лиса-виверна"
+   },
    "1564": {
     "de": "Kolossale Seelenfetzerschlundratte",
     "en": "Colossal Soulshredder Mawrat",
@@ -1882,6 +2764,14 @@
     "fr": "Surveillant de Zereth",
     "pt": "Feitor de Zereth",
     "ru": "Зеретский смотритель"
+   },
+   "1619": {
+    "de": "Uralter Salamanther",
+    "en": "Ancient Salamanther",
+    "es": "Salamantra anciana",
+    "fr": "Dracamandre antique",
+    "pt": "Salamantra Ancestral",
+    "ru": "Древняя саламантера"
    },
    "1626": {
     "de": "Panzerklatscher",
@@ -1922,6 +2812,14 @@
     "fr": "Armoredon ardent",
     "pt": "Armadurado Infernal",
     "ru": "Инфернальный бронедон"
+   },
+   "1732": {
+    "de": "Kobaltschieferschwinge",
+    "en": "Cobalt Shalewing",
+    "es": "Alaesquisto de cobalto",
+    "fr": "Aile-de-schiste de cobalt",
+    "pt": "Asaxisto Cobalto",
+    "ru": "Кобальтовый глинокрыл"
    },
    "1734": {
     "de": "Schattenflammenschieferschwinge",
@@ -1987,6 +2885,14 @@
     "pt": "Urso Guerreiro Amani",
     "ru": "Аманийский боевой медведь"
    },
+   "2038": {
+    "de": "Tonschuppenhornschreiter",
+    "en": "Clayscale Hornstrider",
+    "es": "Zancacuerno escamarcilla",
+    "fr": "Trotte-bois argileux",
+    "pt": "Passochifre Escamargila",
+    "ru": "Глиношкурый длиннорог"
+   },
    "2055": {
     "de": "Ewiges Panzerdon",
     "en": "Infinite Armoredon",
@@ -2019,6 +2925,14 @@
     "pt": "Falcostruz Branco Veloz",
     "ru": "Стремительный белый крылобег"
    },
+   "2176": {
+    "de": "Alunira",
+    "en": "Alunira",
+    "es": "Alunira",
+    "fr": "Alunira",
+    "pt": "Alunira",
+    "ru": "Алунира"
+   },
    "2180": {
     "de": "Schattenhafte Schwärmilbe",
     "en": "Shadowed Swarmite",
@@ -2027,6 +2941,14 @@
     "pt": "Enxamito Obscuro",
     "ru": "Помраченный летающий роевик"
    },
+   "2192": {
+    "de": "Beledars Brut",
+    "en": "Beledar's Spawn",
+    "es": "Engendro de Beledar",
+    "fr": "Engeance de Beledar",
+    "pt": "Cria de Beledar",
+    "ru": "Порождение Беледар"
+   },
    "2204": {
     "de": "Docht",
     "en": "Wick",
@@ -2034,6 +2956,14 @@
     "fr": "Mèche",
     "pt": "Pavio",
     "ru": "Фитиль"
+   },
+   "2205": {
+    "de": "Alter Maulwurf Rufus",
+    "en": "Ol' Mole Rufus",
+    "es": "Rufus, el viejo topo",
+    "fr": "Rufus la vieille taupe",
+    "pt": "Velha Toupeira Rufo",
+    "ru": "Старина Руфус"
    },
    "2219": {
     "de": "Himmelsreißer der Sureki",
@@ -2058,6 +2988,22 @@
     "fr": "Mécarmure diamant",
     "pt": "Traje de Meca de Diamante",
     "ru": "Алмазный мехакостюм"
+   },
+   "2291": {
+    "de": "Geborgene Flugmaschine des Goblingeldsacks",
+    "en": "Salvaged Goblin Gazillionaire's Flying Machine",
+    "es": "Máquina voladora de muchimillonario goblin saqueada",
+    "fr": "Machine volante recyclée de Gobelin milliardaire",
+    "pt": "Máquina Voadora do Gazilionário Goblin Recondicionada",
+    "ru": "Восстановленный ветролет гоблина-триллиардера"
+   },
+   "2293": {
+    "de": "Spionagedrohne der Düsternisverschmolzenen",
+    "en": "Darkfuse Spy-Eye",
+    "es": "Ojo espía de Fundisombras",
+    "fr": "Œil-espion imprégné de ténèbres",
+    "pt": "Vigilante de Sombrafuso",
+    "ru": "Шпионолет Мрачных Минеров"
    },
    "2313": {
     "de": "Magnetomech des Schrottmaestros",
@@ -2155,6 +3101,22 @@
     "pt": "Comestrela Desatado",
     "ru": "Неприкаянный пожиратель звезд"
    },
+   "2601": {
+    "de": "Perlkrolusk",
+    "en": "Pearlescent Krolusk",
+    "es": "Crolusco perlescente",
+    "fr": "Krolusk perlescent",
+    "pt": "Crolusco Perolado",
+    "ru": "Перламутровый кролуск"
+   },
+   "2603": {
+    "de": "Sthaarbs' letztes Mahl",
+    "en": "Sthaarbs's Last Lunch",
+    "es": "Último almuerzo de Sthaarbs",
+    "fr": "Dernier déjeuner de Sthaarbs",
+    "pt": "Última Refeição de Sthaarbs",
+    "ru": "Последний обед Стаарбса"
+   },
    "2607": {
     "de": "Asche von Belo'ren",
     "en": "Ashes of Belo'ren",
@@ -2162,6 +3124,14 @@
     "fr": "Cendres de Belo’ren",
     "pt": "Cinzas de Belo'ren",
     "ru": "Пепел Бело'рена"
+   },
+   "2615": {
+    "de": "Wurzelpirschergrimmluchs",
+    "en": "Rootstalker Grimlynx",
+    "es": "Sombrilince acecharraíces",
+    "fr": "Chagrynx traqueracine",
+    "pt": "Malevolince Espreitarraiz",
+    "ru": "Корнеловчая мракорысь"
    },
    "262": {
     "de": "Roter Protodrache",
@@ -2203,6 +3173,14 @@
     "pt": "Protodraco Azul",
     "ru": "Синий протодракон"
    },
+   "265": {
+    "de": "Zeitverlorener Protodrache",
+    "en": "Time-Lost Proto-Drake",
+    "es": "Protodraco Tiempo Perdido",
+    "fr": "Proto-drake perdu dans le temps",
+    "pt": "Protodraco Perdido no Tempo",
+    "ru": "Затерянный во времени протодракон"
+   },
    "266": {
     "de": "Verseuchter Protodrache",
     "en": "Plagued Proto-Drake",
@@ -2210,6 +3188,14 @@
     "fr": "Proto-drake pestiféré",
     "pt": "Protodraco Pestilento",
     "ru": "Чумной протодракон"
+   },
+   "2708": {
+    "de": "Leuchtende Blütenblattschwinge",
+    "en": "Vibrant Petalwing",
+    "es": "Alapétalo vibrante",
+    "fr": "Folibri éclatant",
+    "pt": "Petalasa Vibrante",
+    "ru": "Красочный перецветник"
    },
    "2733": {
     "de": "Abscheuliches Aas",
@@ -2227,6 +3213,46 @@
     "pt": "Carniça Convalescente",
     "ru": "Восстанавливающийся падальщик"
    },
+   "2751": {
+    "de": "Verstärkter Sturmrochen",
+    "en": "Augmented Stormray",
+    "es": "Rayatormenta aumentada",
+    "fr": "Raie-tempête renforcée",
+    "pt": "Trovarraia Aprimorada",
+    "ru": "Усиленный штормовой скат"
+   },
+   "2758": {
+    "de": "Kobaltdrachenfalke",
+    "en": "Cobalt Dragonhawk",
+    "es": "Dracohalcón cobalto",
+    "fr": "Faucon-dragon cobalt",
+    "pt": "Falcodrago de Cobalto",
+    "ru": "Кобальтовый дракондор"
+   },
+   "2760": {
+    "de": "Scharfkralle der Amani",
+    "en": "Amani Sharptalon",
+    "es": "Garfafilada Amani",
+    "fr": "Serre-tranchante amani",
+    "pt": "Garraguda Amani",
+    "ru": "Аманийский острокоготь"
+   },
+   "2762": {
+    "de": "Himmelblauer Falkenschreiter",
+    "en": "Cerulean Hawkstrider",
+    "es": "Halcón zancudo cerúleo",
+    "fr": "Faucon-pérégrin céruléen",
+    "pt": "Falcostruz Cerúleo",
+    "ru": "Лазурный крылобег"
+   },
+   "2775": {
+    "de": "Schuppentier der Bleichborken",
+    "en": "Witherbark Pango",
+    "es": "Pango Secacorteza",
+    "fr": "Pango fanécorce",
+    "pt": "Pango de Cascasseca",
+    "ru": "Панго Сухокожих"
+   },
    "2805": {
     "de": "Spektralfalkenschreiter",
     "en": "Spectral Hawkstrider",
@@ -2242,6 +3268,14 @@
     "fr": "Faucon-pérégrin lumineux",
     "pt": "Falcostruz Luzidio",
     "ru": "Светоносный крылобег"
+   },
+   "2827": {
+    "de": "Blutiger Plager",
+    "en": "Sanguine Harrower",
+    "es": "Lacerante sanguino",
+    "fr": "Persécuteur sanguin",
+    "pt": "Consternador Sanguíneo",
+    "ru": "Кровавый боронитель"
    },
    "2831": {
     "de": "Schattenhafter Plager",
@@ -2339,6 +3373,14 @@
     "pt": "Cabeça de Mimiron",
     "ru": "Голова Мимирона"
    },
+   "3051": {
+    "de": "Topasfarbener Himmelszahn",
+    "en": "Topaz Skyfang",
+    "es": "Colmilloceleste de topacio",
+    "fr": "Croc-du-ciel topaze",
+    "pt": "Presaceleste de Topázio",
+    "ru": "Топазовый небесный клык"
+   },
    "3058": {
     "de": "Die windende Brut",
     "en": "The Writhing Brood",
@@ -2354,6 +3396,14 @@
     "fr": "Proto-drake bardé de fer",
     "pt": "Protodraco Férreo",
     "ru": "Протодракон в железной броне"
+   },
+   "3061": {
+    "de": "Rubinwinder",
+    "en": "Ruby Writhe",
+    "es": "Retuerto de rubí",
+    "fr": "Tortilleur rubis",
+    "pt": "Contórcia de Rubi",
+    "ru": "Рубиновый скользмей"
    },
    "3063": {
     "de": "Seuchenhauch",
@@ -2459,6 +3509,14 @@
     "pt": "Draco do Vento Leste",
     "ru": "Дракон восточного ветра"
    },
+   "393": {
+    "de": "Phosphorsteindrache",
+    "en": "Phosphorescent Stone Drake",
+    "es": "Draco de piedra fosforescente",
+    "fr": "Drake de pierre phosphorescent",
+    "pt": "Draco de Pedra Fosforescente",
+    "ru": "Светящийся дракон"
+   },
    "395": {
     "de": "Drache des Nordwinds",
     "en": "Drake of the North Wind",
@@ -2482,6 +3540,14 @@
     "fr": "Drake de pierre vitrifiée",
     "pt": "Draco de Pedra Vítreo",
     "ru": "Камнешкурый дракон"
+   },
+   "400": {
+    "de": "Graues Reitkamel",
+    "en": "Grey Riding Camel",
+    "es": "Camello de montar gris",
+    "fr": "Dromadaire gris",
+    "pt": "Camelo Cinza de Montaria",
+    "ru": "Серый ездовой верблюд"
    },
    "410": {
     "de": "Gepanzerter Razzashiraptor",
@@ -2522,6 +3588,14 @@
     "fr": "Ours de bataille amani",
     "pt": "Urso de Batalha Amani",
     "ru": "Аманийский боевой медведь"
+   },
+   "420": {
+    "de": "Beruhigtes Seepferdchen",
+    "en": "Subdued Seahorse",
+    "es": "Caballito de mar subyugado",
+    "fr": "Hippocampe assujetti",
+    "pt": "Cavalo-marinho Dominado",
+    "ru": "Подчиненный морской конек"
    },
    "425": {
     "de": "Flammenkralle von Alysrazar",
@@ -2619,6 +3693,14 @@
     "pt": "Filho de Gailleon",
     "ru": "Сын Галеона"
    },
+   "517": {
+    "de": "Donnernde Rubinwolkenschlange",
+    "en": "Thundering Ruby Cloud Serpent",
+    "es": "Dragón nimbo rubí tronador",
+    "fr": "Serpent-nuage de rubis fulminant",
+    "pt": "Serpente das Nuvens Trovejante Rubi",
+    "ru": "Грозовой рубиновый облачный змей"
+   },
    "518": {
     "de": "Aschegrauer Pandarenphönix",
     "en": "Ashen Pandaren Phoenix",
@@ -2667,6 +3749,30 @@
     "pt": "Escornante Primordial de Cobalto",
     "ru": "Кобальтовый доисторический дикорог"
    },
+   "534": {
+    "de": "Goldgelbes Urterrorhorn",
+    "en": "Amber Primordial Direhorn",
+    "es": "Cuernoatroz primario de ámbar",
+    "fr": "Navrecorne primordial d’ambre",
+    "pt": "Escornante Primordial de Âmbar",
+    "ru": "Янтарный доисторический дикорог"
+   },
+   "535": {
+    "de": "Schiefergraues Urterrorhorn",
+    "en": "Slate Primordial Direhorn",
+    "es": "Cuernoatroz primario de pizarra",
+    "fr": "Navrecorne primordial ardoise",
+    "pt": "Escornante Primordial de Ardósia",
+    "ru": "Сланцевый доисторический дикорог"
+   },
+   "536": {
+    "de": "Jadegrünes Urterrorhorn",
+    "en": "Jade Primordial Direhorn",
+    "es": "Cuernoatroz primario de jade",
+    "fr": "Navrecorne primordial jade",
+    "pt": "Escornante Primordial de Jade",
+    "ru": "Нефритовый доисторический дикорог"
+   },
    "542": {
     "de": "Donnernde Kobaltwolkenschlange",
     "en": "Thundering Cobalt Cloud Serpent",
@@ -2707,6 +3813,14 @@
     "pt": "Jaganata Kor'kron",
     "ru": "Кор'кронский крушитель"
    },
+   "561": {
+    "de": "Donnernde Onyxwolkenschlange",
+    "en": "Thundering Onyx Cloud Serpent",
+    "es": "Dragón nimbo de ónice tronador",
+    "fr": "Serpent-nuage d’onyx fulminant",
+    "pt": "Serpente das Nuvens de Ônix Trovejante",
+    "ru": "Грозовой ониксовый облачный змей"
+   },
    "607": {
     "de": "Blutschreitergronnling",
     "en": "Gorestrider Gronnling",
@@ -2714,6 +3828,22 @@
     "fr": "Gronnlin trotte-sang",
     "pt": "Gronnídeo Corneante",
     "ru": "Верховой малый гронн"
+   },
+   "611": {
+    "de": "Tundraeishuf",
+    "en": "Tundra Icehoof",
+    "es": "Uñagélida de la tundra",
+    "fr": "Sabot-glacé de la toundra",
+    "pt": "Casco Gélido da Tundra",
+    "ru": "Тундровый ледяной копытень"
+   },
+   "612": {
+    "de": "Bluthufbulle",
+    "en": "Bloodhoof Bull",
+    "es": "Macho Pezuña de Sangre",
+    "fr": "Étalon sabot-de-sang",
+    "pt": "Boi Casco Sangrento",
+    "ru": "Самец-кровокопыт"
    },
    "613": {
     "de": "Eisenhufzerstörer",
@@ -2723,6 +3853,14 @@
     "pt": "Destruidor Cascoferro",
     "ru": "Разрушитель-железноног"
    },
+   "614": {
+    "de": "Scheckiger Wiesentrampler",
+    "en": "Mottled Meadowstomper",
+    "es": "Pisallanuras jaspeado",
+    "fr": "Foule-prairie tacheté",
+    "pt": "Campinante Mosqueado",
+    "ru": "Пятнистый лугопотам"
+   },
    "619": {
     "de": "Schwarzstahlkampfeber",
     "en": "Blacksteel Battleboar",
@@ -2731,6 +3869,14 @@
     "pt": "Javali de Batalha de Aço Negro",
     "ru": "Закованный в вороненую сталь боевой вепрь"
    },
+   "622": {
+    "de": "Gepanzerter Klingenrücken",
+    "en": "Armored Razorback",
+    "es": "Picovaja blindado",
+    "fr": "Tranchedos cuirassé",
+    "pt": "Costagume Armadurado",
+    "ru": "Бронированный шипастый кабан"
+   },
    "623": {
     "de": "Frostebenenkampfeber",
     "en": "Frostplains Battleboar",
@@ -2738,6 +3884,22 @@
     "fr": "Sanglier de guerre des plaines givrées",
     "pt": "Javaliço da Planície Congelada",
     "ru": "Боевой вепрь ледяных равнин"
+   },
+   "627": {
+    "de": "Mächtiger Grauhauer",
+    "en": "Great Greytusk",
+    "es": "Gran Colmillogrís",
+    "fr": "Grand grisebroche",
+    "pt": "Grande Cinzatusco",
+    "ru": "Огромный сероклык"
+   },
+   "630": {
+    "de": "Saphirblaue Flussbestie",
+    "en": "Sapphire Riverbeast",
+    "es": "Bestia fluvial de zafiro",
+    "fr": "Potamodonte saphir",
+    "pt": "Fera-do-rio Safira",
+    "ru": "Сапфировое речное чудище"
    },
    "633": {
     "de": "Höllenfeuerbestie",
@@ -2755,6 +3917,22 @@
     "pt": "Falcão-agulha Solar",
     "ru": "Солнечный ястреб пиков"
    },
+   "636": {
+    "de": "Flinker Brisenschreiter",
+    "en": "Swift Breezestrider",
+    "es": "Brizancada presto",
+    "fr": "Trotte-brise rapide",
+    "pt": "Pé-de-brisa Ligeiro",
+    "ru": "Быстрый ветробег"
+   },
+   "643": {
+    "de": "Terrorzahn des Kriegshymnenklans",
+    "en": "Warsong Direfang",
+    "es": "Dientefasto Grito de Guerra",
+    "fr": "Morne-croc chanteguerre",
+    "pt": "Presabrava do Brado Guerreiro",
+    "ru": "Лютоклык клана Песни Войны"
+   },
    "654": {
     "de": "Kriegsyeti des Herausforderers",
     "en": "Challenger's War Yeti",
@@ -2762,6 +3940,22 @@
     "fr": "Yéti de guerre du prétendant",
     "pt": "Yeti de Guerra do Desafiante",
     "ru": "Боевой йети претендента"
+   },
+   "655": {
+    "de": "Sonnenhautgronnling",
+    "en": "Sunhide Gronnling",
+    "es": "Gronnito Pelisol",
+    "fr": "Gronnlin peau-solaire",
+    "pt": "Gronnídeo Courosol",
+    "ru": "Солнечношкурый малый гронн"
+   },
+   "657": {
+    "de": "Nachtheuler der Garn",
+    "en": "Garn Nighthowl",
+    "es": "Garn Sombraullido",
+    "fr": "Garn nocthurle",
+    "pt": "Garn Uivo Noturno",
+    "ru": "Воющий в ночи гарн"
    },
    "69": {
     "de": "Totenschwurs Todesstreitross",
@@ -2851,6 +4045,14 @@
     "pt": "Verme Abissal",
     "ru": "Червь бездны"
    },
+   "928": {
+    "de": "Dünenaasfresser",
+    "en": "Dune Scavenger",
+    "es": "Carroñero de las dunas",
+    "fr": "Charognard des dunes",
+    "pt": "Catador das Dunas",
+    "ru": "Дюнный падальщик"
+   },
    "933": {
     "de": "Obsidiankrolusk",
     "en": "Obsidian Krolusk",
@@ -2867,6 +4069,22 @@
     "pt": "Ur'zul Agrilhoado",
     "ru": "Укрощенный ур'зул"
    },
+   "955": {
+    "de": "Übles Scheusal",
+    "en": "Vile Fiend",
+    "es": "Maligno vil",
+    "fr": "Vil indomptable",
+    "pt": "Diabo Torpe",
+    "ru": "Злобное отродье"
+   },
+   "956": {
+    "de": "Springender Venensucher",
+    "en": "Leaping Veinseeker",
+    "es": "Buscavenas saltador",
+    "fr": "Cherche-veine sauteur",
+    "pt": "Cataveia Saltador",
+    "ru": "Прыгучий кровопийца"
+   },
    "963": {
     "de": "Blutgesättigter Krogg",
     "en": "Bloodgorged Crawg",
@@ -2874,6 +4092,14 @@
     "fr": "Crogg gorgé de sang",
     "pt": "Crorg Ensanguentado",
     "ru": "Напившийся крови крог"
+   },
+   "970": {
+    "de": "Wahnsinniger Chaosläufer",
+    "en": "Maddened Chaosrunner",
+    "es": "Trotacaos enajenado",
+    "fr": "Foule-chaos affolé",
+    "pt": "Corredor Caótico Enlouquecido",
+    "ru": "Обезумевший скакун хаоса"
    },
    "971": {
     "de": "Antorischer Aschenhund",
@@ -2891,6 +4117,14 @@
     "pt": "Canisvil das Trevas Antorano",
     "ru": "Сумеречная гончая из Анторуса"
    },
+   "973": {
+    "de": "Glimmernder Manarochen",
+    "en": "Lambent Mana Ray",
+    "es": "Raya de maná luminiscente",
+    "fr": "Raie de mana diaprée",
+    "pt": "Arraia de Mana Bruxuleante",
+    "ru": "Сияющий манаскат"
+   },
    "978": {
     "de": "Violette Zauberschwinge",
     "en": "Violet Spellwing",
@@ -2898,6 +4132,30 @@
     "fr": "Aile-ensorcelée pourpre",
     "pt": "Asamágis Violeta",
     "ru": "Фиолетовый чарокрыл"
+   },
+   "979": {
+    "de": "Purpurroter Geiferschlund",
+    "en": "Crimson Slavermaw",
+    "es": "Faucesclava carmesí",
+    "fr": "Gueule-écumante cramoisie",
+    "pt": "Babagorja Carmesim",
+    "ru": "Багровый рабоглот"
+   },
+   "980": {
+    "de": "Säurespucker",
+    "en": "Acid Belcher",
+    "es": "Eructador de ácido",
+    "fr": "Crache-acide",
+    "pt": "Arrotácido",
+    "ru": "Кислотный изрыгатель"
+   },
+   "981": {
+    "de": "Gallzahnknirscher",
+    "en": "Biletooth Gnasher",
+    "es": "Rechinador dientebilis",
+    "fr": "Grince-dents caustique",
+    "pt": "Triscadente Bilioso",
+    "ru": "Желчнозубый костеглод"
    },
    "995": {
     "de": "Haihappen",
@@ -4159,12 +5417,116 @@
    }
   },
   "texts": {
+   "Antoran Wastes": {
+    "de": "Antorische Ödnis",
+    "en": "Antoran Wastes",
+    "es": "Baldío Antoran",
+    "fr": "Étendues Antoréennes",
+    "pt": "Ermos Antoranos",
+    "ru": "Пустоши Анторуса"
+   },
    "Any Timewalking Dungeon": {
     "de": "Beliebiger Zeitwanderungsdungeon",
     "es": "Cualquier mazmorra de Paseo en el tiempo",
     "fr": "N'importe quel donjon des Marcheurs du temps",
     "pt": "Qualquer masmorra de Caminhada Temporal",
     "ru": "Любое подземелье путешествий во времени"
+   },
+   "Arathi Highlands": {
+    "de": "Arathihochland",
+    "en": "Arathi Highlands",
+    "es": "Tierras Altas de Arathi",
+    "fr": "Hautes-terres Arathies",
+    "pt": "Planalto Arathi",
+    "ru": "Нагорье Арати"
+   },
+   "Ardenweald": {
+    "de": "Ardenwald",
+    "en": "Ardenweald",
+    "es": "Ardenweald",
+    "fr": "Sylvarden",
+    "pt": "Ardena",
+    "ru": "Арденвельд"
+   },
+   "Darkshore": {
+    "de": "Dunkelküste",
+    "en": "Darkshore",
+    "es": "Costa Oscura",
+    "fr": "Sombrivage",
+    "pt": "Costa Negra",
+    "ru": "Темные берега"
+   },
+   "Deepholm": {
+    "de": "Tiefenheim",
+    "en": "Deepholm",
+    "es": "Infralar",
+    "fr": "Le Tréfonds",
+    "pt": "Geodomo",
+    "ru": "Подземье"
+   },
+   "Drustvar": {
+    "de": "Drustvar",
+    "en": "Drustvar",
+    "es": "Drustvar",
+    "fr": "Drustvar",
+    "pt": "Drustvar",
+    "ru": "Друствар"
+   },
+   "Eredath": {
+    "de": "Eredath",
+    "en": "Eredath",
+    "es": "Eredath",
+    "fr": "Érédath",
+    "pt": "Eredath",
+    "ru": "Эредат"
+   },
+   "Eversong Woods": {
+    "de": "Immersangwald",
+    "en": "Eversong Woods",
+    "es": "Bosque Canción Eterna",
+    "fr": "Bois des Chants éternels",
+    "pt": "Floresta do Canto Eterno",
+    "ru": "Леса Вечной Песни"
+   },
+   "Frostfire Ridge": {
+    "de": "Frostfeuergrat",
+    "en": "Frostfire Ridge",
+    "es": "Cresta Fuego Glacial",
+    "fr": "Crête de Givrefeu",
+    "pt": "Serra Fogofrio",
+    "ru": "Хребет Ледяного Огня"
+   },
+   "Gorgrond": {
+    "de": "Gorgrond",
+    "en": "Gorgrond",
+    "es": "Gorgrond",
+    "fr": "Gorgrond",
+    "pt": "Gorgrond",
+    "ru": "Горгронд"
+   },
+   "Hallowfall": {
+    "de": "Heilsturz",
+    "en": "Hallowfall",
+    "es": "Santificación",
+    "fr": "Sainte-Chute",
+    "pt": "Pouso Santo",
+    "ru": "Тайносводье"
+   },
+   "Harandar": {
+    "de": "Harandar",
+    "en": "Harandar",
+    "es": "Harandar",
+    "fr": "Harandar",
+    "pt": "Harandar",
+    "ru": "Харандар"
+   },
+   "Isle of Dorn": {
+    "de": "Insel von Dorn",
+    "en": "Isle of Dorn",
+    "es": "Isla de Dorn",
+    "fr": "Île de Dorn",
+    "pt": "Ilha de Dorn",
+    "ru": "Остров Дорн"
    },
    "Isle of Giants": {
     "de": "Insel der Riesen",
@@ -4182,6 +5544,22 @@
     "pt": "Ilha do Trovão",
     "ru": "Остров Грома"
    },
+   "K'aresh": {
+    "de": "K'aresh",
+    "en": "K'aresh",
+    "es": "K'aresh",
+    "fr": "K’aresh",
+    "pt": "K'aresh",
+    "ru": "К'ареш"
+   },
+   "Korthia": {
+    "de": "Korthia",
+    "en": "Korthia",
+    "es": "Korthia",
+    "fr": "Korthia",
+    "pt": "Korthia",
+    "ru": "Кортия"
+   },
    "Kun-Lai Summit": {
     "de": "Kun-Lai-Gipfel",
     "en": "Kun-Lai Summit",
@@ -4190,6 +5568,70 @@
     "pt": "Monte Kun-Lai",
     "ru": "Вершина Кунь-Лай"
    },
+   "Maldraxxus": {
+    "de": "Maldraxxus",
+    "en": "Maldraxxus",
+    "es": "Maldraxxus",
+    "fr": "Maldraxxus",
+    "pt": "Maldraxxus",
+    "ru": "Малдраксус"
+   },
+   "Mechagon Island": {
+    "de": "Mechagon",
+    "en": "Mechagon Island",
+    "es": "Isla de Mecandria",
+    "fr": "Île de Mécagone",
+    "pt": "Ilha de Gnomecan",
+    "ru": "Остров Мехагон"
+   },
+   "Nagrand": {
+    "de": "Nagrand",
+    "en": "Nagrand",
+    "es": "Nagrand",
+    "fr": "Nagrand",
+    "pt": "Nagrand",
+    "ru": "Награнд"
+   },
+   "Nazjatar": {
+    "de": "Nazjatar",
+    "en": "Nazjatar",
+    "es": "Nazjatar",
+    "fr": "Nazjatar",
+    "pt": "Nazjatar",
+    "ru": "Назжатар"
+   },
+   "Nazmir": {
+    "de": "Nazmir",
+    "en": "Nazmir",
+    "es": "Nazmir",
+    "fr": "Nazmir",
+    "pt": "Nazmir",
+    "ru": "Назмир"
+   },
+   "Pandaria": {
+    "de": "Pandaria",
+    "en": "Pandaria",
+    "es": "Pandaria",
+    "fr": "Pandarie",
+    "pt": "Pandária",
+    "ru": "Пандария"
+   },
+   "Revendreth": {
+    "de": "Revendreth",
+    "en": "Revendreth",
+    "es": "Revendreth",
+    "fr": "Revendreth",
+    "pt": "Revendreth",
+    "ru": "Ревендрет"
+   },
+   "Shadowmoon Valley": {
+    "de": "Schattenmondtal",
+    "en": "Shadowmoon Valley",
+    "es": "Valle Sombraluna",
+    "fr": "Vallée d’Ombrelune",
+    "pt": "Vale da Lua Negra",
+    "ru": "Долина Призрачной Луны"
+   },
    "Spires of Arak": {
     "de": "Spitzen von Arak",
     "en": "Spires of Arak",
@@ -4197,6 +5639,86 @@
     "fr": "Flèches d’Arak",
     "pt": "Agulhas de Arak",
     "ru": "Пики Арака"
+   },
+   "Stormsong Valley": {
+    "de": "Sturmsangtal",
+    "en": "Stormsong Valley",
+    "es": "Valle Canto Tormenta",
+    "fr": "Vallée Chantorage",
+    "pt": "Vale Trovamare",
+    "ru": "Долина Штормов"
+   },
+   "Talador": {
+    "de": "Talador",
+    "en": "Talador",
+    "es": "Talador",
+    "fr": "Talador",
+    "pt": "Talador",
+    "ru": "Таладор"
+   },
+   "Tanaan Jungle": {
+    "de": "Tanaandschungel",
+    "en": "Tanaan Jungle",
+    "es": "Selva de Tanaan",
+    "fr": "Jungle de Tanaan",
+    "pt": "Selva de Tanaan",
+    "ru": "Танаанские джунгли"
+   },
+   "The Azure Span": {
+    "de": "Azurblaues Gebirge",
+    "en": "The Azure Span",
+    "es": "Las Tierras Azures",
+    "fr": "Travée d’Azur",
+    "pt": "Vasta Lazúli",
+    "ru": "Лазурный Простор"
+   },
+   "The Coiled Isle": {
+    "de": "Gewundene Insel",
+    "en": "The Coiled Isle",
+    "es": "Isla Serpenteante",
+    "fr": "Île Annelée",
+    "pt": "A Ilha Enrolada",
+    "ru": "Спиральный остров"
+   },
+   "The Forbidden Reach": {
+    "de": "Verbotene Insel",
+    "en": "The Forbidden Reach",
+    "es": "El Confín Olvidado",
+    "fr": "Confins Interdits",
+    "pt": "Recôndito Proibido",
+    "ru": "Запретный край"
+   },
+   "The Maw": {
+    "de": "Der Schlund",
+    "en": "The Maw",
+    "es": "Las Fauces",
+    "fr": "Antre",
+    "pt": "A Gorja",
+    "ru": "Утроба"
+   },
+   "The Ringing Deeps": {
+    "de": "Die Schallenden Tiefen",
+    "en": "The Ringing Deeps",
+    "es": "Cavernas Resonantes",
+    "fr": "Les abîmes Retentissants",
+    "pt": "Fosso Ressonante",
+    "ru": "Гулкие глубины"
+   },
+   "The Storm Peaks": {
+    "de": "Die Sturmgipfel",
+    "en": "The Storm Peaks",
+    "es": "Las Cumbres Tormentosas",
+    "fr": "Les pics Foudroyés",
+    "pt": "Picos Tempestuosos",
+    "ru": "Грозовая гряда"
+   },
+   "Timeless Isle": {
+    "de": "Zeitlose Insel",
+    "en": "Timeless Isle",
+    "es": "Isla Intemporal",
+    "fr": "Île du Temps figé",
+    "pt": "Ilha Perene",
+    "ru": "Вневременный остров"
    },
    "Torghast, Tower of the Damned": {
     "de": "Torghast, Turm der Verdammten",
@@ -4214,6 +5736,22 @@
     "pt": "Uldum",
     "ru": "Ульдум"
    },
+   "Undermine": {
+    "de": "Lorenhall",
+    "en": "Undermine",
+    "es": "Minahonda",
+    "fr": "Terremine",
+    "pt": "Inframina",
+    "ru": "Нижняя Шахта"
+   },
+   "Vale of Eternal Blossoms": {
+    "de": "Tal der Ewigen Blüten",
+    "en": "Vale of Eternal Blossoms",
+    "es": "Valle de la Flor Eterna",
+    "fr": "Val de l’Éternel printemps",
+    "pt": "Vale das Flores Eternas",
+    "ru": "Вечноцветущий дол"
+   },
    "Valley of the Four Winds": {
     "de": "Tal der Vier Winde",
     "en": "Valley of the Four Winds",
@@ -4221,6 +5759,14 @@
     "fr": "Vallée des Quatre vents",
     "pt": "Vale dos Quatro Ventos",
     "ru": "Долина Четырех Ветров"
+   },
+   "Vashj'ir": {
+    "de": "Vashj'ir",
+    "en": "Vashj'ir",
+    "es": "Vashj'ir",
+    "fr": "Vashj’ir",
+    "pt": "Vashj'ir",
+    "ru": "Вайш'ир"
    },
    "Vault of Archavon": {
     "de": "Archavons Kammer",
@@ -4230,6 +5776,14 @@
     "pt": "Abóbada de Arcavon",
     "ru": "Хранилище Аркавона"
    },
+   "Voidstorm": {
+    "de": "Leerensturm",
+    "en": "Voidstorm",
+    "es": "Tormenta del Vacío",
+    "fr": "Tempête du Vide",
+    "pt": "Tempestade do Caos",
+    "ru": "Буря Бездны"
+   },
    "Vol'dun": {
     "de": "Vol'dun",
     "en": "Vol'dun",
@@ -4238,17 +5792,167 @@
     "pt": "Vol'dun",
     "ru": "Вол'дун"
    },
+   "Zaralek Cavern": {
+    "de": "Zaralekhöhle",
+    "en": "Zaralek Cavern",
+    "es": "Caverna Zaralek",
+    "fr": "Grotte de Zaralek",
+    "pt": "Caverna Zaralek",
+    "ru": "Пещера Заралек"
+   },
+   "Zereth Mortis": {
+    "de": "Zereth Mortis",
+    "en": "Zereth Mortis",
+    "es": "Zereth Mortis",
+    "fr": "Zereth Mortis",
+    "pt": "Zereth Mortis",
+    "ru": "Зерет Мортис"
+   },
+   "Zul'Aman": {
+    "de": "Zul'Aman",
+    "en": "Zul'Aman",
+    "es": "Zul'Aman",
+    "fr": "Zul’Aman",
+    "pt": "Zul'Aman",
+    "ru": "Зул'Аман"
+   },
+   "Агата Вирмвуд / Чернолап": {
+    "de": "Agathe Wyrmholz / Schwarzpranke",
+    "es": "Agathe Wyrmwood / Zarpanegra",
+    "fr": "Agathe Wyrmebois / Patte-Noire",
+    "pt": "Ágata Bosque da Serpe / Patanegra"
+   },
+   "Алани": {
+    "de": "Alani",
+    "es": "Alani",
+    "fr": "Alani",
+    "pt": "Alani"
+   },
+   "Алаш'анир": {
+    "de": "Alash'anir",
+    "es": "Alash'anir",
+    "fr": "Alash'anir",
+    "pt": "Alash'anir"
+   },
+   "Алунира": {
+    "de": "Alunira",
+    "es": "Alunira",
+    "fr": "Alunira",
+    "pt": "Alunira"
+   },
+   "Анх-Де Верный": {
+    "de": "Anh-De der Loyale",
+    "es": "Anh-De el Leal",
+    "fr": "Anh De le Loyal",
+    "pt": "Anh-De, o Leal"
+   },
+   "Арахноид-пожинатель": {
+    "de": "Arachnoider Ernter",
+    "es": "Cosechadora arácnida",
+    "fr": "Arachnoïde moissonneur",
+    "pt": "Ceifador Aracnídeo"
+   },
    "Боссы Торгаста": {
     "de": "Beliebiger Boss: Torghast",
     "es": "Cualquier jefe: Torghast",
     "fr": "N'importe quel boss : Tourment",
     "pt": "Qualquer chefe: Thanator"
    },
+   "Валфир Непреклонный": {
+    "de": "Valfir der Unerbittliche",
+    "es": "Valfir el Inflexible",
+    "fr": "Valfir le Tenace",
+    "pt": "Valfir, o Implacável"
+   },
+   "Вел'иккан": {
+    "de": "Ri'sich",
+    "es": "Coloss'ahl",
+    "fr": "Gargan'tuzz",
+    "pt": "Graw'uhdo"
+   },
+   "Вестник войны Мал'Корак": {
+    "de": "Kriegshetzer Mal'korak",
+    "es": "Belisario Mal'korak",
+    "fr": "Porteguerre Mal'korak",
+    "pt": "Armipotente Mal'korak"
+   },
    "Вкусный споролакомец из Гнилотопи": {
     "de": "Leckerer Sporenfresser (Rottmoor)",
     "es": "Comeesporas sabroso (Pudrelodo)",
     "fr": "Brouteur de spores savoureux (Embourbe-pourri)",
     "pt": "Pastador de esporos saboroso (Necrocharco)"
+   },
+   "Всадник рока Хелгрим": {
+    "de": "Verdammnisreiter Helgrim",
+    "es": "Jinete de fatalidad Helgrim",
+    "fr": "Chevauche-malheur Sombrenfer",
+    "pt": "Cavaleiro da Perdição Helgueiro"
+   },
+   "Гибломрак": {
+    "de": "Verdammnisschatten",
+    "es": "Sombra de fatalidad",
+    "fr": "Ombre de malheur",
+    "pt": "Sombra da Ruína"
+   },
+   "Гигер": {
+    "de": "Gieger",
+    "es": "Gieger",
+    "fr": "Gieger",
+    "pt": "Gieger"
+   },
+   "Гирукон": {
+    "de": "Hirukon",
+    "es": "Hirukon",
+    "fr": "Hirukon",
+    "pt": "Hirukon"
+   },
+   "Гниложор": {
+    "de": "Fäulnisverschlinger",
+    "es": "Comecarroña",
+    "fr": "Croque-Charogne",
+    "pt": "Putrífago"
+   },
+   "Головокуска": {
+    "de": "Schädelreißer",
+    "es": "Rompecalaveras",
+    "fr": "Arrache-Crâne",
+    "pt": "Estripacrânio"
+   },
+   "Горок": {
+    "de": "Gorok",
+    "es": "Gorok",
+    "fr": "Gorok",
+    "pt": "Gorok"
+   },
+   "Дормус Погонщик Верблюдов": {
+    "de": "Dormus der Kameltreiber",
+    "es": "Dormus el Camellero",
+    "fr": "Dormus le Collectionneur de dromadaires",
+    "pt": "Dormus, o Colecionador de Camelos"
+   },
+   "Зандаларский завоеватель №1": {
+    "de": "Kriegshetzer der Zandalari Nr. 1",
+    "es": "Belisario Zandalari n.º 1",
+    "fr": "Porteguerre zandalari n° 1",
+    "pt": "Armipotente Zandalari nº 1"
+   },
+   "Зандаларский завоеватель №2": {
+    "de": "Kriegshetzer der Zandalari Nr. 2",
+    "es": "Belisario Zandalari n.º 2",
+    "fr": "Porteguerre zandalari n° 2",
+    "pt": "Armipotente Zandalari nº 2"
+   },
+   "Зандаларский завоеватель №3": {
+    "de": "Kriegshetzer der Zandalari Nr. 3",
+    "es": "Belisario Zandalari n.º 3",
+    "fr": "Porteguerre zandalari n° 3",
+    "pt": "Armipotente Zandalari nº 3"
+   },
+   "Затерянный во времени протодракон": {
+    "de": "Zeitverlorener Protodrache",
+    "es": "Protodraco Tiempo Perdido",
+    "fr": "Proto-drake perdu dans le temps",
+    "pt": "Protodraco Perdido no Tempo"
    },
    "Инструктор Разувий (секрет с конём Храбрецом)": {
     "de": "Instrukteur Razuvious",
@@ -4262,6 +5966,48 @@
     "fr": "Ishak des Quatre vents",
     "pt": "Ishak dos Quatro Ventos"
    },
+   "Карокта": {
+    "de": "Karokta",
+    "es": "Karokta",
+    "fr": "Karokta",
+    "pt": "Karokta"
+   },
+   "Коготь Смерти / Кулак Страха / Пушка Смерти / Отмщение": {
+    "de": "Todeskralle / Terrorfaust / Verdammniswalze / Rache",
+    "es": "Garramuerte / Horropuño / Fatalitas / Venganza",
+    "fr": "Serres-mort / Poing-de-terreur / Compresseur funeste / Vengeance",
+    "pt": "Mortísporo / Punho do Terror / Rolador Ruinoso / Vingança"
+   },
+   "Контрогз Уничтожитель": {
+    "de": "Konthrogz der Zerstörer",
+    "es": "Konthrogz el Obliterador",
+    "fr": "Konthrogz l'Oblitérateur",
+    "pt": "Konthrogz, o Obliterador"
+   },
+   "Кроз Ярость Крови / Тенекоготь": {
+    "de": "Croz Blutzorn / Schattenklaue",
+    "es": "Croz Sanguinarius / Garrasombría",
+    "fr": "Croz Ragesang / Ombregriffe",
+    "pt": "Croz Fúria Sanguinária / Garrassombra"
+   },
+   "Кусачий Ветер": {
+    "de": "Brisenbiss",
+    "es": "Mascabrisas",
+    "fr": "Croque-bise",
+    "pt": "Mascabrisa"
+   },
+   "Лук'хок": {
+    "de": "Luk'hok",
+    "es": "Luk'hok",
+    "fr": "Luk'hok",
+    "pt": "Luk'hok"
+   },
+   "Любой боец Театра Боли": {
+    "de": "Beliebiger Champion des Theaters der Schmerzen",
+    "es": "Cualquier campeón del Teatro del Dolor",
+    "fr": "N'importe quel champion du Théâtre de la Souffrance",
+    "pt": "Qualquer campeão do Teatro da Dor"
+   },
    "Любой босс Склепа Аркавона": {
     "de": "Beliebiger Boss: Archavons Kammer",
     "es": "Cualquier jefe: La Cámara de Archavon",
@@ -4274,11 +6020,59 @@
     "fr": "N'importe quel boss des donjons des Marcheurs du temps",
     "pt": "Qualquer chefe de masmorras de Caminhada Temporal"
    },
+   "Любой редкий монстр: Буря Бездны": {
+    "de": "Beliebiger seltener Gegner: Leerensturm",
+    "es": "Cualquier monstruo raro: Tormenta del Vacío",
+    "fr": "N'importe quel monstre rare : Tempête du Vide",
+    "pt": "Qualquer monstro raro: Tempestade do Caos"
+   },
+   "Любой редкий монстр: Запретный край": {
+    "de": "Beliebiger seltener Gegner: Verbotene Insel",
+    "es": "Cualquier monstruo raro: El Confín Olvidado",
+    "fr": "N'importe quel monstre rare : Confins Interdits",
+    "pt": "Qualquer monstro raro: Recôndito Proibido"
+   },
+   "Любой редкий монстр: Зул'Аман": {
+    "de": "Beliebiger seltener Gegner: Zul'Aman",
+    "es": "Cualquier monstruo raro: Zul'Aman",
+    "fr": "N'importe quel monstre rare : Zul’Aman",
+    "pt": "Qualquer monstro raro: Zul'Aman"
+   },
+   "Любой редкий монстр: Леса Вечной Песни": {
+    "de": "Beliebiger seltener Gegner: Immersangwald",
+    "es": "Cualquier monstruo raro: Bosque Canción Eterna",
+    "fr": "N'importe quel monstre rare : Bois des Chants éternels",
+    "pt": "Qualquer monstro raro: Floresta do Canto Eterno"
+   },
+   "Любой редкий монстр: Спиральный остров": {
+    "de": "Beliebiger seltener Gegner: Gewundene Insel",
+    "es": "Cualquier monstruo raro: Isla Serpenteante",
+    "fr": "N'importe quel monstre rare : Île Annelée",
+    "pt": "Qualquer monstro raro: A Ilha Enrolada"
+   },
+   "Любой редкий монстр: Харандар": {
+    "de": "Beliebiger seltener Gegner: Harandar",
+    "es": "Cualquier monstruo raro: Harandar",
+    "fr": "N'importe quel monstre rare : Harandar",
+    "pt": "Qualquer monstro raro: Harandar"
+   },
    "Любопытный слизневый змей": {
     "de": "Schleimschlange",
     "es": "Serpiente de baba",
     "fr": "Serpent visqueux",
     "pt": "Serpente do Visgo"
+   },
+   "Малбог": {
+    "de": "Malbog",
+    "es": "Malbog",
+    "fr": "Malbog",
+    "pt": "Malbog"
+   },
+   "Мастер-псарь Жэнь": {
+    "de": "Hundmeister Ren",
+    "es": "Señor de los canes Ren",
+    "fr": "Grand-veneur Ren",
+    "pt": "Senhor dos Cães Ren"
    },
    "Мешок Каши": {
     "de": "Kashas Tasche",
@@ -4286,11 +6080,65 @@
     "fr": "Sac de Kasha",
     "pt": "Sacola da Kasha"
    },
+   "Мусор из Галаджио": {
+    "de": "Müll des Garbagio",
+    "es": "Basura del Gallagio",
+    "fr": "Détritus du Gallagio",
+    "pt": "Entulho do Gallagio"
+   },
+   "Надзиратель Крикс": {
+    "de": "Aufseher Krix",
+    "es": "Sobrestante Krix",
+    "fr": "Surveillant Krix",
+    "pt": "Feitor Krix"
+   },
+   "Накк Громогласный": {
+    "de": "Nakk der Donnerer",
+    "es": "Nakk el Tronador",
+    "fr": "Nakk le Foudroyeur",
+    "pt": "Nakk, o Trovoador"
+   },
+   "Нерисса Бессердечная": {
+    "de": "Nerissa Herzlos",
+    "es": "Nerissa Despiadada",
+    "fr": "Nerissa Sans-Cœur",
+    "pt": "Nerissa, a Desalmada"
+   },
+   "Неслышимка": {
+    "de": "Lautlos",
+    "es": "Silente",
+    "fr": "Le grand Silence",
+    "pt": "Silente"
+   },
+   "Нимар Душегуб": {
+    "de": "Nimar der Töter",
+    "es": "Nimar el Destripador",
+    "fr": "Nimar le Pourfendeur",
+    "pt": "Nimar, o Matador"
+   },
+   "Нок-Карош": {
+    "de": "Nok-Karosh",
+    "es": "Nok-Karosh",
+    "fr": "Nok-Karosh",
+    "pt": "Nok-Karosh"
+   },
    "Ночная Погибель": {
     "de": "Schrecken der Nacht",
     "es": "Nocturno",
     "fr": "Plaie-de-Nuit",
     "pt": "Nocturno"
+   },
+   "Ночная кобыла": {
+    "de": "Nachtmähre",
+    "es": "Yegua nocturna",
+    "fr": "Jument nocturne",
+    "pt": "Égua Noturna"
+   },
+   "Обожравшаяся темная гончая": {
+    "de": "Vollgefressener Schemenhund",
+    "es": "Can de sombras atiborrado",
+    "fr": "Molosse d'ombre rassasié",
+    "pt": "Canaz-sombra Empanturrado"
    },
    "Обычные NPC внутри AQ40": {
     "de": "Normale NPCs in AQ40",
@@ -4298,11 +6146,149 @@
     "fr": "PNJ ordinaires dans AQ40",
     "pt": "PNJs comuns em AQ40"
    },
+   "Обычные мобы: Вол'дун": {
+    "de": "Gewöhnliche Gegner: Vol'dun",
+    "es": "Enemigos comunes: Vol'dun",
+    "fr": "Monstres communs : Vol’dun",
+    "pt": "Inimigos comuns: Vol'dun"
+   },
+   "Обычные мобы: Долина Штормов": {
+    "de": "Gewöhnliche Gegner: Sturmsangtal",
+    "es": "Enemigos comunes: Valle Canto Tormenta",
+    "fr": "Monstres communs : Vallée Chantorage",
+    "pt": "Inimigos comuns: Vale Trovamare"
+   },
+   "Обычные мобы: Друствар": {
+    "de": "Gewöhnliche Gegner: Drustvar",
+    "es": "Enemigos comunes: Drustvar",
+    "fr": "Monstres communs : Drustvar",
+    "pt": "Inimigos comuns: Drustvar"
+   },
+   "Обычные мобы: Назмир": {
+    "de": "Gewöhnliche Gegner: Nazmir",
+    "es": "Enemigos comunes: Nazmir",
+    "fr": "Monstres communs : Nazmir",
+    "pt": "Inimigos comuns: Nazmir"
+   },
    "Осквернитель из рода Бесконечности": {
     "de": "Ewiger Verderber",
     "es": "Corruptor Infinito",
     "fr": "Corrupteur infini",
     "pt": "Corruptor Infinito"
+   },
+   "Павший боевой конь": {
+    "de": "Gefallenes Streitross",
+    "es": "Destrero caído",
+    "fr": "Destrier déchu",
+    "pt": "Corcel Decaído"
+   },
+   "Палач Мохо / Атилия Огненная Роса": {
+    "de": "Moxo der Köpfer / Athil Tauglanz",
+    "es": "Moxo el Decapitador / Athil Condensafuego",
+    "fr": "Moxo le Tranche-Tête / Athil Brûlerosée",
+    "pt": "Moxo, o Decapitador / Athil Fogorvalha"
+   },
+   "Пастух Кравос": {
+    "de": "Treiber Kravos",
+    "es": "Retador Kravos",
+    "fr": "Kravos le Dompteur",
+    "pt": "Enlaçador Kravos"
+   },
+   "Пожиратель трупов": {
+    "de": "Leichenfresser",
+    "es": "Comecadáveres",
+    "fr": "Mange-cadavres",
+    "pt": "Comedor de Cadáveres"
+   },
+   "Порождение Беледар": {
+    "de": "Beledars Brut",
+    "es": "Engendro de Beledar",
+    "fr": "Engeance de Beledar",
+    "pt": "Cria de Beledar"
+   },
+   "Посейдус": {
+    "de": "Poseidus",
+    "es": "Poseidus",
+    "fr": "Poséidus",
+    "pt": "Poseidus"
+   },
+   "Псарь Керракс": {
+    "de": "Hundemeister Kerrax",
+    "es": "Maestro de canes Kerrax",
+    "fr": "Dresseur de molosses Kerrax",
+    "pt": "Mestre de Matilha Kerrax"
+   },
+   "Пудовый Кулак": {
+    "de": "Rammfaust",
+    "es": "Librapuño",
+    "fr": "Martèlepoing",
+    "pt": "Esmagador"
+   },
+   "Пузцилла / Вракс'тул": {
+    "de": "Puscilla / Vrax'thul",
+    "es": "Puscilla / Vrax'thul",
+    "fr": "Puscilla / Vrax'thul",
+    "pt": "Puscilla / Vrax'thul"
+   },
+   "Реливик Непокорный": {
+    "de": "Reliwik der Trotzige",
+    "es": "Reliwik el Desafiante",
+    "fr": "Réliwik le Provocateur",
+    "pt": "Reliwik, o Desafiador"
+   },
+   "Ржавое Перо": {
+    "de": "Rostfeder",
+    "es": "Alarroña",
+    "fr": "Rouille-Plume",
+    "pt": "Ferrujão"
+   },
+   "Рыцарь-капитан Алдрин": {
+    "de": "Kürassier Aldrin",
+    "es": "Capitán caballero Aldrin",
+    "fr": "Chevalier-capitaine Aldrin",
+    "pt": "Capitão-cavaleiro Alderico"
+   },
+   "Сабриэль Косторуб": {
+    "de": "Sabriel die Knochenspalterin",
+    "es": "Sabriel la Rajahuesos",
+    "fr": "Sabrielle l'Ostéoclaste",
+    "pt": "Sabriel, a Cutilóssea"
+   },
+   "Сильфида": {
+    "de": "Schlickhaut",
+    "es": "Cienopiel",
+    "fr": "Silthide",
+    "pt": "Silthide"
+   },
+   "Скрииг Пожиратель": {
+    "de": "Skreeg der Verschlinger",
+    "es": "Skreeg el Devorador",
+    "fr": "Skreeg le Dévoreur",
+    "pt": "Escrargo, o Devorador"
+   },
+   "Скрытень со Дна": {
+    "de": "Lauerer der Tiefen",
+    "es": "Rondador de las profundidades",
+    "fr": "Rôdeur des profondeurs",
+    "pt": "Tocaieiro das Profundezas"
+   },
+   "Служитель глубин": {
+    "de": "Jünger des Abgrunds",
+    "es": "Adepto del abismo",
+    "fr": "Adhérent des abysses",
+    "pt": "Seguidor do Abismo"
+   },
+   "Сокрушитель Надежд": {
+    "de": "Hoffnungsvernichter",
+    "es": "Machacaesperanzas",
+    "fr": "Brise-Espoir",
+    "pt": "Esmaga-esperanças"
+   },
+   "Стаарбс": {
+    "de": "Sthaarbs",
+    "es": "Sthaarbs",
+    "fr": "Sthaarbs",
+    "pt": "Sthaarbs"
    },
    "Старый тайм-ран в Зул'Амане": {
     "de": "Alter Zeitlauf in Zul'Aman",
@@ -4310,11 +6296,89 @@
     "fr": "Ancienne course contre la montre à Zul'Aman",
     "pt": "Antiga corrida contra o tempo em Zul'Aman"
    },
+   "Стимулирующий реагент Мрачных Минеров": {
+    "de": "Fällmittel der Düsternisverschmolzenen",
+    "es": "Precipitante de Fundisombras",
+    "fr": "Précipitant imprégné de ténèbres",
+    "pt": "Precipitante de Sombrafuso"
+   },
    "Сундук хранителя силовых линий": {
     "de": "Eregos' Lager",
     "es": "Alijo de Eregos",
     "fr": "Cache d'Eregos",
     "pt": "Baú de Éregos"
+   },
+   "Тахонта": {
+    "de": "Tahonta",
+    "es": "Tahonta",
+    "fr": "Tahonta",
+    "pt": "Tahonta"
+   },
+   "Торопун": {
+    "de": "Pfadläufer",
+    "es": "Correcaminos",
+    "fr": "Cours-les-Routes",
+    "pt": "Vencetrilha"
+   },
+   "Укротитель Кама": {
+    "de": "Bestienreiter Kama",
+    "es": "Jinete de bestias Kama",
+    "fr": "Chevaucheur de bêtes Kama",
+    "pt": "Cavalga-feras Kama"
+   },
+   "Урмаг": {
+    "de": "Urmag",
+    "es": "Urmag",
+    "fr": "Urmag",
+    "pt": "Urmag"
+   },
+   "Фаму Бесконечный": {
+    "de": "Famu der Unendliche",
+    "es": "Famu el Infinito",
+    "fr": "Famu l'Infini",
+    "pt": "Famu, o Infinito"
+   },
+   "Фиолетовая ошибка": {
+    "de": "Violetter Fehler",
+    "es": "Error violeta",
+    "fr": "Erreur pourpre",
+    "pt": "Erro Violeta"
+   },
+   "Ха-Ли": {
+    "de": "Ha-Li",
+    "es": "Ha-Li",
+    "fr": "Ha Li",
+    "pt": "Ha-Li"
+   },
+   "Харика Ужасающая": {
+    "de": "Harika die Schreckliche",
+    "es": "Harika la Horrible",
+    "fr": "Harika l'Horrible",
+    "pt": "Hárika, a Hórrida"
+   },
+   "Холон": {
+    "de": "Huolon",
+    "es": "Huolon",
+    "fr": "Huolon",
+    "pt": "Huolon"
+   },
+   "Эонакс": {
+    "de": "Aeonaxx",
+    "es": "Aeonaxx",
+    "fr": "Aeonaxx",
+    "pt": "Aeonaxx"
+   },
+   "Ядовитый небесный скат": {
+    "de": "Giftschwanzhimmelsflosse",
+    "es": "Aletacielo Colaveneno",
+    "fr": "Ciaileron queue-venin",
+    "pt": "Corta-céu Caudaçonha"
+   },
+   "Язвоглот": {
+    "de": "Blasenmaul",
+    "es": "Faucellaga",
+    "fr": "Gueule putride",
+    "pt": "Gorjapus"
    }
   }
  },
