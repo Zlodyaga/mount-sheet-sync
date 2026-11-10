@@ -42,7 +42,7 @@ ENV = dict(os.environ, MSS_GOOGLE_TEST=BASE, MSS_BROWSER_LOG=BROWSER, LANG="C.UT
 for k in ("http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY", "no_proxy", "NO_PROXY"):
     ENV.pop(k, None)
 OPENER = urllib.request.build_opener(urllib.request.ProxyHandler({}))
-mock = subprocess.Popen(["python3", os.path.join(HERE, "mock_google.py"), str(PORT), os.path.join(W, "mock_state.json"), os.path.join(W, "mock.log")])
+mock = subprocess.Popen([sys.executable, os.path.join(HERE, "mock_google.py"), str(PORT), os.path.join(W, "mock_state.json"), os.path.join(W, "mock.log")])
 time.sleep(0.8)
 
 
@@ -57,7 +57,7 @@ def state():
 
 def run(*args, data=DATA, timeout=180):
     p = subprocess.run(["mono", EXE, "--data", data] + list(args), env=ENV, capture_output=True, timeout=timeout)
-    return p.returncode, (p.stdout + p.stderr).decode("utf-8", "replace")
+    return p.returncode, paths.out_text(p.stdout + p.stderr)
 
 
 def login():

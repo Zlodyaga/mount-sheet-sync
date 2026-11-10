@@ -39,6 +39,7 @@ ScrollBox в `wow_mock.lua` упрощён: `SetDataProvider` вызывает �
 портит кириллицу в UTF-8 (в игре локаль `C`). Идут `test_addon2`, `test_minimap`, `test_offline`, `test_locale`,
 `test_collection`; `test_attempts`, `test_collection_sync` и другие без `mono` в пути — с хостами, собранными `csc`, и заменой `mono.exe`, которая запускает exe напрямую; `test_addon_left` — с готовым `SheetData.lua` первым аргументом (Node-скрипт таблицы под Windows
 не работает; дата списка тогда старая — одна проверка «сегодня в» не проходит). `test_attempts_addon` — только в CI.
+e2e (`e2e_google`, `e2e_chars` и др.) на Windows тоже идут (проверено 10.11.2026, exe из `csc` и замена `mono.exe`): вывод программы читает `paths.out_text` — exe без консоли пишет в кодировке ANSI (cp1251), под mono — UTF-8; имитации запускаются тем же Python (`sys.executable`: `python3` на Windows бывает запускалкой, и `terminate()` гасил только её, а имитация оставалась на порту); `allow_reuse_address` на Windows выключен — занятый порт сразу даёт ошибку, а не ответы старой имитации. `ConnectionResetError` в выводе имитации на Windows — обрыв соединения клиентом, не ошибка.
 
 ## Скриншоты окон аддона
 

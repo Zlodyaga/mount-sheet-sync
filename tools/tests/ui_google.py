@@ -52,7 +52,7 @@ procs = []
 procs.append(subprocess.Popen(["Xvfb", DISPLAY, "-screen", "0", "1280x900x24"], stderr=subprocess.DEVNULL))
 time.sleep(1)
 procs.append(subprocess.Popen(["stalonetray", "--geometry", "4x1+1100+0"], env=env, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL))
-procs.append(subprocess.Popen(["python3", os.path.join(HERE, "mock_google.py"), str(PORT), os.path.join(W, "mock.json"), os.path.join(W, "mock.log")]))
+procs.append(subprocess.Popen([sys.executable, os.path.join(HERE, "mock_google.py"), str(PORT), os.path.join(W, "mock.json"), os.path.join(W, "mock.log")]))
 time.sleep(1)
 
 
@@ -233,7 +233,7 @@ finally:
     for p in reversed(procs):
         p.terminate()
     try:
-        out = app.communicate(timeout=10)[0].decode("utf-8", "replace")
+        out = paths.out_text(app.communicate(timeout=10)[0])
     except Exception:
         out = ""
     open(os.path.join(W, "app.out"), "w").write(out)

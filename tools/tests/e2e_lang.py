@@ -39,7 +39,7 @@ def check(name, cond, extra=None):
 
 shutil.rmtree(W, ignore_errors=True)
 os.makedirs(W)
-mock = subprocess.Popen(["python3", os.path.join(HERE, "mock_google.py"), str(PORT), os.path.join(W, "mock_state.json"),
+mock = subprocess.Popen([sys.executable, os.path.join(HERE, "mock_google.py"), str(PORT), os.path.join(W, "mock_state.json"),
                          os.path.join(W, "mock.log")])
 time.sleep(0.8)
 
@@ -74,7 +74,7 @@ class Setup:
 
     def run(self, *args, timeout=180):
         p = subprocess.run(["mono", EXE, "--data", self.data] + list(args), env=self.env, capture_output=True, timeout=timeout)
-        return p.returncode, (p.stdout + p.stderr).decode("utf-8", "replace")
+        return p.returncode, paths.out_text(p.stdout + p.stderr)
 
     def login(self):
         proc = subprocess.Popen(["mono", EXE, "--data", self.data, "--google-login"], env=self.env, stdout=subprocess.PIPE,
