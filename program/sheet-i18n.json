@@ -1871,6 +1871,14 @@
     "pt": "Crorg da Terra Podre",
     "ru": "Крог из Подгнилья"
    },
+   "1057": {
+    "de": "Blutschlange von Nazjatar",
+    "en": "Nazjatar Blood Serpent",
+    "es": "Serpiente sangrienta Nazjatar",
+    "fr": "Serpent de sang de Nazjatar",
+    "pt": "Serpente Sanguínea de Nazjatar",
+    "ru": "Назжатарский кровозмей"
+   },
    "117": {
     "de": "Blaue Qirajipanzerdrohne",
     "en": "Blue Qiraji Battle Tank",
@@ -2263,6 +2271,14 @@
     "pt": "Roca-da-peste Predadora",
     "ru": "Хищный чумной рух"
    },
+   "1415": {
+    "de": "Waldschlucker",
+    "en": "Arboreal Gulper",
+    "es": "Zampón arbóreo",
+    "fr": "Gobeur arboricole",
+    "pt": "Bufo Arbóreo",
+    "ru": "Древесный мешкорот"
+   },
    "1417": {
     "de": "Hand von Hrestimorak",
     "en": "Hand of Hrestimorak",
@@ -2278,6 +2294,14 @@
     "fr": "Marche-mort touché par le vice",
     "pt": "Mortívago Pecaminoso",
     "ru": "Запятнанный грехом вестник смерти"
+   },
+   "1434": {
+    "de": "Tiefensternaurelid",
+    "en": "Deepstar Aurelid",
+    "es": "Aurélido estrellabismal",
+    "fr": "Aurélidé stellaire des profondeurs",
+    "pt": "Aurelídeo Estrelafunda",
+    "ru": "Аурелид звездных глубин"
    },
    "1437": {
     "de": "Schlachtgebundener Kriegshund",
@@ -2590,6 +2614,14 @@
     "fr": "Faucon-pérégrin blanc rapide",
     "pt": "Falcostruz Branco Veloz",
     "ru": "Стремительный белый крылобег"
+   },
+   "2176": {
+    "de": "Alunira",
+    "en": "Alunira",
+    "es": "Alunira",
+    "fr": "Alunira",
+    "pt": "Alunira",
+    "ru": "Алунира"
    },
    "2180": {
     "de": "Schattenhafte Schwärmilbe",
@@ -3031,6 +3063,14 @@
     "pt": "Cabeça de Mimiron",
     "ru": "Голова Мимирона"
    },
+   "3051": {
+    "de": "Topasfarbener Himmelszahn",
+    "en": "Topaz Skyfang",
+    "es": "Colmilloceleste de topacio",
+    "fr": "Croc-du-ciel topaze",
+    "pt": "Presaceleste de Topázio",
+    "ru": "Топазовый небесный клык"
+   },
    "3058": {
     "de": "Die windende Brut",
     "en": "The Writhing Brood",
@@ -3046,6 +3086,14 @@
     "fr": "Proto-drake bardé de fer",
     "pt": "Protodraco Férreo",
     "ru": "Протодракон в железной броне"
+   },
+   "3061": {
+    "de": "Rubinwinder",
+    "en": "Ruby Writhe",
+    "es": "Retuerto de rubí",
+    "fr": "Tortilleur rubis",
+    "pt": "Contórcia de Rubi",
+    "ru": "Рубиновый скользмей"
    },
    "3063": {
     "de": "Seuchenhauch",
@@ -5162,6 +5210,14 @@
     "pt": "Harandar",
     "ru": "Харандар"
    },
+   "Isle of Dorn": {
+    "de": "Insel von Dorn",
+    "en": "Isle of Dorn",
+    "es": "Isla de Dorn",
+    "fr": "Île de Dorn",
+    "pt": "Ilha de Dorn",
+    "ru": "Остров Дорн"
+   },
    "Isle of Giants": {
     "de": "Insel der Riesen",
     "en": "Isle of Giants",
@@ -5306,6 +5362,14 @@
     "pt": "Vasta Lazúli",
     "ru": "Лазурный Простор"
    },
+   "The Coiled Isle": {
+    "de": "Gewundene Insel",
+    "en": "The Coiled Isle",
+    "es": "Isla Serpenteante",
+    "fr": "Île Annelée",
+    "pt": "A Ilha Enrolada",
+    "ru": "Спиральный остров"
+   },
    "The Forbidden Reach": {
     "de": "Verbotene Insel",
     "en": "The Forbidden Reach",
@@ -5426,6 +5490,14 @@
     "pt": "Caverna Zaralek",
     "ru": "Пещера Заралек"
    },
+   "Zereth Mortis": {
+    "de": "Zereth Mortis",
+    "en": "Zereth Mortis",
+    "es": "Zereth Mortis",
+    "fr": "Zereth Mortis",
+    "pt": "Zereth Mortis",
+    "ru": "Зерет Мортис"
+   },
    "Zul'Aman": {
     "de": "Zul'Aman",
     "en": "Zul'Aman",
@@ -5452,6 +5524,12 @@
     "fr": "Alash'anir",
     "pt": "Alash'anir"
    },
+   "Алунира": {
+    "de": "Alunira",
+    "es": "Alunira",
+    "fr": "Alunira",
+    "pt": "Alunira"
+   },
    "Анх-Де Верный": {
     "de": "Anh-De der Loyale",
     "es": "Anh-De el Leal",
@@ -5475,6 +5553,12 @@
     "es": "Valfir el Inflexible",
     "fr": "Valfir le Tenace",
     "pt": "Valfir, o Implacável"
+   },
+   "Вел'иккан": {
+    "de": "Ri'sich",
+    "es": "Coloss'ahl",
+    "fr": "Gargan'tuzz",
+    "pt": "Graw'uhdo"
    },
    "Вестник войны Мал'Корак": {
     "de": "Kriegshetzer Mal'korak",
@@ -5505,6 +5589,12 @@
     "es": "Gieger",
     "fr": "Gieger",
     "pt": "Gieger"
+   },
+   "Гирукон": {
+    "de": "Hirukon",
+    "es": "Hirukon",
+    "fr": "Hirukon",
+    "pt": "Hirukon"
    },
    "Гниложор": {
     "de": "Fäulnisverschlinger",
@@ -5605,7 +5695,7 @@
    "Любой боец Театра Боли": {
     "de": "Beliebiger Champion des Theaters der Schmerzen",
     "es": "Cualquier campeón del Teatro del Dolor",
-    "fr": "N'importe quel champion du Théâtre de la souffrance",
+    "fr": "N'importe quel champion du Théâtre de la Souffrance",
     "pt": "Qualquer campeão do Teatro da Dor"
    },
    "Любой босс Склепа Аркавона": {
@@ -5643,6 +5733,12 @@
     "es": "Cualquier monstruo raro: Bosque Canción Eterna",
     "fr": "N'importe quel monstre rare : Bois des Chants éternels",
     "pt": "Qualquer monstro raro: Floresta do Canto Eterno"
+   },
+   "Любой редкий монстр: Спиральный остров": {
+    "de": "Beliebiger seltener Gegner: Gewundene Insel",
+    "es": "Cualquier monstruo raro: Isla Serpenteante",
+    "fr": "N'importe quel monstre rare : Île Annelée",
+    "pt": "Qualquer monstro raro: A Ilha Enrolada"
    },
    "Любой редкий монстр: Харандар": {
     "de": "Beliebiger seltener Gegner: Harandar",
@@ -5865,6 +5961,12 @@
     "es": "Rondador de las profundidades",
     "fr": "Rôdeur des profondeurs",
     "pt": "Tocaieiro das Profundezas"
+   },
+   "Служитель глубин": {
+    "de": "Jünger des Abgrunds",
+    "es": "Adepto del abismo",
+    "fr": "Adhérent des abysses",
+    "pt": "Seguidor do Abismo"
    },
    "Сокрушитель Надежд": {
     "de": "Hoffnungsvernichter",
