@@ -188,6 +188,26 @@ check("…rows appended to the grid, banded and with the Yes/No list", any("appe
       and any("setDataValidation" in r and r["setDataValidation"]["range"]["startRowIndex"] == 2 for r in areq), [list(r)[0] for r in areq])
 again6 = run({"catalog": None, "sheets": ad["sheets"], "mode": "upgrade", "properties": {"layout": "5"}})
 check("…a second run adds nothing (the rows are matched by mount ID)", not any("appendDimension" in r for r in (again6["applied"][0] if again6["applied"] else [])), again6.get("structure"))
+# ---- layout 6: raid drops of the current content and of content grouping now go to «Рейды <Имя>» (and «Осталось»)
+cur = json.loads(json.dumps(ad["sheets"]))
+rm = [s for s in cur if s["name"] == "Рейды"][0]
+rmh = rm["rows"][0]
+for mount, status in (("Новый текущий маунт", "Текущий контент"), ("Групповой маунт", "Фармится / нужен контент-группинг"), ("Старый маунт", "Недоступен")):
+    row = ["" for _ in rmh]
+    row[rmh.index("Собрано?")], row[rmh.index("Маунт")], row[rmh.index("Тип источника")] = "Нет", mount, "Босс-дроп"
+    row[rmh.index("Босс / достижение / сундук")], row[rmh.index("Сложность / режим")], row[rmh.index("Статус")] = "Босс " + mount, "Mythic", status
+    rm["rows"].append(row)
+cr = run({"catalog": None, "sheets": cur, "mode": "upgrade", "properties": {"layout": "5"}})
+eira = {s["name"]: s for s in cr["sheets"]}["Рейды Эйра"]
+eh = eira["rows"][0]
+got = {r[eh.index("Маунт")]: r for r in eira["rows"][1:]}
+check("layout 6: «Текущий контент» and content-grouping raid drops are added to «Рейды Эйра», not «Недоступен»",
+      "Новый текущий маунт" in got and "Групповой маунт" in got and "Старый маунт" not in got
+      and got["Новый текущий маунт"][0] == "Нет" and got["Новый текущий маунт"][eh.index("Фармлю")] is True, list(got))
+check("…sent as rows at the end of that sheet", any("appendDimension" in r and r["appendDimension"]["sheetId"] == ids["Рейды Эйра"] for r in (cr["applied"][0] if cr["applied"] else [])), cr.get("structure"))
+cr2 = run({"catalog": None, "sheets": cr["sheets"], "mode": "upgrade", "properties": {"layout": "5"}})
+eira2 = {s["name"]: s for s in cr2["sheets"]}["Рейды Эйра"]
+check("…a second run adds them no more", len(eira2["rows"]) == len(eira["rows"]), (len(eira2["rows"]), len(eira["rows"])))
 check("…attempt row of kind «rare»", any(m["kind"] == "rare" and m["n"] == 4 and m["mount"] == "Дракон Четырех Ветров" for m in st.get("mounts", [])), st.get("mounts"))
 h = run({"catalog": None, "sheets": rare_sheets, "mode": "handle", "properties": {"layout": "6"}, "request": {"action": "kills", "client": "exe-test", "kills": [
     {"id": "D-1", "time": 1793457054, "char": "Эйра", "realm": "Ревущий фьорд", "charKey": "Player-1-A", "source": "loot",

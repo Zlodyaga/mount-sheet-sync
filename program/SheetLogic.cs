@@ -1770,7 +1770,7 @@ namespace MountSheetSync
             return At(data[r], c);
         }
 
-        static object At(object[] row, int c)
+        public static object At(object[] row, int c)
         {
             // как row[c] в JS: за пределами строки — undefined
             return c >= 0 && c < row.Length ? row[c] : null;

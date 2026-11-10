@@ -38,7 +38,8 @@ cat = json.load(open(os.path.join(paths.PROGRAM, "catalog.json"), encoding="utf-
 raids = [s for s in cat["sheets"] if s["key"] == "raids"][0]
 RC = raids["columns"]
 aliases = {int(k): v for k, v in cat.get("aliases", {}).items()}
-farm = [r for r in raids["rows"] if r[RC.index("Тип источника")] == "Босс-дроп" and r[RC.index("Статус")] == "Фармится"
+farm = [r for r in raids["rows"] if r[RC.index("Тип источника")] == "Босс-дроп"
+        and r[RC.index("Статус")] in ("Фармится", "Текущий контент", "Фармится / нужен контент-группинг")   # SheetBuilder.RaidStatusesInRemaining
         and isinstance(r[RC.index(ID)], (int, float)) and r[RC.index(ID)] > 0]
 ids_seen = {}
 for r in farm:

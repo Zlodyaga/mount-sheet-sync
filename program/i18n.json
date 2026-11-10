@@ -974,6 +974,7 @@
   "проверяю связь…": "checking connection…",
   "работает": "running",
   "редкие монстры перенесены на отдельный лист ({0})": "rare monsters moved to their own sheet ({0})",
+  "рейдовые маунты текущего контента на листах персонажей ({0})": "current-content raid mounts on the character sheets ({0})",
   "сброс недели": "weekly reset",
   "связь есть": "connected",
   "связь есть, жду файл аддона": "connected, waiting for the addon file",
