@@ -1479,6 +1479,7 @@ namespace MountSheetSync
                 int cPlace = FindCol(header, "локац", 2);
                 int cCollected = FindCol(header, "собрано", -1);
                 int cEvery = FindCol(header, "сброс|частота", -1);
+                int cRareId = FindCol(header, "^id в игре$", -1);
                 for (int r = 1; r < rare.Data.Count; r++)
                 {
                     object[] row = rare.Data[r];
@@ -1488,10 +1489,15 @@ namespace MountSheetSync
                     {
                         continue;
                     }
+                    string group = RareGroup(cRareId >= 0 ? MountIndex.IdOf(At(row, cRareId)) : 0);
                     foreach (string owner in worldOwners)
                     {
                         Dictionary<string, object> item = StatusItem("rare", rare.Name, r, At(row, cPlace), boss, "", mount, false);
                         item["every"] = RareEvery(cEvery >= 0 ? At(row, cEvery) : "");
+                        if (group != null)
+                        {
+                            item["group"] = group;   // своя группа в окне аддона: «100 %» или «Фарм мобов»
+                        }
                         ((List<object>)charFor(owner)["items"]).Add(item);
                     }
                 }

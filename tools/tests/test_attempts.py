@@ -173,14 +173,17 @@ ar = {s["name"]: s for s in ad["sheets"]}["Редкие монстры"]
 areq = ad["applied"][0] if ad["applied"] else []
 check("layout 6: the new rares are added after Ishak, Ishak keeps his 4 attempts", ad["properties"].get("layout") == "6"
       and len(ar["rows"]) == len(RARE_ROWS) + 1 and ar["rows"][1][rh.index("Попыток")] == 4
-      and all(r[rh.index("Попыток")] == 0 and r[0] == "Нет" for r in ar["rows"][2:]), ar["rows"][:3])
-last = len(ar["rows"]) - 1
+      and all(r[rh.index("Попыток")] in (0, "") and r[0] == "Нет" for r in ar["rows"][2:]), ar["rows"][:3])
+# rows with a number for a chance get the counter; «Гарантированно» (rares with a sure drop) gets none
+nums = [r for r in range(2, len(ar["rows"])) if isinstance(ar["rows"][r][rh.index("Шанс выпадения")], (int, float))]
+last = nums[-1]
 cChanceAll = rh.index("Шанс за все попытки")
-check("…their chance formulas in memory, one per new row", all([r, cChanceAll] in ar["formulas"] for r in range(2, last + 1)), ar["formulas"][:4])
+check("…their chance formulas in memory, one per new row with a numeric chance, none for «Гарантированно»", all([r, cChanceAll] in ar["formulas"] for r in nums)
+      and not any([r, cChanceAll] in ar["formulas"] for r in range(2, len(ar["rows"])) if r not in nums) and len(nums) < len(ar["rows"]) - 2, ar["formulas"][:4])
 upd = [r["updateCells"] for r in areq if "updateCells" in r and r["updateCells"].get("start", {}).get("rowIndex") == 2]
-check("…written from row 2 with their own row in the formula (J3 for the first, J%d for the last)" % (last + 1),
-      upd and "J3" in upd[0]["rows"][0]["values"][cChanceAll]["userEnteredValue"]["formulaValue"]
-      and ("J%d" % (last + 1)) in upd[0]["rows"][-1]["values"][cChanceAll]["userEnteredValue"]["formulaValue"], upd[:1] and upd[0]["rows"][0])
+check("…written from row 2 with their own row in the formula (J%d for the first counted, J%d for the last)" % (nums[0] + 1, last + 1),
+      upd and ("J%d" % (nums[0] + 1)) in upd[0]["rows"][nums[0] - 2]["values"][cChanceAll]["userEnteredValue"]["formulaValue"]
+      and ("J%d" % (last + 1)) in upd[0]["rows"][last - 2]["values"][cChanceAll]["userEnteredValue"]["formulaValue"], upd[:1] and upd[0]["rows"][0])
 check("…rows appended to the grid, banded and with the Yes/No list", any("appendDimension" in r for r in areq) and any("addBanding" in r for r in areq)
       and any("setDataValidation" in r and r["setDataValidation"]["range"]["startRowIndex"] == 2 for r in areq), [list(r)[0] for r in areq])
 again6 = run({"catalog": None, "sheets": ad["sheets"], "mode": "upgrade", "properties": {"layout": "5"}})

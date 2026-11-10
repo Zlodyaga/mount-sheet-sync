@@ -490,7 +490,9 @@ def rows6():
 g6.SlashCmdList["MOUNTSHEETSYNC"]("")
 tab6("Осталось")
 texts = [row_text(f) for f in rows6()]
-check("window: «Редкие монстры» is its own group, the last one", [t for t in texts if t.startswith("|cffffd200")][-1] == "|cffffd200Редкие монстры|r", texts)
+heads = [t for t in texts if t.startswith("|cffffd200")]
+check("window: «Редкие монстры» is its own group, then the sure-drop rares and the common mobs (program 2.10.1)",
+      heads[-3:] == ["|cffffd200Редкие монстры|r", "|cffffd200Редкие монстры: добыча 100 %|r", "|cffffd200Фарм обычных мобов|r"], heads)
 rare_rows = [f for f in rows6() if "Исхак" in row_text(f)]
 check("…with the rare in it, once", len(rare_rows) == 1 and texts.index(row_text(rare_rows[0])) > texts.index("|cffffd200Редкие монстры|r"), texts)
 check("…no «не фармлю» menu on a rare", rare_rows[0].elem.entry is None)

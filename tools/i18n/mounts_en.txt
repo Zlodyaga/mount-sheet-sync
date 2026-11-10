@@ -227,3 +227,15 @@
 2751	Augmented Stormray
 2760	Amani Sharptalon
 2775	Witherbark Pango
+265	Time-Lost Proto-Drake
+393	Phosphorescent Stone Drake
+517	Thundering Ruby Cloud Serpent
+627	Great Greytusk
+657	Garn Nighthowl
+655	Sunhide Gronnling
+1018	Terrified Pack Mule
+956	Leaping Veinseeker
+1019	Goldenmane
+928	Dune Scavenger
+1437	Battle-Bound Warhound
+1619	Ancient Salamanther

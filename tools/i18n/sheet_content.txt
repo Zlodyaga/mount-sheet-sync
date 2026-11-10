@@ -1428,3 +1428,69 @@ en: Any rare: Harandar
 
 @ Падает с любого редкого монстра зоны (их здесь 16). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.
 en: Drops from any rare of the zone (16 of them). Each one gives loot once a day per character, so the row has no cooldown of its own.
+
+@ Любой редкий монстр: Запретный край
+en: Any rare: The Forbidden Reach
+
+@ Любой боец Театра Боли
+en: Any Theater of Pain champion
+
+@ Бойцы Театра Боли в Малдраксусе выходят на арену по очереди; маунт падает с любого из них.
+en: The Theater of Pain champions in Maldraxxus come out to the arena in turn; the mount drops from any of them.
+
+@ Обычные мобы: Вол'дун
+en: Common mobs: Vol'dun
+
+@ Падает с обычных мобов зоны (видов 20), например: Отступник - призыватель небес, Отступник-целитель, Сетрак-опустошитель. Отката нет: каждое убийство — попытка.
+en: Drops from the zone's common mobs (20 kinds), e.g. Faithless Skycaller, Faithless Mender, Sethrak Ravager. No cooldown: every kill is an attempt.
+
+@ Обычные мобы: Друствар
+en: Common mobs: Drustvar
+
+@ Падает с обычных мобов зоны (видов 9), например: Порабощенный проклятием сокольничий, Порабощенный проклятием арбалетчик, Порабощенный проклятием стражник. Отката нет: каждое убийство — попытка.
+en: Drops from the zone's common mobs (9 kinds), e.g. Hexthralled Falconer, Hexthralled Crossbowman, Hexthralled Guardsman. No cooldown: every kill is an attempt.
+
+@ Обычные мобы: Назмир
+en: Common mobs: Nazmir
+
+@ Падает с обычных мобов зоны (видов 16), например: Тролль крови - проклинательница, Тролль крови - изверг, Ловчая из племени Охотников Крови. Отката нет: каждое убийство — попытка.
+en: Drops from the zone's common mobs (16 kinds), e.g. Blood Troll Hexxer, Blood Troll Brutalizer, Bloodhunter Stalker. No cooldown: every kill is an attempt.
+
+@ Обычные мобы: Долина Штормов
+en: Common mobs: Stormsong Valley
+
+@ Падает с обычных мобов зоны (видов 25), например: Стрелок из племени Шипошкурых, Лоялист дома Штормсонгов, Канонир из Просоленных мастерских. Отката нет: каждое убийство — попытка.
+en: Drops from the zone's common mobs (25 kinds), e.g. Briarback Skirmisher, Stormsong Loyalist, Brinebrawn Cannoneer. No cooldown: every kill is an attempt.
+
+@ Затерянный во времени протодракон
+en: Time-Lost Proto-Drake
+
+@ Летает по Грозовой Гряде, появляется раз в 6–24 часа (вместо него может появиться Вирагоса). Маунт падает всегда.
+en: Flies around the Storm Peaks, appears every 6-24 hours (Vyragosa may come instead). The mount always drops.
+
+@ Эонакс
+en: Aeonaxx
+
+@ Летает по Подземью; появляется раз в несколько часов, его нужно оседлать и победить. Маунт падает всегда.
+en: Flies around Deepholm; appears every few hours, you have to mount it and win. The mount always drops.
+
+@ Нок-Карош
+en: Nok-Karosh
+
+@ Хребет Ледяного Огня, появляется редко. Маунт падает всегда.
+en: Frostfire Ridge, appears rarely. The mount always drops.
+
+@ Горок
+en: Gorok
+
+@ Пудовый Кулак
+en: Poundfist
+
+@ Горгронд, появляется раз в много часов. Маунт падает всегда.
+en: Gorgrond, appears once in many hours. The mount always drops.
+
+@ Алани
+en: Alani
+
+@ Вечноцветущий дол (фаза Пандарии): щит снимает Небесный кристалл из 10 небесных осколков, они падают с мобов дола. Маунт падает всегда.
+en: Vale of Eternal Blossoms (the Pandaria phase): a Sky Crystal made of 10 Skyshards, dropped by the Vale's mobs, takes down her shield. The mount always drops.

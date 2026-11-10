@@ -413,6 +413,38 @@ namespace MountSheetSync
             return map;
         }
 
+        static Dictionary<long, string> rareGroups;
+
+        /// <summary>
+        /// Группа рара в окне аддона по колонке каталога «Вид» (на лист не пишется): «100» — гарантированная добыча с
+        /// редко появляющегося рара ("guaranteed"), «моб» — фарм обычных мобов ("mobs"); иначе null — обычный рар.
+        /// </summary>
+        public static string RareGroup(long mountId)
+        {
+            if (rareGroups == null)
+            {
+                Dictionary<long, string> map = new Dictionary<long, string>();
+                CatalogSheet sheet = Catalog.Embedded().Rare;
+                int cId = sheet != null ? sheet.Col(SheetBuilder.IdColumn) : -1;
+                int cKind = sheet != null ? sheet.Col("Вид") : -1;
+                if (cId >= 0 && cKind >= 0)
+                {
+                    foreach (object[] row in sheet.Rows)
+                    {
+                        string kind = JsString(row[cKind]).Trim();
+                        long id = MountIndex.IdOf(row[cId]);
+                        if (id > 0 && (kind == "100" || kind == "моб"))
+                        {
+                            map[id] = kind == "100" ? "guaranteed" : "mobs";
+                        }
+                    }
+                }
+                rareGroups = map;
+            }
+            string group;
+            return mountId > 0 && rareGroups.TryGetValue(mountId, out group) ? group : null;
+        }
+
         public static List<object> StatusMounts(IBook book, HashSet<string> collected)
         {
             List<object> list = new List<object>();

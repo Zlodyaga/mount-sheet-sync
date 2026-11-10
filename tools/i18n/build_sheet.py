@@ -23,7 +23,7 @@ LOCALES = {"ru": "ru_RU", "en": "en_US", "de": "de_DE", "fr": "fr_FR", "es": "es
 # Parts of statuses searched inside formulas (SEARCH, COUNTIF "…*"), not values of their own
 PATTERNS = ["Недоступ", "Текущий"]
 # Catalog-only columns (never written to a spreadsheet) and name prefixes the code looks for
-INTERNAL = {"ID босса", "ID в журнале", "ID места", "ID статистики", "ID существ", "Точка", "Босс"}
+INTERNAL = {"ID босса", "ID в журнале", "ID места", "ID статистики", "ID существ", "Точка", "Вид", "Босс"}
 CYR = re.compile("[А-Яа-яЁё]")
 
 
@@ -72,7 +72,7 @@ def main():
                     if v:
                         ids.add(int(v))
                     continue
-                if c == "Маунт" or not isinstance(v, str) or not CYR.search(v):
+                if c == "Маунт" or c in INTERNAL or not isinstance(v, str) or not CYR.search(v):
                     continue
                 if v not in words and v not in content:
                     problems.append("catalog text without a translation (%s): %r" % (c, v))

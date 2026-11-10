@@ -1352,7 +1352,7 @@ local function RemainingView(r, own)
       for pass = 1, 2 do   -- сначала то, что осталось, потом убитые
         for _, entry in ipairs(group) do
           if entry.done == (pass == 2) then
-            local menu = own and kind ~= "world" and kind ~= "rare" and not entry.done
+            local menu = own and kind ~= "world" and kind ~= "rare" and kind ~= "guaranteed" and kind ~= "mobs" and not entry.done
             list[#list + 1] = RemainingRow(entry, menu, stripe)
             stripe = not stripe
           end

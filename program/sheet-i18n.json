@@ -71,6 +71,7 @@
   "Timed-run награда": "Timed-run reward",
   "Агата Вирмвуд / Чернолап": "Agathe Wyrmwood / Blackpaw",
   "Ал'акир": "Al'Akir",
+  "Алани": "Alani",
   "Алаш'анир": "Alash'anir",
   "Алисразор": "Alysrazor",
   "Альтаирий": "Altairus",
@@ -86,6 +87,7 @@
   "Безумие Смертокрыла": "Madness of Deathwing",
   "Безупречный мастер (16-й этаж)": "Flawless Master (Layer 16)",
   "Бой «Падение Полночи»": "Midnight Falls",
+  "Бойцы Театра Боли в Малдраксусе выходят на арену по очереди; маунт падает с любого из них.": "The Theater of Pain champions in Maldraxxus come out to the arena in turn; the mount drops from any of them.",
   "Босс / секретный Naxxramas источник": "Boss / secret Naxxramas source",
   "Босс-дроп / cache": "Boss drop / cache",
   "Босс-дроп / quest item": "Boss drop / quest item",
@@ -103,6 +105,7 @@
   "Верховная жрица Килнара": "High Priestess Kilnara",
   "Верховный оратор Эйрих": "Void Speaker Eirich",
   "Вестник войны Мал'Корак": "Warbringer Mal'Korak",
+  "Вечноцветущий дол (фаза Пандарии): щит снимает Небесный кристалл из 10 небесных осколков, они падают с мобов дола. Маунт падает всегда.": "Vale of Eternal Blossoms (the Pandaria phase): a Sky Crystal made of 10 Skyshards, dropped by the Vale's mobs, takes down her shield. The mount always drops.",
   "Вкусный споролакомец из Гнилотопи": "Tasty sporegrazer from Rotmire",
   "Владыка испытаний: серебро": "Challenge Warlord: Silver",
   "Воздушное судно подавления HK-8": "HK-8 Aerial Oppression Unit",
@@ -123,6 +126,8 @@
   "Гниложор": "Rotfeaster",
   "Головокуска": "Skullripper",
   "Гончие Саргераса / Шатуг": "Felhounds of Sargeras / Shatug",
+  "Горгронд, появляется раз в много часов. Маунт падает всегда.": "Gorgrond, appears once in many hours. The mount always drops.",
+  "Горок": "Gorok",
   "Госпожа Сашж'ин": "Mistress Sassz'ine",
   "Гул'дан": "Gul'dan",
   "Дань бессмертию": "A Tribute to Immortality",
@@ -148,6 +153,7 @@
   "Зандаларский завоеватель №1": "Zandalari Warbringer #1",
   "Зандаларский завоеватель №2": "Zandalari Warbringer #2",
   "Зандаларский завоеватель №3": "Zandalari Warbringer #3",
+  "Затерянный во времени протодракон": "Time-Lost Proto-Drake",
   "Зул'джан": "Zul'jan",
   "Инструктор Разувий (секрет с конём Храбрецом)": "Instructor Razuvious (the Valiance horse secret)",
   "Испытание великого крестоносца": "Trial of the Grand Crusader",
@@ -172,14 +178,18 @@
   "Легенда ключей Midnight: 1-й сезон / Затерянное во времени седло": "Keystone Legend: Midnight Season 1 / Timelost Saddle",
   "Легенда ключей Midnight: 2-й сезон": "Keystone Legend: Midnight Season 2",
   "Леди Джайна Праудмур": "Lady Jaina Proudmoore",
+  "Летает по Грозовой Гряде, появляется раз в 6–24 часа (вместо него может появиться Вирагоса). Маунт падает всегда.": "Flies around the Storm Peaks, appears every 6-24 hours (Vyragosa may come instead). The mount always drops.",
+  "Летает по Подземью; появляется раз в несколько часов, его нужно оседлать и победить. Маунт падает всегда.": "Flies around Deepholm; appears every few hours, you have to mount it and win. The mount always drops.",
   "Ловчий Аттумен": "Attumen the Huntsman",
   "Лорд Аурий Ривендер": "Lord Aurius Rivendare",
   "Лучше делать отдельным achievement-run, а не в скоростном маунт-забеге.": "Better done as a separate achievement run rather than in a fast mount run.",
   "Лучше делать отдельным забегом, потому что часть ачивок мешает speed-clear.": "Better done as a separate run, because some achievements get in the way of a speed clear.",
   "Любая": "Any",
+  "Любой боец Театра Боли": "Any Theater of Pain champion",
   "Любой босс Склепа Аркавона": "Any boss of Vault of Archavon",
   "Любой босс подземелий путешествий во времени": "Any boss of Timewalking dungeons",
   "Любой редкий монстр: Буря Бездны": "Any rare: Voidstorm",
+  "Любой редкий монстр: Запретный край": "Any rare: The Forbidden Reach",
   "Любой редкий монстр: Зул'Аман": "Any rare: Zul'Aman",
   "Любой редкий монстр: Леса Вечной Песни": "Any rare: Eversong Woods",
   "Любой редкий монстр: Харандар": "Any rare: Harandar",
@@ -238,6 +248,7 @@
   "Нимар Душегуб": "Nimar the Slayer",
   "Новый Midnight recolor из Timelost Saddle pool.": "A new Midnight recolor from the Timelost Saddle pool.",
   "Новый маунт патча 12.1; Altar of Fangs есть в пуле M+ 2-го сезона.": "A new mount of patch 12.1; Altar of Fangs is in the Season 2 M+ pool.",
+  "Нок-Карош": "Nok-Karosh",
   "Ночная Погибель": "Nightbane",
   "Нужен random dungeon reward cache": "Needs the random dungeon reward cache",
   "Нужен доступ к Wintergrasp / старой зоне; шанс с любого босса.": "Needs access to Wintergrasp / the old zone; a chance from any boss.",
@@ -248,6 +259,10 @@
   "Обычно 100% при выполнении timed run.": "Usually 100% when the timed run is done.",
   "Обычно нужен solo-kill последних двух боссов": "Usually needs a solo kill of the last two bosses",
   "Обычные NPC внутри AQ40": "Regular NPCs inside AQ40",
+  "Обычные мобы: Вол'дун": "Common mobs: Vol'dun",
+  "Обычные мобы: Долина Штормов": "Common mobs: Stormsong Valley",
+  "Обычные мобы: Друствар": "Common mobs: Drustvar",
+  "Обычные мобы: Назмир": "Common mobs: Nazmir",
   "Обычный рейд": "Normal raid",
   "Один из главных BfA-скипов.": "One of the main BfA skips.",
   "Один из главных Legion-скипов для маунт-фарма.": "One of the main Legion skips for mount farming.",
@@ -270,6 +285,10 @@
   "Падает с любого редкого монстра зоны (их здесь 13). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Drops from any rare of the zone (13 of them). Each one gives loot once a day per character, so the row has no cooldown of its own.",
   "Падает с любого редкого монстра зоны (их здесь 15). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Drops from any rare of the zone (15 of them). Each one gives loot once a day per character, so the row has no cooldown of its own.",
   "Падает с любого редкого монстра зоны (их здесь 16). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Drops from any rare of the zone (16 of them). Each one gives loot once a day per character, so the row has no cooldown of its own.",
+  "Падает с обычных мобов зоны (видов 16), например: Тролль крови - проклинательница, Тролль крови - изверг, Ловчая из племени Охотников Крови. Отката нет: каждое убийство — попытка.": "Drops from the zone's common mobs (16 kinds), e.g. Blood Troll Hexxer, Blood Troll Brutalizer, Bloodhunter Stalker. No cooldown: every kill is an attempt.",
+  "Падает с обычных мобов зоны (видов 20), например: Отступник - призыватель небес, Отступник-целитель, Сетрак-опустошитель. Отката нет: каждое убийство — попытка.": "Drops from the zone's common mobs (20 kinds), e.g. Faithless Skycaller, Faithless Mender, Sethrak Ravager. No cooldown: every kill is an attempt.",
+  "Падает с обычных мобов зоны (видов 25), например: Стрелок из племени Шипошкурых, Лоялист дома Штормсонгов, Канонир из Просоленных мастерских. Отката нет: каждое убийство — попытка.": "Drops from the zone's common mobs (25 kinds), e.g. Briarback Skirmisher, Stormsong Loyalist, Brinebrawn Cannoneer. No cooldown: every kill is an attempt.",
+  "Падает с обычных мобов зоны (видов 9), например: Порабощенный проклятием сокольничий, Порабощенный проклятием арбалетчик, Порабощенный проклятием стражник. Отката нет: каждое убийство — попытка.": "Drops from the zone's common mobs (9 kinds), e.g. Hexthralled Falconer, Hexthralled Crossbowman, Hexthralled Guardsman. No cooldown: every kill is an attempt.",
   "Палач Мохо / Атилия Огненная Роса": "Moxo the Beheader / Athil Dewfire",
   "Пастух Кравос": "Wrangler Kravos",
   "Песчаный проглот Кролок": "Dunegorger Kraulok",
@@ -286,6 +305,7 @@
   "Проверь, открыт ли у персонажа/аккаунта актуальный доступ к старым Naxxramas-секретам.": "Check that the character/account has current access to the old Naxxramas secrets.",
   "Просто спамь Timewalking dungeons во время события.": "Just spam Timewalking dungeons during the event.",
   "Псарь Керракс": "Houndmaster Kerrax",
+  "Пудовый Кулак": "Poundfist",
   "Пузцилла / Вракс'тул": "Puscilla / Vrax'thul",
   "Рагнарос": "Ragnaros",
   "Разные BfA dungeons": "Various BfA dungeons",
@@ -467,6 +487,7 @@
   "Харика Ужасающая": "Harika the Horrid",
   "Холон": "Huolon",
   "Хорридон": "Horridon",
+  "Хребет Ледяного Огня, появляется редко. Маунт падает всегда.": "Frostfire Ridge, appears rarely. The mount always drops.",
   "Хромовый король Галливикс": "Chrome King Gallywix",
   "Цзи-Кунь": "Ji-Kun",
   "Часть достижений может требовать контроля урона, чтобы не убить босса слишком быстро.": "Some achievements may need damage control so the boss does not die too fast.",
@@ -474,6 +495,7 @@
   "Четыре рара Танаанских джунглей, маунт падает с любого из них. Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.": "Four rares of Tanaan Jungle; the mount drops from any of them. Each one gives loot once a day per character, so the row has no cooldown of its own.",
   "Ша Злости": "Sha of Anger",
   "Элегон": "Elegon",
+  "Эонакс": "Aeonaxx",
   "Этот же маунт есть с Malygos в рейде Eye of Eternity.": "The same mount also drops from Malygos in the Eye of Eternity raid.",
   "Ядовитый небесный скат": "Venomtail Skyfin",
   "Язвоглот": "Blistermaw"
@@ -487,6 +509,8 @@
   "ru": "ru_RU"
  },
  "mounts": {
+  "1018": "Terrified Pack Mule",
+  "1019": "Goldenmane",
   "1040": "Tomb Stalker",
   "1053": "Underrot Crawg",
   "117": "Blue Qiraji Battle Tank",
@@ -539,6 +563,7 @@
   "1411": "Predatory Plagueroc",
   "1417": "Hand of Hrestimorak",
   "1419": "Sintouched Deathwalker",
+  "1437": "Battle-Bound Warhound",
   "1443": "Voracious Gorger",
   "1445": "Slime Serpent",
   "1446": "Tazavesh Gearglider",
@@ -557,6 +582,7 @@
   "1564": "Colossal Soulshredder Mawrat",
   "1565": "Colossal Umbrahide Mawrat",
   "1587": "Zereth Overseer",
+  "1619": "Ancient Salamanther",
   "1626": "Shellack",
   "1644": "Raging Magmammoth",
   "168": "Fiery Warhorse",
@@ -606,6 +632,7 @@
   "2631": "Scarlet Void Flyer",
   "2633": "Azure Void Flyer",
   "264": "Blue Proto-Drake",
+  "265": "Time-Lost Proto-Drake",
   "266": "Plagued Proto-Drake",
   "2708": "Vibrant Petalwing",
   "2733": "Calamitous Carrion",
@@ -645,6 +672,7 @@
   "365": "Bloodbathed Frostbrood Vanquisher",
   "391": "Volcanic Stone Drake",
   "392": "Drake of the East Wind",
+  "393": "Phosphorescent Stone Drake",
   "395": "Drake of the North Wind",
   "396": "Drake of the South Wind",
   "397": "Vitreous Stone Drake",
@@ -665,6 +693,7 @@
   "478": "Astral Cloud Serpent",
   "503": "Crimson Pandaren Phoenix",
   "515": "Son of Galleon",
+  "517": "Thundering Ruby Cloud Serpent",
   "518": "Ashen Pandaren Phoenix",
   "519": "Emerald Pandaren Phoenix",
   "520": "Violet Pandaren Phoenix",
@@ -686,10 +715,13 @@
   "619": "Blacksteel Battleboar",
   "622": "Armored Razorback",
   "623": "Frostplains Battleboar",
+  "627": "Great Greytusk",
   "633": "Hellfire Infernal",
   "634": "Solar Spirehawk",
   "643": "Warsong Direfang",
   "654": "Challenger's War Yeti",
+  "655": "Sunhide Gronnling",
+  "657": "Garn Nighthowl",
   "69": "Rivendare's Deathcharger",
   "751": "Felsteel Annihilator",
   "758": "Infernal Direwolf",
@@ -701,9 +733,11 @@
   "875": "Midnight",
   "883": "Smoldering Ember Wyrm",
   "899": "Abyss Worm",
+  "928": "Dune Scavenger",
   "933": "Obsidian Krolusk",
   "954": "Shackled Ur'zul",
   "955": "Vile Fiend",
+  "956": "Leaping Veinseeker",
   "963": "Bloodgorged Crawg",
   "970": "Maddened Chaosrunner",
   "971": "Antoran Charhound",
@@ -1769,6 +1803,22 @@
    }
   },
   "mounts": {
+   "1018": {
+    "de": "Verängstigtes Packmuli",
+    "en": "Terrified Pack Mule",
+    "es": "Mula de carga aterrorizada",
+    "fr": "Mule de bât terrifiée",
+    "pt": "Mula de Carga Aterrorizada",
+    "ru": "Испуганный вьючный мул"
+   },
+   "1019": {
+    "de": "Goldmähne",
+    "en": "Goldenmane",
+    "es": "Crindorada",
+    "fr": "Crin d’or",
+    "pt": "Crina d'Ouro",
+    "ru": "Златогривка"
+   },
    "1040": {
     "de": "Grabschleicher",
     "en": "Tomb Stalker",
@@ -2185,6 +2235,14 @@
     "pt": "Mortívago Pecaminoso",
     "ru": "Запятнанный грехом вестник смерти"
    },
+   "1437": {
+    "de": "Schlachtgebundener Kriegshund",
+    "en": "Battle-Bound Warhound",
+    "es": "Can de guerra ligado a la batalla",
+    "fr": "Chien de guerre lié par le combat",
+    "pt": "Cão de Guerra Feito Para a Batalha",
+    "ru": "Закаленный бойцовский пес"
+   },
    "1443": {
     "de": "Gieriger Fresser",
     "en": "Voracious Gorger",
@@ -2328,6 +2386,14 @@
     "fr": "Surveillant de Zereth",
     "pt": "Feitor de Zereth",
     "ru": "Зеретский смотритель"
+   },
+   "1619": {
+    "de": "Uralter Salamanther",
+    "en": "Ancient Salamanther",
+    "es": "Salamantra anciana",
+    "fr": "Dracamandre antique",
+    "pt": "Salamantra Ancestral",
+    "ru": "Древняя саламантера"
    },
    "1626": {
     "de": "Panzerklatscher",
@@ -2721,6 +2787,14 @@
     "pt": "Protodraco Azul",
     "ru": "Синий протодракон"
    },
+   "265": {
+    "de": "Zeitverlorener Protodrache",
+    "en": "Time-Lost Proto-Drake",
+    "es": "Protodraco Tiempo Perdido",
+    "fr": "Proto-drake perdu dans le temps",
+    "pt": "Protodraco Perdido no Tempo",
+    "ru": "Затерянный во времени протодракон"
+   },
    "266": {
     "de": "Verseuchter Protodrache",
     "en": "Plagued Proto-Drake",
@@ -3033,6 +3107,14 @@
     "pt": "Draco do Vento Leste",
     "ru": "Дракон восточного ветра"
    },
+   "393": {
+    "de": "Phosphorsteindrache",
+    "en": "Phosphorescent Stone Drake",
+    "es": "Draco de piedra fosforescente",
+    "fr": "Drake de pierre phosphorescent",
+    "pt": "Draco de Pedra Fosforescente",
+    "ru": "Светящийся дракон"
+   },
    "395": {
     "de": "Drache des Nordwinds",
     "en": "Drake of the North Wind",
@@ -3192,6 +3274,14 @@
     "fr": "Fils de Galion",
     "pt": "Filho de Gailleon",
     "ru": "Сын Галеона"
+   },
+   "517": {
+    "de": "Donnernde Rubinwolkenschlange",
+    "en": "Thundering Ruby Cloud Serpent",
+    "es": "Dragón nimbo rubí tronador",
+    "fr": "Serpent-nuage de rubis fulminant",
+    "pt": "Serpente das Nuvens Trovejante Rubi",
+    "ru": "Грозовой рубиновый облачный змей"
    },
    "518": {
     "de": "Aschegrauer Pandarenphönix",
@@ -3361,6 +3451,14 @@
     "pt": "Javaliço da Planície Congelada",
     "ru": "Боевой вепрь ледяных равнин"
    },
+   "627": {
+    "de": "Mächtiger Grauhauer",
+    "en": "Great Greytusk",
+    "es": "Gran Colmillogrís",
+    "fr": "Grand grisebroche",
+    "pt": "Grande Cinzatusco",
+    "ru": "Огромный сероклык"
+   },
    "633": {
     "de": "Höllenfeuerbestie",
     "en": "Hellfire Infernal",
@@ -3392,6 +3490,22 @@
     "fr": "Yéti de guerre du prétendant",
     "pt": "Yeti de Guerra do Desafiante",
     "ru": "Боевой йети претендента"
+   },
+   "655": {
+    "de": "Sonnenhautgronnling",
+    "en": "Sunhide Gronnling",
+    "es": "Gronnito Pelisol",
+    "fr": "Gronnlin peau-solaire",
+    "pt": "Gronnídeo Courosol",
+    "ru": "Солнечношкурый малый гронн"
+   },
+   "657": {
+    "de": "Nachtheuler der Garn",
+    "en": "Garn Nighthowl",
+    "es": "Garn Sombraullido",
+    "fr": "Garn nocthurle",
+    "pt": "Garn Uivo Noturno",
+    "ru": "Воющий в ночи гарн"
    },
    "69": {
     "de": "Totenschwurs Todesstreitross",
@@ -3481,6 +3595,14 @@
     "pt": "Verme Abissal",
     "ru": "Червь бездны"
    },
+   "928": {
+    "de": "Dünenaasfresser",
+    "en": "Dune Scavenger",
+    "es": "Carroñero de las dunas",
+    "fr": "Charognard des dunes",
+    "pt": "Catador das Dunas",
+    "ru": "Дюнный падальщик"
+   },
    "933": {
     "de": "Obsidiankrolusk",
     "en": "Obsidian Krolusk",
@@ -3504,6 +3626,14 @@
     "fr": "Vil indomptable",
     "pt": "Diabo Torpe",
     "ru": "Злобное отродье"
+   },
+   "956": {
+    "de": "Springender Venensucher",
+    "en": "Leaping Veinseeker",
+    "es": "Buscavenas saltador",
+    "fr": "Cherche-veine sauteur",
+    "pt": "Cataveia Saltador",
+    "ru": "Прыгучий кровопийца"
    },
    "963": {
     "de": "Blutgesättigter Krogg",
@@ -4876,6 +5006,22 @@
     "pt": "Costa Negra",
     "ru": "Темные берега"
    },
+   "Deepholm": {
+    "de": "Tiefenheim",
+    "en": "Deepholm",
+    "es": "Infralar",
+    "fr": "Le Tréfonds",
+    "pt": "Geodomo",
+    "ru": "Подземье"
+   },
+   "Drustvar": {
+    "de": "Drustvar",
+    "en": "Drustvar",
+    "es": "Drustvar",
+    "fr": "Drustvar",
+    "pt": "Drustvar",
+    "ru": "Друствар"
+   },
    "Eredath": {
     "de": "Eredath",
     "en": "Eredath",
@@ -4891,6 +5037,22 @@
     "fr": "Bois des Chants éternels",
     "pt": "Floresta do Canto Eterno",
     "ru": "Леса Вечной Песни"
+   },
+   "Frostfire Ridge": {
+    "de": "Frostfeuergrat",
+    "en": "Frostfire Ridge",
+    "es": "Cresta Fuego Glacial",
+    "fr": "Crête de Givrefeu",
+    "pt": "Serra Fogofrio",
+    "ru": "Хребет Ледяного Огня"
+   },
+   "Gorgrond": {
+    "de": "Gorgrond",
+    "en": "Gorgrond",
+    "es": "Gorgrond",
+    "fr": "Gorgrond",
+    "pt": "Gorgrond",
+    "ru": "Горгронд"
    },
    "Hallowfall": {
     "de": "Heilsturz",
@@ -4972,6 +5134,14 @@
     "pt": "Nazjatar",
     "ru": "Назжатар"
    },
+   "Nazmir": {
+    "de": "Nazmir",
+    "en": "Nazmir",
+    "es": "Nazmir",
+    "fr": "Nazmir",
+    "pt": "Nazmir",
+    "ru": "Назмир"
+   },
    "Pandaria": {
     "de": "Pandaria",
     "en": "Pandaria",
@@ -4996,6 +5166,14 @@
     "pt": "Agulhas de Arak",
     "ru": "Пики Арака"
    },
+   "Stormsong Valley": {
+    "de": "Sturmsangtal",
+    "en": "Stormsong Valley",
+    "es": "Valle Canto Tormenta",
+    "fr": "Vallée Chantorage",
+    "pt": "Vale Trovamare",
+    "ru": "Долина Штормов"
+   },
    "Tanaan Jungle": {
     "de": "Tanaandschungel",
     "en": "Tanaan Jungle",
@@ -5012,6 +5190,14 @@
     "pt": "Vasta Lazúli",
     "ru": "Лазурный Простор"
    },
+   "The Forbidden Reach": {
+    "de": "Verbotene Insel",
+    "en": "The Forbidden Reach",
+    "es": "El Confín Olvidado",
+    "fr": "Confins Interdits",
+    "pt": "Recôndito Proibido",
+    "ru": "Запретный край"
+   },
    "The Maw": {
     "de": "Der Schlund",
     "en": "The Maw",
@@ -5027,6 +5213,14 @@
     "fr": "Les abîmes Retentissants",
     "pt": "Fosso Ressonante",
     "ru": "Гулкие глубины"
+   },
+   "The Storm Peaks": {
+    "de": "Die Sturmgipfel",
+    "en": "The Storm Peaks",
+    "es": "Las Cumbres Tormentosas",
+    "fr": "Les pics Foudroyés",
+    "pt": "Picos Tempestuosos",
+    "ru": "Грозовая гряда"
    },
    "Timeless Isle": {
     "de": "Zeitlose Insel",
@@ -5061,7 +5255,7 @@
     "ru": "Нижняя Шахта"
    },
    "Vale of Eternal Blossoms": {
-    "de": "Das Tal der Ewigen Blüten",
+    "de": "Tal der Ewigen Blüten",
     "en": "Vale of Eternal Blossoms",
     "es": "Valle de la Flor Eterna",
     "fr": "Val de l’Éternel printemps",
@@ -5121,6 +5315,12 @@
     "es": "Agathe Wyrmwood / Zarpanegra",
     "fr": "Agathe Wyrmebois / Patte-Noire",
     "pt": "Ágata Bosque da Serpe / Patanegra"
+   },
+   "Алани": {
+    "de": "Alani",
+    "es": "Alani",
+    "fr": "Alani",
+    "pt": "Alani"
    },
    "Алаш'анир": {
     "de": "Alash'anir",
@@ -5194,6 +5394,12 @@
     "fr": "Arrache-Crâne",
     "pt": "Estripacrânio"
    },
+   "Горок": {
+    "de": "Gorok",
+    "es": "Gorok",
+    "fr": "Gorok",
+    "pt": "Gorok"
+   },
    "Зандаларский завоеватель №1": {
     "de": "Kriegshetzer der Zandalari Nr. 1",
     "es": "Belisario Zandalari n.º 1",
@@ -5211,6 +5417,12 @@
     "es": "Belisario Zandalari n.º 3",
     "fr": "Porteguerre zandalari n° 3",
     "pt": "Armipotente Zandalari nº 3"
+   },
+   "Затерянный во времени протодракон": {
+    "de": "Zeitverlorener Protodrache",
+    "es": "Protodraco Tiempo Perdido",
+    "fr": "Proto-drake perdu dans le temps",
+    "pt": "Protodraco Perdido no Tempo"
    },
    "Инструктор Разувий (секрет с конём Храбрецом)": {
     "de": "Instrukteur Razuvious",
@@ -5254,6 +5466,12 @@
     "fr": "Croque-bise",
     "pt": "Mascabrisa"
    },
+   "Любой боец Театра Боли": {
+    "de": "Beliebiger Champion des Theaters der Schmerzen",
+    "es": "Cualquier campeón del Teatro del Dolor",
+    "fr": "N'importe quel champion du Théâtre de la souffrance",
+    "pt": "Qualquer campeão do Teatro da Dor"
+   },
    "Любой босс Склепа Аркавона": {
     "de": "Beliebiger Boss: Archavons Kammer",
     "es": "Cualquier jefe: La Cámara de Archavon",
@@ -5271,6 +5489,12 @@
     "es": "Cualquier monstruo raro: Tormenta del Vacío",
     "fr": "N'importe quel monstre rare : Tempête du Vide",
     "pt": "Qualquer monstro raro: Tempestade do Caos"
+   },
+   "Любой редкий монстр: Запретный край": {
+    "de": "Beliebiger seltener Gegner: Verbotene Insel",
+    "es": "Cualquier monstruo raro: El Confín Olvidado",
+    "fr": "N'importe quel monstre rare : Confins Interdits",
+    "pt": "Qualquer monstro raro: Recôndito Proibido"
    },
    "Любой редкий монстр: Зул'Аман": {
     "de": "Beliebiger seltener Gegner: Zul'Aman",
@@ -5344,6 +5568,12 @@
     "fr": "Nimar le Pourfendeur",
     "pt": "Nimar, o Matador"
    },
+   "Нок-Карош": {
+    "de": "Nok-Karosh",
+    "es": "Nok-Karosh",
+    "fr": "Nok-Karosh",
+    "pt": "Nok-Karosh"
+   },
    "Ночная Погибель": {
     "de": "Schrecken der Nacht",
     "es": "Nocturno",
@@ -5361,6 +5591,30 @@
     "es": "PNJ normales en AQ40",
     "fr": "PNJ ordinaires dans AQ40",
     "pt": "PNJs comuns em AQ40"
+   },
+   "Обычные мобы: Вол'дун": {
+    "de": "Gewöhnliche Gegner: Vol'dun",
+    "es": "Enemigos comunes: Vol'dun",
+    "fr": "Monstres communs : Vol’dun",
+    "pt": "Inimigos comuns: Vol'dun"
+   },
+   "Обычные мобы: Долина Штормов": {
+    "de": "Gewöhnliche Gegner: Sturmsangtal",
+    "es": "Enemigos comunes: Valle Canto Tormenta",
+    "fr": "Monstres communs : Vallée Chantorage",
+    "pt": "Inimigos comuns: Vale Trovamare"
+   },
+   "Обычные мобы: Друствар": {
+    "de": "Gewöhnliche Gegner: Drustvar",
+    "es": "Enemigos comunes: Drustvar",
+    "fr": "Monstres communs : Drustvar",
+    "pt": "Inimigos comuns: Drustvar"
+   },
+   "Обычные мобы: Назмир": {
+    "de": "Gewöhnliche Gegner: Nazmir",
+    "es": "Enemigos comunes: Nazmir",
+    "fr": "Monstres communs : Nazmir",
+    "pt": "Inimigos comuns: Nazmir"
    },
    "Осквернитель из рода Бесконечности": {
     "de": "Ewiger Verderber",
@@ -5403,6 +5657,12 @@
     "es": "Maestro de canes Kerrax",
     "fr": "Dresseur de molosses Kerrax",
     "pt": "Mestre de Matilha Kerrax"
+   },
+   "Пудовый Кулак": {
+    "de": "Rammfaust",
+    "es": "Librapuño",
+    "fr": "Martèlepoing",
+    "pt": "Esmagador"
    },
    "Пузцилла / Вракс'тул": {
     "de": "Puscilla / Vrax'thul",
@@ -5523,6 +5783,12 @@
     "es": "Huolon",
     "fr": "Huolon",
     "pt": "Huolon"
+   },
+   "Эонакс": {
+    "de": "Aeonaxx",
+    "es": "Aeonaxx",
+    "fr": "Aeonaxx",
+    "pt": "Aeonaxx"
    },
    "Ядовитый небесный скат": {
     "de": "Giftschwanzhimmelsflosse",
