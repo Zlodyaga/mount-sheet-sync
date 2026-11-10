@@ -13,7 +13,8 @@ Entrance: JournalInstanceEntrance, else the entrance icon (AreaPOI with PoiDataT
 phased copy of a continent have only the icon. Map: the smallest zone whose region holds the entrance; when the entrance
 is in an area of its own inside the zone and a map inside the zone has that area's name, that map (Dragon Soul inside
 the Caverns of Time, as the game shows it). MANUAL overrides places with no usable record. The script fails when a
-catalog place is left without a point.
+catalog place is left without a point. entrances_game.json (the points the game itself showed, made by
+entrances_from_probe.py from the probe addon) wins over the tables.
 """
 import csv, io, json, os, re, sys, tempfile, urllib.request
 
@@ -29,6 +30,10 @@ MANUAL = {
     1178: (1462, 0.736, 0.360, "Operation: Mechagon, Mechagon Island (no record; the point is from guides)"),
     1292: (23, 0.4345, 0.1959, "Stratholme Service Entrance: its record is the main gate; the point is its AreaTrigger"),
 }
+# journalInstanceID -> [UiMap, x, y] the game itself showed (entrances_from_probe.py, from the probe addon in a session):
+# they win over the tables — the game may put an entrance on another copy of a zone than the tables suggest
+GAME_FILE = os.path.join(HERE, "entrances_game.json")
+GAME = {int(k): v for k, v in json.load(open(GAME_FILE, encoding="utf-8"))["points"].items()} if os.path.exists(GAME_FILE) else {}
 
 
 def table(name, cache):
@@ -147,6 +152,9 @@ class World:
     def point(self, instance):
         if instance in MANUAL:
             ui, x, y, _ = MANUAL[instance]
+            return ui, x, y
+        if instance in GAME:
+            ui, x, y = GAME[instance]
             return ui, x, y
         rows = sorted(self.entrances.get(instance, []), key=lambda r: (r["Faction"] != "-1", int(r["ID"])))
         rows += self.icons.get(instance, [])   # entrance on a phased copy of the continent, or no record: the icon

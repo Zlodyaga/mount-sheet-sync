@@ -98,6 +98,8 @@
   Tooltip.lua, toc, Statistics.lua…), часть LF. Правя файл, не превращать CRLF в LF и наоборот.
 - `Statistics.lua` не править руками — генерирует `python3 tools/catalog/statistic_ids.py --write`. `Entrances.lua` — тоже:
   `python3 tools/catalog/entrances.py --write` (таблицы игры с wago.tools; там же точки раров из колонки «Точка»); после новых мест и раров в каталоге — перезапустить.
+  Точки, которые показала сама игра, — `tools/catalog/entrances_game.json` (их собирает аддон-сборщик `tools/probe/MountSheetSyncProbe`,
+  файл делает `entrances_from_probe.py <его SavedVariables>`); они важнее таблиц.
 - `SheetData.lua` и `Program.lua` в репозитории — пустые (`= nil`); их пишет программа у пользователя.
 - Тесты: `bash tools/run_tests.sh` (или `--no-ui`) — нужны Linux, mono, python3 + lupa, node, Xvfb и т. п.
   (на Windows — WSL; иначе полагаться на CI `ci.yml`: на push в `main`, PR и Run workflow, ~4 мин). На ПК
