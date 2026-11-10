@@ -1,0 +1,778 @@
+{
+ "142692": {
+  "en": "Nimar the Slayer",
+  "fr": "Nimar le Pourfendeur",
+  "de": "Nimar der Töter",
+  "es": "Nimar el Destripador",
+  "ru": "Нимар Душегуб",
+  "pt": "Nimar, o Matador"
+ },
+ "142423": {
+  "en": "Overseer Krix",
+  "fr": "Surveillant Krix",
+  "de": "Aufseher Krix",
+  "es": "Sobrestante Krix",
+  "ru": "Надзиратель Крикс",
+  "pt": "Feitor Krix"
+ },
+ "142437": {
+  "en": "Skullripper",
+  "fr": "Arrache-Crâne",
+  "de": "Schädelreißer",
+  "es": "Rompecalaveras",
+  "ru": "Головокуска",
+  "pt": "Estripacrânio"
+ },
+ "142709": {
+  "en": "Beastrider Kama",
+  "fr": "Chevaucheur de bêtes Kama",
+  "de": "Bestienreiter Kama",
+  "es": "Jinete de bestias Kama",
+  "ru": "Укротитель Кама",
+  "pt": "Cavalga-feras Kama"
+ },
+ "142741": {
+  "en": "Doomrider Helgrim",
+  "fr": "Chevauche-malheur Sombrenfer",
+  "de": "Verdammnisreiter Helgrim",
+  "es": "Jinete de fatalidad Helgrim",
+  "ru": "Всадник рока Хелгрим",
+  "pt": "Cavaleiro da Perdição Helgueiro"
+ },
+ "142739": {
+  "en": "Knight-Captain Aldrin",
+  "fr": "Chevalier-capitaine Aldrin",
+  "de": "Kürassier Aldrin",
+  "es": "Capitán caballero Aldrin",
+  "ru": "Рыцарь-капитан Алдрин",
+  "pt": "Capitão-cavaleiro Alderico"
+ },
+ "148787": {
+  "en": "Alash'anir",
+  "fr": "Alash'anir",
+  "de": "Alash'anir",
+  "es": "Alash'anir",
+  "ru": "Алаш'анир",
+  "pt": "Alash'anir"
+ },
+ "149652": {
+  "en": "Agathe Wyrmwood",
+  "fr": "Agathe Wyrmebois",
+  "de": "Agathe Wyrmholz",
+  "es": "Agathe Wyrmwood",
+  "ru": "Агата Вирмвуд",
+  "pt": "Ágata Bosque da Serpe"
+ },
+ "149660": {
+  "en": "Blackpaw",
+  "fr": "Patte-Noire",
+  "de": "Schwarzpranke",
+  "es": "Zarpanegra",
+  "ru": "Чернолап",
+  "pt": "Patanegra"
+ },
+ "149655": {
+  "en": "Croz Bloodrage",
+  "fr": "Croz Ragesang",
+  "de": "Croz Blutzorn",
+  "es": "Croz Sanguinarius",
+  "ru": "Кроз Ярость Крови",
+  "pt": "Croz Fúria Sanguinária"
+ },
+ "149663": {
+  "en": "Shadowclaw",
+  "fr": "Ombregriffe",
+  "de": "Schattenklaue",
+  "es": "Garrasombría",
+  "ru": "Тенекоготь",
+  "pt": "Garrassombra"
+ },
+ "148037": {
+  "en": "Athil Dewfire",
+  "fr": "Athil Brûlerosée",
+  "de": "Athil Tauglanz",
+  "es": "Athil Condensafuego",
+  "ru": "Атилия Огненная Роса",
+  "pt": "Athil Fogorvalha"
+ },
+ "147701": {
+  "en": "Moxo the Beheader",
+  "fr": "Moxo le Tranche-Tête",
+  "de": "Moxo der Köpfer",
+  "es": "Moxo el Decapitador",
+  "ru": "Палач Мохо",
+  "pt": "Moxo, o Decapitador"
+ },
+ "152182": {
+  "en": "Rustfeather",
+  "fr": "Rouille-Plume",
+  "de": "Rostfeder",
+  "es": "Alarroña",
+  "ru": "Ржавое Перо",
+  "pt": "Ferrujão"
+ },
+ "154342": {
+  "en": "Arachnoid Harvester",
+  "fr": "Arachnoïde moissonneur",
+  "de": "Arachnoider Ernter",
+  "es": "Cosechadora arácnida",
+  "ru": "Арахноид-пожинатель",
+  "pt": "Ceifador Aracnídeo"
+ },
+ "152290": {
+  "en": "Soundless",
+  "fr": "Le grand Silence",
+  "de": "Lautlos",
+  "es": "Silente",
+  "ru": "Неслышимка",
+  "pt": "Silente"
+ },
+ "157466": {
+  "en": "Anh-De the Loyal",
+  "fr": "Anh De le Loyal",
+  "de": "Anh-De der Loyale",
+  "es": "Anh-De el Leal",
+  "ru": "Анх-Де Верный",
+  "pt": "Anh-De, o Leal"
+ },
+ "162147": {
+  "en": "Corpse Eater",
+  "fr": "Mange-cadavres",
+  "de": "Leichenfresser",
+  "es": "Comecadáveres",
+  "ru": "Пожиратель трупов",
+  "pt": "Comedor de Cadáveres"
+ },
+ "157153": {
+  "en": "Ha-Li",
+  "fr": "Ha Li",
+  "de": "Ha-Li",
+  "es": "Ha-Li",
+  "ru": "Ха-Ли",
+  "pt": "Ha-Li"
+ },
+ "157160": {
+  "en": "Houndlord Ren",
+  "fr": "Grand-veneur Ren",
+  "de": "Hundmeister Ren",
+  "es": "Señor de los canes Ren",
+  "ru": "Мастер-псарь Жэнь",
+  "pt": "Senhor dos Cães Ren"
+ },
+ "157146": {
+  "en": "Rotfeaster",
+  "fr": "Croque-Charogne",
+  "de": "Fäulnisverschlinger",
+  "es": "Comecarroña",
+  "ru": "Гниложор",
+  "pt": "Putrífago"
+ },
+ "126867": {
+  "en": "Venomtail Skyfin",
+  "fr": "Ciaileron queue-venin",
+  "de": "Giftschwanzhimmelsflosse",
+  "es": "Aletacielo Colaveneno",
+  "ru": "Ядовитый небесный скат",
+  "pt": "Corta-céu Caudaçonha"
+ },
+ "126852": {
+  "en": "Wrangler Kravos",
+  "fr": "Kravos le Dompteur",
+  "de": "Treiber Kravos",
+  "es": "Retador Kravos",
+  "ru": "Пастух Кравос",
+  "pt": "Enlaçador Kravos"
+ },
+ "127288": {
+  "en": "Houndmaster Kerrax",
+  "fr": "Dresseur de molosses Kerrax",
+  "de": "Hundemeister Kerrax",
+  "es": "Maestro de canes Kerrax",
+  "ru": "Псарь Керракс",
+  "pt": "Mestre de Matilha Kerrax"
+ },
+ "122958": {
+  "en": "Blistermaw",
+  "fr": "Gueule putride",
+  "de": "Blasenmaul",
+  "es": "Faucellaga",
+  "ru": "Язвоглот",
+  "pt": "Gorjapus"
+ },
+ "126040": {
+  "en": "Puscilla",
+  "fr": "Puscilla",
+  "de": "Puscilla",
+  "es": "Puscilla",
+  "ru": "Пузцилла",
+  "pt": "Puscilla"
+ },
+ "126199": {
+  "en": "Vrax'thul",
+  "fr": "Vrax'thul",
+  "de": "Vrax'thul",
+  "es": "Vrax'thul",
+  "ru": "Вракс'тул",
+  "pt": "Vrax'thul"
+ },
+ "126912": {
+  "en": "Skreeg the Devourer",
+  "fr": "Skreeg le Dévoreur",
+  "de": "Skreeg der Verschlinger",
+  "es": "Skreeg el Devorador",
+  "ru": "Скрииг Пожиратель",
+  "pt": "Escrargo, o Devorador"
+ },
+ "73167": {
+  "en": "Huolon",
+  "fr": "Huolon",
+  "de": "Huolon",
+  "es": "Huolon",
+  "ru": "Холон",
+  "pt": "Huolon"
+ },
+ "165290": {
+  "en": "Harika the Horrid",
+  "fr": "Harika l'Horrible",
+  "de": "Harika die Schreckliche",
+  "es": "Harika la Horrible",
+  "ru": "Харика Ужасающая",
+  "pt": "Hárika, a Hórrida"
+ },
+ "162586": {
+  "en": "Tahonta",
+  "fr": "Tahonta",
+  "de": "Tahonta",
+  "es": "Tahonta",
+  "ru": "Тахонта",
+  "pt": "Tahonta"
+ },
+ "166679": {
+  "en": "Hopecrusher",
+  "fr": "Brise-Espoir",
+  "de": "Hoffnungsvernichter",
+  "es": "Machacaesperanzas",
+  "ru": "Сокрушитель Надежд",
+  "pt": "Esmaga-esperanças"
+ },
+ "166521": {
+  "en": "Famu the Infinite",
+  "fr": "Famu l'Infini",
+  "de": "Famu der Unendliche",
+  "es": "Famu el Infinito",
+  "ru": "Фаму Бесконечный",
+  "pt": "Famu, o Infinito"
+ },
+ "168647": {
+  "en": "Valfir the Unrelenting",
+  "fr": "Valfir le Tenace",
+  "de": "Valfir der Unerbittliche",
+  "es": "Valfir el Inflexible",
+  "ru": "Валфир Непреклонный",
+  "pt": "Valfir, o Implacável"
+ },
+ "162741": {
+  "en": "Gieger",
+  "fr": "Gieger",
+  "de": "Gieger",
+  "es": "Gieger",
+  "ru": "Гигер",
+  "pt": "Gieger"
+ },
+ "157309": {
+  "en": "Violet Mistake",
+  "fr": "Erreur pourpre",
+  "de": "Violetter Fehler",
+  "es": "Error violeta",
+  "ru": "Фиолетовая ошибка",
+  "pt": "Erro Violeta"
+ },
+ "162690": {
+  "en": "Nerissa Heartless",
+  "fr": "Nerissa Sans-Cœur",
+  "de": "Nerissa Herzlos",
+  "es": "Nerissa Despiadada",
+  "ru": "Нерисса Бессердечная",
+  "pt": "Nerissa, a Desalmada"
+ },
+ "162819": {
+  "en": "Warbringer Mal'Korak",
+  "fr": "Porteguerre Mal'korak",
+  "de": "Kriegshetzer Mal'korak",
+  "es": "Belisario Mal'korak",
+  "ru": "Вестник войны Мал'Корак",
+  "pt": "Armipotente Mal'korak"
+ },
+ "168147": {
+  "en": "Sabriel the Bonecleaver",
+  "fr": "Sabrielle l'Ostéoclaste",
+  "de": "Sabriel die Knochenspalterin",
+  "es": "Sabriel la Rajahuesos",
+  "ru": "Сабриэль Косторуб",
+  "pt": "Sabriel, a Cutilóssea"
+ },
+ "174861": {
+  "en": "Gorged Shadehound",
+  "fr": "Molosse d'ombre rassasié",
+  "de": "Vollgefressener Schemenhund",
+  "es": "Can de sombras atiborrado",
+  "ru": "Обожравшаяся темная гончая",
+  "pt": "Canaz-sombra Empanturrado"
+ },
+ "179472": {
+  "en": "Konthrogz the Obliterator",
+  "fr": "Konthrogz l'Oblitérateur",
+  "de": "Konthrogz der Zerstörer",
+  "es": "Konthrogz el Obliterador",
+  "ru": "Контрогз Уничтожитель",
+  "pt": "Konthrogz, o Obliterador"
+ },
+ "180160": {
+  "en": "Reliwik the Defiant",
+  "fr": "Réliwik le Provocateur",
+  "de": "Reliwik der Trotzige",
+  "es": "Reliwik el Desafiante",
+  "ru": "Реливик Непокорный",
+  "pt": "Reliwik, o Desafiador"
+ },
+ "179684": {
+  "en": "Malbog",
+  "fr": "Malbog",
+  "de": "Malbog",
+  "es": "Malbog",
+  "ru": "Малбог",
+  "pt": "Malbog"
+ },
+ "179460": {
+  "en": "Fallen Charger",
+  "fr": "Destrier déchu",
+  "de": "Gefallenes Streitross",
+  "es": "Destrero caído",
+  "ru": "Павший боевой конь",
+  "pt": "Corcel Decaído"
+ },
+ "195353": {
+  "en": "Breezebiter",
+  "fr": "Croque-bise",
+  "de": "Brisenbiss",
+  "es": "Mascabrisas",
+  "ru": "Кусачий Ветер",
+  "pt": "Mascabrisa"
+ },
+ "203625": {
+  "en": "Karokta",
+  "fr": "Karokta",
+  "de": "Karokta",
+  "es": "Karokta",
+  "ru": "Карокта",
+  "pt": "Karokta"
+ },
+ "208029": {
+  "en": "Doomshadow",
+  "fr": "Ombre de malheur",
+  "de": "Verdammnisschatten",
+  "es": "Sombra de fatalidad",
+  "ru": "Гибломрак",
+  "pt": "Sombra da Ruína"
+ },
+ "207802": {
+  "en": "Beledar's Spawn",
+  "fr": "Engeance de Beledar",
+  "de": "Beledars Brut",
+  "es": "Engendro de Beledar",
+  "ru": "Порождение Беледар",
+  "pt": "Cria de Beledar"
+ },
+ "234621": {
+  "en": "Gallagio Garbage",
+  "fr": "Détritus du Gallagio",
+  "de": "Müll des Garbagio",
+  "es": "Basura del Gallagio",
+  "ru": "Мусор из Галаджио",
+  "pt": "Entulho do Gallagio"
+ },
+ "231310": {
+  "en": "Darkfuse Precipitant",
+  "fr": "Précipitant imprégné de ténèbres",
+  "de": "Fällmittel der Düsternisverschmolzenen",
+  "es": "Precipitante de Fundisombras",
+  "ru": "Стимулирующий реагент Мрачных Минеров",
+  "pt": "Precipitante de Sombrafuso"
+ },
+ "234845": {
+  "en": "Sthaarbs",
+  "fr": "Sthaarbs",
+  "de": "Sthaarbs",
+  "es": "Sthaarbs",
+  "ru": "Стаарбс",
+  "pt": "Sthaarbs"
+ },
+ "232195": {
+  "en": "Urmag",
+  "fr": "Urmag",
+  "de": "Urmag",
+  "es": "Urmag",
+  "ru": "Урмаг",
+  "pt": "Urmag"
+ },
+ "95044": {
+  "en": "Terrorfist",
+  "fr": "Poing-de-terreur",
+  "de": "Terrorfaust",
+  "es": "Horropuño",
+  "ru": "Кулак Страха",
+  "pt": "Punho do Terror"
+ },
+ "95053": {
+  "en": "Deathtalon",
+  "fr": "Serres-mort",
+  "de": "Todeskralle",
+  "es": "Garramuerte",
+  "ru": "Коготь Смерти",
+  "pt": "Mortísporo"
+ },
+ "95054": {
+  "en": "Vengeance",
+  "fr": "Vengeance",
+  "de": "Rache",
+  "es": "Venganza",
+  "ru": "Отмщение",
+  "pt": "Vingança"
+ },
+ "95056": {
+  "en": "Doomroller",
+  "fr": "Compresseur funeste",
+  "de": "Verdammniswalze",
+  "es": "Fatalitas",
+  "ru": "Пушка Смерти",
+  "pt": "Rolador Ruinoso"
+ },
+ "69769": {
+  "en": "Zandalari Warbringer",
+  "fr": "Porteguerre zandalari",
+  "de": "Kriegshetzer der Zandalari",
+  "es": "Belisario Zandalari",
+  "ru": "Зандаларский завоеватель",
+  "pt": "Armipotente Zandalari"
+ },
+ "69841": {
+  "en": "Zandalari Warbringer",
+  "fr": "Porteguerre zandalari",
+  "de": "Kriegshetzer der Zandalari",
+  "es": "Belisario Zandalari",
+  "ru": "Зандаларский завоеватель",
+  "pt": "Armipotente Zandalari"
+ },
+ "69842": {
+  "en": "Zandalari Warbringer",
+  "fr": "Porteguerre zandalari",
+  "de": "Kriegshetzer der Zandalari",
+  "es": "Belisario Zandalari",
+  "ru": "Зандаларский завоеватель",
+  "pt": "Armipotente Zandalari"
+ },
+ "220285": {
+  "en": "Lurker of the Deeps",
+  "fr": "Rôdeur des profondeurs",
+  "de": "Lauerer der Tiefen",
+  "es": "Rondador de las profundidades",
+  "ru": "Скрытень со Дна",
+  "pt": "Tocaieiro das Profundezas"
+ },
+ "122746": {
+  "en": "Faithless Skycaller",
+  "fr": "Mandeciel infidèle",
+  "de": "Treuloser Himmelsrufer",
+  "es": "Clamacielos infiel",
+  "ru": "Отступник - призыватель небес",
+  "pt": "Clamacéus Ímpio"
+ },
+ "122782": {
+  "en": "Faithless Mender",
+  "fr": "Soigneur infidèle",
+  "de": "Treuloser Heiler",
+  "es": "Ensalmador infiel",
+  "ru": "Отступник-целитель",
+  "pt": "Reparador Ímpio"
+ },
+ "123773": {
+  "en": "Sethrak Ravager",
+  "fr": "Ravageur sephrak",
+  "de": "Verheerer der Sethrak",
+  "es": "Devastador sethrak",
+  "ru": "Сетрак-опустошитель",
+  "pt": "Assolador Sethrak"
+ },
+ "131519": {
+  "en": "Hexthralled Falconer",
+  "fr": "Fauconnier serficié",
+  "de": "Behexter Falkner",
+  "es": "Halconero hechizado",
+  "ru": "Порабощенный проклятием сокольничий",
+  "pt": "Falcoeiro Embagatado"
+ },
+ "131529": {
+  "en": "Hexthralled Crossbowman",
+  "fr": "Arbalétrier serficié",
+  "de": "Behexter Armbrustschütze",
+  "es": "Ballestero hechizado",
+  "ru": "Порабощенный проклятием арбалетчик",
+  "pt": "Besteiro Embagatado"
+ },
+ "131530": {
+  "en": "Hexthralled Guardsman",
+  "fr": "Garde serficié",
+  "de": "Behexter Gardist",
+  "es": "Custodio hechizado",
+  "ru": "Порабощенный проклятием стражник",
+  "pt": "Guarda Embagatado"
+ },
+ "120606": {
+  "en": "Blood Troll Hexxer",
+  "fr": "Maléficieuse trolle de sang",
+  "de": "Verhexerin der Bluttrolle",
+  "es": "Aojadora trol de sangre",
+  "ru": "Тролль крови - проклинательница",
+  "pt": "Bagateira Sanguitrólica"
+ },
+ "120607": {
+  "en": "Blood Troll Brutalizer",
+  "fr": "Brutaliseur troll de sang",
+  "de": "Metzler der Bluttrolle",
+  "es": "Brutalizador trol de sangre",
+  "ru": "Тролль крови - изверг",
+  "pt": "Brutalizador Sanguitrólico"
+ },
+ "122239": {
+  "en": "Bloodhunter Stalker",
+  "fr": "Traqueuse chasse-sang",
+  "de": "Pirscherin der Blutjäger",
+  "es": "Acechadora Cazasangre",
+  "ru": "Ловчая из племени Охотников Крови",
+  "pt": "Espreitadora Caça-sangue"
+ },
+ "129750": {
+  "en": "Briarback Skirmisher",
+  "fr": "Tirailleur roncedos",
+  "de": "Scharmützler der Borstenrücken",
+  "es": "Hostigador Lomozarza",
+  "ru": "Стрелок из племени Шипошкурых",
+  "pt": "Escaramuçador Dorsarça"
+ },
+ "130006": {
+  "en": "Stormsong Loyalist",
+  "fr": "Loyaliste chantorage",
+  "de": "Sturmsangloyalist",
+  "es": "Leal a los Canto Tormenta",
+  "ru": "Лоялист дома Штормсонгов",
+  "pt": "Legalista de Trovamare"
+ },
+ "130039": {
+  "en": "Brinebrawn Cannoneer",
+  "fr": "Canonnier saumeforce",
+  "de": "Salzkraftkanonier",
+  "es": "Cañonero Forzasalmuera",
+  "ru": "Канонир из Просоленных мастерских",
+  "pt": "Canhoneiro de Brutomar"
+ },
+ "200537": {
+  "en": "Gahz'raxes",
+  "fr": "Gahz'raxes",
+  "de": "Gahz'raxes",
+  "es": "Gahz'raxes",
+  "ru": "Газ'раксес",
+  "pt": "Gahz'raxes"
+ },
+ "200579": {
+  "en": "Ishyra",
+  "fr": "Ishyra",
+  "de": "Ishyra",
+  "es": "Ishyra",
+  "ru": "Ишира",
+  "pt": "Ishyra"
+ },
+ "200584": {
+  "en": "Vraken the Hunter",
+  "fr": "Vraken le Chasseur",
+  "de": "Vraken der Jäger",
+  "es": "Vraken el Cazador",
+  "ru": "Вракен Охотник",
+  "pt": "Vraken, o Caçador"
+ },
+ "162853": {
+  "en": "Unbreakable Urtz",
+  "fr": "Urtz l'Incassable",
+  "de": "Unbezwingbarer Urtz",
+  "es": "Urtz el Inquebrantable",
+  "ru": "Несокрушимый Урц",
+  "pt": "Urtz Inquebrantável"
+ },
+ "162872": {
+  "en": "Xantuth the Blighted",
+  "fr": "Xantuth le Chancreux",
+  "de": "Xantuth der Verseuchte",
+  "es": "Xantuth la Contagiada",
+  "ru": "Ксантут Чумная",
+  "pt": "Xantuth, a Pestilenta"
+ },
+ "162873": {
+  "en": "Azmogal",
+  "fr": "Azmogal",
+  "de": "Azmogal",
+  "es": "Azmogal",
+  "ru": "Азмогал",
+  "pt": "Azmogal"
+ },
+ "32491": {
+  "en": "Time-Lost Proto-Drake",
+  "fr": "Proto-drake perdu dans le temps",
+  "de": "Zeitverlorener Protodrache",
+  "es": "Protodraco Tiempo Perdido",
+  "ru": "Затерянный во времени протодракон",
+  "pt": "Protodraco Perdido no Tempo"
+ },
+ "50062": {
+  "en": "Aeonaxx",
+  "fr": "Aeonaxx",
+  "de": "Aeonaxx",
+  "es": "Aeonaxx",
+  "ru": "Эонакс",
+  "pt": "Aeonaxx"
+ },
+ "81001": {
+  "en": "Nok-Karosh",
+  "fr": "Nok-Karosh",
+  "de": "Nok-Karosh",
+  "es": "Nok-Karosh",
+  "ru": "Нок-Карош",
+  "pt": "Nok-Karosh"
+ },
+ "50992": {
+  "en": "Gorok",
+  "fr": "Gorok",
+  "de": "Gorok",
+  "es": "Gorok",
+  "ru": "Горок",
+  "pt": "Gorok"
+ },
+ "50985": {
+  "en": "Poundfist",
+  "fr": "Martèlepoing",
+  "de": "Rammfaust",
+  "es": "Librapuño",
+  "ru": "Пудовый Кулак",
+  "pt": "Esmagador"
+ },
+ "64403": {
+  "en": "Alani",
+  "fr": "Alani",
+  "de": "Alani",
+  "es": "Alani",
+  "ru": "Алани",
+  "pt": "Alani"
+ },
+ "50005": {
+  "en": "Poseidus",
+  "fr": "Poséidus",
+  "de": "Poseidus",
+  "es": "Poseidus",
+  "ru": "Посейдус",
+  "pt": "Poseidus"
+ },
+ "50990": {
+  "en": "Nakk the Thunderer",
+  "fr": "Nakk le Foudroyeur",
+  "de": "Nakk der Donnerer",
+  "es": "Nakk el Tronador",
+  "ru": "Накк Громогласный",
+  "pt": "Nakk, o Trovoador"
+ },
+ "50981": {
+  "en": "Luk'hok",
+  "fr": "Luk'hok",
+  "de": "Luk'hok",
+  "es": "Luk'hok",
+  "ru": "Лук'хок",
+  "pt": "Luk'hok"
+ },
+ "51015": {
+  "en": "Silthide",
+  "fr": "Silthide",
+  "de": "Schlickhaut",
+  "es": "Cienopiel",
+  "ru": "Сильфида",
+  "pt": "Silthide"
+ },
+ "50883": {
+  "en": "Pathrunner",
+  "fr": "Cours-les-Routes",
+  "de": "Pfadläufer",
+  "es": "Correcaminos",
+  "ru": "Торопун",
+  "pt": "Vencetrilha"
+ },
+ "168135": {
+  "en": "Night Mare",
+  "fr": "Jument nocturne",
+  "de": "Nachtmähre",
+  "es": "Yegua nocturna",
+  "ru": "Ночная кобыла",
+  "pt": "Égua Noturna"
+ },
+ "50245": {
+  "en": "Dormus the Camel-Hoarder",
+  "fr": "Dormus le Collectionneur de dromadaires",
+  "de": "Dormus der Kameltreiber",
+  "es": "Dormus el Camellero",
+  "ru": "Дормус Погонщик Верблюдов",
+  "pt": "Dormus, o Colecionador de Camelos"
+ },
+ "180978": {
+  "en": "Hirukon",
+  "fr": "Hirukon",
+  "de": "Hirukon",
+  "es": "Hirukon",
+  "ru": "Гирукон",
+  "pt": "Hirukon"
+ },
+ "219281": {
+  "en": "Alunira",
+  "fr": "Alunira",
+  "de": "Alunira",
+  "es": "Alunira",
+  "ru": "Алунира",
+  "pt": "Alunira"
+ },
+ "140474": {
+  "en": "Adherent of the Abyss",
+  "fr": "Adhérent des abysses",
+  "de": "Jünger des Abgrunds",
+  "es": "Adepto del abismo",
+  "ru": "Служитель глубин",
+  "pt": "Seguidor do Abismo"
+ },
+ "164112": {
+  "en": "Humon'gozz",
+  "fr": "Gargan'tuzz",
+  "de": "Ri'sich",
+  "es": "Coloss'ahl",
+  "ru": "Вел'иккан",
+  "pt": "Graw'uhdo"
+ },
+ "164122": {
+  "en": "Rapidly Growing Mushroom",
+  "fr": "Champignon à croissance rapide",
+  "de": "Schnell wachsender Pilz",
+  "es": "Champiñón de crecimiento rápido",
+  "ru": "Быстрорастущий гриб",
+  "pt": "Cogumelo de Crescimento Rápido"
+ },
+ "32630": {
+  "en": "Vyragosa",
+  "fr": "Vyragosa",
+  "de": "Vyragosa",
+  "es": "Vyragosa",
+  "ru": "Вирагоса",
+  "pt": "Viragosa"
+ }
+}

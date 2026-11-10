@@ -1,0 +1,91 @@
+{
+ "32491": [
+  {
+   "area": 67,
+   "name": "The Storm Peaks",
+   "count": 6,
+   "first": [
+    [
+     28,
+     65.4
+    ]
+   ]
+  },
+  {
+   "area": 6755,
+   "name": "Nagrand",
+   "count": 1,
+   "first": [
+    [
+     90.6,
+     29.6
+    ]
+   ]
+  }
+ ],
+ "50062": [
+  {
+   "area": 5042,
+   "name": "Deepholm",
+   "count": 26,
+   "first": [
+    [
+     31.2,
+     42.6
+    ]
+   ]
+  }
+ ],
+ "81001": [
+  {
+   "area": 6720,
+   "name": "Frostfire Ridge",
+   "count": 5,
+   "first": [
+    [
+     13,
+     50.4
+    ]
+   ]
+  }
+ ],
+ "50992": [
+  {
+   "area": 6720,
+   "name": "Frostfire Ridge",
+   "count": 16,
+   "first": [
+    [
+     22.4,
+     66
+    ]
+   ]
+  }
+ ],
+ "50985": [
+  {
+   "area": 6721,
+   "name": "Gorgrond",
+   "count": 5,
+   "first": [
+    [
+     42,
+     25
+    ]
+   ]
+  }
+ ],
+ "64403": [
+  {
+   "area": 5840,
+   "name": "Vale of Eternal Blossoms",
+   "count": 93,
+   "first": [
+    [
+     16.4,
+     38
+    ]
+   ]
+  }
+ ]
+}

@@ -197,6 +197,9 @@ try:
     raids = sheet_cells(book, "Schlachtzüge")
     check("de: German headers", raids[0][0] == "Gesammelt?" and raids[0][3] == "Reittier" and raids[0][12] == "Status"
           and raids[0][17] == "Spiel-ID", raids[0])
+    rare_texts = [str(v) for row in sheet_cells(book, "Seltene Monster").values() for v in row.values()]
+    check("de: rare farming tips in German (program 2.10.1), not English", any(t.startswith("Rar: ") and "Beute einmal am Tag" in t for t in rare_texts)
+          and not any(t.startswith("A rare in ") for t in rare_texts), [t for t in rare_texts if "rare" in t.lower()][:3])
     r = find_row(raids, 17, 1471)
     check("de: mount, boss and raid named as in the German game", r is not None and raids[r][3] == "Rache"
           and raids[r][5] == "Sylvanas Windläufer" and raids[r][2] == "Sanktum der Herrschaft", raids.get(r))
