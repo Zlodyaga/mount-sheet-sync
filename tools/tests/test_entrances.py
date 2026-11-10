@@ -27,9 +27,10 @@ def ids(value):
 
 with open(os.path.join(ROOT, "Entrances.lua"), encoding="utf-8") as f:
     lua = f.read()
+entrance_lua = lua.split("ns.RARE_SPOTS")[0]
 points = {int(m[0]): (int(m[1]), float(m[2]), float(m[3]))
-          for m in re.findall(r"\[(\d+)\] = \{ map = (\d+), x = ([\d.]+), y = ([\d.]+) \}", lua)}
-entries = len(re.findall(r"^\s*\[\d+\] =", lua, re.M))
+          for m in re.findall(r"\[(\d+)\] = \{ map = (\d+), x = ([\d.]+), y = ([\d.]+) \}", entrance_lua)}
+entries = len(re.findall(r"^\s*\[\d+\] =", entrance_lua, re.M))
 check("every line of Entrances.lua is a point", entries == len(points) and points, (entries, len(points)))
 check("Entrances.lua fills ns.ENTRANCES", "ns.ENTRANCES = {" in lua and "local _, ns = ..." in lua)
 for i, (ui, x, y) in sorted(points.items()):
@@ -66,6 +67,19 @@ check("Return to Karazhan", points.get(860) == (42, 0.4637, 0.7066), points.get(
 check("Operation: Mechagon", points.get(1178) == (1462, 0.736, 0.36), points.get(1178))
 check("Stratholme Service Entrance: its own door, not the main gate", points.get(1292) == (23, 0.4345, 0.1959), points.get(1292))
 check("Zul'Gurub is in Northern Stranglethorn, not at the edge of the Blasted Lands", points.get(76, (0,))[0] == 50, points.get(76))
+
+# 3.0.5: rare monsters — the catalog's «Точка» (uiMap x y, or the zone alone) in ns.RARE_SPOTS by mount ID
+spots_lua = lua[lua.index("ns.RARE_SPOTS = {"):] if "ns.RARE_SPOTS = {" in lua else ""
+spots = {int(m[0]): (int(m[1]), m[2], m[3]) for m in re.findall(r"\[(\d+)\] = \{ map = (\d+)(?:, x = ([\d.]+), y = ([\d.]+))? \}", spots_lua)}
+rare = [s for s in catalog["sheets"] if s["key"] == "rare"][0]
+ci, cp = rare["columns"].index("ID в игре"), rare["columns"].index("Точка")
+for row in rare["rows"]:
+    parts = str(row[cp] or "").split()
+    got = spots.get(int(row[ci]))
+    want = (int(parts[0]), "%g" % round(float(parts[1]) / 100, 4), "%g" % round(float(parts[2]) / 100, 4)) if len(parts) == 3 else (int(parts[0]), "", "") if parts else None
+    check("rare %r: its point in ns.RARE_SPOTS (run tools/catalog/entrances.py --write)" % row[3],
+          want is not None and got is not None and (got[0], got[1] and "%g" % float(got[1]), got[2] and "%g" % float(got[2])) == want, (want, got))
+check("every rare of the catalog has a point or a zone", len(spots) == len(rare["rows"]) > 50, (len(spots), len(rare["rows"])))
 
 toc = [ln.strip() for ln in open(os.path.join(ROOT, "MountSheetSync.toc"), encoding="utf-8") if ln.strip() and not ln.startswith("#")]
 check("Entrances.lua loads before UI.lua", "Entrances.lua" in toc and toc.index("Entrances.lua") < toc.index("UI.lua"), toc)

@@ -1011,6 +1011,31 @@ def kraulok(r):
     r.MockClick(r)
     check("…a world boss with no map in the game's journal (Kraulok): a pin at the known point", g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 864 and abs(g.ROUTE.waypoint.x - 0.44) < 1e-9, g.ROUTE.waypoint)
     r.elem.encounter = old
+    rare_route(r)
+def rare_route(r):
+    # 3.0.5: a rare's row (kind rare) has its point in ns.RARE_SPOTS by mount ID — a pin, or its zone's map
+    L.execute("""
+    MOCK_WORLDMAP = nil
+    WorldMapFrame = WorldMapFrame or CreateFrame("Frame", "WorldMapFrame")
+    function OpenWorldMap(map) MOCK_WORLDMAP = map; WorldMapFrame:Show() end""")
+    world, spot = r.elem.world, r.elem.spot
+    spots = g.MSS_NS.RARE_SPOTS
+    check("3.0.5: Entrances.lua gives every rare of the catalog a point (Ishak at Uldum)", spots is not None and spots[1314] is not None and spots[1314].map == 1527, spots and spots[1314])
+    r.elem.world, r.elem.spot = None, spots[1314]
+    L.execute("ROUTE.waypoint = nil")
+    r.MockClick(r)
+    check("3.0.5: Ctrl + left click on a rare with one spawn point: a pin there", g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 1527
+          and abs(g.ROUTE.waypoint.x - 0.7396) < 1e-9, g.ROUTE.waypoint)
+    r.elem.spot = spots[2827]
+    L.execute("ROUTE.waypoint = nil")
+    r.MockClick(r)
+    check("3.0.5: …a rare with several spawn points (any rare of Voidstorm): the zone's map opens, no pin", g.MOCK_WORLDMAP == 2405
+          and g.ROUTE.waypoint is None and "открыта карта его зоны" in chat_all(), (g.MOCK_WORLDMAP, chat_all()[-200:]))
+    w = g.MountSheetSyncFrame
+    hidden = w is not None and not w._shown
+    L.execute("WorldMapFrame:Hide()")
+    check("3.0.5: …the window steps aside while the map is open and comes back when it closes", hidden and w._shown, hidden)
+    r.elem.world, r.elem.spot = world, spot
 world_row = [f for f in pool(ROW) if f.elem.world]
 if world_row:
     world_row[0].MockClick(world_row[0])

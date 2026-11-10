@@ -641,6 +641,19 @@ end
 
 local function ShowRoute(elem)
   pendingRoute = nil   -- новый путь заменяет недоделанный
+  if elem.spot then
+    -- рар: точка из каталога (ns.RARE_SPOTS); точек появления несколько — карта его зоны
+    local name, s = Safe(elem.bossName), elem.spot
+    if s.x and PinAndTrack(s.map, s.x, s.y) then
+      ns.Print(string.format(L.route_boss, name))
+    elseif not s.x and pcall(OpenWorldMap, s.map) then
+      ns.Print(string.format(L.route_zone, name))
+      StepAside(WorldMapFrame)
+    else
+      ns.Print(string.format(L.route_none, name))
+    end
+    return
+  end
   if elem.world then
     local name = Safe(elem.bossName)
     local spot = elem.encounter and FindBossSpot(elem.encounter)
@@ -1232,7 +1245,9 @@ local function WithPlace(elem, item)
   elem.instance = ns.ItemInstance(item)
   elem.encounter = tonumber(item.je)
   elem.world = item.kind == "world" or nil
-  elem.route = (elem.instance and (item.kind == "raid" or item.kind == "dungeon")) or (elem.world and elem.encounter ~= nil) or nil
+  elem.spot = item.kind == "rare" and ns.RARE_SPOTS and ns.RARE_SPOTS[tonumber(item.id)] or nil
+  elem.route = (elem.instance and (item.kind == "raid" or item.kind == "dungeon")) or (elem.world and elem.encounter ~= nil)
+    or elem.spot ~= nil or nil
   elem.placeName = ns.Shown(item, "place")
   elem.bossName = ns.Shown(item, "boss")
   return elem

@@ -67,6 +67,22 @@ def catalog_places():
     return out
 
 
+def rare_spots():
+    """mountID -> (uiMap, x%, y%) or (uiMap,) from the rare sheet's «Точка»."""
+    with open(CATALOG, encoding="utf-8") as f:
+        data = json.load(f)
+    out = {}
+    for sheet in data["sheets"]:
+        if sheet["key"] != "rare" or "Точка" not in sheet["columns"]:
+            continue
+        ci, cp = sheet["columns"].index("ID в игре"), sheet["columns"].index("Точка")
+        for row in sheet["rows"]:
+            parts = str(row[cp] or "").split()
+            if parts and str(row[ci]).isdigit():
+                out[int(row[ci])] = tuple([int(parts[0])] + [float(p) for p in parts[1:3]])
+    return out
+
+
 class World:
     def __init__(self, cache):
         self.encounter = {int(r["ID"]): int(r["JournalInstanceID"]) for r in table("JournalEncounter", cache)}
@@ -229,6 +245,15 @@ def main():
         for i in sorted(points):
             ui, x, y = points[i]
             lines.append("  [%d] = { map = %d, x = %s, y = %s },   -- %s" % (i, ui, x, y, world.instances.get(i, "?")))
+        lines.append("}")
+        # rare monsters: the catalog's «Точка» (uiMap x y in percent, or the zone alone when they have several spawn points)
+        lines.append("-- Rare monsters: [mountID] = { map, x, y } from the catalog's column «Точка»; no x, y — several spawn points, the zone's map.")
+        lines.append("ns.RARE_SPOTS = {")
+        for mid, spot in sorted(rare_spots().items()):
+            if len(spot) == 3:
+                lines.append("  [%d] = { map = %d, x = %s, y = %s }," % (mid, spot[0], round(spot[1] / 100, 4), round(spot[2] / 100, 4)))
+            else:
+                lines.append("  [%d] = { map = %d }," % (mid, spot[0]))
         lines.append("}")
         with open(OUT, "w", encoding="utf-8", newline="\n") as f:
             f.write("\n".join(lines) + "\n")
