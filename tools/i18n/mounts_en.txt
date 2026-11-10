@@ -164,3 +164,66 @@
 3058	The Writhing Brood
 3063	Breath of Blight
 3064	Breath of Ruin
+561	Thundering Onyx Cloud Serpent
+955	Vile Fiend
+981	Biletooth Gnasher
+979	Crimson Slavermaw
+970	Maddened Chaosrunner
+980	Acid Belcher
+973	Lambent Mana Ray
+1174	Highland Mustang
+1183	Skullripper
+1182	Lil' Donkey
+1185	Witherbark Direwing
+1173	Broken Highland Mustang
+1180	Swift Albino Raptor
+1199	Blackpaw
+1200	Ashenvale Chimaera
+1205	Kaldorei Nightsaber
+1203	Umber Nightsaber
+1229	Rusty Mechanocrawler
+1248	Junkheap Drifter
+1257	Silent Glider
+1317	Waste Marauder
+1319	Malevolent Drone
+1328	Xinlao
+1327	Ren's Stalwart Hound
+1297	Clutch of Ha-Li
+1393	Wild Glimmerfur Prowler
+1514	Rampaging Mauler
+1506	Crimson Shardhide
+1509	Garnet Razorwing
+1372	Blisterback Bloodtusk
+1411	Predatory Plagueroc
+1373	Gorespine
+1370	Armored Bonehoof Tauralus
+1366	Bonehoof Tauralus
+1410	Hulking Deathroc
+1298	Hopecrusher Gargon
+1379	Endmire Flyer
+1310	Horrid Dredwing
+1304	Mawsworn Soulhunter
+1502	Fallen Charger
+2038	Clayscale Hornstrider
+1553	Liberated Slyvern
+1732	Cobalt Shalewing
+2192	Beledar's Spawn
+2603	Sthaarbs's Last Lunch
+2601	Pearlescent Krolusk
+2291	Salvaged Goblin Gazillionaire's Flying Machine
+2293	Darkfuse Spy-Eye
+535	Slate Primordial Direhorn
+534	Amber Primordial Direhorn
+536	Jade Primordial Direhorn
+622	Armored Razorback
+611	Tundra Icehoof
+643	Warsong Direfang
+2205	Ol' Mole Rufus
+2762	Cerulean Hawkstrider
+2758	Cobalt Dragonhawk
+2708	Vibrant Petalwing
+2615	Rootstalker Grimlynx
+2827	Sanguine Harrower
+2751	Augmented Stormray
+2760	Amani Sharptalon
+2775	Witherbark Pango

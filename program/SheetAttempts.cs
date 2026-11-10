@@ -380,6 +380,39 @@ namespace MountSheetSync
             return catalogIndex;
         }
 
+        static Dictionary<long, List<object>> rareNpcs;
+
+        /// <summary>
+        /// Номера существ рар каталога по mountID (колонка каталога «ID существ»; на лист не пишется). По ним аддон узнаёт
+        /// рара, чьё имя не говорит, какая это строка: три завоевателя Зандалари с одним именем, «любой редкий монстр» зоны.
+        /// </summary>
+        static Dictionary<long, List<object>> RareNpcs()
+        {
+            if (rareNpcs != null)
+            {
+                return rareNpcs;
+            }
+            Dictionary<long, List<object>> map = new Dictionary<long, List<object>>();
+            CatalogSheet sheet = Catalog.Embedded().Rare;
+            int cId = sheet != null ? sheet.Col(SheetBuilder.IdColumn) : -1;
+            int cNpc = sheet != null ? sheet.Col("ID существ") : -1;
+            if (cId >= 0 && cNpc >= 0)
+            {
+                foreach (object[] row in sheet.Rows)
+                {
+                    long id = MountIndex.IdOf(row[cId]);
+                    List<object> npcs = Regex.Matches(JsString(row[cNpc]), @"\d+").Cast<Match>()
+                        .Select(x => (object)double.Parse(x.Value, CultureInfo.InvariantCulture)).ToList();
+                    if (id > 0 && npcs.Count > 0)
+                    {
+                        map[id] = npcs;
+                    }
+                }
+            }
+            rareNpcs = map;
+            return map;
+        }
+
         public static List<object> StatusMounts(IBook book, HashSet<string> collected)
         {
             List<object> list = new List<object>();
@@ -434,6 +467,11 @@ namespace MountSheetSync
                     if (id > 0)
                     {
                         item["id"] = (double)id;
+                    }
+                    List<object> npcs;
+                    if (m[1] == "rare" && id > 0 && RareNpcs().TryGetValue(id, out npcs))
+                    {
+                        item["npcs"] = npcs;   // аддон 3.0.5 узнаёт рара по номеру существа
                     }
                     list.Add(item);
                 }

@@ -1095,3 +1095,336 @@ en: BfA world boss rotation
 
 @ Рар в Ульдуме, появляется во время нападений Н'Зота; лут раз в день на персонажа.
 en: A rare in Uldum during N'Zoth assaults; loot once a day per character.
+
+@ Нимар Душегуб
+en: Nimar the Slayer
+
+@ Рар: Нагорье Арати, точка 67.48, 60.58. Лут раз в день на персонажа.
+en: A rare in Arathi Highlands, at 67.48, 60.58. Loot once a day per character.
+
+@ Надзиратель Крикс
+en: Overseer Krix
+
+@ Рар: Нагорье Арати, точка 33.44, 36.94. Вход в пещеру — у точки. Лут раз в день на персонажа.
+en: A rare in Arathi Highlands, at 33.44, 36.94. The cave entrance is at the point. Loot once a day per character.
+
+@ Головокуска
+en: Skullripper
+
+@ Рар: Нагорье Арати, точка 57.15, 45.75. Лут раз в день на персонажа.
+en: A rare in Arathi Highlands, at 57.15, 45.75. Loot once a day per character.
+
+@ Укротитель Кама
+en: Beastrider Kama
+
+@ Рар: Нагорье Арати, точка 67.06, 65.89. Лут раз в день на персонажа.
+en: A rare in Arathi Highlands, at 67.06, 65.89. Loot once a day per character.
+
+@ Всадник рока Хелгрим
+en: Doomrider Helgrim
+
+@ Рар: Нагорье Арати, точек появления несколько. Добыча только для Альянса.
+en: A rare in Arathi Highlands, several spawn points. Alliance only.
+
+@ Рыцарь-капитан Алдрин
+en: Knight-Captain Aldrin
+
+@ Рар: Нагорье Арати, точек появления несколько. Добыча только для Орды.
+en: A rare in Arathi Highlands, several spawn points. Horde only.
+
+@ Алаш'анир
+en: Alash'anir
+
+@ Рар: Темные берега, точка 56.4, 30.8. Лут раз в день на персонажа.
+en: A rare in Darkshore, at 56.4, 30.8. Loot once a day per character.
+
+@ Агата Вирмвуд / Чернолап
+en: Agathe Wyrmwood / Blackpaw
+
+@ Рар: Темные берега, точек появления несколько. Альянсу — Агата Вирмвуд, Орде — Чернолап. Лут раз в день на персонажа.
+en: A rare in Darkshore, several spawn points. Alliance: Agathe Wyrmwood, Horde: Blackpaw. Loot once a day per character.
+
+@ Кроз Ярость Крови / Тенекоготь
+en: Croz Bloodrage / Shadowclaw
+
+@ Рар: Темные берега, точек появления несколько. Альянсу — Кроз Ярость Крови, Орде — Тенекоготь. Лут раз в день на персонажа.
+en: A rare in Darkshore, several spawn points. Alliance: Croz Bloodrage, Horde: Shadowclaw. Loot once a day per character.
+
+@ Палач Мохо / Атилия Огненная Роса
+en: Moxo the Beheader / Athil Dewfire
+
+@ Рар: Темные берега, точек появления несколько. Альянсу — Палач Мохо, Орде — Атилия Огненная Роса. Лут раз в день на персонажа.
+en: A rare in Darkshore, several spawn points. Alliance: Moxo the Beheader, Horde: Athil Dewfire. Loot once a day per character.
+
+@ Ржавое Перо
+en: Rustfeather
+
+@ Рар: Остров Мехагон, точка 65.8, 79.6. Лут раз в день на персонажа.
+en: A rare in Mechagon Island, at 65.8, 79.6. Loot once a day per character.
+
+@ Арахноид-пожинатель
+en: Arachnoid Harvester
+
+@ Рар: Остров Мехагон, точка 52, 41.4. Лут раз в день на персонажа.
+en: A rare in Mechagon Island, at 52, 41.4. Loot once a day per character.
+
+@ Неслышимка
+en: Soundless
+
+@ Рар: Назжатар, точек появления несколько. Лут раз в день на персонажа.
+en: A rare in Nazjatar, several spawn points. Loot once a day per character.
+
+@ Анх-Де Верный
+en: Anh-De the Loyal
+
+@ Рар: Вечноцветущий дол, точка 34.15, 68.05. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.
+en: A rare in Vale of Eternal Blossoms, at 34.15, 68.05. Appears during N'Zoth assaults. Loot once a day per character.
+
+@ Ха-Ли
+en: Ha-Li
+
+@ Рар: Вечноцветущий дол, точка 36.6, 37.6. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.
+en: A rare in Vale of Eternal Blossoms, at 36.6, 37.6. Appears during N'Zoth assaults. Loot once a day per character.
+
+@ Мастер-псарь Жэнь
+en: Houndlord Ren
+
+@ Рар: Вечноцветущий дол, точка 10, 33. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.
+en: A rare in Vale of Eternal Blossoms, at 10, 33. Appears during N'Zoth assaults. Loot once a day per character.
+
+@ Пожиратель трупов
+en: Corpse Eater
+
+@ Рар: Ульдум, точка 30.85, 49.71. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.
+en: A rare in Uldum, at 30.85, 49.71. Appears during N'Zoth assaults. Loot once a day per character.
+
+@ Гниложор
+en: Rotfeaster
+
+@ Рар: Ульдум, точка 68.23, 31.97. Появляется во время нападений Н'Зота. Лут раз в день на персонажа.
+en: A rare in Uldum, at 68.23, 31.97. Appears during N'Zoth assaults. Loot once a day per character.
+
+@ Ядовитый небесный скат
+en: Venomtail Skyfin
+
+@ Рар: Эредат, точка 34.01, 47.83. Лут раз в день на персонажа.
+en: A rare in Eredath, at 34.01, 47.83. Loot once a day per character.
+
+@ Пастух Кравос
+en: Wrangler Kravos
+
+@ Рар: Эредат, точка 55.65, 59.95. Лут раз в день на персонажа.
+en: A rare in Eredath, at 55.65, 59.95. Loot once a day per character.
+
+@ Скрииг Пожиратель
+en: Skreeg the Devourer
+
+@ Рар: Эредат, точка 49.79, 9.4. Лут раз в день на персонажа.
+en: A rare in Eredath, at 49.79, 9.4. Loot once a day per character.
+
+@ Псарь Керракс
+en: Houndmaster Kerrax
+
+@ Рар: Пустоши Анторуса, точка 62.96, 24.86. Лут раз в день на персонажа.
+en: A rare in Antoran Wastes, at 62.96, 24.86. Loot once a day per character.
+
+@ Язвоглот
+en: Blistermaw
+
+@ Рар: Пустоши Анторуса, точка 61.78, 36.97. Лут раз в день на персонажа.
+en: A rare in Antoran Wastes, at 61.78, 36.97. Loot once a day per character.
+
+@ Пузцилла / Вракс'тул
+en: Puscilla / Vrax'thul
+
+@ Рар: Пустоши Анторуса, точка 64.42, 20.35. Лут раз в день на персонажа.
+en: A rare in Antoran Wastes, at 64.42, 20.35. Loot once a day per character.
+
+@ Холон
+en: Huolon
+
+@ Рар: Вневременный остров, точек появления несколько.
+en: A rare in Timeless Isle, several spawn points.
+
+@ Харика Ужасающая
+en: Harika the Horrid
+
+@ Рар: Ревендрет, точка 46, 78.5. Его можно и купить у торговца. Лут раз в день на персонажа.
+en: A rare in Revendreth, at 46, 78.5. Can also be bought from a vendor. Loot once a day per character.
+
+@ Сокрушитель Надежд
+en: Hopecrusher
+
+@ Рар: Ревендрет, точка 51.98, 51.8. Лут раз в день на персонажа.
+en: A rare in Revendreth, at 51.98, 51.8. Loot once a day per character.
+
+@ Фаму Бесконечный
+en: Famu the Infinite
+
+@ Рар: Ревендрет, точка 62, 47. Лут раз в день на персонажа.
+en: A rare in Revendreth, at 62, 47. Loot once a day per character.
+
+@ Тахонта
+en: Tahonta
+
+@ Рар: Малдраксус, точка 44.2, 51.2. Падает, только если вашим спутником сейчас конструкт Нина (Некролорды). Лут раз в день на персонажа.
+en: A rare in Maldraxxus, at 44.2, 51.2. Drops only while the construct Neena is your active companion (Necrolords). Loot once a day per character.
+
+@ Сабриэль Косторуб
+en: Sabriel the Bonecleaver
+
+@ Рар: Малдраксус, точка 50.67, 47.37. Его можно и купить у торговца. Лут раз в день на персонажа.
+en: A rare in Maldraxxus, at 50.67, 47.37. Can also be bought from a vendor. Loot once a day per character.
+
+@ Гигер
+en: Gieger
+
+@ Рар: Малдраксус, точка 31.4, 35.6. Лут раз в день на персонажа.
+en: A rare in Maldraxxus, at 31.4, 35.6. Loot once a day per character.
+
+@ Фиолетовая ошибка
+en: Violet Mistake
+
+@ Рар: Малдраксус, точка 58.6, 74.2. Лут раз в день на персонажа.
+en: A rare in Maldraxxus, at 58.6, 74.2. Loot once a day per character.
+
+@ Нерисса Бессердечная
+en: Nerissa Heartless
+
+@ Рар: Малдраксус, точка 65.8, 35.3. Лут раз в день на персонажа.
+en: A rare in Maldraxxus, at 65.8, 35.3. Loot once a day per character.
+
+@ Вестник войны Мал'Корак
+en: Warbringer Mal'Korak
+
+@ Рар: Малдраксус, точка 33.6, 80.6. Лут раз в день на персонажа.
+en: A rare in Maldraxxus, at 33.6, 80.6. Loot once a day per character.
+
+@ Валфир Непреклонный
+en: Valfir the Unrelenting
+
+@ Рар: Арденвельд, точка 30.4, 55.2. Его можно и купить у торговца. Лут раз в день на персонажа.
+en: A rare in Ardenweald, at 30.4, 55.2. Can also be bought from a vendor. Loot once a day per character.
+
+@ Обожравшаяся темная гончая
+en: Gorged Shadehound
+
+@ Рар: Утроба, точка 53.5, 79.5.
+en: A rare in The Maw, at 53.5, 79.5.
+
+@ Павший боевой конь
+en: Fallen Charger
+
+@ Рар: Утроба, точек появления несколько.
+en: A rare in The Maw, several spawn points.
+
+@ Контрогз Уничтожитель
+en: Konthrogz the Obliterator
+
+@ Рар: Кортия, точек появления несколько. Лут раз в день на персонажа.
+en: A rare in Korthia, several spawn points. Loot once a day per character.
+
+@ Реливик Непокорный
+en: Reliwik the Defiant
+
+@ Рар: Кортия, точка 56.3, 66.3. Лут раз в день на персонажа.
+en: A rare in Korthia, at 56.3, 66.3. Loot once a day per character.
+
+@ Малбог
+en: Malbog
+
+@ Рар: Кортия, точка 45.35, 30.34. Лут раз в день на персонажа.
+en: A rare in Korthia, at 45.35, 30.34. Loot once a day per character.
+
+@ Кусачий Ветер
+en: Breezebiter
+
+@ Рар: Лазурный Простор, точек появления несколько.
+en: A rare in The Azure Span, several spawn points.
+
+@ Гибломрак
+en: Doomshadow
+
+@ Рар: Лазурный Простор, точка 27.8, 46.
+en: A rare in The Azure Span, at 27.8, 46.
+
+@ Карокта
+en: Karokta
+
+@ Рар: Пещера Заралек, точек появления несколько.
+en: A rare in Zaralek Cavern, several spawn points.
+
+@ Порождение Беледар
+en: Beledar's Spawn
+
+@ Рар: Тайносводье, точек появления несколько.
+en: A rare in Hallowfall, several spawn points.
+
+@ Мусор из Галаджио
+en: Gallagio Garbage
+
+@ Рар: Нижняя Шахта, точка 32.2, 21.8.
+en: A rare in Undermine, at 32.2, 21.8.
+
+@ Стимулирующий реагент Мрачных Минеров
+en: Darkfuse Precipitant
+
+@ Рар: Нижняя Шахта, точка 41.2, 41.2.
+en: A rare in Undermine, at 41.2, 41.2.
+
+@ Стаарбс
+en: Sthaarbs
+
+@ Рар: К'ареш, точек появления несколько.
+en: A rare in K'aresh, several spawn points.
+
+@ Урмаг
+en: Urmag
+
+@ Без отката
+en: No cooldown
+
+@ Зандаларский завоеватель №1
+en: Zandalari Warbringer #1
+
+@ Появляется в разных зонах Пандарии. Три завоевателя на вид одинаковы, у каждого свой ящер; номер — только для таблицы, аддон различает их сам. Отката добычи нет.
+en: Appears in several zones of Pandaria. The three Warbringers look the same, each has its own direhorn; the number is only for the sheet, the addon tells them apart. No loot cooldown.
+
+@ Зандаларский завоеватель №2
+en: Zandalari Warbringer #2
+
+@ Зандаларский завоеватель №3
+en: Zandalari Warbringer #3
+
+@ Коготь Смерти / Кулак Страха / Пушка Смерти / Отмщение
+en: Deathtalon / Terrorfist / Doomroller / Vengeance
+
+@ Четыре рара Танаанских джунглей, маунт падает с любого из них. Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.
+en: Four rares of Tanaan Jungle; the mount drops from any of them. Each one gives loot once a day per character, so the row has no cooldown of its own.
+
+@ Скрытень со Дна
+en: Lurker of the Deeps
+
+@ Рара нужно призвать: пять игроков почти одновременно (за ~10 секунд) дёргают пять неприметных рычагов по Звенящим глубинам, рар появляется у озера через минуту. Лут раз в день на персонажа.
+en: It has to be summoned: five players pull the five Inconspicuous Levers around the Ringing Deeps within about 10 seconds; it appears at the lake a minute later. Loot once a day per character.
+
+@ Любой редкий монстр: Буря Бездны
+en: Any rare: Voidstorm
+
+@ Падает с любого редкого монстра зоны (их здесь 13). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.
+en: Drops from any rare of the zone (13 of them). Each one gives loot once a day per character, so the row has no cooldown of its own.
+
+@ Любой редкий монстр: Зул'Аман
+en: Any rare: Zul'Aman
+
+@ Падает с любого редкого монстра зоны (их здесь 15). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.
+en: Drops from any rare of the zone (15 of them). Each one gives loot once a day per character, so the row has no cooldown of its own.
+
+@ Любой редкий монстр: Леса Вечной Песни
+en: Any rare: Eversong Woods
+
+@ Любой редкий монстр: Харандар
+en: Any rare: Harandar
+
+@ Падает с любого редкого монстра зоны (их здесь 16). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.
+en: Drops from any rare of the zone (16 of them). Each one gives loot once a day per character, so the row has no cooldown of its own.

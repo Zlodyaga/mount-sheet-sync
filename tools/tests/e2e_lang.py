@@ -397,7 +397,7 @@ try:
     check("de upgrade: no Russian on the new sheet", not any(CYR.search(str(v)) for row in moved.values() for v in row.values()),
           [v for row in moved.values() for v in row.values() if CYR.search(str(v))])
     meta = [m for m in book["devmeta"] if m["metadataKey"] == "mountSheetSync.layout"]
-    check("de upgrade: layout 5 stored", meta and meta[0]["metadataValue"] == "5", meta)
+    check("de upgrade: layout 6 stored", meta and meta[0]["metadataValue"] == "6", meta)
     sd = de.sheet_data()
     check("de upgrade: list with a daily cooldown read from «Täglich»", 'kind = "rare"' in sd and 'every = "daily"' in sd, sd[:300])
     reads = [p for m, p in state()["requests"][n_before:] if m == "GET" and p.startswith("/v4/spreadsheets")]

@@ -48,7 +48,11 @@ sheets = [{"name": s["name"], "rows": s["rows"], "formulas": s["formulas"]} for 
 [s for s in sheets if s["name"] == "Рейды"][0]["rows"][1][15] = 36   # 36 attempts so far
 status = host({"catalog": None, "sheets": sheets, "mode": "handle", "properties": {"layout": "3"}, "request": {"action": "status"}})["reply"]
 status["generated"] = NOW - 3600
-check("the program's status carries the attempt rows", [m["mount"] for m in status.get("mounts", [])] == ["Отмщение", "Сын Галеона", "Дракон Четырех Ветров"], status.get("mounts"))
+check("the program's status carries the attempt rows", [m["mount"] for m in status.get("mounts", [])][:3] == ["Отмщение", "Сын Галеона", "Дракон Четырех Ветров"], status.get("mounts"))
+RARES = {m["boss"]: m for m in status.get("mounts", []) if m["kind"] == "rare"}
+check("…and every rare of the catalog (layout 6), with its creature numbers (program 2.10.1)",
+      len(RARES) > 50 and RARES.get("Зандаларский завоеватель №2", {}).get("npcs") == [69841]
+      and 248741 in RARES.get("Любой редкий монстр: Харандар", {}).get("npcs", []), sorted(RARES)[:5])
 
 
 def lua_str(s):
@@ -64,6 +68,9 @@ def to_lua(v):
     return "{" + ", ".join("[%s] = %s" % (lua_str(k), to_lua(x)) for k, x in v.items() if x is not None and k != "ok") + "}"
 
 
+for _m in status.get("mounts", []):
+    if _m["boss"] == "Исхак Повелитель Четырех Ветров":
+        _m.pop("npcs", None)   # Ishak by his name: the checks below are about the name (a row sent without numbers)
 SHEET_SRC = "MountSheetSyncSheet = " + to_lua(status) + "\n"
 PROGRAM_SRC = 'MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.9.2" }\n' % (NOW - 30)
 
@@ -318,6 +325,23 @@ check("…an ordinary mob is not remembered", len(g4.MountSheetSyncDB.kills) == 
 L4.execute('UNIT_KIND = "SECRET"; TARGET = { guid = "Creature-0-3767-1-41-157134-0000AAAB", name = "Исхак Повелитель Четырех Ветров" }')
 g4.Fire("PLAYER_TARGET_CHANGED")
 check("…a hidden classification: skipped, no error", not any("Ошибка" in c for c in chat(g4, 0)))
+# 3.0.5: a rare whose name does not tell the row — found by the creature number from the GUID
+L7, g7, ns7, _, _ = new_game()
+out = loot(L7, g7, "Creature-0-3767-1-41-69841-0000AA01", "Зандаларский завоеватель")
+k7 = g7.MountSheetSyncDB.kills
+last = k7[len(k7)]
+amber = RARES["Зандаларский завоеватель №2"]["mount"]
+check("3.0.5: a Zandalari Warbringer (one name for three): the record names its own row, №2", last.boss == "Зандаларский завоеватель №2"
+      and "-69841-" in str(last.id), (last.boss, last.id))
+check("…chat: its own direhorn, attempt 1", any(amber in c and "попытка 1 " in c for c in out), out)
+n7 = len(k7)
+out = loot(L7, g7, "Creature-0-3767-1-41-248741-0000AA02", None)
+check("3.0.5: any rare of Harandar, even with its name unknown: counted under «Любой редкий монстр: Харандар»",
+      len(g7.MountSheetSyncDB.kills) == n7 + 1 and g7.MountSheetSyncDB.kills[n7 + 1].boss == "Любой редкий монстр: Харандар", out)
+out = loot(L7, g7, "Creature-0-3767-1-41-249844-0000AA03", None)
+check("…another rare of that zone two minutes later: a new attempt (the repeat guard is by creature)", len(g7.MountSheetSyncDB.kills) == n7 + 2, out)
+out = loot(L7, g7, "Creature-0-3767-1-41-249844-0000AA04", None)
+check("…the same creature again within 15 minutes: not counted twice", len(g7.MountSheetSyncDB.kills) == n7 + 2, out)
 # the other two ways to see a rare: under the mouse, by its nameplate (a unit token that is gone by the time of the loot)
 L4.execute("""
 UNITS = {}
@@ -523,7 +547,7 @@ boxes = [r for r in regs + [g.ALL_REGIONS[i] for i in range(len(regs) + 1, len(g
 text = str(boxes[0]._text) if boxes else ""
 check("report window: the text selected for Ctrl+C", rep is not None and rep._shown and boxes and boxes[0]._highlighted, text)
 check("…versions, program state and counts", "Mount Sheet Sync bug report" in text and "Addon: 3.0.5" in text and "Game: 12.1.5 (build 65000" in text
-      and "Program: online (version 2.9.2, sheet connected" in text and "attempt rows 3" in text and "Journal: 5 records" in text, text)
+      and "Program: online (version 2.9.2, sheet connected" in text and ("attempt rows %d" % len(status["mounts"])) in text and "Journal: 5 records" in text, text)
 check("…no character names, realm or spreadsheet title", "Эйра" not in text and "Ревущий" not in text and "Мирна" not in text, text)
 boxes[0]._scripts.OnTextChanged(boxes[0], True)
 check("…read-only: typing restores the text", str(boxes[0]._text) == text)

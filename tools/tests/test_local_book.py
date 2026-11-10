@@ -28,7 +28,7 @@ r = json.loads(p.stdout.decode("utf-8"))
 
 check("empty data: no sheets, not kept for the next call, nothing on the disk", r["emptySheets"] == 0 and r["emptyReusable"] is False and r["emptyWroteFile"] is False, r)
 check("made from the catalog: the copy in memory is good to reuse", r["madeReusable"] is True)
-check("…remembers who made it, its language, title and layout", r["creator"] != "" and r["langAfterLoad"] == "ru" and r["titleAfterLoad"] == "Тест" and r["layout"] == "5", r)
+check("…remembers who made it, its language, title and layout", r["creator"] != "" and r["langAfterLoad"] == "ru" and r["titleAfterLoad"] == "Тест" and r["layout"] == "6", r)
 check("…reads back in the same shape, tick boxes stay booleans", r["sameShapeAfterLoad"] is True and r["typesKept"] is True, r)
 check("an unsaved change: the copy is not reused", r["dirtyNotReusable"] is True)
 check("…saved: the writer's copy is fine, the value is on the disk", r["writerReusable"] is True and r["valueSaved"] == "Да", r)

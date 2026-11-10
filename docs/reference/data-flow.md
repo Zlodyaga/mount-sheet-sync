@@ -42,4 +42,4 @@ WoW (аддон) ──SavedVariables\MountSheetSync.lua──► програм
 
 В `SheetData.lua` у строк нет `sheet` и `row`: они есть в ответе таблицы, но аддон их не читает (`SheetData.NotForAddon`).
 
-Рары в `SheetData.lua`: `items`/`mounts` с `kind = "rare"`, у `items` ещё `every` (`"daily"`, `"weekly"` или секунды). Лимит проекта — 300 чтений и 300 записей в минуту (см. [decisions.md](decisions.md)).
+Рары в `SheetData.lua`: `items`/`mounts` с `kind = "rare"`, у `items` ещё `every` (`"daily"`, `"weekly"` или секунды). Лимит проекта — 300 чтений и 300 записей в минуту (см. [decisions.md](decisions.md)). У рар в `mounts` — `npcs` (номера существ из каталога, программа 2.10.1); `every` = 0 — «Без отката».

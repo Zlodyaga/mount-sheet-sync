@@ -149,7 +149,7 @@ check("…and switched to it", settings.get("mode") == "local", settings.get("mo
 b = book(A)
 names = [s["name"] for s in b["sheets"]]
 check("the same sheets as a new table", all(n in names for n in ("Рейды", "Рейды Эйра", "Рейды Мирна", "Подземелья", "Подземелья Эйра", "Мировые боссы", "Сводка")), names)
-check("layout is current, so the sync loop has nothing to upgrade", b["properties"].get("layout") == "5", b["properties"])
+check("layout is current, so the sync loop has nothing to upgrade", b["properties"].get("layout") == "6", b["properties"])
 rows = sheet(A, "Рейды Эйра")
 check("character sheet: «Девятка» row from the catalog, with «Фармлю»", any("Девятка" in r for r in rows) and "Фармлю" in rows[0], rows[0])
 check("no default sheet and no empty rows", all(s["rows"] and all(len(r) == len(s["rows"][0]) for r in s["rows"]) for s in b["sheets"]))

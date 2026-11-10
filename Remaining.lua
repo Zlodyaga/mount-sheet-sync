@@ -830,6 +830,26 @@ function ns.RareRow(name)
   return false
 end
 
+-- Строка рара по номеру существа (список программы 2.10.1+, `npcs`): у трёх завоевателей Зандалари одно имя, а «любой
+-- редкий монстр зоны» — десятки имён. Отдаёт название строки — его аддон и пишет в журнал, чтобы программа нашла строку.
+function ns.RareRowForNpc(npc)
+  local data = AttemptRows()
+  npc = tonumber(npc)
+  if not data or not npc then
+    return nil
+  end
+  for _, m in ipairs(data.mounts) do
+    if type(m) == "table" and m.kind == "rare" and type(m.npcs) == "table" and type(m.boss) == "string" and not Collected(m) then
+      for _, n in ipairs(m.npcs) do
+        if tonumber(n) == npc then
+          return m.boss
+        end
+      end
+    end
+  end
+  return nil
+end
+
 -- Персонаж из списка — тот, кто сделал запись (имена записи нормализуются один раз на запись).
 local whoCache = setmetatable({}, { __mode = "k" })
 

@@ -879,12 +879,20 @@ namespace MountSheetSync
         static readonly Regex EveryHours = new Regex(@"(\d+)\s*(ч|h)", RegexOptions.IgnoreCase);
 
         /// <summary>
-        /// Откат рара из «Сброс / частота» (на любом языке таблицы): "weekly", число секунд («каждые 8 ч») или "daily" —
-        /// ежедневный сброс игры, он же значение по умолчанию.
+        /// Откат рара из «Сброс / частота» (на любом языке таблицы): "weekly", число секунд («каждые 8 ч»; «Без отката» — 0)
+        /// или "daily" — ежедневный сброс игры, он же значение по умолчанию.
         /// </summary>
         public static object RareEvery(object cell)
         {
             string text = JsString(cell).ToLowerInvariant();
+            // маунт с любого из нескольких раров, у каждого своя добыча на день: общего отката у строки нет
+            foreach (string w in new[] { "без отката", "no cooldown" })
+            {
+                if (text.Contains(w))
+                {
+                    return 0.0;
+                }
+            }
             foreach (string w in new[] { "еженедельно", "раз в неделю", "weekly", "wöchentlich", "hebdomadaire", "semanal" })
             {
                 if (text.Contains(w))

@@ -438,14 +438,17 @@ local function NameOfGuid(guid)
   return rareNames[guid]
 end
 
-local function RecentlyRecorded(player, boss, stamp)
+-- npc — строка узнана по номеру существа: у неё одно название на много раров («любой редкий монстр зоны»), поэтому повтором
+-- считается только тот же номер.
+local function RecentlyRecorded(player, boss, stamp, npc)
   local want = ns.Norm and ns.Norm(boss) or boss
   for i = #db.kills, 1, -1 do
     local rec = db.kills[i]
     if (tonumber(rec.time) or 0) < stamp - LOOT_REPEAT then
       break
     end
-    if rec.charKey == player.key and rec.kind == "world" and (ns.Norm and ns.Norm(rec.boss) or rec.boss) == want then
+    if rec.charKey == player.key and rec.kind == "world" and (ns.Norm and ns.Norm(rec.boss) or rec.boss) == want
+        and (not npc or tostring(rec.id or ""):find("-" .. npc .. "-", 1, true)) then
       return true
     end
   end
@@ -468,13 +471,15 @@ local function OnLootReady()
   end
   local player = GetPlayer()
   for guid in pairs(guids) do
-    local name = Clean(NameOfGuid(guid))
+    local npc = guid:match("^Creature%-%d+%-%d+%-%d+%-%d+%-(%d+)%-") or "0"
+    -- сначала по номеру существа: строка, которую по имени не узнать (завоеватель Зандалари №2, любой рар зоны)
+    local byNpc = ns.RareRowForNpc and ns.RareRowForNpc(npc)
+    local name = byNpc or Clean(NameOfGuid(guid))
     if name then
       lootedGuids[guid] = true   -- имени нет — труп ещё не решён: может, откроют снова, выбрав его целью
     end
     local stamp = time()
-    if name and player.name and ns.RareRow(name) and not RecentlyRecorded(player, name, stamp) then
-      local npc = guid:match("^Creature%-%d+%-%d+%-%d+%-%d+%-(%d+)%-") or "0"
+    if name and player.name and (byNpc or ns.RareRow(name)) and not RecentlyRecorded(player, name, stamp, byNpc and npc) then
       local rec = BaseRecord(player, stamp)
       rec.id = string.format("D-%s-%s-%d", player.key, npc, stamp)
       rec.boss = name

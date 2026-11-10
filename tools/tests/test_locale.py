@@ -245,6 +245,10 @@ for _sheet in _catalog["sheets"]:
         if not all(_p.get(l) for l in _four + ("ru",)):
             _gaps.append("place: " + _r[1])
 check("every row of the window has its boss and place translated into all six languages", not _gaps, sorted(set(_gaps)))
+_rare = [s for s in _catalog["sheets"] if s["key"] == "rare"][0]
+_rid = _rare["columns"].index("ID в игре")
+_untranslated = [_r[2] for _r in _rare["rows"] if len(_names["mounts"].get(str(_r[_rid]), {})) != 6]
+check("every rare monster's mount has its name in all six languages (game_names.json)", len(_rare["rows"]) > 40 and not _untranslated, _untranslated)
 check("every reward achievement has its requirement in all six languages", all(len(_names["conditions"].get(str(r["id"]), {})) == 6 for r in _names["rewards"].values()),
       [r["id"] for r in _names["rewards"].values() if len(_names["conditions"].get(str(r["id"]), {})) != 6])
 

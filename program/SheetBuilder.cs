@@ -1100,17 +1100,48 @@ namespace MountSheetSync
         public static void AddRare(List<object> req, int sheetId, int index, List<object[]> data)
         {
             AddTable(req, sheetId, RareSheet, index, RareMaster, data, RareWidths);
-            int end = data.Count + 1;
-            req.Add(Validation(sheetId, 1, end, 0, ListRule(new[] { SheetLogic.Yes, SheetLogic.No },
-                new[] { new[] { ChipYesBg, ChipYesFg }, new[] { ChipNoBg, ChipNoFg } })));
             req.AddRange(YesNoColors(sheetId, 0));
+            RareRowFormats(req, sheetId, 1, data.Count + 1);
+        }
+
+        /// <summary>
+        /// Вид 6: новые строки каталога — в конец листа рар (start — номер первой новой строки, 0 — заголовок): значения,
+        /// шрифт, высота, полосы (своей полосой рядом со старой: та кончается на прежней последней строке) и форматы.
+        /// </summary>
+        public static void AppendRare(List<object> req, int sheetId, int start, List<object[]> data)
+        {
+            int columns = RareMaster.Length;
+            int end = start + data.Count;
+            req.Add(O("appendDimension", O("sheetId", sheetId, "dimension", "ROWS", "length", data.Count)));
+            req.Add(UpdateCells(sheetId, start, 0, data));
+            req.Add(RepeatFormat(sheetId, start, end, 0, columns,
+                O("textFormat", O("fontFamily", Font, "fontSize", 11), "verticalAlignment", "TOP", "wrapStrategy", "WRAP"),
+                "userEnteredFormat.textFormat,userEnteredFormat.verticalAlignment,userEnteredFormat.wrapStrategy"));
+            req.Add(O("updateDimensionProperties", O(
+                "range", O("sheetId", sheetId, "dimension", "ROWS", "startIndex", start, "endIndex", end),
+                "properties", O("pixelSize", RowHeight),
+                "fields", "pixelSize")));
+            bool first = (start - 1) % 2 == 0;   // строки 1, 3, 5… — первая полоса
+            req.Add(O("addBanding", O("bandedRange", O(
+                "range", Range(sheetId, start, end, 0, columns),
+                "rowProperties", O(
+                    "firstBandColor", Color(first ? BandFirst : White),
+                    "secondBandColor", Color(first ? White : BandFirst))))));
+            RareRowFormats(req, sheetId, start, end);
+        }
+
+        static void RareRowFormats(List<object> req, int sheetId, int start, int end)
+        {
+            req.Add(Validation(sheetId, start, end, 0, ListRule(new[] { SheetLogic.Yes, SheetLogic.No },
+                new[] { new[] { ChipYesBg, ChipYesFg }, new[] { ChipNoBg, ChipNoFg } })));
             foreach (string name in new[] { Collected, "Шанс выпадения", "Сброс / частота" })
             {
                 int c = Array.IndexOf(RareMaster, name);
-                req.Add(RepeatFormat(sheetId, 1, end, c, c + 1, O("horizontalAlignment", "CENTER"), "userEnteredFormat.horizontalAlignment"));
+                req.Add(RepeatFormat(sheetId, start, end, c, c + 1, O("horizontalAlignment", "CENTER"), "userEnteredFormat.horizontalAlignment"));
             }
             int cChance = Array.IndexOf(RareMaster, "Шанс выпадения");
-            req.Add(RepeatFormat(sheetId, 1, end, cChance, cChance + 1, O("numberFormat", O("type", "PERCENT", "pattern", "0%")),
+            // с десятыми: у рар бывает 0,3–0,5 % (Ржавый механопаук), «0%» читалось бы как «не падает»
+            req.Add(RepeatFormat(sheetId, start, end, cChance, cChance + 1, O("numberFormat", O("type", "PERCENT", "pattern", "0.0%")),
                 "userEnteredFormat.numberFormat"));
             req.AddRange(AttemptFormats(sheetId, Array.IndexOf(RareMaster, AttemptsColumn), end, false));
         }
