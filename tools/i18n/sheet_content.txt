@@ -1615,13 +1615,6 @@ pt: É preciso invocá-lo: cinco jogadores puxam as cinco alavancas (Inconspicuo
 @ Любой редкий монстр: Буря Бездны
 en: Any rare: Voidstorm
 
-@ Падает с любого редкого монстра зоны (их здесь 13). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.
-en: Drops from any rare of the zone (13 of them). Each one gives loot once a day per character, so the row has no cooldown of its own.
-de: Fällt bei jedem seltenen Gegner der Zone (es gibt 13). Jeder gibt einmal am Tag pro Charakter Beute, daher hat die Zeile keine eigene Abklingzeit.
-fr: Tombe sur n'importe quel monstre rare de la zone (il y en a 13). Chacun donne du butin une fois par jour et par personnage : la ligne n'a donc pas de délai propre.
-es: Cae de cualquier raro de la zona (hay 13). Cada uno da botín una vez al día por personaje, así que la fila no tiene reutilización propia.
-pt: Cai de qualquer raro da zona (são 13). Cada um dá saque uma vez por dia por personagem, então a linha não tem recarga própria.
-
 @ Любой редкий монстр: Зул'Аман
 en: Any rare: Zul'Aman
 
@@ -1856,13 +1849,6 @@ pt: Cresce de um Cogumelo de Crescimento Rápido (detalhes no Wowhead).
 
 @ Любой редкий монстр: Спиральный остров
 en: Any rare: The Coiled Isle
-
-@ Падает с любого редкого монстра острова (их здесь 9), очень редко. Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.
-en: Drops from any rare of the isle (9 of them), very rarely. Each one gives loot once a day per character, so the row has no cooldown of its own.
-de: Fällt bei jedem seltenen Gegner der Insel (es gibt 9), sehr selten. Jeder gibt einmal am Tag pro Charakter Beute, daher hat die Zeile keine eigene Abklingzeit.
-fr: Tombe sur n'importe quel monstre rare de l'île (il y en a 9), très rarement. Chacun donne du butin une fois par jour et par personnage : la ligne n'a donc pas de délai propre.
-es: Cae de cualquier raro de la isla (hay 9), muy rara vez. Cada uno da botín una vez al día por personaje, así que la fila no tiene reutilización propia.
-pt: Cai de qualquer raro da ilha (são 9), muito raramente. Cada um dá saque uma vez por dia por personagem, então a linha não tem recarga própria.
 
 @ Падает с любого редкого монстра зоны (их здесь 21). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет.
 en: Drops from any rare of the zone (21 of them). Each one gives loot once a day per character, so the row has no cooldown of its own.
