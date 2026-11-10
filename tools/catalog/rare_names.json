@@ -19,6 +19,12 @@
    "es": "Alash'anir",
    "pt": "Alash'anir"
   },
+  "Алунира": {
+   "de": "Alunira",
+   "fr": "Alunira",
+   "es": "Alunira",
+   "pt": "Alunira"
+  },
   "Анх-Де Верный": {
    "de": "Anh-De der Loyale",
    "fr": "Anh De le Loyal",
@@ -36,6 +42,12 @@
    "fr": "Valfir le Tenace",
    "es": "Valfir el Inflexible",
    "pt": "Valfir, o Implacável"
+  },
+  "Вел'иккан": {
+   "de": "Ri'sich",
+   "fr": "Gargan'tuzz",
+   "es": "Coloss'ahl",
+   "pt": "Graw'uhdo"
   },
   "Вестник войны Мал'Корак": {
    "de": "Kriegshetzer Mal'korak",
@@ -61,6 +73,12 @@
    "es": "Gieger",
    "pt": "Gieger"
   },
+  "Гирукон": {
+   "de": "Hirukon",
+   "fr": "Hirukon",
+   "es": "Hirukon",
+   "pt": "Hirukon"
+  },
   "Гниложор": {
    "de": "Fäulnisverschlinger",
    "fr": "Croque-Charogne",
@@ -78,6 +96,12 @@
    "fr": "Gorok",
    "es": "Gorok",
    "pt": "Gorok"
+  },
+  "Дормус Погонщик Верблюдов": {
+   "de": "Dormus der Kameltreiber",
+   "fr": "Dormus le Collectionneur de dromadaires",
+   "es": "Dormus el Camellero",
+   "pt": "Dormus, o Colecionador de Camelos"
   },
   "Зандаларский завоеватель №1": {
    "de": "Kriegshetzer der Zandalari Nr. 1",
@@ -133,9 +157,15 @@
    "es": "Mascabrisas",
    "pt": "Mascabrisa"
   },
+  "Лук'хок": {
+   "de": "Luk'hok",
+   "fr": "Luk'hok",
+   "es": "Luk'hok",
+   "pt": "Luk'hok"
+  },
   "Любой боец Театра Боли": {
    "de": "Beliebiger Champion des Theaters der Schmerzen",
-   "fr": "N'importe quel champion du Théâtre de la souffrance",
+   "fr": "N'importe quel champion du Théâtre de la Souffrance",
    "es": "Cualquier campeón del Teatro del Dolor",
    "pt": "Qualquer campeão do Teatro da Dor"
   },
@@ -162,6 +192,12 @@
    "fr": "N'importe quel monstre rare : Bois des Chants éternels",
    "es": "Cualquier monstruo raro: Bosque Canción Eterna",
    "pt": "Qualquer monstro raro: Floresta do Canto Eterno"
+  },
+  "Любой редкий монстр: Спиральный остров": {
+   "de": "Beliebiger seltener Gegner: Gewundene Insel",
+   "fr": "N'importe quel monstre rare : Île Annelée",
+   "es": "Cualquier monstruo raro: Isla Serpenteante",
+   "pt": "Qualquer monstro raro: A Ilha Enrolada"
   },
   "Любой редкий монстр: Харандар": {
    "de": "Beliebiger seltener Gegner: Harandar",
@@ -193,6 +229,12 @@
    "es": "Sobrestante Krix",
    "pt": "Feitor Krix"
   },
+  "Накк Громогласный": {
+   "de": "Nakk der Donnerer",
+   "fr": "Nakk le Foudroyeur",
+   "es": "Nakk el Tronador",
+   "pt": "Nakk, o Trovoador"
+  },
   "Нерисса Бессердечная": {
    "de": "Nerissa Herzlos",
    "fr": "Nerissa Sans-Cœur",
@@ -216,6 +258,12 @@
    "fr": "Nok-Karosh",
    "es": "Nok-Karosh",
    "pt": "Nok-Karosh"
+  },
+  "Ночная кобыла": {
+   "de": "Nachtmähre",
+   "fr": "Jument nocturne",
+   "es": "Yegua nocturna",
+   "pt": "Égua Noturna"
   },
   "Обожравшаяся темная гончая": {
    "de": "Vollgefressener Schemenhund",
@@ -277,6 +325,12 @@
    "es": "Engendro de Beledar",
    "pt": "Cria de Beledar"
   },
+  "Посейдус": {
+   "de": "Poseidus",
+   "fr": "Poséidus",
+   "es": "Poseidus",
+   "pt": "Poseidus"
+  },
   "Псарь Керракс": {
    "de": "Hundemeister Kerrax",
    "fr": "Dresseur de molosses Kerrax",
@@ -319,6 +373,12 @@
    "es": "Sabriel la Rajahuesos",
    "pt": "Sabriel, a Cutilóssea"
   },
+  "Сильфида": {
+   "de": "Schlickhaut",
+   "fr": "Silthide",
+   "es": "Cienopiel",
+   "pt": "Silthide"
+  },
   "Скрииг Пожиратель": {
    "de": "Skreeg der Verschlinger",
    "fr": "Skreeg le Dévoreur",
@@ -330,6 +390,12 @@
    "fr": "Rôdeur des profondeurs",
    "es": "Rondador de las profundidades",
    "pt": "Tocaieiro das Profundezas"
+  },
+  "Служитель глубин": {
+   "de": "Jünger des Abgrunds",
+   "fr": "Adhérent des abysses",
+   "es": "Adepto del abismo",
+   "pt": "Seguidor do Abismo"
   },
   "Сокрушитель Надежд": {
    "de": "Hoffnungsvernichter",
@@ -354,6 +420,12 @@
    "fr": "Tahonta",
    "es": "Tahonta",
    "pt": "Tahonta"
+  },
+  "Торопун": {
+   "de": "Pfadläufer",
+   "fr": "Cours-les-Routes",
+   "es": "Correcaminos",
+   "pt": "Vencetrilha"
   },
   "Укротитель Кама": {
    "de": "Bestienreiter Kama",
@@ -429,28 +501,35 @@
   "Gorgrond": 543,
   "Hallowfall": 2215,
   "Harandar": 2413,
+  "Isle of Dorn": 2248,
   "K'aresh": 2371,
   "Korthia": 1961,
   "Maldraxxus": 1536,
   "Mechagon Island": 1462,
+  "Nagrand": 550,
   "Nazjatar": 1355,
   "Nazmir": 863,
   "Pandaria": 424,
   "Revendreth": 1525,
+  "Shadowmoon Valley": 539,
   "Stormsong Valley": 942,
+  "Talador": 535,
   "Tanaan Jungle": 534,
   "The Azure Span": 2024,
+  "The Coiled Isle": 2512,
   "The Forbidden Reach": 2151,
   "The Maw": 1543,
   "The Ringing Deeps": 2214,
   "The Storm Peaks": 120,
   "Timeless Isle": 554,
-  "Uldum": 1527,
+  "Uldum": 249,
   "Undermine": 2346,
   "Vale of Eternal Blossoms": 390,
+  "Vashj'ir": 203,
   "Voidstorm": 2405,
   "Vol'dun": 864,
   "Zaralek Cavern": 2133,
+  "Zereth Mortis": 1970,
   "Zul'Aman": 2437
  }
 }

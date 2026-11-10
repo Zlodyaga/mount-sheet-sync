@@ -2,58 +2,58 @@
 -- Do not edit by hand. Fallback map point of every catalog raid and dungeon entrance: [journalInstanceID] = { map, x, y }.
 local _, ns = ...
 ns.ENTRANCES = {
-  [67] = { map = 207, x = 0.4783, y = 0.519 },   -- The Stonecore
-  [68] = { map = 249, x = 0.7684, y = 0.8459 },   -- The Vortex Pinnacle
-  [74] = { map = 249, x = 0.3824, y = 0.807 },   -- Throne of the Four Winds
-  [76] = { map = 50, x = 0.7225, y = 0.3291 },   -- Zul'Gurub
-  [77] = { map = 95, x = 0.8259, y = 0.6431 },   -- Zul'Aman
-  [78] = { map = 198, x = 0.47, y = 0.7824 },   -- Firelands
-  [187] = { map = 75, x = 0.6161, y = 0.2588 },   -- Dragon Soul
-  [236] = { map = 23, x = 0.2733, y = 0.116 },   -- Stratholme - Main Gate
-  [249] = { map = 122, x = 0.6152, y = 0.311 },   -- Magisters' Terrace
-  [252] = { map = 108, x = 0.4506, y = 0.6562 },   -- Sethekk Halls
-  [279] = { map = 71, x = 0.611, y = 0.6214 },   -- The Culling of Stratholme
-  [282] = { map = 114, x = 0.2752, y = 0.2675 },   -- The Oculus
-  [286] = { map = 117, x = 0.5729, y = 0.4689 },   -- Utgarde Pinnacle
-  [317] = { map = 379, x = 0.595, y = 0.3934 },   -- Mogu'shan Vaults
-  [362] = { map = 504, x = 0.6382, y = 0.3205 },   -- Throne of Thunder
-  [369] = { map = 390, x = 0.743, y = 0.4166 },   -- Siege of Orgrimmar
-  [457] = { map = 543, x = 0.5159, y = 0.2711 },   -- Blackrock Foundry
+  [67] = { map = 207, x = 0.4738, y = 0.5205 },   -- The Stonecore
+  [68] = { map = 249, x = 0.767, y = 0.8436 },   -- The Vortex Pinnacle
+  [74] = { map = 249, x = 0.3701, y = 0.8144 },   -- Throne of the Four Winds
+  [76] = { map = 50, x = 0.721, y = 0.3293 },   -- Zul'Gurub
+  [77] = { map = 95, x = 0.8196, y = 0.6434 },   -- Zul'Aman
+  [78] = { map = 198, x = 0.468, y = 0.7839 },   -- Firelands
+  [187] = { map = 75, x = 0.6088, y = 0.2116 },   -- Dragon Soul
+  [236] = { map = 23, x = 0.2708, y = 0.1152 },   -- Stratholme - Main Gate
+  [249] = { map = 122, x = 0.6097, y = 0.3073 },   -- Magisters' Terrace
+  [252] = { map = 108, x = 0.446, y = 0.6561 },   -- Sethekk Halls
+  [279] = { map = 75, x = 0.6011, y = 0.8272 },   -- The Culling of Stratholme
+  [282] = { map = 114, x = 0.266, y = 0.2746 },   -- The Oculus
+  [286] = { map = 117, x = 0.5722, y = 0.4649 },   -- Utgarde Pinnacle
+  [317] = { map = 379, x = 0.5961, y = 0.3917 },   -- Mogu'shan Vaults
+  [362] = { map = 504, x = 0.6383, y = 0.3204 },   -- Throne of Thunder
+  [369] = { map = 390, x = 0.7371, y = 0.4249 },   -- Siege of Orgrimmar
+  [457] = { map = 543, x = 0.5157, y = 0.272 },   -- Blackrock Foundry
   [669] = { map = 534, x = 0.4697, y = 0.5264 },   -- Hellfire Citadel
-  [744] = { map = 81, x = 0.241, y = 0.8711 },   -- Temple of Ahn'Qiraj
-  [745] = { map = 42, x = 0.4659, y = 0.7411 },   -- Karazhan
-  [749] = { map = 109, x = 0.7388, y = 0.6374 },   -- The Eye
-  [754] = { map = 115, x = 0.875, y = 0.5064 },   -- Naxxramas
+  [744] = { map = 81, x = 0.2432, y = 0.8729 },   -- Temple of Ahn'Qiraj
+  [745] = { map = 42, x = 0.4699, y = 0.7491 },   -- Karazhan
+  [749] = { map = 109, x = 0.736, y = 0.6372 },   -- The Eye
+  [754] = { map = 115, x = 0.8735, y = 0.51 },   -- Naxxramas
   [755] = { map = 115, x = 0.6002, y = 0.5702 },   -- The Obsidian Sanctum
   [756] = { map = 114, x = 0.2752, y = 0.2674 },   -- The Eye of Eternity
-  [758] = { map = 118, x = 0.5391, y = 0.8741 },   -- Icecrown Citadel
-  [759] = { map = 120, x = 0.4155, y = 0.1758 },   -- Ulduar
-  [760] = { map = 70, x = 0.529, y = 0.7815 },   -- Onyxia's Lair
-  [786] = { map = 680, x = 0.4423, y = 0.5951 },   -- The Nighthold
+  [758] = { map = 118, x = 0.538, y = 0.8709 },   -- Icecrown Citadel
+  [759] = { map = 120, x = 0.4157, y = 0.178 },   -- Ulduar
+  [760] = { map = 70, x = 0.5222, y = 0.7594 },   -- Onyxia's Lair
+  [786] = { map = 680, x = 0.4373, y = 0.5729 },   -- The Nighthold
   [860] = { map = 42, x = 0.4637, y = 0.7066 },   -- Return to Karazhan
-  [875] = { map = 646, x = 0.6497, y = 0.2026 },   -- Tomb of Sargeras
-  [946] = { map = 885, x = 0.547, y = 0.628 },   -- Antorus, the Burning Throne
+  [875] = { map = 646, x = 0.6401, y = 0.2137 },   -- Tomb of Sargeras
+  [946] = { map = 885, x = 0.5482, y = 0.6253 },   -- Antorus, the Burning Throne
   [1001] = { map = 895, x = 0.8382, y = 0.7925 },   -- Freehold
-  [1022] = { map = 863, x = 0.5108, y = 0.6429 },   -- The Underrot
-  [1041] = { map = 862, x = 0.3731, y = 0.395 },   -- Kings' Rest
-  [1176] = { map = 862, x = 0.5428, y = 0.3003 },   -- Battle of Dazar'alor
+  [1022] = { map = 863, x = 0.5126, y = 0.6465 },   -- The Underrot
+  [1041] = { map = 862, x = 0.3759, y = 0.3948 },   -- Kings' Rest
+  [1176] = { map = 862, x = 0.5426, y = 0.2994 },   -- Battle of Dazar'alor
   [1178] = { map = 1462, x = 0.736, y = 0.36 },   -- Operation: Mechagon
   [1180] = { map = 1530, x = 0.4004, y = 0.4557 },   -- Ny'alotha, the Waking City
-  [1182] = { map = 1569, x = 0.4009, y = 0.552 },   -- The Necrotic Wake
-  [1183] = { map = 1536, x = 0.5946, y = 0.6511 },   -- Plaguefall
+  [1182] = { map = 1533, x = 0.4015, y = 0.5521 },   -- The Necrotic Wake
+  [1183] = { map = 1536, x = 0.594, y = 0.6502 },   -- Plaguefall
   [1193] = { map = 1543, x = 0.6975, y = 0.3201 },   -- Sanctum of Domination
-  [1194] = { map = 2016, x = 0.8873, y = 0.4364 },   -- Tazavesh, the Veiled Market
-  [1195] = { map = 1970, x = 0.81, y = 0.5333 },   -- Sepulcher of the First Ones
-  [1207] = { map = 2200, x = 0.2725, y = 0.3103 },   -- Amirdrassil, the Dream's Hope
-  [1210] = { map = 2272, x = 0.5268, y = 0.2097 },   -- Darkflame Cleft
-  [1269] = { map = 2272, x = 0.3835, y = 0.0613 },   -- The Stonevault
-  [1273] = { map = 2255, x = 0.4346, y = 0.9044 },   -- Nerub-ar Palace
+  [1194] = { map = 2472, x = 0.3632, y = 0.1209 },   -- Tazavesh, the Veiled Market
+  [1195] = { map = 1970, x = 0.8049, y = 0.534 },   -- Sepulcher of the First Ones
+  [1207] = { map = 2200, x = 0.2731, y = 0.3104 },   -- Amirdrassil, the Dream's Hope
+  [1210] = { map = 2214, x = 0.5546, y = 0.2163 },   -- Darkflame Cleft
+  [1269] = { map = 2214, x = 0.427, y = 0.0857 },   -- The Stonevault
+  [1273] = { map = 2255, x = 0.4356, y = 0.9029 },   -- Nerub-ar Palace
   [1292] = { map = 23, x = 0.4345, y = 0.1959 },   -- Stratholme - Service Entrance
   [1296] = { map = 2346, x = 0.4212, y = 0.5041 },   -- Liberation of Undermine
   [1299] = { map = 2395, x = 0.3545, y = 0.7883 },   -- Windrunner Spire
   [1300] = { map = 2424, x = 0.6346, y = 0.1539 },   -- Magisters' Terrace
   [1302] = { map = 2371, x = 0.4166, y = 0.2153 },   -- Manaforge Omega
-  [1305] = { map = 2480, x = 0.7356, y = 0.6636 },   -- Sporefall
+  [1305] = { map = 2413, x = 0.7356, y = 0.6636 },   -- Sporefall
   [1308] = { map = 2424, x = 0.5261, y = 0.853 },   -- March on Quel'Danas
   [1320] = { map = 2509, x = 0.4723, y = 0.2286 },   -- The Venomous Abyss
   [1322] = { map = 2509, x = 0.4724, y = 0.6813 },   -- Altar of Fangs
@@ -62,14 +62,20 @@ ns.ENTRANCES = {
 ns.RARE_SPOTS = {
   [265] = { map = 120 },
   [393] = { map = 207 },
+  [400] = { map = 249 },
+  [420] = { map = 203 },
   [517] = { map = 390 },
   [534] = { map = 424 },
   [535] = { map = 424 },
   [536] = { map = 424 },
   [561] = { map = 554 },
   [611] = { map = 534 },
+  [612] = { map = 550 },
+  [614] = { map = 550 },
   [622] = { map = 534 },
   [627] = { map = 525 },
+  [630] = { map = 535 },
+  [636] = { map = 539 },
   [643] = { map = 534 },
   [655] = { map = 543 },
   [657] = { map = 525 },
@@ -83,6 +89,7 @@ ns.RARE_SPOTS = {
   [981] = { map = 885, x = 0.6442, y = 0.2035 },
   [1018] = { map = 896 },
   [1019] = { map = 942 },
+  [1057] = { map = 942 },
   [1173] = { map = 14 },
   [1174] = { map = 14 },
   [1180] = { map = 14, x = 0.6706, y = 0.6589 },
@@ -99,6 +106,7 @@ ns.RARE_SPOTS = {
   [1297] = { map = 1530, x = 0.366, y = 0.376 },
   [1298] = { map = 1525, x = 0.5198, y = 0.518 },
   [1304] = { map = 1543, x = 0.535, y = 0.795 },
+  [1306] = { map = 1565 },
   [1310] = { map = 1525, x = 0.46, y = 0.785 },
   [1314] = { map = 1527, x = 0.7396, y = 0.8352 },
   [1317] = { map = 1527, x = 0.6823, y = 0.3197 },
@@ -113,6 +121,8 @@ ns.RARE_SPOTS = {
   [1393] = { map = 1565, x = 0.304, y = 0.552 },
   [1410] = { map = 1536, x = 0.586, y = 0.742 },
   [1411] = { map = 1536, x = 0.314, y = 0.356 },
+  [1415] = { map = 1565 },
+  [1434] = { map = 1970 },
   [1437] = { map = 1536 },
   [1502] = { map = 1543 },
   [1506] = { map = 1961, x = 0.4535, y = 0.3034 },
@@ -122,6 +132,7 @@ ns.RARE_SPOTS = {
   [1619] = { map = 2151 },
   [1732] = { map = 2133 },
   [2038] = { map = 2024, x = 0.278, y = 0.46 },
+  [2176] = { map = 2248 },
   [2192] = { map = 2215 },
   [2205] = { map = 2214 },
   [2291] = { map = 2346, x = 0.322, y = 0.218 },
@@ -136,4 +147,6 @@ ns.RARE_SPOTS = {
   [2762] = { map = 2395 },
   [2775] = { map = 2437 },
   [2827] = { map = 2405 },
+  [3051] = { map = 2512 },
+  [3061] = { map = 2512 },
 }

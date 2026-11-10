@@ -31,6 +31,17 @@ def parse_content():
     return {k: v["en"] for k, v in parse(os.path.join(HERE, "sheet_content.txt")).items()}
 
 
+def parse_content_l10n():
+    """Catalog texts that have their own German, French, Spanish or Portuguese line (the rare farming tips):
+    {lang: {Russian: text}}; the rest stay English in those spreadsheets."""
+    out = {lang: {} for lang in LANGS if lang != "en"}
+    for k, v in parse(os.path.join(HERE, "sheet_content.txt")).items():
+        for lang in out:
+            if v.get(lang):
+                out[lang][k] = v[lang]
+    return out
+
+
 def parse_mounts():
     out = {}
     for line in open(os.path.join(HERE, "mounts_en.txt"), encoding="utf-8"):

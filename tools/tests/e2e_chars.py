@@ -38,7 +38,7 @@ for d in (DATA, SV_DIR, ADDON):
 open(os.path.join(ADDON, "MountSheetSync.toc"), "w").write("## Interface: 120105\n")
 json.dump({"wowPath": WOW, "pollSeconds": 2, "mode": "google"}, open(os.path.join(DATA, "settings.json"), "w"))
 BROWSER_LOG = os.path.join(W, "browser.txt")
-mock = subprocess.Popen(["python3", os.path.join(HERE, "mock_google.py"), str(PORT), os.path.join(W, "mock_state.json"),
+mock = subprocess.Popen([sys.executable, os.path.join(HERE, "mock_google.py"), str(PORT), os.path.join(W, "mock_state.json"),
                          os.path.join(W, "mock.log")])
 time.sleep(0.8)
 ENV = dict(os.environ, MSS_GOOGLE_TEST=BASE, MSS_BROWSER_LOG=BROWSER_LOG, LANG="C.UTF-8", MSS_SYSTEM_LANG="ru")
@@ -53,7 +53,7 @@ def state():
 
 def run(exe, *args):
     p = subprocess.run(["mono", exe, "--data", DATA] + list(args), env=ENV, capture_output=True, timeout=300)
-    return p.returncode, (p.stdout + p.stderr).decode("utf-8", "replace")
+    return p.returncode, paths.out_text(p.stdout + p.stderr)
 
 
 def login(exe):

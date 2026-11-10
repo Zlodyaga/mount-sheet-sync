@@ -22,3 +22,12 @@ FIXTURES = os.path.join(HERE, "fixtures")
 
 def work(name):
     return os.path.join(os.environ.get("MSS_TEST_TMP") or os.path.join(tempfile.gettempdir(), "mss-tests"), name)
+
+
+def out_text(data):
+    """What the program printed. Under mono it is UTF-8; the Windows exe (winexe, no console) writes in the ANSI
+    code page (cp1251 on a Russian Windows), and decoding that as UTF-8 turned every Russian log line into «���»."""
+    try:
+        return data.decode("utf-8")
+    except UnicodeDecodeError:
+        return data.decode("mbcs" if os.name == "nt" else "utf-8", "replace")

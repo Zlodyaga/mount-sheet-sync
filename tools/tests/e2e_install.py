@@ -48,7 +48,7 @@ for k in ("http_proxy", "https_proxy", "HTTP_PROXY", "HTTPS_PROXY", "no_proxy", 
 
 def run(exe, *args):
     p = subprocess.run(["mono", exe, "--data", DATA] + list(args), env=env, capture_output=True, timeout=120)
-    return p.returncode, (p.stdout + p.stderr).decode("utf-8", "replace")
+    return p.returncode, paths.out_text(p.stdout + p.stderr)
 
 
 def uninstall_values():

@@ -1,7 +1,7 @@
 # Google-таблица
 
 Создаёт её программа (`SheetBuilder.Requests` одним `batchUpdate`, `SheetCreator`). Данные строк — из каталога
-`program/catalog.json` (версия `2026-11-10`: Рейды 91, Подземелья 67, Мировые боссы 6, Редкие монстры 76 строк; колонки
+`program/catalog.json` (версия `2026-11-10`: Рейды 91, Подземелья 67, Мировые боссы 6, Редкие монстры 89 строк; колонки
 каталога, включая `ID в игре`, `ID босса` = dungeonEncounterID, `ID в журнале`, `ID места`, `ID статистики` —
 статистики убийств игры через «/»). Каталог собирается скриптами `tools/catalog/` и `tools/i18n/`; колонки
 `ID …` кроме `ID в игре` в таблицу не попадают (`INTERNAL` в `build_sheet.py`).
@@ -121,6 +121,16 @@ Developer metadata `mountSheetSync` = `{app, catalog, lang}`; свойства �
 
 Внутри программы таблица всегда «русская»: при чтении названия листов, заголовки и слова списков переводятся
 в русские, при записи — обратно (`Outgoing`, `ValueOut`, `Response`). Переводы: `tools/i18n/sheet_words.txt`
-(слова, 5 языков), `sheet_content.txt` (тексты каталога → английский), `mounts_en.txt` → `program/sheet-i18n.json`
+(слова, 5 языков), `sheet_content.txt` (тексты каталога → английский; советы по фарму раров — ещё de/fr/es/pt, ключ
+`contentL10n`, их берёт `SheetLang.Content` раньше английского), `mounts_en.txt` → `program/sheet-i18n.json`
 (`build_sheet.py --check` ловит русские строки SheetBuilder.cs без перевода — шаблоны поиска колонок держим в
 SheetLogic). Маунты/боссы/подземелья на языке таблицы — из игры, если она на этом языке, иначе английские.
+
+## Лист раров: откуда строки
+
+`python3 tools/catalog/rares/rare_rows.py [--wago <кеш>] [--write]` (программа 2.10.1): строки листа «Редкие монстры»
+из базы Rarity (`rare_scan.py` → `rare_scan.json`; сама база — локальная копия, в репозитории её нет), имена — Wowhead
+(`npc_names.py` → `npc_names.json`), зоны и точки — `rare_zones.py`, особые строки (№1–3, любой рар зоны, «100 %», фарм
+мобов, рары вне Rarity) — в самом скрипте. Советы на de/fr/es/pt — `tip_l10n.py` по английскому тексту, по предложению:
+новая фраза без перевода останавливает сборку. С `--write` скрипт пишет catalog.json, sheet_content.txt, mounts_en.txt,
+rare_names.json и сам запускает `game_names.py`, потом `build_sheet.py` — именно в этом порядке. После — `entrances.py --write`.

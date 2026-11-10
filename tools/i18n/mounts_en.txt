@@ -239,3 +239,16 @@
 928	Dune Scavenger
 1437	Battle-Bound Warhound
 1619	Ancient Salamanther
+400	Grey Riding Camel
+420	Subdued Seahorse
+614	Mottled Meadowstomper
+612	Bloodhoof Bull
+636	Swift Breezestrider
+630	Sapphire Riverbeast
+1306	Swift Gloomhoof
+1057	Nazjatar Blood Serpent
+1415	Arboreal Gulper
+1434	Deepstar Aurelid
+2176	Alunira
+3051	Topaz Skyfang
+3061	Ruby Writhe

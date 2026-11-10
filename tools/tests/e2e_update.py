@@ -127,7 +127,7 @@ def run(app, data, *args, **extra):
         env.pop(k, None)
     p = subprocess.run(["mono", os.path.join(app, "MountSheetSync.exe"), "--data", data] + list(args), env=env,
                        capture_output=True, timeout=120)
-    return p.returncode, (p.stdout + p.stderr).decode("utf-8", "replace")
+    return p.returncode, paths.out_text(p.stdout + p.stderr)
 
 
 try:

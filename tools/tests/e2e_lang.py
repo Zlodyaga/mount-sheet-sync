@@ -39,7 +39,7 @@ def check(name, cond, extra=None):
 
 shutil.rmtree(W, ignore_errors=True)
 os.makedirs(W)
-mock = subprocess.Popen(["python3", os.path.join(HERE, "mock_google.py"), str(PORT), os.path.join(W, "mock_state.json"),
+mock = subprocess.Popen([sys.executable, os.path.join(HERE, "mock_google.py"), str(PORT), os.path.join(W, "mock_state.json"),
                          os.path.join(W, "mock.log")])
 time.sleep(0.8)
 
@@ -74,7 +74,7 @@ class Setup:
 
     def run(self, *args, timeout=180):
         p = subprocess.run(["mono", EXE, "--data", self.data] + list(args), env=self.env, capture_output=True, timeout=timeout)
-        return p.returncode, (p.stdout + p.stderr).decode("utf-8", "replace")
+        return p.returncode, paths.out_text(p.stdout + p.stderr)
 
     def login(self):
         proc = subprocess.Popen(["mono", EXE, "--data", self.data, "--google-login"], env=self.env, stdout=subprocess.PIPE,
@@ -197,6 +197,9 @@ try:
     raids = sheet_cells(book, "Schlachtzüge")
     check("de: German headers", raids[0][0] == "Gesammelt?" and raids[0][3] == "Reittier" and raids[0][12] == "Status"
           and raids[0][17] == "Spiel-ID", raids[0])
+    rare_texts = [str(v) for row in sheet_cells(book, "Seltene Monster").values() for v in row.values()]
+    check("de: rare farming tips in German (program 2.10.1), not English", any(t.startswith("Rar: ") and "Beute einmal am Tag" in t for t in rare_texts)
+          and not any(t.startswith("A rare in ") for t in rare_texts), [t for t in rare_texts if "rare" in t.lower()][:3])
     r = find_row(raids, 17, 1471)
     check("de: mount, boss and raid named as in the German game", r is not None and raids[r][3] == "Rache"
           and raids[r][5] == "Sylvanas Windläufer" and raids[r][2] == "Sanktum der Herrschaft", raids.get(r))

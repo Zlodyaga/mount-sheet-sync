@@ -1084,6 +1084,14 @@
    "pt": "Crorg da Terra Podre",
    "ru": "Крог из Подгнилья"
   },
+  "1057": {
+   "de": "Blutschlange von Nazjatar",
+   "en": "Nazjatar Blood Serpent",
+   "es": "Serpiente sangrienta Nazjatar",
+   "fr": "Serpent de sang de Nazjatar",
+   "pt": "Serpente Sanguínea de Nazjatar",
+   "ru": "Назжатарский кровозмей"
+  },
   "117": {
    "de": "Blaue Qirajipanzerdrohne",
    "en": "Blue Qiraji Battle Tank",
@@ -1316,6 +1324,14 @@
    "pt": "Caçador de Almas Górjuro",
    "ru": "Верный Утробе ловец душ"
   },
+  "1306": {
+   "de": "Schneller Düsterhuf",
+   "en": "Swift Gloomhoof",
+   "es": "Pezuñasombría presto",
+   "fr": "Sabot-sinistre rapide",
+   "pt": "Cascocaso Veloz",
+   "ru": "Быстрая чернокопытная лошадь"
+  },
   "1310": {
    "de": "Schreckliche Fledderschwinge",
    "en": "Horrid Dredwing",
@@ -1468,6 +1484,14 @@
    "pt": "Roca-da-peste Predadora",
    "ru": "Хищный чумной рух"
   },
+  "1415": {
+   "de": "Waldschlucker",
+   "en": "Arboreal Gulper",
+   "es": "Zampón arbóreo",
+   "fr": "Gobeur arboricole",
+   "pt": "Bufo Arbóreo",
+   "ru": "Древесный мешкорот"
+  },
   "1417": {
    "de": "Hand von Hrestimorak",
    "en": "Hand of Hrestimorak",
@@ -1483,6 +1507,14 @@
    "fr": "Marche-mort touché par le vice",
    "pt": "Mortívago Pecaminoso",
    "ru": "Запятнанный грехом вестник смерти"
+  },
+  "1434": {
+   "de": "Tiefensternaurelid",
+   "en": "Deepstar Aurelid",
+   "es": "Aurélido estrellabismal",
+   "fr": "Aurélidé stellaire des profondeurs",
+   "pt": "Aurelídeo Estrelafunda",
+   "ru": "Аурелид звездных глубин"
   },
   "1437": {
    "de": "Schlachtgebundener Kriegshund",
@@ -1795,6 +1827,14 @@
    "fr": "Faucon-pérégrin blanc rapide",
    "pt": "Falcostruz Branco Veloz",
    "ru": "Стремительный белый крылобег"
+  },
+  "2176": {
+   "de": "Alunira",
+   "en": "Alunira",
+   "es": "Alunira",
+   "fr": "Alunira",
+   "pt": "Alunira",
+   "ru": "Алунира"
   },
   "2180": {
    "de": "Schattenhafte Schwärmilbe",
@@ -2236,6 +2276,14 @@
    "pt": "Cabeça de Mimiron",
    "ru": "Голова Мимирона"
   },
+  "3051": {
+   "de": "Topasfarbener Himmelszahn",
+   "en": "Topaz Skyfang",
+   "es": "Colmilloceleste de topacio",
+   "fr": "Croc-du-ciel topaze",
+   "pt": "Presaceleste de Topázio",
+   "ru": "Топазовый небесный клык"
+  },
   "3058": {
    "de": "Die windende Brut",
    "en": "The Writhing Brood",
@@ -2251,6 +2299,14 @@
    "fr": "Proto-drake bardé de fer",
    "pt": "Protodraco Férreo",
    "ru": "Протодракон в железной броне"
+  },
+  "3061": {
+   "de": "Rubinwinder",
+   "en": "Ruby Writhe",
+   "es": "Retuerto de rubí",
+   "fr": "Tortilleur rubis",
+   "pt": "Contórcia de Rubi",
+   "ru": "Рубиновый скользмей"
   },
   "3063": {
    "de": "Seuchenhauch",
@@ -2388,6 +2444,14 @@
    "pt": "Draco de Pedra Vítreo",
    "ru": "Камнешкурый дракон"
   },
+  "400": {
+   "de": "Graues Reitkamel",
+   "en": "Grey Riding Camel",
+   "es": "Camello de montar gris",
+   "fr": "Dromadaire gris",
+   "pt": "Camelo Cinza de Montaria",
+   "ru": "Серый ездовой верблюд"
+  },
   "410": {
    "de": "Gepanzerter Razzashiraptor",
    "en": "Armored Razzashi Raptor",
@@ -2427,6 +2491,14 @@
    "fr": "Ours de bataille amani",
    "pt": "Urso de Batalha Amani",
    "ru": "Аманийский боевой медведь"
+  },
+  "420": {
+   "de": "Beruhigtes Seepferdchen",
+   "en": "Subdued Seahorse",
+   "es": "Caballito de mar subyugado",
+   "fr": "Hippocampe assujetti",
+   "pt": "Cavalo-marinho Dominado",
+   "ru": "Подчиненный морской конек"
   },
   "425": {
    "de": "Flammenkralle von Alysrazar",
@@ -2668,6 +2740,14 @@
    "pt": "Casco Gélido da Tundra",
    "ru": "Тундровый ледяной копытень"
   },
+  "612": {
+   "de": "Bluthufbulle",
+   "en": "Bloodhoof Bull",
+   "es": "Macho Pezuña de Sangre",
+   "fr": "Étalon sabot-de-sang",
+   "pt": "Boi Casco Sangrento",
+   "ru": "Самец-кровокопыт"
+  },
   "613": {
    "de": "Eisenhufzerstörer",
    "en": "Ironhoof Destroyer",
@@ -2675,6 +2755,14 @@
    "fr": "Destructeur sabot-de-fer",
    "pt": "Destruidor Cascoferro",
    "ru": "Разрушитель-железноног"
+  },
+  "614": {
+   "de": "Scheckiger Wiesentrampler",
+   "en": "Mottled Meadowstomper",
+   "es": "Pisallanuras jaspeado",
+   "fr": "Foule-prairie tacheté",
+   "pt": "Campinante Mosqueado",
+   "ru": "Пятнистый лугопотам"
   },
   "619": {
    "de": "Schwarzstahlkampfeber",
@@ -2708,6 +2796,14 @@
    "pt": "Grande Cinzatusco",
    "ru": "Огромный сероклык"
   },
+  "630": {
+   "de": "Saphirblaue Flussbestie",
+   "en": "Sapphire Riverbeast",
+   "es": "Bestia fluvial de zafiro",
+   "fr": "Potamodonte saphir",
+   "pt": "Fera-do-rio Safira",
+   "ru": "Сапфировое речное чудище"
+  },
   "633": {
    "de": "Höllenfeuerbestie",
    "en": "Hellfire Infernal",
@@ -2723,6 +2819,14 @@
    "fr": "Faucon des flèches solaire",
    "pt": "Falcão-agulha Solar",
    "ru": "Солнечный ястреб пиков"
+  },
+  "636": {
+   "de": "Flinker Brisenschreiter",
+   "en": "Swift Breezestrider",
+   "es": "Brizancada presto",
+   "fr": "Trotte-brise rapide",
+   "pt": "Pé-de-brisa Ligeiro",
+   "ru": "Быстрый ветробег"
   },
   "643": {
    "de": "Terrorzahn des Kriegshymnenklans",
@@ -4319,6 +4423,14 @@
    "pt": "Harandar",
    "ru": "Харандар"
   },
+  "Isle of Dorn": {
+   "de": "Insel von Dorn",
+   "en": "Isle of Dorn",
+   "es": "Isla de Dorn",
+   "fr": "Île de Dorn",
+   "pt": "Ilha de Dorn",
+   "ru": "Остров Дорн"
+  },
   "Isle of Giants": {
    "de": "Insel der Riesen",
    "en": "Isle of Giants",
@@ -4375,6 +4487,14 @@
    "pt": "Ilha de Gnomecan",
    "ru": "Остров Мехагон"
   },
+  "Nagrand": {
+   "de": "Nagrand",
+   "en": "Nagrand",
+   "es": "Nagrand",
+   "fr": "Nagrand",
+   "pt": "Nagrand",
+   "ru": "Награнд"
+  },
   "Nazjatar": {
    "de": "Nazjatar",
    "en": "Nazjatar",
@@ -4407,6 +4527,14 @@
    "pt": "Revendreth",
    "ru": "Ревендрет"
   },
+  "Shadowmoon Valley": {
+   "de": "Schattenmondtal",
+   "en": "Shadowmoon Valley",
+   "es": "Valle Sombraluna",
+   "fr": "Vallée d’Ombrelune",
+   "pt": "Vale da Lua Negra",
+   "ru": "Долина Призрачной Луны"
+  },
   "Spires of Arak": {
    "de": "Spitzen von Arak",
    "en": "Spires of Arak",
@@ -4423,6 +4551,14 @@
    "pt": "Vale Trovamare",
    "ru": "Долина Штормов"
   },
+  "Talador": {
+   "de": "Talador",
+   "en": "Talador",
+   "es": "Talador",
+   "fr": "Talador",
+   "pt": "Talador",
+   "ru": "Таладор"
+  },
   "Tanaan Jungle": {
    "de": "Tanaandschungel",
    "en": "Tanaan Jungle",
@@ -4438,6 +4574,14 @@
    "fr": "Travée d’Azur",
    "pt": "Vasta Lazúli",
    "ru": "Лазурный Простор"
+  },
+  "The Coiled Isle": {
+   "de": "Gewundene Insel",
+   "en": "The Coiled Isle",
+   "es": "Isla Serpenteante",
+   "fr": "Île Annelée",
+   "pt": "A Ilha Enrolada",
+   "ru": "Спиральный остров"
   },
   "The Forbidden Reach": {
    "de": "Verbotene Insel",
@@ -4519,6 +4663,14 @@
    "pt": "Vale dos Quatro Ventos",
    "ru": "Долина Четырех Ветров"
   },
+  "Vashj'ir": {
+   "de": "Vashj'ir",
+   "en": "Vashj'ir",
+   "es": "Vashj'ir",
+   "fr": "Vashj’ir",
+   "pt": "Vashj'ir",
+   "ru": "Вайш'ир"
+  },
   "Vault of Archavon": {
    "de": "Archavons Kammer",
    "en": "Vault of Archavon",
@@ -4551,6 +4703,14 @@
    "pt": "Caverna Zaralek",
    "ru": "Пещера Заралек"
   },
+  "Zereth Mortis": {
+   "de": "Zereth Mortis",
+   "en": "Zereth Mortis",
+   "es": "Zereth Mortis",
+   "fr": "Zereth Mortis",
+   "pt": "Zereth Mortis",
+   "ru": "Зерет Мортис"
+  },
   "Zul'Aman": {
    "de": "Zul'Aman",
    "en": "Zul'Aman",
@@ -4577,6 +4737,12 @@
    "fr": "Alash'anir",
    "pt": "Alash'anir"
   },
+  "Алунира": {
+   "de": "Alunira",
+   "es": "Alunira",
+   "fr": "Alunira",
+   "pt": "Alunira"
+  },
   "Анх-Де Верный": {
    "de": "Anh-De der Loyale",
    "es": "Anh-De el Leal",
@@ -4600,6 +4766,12 @@
    "es": "Valfir el Inflexible",
    "fr": "Valfir le Tenace",
    "pt": "Valfir, o Implacável"
+  },
+  "Вел'иккан": {
+   "de": "Ri'sich",
+   "es": "Coloss'ahl",
+   "fr": "Gargan'tuzz",
+   "pt": "Graw'uhdo"
   },
   "Вестник войны Мал'Корак": {
    "de": "Kriegshetzer Mal'korak",
@@ -4631,6 +4803,12 @@
    "fr": "Gieger",
    "pt": "Gieger"
   },
+  "Гирукон": {
+   "de": "Hirukon",
+   "es": "Hirukon",
+   "fr": "Hirukon",
+   "pt": "Hirukon"
+  },
   "Гниложор": {
    "de": "Fäulnisverschlinger",
    "es": "Comecarroña",
@@ -4648,6 +4826,12 @@
    "es": "Gorok",
    "fr": "Gorok",
    "pt": "Gorok"
+  },
+  "Дормус Погонщик Верблюдов": {
+   "de": "Dormus der Kameltreiber",
+   "es": "Dormus el Camellero",
+   "fr": "Dormus le Collectionneur de dromadaires",
+   "pt": "Dormus, o Colecionador de Camelos"
   },
   "Зандаларский завоеватель №1": {
    "de": "Kriegshetzer der Zandalari Nr. 1",
@@ -4715,10 +4899,16 @@
    "fr": "Croque-bise",
    "pt": "Mascabrisa"
   },
+  "Лук'хок": {
+   "de": "Luk'hok",
+   "es": "Luk'hok",
+   "fr": "Luk'hok",
+   "pt": "Luk'hok"
+  },
   "Любой боец Театра Боли": {
    "de": "Beliebiger Champion des Theaters der Schmerzen",
    "es": "Cualquier campeón del Teatro del Dolor",
-   "fr": "N'importe quel champion du Théâtre de la souffrance",
+   "fr": "N'importe quel champion du Théâtre de la Souffrance",
    "pt": "Qualquer campeão do Teatro da Dor"
   },
   "Любой босс Склепа Аркавона": {
@@ -4756,6 +4946,12 @@
    "es": "Cualquier monstruo raro: Bosque Canción Eterna",
    "fr": "N'importe quel monstre rare : Bois des Chants éternels",
    "pt": "Qualquer monstro raro: Floresta do Canto Eterno"
+  },
+  "Любой редкий монстр: Спиральный остров": {
+   "de": "Beliebiger seltener Gegner: Gewundene Insel",
+   "es": "Cualquier monstruo raro: Isla Serpenteante",
+   "fr": "N'importe quel monstre rare : Île Annelée",
+   "pt": "Qualquer monstro raro: A Ilha Enrolada"
   },
   "Любой редкий монстр: Харандар": {
    "de": "Beliebiger seltener Gegner: Harandar",
@@ -4799,6 +4995,12 @@
    "fr": "Surveillant Krix",
    "pt": "Feitor Krix"
   },
+  "Накк Громогласный": {
+   "de": "Nakk der Donnerer",
+   "es": "Nakk el Tronador",
+   "fr": "Nakk le Foudroyeur",
+   "pt": "Nakk, o Trovoador"
+  },
   "Нерисса Бессердечная": {
    "de": "Nerissa Herzlos",
    "es": "Nerissa Despiadada",
@@ -4828,6 +5030,12 @@
    "es": "Nocturno",
    "fr": "Plaie-de-Nuit",
    "pt": "Nocturno"
+  },
+  "Ночная кобыла": {
+   "de": "Nachtmähre",
+   "es": "Yegua nocturna",
+   "fr": "Jument nocturne",
+   "pt": "Égua Noturna"
   },
   "Обожравшаяся темная гончая": {
    "de": "Vollgefressener Schemenhund",
@@ -4901,6 +5109,12 @@
    "fr": "Engeance de Beledar",
    "pt": "Cria de Beledar"
   },
+  "Посейдус": {
+   "de": "Poseidus",
+   "es": "Poseidus",
+   "fr": "Poséidus",
+   "pt": "Poseidus"
+  },
   "Псарь Керракс": {
    "de": "Hundemeister Kerrax",
    "es": "Maestro de canes Kerrax",
@@ -4943,6 +5157,12 @@
    "fr": "Sabrielle l'Ostéoclaste",
    "pt": "Sabriel, a Cutilóssea"
   },
+  "Сильфида": {
+   "de": "Schlickhaut",
+   "es": "Cienopiel",
+   "fr": "Silthide",
+   "pt": "Silthide"
+  },
   "Скрииг Пожиратель": {
    "de": "Skreeg der Verschlinger",
    "es": "Skreeg el Devorador",
@@ -4954,6 +5174,12 @@
    "es": "Rondador de las profundidades",
    "fr": "Rôdeur des profondeurs",
    "pt": "Tocaieiro das Profundezas"
+  },
+  "Служитель глубин": {
+   "de": "Jünger des Abgrunds",
+   "es": "Adepto del abismo",
+   "fr": "Adhérent des abysses",
+   "pt": "Seguidor do Abismo"
   },
   "Сокрушитель Надежд": {
    "de": "Hoffnungsvernichter",
@@ -4990,6 +5216,12 @@
    "es": "Tahonta",
    "fr": "Tahonta",
    "pt": "Tahonta"
+  },
+  "Торопун": {
+   "de": "Pfadläufer",
+   "es": "Correcaminos",
+   "fr": "Cours-les-Routes",
+   "pt": "Vencetrilha"
   },
   "Укротитель Кама": {
    "de": "Bestienreiter Kama",

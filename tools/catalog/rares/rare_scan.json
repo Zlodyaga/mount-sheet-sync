@@ -1,0 +1,2618 @@
+[
+ {
+  "file": "BattleForAzeroth",
+  "item": "Witherbark Direwing",
+  "mount": [
+   1185,
+   "Witherbark Direwing"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   142692
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 33,
+  "quest": "53091, 53517",
+  "coords": [
+   [
+    "ARATHI_HIGHLANDS",
+    14,
+    "67.48",
+    "60.58",
+    "Nimar the Slayer"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Lil' Donkey",
+  "mount": [
+   1182,
+   "Lil' Donkey"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   142423
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 33,
+  "quest": "53014, 53518",
+  "coords": [
+   [
+    "ARATHI_HIGHLANDS",
+    14,
+    "33.44",
+    "36.94",
+    "Cave Entrance"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Skullripper",
+  "mount": [
+   1183,
+   "Skullripper"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   142437
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 33,
+  "quest": "53022, 53526",
+  "coords": [
+   [
+    "ARATHI_HIGHLANDS",
+    14,
+    "57.15",
+    "45.75",
+    "Skullripper"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Swift Albino Raptor",
+  "mount": [
+   1180,
+   "Swift Albino Raptor"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   142709
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 33,
+  "quest": "53083, 53504",
+  "coords": [
+   [
+    "ARATHI_HIGHLANDS",
+    14,
+    "67.06",
+    "65.89",
+    "Beastrider Kama"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Highland Mustang",
+  "mount": [
+   1174,
+   "Highland Mustang"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   142741
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 33,
+  "quest": "",
+  "coords": [],
+  "flags": [
+   "requiresAlliance"
+  ]
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Broken Highland Mustang",
+  "mount": [
+   1173,
+   "Broken Highland Mustang"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   142739
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 33,
+  "quest": "",
+  "coords": [],
+  "flags": [
+   "requiresHorde"
+  ]
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Captured Dune Scavenger",
+  "mount": [
+   928,
+   "Dune Scavenger"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   128682,
+   123774,
+   136191,
+   134429,
+   129778,
+   134427,
+   129652,
+   134560,
+   134103,
+   128678,
+   123773,
+   134559,
+   123775,
+   128749,
+   127406,
+   122746,
+   123864,
+   136545,
+   122782,
+   123863
+  ],
+  "n_npcs": 20,
+  "names": [
+   "?",
+   "Diamondback Warbringer",
+   "Sethrak Skycaller"
+  ],
+  "class": [
+   -1,
+   0
+  ],
+  "chance": 3000,
+  "quest": "",
+  "coords": [
+   [
+    "VOLDUN",
+    864,
+    "",
+    "",
+    ""
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Chewed-On Reins of the Terrified Pack Mule",
+  "mount": [
+   1018,
+   "Terrified Pack Mule"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   131534,
+   133892,
+   133889,
+   141642,
+   131519,
+   137134,
+   133736,
+   131530,
+   131529
+  ],
+  "n_npcs": 9,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 4000,
+  "quest": "",
+  "coords": [
+   [
+    "DRUSTVAR",
+    896,
+    "",
+    "",
+    ""
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Reins of a Tamed Bloodfeaster",
+  "mount": [
+   956,
+   "Leaping Veinseeker"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   126888,
+   126187,
+   133077,
+   122239,
+   127919,
+   120607,
+   136639,
+   127224,
+   136293,
+   133279,
+   133063,
+   128734,
+   127928,
+   120606,
+   124547,
+   124688
+  ],
+  "n_npcs": 16,
+  "names": [
+   "?",
+   "Blood Troll Hexxer",
+   "Bloodhunter Drudge"
+  ],
+  "class": [
+   -1,
+   0
+  ],
+  "chance": 3000,
+  "quest": "",
+  "coords": [
+   [
+    "NAZMIR",
+    863,
+    "",
+    "",
+    ""
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Goldenmane's Reins",
+  "mount": [
+   1019,
+   "Goldenmane"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   129750,
+   131646,
+   135585,
+   138167,
+   138332,
+   141143,
+   137202,
+   138168,
+   130641,
+   131166,
+   138226,
+   130897,
+   135584,
+   140209,
+   137893,
+   138170,
+   137156,
+   130006,
+   131404,
+   136158,
+   130039,
+   132226,
+   138340,
+   137155,
+   130531
+  ],
+  "n_npcs": 25,
+  "names": [
+   "?",
+   "Irontide Coin Hauler",
+   "Irontide Cutthroat"
+  ],
+  "class": [
+   -1,
+   0
+  ],
+  "chance": 3000,
+  "quest": "",
+  "coords": [
+   [
+    "STORMSONG_VALLEY",
+    942,
+    "",
+    "",
+    ""
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Ashenvale Chimaera",
+  "mount": [
+   1200,
+   "Ashenvale Chimaera"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   148787
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 20,
+  "quest": "54695, 54696",
+  "coords": [
+   [
+    "DARKSHORE",
+    62,
+    "56.4",
+    "30.8",
+    "Alash'anir"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Caged Bear",
+  "mount": [
+   1199,
+   "Blackpaw"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   149652
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 20,
+  "quest": "54883",
+  "coords": [],
+  "flags": [
+   "requiresAlliance"
+  ]
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Blackpaw",
+  "mount": [
+   1199,
+   "Blackpaw"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   149660
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 20,
+  "quest": "54890",
+  "coords": [
+   [
+    "DARKSHORE",
+    62,
+    "49.2",
+    "24.8",
+    "Blackpaw"
+   ]
+  ],
+  "flags": [
+   "requiresHorde"
+  ]
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Captured Kaldorei Nightsaber",
+  "mount": [
+   1205,
+   "Kaldorei Nightsaber"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   149655
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 20,
+  "quest": "54886",
+  "coords": [],
+  "flags": [
+   "requiresAlliance"
+  ]
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Kaldorei Nightsaber",
+  "mount": [
+   1205,
+   "Kaldorei Nightsaber"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   149663
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 20,
+  "quest": "54892",
+  "coords": [
+   [
+    "DARKSHORE",
+    62,
+    "39.9",
+    "33.0",
+    "Shadowclaw"
+   ]
+  ],
+  "flags": [
+   "requiresHorde"
+  ]
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Umber Nightsaber",
+  "mount": [
+   1203,
+   "Umber Nightsaber"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   148037
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 20,
+  "quest": "54431",
+  "coords": [
+   [
+    "DARKSHORE",
+    62,
+    "42",
+    "77.6",
+    "Athil Dewfire"
+   ]
+  ],
+  "flags": [
+   "requiresHorde"
+  ]
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Captured Umber Nightsaber",
+  "mount": [
+   1203,
+   "Umber Nightsaber"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   147701
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 20,
+  "quest": "54277",
+  "coords": [],
+  "flags": [
+   "requiresAlliance"
+  ]
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Rusted Keys to the Junkheap Drifter",
+  "mount": [
+   1248,
+   "Junkheap Drifter"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   152182
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 200,
+  "quest": "55811",
+  "coords": [
+   [
+    "MECHAGON_ISLAND",
+    1462,
+    "65.8",
+    "79.6",
+    "Rustfeather"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Rusty Mechanocrawler",
+  "mount": [
+   1229,
+   "Rusty Mechanocrawler"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   154342,
+   151934
+  ],
+  "n_npcs": 2,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 333,
+  "quest": "55512",
+  "coords": [
+   [
+    "MECHAGON_ISLAND",
+    1462,
+    "52.0",
+    "41.4",
+    "Arachnoid Harvester"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Silent Glider",
+  "mount": [
+   1257,
+   "Silent Glider"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   152290
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 200,
+  "quest": "56298",
+  "coords": [
+   [
+    "NAZJATAR",
+    1355,
+    "",
+    "",
+    ""
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Xinlao",
+  "mount": [
+   1328,
+   "Xinlao"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   157466
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 33,
+  "quest": "57363",
+  "coords": [
+   [
+    "VALE_OF_ETERNAL_BLOSSOMS",
+    1530,
+    "34.15",
+    "68.05",
+    "Anh-De the Loyal"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Reins of the Drake of the Four Winds",
+  "mount": [
+   1314,
+   "Drake of the Four Winds"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   157134
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 33,
+  "quest": "57259",
+  "coords": [
+   [
+    "ULDUM",
+    1527,
+    "73.96",
+    "83.52",
+    "Ishak of the Four Winds"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Malevolent Drone",
+  "mount": [
+   1319,
+   "Malevolent Drone"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   162147
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "58696",
+  "coords": [
+   [
+    "ULDUM",
+    1527,
+    "30.85",
+    "49.71",
+    "Corpse Eater"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Clutch of Ha-Li",
+  "mount": [
+   1297,
+   "Clutch of Ha-Li"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   157153
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 33,
+  "quest": "57344",
+  "coords": [
+   [
+    "VALE_OF_ETERNAL_BLOSSOMS",
+    1530,
+    "36.6",
+    "37.6",
+    "Ha-Li"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Ren's Stalwart Hound",
+  "mount": [
+   1327,
+   "Ren's Stalwart Hound"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   157160
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 33,
+  "quest": "57345",
+  "coords": [
+   [
+    "VALE_OF_ETERNAL_BLOSSOMS",
+    1530,
+    "10",
+    "33",
+    "Houndlord Ren"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "BattleForAzeroth",
+  "item": "Waste Marauder",
+  "mount": [
+   1317,
+   "Waste Marauder"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   157146
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 33,
+  "quest": "57273",
+  "coords": [
+   [
+    "ULDUM",
+    1527,
+    "68.23",
+    "31.97",
+    "Rotfeaster"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Dragonflight",
+  "item": "Reins of the Liberated Slyvern",
+  "mount": [
+   1553,
+   "Liberated Slyvern"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   195353
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 50,
+  "quest": "",
+  "coords": [],
+  "flags": []
+ },
+ {
+  "file": "Dragonflight",
+  "item": "Ancient Salamanther",
+  "mount": [
+   1619,
+   "Ancient Salamanther"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   201181,
+   200960,
+   200584,
+   200904,
+   200956,
+   201013,
+   200610,
+   200721,
+   200911,
+   200600,
+   200717,
+   200978,
+   200885,
+   200681,
+   200579,
+   200537
+  ],
+  "n_npcs": 16,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 80,
+  "quest": "",
+  "coords": [
+   [
+    "THE_FORBIDDEN_REACH",
+    2151,
+    "68.6",
+    "45.6",
+    "Mad-Eye Carrey"
+   ],
+   [
+    "THE_FORBIDDEN_REACH",
+    2151,
+    "45.9",
+    "79.7",
+    "Warden Entrix"
+   ],
+   [
+    "THE_FORBIDDEN_REACH",
+    2151,
+    "58.6",
+    "48.8",
+    "Vraken the Hunter"
+   ]
+  ],
+  "flags": [
+   "equalOdds",
+   "groupSize"
+  ]
+ },
+ {
+  "file": "Dragonflight",
+  "item": "Cobalt Shalewing",
+  "mount": [
+   1732,
+   "Cobalt Shalewing"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   203625
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "",
+  "coords": [],
+  "flags": []
+ },
+ {
+  "file": "Dragonflight",
+  "item": "Clayscale Hornstrider",
+  "mount": [
+   2038,
+   "Clayscale Hornstrider"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   208029
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 200,
+  "quest": "",
+  "coords": [
+   [
+    "THE_AZURE_SPAN",
+    2024,
+    "",
+    "",
+    ""
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Legion",
+  "item": "Lambent Mana Ray",
+  "mount": [
+   973,
+   "Lambent Mana Ray"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   126867
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 30,
+  "quest": "",
+  "coords": [
+   [
+    "MACAREE",
+    882,
+    "34.01",
+    "47.83",
+    "Venomtail Skyfin"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Legion",
+  "item": "Maddened Chaosrunner",
+  "mount": [
+   970,
+   "Maddened Chaosrunner"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   126852
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 30,
+  "quest": "",
+  "coords": [
+   [
+    "MACAREE",
+    882,
+    "55.65",
+    "59.95",
+    "Wrangler Kravos"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Legion",
+  "item": "Vile Fiend",
+  "mount": [
+   955,
+   "Vile Fiend"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   127288
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 30,
+  "quest": "",
+  "coords": [
+   [
+    "ANTORAN_WASTES",
+    885,
+    "62.96",
+    "24.86",
+    "Houndmaster Kerrax"
+   ]
+  ],
+  "flags": [
+   "blackMarket"
+  ]
+ },
+ {
+  "file": "Legion",
+  "item": "Crimson Slavermaw",
+  "mount": [
+   979,
+   "Crimson Slavermaw"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   122958
+  ],
+  "n_npcs": 1,
+  "names": [
+   "Blistermaw"
+  ],
+  "class": [
+   2
+  ],
+  "chance": 30,
+  "quest": "",
+  "coords": [
+   [
+    "ANTORAN_WASTES",
+    885,
+    "61.78",
+    "36.97",
+    "Blistermaw"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Legion",
+  "item": "Biletooth Gnasher",
+  "mount": [
+   981,
+   "Biletooth Gnasher"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   126040,
+   126199
+  ],
+  "n_npcs": 2,
+  "names": [
+   "?",
+   "Puscilla"
+  ],
+  "class": [
+   -1,
+   2
+  ],
+  "chance": 30,
+  "quest": "48809, 48810",
+  "coords": [
+   [
+    "ANTORAN_WASTES",
+    885,
+    "64.42",
+    "20.35",
+    ""
+   ],
+   [
+    "ANTORAN_WASTES",
+    885,
+    "53.06",
+    "36.12",
+    ""
+   ]
+  ],
+  "flags": [
+   "sourceText"
+  ]
+ },
+ {
+  "file": "Legion",
+  "item": "Acid Belcher ",
+  "mount": [
+   980,
+   "Acid Belcher"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   126912
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 30,
+  "quest": "",
+  "coords": [
+   [
+    "MACAREE",
+    882,
+    "49.79",
+    "9.40",
+    "Skreeg the Devourer"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Midnight",
+  "item": "Sanguine Harrower",
+  "mount": [
+   2827,
+   "Sanguine Harrower"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   244272,
+   244272,
+   256923,
+   256925,
+   256808,
+   256770,
+   245044,
+   238498,
+   256922,
+   256924,
+   256926,
+   257027,
+   245182,
+   256821
+  ],
+  "n_npcs": 14,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "",
+  "coords": [
+   [
+    "VOIDSTORM",
+    2405,
+    "",
+    "",
+    ""
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Midnight",
+  "item": "Augmented Stormray",
+  "mount": [
+   2751,
+   "Augmented Stormray"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   244272,
+   244272,
+   256923,
+   256925,
+   256808,
+   256770,
+   245044,
+   238498,
+   256922,
+   256924,
+   256926,
+   257027,
+   245182,
+   256821
+  ],
+  "n_npcs": 14,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "",
+  "coords": [
+   [
+    "VOIDSTORM",
+    2405,
+    "",
+    "",
+    ""
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Midnight",
+  "item": "Amani Sharptalon",
+  "mount": [
+   2760,
+   "Amani Sharptalon"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   242023,
+   242025,
+   245975,
+   242031,
+   242033,
+   242035,
+   242027,
+   245692,
+   242024,
+   242028,
+   247976,
+   242032,
+   242034,
+   242026,
+   245691
+  ],
+  "n_npcs": 15,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "",
+  "coords": [
+   [
+    "ZUL_AMAN_MIDNIGHT",
+    2437,
+    "",
+    "",
+    ""
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Midnight",
+  "item": "Escaped Witherbark Pango",
+  "mount": [
+   2775,
+   "Witherbark Pango"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   242023,
+   242025,
+   245975,
+   242031,
+   242033,
+   242035,
+   242027,
+   245692,
+   242024,
+   242028,
+   247976,
+   242032,
+   242034,
+   242026,
+   245691
+  ],
+  "n_npcs": 15,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "",
+  "coords": [
+   [
+    "ZUL_AMAN_MIDNIGHT",
+    2437,
+    "",
+    "",
+    ""
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Midnight",
+  "item": "Cerulean Hawkstrider",
+  "mount": [
+   2762,
+   "Cerulean Hawkstrider"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   246332,
+   240129,
+   250719,
+   250754,
+   250841,
+   250826,
+   255302,
+   255348,
+   246633,
+   250582,
+   250683,
+   250876,
+   250780,
+   250806,
+   255329
+  ],
+  "n_npcs": 15,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "",
+  "coords": [
+   [
+    "EVERSONG_WOODS_MIDNIGHT",
+    2395,
+    "",
+    "",
+    ""
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Midnight",
+  "item": "Cobalt Dragonhawk",
+  "mount": [
+   2758,
+   "Cobalt Dragonhawk"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   246332,
+   240129,
+   250719,
+   250754,
+   250841,
+   250826,
+   255302,
+   255348,
+   246633,
+   250582,
+   250683,
+   250876,
+   250780,
+   250806,
+   255329
+  ],
+  "n_npcs": 15,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "",
+  "coords": [
+   [
+    "EVERSONG_WOODS_MIDNIGHT",
+    2395,
+    "",
+    "",
+    ""
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Midnight",
+  "item": "Vibrant Petalwing",
+  "mount": [
+   2708,
+   "Vibrant Petalwing"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   248741,
+   249849,
+   249962,
+   250086,
+   250226,
+   250246,
+   250321,
+   250358,
+   249844,
+   249902,
+   249997,
+   250180,
+   250231,
+   250317,
+   250347,
+   246735
+  ],
+  "n_npcs": 16,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "",
+  "coords": [
+   [
+    "HARANDAR",
+    2413,
+    "",
+    "",
+    ""
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Midnight",
+  "item": "Rootstalker Grimlynx",
+  "mount": [
+   2615,
+   "Rootstalker Grimlynx"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   248741,
+   249849,
+   249962,
+   250086,
+   250226,
+   250246,
+   250321,
+   250358,
+   249844,
+   249902,
+   249997,
+   250180,
+   250231,
+   250317,
+   250347
+  ],
+  "n_npcs": 15,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "",
+  "coords": [
+   [
+    "HARANDAR",
+    2413,
+    "",
+    "",
+    ""
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "MistsOfPandaria",
+  "item": "Reins of the Amber Primordial Direhorn",
+  "mount": [
+   534,
+   "Amber Primordial Direhorn"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   69841
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 20,
+  "quest": "",
+  "coords": [],
+  "flags": [
+   "sourceText",
+   "blackMarket"
+  ]
+ },
+ {
+  "file": "MistsOfPandaria",
+  "item": "Reins of the Jade Primordial Direhorn",
+  "mount": [
+   536,
+   "Jade Primordial Direhorn"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   69842
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 20,
+  "quest": "",
+  "coords": [],
+  "flags": [
+   "sourceText",
+   "blackMarket"
+  ]
+ },
+ {
+  "file": "MistsOfPandaria",
+  "item": "Reins of the Slate Primordial Direhorn",
+  "mount": [
+   535,
+   "Slate Primordial Direhorn"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   69769
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 20,
+  "quest": "",
+  "coords": [],
+  "flags": [
+   "sourceText",
+   "blackMarket"
+  ]
+ },
+ {
+  "file": "MistsOfPandaria",
+  "item": "Reins of the Thundering Onyx Cloud Serpent",
+  "mount": [
+   561,
+   "Thundering Onyx Cloud Serpent"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   73167
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "",
+  "coords": [],
+  "flags": [
+   "sourceText",
+   "blackMarket"
+  ]
+ },
+ {
+  "file": "Shadowlands",
+  "item": "Horrid Dredwing",
+  "mount": [
+   1310,
+   "Horrid Dredwing"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   165290
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "59612",
+  "coords": [
+   [
+    "REVENDRETH",
+    1525,
+    "46.0",
+    "78.5",
+    "Harika the Horrid"
+   ]
+  ],
+  "flags": [
+   "sourceText"
+  ]
+ },
+ {
+  "file": "Shadowlands",
+  "item": "Bonehoof Tauralus",
+  "mount": [
+   1366,
+   "Bonehoof Tauralus"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   162586
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "58783",
+  "coords": [
+   [
+    "MALDRAXXUS",
+    1536,
+    "44.2",
+    "51.2",
+    "Tahonta"
+   ]
+  ],
+  "flags": [
+   "sourceText"
+  ]
+ },
+ {
+  "file": "Shadowlands",
+  "item": "Hopecrusher Gargon",
+  "mount": [
+   1298,
+   "Hopecrusher Gargon"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   166679
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "59900",
+  "coords": [
+   [
+    "REVENDRETH",
+    1525,
+    "51.98",
+    "51.80",
+    "Hopecrusher"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Shadowlands",
+  "item": "Endmire Flyer Tether",
+  "mount": [
+   1379,
+   "Endmire Flyer"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   166521
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "59869",
+  "coords": [
+   [
+    "REVENDRETH",
+    1525,
+    "62.0",
+    "47.0",
+    "Famu the Infinite"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Shadowlands",
+  "item": "Wild Glimmerfur Prowler",
+  "mount": [
+   1393,
+   "Wild Glimmerfur Prowler"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   168647
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "61632",
+  "coords": [
+   [
+    "ARDENWEALD",
+    1565,
+    "30.4",
+    "55.2",
+    "Valfir the Unrelenting"
+   ]
+  ],
+  "flags": [
+   "sourceText"
+  ]
+ },
+ {
+  "file": "Shadowlands",
+  "item": "Predatory Plagueroc",
+  "mount": [
+   1411,
+   "Predatory Plagueroc"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   162741
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 33,
+  "quest": "58872",
+  "coords": [
+   [
+    "MALDRAXXUS",
+    1536,
+    "31.4",
+    "35.6",
+    "Gieger"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Shadowlands",
+  "item": "Slime-Covered Reins of the Hulking Deathroc",
+  "mount": [
+   1410,
+   "Hulking Deathroc"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   157309
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 33,
+  "quest": "61720",
+  "coords": [
+   [
+    "MALDRAXXUS",
+    1536,
+    "58.6",
+    "74.2",
+    "Violet Mistake"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Shadowlands",
+  "item": "Gorespine",
+  "mount": [
+   1373,
+   "Gorespine"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   162690
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 50,
+  "quest": "58851",
+  "coords": [
+   [
+    "MALDRAXXUS",
+    1536,
+    "65.8",
+    "35.3",
+    "Nerissa Heartless"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Shadowlands",
+  "item": "Blisterback Bloodtusk",
+  "mount": [
+   1372,
+   "Blisterback Bloodtusk"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   162819
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 33,
+  "quest": "58889",
+  "coords": [
+   [
+    "MALDRAXXUS",
+    1536,
+    "33.6",
+    "80.6",
+    "Warbringer Mal'Korak"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Shadowlands",
+  "item": "Armored Bonehoof Tauralus",
+  "mount": [
+   1370,
+   "Armored Bonehoof Tauralus"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   168147
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "58784",
+  "coords": [
+   [
+    "MALDRAXXUS",
+    1536,
+    "50.67",
+    "47.37",
+    "Sabriel the Bonecleaver"
+   ]
+  ],
+  "flags": [
+   "sourceText"
+  ]
+ },
+ {
+  "file": "Shadowlands",
+  "item": "Mawsworn Soulhunter",
+  "mount": [
+   1304,
+   "Mawsworn Soulhunter"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   174861
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 50,
+  "quest": "",
+  "coords": [
+   [
+    "THE_MAW",
+    1543,
+    "53.5",
+    "79.5",
+    "Gorged Shadehound"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Shadowlands",
+  "item": "Gnawed Reins of the Battle-Bound Warhound",
+  "mount": [
+   1437,
+   "Battle-Bound Warhound"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   162873,
+   162880,
+   162875,
+   162853,
+   162874,
+   162872
+  ],
+  "n_npcs": 6,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "",
+  "coords": [
+   [
+    "MALDRAXXUS",
+    1536,
+    "50.67",
+    "47.37",
+    "Theater of Pain"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Shadowlands",
+  "item": "Impressionable Gorger Spawn",
+  "mount": [
+   1391,
+   "Loyal Gorger"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   160821
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "",
+  "coords": [
+   [
+    "REVENDRETH",
+    1525,
+    "38.60",
+    "72.00",
+    "Worldedge Gorger"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Shadowlands",
+  "item": "Rampaging Mauler",
+  "mount": [
+   1514,
+   "Rampaging Mauler"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   179472
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 50,
+  "quest": "64246",
+  "coords": [
+   [
+    "KORTHIA",
+    1961,
+    "",
+    "",
+    "Konthrogz the Obliterator"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Shadowlands",
+  "item": "Garnet Razorwing",
+  "mount": [
+   1509,
+   "Garnet Razorwing"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   180160
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "64455",
+  "coords": [
+   [
+    "KORTHIA",
+    1961,
+    "56.3",
+    "66.3",
+    "Reliwik the Defiant"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Shadowlands",
+  "item": "Crimson Shardhide",
+  "mount": [
+   1506,
+   "Crimson Shardhide"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   179684
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "64233",
+  "coords": [
+   [
+    "KORTHIA",
+    1961,
+    "45.35",
+    "30.34",
+    "Malbog"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Shadowlands",
+  "item": "Fallen Charger's Reins",
+  "mount": [
+   1502,
+   "Fallen Charger"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   179460
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 7,
+  "quest": "",
+  "coords": [
+   [
+    "THE_MAW",
+    1543,
+    "",
+    "",
+    "Fallen Charger"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Shadowlands",
+  "item": "Iska's Mawrat Leash",
+  "mount": [
+   1584,
+   "Colossal Plaguespew Mawrat"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   182120
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "",
+  "coords": [],
+  "flags": []
+ },
+ {
+  "file": "Shadowlands",
+  "item": "Sturdy Silver Mawrat Harness",
+  "mount": [
+   1565,
+   "Colossal Umbrahide Mawrat"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   179526,
+   179433,
+   176578,
+   169859,
+   159755,
+   153165,
+   171422,
+   153451,
+   159190,
+   151329,
+   151331,
+   155945,
+   170418,
+   156239,
+   155250,
+   155251,
+   157122,
+   153174,
+   156015,
+   1,
+   5,
+   2022,
+   185026,
+   185027,
+   185028,
+   153011
+  ],
+  "n_npcs": 26,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "",
+  "coords": [
+   [
+    "TORGHAST",
+    1751,
+    "",
+    "",
+    ""
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "Shadowlands",
+  "item": "Deepstar Polyp",
+  "mount": [
+   1434,
+   "Deepstar Aurelid"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   180978
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 100,
+  "quest": "",
+  "coords": [],
+  "flags": [
+   "sourceText"
+  ]
+ },
+ {
+  "file": "TheWarWithin",
+  "item": "Beledar's Spawn",
+  "mount": [
+   2192,
+   "Beledar's Spawn"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   207802
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 20,
+  "quest": "",
+  "coords": [
+   [
+    "HALLOWFALL",
+    2215,
+    "",
+    "",
+    ""
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "TheWarWithin",
+  "item": "Regurgitated Mole Reins",
+  "mount": [
+   2205,
+   "Ol' Mole Rufus"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   220285
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 20,
+  "quest": "81633",
+  "coords": [
+   [
+    "THE_RINGING_DEEPS",
+    2214,
+    "",
+    "",
+    ""
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "TheWarWithin",
+  "item": "Salvaged Goblin Gazillionaire's Flying Machine",
+  "mount": [
+   2291,
+   "Salvaged Goblin Gazillionaire's Flying Machine"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   234621
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 50,
+  "quest": "",
+  "coords": [
+   [
+    "UNDERMINE",
+    2346,
+    "32.2",
+    "21.8",
+    "Gallagio Garbage"
+   ],
+   [
+    "UNDERMINE",
+    2346,
+    "67.8",
+    "29.2",
+    "Gallagio Garbage"
+   ],
+   [
+    "UNDERMINE",
+    2346,
+    "36.6",
+    "45.6",
+    "Gallagio Garbage"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "TheWarWithin",
+  "item": "Darkfuse Spy-Eye",
+  "mount": [
+   2293,
+   "Darkfuse Spy-Eye"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   231310
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 25,
+  "quest": "",
+  "coords": [
+   [
+    "UNDERMINE",
+    2346,
+    "41.2",
+    "41.2",
+    "Darkfuse Precipitant"
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "TheWarWithin",
+  "item": "Sthaarbs's Last Lunch",
+  "mount": [
+   2603,
+   "Sthaarbs's Last Lunch"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   234845
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 10,
+  "quest": "",
+  "coords": [
+   [
+    "KARESH",
+    2371,
+    "",
+    "",
+    ""
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "TheWarWithin",
+  "item": "Pearlescent Krolusk",
+  "mount": [
+   2601,
+   "Pearlescent Krolusk"
+  ],
+  "in_catalog": true,
+  "npcs": [
+   232195
+  ],
+  "n_npcs": 1,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 10,
+  "quest": "",
+  "coords": [
+   [
+    "KARESH",
+    2371,
+    "",
+    "",
+    ""
+   ]
+  ],
+  "flags": []
+ },
+ {
+  "file": "WarlordsOfDraenor",
+  "item": "Armored Razorback",
+  "mount": [
+   622,
+   "Armored Razorback"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   95044,
+   95054,
+   95053,
+   95056
+  ],
+  "n_npcs": 4,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 30,
+  "quest": "39287, 39288, 39289, 39290",
+  "coords": [],
+  "flags": [
+   "sourceText"
+  ]
+ },
+ {
+  "file": "WarlordsOfDraenor",
+  "item": "Riding Turtle",
+  "mount": [
+   125,
+   "Riding Turtle"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   81171,
+   85715
+  ],
+  "n_npcs": 2,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 200,
+  "quest": "",
+  "coords": [],
+  "flags": [
+   "sourceText",
+   "blackMarket"
+  ]
+ },
+ {
+  "file": "WarlordsOfDraenor",
+  "item": "Tundra Icehoof",
+  "mount": [
+   611,
+   "Tundra Icehoof"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   95044,
+   95054,
+   95053,
+   95056
+  ],
+  "n_npcs": 4,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 30,
+  "quest": "39287, 39288, 39289, 39290",
+  "coords": [],
+  "flags": [
+   "sourceText"
+  ]
+ },
+ {
+  "file": "WarlordsOfDraenor",
+  "item": "Warsong Direfang",
+  "mount": [
+   643,
+   "Warsong Direfang"
+  ],
+  "in_catalog": false,
+  "npcs": [
+   95044,
+   95054,
+   95053,
+   95056
+  ],
+  "n_npcs": 4,
+  "names": [
+   "?"
+  ],
+  "class": [
+   -1
+  ],
+  "chance": 30,
+  "quest": "39287, 39288, 39289, 39290",
+  "coords": [],
+  "flags": [
+   "sourceText"
+  ]
+ }
+]

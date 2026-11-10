@@ -976,7 +976,8 @@ OLD_GAI = GetAchievementInfo
 GetAchievementInfo = function(id)
   if id == 13553 then return id, "Мехагонская угроза", 10, true, 1, 1, 24, "", 0, 0, "", false, ACH_EARNED end
 end
-MSS_NS.ACCESS[777] = { ach = { 13553 }, hint = "mechagon" }
+MSS_NS.L.access_test_ach = "получить достижение «%s»"
+MSS_NS.ACCESS[777] = { ach = { 13553 }, hint = "test_ach" }
 ROUTE.pin = nil; ROUTE.waypoint = nil""")
 n_chat = len(chat_all())
 row.MockClick(row)
@@ -1002,6 +1003,24 @@ missing = L.eval("""(function()
   return table.concat(out, ",")
 end)()""")
 check("3.0.5: every gated entrance of Access.lua has its texts (hint, note, where)", missing == "", missing)
+sep = L.eval("""(function()
+  QUEST_DONE = {}
+  local a = MSS_NS.AccessCheck(1195)
+  local s = a and a.step
+  QUEST_DONE[64844] = true
+  local b = MSS_NS.AccessCheck(1195)
+  QUEST_DONE = {}
+  return a and a.open, s and s.quest, s and s.map, b and b.open
+end)""")()
+check("Sepulcher: closed until «The Pilgrimage Ends» (64844), the step pins Elder Ara in Zereth Mortis; done — open",
+      list(sep) == [False, 64844, 1970, True], list(sep))
+und = L.eval("""(function()
+  QUEST_DONE = {}
+  local u, d = MSS_NS.AccessCheck(1296), MSS_NS.AccessCheck(1193)
+  return u and u.open, u and u.step and u.step.quest, u and u.step and u.step.map, d and d.open, d and d.hint
+end)""")()
+check("Undermine: closed until «When Opportunity Explodes» (83137), the step pins Renzik in Dornogal; Sanctum: only a note",
+      list(und)[:4] == [False, 83137, 2339, None] and "Утробе" in str(und[4]), list(und))
 L.execute("function C_EncounterJournal.GetDungeonEntrancesForMap() return {} end")
 row.elem.instance = 778
 row.MockClick(row)
