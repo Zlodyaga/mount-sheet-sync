@@ -41,8 +41,12 @@ ns.ACCESS = {
     quests = { 63985 }, account = true, hint = "tazavesh",
     steps = { { quest = 63985, name = "The Veiled Market", where = "tarela" } },
   },
-  -- Гробница Предвечных: Древний транслокатор после 4-й главы кампании 9.2 (номера нет — только подсказка)
-  [1195] = { hint = "sepulcher" },
+  -- Гробница Предвечных: Древний транслокатор открывает «The Pilgrimage Ends» (4-я глава кампании 9.2, выдаёт старейшина Ара);
+  -- с полётами в Зерет Морте («Unlocking the Secrets») можно долететь и без него
+  [1195] = {
+    quests = { 64844 }, ach = { 15514 }, hint = "sepulcher",
+    steps = { { quest = 64844, name = "The Pilgrimage Ends", map = 1970, x = 0.474, y = 0.884 } },
+  },
   -- Манагорн Омега: без плаща «Reshii Wraps» не пустят; плащ — кампания К'ареша, глава 3, «The Tabiqa»
   [1302] = {
     quests = { 84910 }, hint = "karesh",

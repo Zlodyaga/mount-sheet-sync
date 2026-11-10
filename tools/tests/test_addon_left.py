@@ -1002,6 +1002,17 @@ missing = L.eval("""(function()
   return table.concat(out, ",")
 end)()""")
 check("3.0.5: every gated entrance of Access.lua has its texts (hint, note, where)", missing == "", missing)
+sep = L.eval("""(function()
+  QUEST_DONE = {}
+  local a = MSS_NS.AccessCheck(1195)
+  local s = a and a.step
+  QUEST_DONE[64844] = true
+  local b = MSS_NS.AccessCheck(1195)
+  QUEST_DONE = {}
+  return a and a.open, s and s.quest, s and s.map, b and b.open
+end)""")()
+check("Sepulcher: closed until «The Pilgrimage Ends» (64844), the step pins Elder Ara in Zereth Mortis; done — open",
+      list(sep) == [False, 64844, 1970, True], list(sep))
 L.execute("function C_EncounterJournal.GetDungeonEntrancesForMap() return {} end")
 row.elem.instance = 778
 row.MockClick(row)
