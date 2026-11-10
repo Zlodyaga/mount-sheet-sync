@@ -113,6 +113,12 @@ namespace MountSheetSync
             }
             if (layout < 6)
             {
+                // листы в памяти — как после запросов выше: «Фармлю» вида 2 уже на листах персонажей, и новые строки получат галочку
+                foreach (Action a in memory)
+                {
+                    a();
+                }
+                memory.Clear();
                 string raids = AddRaidRows(book, req, memory);
                 if (raids != null)
                 {
