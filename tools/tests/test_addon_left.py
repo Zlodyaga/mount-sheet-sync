@@ -976,7 +976,8 @@ OLD_GAI = GetAchievementInfo
 GetAchievementInfo = function(id)
   if id == 13553 then return id, "Мехагонская угроза", 10, true, 1, 1, 24, "", 0, 0, "", false, ACH_EARNED end
 end
-MSS_NS.ACCESS[777] = { ach = { 13553 }, hint = "mechagon" }
+MSS_NS.L.access_test_ach = "получить достижение «%s»"
+MSS_NS.ACCESS[777] = { ach = { 13553 }, hint = "test_ach" }
 ROUTE.pin = nil; ROUTE.waypoint = nil""")
 n_chat = len(chat_all())
 row.MockClick(row)
