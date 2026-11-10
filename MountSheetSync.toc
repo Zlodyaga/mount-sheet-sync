@@ -25,6 +25,7 @@ Locales.lua
 MountSheetSync.lua
 Statistics.lua
 Entrances.lua
+Access.lua
 Collection.lua
 Remaining.lua
 Skin.lua

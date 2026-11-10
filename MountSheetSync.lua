@@ -965,6 +965,9 @@ frame:SetScript("OnEvent", function(self, event, ...)
     if ns.OnLoginCollection then
       SafeCall(ns.OnLoginCollection)
     end
+    if ns.RememberAccess then
+      SafeCall(ns.RememberAccess)   -- доступ к входу, общий на аккаунт: запомнить у этого персонажа (Access.lua)
+    end
     C_Timer.After(3, RequestLockouts)
   elseif event == "ENCOUNTER_END" then
     local encounterID, encounterName, difficultyID, groupSize, success = ...

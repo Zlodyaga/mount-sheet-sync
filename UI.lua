@@ -639,6 +639,8 @@ local function WatchRoute()
   end)
 end
 
+local accessAsked, accessAskedAt = nil, 0   -- вход, про который только что сказали «не пройдено»
+
 local function ShowRoute(elem)
   pendingRoute = nil   -- новый путь заменяет недоделанный
   if elem.spot then
@@ -666,6 +668,20 @@ local function ShowRoute(elem)
   end
   local instance = elem.instance
   local name = Safe(elem.placeName) ~= "" and Safe(elem.placeName) or ns.InstanceName(instance) or "?"
+  -- вход, закрытый сюжетом или фазой (Access.lua): сначала — что сделать; «не пройдено» — без метки, но повторный
+  -- Ctrl + щелчок в течение минуты ставит её всё равно (номер задания мог устареть)
+  local access = ns.AccessCheck and ns.AccessCheck(instance)
+  if access and access.hint ~= "" then
+    local now = GetTime and GetTime() or 0
+    if access.open == false and not (accessAsked == instance and now - accessAskedAt < 60) then
+      accessAsked, accessAskedAt = instance, now
+      ns.Print(string.format(L.access_need, name, access.hint))
+      return
+    end
+    if access.open == nil then
+      ns.Print(string.format(L.access_note, name, access.hint))
+    end
+  end
   local e = FindEntrance(instance, ns.InstanceName(instance) or elem.placeName)
   if not e then
     ns.Print(string.format(L.route_none, name))

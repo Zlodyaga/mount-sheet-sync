@@ -885,6 +885,38 @@ L.execute("ROUTE.tracks = false; ROUTE.pin = nil")
 row.MockClick(row)
 check("…if the game won't track it: a map pin at the entrance, tracked", g.ROUTE.waypoint.map == 14 and g.ROUTE.waypoint.x == 0.5 and g.ROUTE.user is True, g.ROUTE.user)
 check("…and the chat says so", "метка на карте" in chat_all(), chat_all()[-160:])
+# 3.0.5: an entrance closed by a quest chain (Access.lua): first what to do, no pin; Ctrl + click again — the pin anyway
+L.execute("""
+QUEST_DONE = {}
+C_QuestLog = { IsQuestFlaggedCompleted = function(id) return QUEST_DONE[id] == true end }
+MSS_NS.ACCESS[777] = { quests = { 111 }, hint = "argus" }
+ROUTE.tracks = true; ROUTE.pin = nil; ROUTE.waypoint = nil""")
+n_chat = len(chat_all())
+row.MockClick(row)
+said = chat_all()[n_chat:]
+check("3.0.5: a gated entrance, chain not done on this character: what to do, and no pin", g.ROUTE.pin is None and g.ROUTE.waypoint is None
+      and "сначала нужно открыть Аргус" in said and "Ctrl + щелчок ещё раз" in said, said)
+row.MockClick(row)
+check("…Ctrl + click again: the pin anyway (the quest number may be stale)", g.ROUTE.pin == 42, g.ROUTE.pin)
+L.execute("QUEST_DONE[111] = true; ROUTE.pin = nil; MSS_NS.ACCESS[777] = { quests = { 111 }, hint = \"argus\" }")
+n_chat = len(chat_all())
+row.MockClick(row)
+check("…the chain done: straight to the entrance, no warning", g.ROUTE.pin == 42 and "сначала нужно" not in chat_all()[n_chat:], chat_all()[n_chat:])
+L.execute("""
+QUEST_DONE = { [222] = true }
+MSS_NS.ACCESS[777] = { quests = { 222 }, account = true, hint = "argus" }
+MSS_NS.RememberAccess()
+QUEST_DONE = {}
+ROUTE.pin = nil""")
+check("3.0.5: access shared by the account, seen at login on one character: remembered", g.MountSheetSyncDB.access is not None and g.MountSheetSyncDB.access[777] is True)
+n_chat = len(chat_all())
+row.MockClick(row)
+check("…another character without the quest goes straight to the entrance", g.ROUTE.pin == 42 and "сначала нужно" not in chat_all()[n_chat:], chat_all()[n_chat:])
+L.execute('MSS_NS.ACCESS[777] = { hint = "nyalotha" }; ROUTE.pin = nil')
+n_chat = len(chat_all())
+row.MockClick(row)
+check("3.0.5: nothing to check (Ny'alotha, phase): a note before the pin", g.ROUTE.pin == 42 and "учтите" in chat_all()[n_chat:] and "Зидорми" in chat_all()[n_chat:], chat_all()[n_chat:])
+L.execute("MSS_NS.ACCESS[777] = nil; MountSheetSyncDB.access = nil; ROUTE.tracks = false; ROUTE.pin = nil")
 L.execute("function C_EncounterJournal.GetDungeonEntrancesForMap() return {} end")
 row.elem.instance = 778
 row.MockClick(row)

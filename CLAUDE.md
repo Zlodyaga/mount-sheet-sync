@@ -64,6 +64,7 @@
 - **Программа 2.10.1** (в работе, не выпущена, 10.11.2026): 63 маунта с раров в каталоге (`2026-11-10`, источник — база Rarity,
   имена — Wowhead, `tools/catalog/rare_names.json`); вид таблицы 6 дописывает их в готовые листы (`SheetUpgrade.AddRares`);
   рар узнаётся и по номеру существа (колонка каталога «ID существ» → `npcs` → `ns.RareRowForNpc`), `MinAddon` = 3.0.5.
+  В аддоне 3.0.5 ещё: Ctrl + щелчок по рару (`ns.RARE_SPOTS`), закрытые сюжетом входы (`Access.lua`; номера заданий с Wowhead — проверить в игре).
 
 - **Discord** (02.11.2026): сервер «MountSheetSync WoW», бессрочное приглашение https://discord.gg/DKPGJP222d, ссылка стоит в Social Links проекта на CurseForge.
 
