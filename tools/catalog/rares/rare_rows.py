@@ -205,10 +205,14 @@ special(2205, "The War Within", 2214, names["220285"]["ru"], {l: names["220285"]
 # Midnight: any rare of the zone
 ANY = {"ru": "Любой редкий монстр: %s", "en": "Any rare: %s", "de": "Beliebiger seltener Gegner: %s",
        "fr": "N'importe quel monstre rare : %s", "es": "Cualquier monstruo raro: %s", "pt": "Qualquer monstro raro: %s"}
+# rares Rarity does not list, from Wowhead's "dropped by" of the mount's item (checked 10.11.2026: the player saw
+# Hardin Steellock in Voidstorm, and the row did not know him)
+VOIDSTORM_MORE = [257199, 248459, 248700, 257231, 241443, 248068, 248791, 248823]
+MORE_NPCS = {2827: VOIDSTORM_MORE, 2751: VOIDSTORM_MORE}
 for mid in (2827, 2751, 2760, 2775, 2762, 2758, 2708, 2615):
     e = scan_by_mount[mid]
     ui = [c[1] for c in e["coords"] if c[1]][0]
-    npcs = sorted(set(e["npcs"]))
+    npcs = sorted(set(e["npcs"]) | set(MORE_NPCS.get(mid, [])))
     special(mid, "Midnight", ui, ANY["ru"] % uimap["ru"][ui], {l: ANY[l] % uimap[l][ui] for l in LANGS}, NO_CD,
             "Падает с любого редкого монстра зоны (их здесь %d). Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет." % len(npcs),
             "Drops from any rare of the zone (%d of them). Each one gives loot once a day per character, so the row has no cooldown of its own." % len(npcs),
@@ -307,7 +311,8 @@ for mid, npcs, exp, ui, chance, ru, en in OUTSIDE:
     special(mid, exp, ui, names[str(npcs[0])]["ru"], {l: names[str(npcs[0])][l] for l in LANGS}, "Ежедневно", ru, en, npcs,
             chance=round(chance, 4))
 # The Coiled Isle (Midnight): two mounts from any of its rares, a very rare drop
-COILED = sorted({257863, 257906, 263456, 268049, 261142, 255088, 255087, 265237, 268090})
+COILED = sorted({257863, 257906, 263456, 268049, 261142, 255088, 255087, 265237, 268090,
+                 255927, 256631, 258920, 261109, 265262, 258916})
 for mid in (3051, 3061):
     special(mid, "Midnight", 2512, ANY["ru"] % uimap["ru"][2512], {l: ANY[l] % uimap[l][2512] for l in LANGS}, NO_CD,
             "Падает с любого редкого монстра острова (их здесь %d), очень редко. Добыча с каждого — раз в день на персонажа, поэтому общего отката у строки нет." % len(COILED),

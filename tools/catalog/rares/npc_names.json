@@ -774,5 +774,117 @@
   "es": "Vyragosa",
   "ru": "Вирагоса",
   "pt": "Viragosa"
+ },
+ "257199": {
+  "en": "Hardin Steellock",
+  "fr": "Hardin Fermacier",
+  "de": "Hardin Stahllocke",
+  "es": "Hardin Cerracero",
+  "ru": "Хардин Сталелокон",
+  "pt": "Hardin Trancaferro"
+ },
+ "248459": {
+  "en": "The Many-Broken",
+  "fr": "Le Fragmenté",
+  "de": "Der oft Gebrochene",
+  "es": "Los muchos tábidos",
+  "ru": "Переломленный",
+  "pt": "O Multiquebrado"
+ },
+ "248700": {
+  "en": "Abysslick",
+  "fr": "Abysgliss",
+  "de": "Abysschlick",
+  "es": "Lameabismos",
+  "ru": "Глубинный лизун",
+  "pt": "Gosma Abissal"
+ },
+ "257231": {
+  "en": "Gar'chak Skullcleave",
+  "fr": "Gar'chak Fendecrâne",
+  "de": "Gar'chak Schädelspalter",
+  "es": "Quiebracalaveras Gar'chak",
+  "ru": "Гар'чак Череполом",
+  "pt": "Gar'chak Rebenta-crânio"
+ },
+ "241443": {
+  "en": "Tremora",
+  "fr": "Tremora",
+  "de": "Tremora",
+  "es": "Temblora",
+  "ru": "Тремора",
+  "pt": "Tremora"
+ },
+ "248068": {
+  "en": "Nullspiral",
+  "fr": "Spirale de vacuité",
+  "de": "Nullspirale",
+  "es": "Espiral nula",
+  "ru": "Нуль-спираль",
+  "pt": "Nulespiral"
+ },
+ "248791": {
+  "en": "Voidseer Orivane",
+  "fr": "Voyant du Vide Orivane",
+  "de": "Leerenseher Orivane",
+  "es": "Orivane Vidente del Vacío",
+  "ru": "Пророк Бездны Оривейн",
+  "pt": "Vidente do Caos Orivane"
+ },
+ "248823": {
+  "en": "Blackcore",
+  "fr": "Noyau noir",
+  "de": "Schwarzkern",
+  "es": "Núcleo negro",
+  "ru": "Черноруд",
+  "pt": "Negrinúcleo"
+ },
+ "255927": {
+  "en": "Venom Lancer Ori'kassi",
+  "fr": "Ori'kassi Lance-venin",
+  "de": "Giftschleuderer Ori'kassi",
+  "es": "Lancero venenoso Ori'kassi",
+  "ru": "Ядовитый копейщик Ори'касси",
+  "pt": "Lanceiro Peçonhento Ori'kassi"
+ },
+ "256631": {
+  "en": "Big Mon",
+  "fr": "Grand balèze",
+  "de": "Großa Kloppa",
+  "es": "Colegón",
+  "ru": "Здоровяк",
+  "pt": "Cara Grandão"
+ },
+ "258920": {
+  "en": "Nar'zira",
+  "fr": "Nar'zira",
+  "de": "Nar'zira",
+  "es": "Nar'zira",
+  "ru": "Нар'зира",
+  "pt": "Nar'zira"
+ },
+ "261109": {
+  "en": "Sss'alik",
+  "fr": "Sss'alik",
+  "de": "Sss'alik",
+  "es": "Sss'alik",
+  "ru": "Сз'алик",
+  "pt": "Sss'alik"
+ },
+ "265262": {
+  "en": "Hisstara",
+  "fr": "Siffltara",
+  "de": "Hisstara",
+  "es": "Sisetara",
+  "ru": "Шиптара",
+  "pt": "Hisstara"
+ },
+ "258916": {
+  "en": "Garsecg",
+  "fr": "Garsecg",
+  "de": "Garsecg",
+  "es": "Garsecg",
+  "ru": "Гарсекг",
+  "pt": "Garsecg"
  }
 }
