@@ -1171,7 +1171,7 @@ namespace MountSheetSync
             req.Add(Validation(sheetId, start, end, 0, ListRule(new[] { SheetLogic.No, SheetLogic.Yes },
                 new[] { new[] { ChipNoBg, ChipNoFg }, new[] { ChipYesBg, ChipYesFg } })));
             req.Add(RepeatFormat(sheetId, start, end, 0, 1, O("horizontalAlignment", "CENTER"), "userEnteredFormat.horizontalAlignment"));
-            int cFarm = SheetLogic.FindCol(header, "^фармлю", -1);
+            int cFarm = SheetLogic.FarmCol(header);
             if (cFarm >= 0)
             {
                 req.Add(Validation(sheetId, start, end, cFarm, O("condition", O("type", "BOOLEAN"))));

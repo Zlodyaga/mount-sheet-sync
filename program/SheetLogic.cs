@@ -1670,6 +1670,12 @@ namespace MountSheetSync
             }).ToList();
         }
 
+        // Колонка «Фармлю» на листе персонажа (-1 — нет).
+        public static int FarmCol(object[] header)
+        {
+            return FindCol(header, "^фармлю", -1);
+        }
+
         public static int FindCol(object[] header, string pattern, int fallback)
         {
             Regex re = new Regex(pattern);
