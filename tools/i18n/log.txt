@@ -453,3 +453,8 @@ en: The previous data on this computer is kept: {0}
 @ Не удалось запомнить персонажей для повторной отметки: {0}
 en: Could not note the characters whose marks are to be set again: {0}
 
+@ Не удалось включить слежение за файлом ({0}): проверяю его раз в несколько секунд.
+en: Could not start watching the file ({0}): checking it every few seconds.
+
+@ Не получилось, работаю дальше ({0})
+en: That did not work, carrying on ({0})

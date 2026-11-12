@@ -329,8 +329,9 @@ namespace MountSheetSync
                 {
                     File.Move(oldExe, exePath);   // вернуть как было
                 }
-                catch (Exception)
+                catch (Exception swallowed)
                 {
+                    Log.Quiet("Updater: put the old exe back", swallowed);
                 }
                 TryDelete(tmpExe);
                 throw new SyncException(Tr.F("не удалось заменить программу: {0}", ex.Message));

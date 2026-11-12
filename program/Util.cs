@@ -38,6 +38,25 @@ namespace MountSheetSync
             }
         }
 
+        static readonly HashSet<string> quietSeen = new HashSet<string>();
+
+        /// <summary>
+        /// Ошибка, из-за которой работу не прерывают (2.10.1): раньше её молча глотали, и в отчёте об ошибке смотреть было
+        /// нечего. Одна и та же — раз за запуск: такие места бывают в цикле.
+        /// </summary>
+        public static void Quiet(string where, Exception ex)
+        {
+            string text = where + ": " + ex.GetType().Name + ": " + ex.Message;
+            lock (quietSeen)
+            {
+                if (!quietSeen.Add(text) || quietSeen.Count > 200)
+                {
+                    return;
+                }
+            }
+            Write(Tr.L("Не получилось, работаю дальше ({0})", text));
+        }
+
         public static void Write(string message)
         {
             string line = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture) + "  " + message;

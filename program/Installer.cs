@@ -157,8 +157,9 @@ namespace MountSheetSync
                     s.InstallDeclined = Updater.ExePath;
                     s.Save(AppPaths.SettingsFile);
                 }
-                catch (Exception)
+                catch (Exception swallowed)
                 {
+                    Log.Quiet("Installer: remember the declined install", swallowed);
                 }
                 return false;
             }
@@ -312,8 +313,9 @@ namespace MountSheetSync
                 CleanupOld();
                 Register(InstalledExe);
             }
-            catch (Exception)
+            catch (Exception swallowed)
             {
+                Log.Quiet("Installer: cleanup and registration", swallowed);
             }
         }
 
@@ -370,8 +372,9 @@ namespace MountSheetSync
                     Autostart.Set(false);
                 }
             }
-            catch (Exception)
+            catch (Exception swallowed)
             {
+                Log.Quiet("Uninstall: autostart off", swallowed);
             }
             try
             {

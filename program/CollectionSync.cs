@@ -297,8 +297,9 @@ namespace MountSheetSync
             {
                 done = book.GetProperty(MixFixedProperty);
             }
-            catch (Exception)
+            catch (Exception swallowed)
             {
+                Log.Quiet("CollectionSync: mix-fixed property", swallowed);
             }
             if (done != null)
             {

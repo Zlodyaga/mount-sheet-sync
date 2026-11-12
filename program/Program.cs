@@ -643,8 +643,9 @@ namespace MountSheetSync
                     proxy.Credentials = CredentialCache.DefaultCredentials;
                 }
             }
-            catch (Exception)
+            catch (Exception swallowed)
             {
+                Log.Quiet("Program: proxy credentials", swallowed);
             }
         }
 

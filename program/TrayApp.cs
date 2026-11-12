@@ -1021,8 +1021,9 @@ namespace MountSheetSync
                         }
                     }
                 }
-                catch (Exception)
+                catch (Exception swallowed)
                 {
+                    Log.Quiet("Autostart: approved key", swallowed);
                 }
                 Log.Write(Tr.L("Автозапуск включён: {0}", Command));
             }
@@ -1058,8 +1059,9 @@ namespace MountSheetSync
                     }
                 }
             }
-            catch (Exception)
+            catch (Exception swallowed)
             {
+                Log.Quiet("Autostart: run key", swallowed);
             }
         }
     }

@@ -29,8 +29,9 @@ namespace MountSheetSync
             {
                 v = book.GetProperty(Property);
             }
-            catch (Exception)
+            catch (Exception swallowed)
             {
+                Log.Quiet("SheetUpgrade: read the layout", swallowed);
             }
             return int.TryParse(v ?? "", NumberStyles.Integer, CultureInfo.InvariantCulture, out n) ? n : 0;
         }
