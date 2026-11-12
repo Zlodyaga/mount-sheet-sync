@@ -965,8 +965,21 @@ n_chat = len(chat_all())
 row.MockClick(row)
 said = chat_all()[n_chat:]
 check("3.0.5: the chain's next step has no place: where to go, in words; no pin", g.ROUTE.pin is None and g.ROUTE.waypoint is None
-      and "Harnessing the Power" in said and "Магни в Палате Сердца" in said,
+      and "Harnessing the Power" in said and "в Зале Сердца" in said,
       said)
+# the real first step of Ny'alotha: given inside the Chamber of Heart — a pin at the translocator in Silithus, and the words
+L.execute("""
+MOCK.gt = MOCK.gt + 1000
+SAVED_STEPS = MSS_NS.ACCESS[777].steps
+MSS_NS.ACCESS[777].steps = { MSS_NS.ACCESS[1180].steps[1] }
+ROUTE.pin = nil; ROUTE.waypoint = nil""")
+n_chat = len(chat_all())
+row.MockClick(row)
+said = chat_all()[n_chat:]
+check("3.0.6: a step given inside a place (Chamber of Heart): a pin at the way in (Silithus) and where it is given, in words",
+      g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 81 and abs(g.ROUTE.waypoint.x - 0.43) < 1e-9
+      and "Зале Сердца" in said and "Транслокатор титанов" in said, (g.ROUTE.waypoint, said))
+L.execute("MSS_NS.ACCESS[777].steps = SAVED_STEPS; ROUTE.waypoint = nil")
 L.execute("MOCK.gt = MOCK.gt + 1000; QUEST_DONE[57010] = true")
 row.MockClick(row)
 check("…the next step has a quest giver's spot: a pin there, not at the entrance", g.ROUTE.pin is None and g.ROUTE.waypoint is not None

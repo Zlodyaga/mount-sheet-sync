@@ -727,15 +727,25 @@ local function ShowAccessStep(step, inLog)
     return
   end
   local title = ns.QuestTitle(step)
+  -- слова о месте (step.where): у шага без точки — вместо метки, у шага с точкой — вместе с ней (метка у входа туда,
+  -- где задание выдают: Зал Сердца)
+  local where = step.where and L["access_where_" .. tostring(step.where)]
   if inLog and pcall(C_SuperTrack.SetSuperTrackedQuestID, step.quest) then
     ns.Print(string.format(L.access_step_track, title))
   elseif step.map and Mz.Via(step.map, step.x, step.y, title) then
-    return
+    if where then
+      ns.Print(string.format(L.access_step_text, title, where))
+    end
   elseif step.map and PinAndTrack(step.map, step.x, step.y) then
-    ns.Print(string.format(L.access_step_pin, title))
+    if where then
+      ns.Print(string.format(L.route_boss, title))
+      ns.Print(string.format(L.access_step_text, title, where))
+    else
+      ns.Print(string.format(L.access_step_pin, title))
+    end
     Mz.Hint(step.map)
   else
-    ns.Print(string.format(L.access_step_text, title, L["access_where_" .. tostring(step.where)] or "?"))
+    ns.Print(string.format(L.access_step_text, title, where or "?"))
   end
 end
 
