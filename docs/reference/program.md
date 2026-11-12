@@ -100,7 +100,7 @@ Windows). «Выйти» удаляет ключ и отзывает его у G
 
 `settings.json` (ключи: `mode`, `welcomed`, `spreadsheetId`, `spreadsheetTitle`, `spreadsheetUrl`, `webAppUrl`, `secret`,
 `wowPath`, `notifications`, `checkUpdates`, `testVersions`, `updateNotified`, `installDeclined`, `language`,
-`pollSeconds`, `retrySeconds`), `google-token.dat`, `sent-ids*.txt` (у `local` — `sent-ids-local.txt`), `local-data.json`, `.bak` и (после повреждения) `.damaged` (режим «на этом компьютере», `LocalBook`), `state.json` (последняя отправка и результат, «Последние события», о чём уже напоминали),
+`pollSeconds`, `retrySeconds`), `google-token.dat`, `sent-ids*.txt` (у `local` — `sent-ids-local.txt`), `local-data.json`, `.bak` (прошлая запись), `backups/local-data-ГГГГ-ММ-ДД.json` (2.10.1: версия перед первой записью за день, последние 7 — `LocalBook.KeepDaily`) и (после повреждения) `.damaged` (режим «на этом компьютере», `LocalBook`), `state.json` (последняя отправка и результат, «Последние события», о чём уже напоминали),
 `sync.log` (по-русски при русском языке, иначе по-английски).
 
 ## Командная строка

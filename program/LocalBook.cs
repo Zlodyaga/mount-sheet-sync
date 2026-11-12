@@ -124,6 +124,41 @@ namespace MountSheetSync
     sealed class LocalBook : IStructuredBook
     {
         const int Format = 1;
+        /// <summary>Сколько дневных копий хранить в папке «backups».</summary>
+        public const int DailyBackups = 7;
+
+        /// <summary>
+        /// Раз в день версия файла перед записью уходит в папку «backups» рядом (хранятся последние DailyBackups): «.bak» —
+        /// только прошлая запись, а испорченное по ошибке могло записаться уже дважды. Не вышло — не беда: запись важнее.
+        /// </summary>
+        static void KeepDaily(string file)
+        {
+            try
+            {
+                string dir = Path.Combine(Path.GetDirectoryName(file), "backups");
+                string stem = Path.GetFileNameWithoutExtension(file) + "-", ext = Path.GetExtension(file);
+                string copy = Path.Combine(dir, stem + DateTime.Now.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture) + ext);
+                if (File.Exists(copy))
+                {
+                    return;
+                }
+                Directory.CreateDirectory(dir);
+                File.Copy(file, copy, false);
+                string[] all = Directory.GetFiles(dir, stem + "*" + ext);
+                Array.Sort(all, StringComparer.Ordinal);
+                for (int i = 0; i < all.Length - DailyBackups; i++)
+                {
+                    File.Delete(all[i]);
+                }
+            }
+            catch (Exception ex)
+            {
+                if (ex is OutOfMemoryException)
+                {
+                    throw;
+                }
+            }
+        }
 
         readonly string file;
         string title = "";
@@ -350,6 +385,7 @@ namespace MountSheetSync
                 File.WriteAllText(temp, Json.Write(d, false), new UTF8Encoding(false));
                 if (File.Exists(file))
                 {
+                    KeepDaily(file);
                     File.Replace(temp, file, file + ".bak");
                 }
                 else

@@ -43,6 +43,8 @@ check("…a deleted sheet is gone", r["sheetRemoved"] is True)
 check("writers take turns: the second waits for the first, the same thread can enter again", r["secondWaited"] is True and r["secondGotIn"] is True and r["sameThreadAgain"] is True, r)
 check("a damaged file: read from the backup, kept aside as .damaged", r["healedFromBackup"] is True and r["damagedKept"] is True, r)
 check("…and the next write doesn't overwrite the good backup with it", r["backupGood"] is True)
+check("2.10.1: one dated copy a day in «backups», however many writes", r["dailyToday"] == 1, r["dailyToday"])
+check("…only the last 7 are kept", r["dailyKept"] == 7 and r["dailyOldestGone"] is True, r["dailyKept"])
 check("no file and no backup: a clear error", "не удалось прочитать" in r["missing"], r["missing"])
 
 passed = sum(1 for _, ok in checks if ok)
