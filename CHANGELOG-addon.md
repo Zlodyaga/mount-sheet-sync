@@ -2,6 +2,10 @@
 
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
+## 3.0.7
+- The game's addon list shows Mount Sheet Sync under “Collections”, next to other collection addons.
+- A mount only one faction can get (“… [Horde]”) is no longer listed or counted for characters of the other faction. The addon learns a character's faction when you log in with it.
+
 ## 3.0.6
 - Routes through portals with Mapzeroth: when the Mapzeroth addon is installed, Ctrl + click hands it the pin (entrance, rare,
   world boss, the next quest of a gated entrance) and its navigator leads the way, through portals and flights too. Without

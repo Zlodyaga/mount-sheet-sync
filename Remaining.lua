@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.6 — «Осталось на этой неделе»
+Mount Sheet Sync 3.0.7 — «Осталось на этой неделе»
 ==================================================
 Список приходит из Google-таблицы: программа MountSheetSync.exe записывает его
 в SheetData.lua (глобальная MountSheetSyncSheet), а игра читает этот файл при
@@ -415,6 +415,32 @@ local function ResetTime(kills, weekEnd)
   return last
 end
 
+-- Строка маунта одной фракции (в каталоге имя кончается на «[Орда]» / «[Альянс]») у персонажа другой фракции.
+-- Фракцию персонажа запоминает Collection.lua при входе (c.faction); не знаем её — строку показываем.
+local SIDE_MARKS = { ["[Орда]"] = "Horde", ["[Альянс]"] = "Alliance" }
+local function OtherSide(item, key)
+  local mount = type(item.mount) == "string" and item.mount or ""
+  local db = MountSheetSyncDB
+  local faction
+  if key and type(db) == "table" and type(db.chars) == "table" then
+    for name, c in pairs(db.chars) do   -- ключ персонажа в списках — его GUID, а у старых записей «Имя-Сервер»
+      if type(c) == "table" and (c.guid == key or name == key) then
+        faction = c.faction
+        break
+      end
+    end
+  end
+  if faction ~= "Horde" and faction ~= "Alliance" then
+    return false
+  end
+  for mark, side in pairs(SIDE_MARKS) do
+    if side ~= faction and mount:sub(-#mark) == mark then
+      return true
+    end
+  end
+  return false
+end
+
 -- ch — строка персонажа из таблицы, если она уже известна (список всех персонажей), иначе ищется по player.
 function ns.BuildRemaining(data, player, weekEnd, kills, ch)
   local result = { generated = tonumber(data.generated) }
@@ -449,7 +475,9 @@ function ns.BuildRemaining(data, player, weekEnd, kills, ch)
   local items, left, total = {}, 0, 0
   local now = time()
   for _, item in ipairs(type(ch.items) == "table" and ch.items or {}) do
-    if type(item) == "table" and item.kind == "rare" then
+    if type(item) == "table" and OtherSide(item, player.key) then
+      -- маунт другой фракции («… [Орда]»): этому персонажу он не выпадет — ни в списке, ни в счёте
+    elseif type(item) == "table" and item.kind == "rare" then
       -- откат свой, неделя ни при чём: последнее убийство этим персонажем из всего журнала. Рары «100 %» и фарм мобов
       -- (item.group) показываем своими группами, но не считаем: это не «убить на этой неделе»
       local counts = item.group ~= "guaranteed" and item.group ~= "mobs"

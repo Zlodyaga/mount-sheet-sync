@@ -183,3 +183,7 @@ Midnight (`issecretvalue`) не читаются — имя босса тогд�
 с 2.9 — `stats` = { [statisticID] = убийств } только ненулевые и `statsAt`), `collection` (`ids`,
 `collected`, `journal` — число маунтов журнала, `mounts`, `updated`), `journal` (снимок Атласа приключений для программы: `locale`, `build`, `instances`, `encounters`), `access` (3.0.5: journalInstanceID → true — доступ, общий на аккаунт, уже видели у одного из персонажей), `notFarmed` (ещё не учтённые таблицей «Не фармлю»), `quiet`, `minimap`,
 `language`, `mapzeroth` (3.0.6: `false` — не вести через Mapzeroth), позиция окна (`window`), вкладка (`tab`), сортировка и фильтры «Попыток» (`attemptsView`), вид сетки всех персонажей (`gridView`). Только SavedVariables — аддоны WoW не выходят в сеть.
+
+3.0.7: toc — `## Category: Collections` с переводами (раздел списка модификаций, названия как у игры). Маунт одной фракции
+(имя в каталоге кончается на «[Орда]» / «[Альянс]») не показывается и не считается у персонажа другой фракции:
+`OtherSide` в Remaining.lua, фракция — `chars[…].faction` (пишет Collection.lua при входе; не знаем — строку показываем).

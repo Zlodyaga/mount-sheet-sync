@@ -1527,6 +1527,30 @@ click_all()
 check("«Все персонажи» with 20+ characters: the bar under the columns", win.gridSlider._shown and win.gridSlider._max == len(g.MountSheetSyncSheet.chars) - 7, win.gridSlider._max)
 check("left panel lists them all (the ScrollBox scrolls)", len(char_rows()) == len(g.MountSheetSyncSheet.chars) + 1, len(char_rows()))
 
+# 3.0.7: a mount of one faction («… [Орда]») is not listed or counted for a character of the other faction
+L.execute("""
+SIDE = { r = {} }
+function SIDE.run(faction)
+  for _, c in pairs(MountSheetSyncDB.chars) do c.faction = faction end
+  MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+  local r = MSS_NS.GetAllRemaining()[1].r
+  local seen = false
+  for _, it in ipairs(r.items) do if it.item.mount == "Проверочный мамонт [Орда]" then seen = true end end
+  SIDE.r[faction or "none"] = { total = r.total, seen = seen }
+end
+local first = MSS_NS.GetAllRemaining()[1].name
+for _, ch in ipairs(MountSheetSyncSheet.chars) do
+  if ch.name == first then
+    ch.items[#ch.items + 1] = { mount = "Проверочный мамонт [Орда]", boss = "Любой босс проверки", sheet = "Рейды", kind = "raid", p = 0.01 }
+  end
+end
+SIDE.run(nil); SIDE.run("Horde"); SIDE.run("Alliance")""")
+side = g.SIDE.r
+check("3.0.7: a Horde-only mount is listed for a Horde character and when the faction is not known",
+      side["Horde"].seen and side["none"].seen and side["Horde"].total == side["none"].total, (side["Horde"].total, side["none"].total))
+check("…and neither listed nor counted for an Alliance character",
+      not side["Alliance"].seen and side["Alliance"].total == side["Horde"].total - 1, side["Alliance"].total)
+
 check("no Lua errors reported in chat", "ошибка" not in chat_all())
 failed = [nm for nm, ok in checks if not ok]
 print("\n%d/%d checks passed" % (len(checks) - len(failed), len(checks)))

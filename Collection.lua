@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.6 — персонажи и коллекция маунтов
+Mount Sheet Sync 3.0.7 — персонажи и коллекция маунтов
 ====================================================
 По этим данным программа Mount Sheet Sync строит новую Google-таблицу
 («Создать таблицу»): листы «Рейды <Имя>» / «Подземелья <Имя>» на каждого
@@ -103,6 +103,9 @@ function ns.RememberCharacter()
     local className, classFile = UnitClass("player")
     c.class = Text(className) or c.class
     c.classFile = Text(classFile) or c.classFile
+  end
+  if UnitFactionGroup then
+    c.faction = Text(UnitFactionGroup("player")) or c.faction   -- "Horde" / "Alliance": строки чужой фракции в «Осталось» не нужны
   end
   if UnitLevel then
     c.level = Num(UnitLevel("player")) or c.level
