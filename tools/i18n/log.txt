@@ -458,3 +458,6 @@ en: Could not start watching the file ({0}): checking it every few seconds.
 
 @ Не получилось, работаю дальше ({0})
 en: That did not work, carrying on ({0})
+
+@ Данные возвращены из копии за {0}; прежние сохранены: {1}
+en: Data brought back from the copy of {0}; the previous data is kept: {1}

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -34,6 +35,7 @@ namespace MountSheetSync
         ToolStripMenuItem notifyItem;
         ToolStripMenuItem autoAddItem;
         ToolStripMenuItem languageItem;
+        ToolStripMenuItem restoreItem;
         ToolStripMenuItem updateItem;
         ToolStripMenuItem checkUpdatesItem;
         ToolStripMenuItem testVersionsItem;
@@ -166,6 +168,7 @@ namespace MountSheetSync
             notifyItem = Item(Tr._("Показывать уведомления"), delegate { ToggleNotifications(); });
             autoAddItem = Item(Tr._("Добавлять новых персонажей самим"), delegate { ToggleAutoAdd(); });
             autoAddItem.ToolTipText = Tr._("Персонаж, которым вы зашли в игру, сам попадает в список. Выключено — добавляйте через «Персонажи…»");
+            restoreItem = new ToolStripMenuItem(Tr._("Вернуть данные за день"));
             languageItem = new ToolStripMenuItem(Tr._("Язык") + (Tr.Lang != "en" ? " / Language" : ""));
             foreach (string code in new[] { "auto" }.Concat(Tr.Languages))
             {
@@ -181,7 +184,7 @@ namespace MountSheetSync
                 syncItem, recentItem, leftItem, openSheetItem, signInItem, createItem, addCharsItem, farmItem, collectionItem, new ToolStripSeparator(),
                 Item(Tr._("Настройки…"), delegate { OpenSettings(false); }),
                 Item(Tr._("Журнал работы"), delegate { OpenLog(); }),
-                autostartItem, notifyItem, autoAddItem, checkUpdatesItem, testVersionsItem, languageItem, new ToolStripSeparator(),
+                autostartItem, notifyItem, autoAddItem, restoreItem, checkUpdatesItem, testVersionsItem, languageItem, new ToolStripSeparator(),
                 Item(Tr._("Выход"), delegate { ExitApp(); }),
             });
         }
@@ -366,6 +369,7 @@ namespace MountSheetSync
             notifyItem.Checked = settings.Notifications;
             autoAddItem.Checked = settings.AutoAddCharacters;
             autoAddItem.Visible = settings.IsLocal;
+            FillRestore();
             checkUpdatesItem.Checked = settings.CheckUpdates;
             testVersionsItem.Checked = settings.TestVersions;
             testVersionsItem.Enabled = settings.CheckUpdates;
@@ -849,6 +853,64 @@ namespace MountSheetSync
                 return;
             }
             ExitApp();
+        }
+
+        /// <summary>Подменю «Вернуть данные за день»: дневные копии из «backups» (LocalBook.KeepDaily), новые первыми.</summary>
+        void FillRestore()
+        {
+            restoreItem.DropDownItems.Clear();
+            List<KeyValuePair<string, string>> copies = new List<KeyValuePair<string, string>>();
+            try
+            {
+                if (settings.IsLocal)
+                {
+                    copies = LocalBook.DailyCopies(AppPaths.LocalBookFile);
+                }
+            }
+            catch (Exception swallowed)
+            {
+                Log.Quiet("дневные копии", swallowed);
+            }
+            foreach (KeyValuePair<string, string> one in copies)
+            {
+                string copy = one.Value;
+                string day = DateTime.ParseExact(one.Key, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture).ToShortDateString();
+                restoreItem.DropDownItems.Add(Item(day, delegate { RestoreCopy(day, copy); }));
+            }
+            restoreItem.Visible = copies.Count > 0;
+        }
+
+        void RestoreCopy(string day, string copy)
+        {
+            string file = AppPaths.LocalBookFile;
+            DialogResult answer = MessageBox.Show(
+                Tr.F("Вернуть данные, какими они были {0}? Отметки, попытки и персонажи, добавленные позже, пропадут. Нынешние данные сохранятся рядом: {1}.",
+                    day, LocalBook.BeforeRestoreFile(file)),
+                Program.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
+            if (answer != DialogResult.Yes)
+            {
+                return;
+            }
+            try
+            {
+                LocalBook.Restore(file, copy);
+                Log.Write(Tr.L("Данные возвращены из копии за {0}; прежние сохранены: {1}", day, LocalBook.BeforeRestoreFile(file)));
+            }
+            catch (Exception ex)
+            {
+                if (ex is OutOfMemoryException)
+                {
+                    throw;
+                }
+                Log.Write(Tr.L("Не удалось вернуть данные из копии: {0}", ex.Message));
+                MessageBox.Show(Tr.F("Не удалось вернуть данные из копии: {0}", ex.Message), Program.Title,
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            if (worker != null)
+            {
+                worker.Reload(settings.Clone(), false);
+            }
         }
 
         void ToggleAutoAdd()

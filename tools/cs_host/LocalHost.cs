@@ -163,6 +163,26 @@ namespace MountSheetSync
             r["dailyKept"] = kept.Length;
             r["dailyOldestGone"] = !kept.Any(x => x.EndsWith("-2020-01-01.json", StringComparison.Ordinal));
 
+            // вернуть данные из дневной копии: нынешние остаются рядом, испорченную копию не берём
+            string today = LocalBook.DailyCopies(file)[0].Value;
+            r["copiesNewestFirst"] = LocalBook.DailyCopies(file).Count == 7
+                && string.CompareOrdinal(LocalBook.DailyCopies(file)[0].Key, LocalBook.DailyCopies(file)[1].Key) > 0;
+            string wasNow = File.ReadAllText(file), wasCopy = File.ReadAllText(today);
+            LocalBook.Restore(file, today);
+            r["restored"] = File.ReadAllText(file) == wasCopy && wasCopy != wasNow;
+            r["restoreKeptCurrent"] = File.ReadAllText(LocalBook.BeforeRestoreFile(file)) == wasNow;
+            r["restoreNotACopy"] = LocalBook.DailyCopies(file).Count == 7;
+            bool refused = false;
+            try
+            {
+                LocalBook.Restore(file, LocalBook.DailyCopies(file)[1].Value);   // «{}» — не данные
+            }
+            catch (Exception)
+            {
+                refused = true;
+            }
+            r["restoreBadRefused"] = refused && File.ReadAllText(file) == wasCopy;
+
             // ни файла, ни копии: понятная ошибка
             string missing = Path.Combine(args[0], "none.json");
             try

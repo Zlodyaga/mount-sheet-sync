@@ -45,6 +45,10 @@ check("a damaged file: read from the backup, kept aside as .damaged", r["healedF
 check("…and the next write doesn't overwrite the good backup with it", r["backupGood"] is True)
 check("2.10.1: one dated copy a day in «backups», however many writes", r["dailyToday"] == 1, r["dailyToday"])
 check("…only the last 7 are kept", r["dailyKept"] == 7 and r["dailyOldestGone"] is True, r["dailyKept"])
+check("2.10.2: the daily copies are listed newest first", r["copiesNewestFirst"] is True)
+check("…bringing one back replaces the data and keeps the current data next to it", r["restored"] is True and r["restoreKeptCurrent"] is True, r)
+check("…the kept data is not counted as a daily copy", r["restoreNotACopy"] is True)
+check("…a copy that cannot be read is refused, the data stays", r["restoreBadRefused"] is True)
 check("no file and no backup: a clear error", "не удалось прочитать" in r["missing"], r["missing"])
 
 passed = sum(1 for _, ok in checks if ok)

@@ -197,6 +197,57 @@ namespace MountSheetSync
             return book;
         }
 
+        /// <summary>Куда уходят нынешние данные, когда их заменяют дневной копией.</summary>
+        public static string BeforeRestoreFile(string file)
+        {
+            return Path.Combine(Path.Combine(Path.GetDirectoryName(file), "backups"), "before-restore" + Path.GetExtension(file));
+        }
+
+        /// <summary>Дневные копии из папки «backups», новые первыми: день («2026-11-13») и путь.</summary>
+        public static List<KeyValuePair<string, string>> DailyCopies(string file)
+        {
+            List<KeyValuePair<string, string>> found = new List<KeyValuePair<string, string>>();
+            string dir = Path.Combine(Path.GetDirectoryName(file), "backups");
+            string stem = Path.GetFileNameWithoutExtension(file) + "-", ext = Path.GetExtension(file);
+            if (!Directory.Exists(dir))
+            {
+                return found;
+            }
+            string[] all = Directory.GetFiles(dir, stem + "*" + ext);
+            Array.Sort(all, StringComparer.Ordinal);
+            for (int i = all.Length - 1; i >= 0; i--)
+            {
+                string day = Path.GetFileNameWithoutExtension(all[i]).Substring(stem.Length);
+                DateTime parsed;
+                if (DateTime.TryParseExact(day, "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture,
+                    System.Globalization.DateTimeStyles.None, out parsed))
+                {
+                    found.Add(new KeyValuePair<string, string>(day, all[i]));
+                }
+            }
+            return found;
+        }
+
+        /// <summary>
+        /// Заменить данные дневной копией. Копию сначала читаем — испорченную не берём; нынешние данные остаются в
+        /// BeforeRestoreFile. Сама копия на месте: вернуть её можно ещё раз.
+        /// </summary>
+        public static void Restore(string file, string copy)
+        {
+            if (Read(copy).Entries.Count == 0)
+            {
+                throw new SyncException(Tr._("в копии нет данных"));
+            }
+            using (Exclusive(file))
+            {
+                if (File.Exists(file))
+                {
+                    File.Copy(file, BeforeRestoreFile(file), true);
+                }
+                File.Copy(copy, file, true);
+            }
+        }
+
         /// <summary>Только один пишет в файл: цикл синхронизации, окна и команды из другого процесса.</summary>
         public static IDisposable Exclusive(string file)
         {

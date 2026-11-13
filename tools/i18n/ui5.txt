@@ -668,3 +668,31 @@ de: Ein Charakter, mit dem du dich einloggst, kommt von selbst in die Liste. Aus
 fr: Un personnage avec lequel vous vous connectez rejoint la liste tout seul. Désactivé : ajoutez-les via « Personnages… »
 es: Un personaje con el que entras al juego se añade solo a la lista. Desactivado: añádelos desde «Personajes…»
 pt: Um personagem com que você entra no jogo vai sozinho para a lista. Desligado: adicione por “Personagens…”
+
+@ Вернуть данные за день
+en: Bring back the data of a day
+de: Daten eines Tages zurückholen
+fr: Reprendre les données d'un jour
+es: Recuperar los datos de un día
+pt: Recuperar os dados de um dia
+
+@ Вернуть данные, какими они были {0}? Отметки, попытки и персонажи, добавленные позже, пропадут. Нынешние данные сохранятся рядом: {1}.
+en: Bring the data back to what it was on {0}? Marks, attempts and characters added later will be lost. The current data will be kept next to it: {1}.
+de: Die Daten auf den Stand vom {0} zurücksetzen? Später hinzugekommene Markierungen, Versuche und Charaktere gehen verloren. Die jetzigen Daten bleiben daneben erhalten: {1}.
+fr: Reprendre les données telles qu'elles étaient le {0} ? Les marques, tentatives et personnages ajoutés ensuite seront perdus. Les données actuelles seront gardées à côté : {1}.
+es: ¿Recuperar los datos tal como estaban el {0}? Las marcas, los intentos y los personajes añadidos después se perderán. Los datos actuales se guardarán al lado: {1}.
+pt: Recuperar os dados como estavam em {0}? Marcas, tentativas e personagens adicionados depois serão perdidos. Os dados atuais ficam guardados ao lado: {1}.
+
+@ Не удалось вернуть данные из копии: {0}
+en: Couldn't bring the data back from the copy: {0}
+de: Die Daten konnten nicht aus der Kopie zurückgeholt werden: {0}
+fr: Impossible de reprendre les données de la copie : {0}
+es: No se pudieron recuperar los datos de la copia: {0}
+pt: Não foi possível recuperar os dados da cópia: {0}
+
+@ в копии нет данных
+en: the copy has no data
+de: die Kopie enthält keine Daten
+fr: la copie ne contient pas de données
+es: la copia no tiene datos
+pt: a cópia não tem dados
