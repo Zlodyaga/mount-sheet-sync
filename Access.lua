@@ -30,6 +30,9 @@ ns.ACCESS = {
   [1180] = {
     quests = { 56376 }, inlog = true, hint = "nyalotha", after = "nyalotha_phase",
     steps = {
+      -- начало цепочки к Залу Сердца (8.2): без него Транслокатор титанов в Силитусе не пускает (проверено в игре 13.11.2026);
+      -- приходит от Магни после прибытия в Назжатар — по тексту задания, в игре не проверено
+      { quest = 55851, name = "Essential Empowerment", where = "nazjatar" },
       -- выдают в Зале Сердца; туда переносит Транслокатор титанов в Силитусе (объект 289521, точка с Wowhead)
       { quest = 57010, name = "Harnessing the Power", where = "heart", map = 81, x = 0.43, y = 0.445 },
       { quest = 58582, faction = "Horde", name = "Return of the Black Prince", where = "wrathion" },

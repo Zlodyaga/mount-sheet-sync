@@ -7,8 +7,9 @@ The addon and the Windows program are released separately; the program's changes
   world boss, the next quest of a gated entrance) and its navigator leads the way, through portals and flights too. Without
   Mapzeroth the pin works as before; on another continent the addon says once that Mapzeroth can lead there. A tick
   “Route through Mapzeroth” in the settings (on by default). Mapzeroth is an optional dependency.
-- Ny'alotha's first step (“Harnessing the Power”) now has a pin: the Titan Translocator in Silithus that takes you to the
-  Chamber of Heart.
+- Ny'alotha's chain now starts where it really starts: “Essential Empowerment”, which Magni sends once you reach Nazjatar
+  (without it the Titan Translocator in Silithus doesn't let you into the Chamber of Heart). “Harnessing the Power” then has
+  a pin at that translocator.
 - Quest, item and place names in the hints of gated entrances are the game's own in every language (they were English).
 
 ## 3.0.5
