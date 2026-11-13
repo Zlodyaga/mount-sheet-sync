@@ -351,8 +351,62 @@ namespace MountSheetSync
         public void Stop()
         {
             stopping = true;
+            WatchFiles(new List<string>());
             wake.Set();
             mark.Stop();
+        }
+
+        // Слежение за файлами аддона (2.10.1): игра записала файл — цикл просыпается сразу, а не через pollSeconds.
+        // Опрос остаётся про запас: на сетевом диске или в облачной папке события приходят не всегда.
+        bool collectionSameSaid;
+        readonly List<FileSystemWatcher> watchers = new List<FileSystemWatcher>();
+        string watchedKey = "";
+
+        void WatchFiles(List<string> list)
+        {
+            lock (watchers)
+            {
+                WatchFilesLocked(list);
+            }
+        }
+
+        void WatchFilesLocked(List<string> list)
+        {
+            string key = string.Join("|", list.ToArray());
+            if (key == watchedKey)
+            {
+                return;
+            }
+            watchedKey = key;
+            foreach (FileSystemWatcher old in watchers)
+            {
+                try
+                {
+                    old.Dispose();
+                }
+                catch (Exception)
+                {
+                }
+            }
+            watchers.Clear();
+            foreach (string f in list)
+            {
+                try
+                {
+                    // игра пишет во временный файл и переименовывает: ловим и запись, и появление, и переименование
+                    FileSystemWatcher w = new FileSystemWatcher(Path.GetDirectoryName(f), Path.GetFileName(f));
+                    w.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.Size;
+                    w.Changed += delegate { wake.Set(); };
+                    w.Created += delegate { wake.Set(); };
+                    w.Renamed += delegate { wake.Set(); };
+                    w.EnableRaisingEvents = true;
+                    watchers.Add(w);
+                }
+                catch (Exception ex)
+                {
+                    Log.Write(Tr.L("Не удалось включить слежение за файлом ({0}): проверяю его раз в несколько секунд.", ex.Message));
+                }
+            }
         }
 
         void Loop()
@@ -648,8 +702,9 @@ namespace MountSheetSync
                         newest = m.Groups[1].Value;
                     }
                 }
-                catch (Exception)
+                catch (Exception swallowed)
                 {
+                    Log.Quiet("SyncWorker: read the addon version", swallowed);
                 }
             }
             string note = newest != null && Updater.IsNewer(Program.MinAddon, newest)
@@ -726,7 +781,12 @@ namespace MountSheetSync
             {
                 return;   // с этим снимком коллекции таблица уже сверена
             }
-            Log.Write(Tr.L("Сверка с коллекцией: {0}.", res.Summary()));
+            // «всё уже совпадает» — раз за запуск или по ручной команде: иначе это строка на каждый вход в игру
+            if (res.Changed || manual || !collectionSameSaid)
+            {
+                Log.Write(Tr.L("Сверка с коллекцией: {0}.", res.Summary()));
+            }
+            collectionSameSaid = collectionSameSaid || !res.Changed;
             if (res.Changed)
             {
                 statusDirty = true;
@@ -1016,6 +1076,7 @@ namespace MountSheetSync
                 }
             }
             files = foundFiles;
+            WatchFiles(files);
             if (files.Count == 0)
             {
                 nextRescan = now.AddSeconds(30);

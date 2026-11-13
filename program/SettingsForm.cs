@@ -408,8 +408,9 @@ namespace MountSheetSync
                         found = dirs[0];
                     }
                 }
-                catch (Exception)
+                catch (Exception swallowed)
                 {
+                    Log.Quiet("Settings: find the game folder", swallowed);
                 }
                 UiStyle.RunOnUi(this, delegate
                 {

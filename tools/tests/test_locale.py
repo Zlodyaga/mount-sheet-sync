@@ -161,13 +161,17 @@ check("long French button text: the button grows", scan and scan[0]._w > 156, sc
 # ---------------------------------------------------------------- 5. quiet and minimap in the settings
 q = [r for r in [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
      if r._type == "CheckButton" and r._parent is not None and r._parent._uid == sf._uid and rg(r, "code") is None and rg(r, "view") is None]
-check("two more ticks: chat messages and minimap button", len(q) == 2, len(q))
+check("three more ticks: chat messages, minimap button, route through Mapzeroth (3.0.6)", len(q) == 3, len(q))
 q[0].MockClick(q[0])
 check("“no chat messages” from the settings", g.MountSheetSyncDB.quiet is True)
 q[1].MockClick(q[1])
 check("minimap button hidden from the settings", g.MountSheetSyncMinimapButton._shown is False)
 q[1].MockClick(q[1])
 check("…and shown again", g.MountSheetSyncMinimapButton._shown is True)
+q[2].MockClick(q[2])
+check("«route through Mapzeroth» off from the settings: remembered", g.MountSheetSyncDB.mapzeroth is False)
+q[2].MockClick(q[2])
+check("…and on again (the default: nothing saved)", g.MountSheetSyncDB.mapzeroth is None)
 
 # ---------------------------------------------------------------- 6. chat commands
 L, g, ns = new_game("zhCN")

@@ -100,7 +100,7 @@ Windows). «Выйти» удаляет ключ и отзывает его у G
 
 `settings.json` (ключи: `mode`, `welcomed`, `spreadsheetId`, `spreadsheetTitle`, `spreadsheetUrl`, `webAppUrl`, `secret`,
 `wowPath`, `notifications`, `checkUpdates`, `testVersions`, `updateNotified`, `installDeclined`, `language`,
-`pollSeconds`, `retrySeconds`), `google-token.dat`, `sent-ids*.txt` (у `local` — `sent-ids-local.txt`), `local-data.json`, `.bak` и (после повреждения) `.damaged` (режим «на этом компьютере», `LocalBook`), `state.json` (последняя отправка и результат, «Последние события», о чём уже напоминали),
+`pollSeconds`, `retrySeconds`), `google-token.dat`, `sent-ids*.txt` (у `local` — `sent-ids-local.txt`), `local-data.json`, `.bak` (прошлая запись), `backups/local-data-ГГГГ-ММ-ДД.json` (2.10.1: версия перед первой записью за день, последние 7 — `LocalBook.KeepDaily`) и (после повреждения) `.damaged` (режим «на этом компьютере», `LocalBook`), `state.json` (последняя отправка и результат, «Последние события», о чём уже напоминали),
 `sync.log` (по-русски при русском языке, иначе по-английски).
 
 ## Командная строка
@@ -120,3 +120,12 @@ Windows). «Выйти» удаляет ключ и отзывает его у G
 
 `MSS_UPDATE_TEST` (адрес имитации GitHub), `MSS_UPDATE_DELAY`, `MSS_TEST_PRERELEASE`, `MSS_INSTALL_DIR`,
 `MSS_DOWNLOADS_DIR`, `MSS_SYSTEM_LANG`, `MSS_WOW_RUNNING`, адрес имитации Google — см. [testing.md](testing.md).
+
+С 2.10.1 цикл будит и `FileSystemWatcher` на файлах аддона (`SyncWorker.WatchFiles`: запись, появление, переименование — игра пишет
+во временный файл и переименовывает); опрос раз в `pollSeconds` остаётся про запас (сетевой диск, облачная папка) и для
+остальных проверок цикла. `Log.Quiet(где, ошибка)` — для ошибок, из-за которых работу не прерывают: строка «Не получилось,
+работаю дальше (…)», одна и та же — раз за запуск.
+Меню значка (2.10.1): «Добавлять новых персонажей самим» — только в режиме `local`, `settings.autoAddCharacters` (в файле лишь
+`false`; `SyncEngine.SyncAll` тогда не зовёт `AddNewCharacters`). Журнал: состав персонажей и листов (`CheckConnection`) пишется,
+когда изменился с прошлой проверки за запуск (`lastRoster`), «Сверка с коллекцией: всё уже совпадает» — раз за запуск или по
+команде из меню; убийство персонажа без листа в режиме `local` — строка с «[~]».

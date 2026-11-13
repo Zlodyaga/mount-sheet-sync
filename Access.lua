@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.5 — входы, закрытые сюжетом или фазой зоны.
+Mount Sheet Sync 3.0.6 — входы, закрытые сюжетом или фазой зоны.
 
 ns.ACCESS[journalInstanceID]: что нужно, чтобы дойти до входа.
   quests  — задания, любое из которых открывает доступ (C_QuestLog.IsQuestFlaggedCompleted);
@@ -30,7 +30,8 @@ ns.ACCESS = {
   [1180] = {
     quests = { 56376 }, inlog = true, hint = "nyalotha", after = "nyalotha_phase",
     steps = {
-      { quest = 57010, name = "Harnessing the Power", where = "heart" },
+      -- выдают в Зале Сердца; туда переносит Транслокатор титанов в Силитусе (объект 289521, точка с Wowhead)
+      { quest = 57010, name = "Harnessing the Power", where = "heart", map = 81, x = 0.43, y = 0.445 },
       { quest = 58582, faction = "Horde", name = "Return of the Black Prince", where = "wrathion" },
       { quest = 58496, faction = "Alliance", name = "An Unwelcome Advisor", where = "wrathion" },
       { quest = 56376, name = "Surfacing Threats", map = 1527, x = 0.548, y = 0.328 },

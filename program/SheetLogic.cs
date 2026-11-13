@@ -162,8 +162,9 @@ namespace MountSheetSync
                     {
                         book.SetProperty(ResetProperty, UnixNow().ToString(CultureInfo.InvariantCulture));
                     }
-                    catch (Exception)
+                    catch (Exception swallowed)
                     {
+                        Log.Quiet("SheetLogic: remember the week reset", swallowed);
                         // не страшно: аддон тогда смотрит на сбросы в своём журнале
                     }
                 }
@@ -1507,8 +1508,9 @@ namespace MountSheetSync
             {
                 resetAt = book.GetProperty(ResetProperty);
             }
-            catch (Exception)
+            catch (Exception swallowed)
             {
+                Log.Quiet("SheetLogic: read the week reset", swallowed);
             }
             double reset = Number(resetAt);
             if (reset > 0)

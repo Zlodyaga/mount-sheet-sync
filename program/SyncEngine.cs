@@ -320,9 +320,12 @@ namespace MountSheetSync
                     names.Add(name);
                 }
             }
+            // состав персонажей и листов — в журнал, только когда он изменился с прошлой проверки связи (2.10.1): за три недели
+            // у пользователя это было 300 одинаковых строк из 1800
+            List<string> roster = new List<string>();
             if (names.Count > 0)
             {
-                Log.Write(Tr.L("Персонажи в таблице: {0}", string.Join(", ", names)));
+                roster.Add(Tr.L("Персонажи в таблице: {0}", string.Join(", ", names)));
             }
             foreach (object o in J.Arr(J.Get(resp, "checked")))
             {
@@ -335,18 +338,29 @@ namespace MountSheetSync
                     {
                         sheets.Add(Convert.ToString(sheet, CultureInfo.InvariantCulture));
                     }
-                    Log.Write(Tr.L("  {0} — листы: {1}", who, string.Join(", ", sheets)));
+                    roster.Add(Tr.L("  {0} — листы: {1}", who, string.Join(", ", sheets)));
                     info.Found.Add(who);
                 }
                 else
                 {
-                    Log.Write(Tr.L("  {0} ({1}) — в таблице нет его листов, отметки для него сохраняться не будут",
+                    roster.Add(Tr.L("  {0} ({1}) — в таблице нет его листов, отметки для него сохраняться не будут",
                         who, J.Str(c, "realm")));
                     info.Missing.Add(who);
                 }
             }
+            string rosterText = string.Join("\n", roster.ToArray());
+            if (rosterText != lastRoster)
+            {
+                lastRoster = rosterText;
+                foreach (string line in roster)
+                {
+                    Log.Write(line);
+                }
+            }
             return info;
         }
+
+        static string lastRoster;   // что о персонажах и листах уже записано в журнал за этот запуск
 
         /// <summary>Список «Осталось на этой неделе» для аддона (Code.gs 1.4+).</summary>
         public Dictionary<string, object> FetchStatus()
@@ -456,7 +470,7 @@ namespace MountSheetSync
         public SyncSummary SyncAll(IList<string> files, Dictionary<string, object> extra = null)
         {
             SyncSummary sum = new SyncSummary();
-            if (Settings.IsLocal && Settings.HasOwnBook)
+            if (Settings.IsLocal && Settings.HasOwnBook && Settings.AutoAddCharacters)
             {
                 sum.AddedCharacters = AddNewCharacters(files);
             }
@@ -709,8 +723,8 @@ namespace MountSheetSync
                 }
                 else if (status == "no_sheet" && quietNoSheet)
                 {
-                    // данные на компьютере: листов нет только у того, кого человек убрал сам, напоминать незачем
-                    Log.Write(Tr.L("[!] {0}: {1} — {2}", who, boss, message));
+                    // данные на компьютере: листов нет только у того, кого человек убрал сам — это не ошибка, и напоминать незачем
+                    Log.Write(Tr.L("[~] {0}: {1} — {2}", who, boss, message));
                 }
                 else if (shown.Add(status + "|" + message))
                 {

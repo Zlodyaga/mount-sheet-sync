@@ -150,6 +150,18 @@ namespace MountSheetSync
             r["damagedKept"] = File.ReadAllText(file + ".damaged").StartsWith("{ битый", StringComparison.Ordinal);
             healed.SetProperty("after", "1");
             r["backupGood"] = !File.ReadAllText(file + ".bak").StartsWith("{ битый", StringComparison.Ordinal);
+            // дневные копии: одна за сегодня, сколько бы раз ни писали; старше семи — убираются
+            string backups = Path.Combine(Path.GetDirectoryName(file), "backups");
+            r["dailyToday"] = Directory.GetFiles(backups).Length;
+            for (int day = 1; day <= 9; day++)
+            {
+                File.WriteAllText(Path.Combine(backups, Path.GetFileNameWithoutExtension(file) + "-2020-01-0" + day + ".json"), "{}");
+            }
+            File.Delete(Directory.GetFiles(backups).OrderBy(x => x, StringComparer.Ordinal).Last());   // сегодняшней нет — запись сделает новую
+            healed.SetProperty("after", "2");
+            string[] kept = Directory.GetFiles(backups).OrderBy(x => x, StringComparer.Ordinal).ToArray();
+            r["dailyKept"] = kept.Length;
+            r["dailyOldestGone"] = !kept.Any(x => x.EndsWith("-2020-01-01.json", StringComparison.Ordinal));
 
             // ни файла, ни копии: понятная ошибка
             string missing = Path.Combine(args[0], "none.json");

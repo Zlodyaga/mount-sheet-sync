@@ -2,6 +2,15 @@
 
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
+## 3.0.6
+- Routes through portals with Mapzeroth: when the Mapzeroth addon is installed, Ctrl + click hands it the pin (entrance, rare,
+  world boss, the next quest of a gated entrance) and its navigator leads the way, through portals and flights too. Without
+  Mapzeroth the pin works as before; on another continent the addon says once that Mapzeroth can lead there. A tick
+  “Route through Mapzeroth” in the settings (on by default). Mapzeroth is an optional dependency.
+- Ny'alotha's first step (“Harnessing the Power”) now has a pin: the Titan Translocator in Silithus that takes you to the
+  Chamber of Heart.
+- Quest, item and place names in the hints of gated entrances are the game's own in every language (they were English).
+
 ## 3.0.5
 - Two new groups in “Remaining”: rare monsters with a guaranteed drop and common mob farming. They are not counted in what is left this week and are not in the “All characters” grid.
 - Entrances closed by a story chain or a zone phase (Antorus on Argus, Ny'alotha, Amirdrassil, Tazavesh, Sepulcher of the First Ones, Liberation of Undermine, Manaforge Omega; notes for Operation: Mechagon, the Underrot and the road to the Sanctum of Domination): Ctrl + click first says what to do and leads to the chain's next quest (tracks it when it is in your log, otherwise pins where it is given); if the chain is not done on this character there is no pin to the entrance, and a second Ctrl + click pins it anyway. Access the whole account shares (the Emerald Dream) is remembered once any character has it.

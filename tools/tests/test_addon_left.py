@@ -885,6 +885,42 @@ L.execute("ROUTE.tracks = false; ROUTE.pin = nil")
 row.MockClick(row)
 check("…if the game won't track it: a map pin at the entrance, tracked", g.ROUTE.waypoint.map == 14 and g.ROUTE.waypoint.x == 0.5 and g.ROUTE.user is True, g.ROUTE.user)
 check("…and the chat says so", "метка на карте" in chat_all(), chat_all()[-160:])
+# 3.0.6: Mapzeroth installed — the pin goes to it (it leads through portals); no route there — as before
+L.execute("""
+MZ = { plan = { steps = { {}, {} } } }
+MapzerothAddon = {
+  GetWaypoint = function() return ROUTE.waypoint and { id = "WAYPOINT_1", mapID = ROUTE.waypoint.map, x = ROUTE.waypoint.x, y = ROUTE.waypoint.y } end,
+  Journey = { PlanFromHere = function(self, entry) MZ.entry = entry; return MZ.plan end },
+  Navigation = { Start = function(self, entry, plan) MZ.started = entry end },
+  Navigator = { Show = function() MZ.shown = true end },
+}
+ROUTE.tracks = true; ROUTE.pin = nil; ROUTE.waypoint = nil""")
+n_chat = len(chat_all())
+row.MockClick(row)
+said = chat_all()[n_chat:]
+check("3.0.6: Mapzeroth installed: a map pin at the entrance and Mapzeroth's route to it, its navigator shown",
+      g.MZ.started is not None and g.MZ.shown is True and g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 14
+      and g.MZ.entry.dest.id == "WAYPOINT_1" and "Mapzeroth" in said, said)
+L.execute("MZ.plan = nil; MZ.started = nil; ROUTE.pin = nil")
+row.MockClick(row)
+check("…Mapzeroth finds no route: the game's entrance pin, as before", g.MZ.started is None and g.ROUTE.pin == 42, g.ROUTE.pin)
+L.execute("MZ.plan = { steps = { {} } }; MountSheetSyncDB.mapzeroth = false; ROUTE.pin = nil")
+row.MockClick(row)
+check("…«Путь через Mapzeroth» off in the settings: not used", g.MZ.started is None and g.ROUTE.pin == 42, g.ROUTE.pin)
+L.execute("""
+MountSheetSyncDB.mapzeroth = nil; MapzerothAddon = nil; ROUTE.pin = nil
+OLD_GMI, OLD_BEST = C_Map.GetMapInfo, C_Map.GetBestMapForUnit
+Enum.UIMapType.Continent = 2
+C_Map.GetMapInfo = function(map) return ({ [14] = { mapID = 14, mapType = 3, parentMapID = 13 }, [13] = { mapID = 13, mapType = 2 },
+  [85] = { mapID = 85, mapType = 3, parentMapID = 12 }, [12] = { mapID = 12, mapType = 2 } })[map] end
+C_Map.GetBestMapForUnit = function() return 85 end""")
+n_chat = len(chat_all())
+row.MockClick(row)
+row.MockClick(row)
+said = chat_all()[n_chat:]
+check("…no Mapzeroth, the entrance on another continent: the game's pin, and once a session a word about Mapzeroth",
+      g.ROUTE.pin == 42 and said.count("Mapzeroth") == 1, said)
+L.execute("C_Map.GetMapInfo, C_Map.GetBestMapForUnit = OLD_GMI, OLD_BEST; ROUTE.pin = nil")
 # 3.0.5: an entrance closed by a quest chain (Access.lua): first what to do, no pin; Ctrl + click again — the pin anyway
 L.execute("""
 QUEST_DONE = {}
@@ -929,8 +965,21 @@ n_chat = len(chat_all())
 row.MockClick(row)
 said = chat_all()[n_chat:]
 check("3.0.5: the chain's next step has no place: where to go, in words; no pin", g.ROUTE.pin is None and g.ROUTE.waypoint is None
-      and "Harnessing the Power" in said and "Магни в Палате Сердца" in said,
+      and "Harnessing the Power" in said and "в Зале Сердца" in said,
       said)
+# the real first step of Ny'alotha: given inside the Chamber of Heart — a pin at the translocator in Silithus, and the words
+L.execute("""
+MOCK.gt = MOCK.gt + 1000
+SAVED_STEPS = MSS_NS.ACCESS[777].steps
+MSS_NS.ACCESS[777].steps = { MSS_NS.ACCESS[1180].steps[1] }
+ROUTE.pin = nil; ROUTE.waypoint = nil""")
+n_chat = len(chat_all())
+row.MockClick(row)
+said = chat_all()[n_chat:]
+check("3.0.6: a step given inside a place (Chamber of Heart): a pin at the way in (Silithus) and where it is given, in words",
+      g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 81 and abs(g.ROUTE.waypoint.x - 0.43) < 1e-9
+      and "Зале Сердца" in said and "Транслокатор титанов" in said, (g.ROUTE.waypoint, said))
+L.execute("MSS_NS.ACCESS[777].steps = SAVED_STEPS; ROUTE.waypoint = nil")
 L.execute("MOCK.gt = MOCK.gt + 1000; QUEST_DONE[57010] = true")
 row.MockClick(row)
 check("…the next step has a quest giver's spot: a pin there, not at the entrance", g.ROUTE.pin is None and g.ROUTE.waypoint is not None

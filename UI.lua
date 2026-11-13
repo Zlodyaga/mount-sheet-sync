@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.5 — окно, иконка и настройки
+Mount Sheet Sync 3.0.6 — окно, иконка и настройки
 ==================================================
   * окно (ЛКМ по иконке или /mss): слева «Все персонажи» и персонажи из таблицы (сколько каждому осталось), справа
     вкладки «Осталось» (таблица выбранного персонажа или сетка всех), «Попытки» (счётчик маунтов, сортировка и
@@ -564,6 +564,85 @@ local function PinAndTrack(map, x, y)
   end)
 end
 
+-- Путь через Mapzeroth (отдельный аддон, автор разрешил связь 12.11.2026): метка на карте и план Mapzeroth к ней —
+-- он ведёт и через порталы, а свою метку на карте игра ведёт только вблизи. Mapzeroth не установлен, выключен
+-- в настройках (db.mapzeroth = false) или не нашёл пути — false, и путь строится как раньше. Его внутренности
+-- (MapzerothAddon: GetWaypoint, Journey:PlanFromHere, Navigation:Start, Navigator:Show) могут поменяться — всё под pcall.
+local Mz = {}   -- всё про Mapzeroth в одной таблице: у главного блока Lua 5.1 предел в 200 локальных
+
+function Mz.On()
+  local db = ns.GetDB and ns.GetDB()
+  return not (db and db.mapzeroth == false)
+end
+
+function Mz.Addon()
+  local mz = rawget(_G, "MapzerothAddon")
+  if type(mz) == "table" and type(mz.GetWaypoint) == "function" and type(mz.Journey) == "table"
+      and type(mz.Journey.PlanFromHere) == "function" and type(mz.Navigation) == "table"
+      and type(mz.Navigation.Start) == "function" then
+    return mz
+  end
+  return nil
+end
+
+function Mz.Via(map, x, y, name)
+  local mz = Mz.On() and Mz.Addon()
+  if not (mz and map and x and y) or not PinAndTrack(map, x, y) then
+    return false
+  end
+  local ok, started = pcall(function()
+    local wp = mz:GetWaypoint()
+    if type(wp) ~= "table" or not wp.id then
+      return false
+    end
+    local entry = { name = name, nodeID = wp.id, nodeIDs = { wp.id }, group = "waypoint", relevant = true, pick = true,
+                    dest = wp, key = "waypoint" }
+    local plan = mz.Journey:PlanFromHere(entry)
+    if type(plan) ~= "table" or type(plan.steps) ~= "table" or #plan.steps == 0 then
+      return false
+    end
+    mz.Navigation:Start(entry, plan)
+    if type(mz.Navigator) == "table" and type(mz.Navigator.Show) == "function" then
+      mz.Navigator:Show()
+    end
+    return true
+  end)
+  if ok and started == true then
+    ns.Print(string.format(L.route_mapzeroth, name))
+    return true
+  end
+  return false
+end
+
+-- Континент карты (тип Continent у одного из её родителей), nil — не узнать.
+function Mz.Continent(map)
+  for _ = 1, 10 do
+    local ok, info = pcall(C_Map.GetMapInfo, map)
+    info = ok and map and info or nil
+    if not info then
+      return nil
+    end
+    if info.mapType == Enum.UIMapType.Continent then
+      return info.mapID
+    end
+    map = info.parentMapID
+  end
+  return nil
+end
+
+-- Цель на другом континенте, а Mapzeroth нет: один раз за сеанс подсказать, что через порталы ведёт он.
+function Mz.Hint(map)
+  if Mz.hinted or not Mz.On() or Mz.Addon() then
+    return
+  end
+  local here = C_Map.GetBestMapForUnit and C_Map.GetBestMapForUnit("player")
+  local a, b = Mz.Continent(here), Mz.Continent(map)
+  if a and b and a ~= b then
+    Mz.hinted = true
+    ns.Print(L.route_get_mapzeroth)
+  end
+end
+
 -- Показать путь: игра ведёт к отметке входа, а если не вышло (не изучена территория и т. п.) — своя метка на карте у входа.
 -- У мировых боссов входа нет: метка там, где их показывает игра.
 -- Путь, ждущий второго шага: { entrance, name, inner }. routeOwn — цель меняет сам аддон, это не выбор игрока.
@@ -648,12 +727,25 @@ local function ShowAccessStep(step, inLog)
     return
   end
   local title = ns.QuestTitle(step)
+  -- слова о месте (step.where): у шага без точки — вместо метки, у шага с точкой — вместе с ней (метка у входа туда,
+  -- где задание выдают: Зал Сердца)
+  local where = step.where and L["access_where_" .. tostring(step.where)]
   if inLog and pcall(C_SuperTrack.SetSuperTrackedQuestID, step.quest) then
     ns.Print(string.format(L.access_step_track, title))
+  elseif step.map and Mz.Via(step.map, step.x, step.y, title) then
+    if where then
+      ns.Print(string.format(L.access_step_text, title, where))
+    end
   elseif step.map and PinAndTrack(step.map, step.x, step.y) then
-    ns.Print(string.format(L.access_step_pin, title))
+    if where then
+      ns.Print(string.format(L.route_boss, title))
+      ns.Print(string.format(L.access_step_text, title, where))
+    else
+      ns.Print(string.format(L.access_step_pin, title))
+    end
+    Mz.Hint(step.map)
   else
-    ns.Print(string.format(L.access_step_text, title, L["access_where_" .. tostring(step.where)] or "?"))
+    ns.Print(string.format(L.access_step_text, title, where or "?"))
   end
 end
 
@@ -662,8 +754,11 @@ local function ShowRoute(elem)
   if elem.spot then
     -- рар: точка из каталога (ns.RARE_SPOTS); точек появления несколько — карта его зоны
     local name, s = Safe(elem.bossName), elem.spot
-    if s.x and PinAndTrack(s.map, s.x, s.y) then
+    if s.x and Mz.Via(s.map, s.x, s.y, name) then
+      return
+    elseif s.x and PinAndTrack(s.map, s.x, s.y) then
       ns.Print(string.format(L.route_boss, name))
+      Mz.Hint(s.map)
     elseif not s.x and pcall(OpenWorldMap, s.map) then
       ns.Print(string.format(L.route_zone, name))
       StepAside(WorldMapFrame)
@@ -675,8 +770,11 @@ local function ShowRoute(elem)
   if elem.world then
     local name = Safe(elem.bossName)
     local spot = elem.encounter and FindBossSpot(elem.encounter)
-    if spot and PinAndTrack(spot.map, spot.x, spot.y) then
+    if spot and Mz.Via(spot.map, spot.x, spot.y, name) then
+      return
+    elseif spot and PinAndTrack(spot.map, spot.x, spot.y) then
       ns.Print(string.format(L.route_boss, name))
+      Mz.Hint(spot.map)
     else
       ns.Print(string.format(L.route_none, name))
     end
@@ -706,6 +804,13 @@ local function ShowRoute(elem)
     ns.Print(string.format(L.route_none, name))
     return
   end
+  routeOwn = true   -- своя метка для Mapzeroth — не выбор игрока
+  local viaMz = Mz.Via(e.map, e.x, e.y, name)
+  routeOwn = false
+  if viaMz then
+    return
+  end
+  Mz.Hint(e.map)
   local outer = OuterStep(e)
   if not outer then
     TrackEntrance(e, name)
@@ -2330,6 +2435,7 @@ local function RefreshSettings()
   settingsQuiet:SetChecked(db and db.quiet and true or false)
   local mm = db and type(db.minimap) == "table" and db.minimap or {}
   settingsMinimap:SetChecked(not mm.hide)
+  Mz.check:SetChecked(not (db and db.mapzeroth == false))
   for _, b in ipairs(gridButtons) do
     b:SetChecked(b.view == (db and db.gridView or "scroll"))
   end
@@ -2488,7 +2594,7 @@ local function CreateSettings()
   for _, code in ipairs(ns.LANGUAGES) do
     codes[#codes + 1] = code
   end
-  local height = 100 + #codes * 24 + 70 + 96 + 86
+  local height = 100 + #codes * 24 + 70 + 96 + 86 + 26
   settingsFrame = Skin.Window(SETTINGS_NAME, 330, height, "DIALOG")
   settingsFrame:SetPoint("CENTER", 0, 60)
   local function title()
@@ -2549,6 +2655,17 @@ local function CreateSettings()
       ns.ToggleMinimapButton()
     end
   end)
+  Mz.check = SettingsCheck(settingsFrame, y - 52, "settings_mapzeroth", function(self)
+    local db = ns.GetDB()
+    if db then
+      if self:GetChecked() then
+        db.mapzeroth = nil   -- по умолчанию включено: в сохранениях только «выключено»
+      else
+        db.mapzeroth = false
+      end
+    end
+  end)
+  AttachTooltip(Mz.check, "settings_mapzeroth", "tip_mapzeroth")
 
   local reportButton = MakeButton(settingsFrame, "button_report", 200, "tip_report", function()
     ns.SafeCall(ShowReport)
