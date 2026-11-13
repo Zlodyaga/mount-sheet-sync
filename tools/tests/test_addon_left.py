@@ -971,7 +971,7 @@ check("3.0.5: the chain's next step has no place: where to go, in words; no pin"
 L.execute("""
 MOCK.gt = MOCK.gt + 1000
 SAVED_STEPS = MSS_NS.ACCESS[777].steps
-MSS_NS.ACCESS[777].steps = { MSS_NS.ACCESS[1180].steps[1] }
+MSS_NS.ACCESS[777].steps = { MSS_NS.ACCESS[1180].steps[2] }
 ROUTE.pin = nil; ROUTE.waypoint = nil""")
 n_chat = len(chat_all())
 row.MockClick(row)
@@ -979,6 +979,16 @@ said = chat_all()[n_chat:]
 check("3.0.6: a step given inside a place (Chamber of Heart): a pin at the way in (Silithus) and where it is given, in words",
       g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 81 and abs(g.ROUTE.waypoint.x - 0.43) < 1e-9
       and "Зале Сердца" in said and "Транслокатор титанов" in said, (g.ROUTE.waypoint, said))
+# 3.0.6: the chain's real start (Essential Empowerment, before the translocator lets you in): words about Nazjatar, no pin
+L.execute("""
+MOCK.gt = MOCK.gt + 1000
+MSS_NS.ACCESS[777].steps = MSS_NS.ACCESS[1180].steps
+ROUTE.pin = nil; ROUTE.waypoint = nil""")
+n_chat = len(chat_all())
+row.MockClick(row)
+said = chat_all()[n_chat:]
+check("3.0.6: Ny'alotha with nothing done: the chain's first quest (Essential Empowerment), Nazjatar in words, no pin",
+      g.ROUTE.waypoint is None and g.ROUTE.pin is None and "Essential Empowerment" in said and "Назжатар" in said, said)
 L.execute("MSS_NS.ACCESS[777].steps = SAVED_STEPS; ROUTE.waypoint = nil")
 L.execute("MOCK.gt = MOCK.gt + 1000; QUEST_DONE[57010] = true")
 row.MockClick(row)
