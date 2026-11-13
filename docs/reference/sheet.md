@@ -123,7 +123,7 @@ Developer metadata `mountSheetSync` = `{app, catalog, lang}`; свойства �
 в русские, при записи — обратно (`Outgoing`, `ValueOut`, `Response`). Переводы: `tools/i18n/sheet_words.txt`
 (слова, 5 языков), `sheet_content.txt` (тексты каталога → английский; советы по фарму раров — ещё de/fr/es/pt, ключ
 `contentL10n`, их берёт `SheetLang.Content` раньше английского), `mounts_en.txt` → `program/sheet-i18n.json`
-(`build_sheet.py --check` ловит русские строки SheetBuilder.cs без перевода — шаблоны поиска колонок держим в
+(`build_sheet.py --check` ловит русские строки SheetBuilder.cs и Catalog.cs без перевода — шаблоны поиска колонок держим в
 SheetLogic). Маунты/боссы/подземелья на языке таблицы — из игры, если она на этом языке, иначе английские.
 
 ## Лист раров: откуда строки
