@@ -32,6 +32,7 @@ namespace MountSheetSync
         ToolStripMenuItem farmItem;
         ToolStripMenuItem autostartItem;
         ToolStripMenuItem notifyItem;
+        ToolStripMenuItem autoAddItem;
         ToolStripMenuItem languageItem;
         ToolStripMenuItem updateItem;
         ToolStripMenuItem checkUpdatesItem;
@@ -163,6 +164,8 @@ namespace MountSheetSync
             collectionItem.ToolTipText = Tr._("Отметить «Собрано?» у маунтов, которые уже есть в игре, и убрать их с листов персонажей");
             autostartItem = Item(Tr._("Запускать вместе с Windows"), delegate { ToggleAutostart(); });
             notifyItem = Item(Tr._("Показывать уведомления"), delegate { ToggleNotifications(); });
+            autoAddItem = Item(Tr._("Добавлять новых персонажей самим"), delegate { ToggleAutoAdd(); });
+            autoAddItem.ToolTipText = Tr._("Персонаж, которым вы зашли в игру, сам попадает в список. Выключено — добавляйте через «Персонажи…»");
             languageItem = new ToolStripMenuItem(Tr._("Язык") + (Tr.Lang != "en" ? " / Language" : ""));
             foreach (string code in new[] { "auto" }.Concat(Tr.Languages))
             {
@@ -178,7 +181,7 @@ namespace MountSheetSync
                 syncItem, recentItem, leftItem, openSheetItem, signInItem, createItem, addCharsItem, farmItem, collectionItem, new ToolStripSeparator(),
                 Item(Tr._("Настройки…"), delegate { OpenSettings(false); }),
                 Item(Tr._("Журнал работы"), delegate { OpenLog(); }),
-                autostartItem, notifyItem, checkUpdatesItem, testVersionsItem, languageItem, new ToolStripSeparator(),
+                autostartItem, notifyItem, autoAddItem, checkUpdatesItem, testVersionsItem, languageItem, new ToolStripSeparator(),
                 Item(Tr._("Выход"), delegate { ExitApp(); }),
             });
         }
@@ -361,6 +364,8 @@ namespace MountSheetSync
             farmItem.Visible = haveSheet;
             autostartItem.Checked = Autostart.IsEnabled();
             notifyItem.Checked = settings.Notifications;
+            autoAddItem.Checked = settings.AutoAddCharacters;
+            autoAddItem.Visible = settings.IsLocal;
             checkUpdatesItem.Checked = settings.CheckUpdates;
             testVersionsItem.Checked = settings.TestVersions;
             testVersionsItem.Enabled = settings.CheckUpdates;
@@ -844,6 +849,23 @@ namespace MountSheetSync
                 return;
             }
             ExitApp();
+        }
+
+        void ToggleAutoAdd()
+        {
+            settings.AutoAddCharacters = !settings.AutoAddCharacters;
+            try
+            {
+                settings.Save(AppPaths.SettingsFile);
+            }
+            catch (Exception ex)
+            {
+                Log.Write(Tr.L("Не удалось сохранить настройки: {0}", ex.Message));
+            }
+            if (worker != null)
+            {
+                worker.Reload(settings.Clone(), false);
+            }
         }
 
         void ToggleNotifications()

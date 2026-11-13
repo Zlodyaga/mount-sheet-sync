@@ -264,6 +264,18 @@ spec = [{"name": n, "raids": True, "dungeons": True, "world": True} for n in ("�
 json.dump(spec, open(path, "w", encoding="utf-8"), ensure_ascii=False)
 code, out = run(A, "--set-chars", path)
 check("a tick brings them back and they are no longer skipped", code == 0 and "Рейды Мирна" in [s["name"] for s in book(A)["sheets"]] and "Мирна" not in book(A)["properties"].get("skippedCharacters", ""), (out[-400:], book(A)["properties"]))
+# 2.10.1: «add new characters automatically» off — a new character stays out until added by hand
+st = json.load(open(os.path.join(A, "settings.json"), encoding="utf-8-sig"))
+st["autoAddCharacters"] = False
+json.dump(st, open(os.path.join(A, "settings.json"), "w"))
+everyone = everyone + [dict(CHARS[0], name="Чужая")]
+write_sv(kills, chars=everyone)
+code, out = run(A, "--once")
+check("2.10.1: auto-add off: a new character is not added", code == 0 and "Рейды Чужая" not in [x["name"] for x in book(A)["sheets"]], out[-400:])
+st.pop("autoAddCharacters")
+json.dump(st, open(os.path.join(A, "settings.json"), "w"))
+everyone = everyone[:-1]
+write_sv(kills, chars=everyone)
 spec = [s for s in spec if s["name"] != "Тарен"]
 json.dump(spec, open(path, "w", encoding="utf-8"), ensure_ascii=False)
 code, out = run(A, "--set-chars", path)

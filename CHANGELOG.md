@@ -9,6 +9,8 @@ The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [C
 - Data kept on this computer: a dated copy a day in the “backups” folder next to the data file, the last 7 are kept.
 - A kill reaches the list sooner: the program notices the game writing the addon's file at once instead of checking every 5 seconds.
 - Errors the program used to skip silently are now written to the log (once per run), so a bug report has something to show.
+- Data on this computer: “Add new characters automatically” in the tray menu. Turn it off and a character you merely log in with no longer joins the list.
+- A shorter log: the list of characters and “the collection already matches” are written when they change, not on every check.
 - German, French, Spanish and Portuguese spreadsheets get the rare farming tips in their own language (they were English).
 - Raid drops with the status “Current content” and “Farmable / needs content grouping” now go to the character's raid sheet and to “Remaining” too; sheets made earlier get these rows by themselves.
 - Two more groups on the rare sheet: rares with a guaranteed drop (the Time-Lost Proto-Drake, Aeonaxx, Nok-Karosh, Gorok, Poundfist, Alani) and common mob farming in Battle for Azeroth zones (about 1 in 3000, every kill counts); plus any Forbidden Reach rare and any Theater of Pain champion.

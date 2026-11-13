@@ -25,6 +25,8 @@ namespace MountSheetSync
         public string Secret = DefaultSecret;
         public string WowPath = "";
         public bool Notifications = true;
+        /// <summary>Данные на компьютере: новые персонажи из игры попадают в список сами (2.10.1; выключено — только через «Персонажи…»).</summary>
+        public bool AutoAddCharacters = true;
         /// <summary>Раз в сутки смотреть, нет ли новой версии на GitHub.</summary>
         public bool CheckUpdates = true;
         /// <summary>Обновляться и до пробных версий (альфа, бета — пре-релизы на GitHub).</summary>
@@ -180,6 +182,10 @@ namespace MountSheetSync
                 {
                     s.Notifications = J.Truthy(d, "notifications");
                 }
+                if (d.ContainsKey("autoAddCharacters"))
+                {
+                    s.AutoAddCharacters = J.Truthy(d, "autoAddCharacters");
+                }
                 if (d.ContainsKey("checkUpdates"))
                 {
                     s.CheckUpdates = J.Truthy(d, "checkUpdates");
@@ -217,6 +223,10 @@ namespace MountSheetSync
             d["secret"] = Secret;
             d["wowPath"] = WowPath;
             d["notifications"] = Notifications;
+            if (!AutoAddCharacters)
+            {
+                d["autoAddCharacters"] = false;
+            }
             d["checkUpdates"] = CheckUpdates;
             if (TestVersions)
             {

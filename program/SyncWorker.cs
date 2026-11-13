@@ -358,6 +358,7 @@ namespace MountSheetSync
 
         // Слежение за файлами аддона (2.10.1): игра записала файл — цикл просыпается сразу, а не через pollSeconds.
         // Опрос остаётся про запас: на сетевом диске или в облачной папке события приходят не всегда.
+        bool collectionSameSaid;
         readonly List<FileSystemWatcher> watchers = new List<FileSystemWatcher>();
         string watchedKey = "";
 
@@ -780,7 +781,12 @@ namespace MountSheetSync
             {
                 return;   // с этим снимком коллекции таблица уже сверена
             }
-            Log.Write(Tr.L("Сверка с коллекцией: {0}.", res.Summary()));
+            // «всё уже совпадает» — раз за запуск или по ручной команде: иначе это строка на каждый вход в игру
+            if (res.Changed || manual || !collectionSameSaid)
+            {
+                Log.Write(Tr.L("Сверка с коллекцией: {0}.", res.Summary()));
+            }
+            collectionSameSaid = collectionSameSaid || !res.Changed;
             if (res.Changed)
             {
                 statusDirty = true;

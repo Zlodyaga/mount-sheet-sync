@@ -655,3 +655,16 @@ fr: Transférer les données du tableau « {0} » sur cet ordinateur ? Les marqu
 es: ¿Pasar los datos de la hoja «{0}» a este ordenador? Las marcas, «no farmeo», los intentos y los personajes quedan como en la hoja. «No» empieza de nuevo, sin ellos.
 pt: Transferir os dados da planilha “{0}” para este computador? Marcas, “não farmo”, tentativas e personagens ficam como na planilha. “Não” começa do zero, sem eles.
 
+@ Добавлять новых персонажей самим
+en: Add new characters automatically
+de: Neue Charaktere automatisch hinzufügen
+fr: Ajouter les nouveaux personnages automatiquement
+es: Añadir personajes nuevos automáticamente
+pt: Adicionar personagens novos automaticamente
+
+@ Персонаж, которым вы зашли в игру, сам попадает в список. Выключено — добавляйте через «Персонажи…»
+en: A character you log in with joins the list by itself. Off: add them through “Characters…”
+de: Ein Charakter, mit dem du dich einloggst, kommt von selbst in die Liste. Aus: über „Charaktere…“ hinzufügen
+fr: Un personnage avec lequel vous vous connectez rejoint la liste tout seul. Désactivé : ajoutez-les via « Personnages… »
+es: Un personaje con el que entras al juego se añade solo a la lista. Desactivado: añádelos desde «Personajes…»
+pt: Um personagem com que você entra no jogo vai sozinho para a lista. Desligado: adicione por “Personagens…”
