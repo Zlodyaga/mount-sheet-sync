@@ -120,3 +120,8 @@ Windows). «Выйти» удаляет ключ и отзывает его у G
 
 `MSS_UPDATE_TEST` (адрес имитации GitHub), `MSS_UPDATE_DELAY`, `MSS_TEST_PRERELEASE`, `MSS_INSTALL_DIR`,
 `MSS_DOWNLOADS_DIR`, `MSS_SYSTEM_LANG`, `MSS_WOW_RUNNING`, адрес имитации Google — см. [testing.md](testing.md).
+
+С 2.10.1 цикл будит и `FileSystemWatcher` на файлах аддона (`SyncWorker.WatchFiles`: запись, появление, переименование — игра пишет
+во временный файл и переименовывает); опрос раз в `pollSeconds` остаётся про запас (сетевой диск, облачная папка) и для
+остальных проверок цикла. `Log.Quiet(где, ошибка)` — для ошибок, из-за которых работу не прерывают: строка «Не получилось,
+работаю дальше (…)», одна и та же — раз за запуск.
