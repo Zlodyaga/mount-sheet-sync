@@ -139,3 +139,10 @@ Windows). «Выйти» удаляет ключ и отзывает его у G
 находит строку (слова маунта и босса, персонаж, место, сложность, отметки), `SheetLogic.Status.cs` — `Ping` и «Осталось» (`Status`);
 `SyncWorker.cs` — цикл, `SyncWorker.Files.cs` — файлы аддона (`WriteSheetFiles`, `Rescan`), `SyncWorker.Report.cs` — сбои, итог прохода,
 состояние для значка; `Catalog.cs` — типы каталога и план сборки (были в `SheetBuilder.cs`). Классы `SheetLogic` и `SyncWorker` — `partial`.
+
+Анонимная статистика (2.10.2, `Stats.cs`; выключена целиком, пока `Stats.Url` пуст): вопрос один раз — `TrayApp.AskStats`,
+`settings.stats` = «yes» / «no», `settings.installId` (случайный, только при «yes»; отказ стирает его и `stats.json`). Меню значка:
+«Отправлять анонимную статистику», «Что отправляется…» (`Stats.LastText`). `Stats.SendIfDue` — из цикла, раз в сутки, день
+отмечается до отправки (при ошибке повтора нет). Сообщение (`Stats.Build`): `v`, `id`, `program`, `addon`, `windows`, `lang`,
+`game`, `mode`, `chars` (вилка), `mapzeroth`, `day` и `use` — счётчики аддона за последний полный день (только числа под
+именами из латинских букв и «_»). Приёмник — `tools/stats/Code.gs`. Решения и черновик политики — `docs/stats-proposal.md`.

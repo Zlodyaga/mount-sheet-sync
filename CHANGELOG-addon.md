@@ -5,6 +5,7 @@ The addon and the Windows program are released separately; the program's changes
 ## 3.0.7
 - The game's addon list shows Mount Sheet Sync under “Collections”, next to other collection addons.
 - A mount only one faction can get (“… [Horde]”) is no longer listed or counted for characters of the other faction. The addon learns a character's faction when you log in with it.
+- The addon counts how often its window, tabs and pins are used (numbers only, kept for 7 days in its saved file). Nothing leaves your computer unless you agree to anonymous statistics in the tray program.
 
 ## 3.0.6
 - Routes through portals with Mapzeroth: when the Mapzeroth addon is installed, Ctrl + click hands it the pin (entrance, rare,

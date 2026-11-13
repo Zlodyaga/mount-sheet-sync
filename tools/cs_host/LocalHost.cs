@@ -183,6 +183,23 @@ namespace MountSheetSync
             }
             r["restoreBadRefused"] = refused && File.ReadAllText(file) == wasCopy;
 
+            // анонимная статистика: что попадает в сообщение
+            string sv = Path.Combine(args[0], "MountSheetSync.lua");
+            string yesterday = DateTime.Now.AddDays(-1).ToString("yyyy-MM-dd"), todayDay = DateTime.Now.ToString("yyyy-MM-dd");
+            File.WriteAllText(sv, "MountSheetSyncDB = {\n[\"addonVersion\"] = \"3.0.7\",\n[\"chars\"] = {\n[\"Тайное Имя-Сервер\"] = { [\"name\"] = \"Тайное Имя\" },\n"
+                + "[\"Б-Сервер\"] = { [\"name\"] = \"Б\" },\n},\n[\"collection\"] = { [\"locale\"] = \"ruRU\" },\n[\"usage\"] = { [\"mapzeroth\"] = true, [\"days\"] = {\n"
+                + "[\"" + yesterday + "\"] = { [\"tab_left\"] = 3, [\"route\"] = 2, [\"Имя\"] = 1, [\"note\"] = \"текст\" },\n"
+                + "[\"" + todayDay + "\"] = { [\"tab_left\"] = 9 },\n} },\n}\n", new UTF8Encoding(false));
+            Settings statsSettings = new Settings();
+            statsSettings.StatsChoice = "yes";
+            statsSettings.InstallId = Stats.NewId();
+            string sent = Stats.Text(Stats.Build(statsSettings, new string[] { sv }));
+            r["statsSent"] = sent;
+            r["statsId"] = statsSettings.InstallId.Length == 32 && sent.Contains(statsSettings.InstallId);
+            r["statsNoNames"] = !sent.Contains("Имя") && !sent.Contains("Сервер") && !sent.Contains("текст");
+            r["statsBuckets"] = Stats.Bucket(0) + " " + Stats.Bucket(1) + " " + Stats.Bucket(5) + " " + Stats.Bucket(6) + " " + Stats.Bucket(40);
+            r["statsOffByDefault"] = new Settings().StatsChoice == "" && !Stats.Available;
+
             // ни файла, ни копии: понятная ошибка
             string missing = Path.Combine(args[0], "none.json");
             try

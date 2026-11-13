@@ -305,6 +305,14 @@ namespace MountSheetSync
             engine.Settings = settings.Clone();
         }
 
+        volatile string[] addonFilesNow = new string[0];
+
+        /// <summary>Файлы сохранений аддона, найденные на последнем проходе (для «Что отправляется…»).</summary>
+        public string[] AddonFilesNow
+        {
+            get { return addonFilesNow; }
+        }
+
         public void Reload(Settings settings, bool announceResult)
         {
             lock (gate)
@@ -678,6 +686,15 @@ namespace MountSheetSync
             }
             CheckCollection(current.Keys.ToList(), collectionNow);
             CheckAddonVersion(current.Keys.ToList());
+            addonFilesNow = current.Keys.ToArray();
+            try
+            {
+                Stats.SendIfDue(engine.Settings, addonFilesNow);
+            }
+            catch (Exception swallowed)
+            {
+                Log.Quiet("статистика", swallowed);
+            }
             RefreshStatusIfDue();
         }
 

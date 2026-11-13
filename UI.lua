@@ -751,6 +751,7 @@ end
 
 local function ShowRoute(elem)
   pendingRoute = nil   -- новый путь заменяет недоделанный
+  ns.Count("route")
   if elem.spot then
     -- рар: точка из каталога (ns.RARE_SPOTS); точек появления несколько — карта его зоны
     local name, s = Safe(elem.bossName), elem.spot
@@ -2003,6 +2004,7 @@ end
 
 function UI.SelectTab(id)
   ns.GetDB().tab = TAB_KEYS[id]
+  ns.Count("tab_" .. tostring(TAB_KEYS[id]))
   ShowTabState(id)
   shownList = nil
   listBox:ScrollToBegin()
@@ -2406,6 +2408,7 @@ function UI.Toggle()
   if frame:IsShown() then
     frame:Hide()
   else
+    ns.Count("open")
     frame:Show()
   end
 end

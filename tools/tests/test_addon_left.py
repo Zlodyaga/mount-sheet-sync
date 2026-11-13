@@ -1551,6 +1551,21 @@ check("3.0.7: a Horde-only mount is listed for a Horde character and when the fa
 check("…and neither listed nor counted for an Alliance character",
       not side["Alliance"].seen and side["Alliance"].total == side["Horde"].total - 1, side["Alliance"].total)
 
+# 3.0.7: usage counters — numbers only, by day, seven days kept
+L.execute("""
+USAGE = MountSheetSyncDB.usage
+USAGE_TODAY = USAGE.days[os.date("%Y-%m-%d")]
+for i = 1, 9 do USAGE.days["2020-01-0" .. i] = { open = 1 } end
+USAGE.days[os.date("%Y-%m-%d")] = nil
+MSS_NS.Count("open")
+USAGE_KEPT = 0
+for _ in pairs(USAGE.days) do USAGE_KEPT = USAGE_KEPT + 1 end""")
+today = g.USAGE_TODAY
+check("3.0.7: usage counters: tab switches, Ctrl + clicks and manual marks are counted for today",
+      today is not None and (today.tab_left or 0) > 0 and (today.route or 0) > 0, dict(today) if today is not None else None)
+check("…only numbers are stored", today is not None and all(isinstance(v, (int, float)) for v in dict(today).values()))
+check("…seven days are kept, Mapzeroth is noted", g.USAGE_KEPT == 7 and g.USAGE.mapzeroth in (True, False), g.USAGE_KEPT)
+
 check("no Lua errors reported in chat", "ошибка" not in chat_all())
 failed = [nm for nm, ok in checks if not ok]
 print("\n%d/%d checks passed" % (len(checks) - len(failed), len(checks)))

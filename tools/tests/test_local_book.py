@@ -49,6 +49,13 @@ check("2.10.2: the daily copies are listed newest first", r["copiesNewestFirst"]
 check("…bringing one back replaces the data and keeps the current data next to it", r["restored"] is True and r["restoreKeptCurrent"] is True, r)
 check("…the kept data is not counted as a daily copy", r["restoreNotACopy"] is True)
 check("…a copy that cannot be read is refused, the data stays", r["restoreBadRefused"] is True)
+st = json.loads(r["statsSent"])
+check("2.10.2: statistics: nothing is asked or sent while there is no receiver address", r["statsOffByDefault"] is True)
+check("…the message has the installation number, versions, game language, a range of characters, Mapzeroth",
+      r["statsId"] is True and st.get("addon") == "3.0.7" and st.get("game") == "ruRU" and st.get("chars") == "2-5" and st.get("mapzeroth") is True, st)
+check("…the counters of the last full day only, numbers under plain names", st.get("use") == {"tab_left": 3, "route": 2}, st.get("use"))
+check("…no character names, realms or texts from the game file", r["statsNoNames"] is True)
+check("…characters as a range", r["statsBuckets"] == "0 1 2-5 6-10 11+", r["statsBuckets"])
 check("no file and no backup: a clear error", "не удалось прочитать" in r["missing"], r["missing"])
 
 passed = sum(1 for _, ok in checks if ok)
