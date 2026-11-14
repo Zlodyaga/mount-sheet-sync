@@ -42,4 +42,5 @@ Collection.lua
 Remaining.lua
 Skin.lua
 UI.lua
+Alert.lua
 Tooltip.lua

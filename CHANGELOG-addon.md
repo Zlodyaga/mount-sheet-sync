@@ -3,6 +3,7 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.7
+- A notice when a mount from your list drops: a panel at the top of the screen strikes the mount out, left to right, the “left to collect” count goes down by one, and you see the attempt it dropped on. With its own two sounds. Two ticks in the settings turn the notice or its sound off; `/mss drop` shows a test one.
 - The game's addon list shows Mount Sheet Sync under “Collections”, next to other collection addons.
 - A mount only one faction can get (“… [Horde]”) is no longer listed or counted for characters of the other faction. The addon learns a character's faction when you log in with it.
 - The addon counts how often its window, tabs and pins are used (numbers only, kept for 7 days in its saved file). Nothing leaves your computer unless you agree to anonymous statistics in the tray program.

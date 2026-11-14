@@ -646,6 +646,8 @@ local function OnMountAdded(mountID)
   if not name or not player.name then
     return
   end
+  -- оповещение: что известно о маунте, пока он ещё числится несобранным
+  local drop = ns.DropInfo and select(2, pcall(ns.DropInfo, mountID))
   if ns.CollectionAdd then
     SafeCall(ns.CollectionAdd, mountID, name)
   end
@@ -661,8 +663,19 @@ local function OnMountAdded(mountID)
   rec.mount = name
   rec.mountID = mountID
   rec.from = from          -- откуда маунт, по журналу маунтов: по нему таблица узнаёт босса
-  if AddRecord(rec) and not db.quiet then
+  local added = AddRecord(rec)
+  if added and not db.quiet then
     Print(string.format(L.mount_added, name))
+  end
+  if added and type(drop) == "table" then
+    local _, _, icon = journal.GetMountInfoByID(mountID)
+    drop.icon = icon
+    if (tonumber(drop.n) or 0) > 0 and not db.quiet then
+      Print(string.format(L.alert_chat, name, drop.n))
+    end
+    if ns.ShowDrop then
+      SafeCall(ns.ShowDrop, drop)
+    end
   end
 end
 
@@ -860,6 +873,7 @@ local function ShowHelp()
     CMD .. "/mss|r — " .. L.help_open,
     CMD .. "/mss sync|r — " .. L.help_sync,
     CMD .. "/mss left|r — " .. L.help_left,
+    CMD .. "/mss drop|r — " .. L.help_drop,
     CMD .. "/mss list|r — " .. L.help_list,
     CMD .. "/mss add " .. L.help_add_arg .. "|r — " .. L.help_add,
     CMD .. "/mss scan|r — " .. L.help_scan,
@@ -892,6 +906,11 @@ SlashCmdList["MOUNTSHEETSYNC"] = function(msg)
     end
   elseif cmd == "help" or cmd == "?" then
     ShowHelp()
+  elseif cmd == "drop" then
+    -- проверка оповещения о выпавшем маунте: выдуманное выпадение, ничего не записывается
+    if ns.TestDrop then
+      SafeCall(ns.TestDrop)
+    end
   elseif cmd == "tip" then
     -- проверка подсказки о боссе: пишет в чат, что видит аддон при наведении (до /reload)
     ns.tipDebug = not ns.tipDebug

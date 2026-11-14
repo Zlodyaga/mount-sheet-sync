@@ -2439,6 +2439,8 @@ local function RefreshSettings()
   local mm = db and type(db.minimap) == "table" and db.minimap or {}
   settingsMinimap:SetChecked(not mm.hide)
   Mz.check:SetChecked(not (db and db.mapzeroth == false))
+  Mz.alert:SetChecked(not (db and db.alert == false))
+  Mz.alertSound:SetChecked(not (db and db.alertSound == false))
   for _, b in ipairs(gridButtons) do
     b:SetChecked(b.view == (db and db.gridView or "scroll"))
   end
@@ -2597,7 +2599,7 @@ local function CreateSettings()
   for _, code in ipairs(ns.LANGUAGES) do
     codes[#codes + 1] = code
   end
-  local height = 100 + #codes * 24 + 70 + 96 + 86 + 26
+  local height = 100 + #codes * 24 + 70 + 96 + 86 + 26 + 52
   settingsFrame = Skin.Window(SETTINGS_NAME, 330, height, "DIALOG")
   settingsFrame:SetPoint("CENTER", 0, 60)
   local function title()
@@ -2669,6 +2671,29 @@ local function CreateSettings()
     end
   end)
   AttachTooltip(Mz.check, "settings_mapzeroth", "tip_mapzeroth")
+  -- оповещение о выпавшем маунте (Alert.lua): по умолчанию включено, в сохранениях только «выключено»
+  Mz.alert = SettingsCheck(settingsFrame, y - 78, "settings_alert", function(self)
+    local db = ns.GetDB()
+    if db then
+      if self:GetChecked() then
+        db.alert = nil
+      else
+        db.alert = false
+      end
+    end
+  end)
+  AttachTooltip(Mz.alert, "settings_alert", "tip_alert")
+  Mz.alertSound = SettingsCheck(settingsFrame, y - 104, "settings_alert_sound", function(self)
+    local db = ns.GetDB()
+    if db then
+      if self:GetChecked() then
+        db.alertSound = nil
+      else
+        db.alertSound = false
+      end
+    end
+  end)
+  AttachTooltip(Mz.alertSound, "settings_alert_sound", "tip_alert")
 
   local reportButton = MakeButton(settingsFrame, "button_report", 200, "tip_report", function()
     ns.SafeCall(ShowReport)

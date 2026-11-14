@@ -191,3 +191,11 @@ Midnight (`issecretvalue`) не читаются — имя босса тогд�
 Счётчики пользования (3.0.7): `ns.Count(что)` → `db.usage.days["ГГГГ-ММ-ДД"][что]`, хранятся 7 дней; `db.usage.mapzeroth`.
 Считаются `open` (открытие окна), `tab_left` / `tab_ach` / `tab_attempts` / `tab_log`, `route` (Ctrl + щелчок), `manual` (ручная
 отметка). Только числа; из игры они никуда не уходят — их читает программа и отправляет лишь при согласии игрока.
+
+Оповещение о выпавшем маунте (3.0.7, `Alert.lua`): `OnMountAdded` до `ns.CollectionAdd` берёт `ns.DropInfo(mountID)` — строку вкладки
+«Попытки» (имя, попыток, шанс) и число несобранных; маунт не из списка — оповещения нет. `ns.ShowDrop(info)` — панель
+`MountSheetSyncAlertFrame` вверху экрана: появление (0,3 с, `Media\Drop.ogg`), с 0,9 с черта растёт слева направо 1,1 с
+(`Media\Strike.ogg`), затем «Осталось собрать» на единицу меньше, 5 с и исчезает; щелчок закрывает. В чат — `alert_chat`
+(«выпал с попытки № N»). Настройки: `db.alert == false` — без панели, `db.alertSound == false` — без звука (галочки `settings_alert`,
+`settings_alert_sound`). Команда `/mss drop` — проверка (`ns.TestDrop`, выдуманные числа, ничего не пишет). Звуки — записи с
+Freesound, лицензия CC0: «cartoon_wink_magic_sparkle» (MLaudio, 511485) и «Sword draw» (xkeril, 666580); исходники — `tools/sounds/`.

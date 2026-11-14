@@ -1551,6 +1551,38 @@ check("3.0.7: a Horde-only mount is listed for a Horde character and when the fa
 check("…and neither listed nor counted for an Alliance character",
       not side["Alliance"].seen and side["Alliance"].total == side["Horde"].total - 1, side["Alliance"].total)
 
+# 3.0.7: the mount drop notice — the row is struck out left to right, the count goes down by one, then it goes away
+L.execute("""
+ALERT = { sounds = {} }
+PlaySoundFile = function(file, channel) ALERT.sounds[#ALERT.sounds + 1] = file end
+MountSheetSyncDB.alert = false
+ALERT.shownWhenOff = MSS_NS.ShowDrop({ name = "Тихий маунт", n = 3, p = 0.01, left = 10 })
+ALERT.testShown = MSS_NS.TestDrop()   -- the test ignores the switch
+MountSheetSyncDB.alert = nil
+ALERT.shown = MSS_NS.ShowDrop({ name = "Непобедимый", n = 147, p = 0.01, left = 212 })
+local f = MountSheetSyncAlertFrame
+local step = f:GetScript("OnUpdate")
+ALERT.before = f.left:GetText()
+ALERT.tries = f.tries:GetText()
+MOCK.gt = MOCK.gt + 1.4; step(f)
+ALERT.midWidth, ALERT.midLeft, ALERT.midLine = f.line:GetWidth(), f.left:GetText(), f.line:IsShown()
+MOCK.gt = MOCK.gt + 1.0; step(f)
+ALERT.fullWidth, ALERT.after, ALERT.stillShown = f.line:GetWidth(), f.left:GetText(), f:IsShown()
+MOCK.gt = MOCK.gt + 10; step(f)
+ALERT.gone = not f:IsShown()
+MountSheetSyncDB.alertSound = false
+MSS_NS.TestDrop()
+ALERT.muted = #ALERT.sounds
+MountSheetSyncDB.alertSound = nil
+MountSheetSyncAlertFrame:Hide()""")
+al = g.ALERT
+check("3.0.7: the drop notice is not shown when switched off; /mss drop shows it anyway", al.shownWhenOff is False and al.testShown is True and al.shown is True)
+check("…it starts with the full count and the attempts", "212" in al.before and "147" in al.tries and "1 %" in al.tries, (al.before, al.tries))
+check("…the line grows left to right, not at once", al.midLine and 1 < al.midWidth < al.fullWidth and "212" in al.midLeft, (al.midWidth, al.fullWidth))
+check("…when the line is done the count is one less", "211" in al.after and al.stillShown, al.after)
+check("…and it goes away by itself", al.gone is True)
+check("…a sound when it appears and one for the line; none when the sound is off", al.muted == 3 and "Drop.ogg" in al.sounds[1] and "Strike.ogg" in al.sounds[3], list(al.sounds.values()))
+
 # 3.0.7: usage counters — numbers only, by day, seven days kept
 L.execute("""
 USAGE = MountSheetSyncDB.usage
