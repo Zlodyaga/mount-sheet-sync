@@ -14,7 +14,7 @@ import os
 import re
 import sys
 
-ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+ROOT = os.environ.get("MSS_BUMP_ROOT") or os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")   # the variable: for test_bump.py
 VERSION = re.compile(r"^\d+\.\d+\.\d+$")
 
 

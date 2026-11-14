@@ -228,8 +228,14 @@ namespace MountSheetSync
             {
                 stream.Write(body, 0, body.Length);
             }
-            using (request.GetResponse())
+            // ответ дочитываем: брошенное на полуслове соединение приёмник видит как обрыв
+            using (WebResponse response = request.GetResponse())
+            using (Stream answer = response.GetResponseStream())
             {
+                byte[] skip = new byte[1024];
+                while (answer.Read(skip, 0, skip.Length) > 0)
+                {
+                }
             }
         }
 
