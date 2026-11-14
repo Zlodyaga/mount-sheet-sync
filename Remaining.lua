@@ -1073,6 +1073,53 @@ function ns.GetAttemptsList()
   return out
 end
 
+-- Вкладка «Выпавшие»: маунты списка, которые выпали, пока стоит аддон, { id, name, boss, n, p, time, char }, новые сверху.
+-- Источники: db.drops (пишется при выпадении: попытки на тот момент, время, персонаж — переживает очистку журнала) и
+-- записи журнала о новых маунтах (kind = "mount") — для выпавших до 3.0.7; у них попытки считаются как во вкладке «Попытки».
+function ns.GetDrops()
+  local data = AttemptRows()
+  local db = ns.GetDB()
+  if not data or not db then
+    return nil
+  end
+  local byId = {}
+  for _, m in ipairs(data.mounts) do
+    local p = type(m) == "table" and tonumber(m.p)
+    if p and p > 0 and p < 1 and tonumber(m.id) then
+      byId[tonumber(m.id)] = m
+    end
+  end
+  local kills = db.kills or {}
+  local known = KnownIds(data)
+  local out, seen = {}, {}
+  local function Add(id, n, when, char)
+    local m = byId[id]
+    if m and not seen[id] then
+      seen[id] = true
+      out[#out + 1] = { id = id, name = MountName(m), boss = ns.Shown(m, "boss"), p = tonumber(m.p),
+        n = tonumber(n) or CountNow(m, data, kills, known), time = tonumber(when) or 0, char = char }
+    end
+  end
+  for id, d in pairs(type(db.drops) == "table" and db.drops or {}) do
+    if type(d) == "table" then
+      Add(tonumber(id), d.n, d.time, d.char)
+    end
+  end
+  for i = #kills, 1, -1 do
+    local rec = kills[i]
+    if rec.kind == "mount" and tonumber(rec.mountID) then
+      Add(tonumber(rec.mountID), nil, rec.time, rec.char)
+    end
+  end
+  table.sort(out, function(a, b)
+    if a.time ~= b.time then
+      return a.time > b.time
+    end
+    return a.name < b.name
+  end)
+  return out
+end
+
 -- Строка «Осталось» → её счётчик: n, p, ID маунта (nil — маунта нет среди строк со случайным шансом).
 function ns.ItemAttempts(item)
   local data = AttemptRows()

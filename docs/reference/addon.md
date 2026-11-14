@@ -199,3 +199,9 @@ Midnight (`issecretvalue`) не читаются — имя босса тогд�
 («выпал с попытки № N»). Настройки: `db.alert == false` — без панели, `db.alertSound == false` — без звука (галочки `settings_alert`,
 `settings_alert_sound`). Команда `/mss drop` — проверка (`ns.TestDrop`, выдуманные числа, ничего не пишет). Звуки — записи с
 Freesound, лицензия CC0: «cartoon_wink_magic_sparkle» (MLaudio, 511485) и «Sword draw» (xkeril, 666580); исходники — `tools/sounds/`.
+
+Вкладка «Выпавшие» (3.0.7, пятая, ключ `drops`): `ns.GetDrops()` → `UI.DropsView` — маунт, босс, попыток, шанс, когда, персонаж; новые
+сверху. Источники: `db.drops[mountID] = { n, time, char }` (пишет `OnMountAdded` для маунтов списка; переживает очистку журнала) и
+записи журнала `kind = "mount"` (выпавшие до 3.0.7; попытки — `CountNow`). Маунты без случайного шанса (p = 1) сюда не идут.
+Галочка `settings_alert_rarity` (`db.alertRarity`, по умолчанию выкл.): при включённом Rarity панель оповещения не показывается
+(строка в чат и запись в `db.drops` остаются). `ns.UI` — таблица окна, открыта для проверок.

@@ -44,8 +44,8 @@ local KIND_COLOR = {
 
 -- Вкладки по порядку; в db.tab хранится ключ.
 local TAB_LEFT, TAB_ACH, TAB_ATTEMPTS, TAB_LOG = 1, 2, 3, 4
-local TAB_KEYS = { "left", "ach", "attempts", "log" }
-local TAB_LABELS = { "tab_left", "tab_ach", "tab_attempts", "tab_log" }
+local TAB_KEYS = { "left", "ach", "attempts", "log", "drops" }
+local TAB_LABELS = { "tab_left", "tab_ach", "tab_attempts", "tab_log", "tab_drops" }
 local ALL_CHARS = {}      -- selectedChar: первая строка слева, «Все персонажи»
 local FILTER_KINDS = { "all", "raid", "dungeon", "world", "rare" }
 
@@ -1589,6 +1589,39 @@ local function AchievementsView(rows)
   return { list = list, cols = cols, summary = "|cff8c8c8c" .. string.format(L.ach_head, total, earned) .. "|r" }
 end
 
+-- Вкладка «Выпавшие» (ns.GetDrops): маунт, босс, с какой попытки, когда и кому. Столбцы считаются один раз (UI.dropCols).
+function UI.DropsView(rows)
+  if not rows then
+    return NoDataView()
+  end
+  if #rows == 0 then
+    return { list = {}, empty = L.drops_empty }
+  end
+  UI.dropCols = UI.dropCols or Columns({
+    { key = "icon", w = 18 },
+    { key = "mount", flex = 1.3, label = "col_mount" },
+    { key = "boss", flex = 1.3, label = "col_boss" },
+    { key = "n", w = 64, right = true, bold = true, label = "col_attempts" },
+    { key = "chance", w = 46, right = true, label = "col_drop_chance" },
+    { key = "when", w = 84, right = true, label = "col_when" },
+    { key = "who", flex = 0.7, label = "col_who" },
+  }, listWidth)
+  local cols, list = UI.dropCols, {}
+  for i, d in ipairs(rows) do
+    local percent = d.p and d.p * 100
+    list[#list + 1] = { cols = cols, icon = ns.MountIcon(d.id), mountID = KnownMount(d.id), stripe = i % 2 == 0,
+      tip = { Safe(d.name), Safe(d.boss) }, values = {
+        mount = "|cffc9a0ff" .. Safe(d.name) .. "|r",
+        boss = Safe(d.boss),
+        n = d.n and d.n > 0 and tostring(d.n) or "-",
+        chance = percent and ((percent >= 1 and string.format("%d", percent + 0.5) or string.format("%.1f", percent)) .. " %") or "",
+        when = d.time and d.time > 0 and (date or os.date)("%d.%m.%Y", d.time) or "-",
+        who = Safe(d.char),
+      } }
+  end
+  return { list = list, cols = cols, summary = "|cff8c8c8c" .. string.format(L.drops_head, #rows) .. "|r" }
+end
+
 -- Персонажи для столбцов сетки: имя, цвет класса (без класса — серый: персонаж другого аккаунта).
 local function GridChars(all)
   local chars = {}
@@ -1978,6 +2011,11 @@ function UI.Refresh()
     local st = AttemptsState()
     key = table.concat({ "attempts", tostring(rows), st.sort, tostring(st.desc), st.kind, tostring(st.hideZero) }, "|")
     build = function() return AttemptsView(rows, #all) end
+  elseif tab == 5 then   -- «Выпавшие»
+    local rows = ns.GetDrops()
+    local newest = rows and rows[1]
+    key = "drops|" .. tostring(rows and #rows) .. "|" .. tostring(newest and newest.id) .. "|" .. ns.CurrentLanguage()
+    build = function() return UI.DropsView(rows) end
   else
     local last = db.kills[#db.kills]
     key = "log|" .. #db.kills .. "|" .. tostring(last and last.id)
@@ -2414,6 +2452,7 @@ function UI.Toggle()
 end
 
 ns.ToggleWindow = UI.Toggle
+ns.UI = UI   -- для проверок и Alert.lua
 ns.ConfirmResetWeek = UI.ConfirmResetWeek
 ns.OnChange = UI.RequestRefresh
 
@@ -2441,6 +2480,7 @@ local function RefreshSettings()
   Mz.check:SetChecked(not (db and db.mapzeroth == false))
   Mz.alert:SetChecked(not (db and db.alert == false))
   Mz.alertSound:SetChecked(not (db and db.alertSound == false))
+  Mz.alertRarity:SetChecked(db and db.alertRarity and true or false)
   for _, b in ipairs(gridButtons) do
     b:SetChecked(b.view == (db and db.gridView or "scroll"))
   end
@@ -2599,7 +2639,7 @@ local function CreateSettings()
   for _, code in ipairs(ns.LANGUAGES) do
     codes[#codes + 1] = code
   end
-  local height = 100 + #codes * 24 + 70 + 96 + 86 + 26 + 52
+  local height = 100 + #codes * 24 + 70 + 96 + 86 + 26 + 52 + 26
   settingsFrame = Skin.Window(SETTINGS_NAME, 330, height, "DIALOG")
   settingsFrame:SetPoint("CENTER", 0, 60)
   local function title()
@@ -2694,6 +2734,13 @@ local function CreateSettings()
     end
   end)
   AttachTooltip(Mz.alertSound, "settings_alert_sound", "tip_alert")
+  Mz.alertRarity = SettingsCheck(settingsFrame, y - 130, "settings_alert_rarity", function(self)
+    local db = ns.GetDB()
+    if db then
+      db.alertRarity = self:GetChecked() and true or nil   -- по умолчанию выключено: показываем и вместе с Rarity
+    end
+  end)
+  AttachTooltip(Mz.alertRarity, "settings_alert_rarity", "tip_alert_rarity")
 
   local reportButton = MakeButton(settingsFrame, "button_report", 200, "tip_report", function()
     ns.SafeCall(ShowReport)

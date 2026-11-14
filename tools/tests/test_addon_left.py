@@ -223,7 +223,7 @@ def under_window(x):
 
 
 tabs = [x for x in regions("Button") if x._isTab]
-check("four tabs above the list, achievements next to «Осталось»", [str(t._text) for t in tabs] == ["Осталось (26)", "Достижения", "Попытки", "Журнал"],
+check("five tabs above the list, achievements next to «Осталось», «Выпавшие» last (3.0.7)", [str(t._text) for t in tabs] == ["Осталось (26)", "Достижения", "Попытки", "Журнал", "Выпавшие"],
       [str(t._text) for t in tabs])
 check("3.0: «Осталось» selected by default", win.selectedTab == 1 and not tabs[0].IsEnabled(tabs[0]) and tabs[3].IsEnabled(tabs[3]))
 
@@ -1582,6 +1582,43 @@ check("…the line grows left to right, not at once", al.midLine and 1 < al.midW
 check("…when the line is done the count is one less", "211" in al.after and al.stillShown, al.after)
 check("…and it goes away by itself", al.gone is True)
 check("…a sound when it appears and one for the line; none when the sound is off", al.muted == 3 and "Drop.ogg" in al.sounds[1] and "Strike.ogg" in al.sounds[3], list(al.sounds.values()))
+
+# 3.0.7: «Выпавшие» — what dropped, with the attempt and the day; no notice together with Rarity when the player asks so
+L.execute("""
+DROPS = { oldMounts = MountSheetSyncSheet.mounts, id = 363 }
+MountSheetSyncSheet.mounts = { { id = 363, mount = "Непобедимый", boss = "Король-лич", p = 0.01, kind = "raid", sheet = "Рейды" },
+  { id = 999001, mount = "Не из шанса", boss = "Торговец", p = 1 } }
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+DROPS.before = #MSS_NS.GetDrops()
+MountSheetSyncDB.drops = { [tostring(DROPS.id)] = { n = 42, time = 1700000000, char = "Эйра" } }
+local rows = MSS_NS.GetDrops()
+DROPS.after, DROPS.n, DROPS.char, DROPS.rowId = #rows, rows[1].n, rows[1].char, rows[1].id
+local view = MSS_NS.UI.DropsView(rows)
+DROPS.cells = view.list[1].values.n .. "|" .. view.list[1].values.when .. "|" .. view.list[1].values.who
+DROPS.emptyText = MSS_NS.UI.DropsView({}).empty
+MSS_NS.UI.SelectTab(5); MSS_NS.UI.Refresh()
+DROPS.tab = MountSheetSyncDB.tab
+MSS_NS.UI.SelectTab(1); MSS_NS.UI.Refresh()
+MountSheetSyncDB.drops = nil
+MountSheetSyncSheet.mounts = DROPS.oldMounts
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+C_AddOns = C_AddOns or {}
+DROPS.oldLoaded = C_AddOns.IsAddOnLoaded
+C_AddOns.IsAddOnLoaded = function(name) return name == "Rarity" end
+DROPS.withRarity = MSS_NS.ShowDrop({ name = "Маунт", n = 1, p = 0.01, left = 5 })
+MountSheetSyncDB.alertRarity = true
+DROPS.rarityOff = MSS_NS.ShowDrop({ name = "Маунт", n = 1, p = 0.01, left = 5 })
+DROPS.testAnyway = MSS_NS.TestDrop()
+MountSheetSyncDB.alertRarity = nil
+C_AddOns.IsAddOnLoaded = DROPS.oldLoaded
+MountSheetSyncAlertFrame:Hide()""")
+dr = g.DROPS
+check("3.0.7: «Выпавшие»: a mount noted when it dropped is listed with its attempt and character",
+      dr.after >= 1 and dr.after >= dr.before and dr.n == 42 and dr.char == "Эйра" and dr.rowId == dr.id, (dr.before, dr.after, dr.n))
+check("…the row shows the attempt, the day and the character; an empty list says so", dr.cells.startswith("42|") and ".2023|" in dr.cells and dr.cells.endswith("Эйра") and "не выпадали" in dr.emptyText, dr.cells)
+check("…the tab opens and is remembered", dr.tab == "drops")
+check("3.0.7: with Rarity on, the notice shows by default, not when the player ticked «without Rarity»; the test shows anyway",
+      dr.withRarity is True and dr.rarityOff is False and dr.testAnyway is True)
 
 # 3.0.7: usage counters — numbers only, by day, seven days kept
 L.execute("""

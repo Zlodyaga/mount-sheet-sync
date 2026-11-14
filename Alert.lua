@@ -144,6 +144,10 @@ function ns.ShowDrop(info)
   if db and db.alert == false and not info.test then
     return false
   end
+  -- Rarity показывает своё оповещение о том же маунте: по желанию игрока наше тогда молчит
+  if db and db.alertRarity and not info.test and C_AddOns and C_AddOns.IsAddOnLoaded and C_AddOns.IsAddOnLoaded("Rarity") then
+    return false
+  end
   frame = frame or Create()
   current = { left = tonumber(info.left) }
   shownAt = GetTime()

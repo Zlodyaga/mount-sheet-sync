@@ -668,6 +668,9 @@ local function OnMountAdded(mountID)
     Print(string.format(L.mount_added, name))
   end
   if added and type(drop) == "table" then
+    -- памятка для вкладки «Выпавшие»: с какой попытки, когда и кому (журнал могут очистить, а это останется)
+    db.drops = type(db.drops) == "table" and db.drops or {}
+    db.drops[tostring(mountID)] = { n = tonumber(drop.n) or 0, time = rec.time, char = player.name }
     local _, _, icon = journal.GetMountInfoByID(mountID)
     drop.icon = icon
     if (tonumber(drop.n) or 0) > 0 and not db.quiet then

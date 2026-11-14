@@ -10,9 +10,10 @@
 
 var SHEET = 'data';
 var KEEP_DAYS = 365;
-var HEADER = ['received', 'id', 'program', 'addon', 'windows', 'lang', 'game', 'mode', 'chars', 'mapzeroth', 'day', 'use'];
+var HEADER = ['Получено', 'Номер установки', 'Программа', 'Аддон', 'Windows', 'Язык программы', 'Язык игры', 'Где данные',
+  'Персонажей', 'Mapzeroth', 'День счётчиков', 'Счётчики'];
 /** Счётчики, которые знает аддон; другие имена отбрасываются. */
-var COUNTERS = ['open', 'route', 'manual', 'tab_left', 'tab_ach', 'tab_attempts', 'tab_log'];
+var COUNTERS = ['open', 'route', 'manual', 'tab_left', 'tab_ach', 'tab_attempts', 'tab_log', 'tab_drops'];
 /** Что может стоять в каждом поле: всё остальное становится пустым. */
 var RULES = {
   id: /^[0-9a-f]{32}$/,
@@ -59,10 +60,12 @@ function doPost(e) {
         });
         // день без времени: по времени строки игрока не сопоставить с чем-то ещё
         var today = Utilities.formatDate(new Date(), 'UTC', 'yyyy-MM-dd');
-        sheet_().appendRow([today, clean_(message, 'id'), clean_(message, 'program'), clean_(message, 'addon'),
-          clean_(message, 'windows'), clean_(message, 'lang'), clean_(message, 'game'), clean_(message, 'mode'),
-          "'" + clean_(message, 'chars'), message.mapzeroth === true ? 1 : message.mapzeroth === false ? 0 : '',
-          clean_(message, 'day'), JSON.stringify(use)]);
+        // апостроф впереди: иначе таблица читает «2.10.2» как дату, а номер из одних цифр — как число
+        var text_ = function (field) { return "'" + clean_(message, field); };
+        sheet_().appendRow(["'" + today, text_('id'), text_('program'), text_('addon'),
+          text_('windows'), text_('lang'), text_('game'), text_('mode'),
+          text_('chars'), message.mapzeroth === true ? "'1" : message.mapzeroth === false ? "'0" : '',
+          text_('day'), "'" + JSON.stringify(use)]);
         answer.ok = true;
       }
     }
