@@ -13,10 +13,10 @@ namespace MountSheetSync
     static class Stats
     {
         /// <summary>
-        /// Адрес приёмника — веб-приложение Apps Script автора (tools/stats/Code.gs). Пока пусто, статистики нет вовсе:
-        /// ни вопроса, ни пунктов меню, ни отправки.
+        /// Адрес приёмника — веб-приложение Apps Script автора (tools/stats/Code.gs). Не секрет: по нему можно только
+        /// добавить строку. Пустой адрес выключает статистику целиком: ни вопроса, ни пунктов меню, ни отправки.
         /// </summary>
-        public const string Url = "";
+        public const string Url = "https://script.google.com/macros/s/AKfycbyVEf7FbRlom2vlALzMZcVZxDZrQP8eAlGo2BzHH-5LwwScRt9Irv5001f0NT4T7NGq/exec";
         const int TimeoutMs = 15000;
 
         public static string UrlInUse
@@ -24,13 +24,11 @@ namespace MountSheetSync
             get
             {
 #if TESTS
-                string test = Environment.GetEnvironmentVariable("MSS_STATS_URL");
-                if (!string.IsNullOrEmpty(test))
-                {
-                    return test;
-                }
-#endif
+                // сборка для тестов настоящему приёмнику не пишет и вопроса не задаёт: адрес — только из окружения
+                return Environment.GetEnvironmentVariable("MSS_STATS_URL") ?? "";
+#else
                 return Url;
+#endif
             }
         }
 

@@ -161,7 +161,7 @@ check("long French button text: the button grows", scan and scan[0]._w > 156, sc
 # ---------------------------------------------------------------- 5. quiet and minimap in the settings
 q = [r for r in [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
      if r._type == "CheckButton" and r._parent is not None and r._parent._uid == sf._uid and rg(r, "code") is None and rg(r, "view") is None]
-check("three more ticks: chat messages, minimap button, route through Mapzeroth (3.0.6)", len(q) == 3, len(q))
+check("five more ticks: chat messages, minimap button, route through Mapzeroth, the drop notice and its sound (3.0.7)", len(q) == 5, len(q))
 q[0].MockClick(q[0])
 check("“no chat messages” from the settings", g.MountSheetSyncDB.quiet is True)
 q[1].MockClick(q[1])

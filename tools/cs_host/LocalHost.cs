@@ -198,7 +198,7 @@ namespace MountSheetSync
             r["statsId"] = statsSettings.InstallId.Length == 32 && sent.Contains(statsSettings.InstallId);
             r["statsNoNames"] = !sent.Contains("Имя") && !sent.Contains("Сервер") && !sent.Contains("текст");
             r["statsBuckets"] = Stats.Bucket(0) + " " + Stats.Bucket(1) + " " + Stats.Bucket(5) + " " + Stats.Bucket(6) + " " + Stats.Bucket(40);
-            r["statsOffByDefault"] = new Settings().StatsChoice == "" && !Stats.Available;
+            r["statsOffByDefault"] = new Settings().StatsChoice == "" && !Stats.Available && Stats.Url.StartsWith("https://script.google.com/macros/s/");
 
             // ни файла, ни копии: понятная ошибка
             string missing = Path.Combine(args[0], "none.json");

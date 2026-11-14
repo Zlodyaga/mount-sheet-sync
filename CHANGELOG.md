@@ -3,6 +3,7 @@
 The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [CHANGELOG-addon.md](CHANGELOG-addon.md).
 
 ## 2.10.2
+- Anonymous statistics, only if you agree: on the first start the program asks once. If you say yes, it sends the author one short message a day (versions, language, where the data is kept, a rough number of characters, how often the addon's window, tabs and pins are used, a random installation number). No character names, realms or anything from your list. “What is sent…” in the tray menu shows the exact message; the tick next to it turns it off.
 - Data on this computer: “Bring back the data of a day” in the tray menu lists the daily copies from the “backups” folder. Pick a day and the data becomes what it was then; the current data is kept next to the copies (before-restore).
 
 ## 2.10.1
