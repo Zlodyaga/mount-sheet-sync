@@ -33,15 +33,6 @@ local function Play(file)
   end
 end
 
-local function Chance(p)
-  p = tonumber(p)
-  if not p or p <= 0 then
-    return nil
-  end
-  local percent = p * 100
-  return (percent >= 1 and string.format("%d", percent + 0.5) or string.format("%.1f", percent)) .. " %"
-end
-
 -- плавно в начале и в конце: черта не «выстреливает»
 local function Ease(x)
   x = math.max(0, math.min(1, x))
@@ -155,7 +146,7 @@ function ns.ShowDrop(info)
   frame.name:SetTextColor(COLOR.gold[1], COLOR.gold[2], COLOR.gold[3])
   frame.icon:SetTexture(info.icon or 134400)   -- 134400 — знак вопроса игры
   frame.left:SetText(LeftText(current.left, false))
-  local n, chance = tonumber(info.n), Chance(info.p)
+  local n, chance = tonumber(info.n), ns.FormatDropChance(info.p)
   local tries = n and n > 0 and string.format(L.alert_attempts, n) or ""
   frame.tries:SetText(chance and tries ~= "" and (tries .. ", " .. chance) or chance or tries)
   frame.line:SetWidth(1)

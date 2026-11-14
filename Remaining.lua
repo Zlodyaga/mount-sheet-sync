@@ -820,6 +820,15 @@ function ns.FormatChance(n, p)
   return text .. "%"
 end
 
+-- Шанс выпадения за одно убийство, 0..1 → «1%», «0,5%» (тот же вид, что у ns.FormatChance); nil — шанса нет.
+function ns.FormatDropChance(p)
+  p = tonumber(p)
+  if not p or p <= 0 then
+    return nil
+  end
+  return ns.FormatChance(1, p)
+end
+
 -- Убийство rec (уже в журнале): строки, для которых оно попытка, — { name, n, p } (n — вместе с этой попыткой).
 function ns.AttemptsFor(rec)
   local data = AttemptRows()

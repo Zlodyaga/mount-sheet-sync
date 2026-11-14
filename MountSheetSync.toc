@@ -42,5 +42,11 @@ Collection.lua
 Remaining.lua
 Skin.lua
 UI.lua
+UI.Route.lua
+UI.Rows.lua
+UI.Views.lua
+UI.Window.lua
+UI.Settings.lua
+UI.Minimap.lua
 Alert.lua
 Tooltip.lua

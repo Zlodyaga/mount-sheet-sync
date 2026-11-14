@@ -1577,7 +1577,7 @@ MountSheetSyncDB.alertSound = nil
 MountSheetSyncAlertFrame:Hide()""")
 al = g.ALERT
 check("3.0.7: the drop notice is not shown when switched off; /mss drop shows it anyway", al.shownWhenOff is False and al.testShown is True and al.shown is True)
-check("…it starts with the full count and the attempts", "212" in al.before and "147" in al.tries and "1 %" in al.tries, (al.before, al.tries))
+check("…it starts with the full count and the attempts", "212" in al.before and "147" in al.tries and "1%" in al.tries, (al.before, al.tries))
 check("…the line grows left to right, not at once", al.midLine and 1 < al.midWidth < al.fullWidth and "212" in al.midLeft, (al.midWidth, al.fullWidth))
 check("…when the line is done the count is one less", "211" in al.after and al.stillShown, al.after)
 check("…and it goes away by itself", al.gone is True)
