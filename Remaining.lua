@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.6 — «Осталось на этой неделе»
+Mount Sheet Sync — «Осталось на этой неделе»
 ==================================================
 Список приходит из Google-таблицы: программа MountSheetSync.exe записывает его
 в SheetData.lua (глобальная MountSheetSyncSheet), а игра читает этот файл при
@@ -415,6 +415,32 @@ local function ResetTime(kills, weekEnd)
   return last
 end
 
+-- Строка маунта одной фракции (в каталоге имя кончается на «[Орда]» / «[Альянс]») у персонажа другой фракции.
+-- Фракцию персонажа запоминает Collection.lua при входе (c.faction); не знаем её — строку показываем.
+local SIDE_MARKS = { ["[Орда]"] = "Horde", ["[Альянс]"] = "Alliance" }
+local function OtherSide(item, key)
+  local mount = type(item.mount) == "string" and item.mount or ""
+  local db = MountSheetSyncDB
+  local faction
+  if key and type(db) == "table" and type(db.chars) == "table" then
+    for name, c in pairs(db.chars) do   -- ключ персонажа в списках — его GUID, а у старых записей «Имя-Сервер»
+      if type(c) == "table" and (c.guid == key or name == key) then
+        faction = c.faction
+        break
+      end
+    end
+  end
+  if faction ~= "Horde" and faction ~= "Alliance" then
+    return false
+  end
+  for mark, side in pairs(SIDE_MARKS) do
+    if side ~= faction and mount:sub(-#mark) == mark then
+      return true
+    end
+  end
+  return false
+end
+
 -- ch — строка персонажа из таблицы, если она уже известна (список всех персонажей), иначе ищется по player.
 function ns.BuildRemaining(data, player, weekEnd, kills, ch)
   local result = { generated = tonumber(data.generated) }
@@ -449,7 +475,9 @@ function ns.BuildRemaining(data, player, weekEnd, kills, ch)
   local items, left, total = {}, 0, 0
   local now = time()
   for _, item in ipairs(type(ch.items) == "table" and ch.items or {}) do
-    if type(item) == "table" and item.kind == "rare" then
+    if type(item) == "table" and OtherSide(item, player.key) then
+      -- маунт другой фракции («… [Орда]»): этому персонажу он не выпадет — ни в списке, ни в счёте
+    elseif type(item) == "table" and item.kind == "rare" then
       -- откат свой, неделя ни при чём: последнее убийство этим персонажем из всего журнала. Рары «100 %» и фарм мобов
       -- (item.group) показываем своими группами, но не считаем: это не «убить на этой неделе»
       local counts = item.group ~= "guaranteed" and item.group ~= "mobs"
@@ -792,6 +820,15 @@ function ns.FormatChance(n, p)
   return text .. "%"
 end
 
+-- Шанс выпадения за одно убийство, 0..1 → «1%», «0,5%» (тот же вид, что у ns.FormatChance); nil — шанса нет.
+function ns.FormatDropChance(p)
+  p = tonumber(p)
+  if not p or p <= 0 then
+    return nil
+  end
+  return ns.FormatChance(1, p)
+end
+
 -- Убийство rec (уже в журнале): строки, для которых оно попытка, — { name, n, p } (n — вместе с этой попыткой).
 function ns.AttemptsFor(rec)
   local data = AttemptRows()
@@ -1042,6 +1079,53 @@ function ns.GetAttemptsList()
     end
   end)
   attemptsStamp, attemptsResult = stamp, out
+  return out
+end
+
+-- Вкладка «Выпавшие»: маунты списка, которые выпали, пока стоит аддон, { id, name, boss, n, p, time, char }, новые сверху.
+-- Источники: db.drops (пишется при выпадении: попытки на тот момент, время, персонаж — переживает очистку журнала) и
+-- записи журнала о новых маунтах (kind = "mount") — для выпавших до 3.0.7; у них попытки считаются как во вкладке «Попытки».
+function ns.GetDrops()
+  local data = AttemptRows()
+  local db = ns.GetDB()
+  if not data or not db then
+    return nil
+  end
+  local byId = {}
+  for _, m in ipairs(data.mounts) do
+    local p = type(m) == "table" and tonumber(m.p)
+    if p and p > 0 and p < 1 and tonumber(m.id) then
+      byId[tonumber(m.id)] = m
+    end
+  end
+  local kills = db.kills or {}
+  local known = KnownIds(data)
+  local out, seen = {}, {}
+  local function Add(id, n, when, char)
+    local m = byId[id]
+    if m and not seen[id] then
+      seen[id] = true
+      out[#out + 1] = { id = id, name = MountName(m), boss = ns.Shown(m, "boss"), p = tonumber(m.p),
+        n = tonumber(n) or CountNow(m, data, kills, known), time = tonumber(when) or 0, char = char }
+    end
+  end
+  for id, d in pairs(type(db.drops) == "table" and db.drops or {}) do
+    if type(d) == "table" then
+      Add(tonumber(id), d.n, d.time, d.char)
+    end
+  end
+  for i = #kills, 1, -1 do
+    local rec = kills[i]
+    if rec.kind == "mount" and tonumber(rec.mountID) then
+      Add(tonumber(rec.mountID), nil, rec.time, rec.char)
+    end
+  end
+  table.sort(out, function(a, b)
+    if a.time ~= b.time then
+      return a.time > b.time
+    end
+    return a.name < b.name
+  end)
   return out
 end
 

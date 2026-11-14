@@ -28,27 +28,7 @@ def check(name, cond, extra=None):
     print(("PASS " if cond else "FAIL ") + name + ("" if cond or extra is None else "\n     " + repr(extra)))
 
 
-# ---- the sheet's status reply -> SheetData.lua
-def lua_str(s):
-    out = []
-    for ch in s:
-        o = ord(ch)
-        if ch == "\\": out.append("\\\\")
-        elif ch == '"': out.append('\\"')
-        elif ch == "\n": out.append("\\n")
-        elif ch == "\r": out.append("\\r")
-        elif o < 32 or o == 127: out.append("\\%03d" % o)
-        else: out.append(ch)
-    return '"' + "".join(out) + '"'
-
-
-def sheet_lua(v):
-    if v is None: return "nil"
-    if isinstance(v, bool): return "true" if v else "false"
-    if isinstance(v, (int, float)): return repr(v)
-    if isinstance(v, str): return lua_str(v)
-    if isinstance(v, list): return "{" + ", ".join(sheet_lua(x) for x in v) + "}"
-    return "{" + ", ".join("[%s] = %s" % (lua_str(k), sheet_lua(x)) for k, x in v.items() if x is not None and k != "ok") + "}"
+from addon_env import lua_str, sheet_lua   # the sheet's status reply -> SheetData.lua
 
 
 if SHEET_FILE:
@@ -223,7 +203,7 @@ def under_window(x):
 
 
 tabs = [x for x in regions("Button") if x._isTab]
-check("four tabs above the list, achievements next to «Осталось»", [str(t._text) for t in tabs] == ["Осталось (26)", "Достижения", "Попытки", "Журнал"],
+check("five tabs above the list, achievements next to «Осталось», «Выпавшие» last (3.0.7)", [str(t._text) for t in tabs] == ["Осталось (26)", "Достижения", "Попытки", "Журнал", "Выпавшие"],
       [str(t._text) for t in tabs])
 check("3.0: «Осталось» selected by default", win.selectedTab == 1 and not tabs[0].IsEnabled(tabs[0]) and tabs[3].IsEnabled(tabs[3]))
 

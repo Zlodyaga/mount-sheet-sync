@@ -162,6 +162,74 @@ code, out = run(A, "--once")
 check("--once: list made, no upgrade, Google never asked", code == 0 and "Таблица обновлена" not in out and "нет связи" not in out, out[-800:])
 check("SheetData.lua for the addon", "Сильвана Ветрокрылая" in sheet_lua() and 'name = "Эйра"' in sheet_lua(), sheet_lua()[:300])
 
+# 2.10.2: anonymous statistics — nothing without a «yes», then one message a day to the receiver, no names in it
+import http.server
+import threading
+STATS = []
+
+
+class StatsReceiver(http.server.BaseHTTPRequestHandler):
+    def do_POST(self):
+        STATS.append(self.rfile.read(int(self.headers.get("Content-Length") or 0)).decode("utf-8"))
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", "11")
+        self.end_headers()
+        self.wfile.write(b'{"ok":true}')
+
+    def log_message(self, *args):
+        pass
+
+
+stats_server = http.server.HTTPServer(("127.0.0.1", PORT + 2), StatsReceiver)
+threading.Thread(target=stats_server.serve_forever, daemon=True).start()
+STATS_ENV = dict(ENV, MSS_STATS_URL="http://127.0.0.1:%d/exec" % (PORT + 2))
+
+
+def set_stats(choice, install=None, day=None):
+    f = os.path.join(A, "settings.json")
+    d = json.load(open(f, encoding="utf-8"))
+    d.pop("stats", None), d.pop("installId", None)
+    if choice:
+        d["stats"] = choice
+    if install:
+        d["installId"] = install
+    json.dump(d, open(f, "w", encoding="utf-8"))
+    state = os.path.join(A, "stats.json")
+    if day and os.path.exists(state):
+        st = json.load(open(state, encoding="utf-8"))
+        st["day"] = day
+        json.dump(st, open(state, "w", encoding="utf-8"))
+
+
+run(A, "--once", env=STATS_ENV)
+check("2.10.2: statistics: the player was not asked yet — nothing is sent", STATS == [], STATS)
+set_stats("no")
+run(A, "--once", env=STATS_ENV)
+check("…the player said no — nothing is sent", STATS == [], STATS)
+set_stats("yes", "0123456789abcdef0123456789abcdef")
+code, out = run(A, "--once", env=STATS_ENV)
+msg = json.loads(STATS[0]) if STATS else {}
+check("…the player said yes: one message with the number, the versions, the mode and a range of characters",
+      len(STATS) == 1 and msg.get("v") == 1 and msg.get("id") == "0123456789abcdef0123456789abcdef" and msg.get("mode") == "local"
+      and re.match(r"^\d+\.\d+\.\d+$", str(msg.get("program"))) and msg.get("chars") in ("1", "2-5", "6-10", "11+") and msg.get("lang") == "ru",
+      (out[-300:], STATS[:1]))
+check("…no character names or realms in it", STATS and "Эйра" not in STATS[0] and "Ревущий" not in STATS[0] and "\\u042d" not in STATS[0], STATS[:1])
+check("…what was sent is kept for «Что отправляется…»", os.path.exists(os.path.join(A, "stats.json"))
+      and json.load(open(os.path.join(A, "stats.json"), encoding="utf-8")).get("last", {}).get("id") == msg.get("id"))
+run(A, "--once", env=STATS_ENV)
+check("…once a day: a second pass the same day sends nothing", len(STATS) == 1, len(STATS))
+set_stats("yes", "0123456789abcdef0123456789abcdef", day="2020-01-01")
+run(A, "--once", env=STATS_ENV)
+check("…the next day it sends again", len(STATS) == 2, len(STATS))
+stats_server.shutdown()
+stats_server.server_close()   # the port refuses connections from here on
+set_stats("yes", "0123456789abcdef0123456789abcdef", day="2020-01-01")
+code, out = run(A, "--once", env=STATS_ENV)
+check("…a receiver that is down does not break the pass and is not retried the same day",
+      code == 0 and json.load(open(os.path.join(A, "stats.json"), encoding="utf-8")).get("day") != "2020-01-01", out[-400:])
+set_stats(None)
+
 
 def sheet_rows():
     lua = lua51.LuaRuntime(unpack_returned_tuples=True)

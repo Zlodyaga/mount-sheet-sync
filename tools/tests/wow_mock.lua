@@ -84,6 +84,7 @@ end
 function Region:EnableMouseWheel(v) self._wheel = v end
 function Region:LockHighlight() self._locked = true end
 function Region:UnlockHighlight() self._locked = false end
+function Region:SetAlpha(a) assert(type(a) == "number", "mock: SetAlpha(number)"); self._alpha = a end
 function Region:SetVertexColor(...) self._vertex = { ... } end
 function Region:GetLeft() return self._left or 0 end
 function Region:GetTop() return self._top or 0 end

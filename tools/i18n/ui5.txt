@@ -668,3 +668,73 @@ de: Ein Charakter, mit dem du dich einloggst, kommt von selbst in die Liste. Aus
 fr: Un personnage avec lequel vous vous connectez rejoint la liste tout seul. Désactivé : ajoutez-les via « Personnages… »
 es: Un personaje con el que entras al juego se añade solo a la lista. Desactivado: añádelos desde «Personajes…»
 pt: Um personagem com que você entra no jogo vai sozinho para a lista. Desligado: adicione por “Personagens…”
+
+@ Вернуть данные за день
+en: Bring back the data of a day
+de: Daten eines Tages zurückholen
+fr: Reprendre les données d'un jour
+es: Recuperar los datos de un día
+pt: Recuperar os dados de um dia
+
+@ Вернуть данные, какими они были {0}? Отметки, попытки и персонажи, добавленные позже, пропадут. Нынешние данные сохранятся рядом: {1}.
+en: Bring the data back to what it was on {0}? Marks, attempts and characters added later will be lost. The current data will be kept next to it: {1}.
+de: Die Daten auf den Stand vom {0} zurücksetzen? Später hinzugekommene Markierungen, Versuche und Charaktere gehen verloren. Die jetzigen Daten bleiben daneben erhalten: {1}.
+fr: Reprendre les données telles qu'elles étaient le {0} ? Les marques, tentatives et personnages ajoutés ensuite seront perdus. Les données actuelles seront gardées à côté : {1}.
+es: ¿Recuperar los datos tal como estaban el {0}? Las marcas, los intentos y los personajes añadidos después se perderán. Los datos actuales se guardarán al lado: {1}.
+pt: Recuperar os dados como estavam em {0}? Marcas, tentativas e personagens adicionados depois serão perdidos. Os dados atuais ficam guardados ao lado: {1}.
+
+@ Не удалось вернуть данные из копии: {0}
+en: Couldn't bring the data back from the copy: {0}
+de: Die Daten konnten nicht aus der Kopie zurückgeholt werden: {0}
+fr: Impossible de reprendre les données de la copie : {0}
+es: No se pudieron recuperar los datos de la copia: {0}
+pt: Não foi possível recuperar os dados da cópia: {0}
+
+@ в копии нет данных
+en: the copy has no data
+de: die Kopie enthält keine Daten
+fr: la copie ne contient pas de données
+es: la copia no tiene datos
+pt: a cópia não tem dados
+
+@ Отправлять анонимную статистику
+en: Send anonymous statistics
+de: Anonyme Statistik senden
+fr: Envoyer des statistiques anonymes
+es: Enviar estadísticas anónimas
+pt: Enviar estatísticas anônimas
+
+@ Раз в сутки: версии, язык, режим и счётчики пользования. Без имён персонажей и данных таблицы
+en: Once a day: versions, language, mode and usage counters. No character names, nothing from your list
+de: Einmal am Tag: Versionen, Sprache, Modus und Nutzungszähler. Keine Charakternamen, nichts aus deiner Liste
+fr: Une fois par jour : versions, langue, mode et compteurs d'utilisation. Aucun nom de personnage, rien de votre liste
+es: Una vez al día: versiones, idioma, modo y contadores de uso. Sin nombres de personajes ni datos de tu lista
+pt: Uma vez por dia: versões, idioma, modo e contadores de uso. Sem nomes de personagens nem dados da sua lista
+
+@ Что отправляется…
+en: What is sent…
+de: Was gesendet wird…
+fr: Ce qui est envoyé…
+es: Qué se envía…
+pt: O que é enviado…
+
+@ Помочь автору понять, чем в Mount Sheet Sync пользуются?\n\nРаз в сутки программа будет отправлять автору короткое сообщение: версии программы, аддона и Windows, язык, где хранятся данные, сколько персонажей (примерно), сколько раз открывали вкладки и ставили метки, и случайный номер установки. Ни имён персонажей, ни серверов, ни данных таблицы в нём нет.\n\nТочный текст сообщения — «Что отправляется…» в меню значка; там же это выключается.\n\nОтправлять?
+en: Help the author see what people use in Mount Sheet Sync?\n\nOnce a day the program will send the author a short message: the versions of the program, the addon and Windows, the language, where the data is kept, roughly how many characters, how many times tabs were opened and pins were set, and a random installation number. It has no character names, no realms and nothing from your list.\n\nThe exact text of the message is under “What is sent…” in the tray menu; you can turn it off there too.\n\nSend it?
+de: Dem Autor zeigen, was in Mount Sheet Sync genutzt wird?\n\nEinmal am Tag sendet das Programm dem Autor eine kurze Nachricht: die Versionen von Programm, Addon und Windows, die Sprache, wo die Daten liegen, ungefähr wie viele Charaktere, wie oft Reiter geöffnet und Markierungen gesetzt wurden, und eine zufällige Installationsnummer. Sie enthält keine Charakternamen, keine Realms und nichts aus deiner Liste.\n\nDen genauen Text der Nachricht zeigt „Was gesendet wird…“ im Menü des Symbols; dort lässt es sich auch ausschalten.\n\nSenden?
+fr: Aider l'auteur à voir ce qui sert dans Mount Sheet Sync ?\n\nUne fois par jour, le programme enverra à l'auteur un court message : les versions du programme, de l'addon et de Windows, la langue, l'endroit où sont gardées les données, le nombre approximatif de personnages, le nombre d'ouvertures d'onglets et de repères posés, et un numéro d'installation aléatoire. Il ne contient ni nom de personnage, ni royaume, ni rien de votre liste.\n\nLe texte exact du message se trouve sous « Ce qui est envoyé… » dans le menu de l'icône ; on peut aussi le désactiver là.\n\nEnvoyer ?
+es: ¿Ayudar al autor a ver qué se usa en Mount Sheet Sync?\n\nUna vez al día el programa enviará al autor un mensaje corto: las versiones del programa, del addon y de Windows, el idioma, dónde se guardan los datos, cuántos personajes hay aproximadamente, cuántas veces se abrieron pestañas y se pusieron marcas, y un número de instalación aleatorio. No lleva nombres de personajes, reinos ni nada de tu lista.\n\nEl texto exacto del mensaje está en «Qué se envía…» en el menú del icono; ahí también se desactiva.\n\n¿Enviar?
+pt: Ajudar o autor a ver o que é usado no Mount Sheet Sync?\n\nUma vez por dia o programa enviará ao autor uma mensagem curta: as versões do programa, do addon e do Windows, o idioma, onde os dados ficam, quantos personagens há aproximadamente, quantas vezes abas foram abertas e marcas foram colocadas, e um número de instalação aleatório. Não há nomes de personagens, reinos nem nada da sua lista.\n\nO texto exato da mensagem está em “O que é enviado…” no menu do ícone; lá também dá para desligar.\n\nEnviar?
+
+@ Статистика включена. Вот сообщение, которое уходит раз в сутки:
+en: Statistics are on. This is the message that is sent once a day:
+de: Die Statistik ist an. Diese Nachricht wird einmal am Tag gesendet:
+fr: Les statistiques sont activées. Voici le message envoyé une fois par jour :
+es: Las estadísticas están activadas. Este es el mensaje que se envía una vez al día:
+pt: As estatísticas estão ligadas. Esta é a mensagem enviada uma vez por dia:
+
+@ Статистика выключена, ничего не отправляется. Вот что уходило бы раз в сутки:
+en: Statistics are off, nothing is sent. This is what would be sent once a day:
+de: Die Statistik ist aus, es wird nichts gesendet. Das würde einmal am Tag gesendet:
+fr: Les statistiques sont désactivées, rien n'est envoyé. Voici ce qui serait envoyé une fois par jour :
+es: Las estadísticas están desactivadas, no se envía nada. Esto es lo que se enviaría una vez al día:
+pt: As estatísticas estão desligadas, nada é enviado. Isto é o que seria enviado uma vez por dia:

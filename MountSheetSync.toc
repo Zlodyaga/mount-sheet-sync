@@ -7,7 +7,18 @@
 ## Notes-esMX: Marca los jefes derrotados y las monturas nuevas en una tabla de Google de monturas, recuerda los personajes y la colección y muestra lo que queda esta semana.
 ## Notes-ptBR: Marca os chefes derrotados e as montarias novas numa planilha Google de montarias, lembra os personagens e a coleção e mostra o que falta nesta semana.
 ## Notes-ruRU: Отмечает убитых боссов и новые маунты в Google-таблице маунтов, запоминает персонажей и коллекцию для новой таблицы и показывает, что осталось на неделе.
-## Version: 3.0.6
+## Version: 3.0.7
+## Category: Collections
+## Category-deDE: Kriegsmeutesammlungen
+## Category-esES: Colecciones de banda guerrera
+## Category-esMX: Colecciones de tropa
+## Category-frFR: Collections du bataillon
+## Category-itIT: Collezioni della Brigata
+## Category-koKR: 수집
+## Category-ptBR: Coleções do Bando de Guerra
+## Category-ruRU: Коллекции отряда
+## Category-zhCN: 战团藏品
+## Category-zhTW: 戰隊收藏
 ## SavedVariables: MountSheetSyncDB
 ## OptionalDeps: Mapzeroth
 ## X-Curse-Project-ID: 1761349
@@ -22,6 +33,12 @@ Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
 Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
 SheetData.lua
 Program.lua
+Locale.enUS.lua
+Locale.ruRU.lua
+Locale.deDE.lua
+Locale.frFR.lua
+Locale.esES.lua
+Locale.ptBR.lua
 Locales.lua
 MountSheetSync.lua
 Statistics.lua
@@ -31,4 +48,11 @@ Collection.lua
 Remaining.lua
 Skin.lua
 UI.lua
+UI.Route.lua
+UI.Rows.lua
+UI.Views.lua
+UI.Window.lua
+UI.Settings.lua
+UI.Minimap.lua
+Alert.lua
 Tooltip.lua

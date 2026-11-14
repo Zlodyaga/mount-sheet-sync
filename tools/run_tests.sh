@@ -28,6 +28,7 @@ run() {
 }
 run test_addon2.py
 run test_addon_left.py
+run test_addon_drops.py
 run test_minimap.py
 run test_offline.py
 run test_attempts_addon.py
@@ -39,6 +40,8 @@ run test_collection_sync.py
 run test_layout22.py
 run test_attempts.py
 run test_local_book.py
+run test_stats_receiver.py
+run test_bump.py
 run test_release_plan.py
 run e2e_google.py "$EXE"
 run e2e_week.py "$EXE"

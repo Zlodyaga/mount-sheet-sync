@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.6 — входы, закрытые сюжетом или фазой зоны.
+Mount Sheet Sync — входы, закрытые сюжетом или фазой зоны.
 
 ns.ACCESS[journalInstanceID]: что нужно, чтобы дойти до входа.
   quests  — задания, любое из которых открывает доступ (C_QuestLog.IsQuestFlaggedCompleted);

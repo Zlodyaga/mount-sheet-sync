@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.6 — ядро
+Mount Sheet Sync — ядро
 =============================
 Записывает убийства боссов на текущем персонаже и новые маунты, чтобы программа
 Mount Sheet Sync (MountSheetSync.exe в трее Windows) отметила их в Google-таблице маунтов:
@@ -26,7 +26,7 @@ SavedVariables. Игра сохраняет файл
 
 local ADDON_NAME, ns = ...
 
-local VERSION = "3.0.6"
+local VERSION = "3.0.7"
 local MAX_RECORDS = 400               -- храним не больше стольких записей
 local MAX_AGE = 21 * 24 * 60 * 60     -- и не старше трёх недель
 local DUPLICATE_WINDOW = 120          -- ENCOUNTER_END и BOSS_KILL об одном бое, сек
@@ -646,6 +646,8 @@ local function OnMountAdded(mountID)
   if not name or not player.name then
     return
   end
+  -- оповещение: что известно о маунте, пока он ещё числится несобранным
+  local drop = ns.DropInfo and select(2, pcall(ns.DropInfo, mountID))
   if ns.CollectionAdd then
     SafeCall(ns.CollectionAdd, mountID, name)
   end
@@ -661,8 +663,22 @@ local function OnMountAdded(mountID)
   rec.mount = name
   rec.mountID = mountID
   rec.from = from          -- откуда маунт, по журналу маунтов: по нему таблица узнаёт босса
-  if AddRecord(rec) and not db.quiet then
+  local added = AddRecord(rec)
+  if added and not db.quiet then
     Print(string.format(L.mount_added, name))
+  end
+  if added and type(drop) == "table" then
+    -- памятка для вкладки «Выпавшие»: с какой попытки, когда и кому (журнал могут очистить, а это останется)
+    db.drops = type(db.drops) == "table" and db.drops or {}
+    db.drops[tostring(mountID)] = { n = tonumber(drop.n) or 0, time = rec.time, char = player.name }
+    local _, _, icon = journal.GetMountInfoByID(mountID)
+    drop.icon = icon
+    if (tonumber(drop.n) or 0) > 0 and not db.quiet then
+      Print(string.format(L.alert_chat, name, drop.n))
+    end
+    if ns.ShowDrop then
+      SafeCall(ns.ShowDrop, drop)
+    end
   end
 end
 
@@ -694,7 +710,39 @@ end
 
 function ns.AddManual(text)
   local ok, added = pcall(AddManual, text)
+  if ok and added then
+    ns.Count("manual")
+  end
   return ok and added or false
+end
+
+-- Счётчики пользования: только числа по дням (db.usage.days["2026-11-14"].tab_left = 3), хранятся 7 дней. Их читает
+-- программа и отправляет, только если игрок согласился на анонимную статистику; без программы они никуда не уходят.
+local USAGE_DAYS = 7
+function ns.Count(what)
+  if type(db) ~= "table" or type(what) ~= "string" then
+    return
+  end
+  local usage = type(db.usage) == "table" and db.usage or {}
+  db.usage = usage
+  local days = type(usage.days) == "table" and usage.days or {}
+  usage.days = days
+  local today = (date or os.date)("%Y-%m-%d")
+  local day = days[today]
+  if type(day) ~= "table" then
+    day = {}
+    days[today] = day
+    local known = {}
+    for key in pairs(days) do
+      known[#known + 1] = key
+    end
+    table.sort(known)
+    for i = 1, #known - USAGE_DAYS do
+      days[known[i]] = nil
+    end
+  end
+  day[what] = (tonumber(day[what]) or 0) + 1
+  usage.mapzeroth = C_AddOns and C_AddOns.IsAddOnLoaded and C_AddOns.IsAddOnLoaded("Mapzeroth") and true or false
 end
 
 -- «Не фармлю»: строка (scope = "row") или весь рейд / подземелье (scope = "place") из списка «Осталось».
@@ -828,6 +876,7 @@ local function ShowHelp()
     CMD .. "/mss|r — " .. L.help_open,
     CMD .. "/mss sync|r — " .. L.help_sync,
     CMD .. "/mss left|r — " .. L.help_left,
+    CMD .. "/mss drop|r — " .. L.help_drop,
     CMD .. "/mss list|r — " .. L.help_list,
     CMD .. "/mss add " .. L.help_add_arg .. "|r — " .. L.help_add,
     CMD .. "/mss scan|r — " .. L.help_scan,
@@ -860,6 +909,11 @@ SlashCmdList["MOUNTSHEETSYNC"] = function(msg)
     end
   elseif cmd == "help" or cmd == "?" then
     ShowHelp()
+  elseif cmd == "drop" then
+    -- проверка оповещения о выпавшем маунте: выдуманное выпадение, ничего не записывается
+    if ns.TestDrop then
+      SafeCall(ns.TestDrop)
+    end
   elseif cmd == "tip" then
     -- проверка подсказки о боссе: пишет в чат, что видит аддон при наведении (до /reload)
     ns.tipDebug = not ns.tipDebug

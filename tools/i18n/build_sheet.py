@@ -20,6 +20,7 @@ ROOT = os.path.join(HERE, "..", "..")
 OUT = os.path.join(ROOT, "program", "sheet-i18n.json")
 CATALOG = os.path.join(ROOT, "program", "catalog.json")
 BUILDER = os.path.join(ROOT, "program", "SheetBuilder.cs")
+CATALOG_CS = os.path.join(ROOT, "program", "Catalog.cs")   # типы каталога, вынесены из SheetBuilder.cs в 2.10.2
 LOCALES = {"ru": "ru_RU", "en": "en_US", "de": "de_DE", "fr": "fr_FR", "es": "es_ES", "pt": "pt_BR"}
 # Parts of statuses searched inside formulas (SEARCH, COUNTIF "…*"), not values of their own
 PATTERNS = ["Недоступ", "Текущий"]
@@ -79,7 +80,7 @@ def main():
                     problems.append("catalog text without a translation (%s): %r" % (c, v))
     for i in sorted(ids - set(mounts)):
         problems.append("no English name for mount %d" % i)
-    src = open(BUILDER, encoding="utf-8").read()
+    src = open(BUILDER, encoding="utf-8").read() + open(CATALOG_CS, encoding="utf-8").read()
     for line in src.split("\n"):
         if re.search(r"throw |Tr\.|Log\.|^\s*//", line):
             continue

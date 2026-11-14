@@ -2,6 +2,10 @@
 
 The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [CHANGELOG-addon.md](CHANGELOG-addon.md).
 
+## 2.10.2
+- Anonymous statistics, only if you agree: on the first start the program asks once. If you say yes, it sends the author one short message a day (versions, language, where the data is kept, a rough number of characters, how often the addon's window, tabs and pins are used, a random installation number). No character names, realms or anything from your list. “What is sent…” in the tray menu shows the exact message; the tick next to it turns it off.
+- Data on this computer: “Bring back the data of a day” in the tray menu lists the daily copies from the “backups” folder. Pick a day and the data becomes what it was then; the current data is kept next to the copies (before-restore).
+
 ## 2.10.1
 - 88 more rare-monster mounts on the “Rare monsters” sheet, from Wrath of the Lich King to Midnight (13 of them a sure drop): drop chance, loot cooldown, and the zone and map point in the farming tip; names in all six languages. Sheets made earlier get the new rows at the end of that sheet by themselves.
 - Rares the addon can't tell by name are told by the creature's number: the three Zandalari Warbringers (№1–№3, each with its own direhorn) and “Any rare: <zone>” rows of Midnight. Rows with several rares have “No cooldown”. Needs the addon 3.0.5.
