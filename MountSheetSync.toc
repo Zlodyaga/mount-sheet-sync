@@ -33,6 +33,12 @@ Libs\CallbackHandler-1.0\CallbackHandler-1.0.lua
 Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
 SheetData.lua
 Program.lua
+Locale.enUS.lua
+Locale.ruRU.lua
+Locale.deDE.lua
+Locale.frFR.lua
+Locale.esES.lua
+Locale.ptBR.lua
 Locales.lua
 MountSheetSync.lua
 Statistics.lua

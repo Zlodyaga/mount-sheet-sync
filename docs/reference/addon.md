@@ -10,7 +10,8 @@
 | `Libs/` | LibStub, CallbackHandler-1.0, LibDataBroker-1.1 (кнопка Data Broker) |
 | `SheetData.lua` | `MountSheetSyncSheet` — список «Осталось» из таблицы; **пишет программа**, в выпуске пустой (`= nil`) |
 | `Program.lua` | `MountSheetSyncProgram = { seen, sheet, version }` — «программа запущена»; **пишет программа** раз в минуту, в выпуске `= nil` |
-| `Locales.lua` | Тексты на 6 языках (`T.enUS`, `ruRU`, `deDE`, `frFR`, `esES`, `ptBR`), `ns.L`, выбор языка |
+| `Locale.enUS.lua` … `Locale.ptBR.lua` | Тексты, по файлу на язык: `T.<код>` и слова для игрока без Google-таблицы `ns.LIST_WORDS.<код>`; новый ключ — во все шесть файлов (следит `test_locale.py`) |
+| `Locales.lua` | `ns.L`, выбор и смена языка (`ns.SetLanguage`, `ns.ApplyLanguage`); грузится после файлов языков |
 | `MountSheetSync.lua` | Ядро: события, запись убийств, сохранения подземелий, ручные отметки, `/mss`, `ns.ProgramState()` |
 | `Statistics.lua` | `ns.STATISTIC_IDS` — статистики убийств, которые читает аддон (**генерирует** `tools/catalog/statistic_ids.py`, не править руками) |
 | `Entrances.lua` | `ns.ENTRANCES` — запасная точка входа каждого рейда и подземелья каталога: `[journalInstanceID] = { map, x, y }`; `ns.RARE_SPOTS` — точка рара по mountID из колонки каталога «Точка» (`{ map, x, y }`, у раров с несколькими местами — `{ map }`) (**генерирует** `tools/catalog/entrances.py`, не править руками) |

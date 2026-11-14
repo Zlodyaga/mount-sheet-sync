@@ -92,11 +92,13 @@ for code in langs:
           (missing, extra, bad))
 
 # a key written twice in one language: Lua keeps the last one silently (3.0 nearly lost the /mss chars title this way)
-src = open(os.path.join(paths.ADDON_DIR, "Locales.lua"), encoding="utf-8").read()
+src = "\n".join(open(os.path.join(paths.ADDON_DIR, "Locale.%s.lua" % code), encoding="utf-8").read()
+                for code in ("enUS", "ruRU", "deDE", "frFR", "esES", "ptBR"))
+check("3.0.7: one text file per language", len(re.findall(r"^T\.\w+ = \{", src, re.M)) == 6)
 for block in re.findall(r"^T\.(\w+) = \{\n(.*?)^\}", src, re.S | re.M):
     names = re.findall(r"^  (\w+) = ", block[1], re.M)
     dups = sorted({k for k in names if names.count(k) > 1})
-    check("%s: no key written twice in Locales.lua" % block[0], not dups, dups)
+    check("%s: no key written twice in its file" % block[0], not dups, dups)
 
 # ---------------------------------------------------------------- 2. language picked from the game client
 for locale, want, sample in [("ruRU", "ruRU", "открыть окно"), ("deDE", "deDE", "Fenster öffnen"),
