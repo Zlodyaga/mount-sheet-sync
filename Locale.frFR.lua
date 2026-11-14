@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.7 — texts / тексты: Français
+Mount Sheet Sync — texts / тексты: Français
 T.frFR — every text of the addon; ns.LIST_WORDS.frFR — the same keys reworded for a player without a Google sheet
 (the program keeps the data on this computer, or there is no program yet). Locales.lua picks the language.
 Format strings keep the same order of %s / %d in every language (test_locale.py checks it).

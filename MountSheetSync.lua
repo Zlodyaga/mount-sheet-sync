@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.7 — ядро
+Mount Sheet Sync — ядро
 =============================
 Записывает убийства боссов на текущем персонаже и новые маунты, чтобы программа
 Mount Sheet Sync (MountSheetSync.exe в трее Windows) отметила их в Google-таблице маунтов:

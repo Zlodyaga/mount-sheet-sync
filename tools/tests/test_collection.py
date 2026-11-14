@@ -126,7 +126,8 @@ toc = open(os.path.join(ADDON_DIR, "MountSheetSync.toc"), encoding="utf-8").read
 files = [ln.strip().replace("\\", "/") for ln in toc if ln.strip() and not ln.startswith("#")]
 check("Collection.lua in the toc after the core, before the window",
       files.index("MountSheetSync.lua") < files.index("Collection.lua") < files.index("UI.lua"), files)
-check("toc version 3.0.7", "## Version: 3.0.7" in toc)
+TOC_VERSION = [ln.split(":", 1)[1].strip() for ln in toc.splitlines() if ln.startswith("## Version:")][0]
+check("the toc has a version like 3.0.7", len(TOC_VERSION.split(".")) == 3 and all(p.isdigit() for p in TOC_VERSION.split(".")), TOC_VERSION)
 check("3.0.7: the addon list puts it under Collections, in Russian too", "## Category: Collections" in toc and "## Category-ruRU: Коллекции отряда" in toc)
 check("Statistics.lua (the statistic IDs) loads before Collection.lua", files.index("Statistics.lua") < files.index("Collection.lua"), files)
 ns = L.table()
@@ -134,7 +135,7 @@ loader = L.eval("function(src, name) return assert(loadstring(src, '@' .. name))
 for name in files:
     loader(open(os.path.join(ADDON_DIR, name), encoding="utf-8").read(), name)("MountSheetSync", ns)
 L.eval("function(n) n.UsesListWords = function() return false end end")(ns)   # the texts of a player with a Google sheet
-check("core version 3.0.7", ns.VERSION == "3.0.7")
+check("the core has the toc's version (tools/bump.py sets both)", ns.VERSION == TOC_VERSION, (ns.VERSION, TOC_VERSION))
 
 
 def chat_all():

@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.7 — texts / тексты: English (also the fallback)
+Mount Sheet Sync — texts / тексты: English (also the fallback)
 T.enUS — every text of the addon; ns.LIST_WORDS.enUS — the same keys reworded for a player without a Google sheet
 (the program keeps the data on this computer, or there is no program yet). Locales.lua picks the language.
 Format strings keep the same order of %s / %d in every language (test_locale.py checks it).
