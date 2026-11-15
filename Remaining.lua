@@ -511,6 +511,7 @@ function ns.BuildRemaining(data, player, weekEnd, kills, ch)
     end
   end
   result.off = off
+  local marked = {}
   for _, item in ipairs(source) do
     if type(item) == "table" and OtherSide(item, player.key) then
       -- маунт другой фракции («… [Орда]»): этому персонажу он не выпадет — ни в списке, ни в счёте
@@ -553,6 +554,8 @@ function ns.BuildRemaining(data, player, weekEnd, kills, ch)
         local partsLeft = CountPartsLeft(killed)
         items[#items + 1] = { item = item, done = partsLeft == 0, by = by, killed = killed, partsLeft = partsLeft }
         left = left + partsLeft
+      else
+        marked[#marked + 1] = item
       end
     elseif type(item) == "table" and not ns.IsNotFarmed(hidden, item) then
       -- достижения и награды показываем, но не считаем: их не убить
@@ -572,9 +575,14 @@ function ns.BuildRemaining(data, player, weekEnd, kills, ch)
         if not by and counts then
           left = left + 1
         end
+      else
+        marked[#marked + 1] = item
       end
     end
   end
+  -- в списке программы уже «Да» (убит на этой неделе): в «Осталось» персонажа таких строк нет, но сетке «Все персонажи»
+  -- они нужны — иначе убитый босс выглядит как «не фармит»
+  result.marked = marked
   result.state = "ok"
   result.name = ch.name
   result.items = items
@@ -694,6 +702,22 @@ function ns.GetSummary()
             row.killed = row.killed or {}
             row.killed[c.name] = entry.killed
           end
+        end
+      end
+    end
+  end
+  -- убит и уже отмечен программой (r.marked): в сетке это «убит», а не «не фармит»
+  for _, c in ipairs(all) do
+    if c.r.state == "ok" then
+      for _, it in ipairs(c.r.marked or {}) do
+        local k = summaryKey[it]
+        if not k then
+          k = table.concat({ tostring(it.kind), Norm(it.boss), Norm(it.diff), Norm(it.mount) }, "|")
+          summaryKey[it] = k
+        end
+        local row = byKey[k]
+        if row then
+          row.done[c.name] = true
         end
       end
     end

@@ -285,4 +285,37 @@ check("…in the addon's language where there is one (rares in German), in Engli
 check("…the mammoth's twin has the same tip; the setting turns tips off", T.twin is True and T.off is None, (T.twin, T.off))
 check("…no arrows or middle dots the game's fonts cannot draw", T.bad is False)
 
+# 3.0.7: a kill the program has already marked («Да» in its list) is «killed» in the grid, not «does not farm»
+L.execute("""
+local ns = MSS_NS
+local all = ns.GetAllRemaining()
+local me, other = all[1], nil
+for i = 2, #all do other = other or all[i] end
+local mine
+for _, ch in ipairs(MountSheetSyncSheet.chars) do
+  if ch.name == me.name then mine = ch end
+end
+local item
+for _, it in ipairs(mine.items) do
+  if it.kind == "raid" and not it.sep and not it.y and FARM.rowOf(it) and #FARM.rowOf(it).names > 1 then item = it break end
+end
+YES = { found = item ~= nil }
+if item then
+  item.y = true
+  FARM.fresh()
+  local row = FARM.rowOf(item)
+  YES.row = row ~= nil
+  YES.done = row and row.done[me.name] == true
+  YES.listed = false
+  for _, n in ipairs(row and row.names or {}) do if n == me.name then YES.listed = true end end
+  local elem = FARM.elemOf(item)
+  YES.cellDone = elem and elem.done and elem.done[me.name] == true
+  item.y = nil
+  FARM.fresh()
+end
+""")
+Y = g.YES
+check("3.0.7: a boss the program already marked as killed for a character: in the grid it is «killed» for that character, not missing",
+      Y.found and Y.row and Y.done is True and Y.listed is False and Y.cellDone is True, (Y.found, Y.row, Y.done, Y.listed, Y.cellDone))
+
 env.finish()
