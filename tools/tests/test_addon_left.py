@@ -983,6 +983,13 @@ row.MockClick(row)
 said = chat_all()[n_chat:]
 check("…a later step is done though the game never marked the early one: on from the last done step, not back to the fleet",
       "Harnessing the Power" in said and "Send the Fleet" not in said, said)
+L.execute("MOCK.gt = MOCK.gt + 1000; QUEST_DONE[57010] = true; ROUTE.waypoint = nil; ROUTE.pin = nil")
+n_chat = len(chat_all())
+row.MockClick(row)
+said = chat_all()[n_chat:]
+check("3.0.7: «Return of the Black Prince» (Horde): a pin at the letter that starts it, on the ship in the port of Zuldazar",
+      g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 862 and abs(g.ROUTE.waypoint.x - 0.585) < 1e-9 and "Натанос" in said, (g.ROUTE.waypoint, said))
+L.execute("QUEST_DONE[57010] = nil")
 L.execute("QUEST_DONE[56043] = nil; QUEST_DONE[55851] = nil; UnitFactionGroup = SAVED_FACTION; ROUTE.waypoint = nil")
 L.execute("MSS_NS.ACCESS[777].steps = SAVED_STEPS; ROUTE.waypoint = nil")
 L.execute("MOCK.gt = MOCK.gt + 1000; QUEST_DONE[57010] = true")
