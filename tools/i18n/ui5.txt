@@ -780,3 +780,73 @@ de: Die Daten liegen jetzt in {0}. Das Programm startet neu.
 fr: Les données sont maintenant dans {0}. Le programme va redémarrer.
 es: Los datos están ahora en {0}. El programa se reiniciará.
 pt: Os dados agora estão em {0}. O programa será reiniciado.
+
+@ попытки
+en: attempts
+de: Versuche
+fr: tentatives
+es: intentos
+pt: tentativas
+
+@ Сколько попыток уже было по каждому маунту. Выберите строку и поправьте число — например, если часть убийств была до установки аддона.
+en: How many attempts there have been for each mount. Pick a row and correct the number — for example, if some kills happened before the addon was installed.
+de: Wie viele Versuche es für jedes Reittier schon gab. Zeile wählen und die Zahl korrigieren — zum Beispiel, wenn ein Teil der Kills vor der Installation des Addons lag.
+fr: Combien de tentatives il y a déjà eu pour chaque monture. Choisissez une ligne et corrigez le nombre — par exemple si une partie des victoires date d'avant l'installation de l'addon.
+es: Cuántos intentos ha habido ya para cada montura. Elija una fila y corrija el número; por ejemplo, si parte de las muertes fueron antes de instalar el addon.
+pt: Quantas tentativas já houve para cada montaria. Escolha uma linha e corrija o número — por exemplo, se parte dos abates foi antes de instalar o addon.
+
+@ Маунт
+en: Mount
+de: Reittier
+fr: Monture
+es: Montura
+pt: Montaria
+
+@ Босс
+en: Boss
+de: Boss
+fr: Boss
+es: Jefe
+pt: Chefe
+
+@ Попыток
+en: Attempts
+de: Versuche
+fr: Tentatives
+es: Intentos
+pt: Tentativas
+
+@ Попыток у выбранного маунта:
+en: Attempts for the selected mount:
+de: Versuche für das gewählte Reittier:
+fr: Tentatives pour la monture choisie :
+es: Intentos de la montura elegida:
+pt: Tentativas da montaria escolhida:
+
+@ Счётчика попыток пока нет.
+en: There is no attempt counter yet.
+de: Es gibt noch keinen Versuchszähler.
+fr: Il n'y a pas encore de compteur de tentatives.
+es: Todavía no hay contador de intentos.
+pt: Ainda não há contador de tentativas.
+
+@ Попытки…
+en: Attempts…
+de: Versuche…
+fr: Tentatives…
+es: Intentos…
+pt: Tentativas…
+
+@ Попытки: сохранено
+en: Attempts: saved
+de: Versuche: gespeichert
+fr: Tentatives : enregistré
+es: Intentos: guardado
+pt: Tentativas: salvo
+
+@ Изменено маунтов: {0}. В игре числа обновятся после входа или /reload.
+en: Mounts changed: {0}. In the game the numbers update after you log in or /reload.
+de: Geänderte Reittiere: {0}. Im Spiel aktualisieren sich die Zahlen nach dem Einloggen oder /reload.
+fr: Montures modifiées : {0}. En jeu, les nombres se mettent à jour après la connexion ou /reload.
+es: Monturas cambiadas: {0}. En el juego los números se actualizan al entrar o con /reload.
+pt: Montarias alteradas: {0}. No jogo os números atualizam depois de entrar ou /reload.

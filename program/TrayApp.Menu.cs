@@ -13,6 +13,26 @@ namespace MountSheetSync
 {
     sealed partial class TrayApp
     {
+        ToolStripMenuItem attemptsItem;
+
+        /// <summary>«Попытки…»: поправить число попыток по маунтам.</summary>
+        void OpenAttempts()
+        {
+            if (settingsForm != null)
+            {
+                settingsForm.Activate();
+                return;
+            }
+            using (AttemptsForm f = new AttemptsForm(settings.Clone()))
+            {
+                if (f.ShowDialog() == DialogResult.OK && f.Changed > 0)
+                {
+                    ShowNote(MakeNote(Tr._("Попытки: сохранено"), Tr.F("Изменено маунтов: {0}. В игре числа обновятся после входа или /reload.", f.Changed), false));
+                    worker.SyncNow();
+                }
+            }
+        }
+
         /// <summary>«Папка данных…»: выбрать папку, скопировать туда данные и запуститься из неё.</summary>
         void ChooseDataFolder()
         {

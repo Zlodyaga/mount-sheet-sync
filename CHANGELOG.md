@@ -3,6 +3,8 @@
 The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [CHANGELOG-addon.md](CHANGELOG-addon.md).
 
 ## 2.10.2
+- “Attempts…” in the tray menu: correct the number of attempts for any mount.
+- An unknown start option no longer starts the program as usual: it writes a line to the log and exits.
 - “Data folder…” in the tray menu: keep the settings and the data in a folder of your choice (another drive, a synced folder). The files are copied there and the program restarts; the old ones stay.
 - A number of attempts corrected in the game (addon 3.0.7) is written to the “Attempts” column.
 - The list for the addon carries the mounts already collected, for its “Dropped” tab.

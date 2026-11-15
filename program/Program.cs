@@ -27,6 +27,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
@@ -76,13 +77,18 @@ namespace MountSheetSync
                 return 1;
             }
             bool console = opts.Once || opts.Test || opts.GoogleLogin || opts.CreateSheet || opts.AddChars || opts.SyncCollection
-                || opts.CreateLocal || opts.ImportLocal || opts.Storage != null || opts.DataFolder != null
+                || opts.CreateLocal || opts.ImportLocal || opts.Storage != null || opts.DataFolder != null || opts.SetAttemptsFile != null || opts.Unknown != null
                 || opts.SetCharsFile != null || opts.CheckUpdate || opts.Update || opts.Install || (opts.Uninstall && opts.Yes);
             Tr.Use(Settings.Load(AppPaths.SettingsFile).Language);
             Log.Init(AppPaths.LogFile, console);
             ConfigureNetwork();
             GoogleConfig.ApplyTestOverride();
 
+            if (opts.Unknown != null)
+            {
+                Log.Write(Tr.L("Неизвестный параметр запуска: {0}. Программа не запущена.", opts.Unknown));
+                return 2;
+            }
             if (opts.Test)
             {
                 return RunTest();
@@ -110,6 +116,10 @@ namespace MountSheetSync
             if (opts.DataFolder != null)
             {
                 return RunDataFolder(opts.DataFolder);
+            }
+            if (opts.SetAttemptsFile != null)
+            {
+                return RunSetAttempts(opts.SetAttemptsFile);
             }
             if (opts.AddChars)
             {
@@ -521,6 +531,47 @@ namespace MountSheetSync
             return 0;
         }
 
+        /// <summary>
+        /// --set-attempts &lt;файл.json&gt;: [{ "mount": "…", "boss": "…", "n": 12 }, …] — поставить число попыток, как окно
+        /// «Попытки» (для проверок и для тех, кому удобнее файлом).
+        /// </summary>
+        static int RunSetAttempts(string file)
+        {
+            try
+            {
+                Settings settings = Settings.Load(AppPaths.SettingsFile);
+                List<object> want = J.Arr(Json.Parse(File.ReadAllText(file, FileUtil.Utf8NoBom)));
+                using (settings.ExclusiveBook())
+                {
+                    IStructuredBook book = settings.OpenBook();
+                    List<AttemptRow> rows = AttemptsEdit.Rows(book);
+                    List<AttemptRow> changed = new List<AttemptRow>();
+                    foreach (object o in want)
+                    {
+                        Dictionary<string, object> w = J.Obj(o);
+                        AttemptRow row = rows.FirstOrDefault(r => SheetLogic.Norm(r.Mount) == SheetLogic.Norm(J.Str(w, "mount"))
+                            && (J.Str(w, "boss").Length == 0 || SheetLogic.Norm(r.Boss) == SheetLogic.Norm(J.Str(w, "boss"))));
+                        if (row == null)
+                        {
+                            Log.Write(Tr.L("Попытки: маунта «{0}» со счётчиком нет.", J.Str(w, "mount")));
+                            continue;
+                        }
+                        row.N = Math.Max(0, Math.Floor(SheetLogic.Number(J.Get(w, "n"))));
+                        changed.Add(row);
+                    }
+                    int written = AttemptsEdit.Save(book, changed);
+                    book.Flush();
+                    Log.Write(Tr.L("Попытки: изменено маунтов — {0}.", written));
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Log.Write(Tr.L("Попытки: {0}", ex.Message));
+                return 1;
+            }
+        }
+
         static int RunStorage(string storage)
         {
             Settings settings = Settings.Load(AppPaths.SettingsFile);
@@ -712,6 +763,8 @@ namespace MountSheetSync
         public bool ImportLocal;
         public string Storage;
         public string DataFolder;
+        public string SetAttemptsFile;
+        public string Unknown;
         public bool AddChars;
         public bool SyncCollection;
         public string SetCharsFile;
@@ -773,6 +826,10 @@ namespace MountSheetSync
                 {
                     o.Storage = args[++i];
                 }
+                else if (a == "set-attempts" && i + 1 < args.Length)
+                {
+                    o.SetAttemptsFile = args[++i];
+                }
                 else if (a == "data-folder" && i + 1 < args.Length)
                 {
                     o.DataFolder = Path.GetFullPath(args[++i]);
@@ -828,6 +885,12 @@ namespace MountSheetSync
                 else if (a == "data" && i + 1 < args.Length)
                 {
                     o.DataDir = Path.GetFullPath(args[++i]);
+                }
+                else if (args[i].StartsWith("--", StringComparison.Ordinal) && o.Unknown == null)
+                {
+                    // незнакомый ключ — не повод открывать окно программы: так тест со старой сборкой показал окно
+                    // настроек посреди игры (15.11.2026)
+                    o.Unknown = args[i];
                 }
             }
             return o;

@@ -86,6 +86,11 @@ size = len(log_of(USUAL))
 code = run("--storage", "nowhere")
 check("a pointer to a folder that is gone: the program works in the usual folder", code == 1 and len(log_of(USUAL)) > size and not os.path.exists(NEW), code)
 
+# an option the program does not know must not open its window (a test run with an older build did, in the middle of a game)
+size = len(log_of(USUAL))
+code = run("--no-such-option")
+check("an unknown option: the program says so and exits, no window", code == 2 and "--no-such-option" in log_of(USUAL)[size:], (code, log_of(USUAL)[size:][-200:]))
+
 failed = [nm for nm, ok in checks if not ok]
 print("\n%d/%d checks passed" % (len(checks) - len(failed), len(checks)))
 sys.exit(1 if failed else 0)

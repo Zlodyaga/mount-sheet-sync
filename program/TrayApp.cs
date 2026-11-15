@@ -168,6 +168,7 @@ namespace MountSheetSync
             createItem = Item(Tr._("Создать таблицу…"), delegate { OpenCharacters(false); });
             addCharsItem = Item(Tr._("Персонажи в таблице…"), delegate { OpenCharacters(true); });
             farmItem = Item(Tr._("Что фармить…"), delegate { OpenFarm(); });
+            attemptsItem = Item(Tr._("Попытки…"), delegate { OpenAttempts(); });
             collectionItem = Item(Tr._("Сверить с коллекцией"), delegate { worker.SyncCollectionNow(); });
             collectionItem.ToolTipText = Tr._("Отметить «Собрано?» у маунтов, которые уже есть в игре, и убрать их с листов персонажей");
             autostartItem = Item(Tr._("Запускать вместе с Windows"), delegate { ToggleAutostart(); });
@@ -190,7 +191,7 @@ namespace MountSheetSync
             menu.Items.AddRange(new ToolStripItem[]
             {
                 title, updateItem, statusItem, detailItem, addonItem, new ToolStripSeparator(),
-                syncItem, recentItem, leftItem, openSheetItem, signInItem, createItem, addCharsItem, farmItem, collectionItem, new ToolStripSeparator(),
+                syncItem, recentItem, leftItem, openSheetItem, signInItem, createItem, addCharsItem, farmItem, attemptsItem, collectionItem, new ToolStripSeparator(),
                 Item(Tr._("Настройки…"), delegate { OpenSettings(false); }),
                 Item(Tr._("Журнал работы"), delegate { OpenLog(); }),
                 Item(Tr._("Папка данных…"), delegate { ChooseDataFolder(); }),
@@ -375,6 +376,7 @@ namespace MountSheetSync
             addCharsItem.Text = settings.IsLocal ? Tr._("Персонажи…") : Tr._("Персонажи в таблице…");
             collectionItem.Visible = haveSheet;
             farmItem.Visible = haveSheet;
+            attemptsItem.Visible = haveSheet;
             autostartItem.Checked = Autostart.IsEnabled();
             notifyItem.Checked = settings.Notifications;
             autoAddItem.Checked = settings.AutoAddCharacters;

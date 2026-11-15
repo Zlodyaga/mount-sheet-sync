@@ -265,29 +265,38 @@ target = [i for i in mirna if i.kind == "raid" and str(i.boss) == "Сильва�
 same = lambda rows: [i for i in rows if str(i.boss) == str(target.boss) and str(i.mount) == str(target.mount) and str(i.diff) == str(target.diff)]
 check("2.10.2: nothing is off at first: the list has no «off» rows", farm_lists("Мирна")[1] == [] and "off = {" not in sheet_lua())
 write_sv([plan("P-off-1", target, False, "Мирна")])
-code, out = run(A, "--once")
+fcode, fout = run(A, "--once")
 items, off = farm_lists("Мирна")
 check("…«не фармлю» sent from another character: the row leaves «Осталось» of that character and comes in its «off» list",
-      code == 0 and same(items) == [] and len(same(off)) == 1, (out[-300:], len(same(items)), len(same(off))))
+      fcode == 0 and same(items) == [] and len(same(off)) == 1, (fout[-300:], len(same(items)), len(same(off))))
 check("…the «off» row has what the addon needs to show it and to bring it back: kind, place, mount ID",
       same(off) and same(off)[0].kind == "raid" and same(off)[0].place and same(off)[0].id, same(off) and (same(off)[0].kind, same(off)[0].place))
 check("…the other character still farms it", len(same(farm_lists("Эйра")[0])) == 1 and same(farm_lists("Эйра")[1]) == [])
 write_sv([plan("P-off-1", target, False, "Мирна"), plan("P-on-1", target, True, "Мирна")])
-code, out = run(A, "--once")
+fcode, fout = run(A, "--once")
 items, off = farm_lists("Мирна")
 check("…«снова фармлю» from the game: the row is back in «Осталось», nothing is off",
-      code == 0 and len(same(items)) == 1 and off == [], (out[-300:], len(same(items)), len(off)))
+      fcode == 0 and len(same(items)) == 1 and off == [], (fout[-300:], len(same(items)), len(off)))
 # 2.10.2: the number of attempts corrected in the game
 write_sv([{"id": "A-edit-1", "time": NOW - 20, "char": "Эйра", "realm": "Ревущий фьорд", "charKey": "Player-1-A", "kind": "attempts", "list": "raid",
            "boss": str(target.boss), "mount": str(target.mount), "mountID": int(target.id), "n": 37}])
-code, out = run(A, "--once")
-check("2.10.2: attempts corrected in the game: «Попыток» of that row becomes the number", code == 0 and attempts(A, str(target.boss)) == 37,
-      (out[-300:], attempts(A, str(target.boss))))
+fcode, fout = run(A, "--once")
+check("2.10.2: attempts corrected in the game: «Попыток» of that row becomes the number", fcode == 0 and attempts(A, str(target.boss)) == 37,
+      (fout[-300:], attempts(A, str(target.boss))))
 rt = lua51.LuaRuntime(unpack_returned_tuples=True)
 rt.execute(sheet_lua())
 listed = [m.n for m in (rt.globals().MountSheetSyncSheet.mounts or {}).values() if str(m.boss) == str(target.boss) and str(m.mount) == str(target.mount)]
 check("…and the addon's list carries it", listed == [37], listed)
 write_sv([{"id": "A-edit-2", "time": NOW - 10, "char": "Эйра", "realm": "Ревущий фьорд", "charKey": "Player-1-A", "kind": "attempts", "list": "raid",
+           "boss": str(target.boss), "mount": str(target.mount), "mountID": int(target.id), "n": 0}])
+run(A, "--once")
+# 2.10.2: the same from the program itself (the «Попытки…» window works through AttemptsEdit; --set-attempts drives it)
+want = os.path.join(W, "attempts.json")
+json.dump([{"mount": str(target.mount), "boss": str(target.boss), "n": 12}, {"mount": "Нет такого маунта", "n": 3}], open(want, "w", encoding="utf-8"), ensure_ascii=False)
+fcode, fout = run(A, "--set-attempts", want)
+check("2.10.2: attempts set in the program: the number is written, an unknown mount is named in the log",
+      fcode == 0 and attempts(A, str(target.boss)) == 12 and "Нет такого маунта" in fout and "изменено маунтов — 1" in fout, (fout[-300:], attempts(A, str(target.boss))))
+write_sv([{"id": "A-edit-3", "time": NOW - 5, "char": "Эйра", "realm": "Ревущий фьорд", "charKey": "Player-1-A", "kind": "attempts", "list": "raid",
            "boss": str(target.boss), "mount": str(target.mount), "mountID": int(target.id), "n": 0}])
 run(A, "--once")
 check("…and back to 0 for the checks below", attempts(A, str(target.boss)) == 0, attempts(A, str(target.boss)))

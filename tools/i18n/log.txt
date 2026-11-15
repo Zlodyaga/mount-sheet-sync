@@ -482,3 +482,15 @@ en: The data is already in {0}.
 
 @ Данные теперь в папке {0}; прежние файлы остались в {1}.
 en: The data is now in {0}; the old files stay in {1}.
+
+@ Попытки: {0}
+en: Attempts: {0}
+
+@ Попытки: маунта «{0}» со счётчиком нет.
+en: Attempts: there is no mount “{0}” with a counter.
+
+@ Попытки: изменено маунтов — {0}.
+en: Attempts: mounts changed — {0}.
+
+@ Неизвестный параметр запуска: {0}. Программа не запущена.
+en: Unknown start option: {0}. The program was not started.

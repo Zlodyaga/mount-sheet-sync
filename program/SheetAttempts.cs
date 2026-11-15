@@ -547,6 +547,22 @@ namespace MountSheetSync
         /// Число попыток, поправленное в игре (запись аддона kind = "attempts"): «Попыток» у строки маунта на общем
         /// листе становится равным n. Строка — по номеру маунта (или названию) и боссу.
         /// </summary>
+        /// <summary>То же без записи журнала (окно «Попытки» в программе): true — число изменилось.</summary>
+        public static bool SetAttemptsFor(IBook book, string mount, string boss, long id, double n)
+        {
+            Dictionary<string, object> kill = new Dictionary<string, object>();
+            kill["mount"] = mount;
+            kill["boss"] = boss;
+            kill["n"] = n;
+            if (id > 0)
+            {
+                kill["mountID"] = (double)id;
+            }
+            Dictionary<string, object> o = new Dictionary<string, object>();
+            o["cells"] = new List<object>();
+            return J.Str(SetAttempts(book, kill, o), "status") == "attempts";
+        }
+
         static Dictionary<string, object> SetAttempts(IBook book, Dictionary<string, object> kill, Dictionary<string, object> o)
         {
             o["kind"] = "attempts";
