@@ -1,0 +1,673 @@
+[
+ {
+  "npc": 32491,
+  "map": 120,
+  "name": "Time-Lost Proto-Drake",
+  "source": "spawn points: Warcraft Wiki; routes: a player-drawn map sent by the user 16.11.2026, traced by its landmarks (about 2 units off at most)",
+  "routes": [
+   {
+    "name": "Ulduar Ravine",
+    "spawn": [
+     52,
+     34
+    ],
+    "line": [
+     [
+      52,
+      34
+     ],
+     [
+      49.9,
+      31.2
+     ],
+     [
+      41.9,
+      31.0
+     ],
+     [
+      34.5,
+      32.2
+     ],
+     [
+      26.4,
+      35.2
+     ],
+     [
+      26.4,
+      42.5
+     ],
+     [
+      27.9,
+      48.3
+     ],
+     [
+      26.0,
+      56.9
+     ],
+     [
+      26.7,
+      62.7
+     ],
+     [
+      27.9,
+      64.6
+     ],
+     [
+      36.0,
+      64.4
+     ],
+     [
+      40.5,
+      56.9
+     ],
+     [
+      44.2,
+      56.2
+     ],
+     [
+      48.9,
+      51.4
+     ],
+     [
+      49.7,
+      48.8
+     ],
+     [
+      47.2,
+      40.6
+     ],
+     [
+      48.2,
+      36.8
+     ],
+     [
+      52,
+      34
+     ]
+    ]
+   },
+   {
+    "name": "Frozen Lake",
+    "spawn": [
+     31,
+     69
+    ],
+    "line": [
+     [
+      31,
+      69
+     ],
+     [
+      27.9,
+      64.8
+     ],
+     [
+      26.9,
+      62.2
+     ],
+     [
+      27.5,
+      56.9
+     ],
+     [
+      28.4,
+      48.3
+     ],
+     [
+      29.9,
+      41.1
+     ],
+     [
+      34.5,
+      39.7
+     ],
+     [
+      39.7,
+      41.1
+     ],
+     [
+      40.5,
+      45.9
+     ],
+     [
+      40.2,
+      53.1
+     ],
+     [
+      37.9,
+      55.2
+     ],
+     [
+      36.0,
+      63.7
+     ],
+     [
+      31,
+      69
+     ]
+    ]
+   },
+   {
+    "name": "Waterfall",
+    "spawn": [
+     35,
+     76
+    ],
+    "line": [
+     [
+      35,
+      76
+     ],
+     [
+      36.2,
+      73.3
+     ],
+     [
+      36.0,
+      65.6
+     ],
+     [
+      27.9,
+      65.6
+     ],
+     [
+      25.7,
+      71.3
+     ],
+     [
+      26.5,
+      75.2
+     ],
+     [
+      29.9,
+      77.1
+     ],
+     [
+      34.5,
+      77.6
+     ],
+     [
+      35,
+      76
+     ]
+    ]
+   },
+   {
+    "name": "Brunnhildar",
+    "spawn": [
+     51,
+     70
+    ],
+    "line": [
+     [
+      51,
+      70
+     ],
+     [
+      43.5,
+      59.8
+     ],
+     [
+      40.5,
+      61.0
+     ],
+     [
+      39.5,
+      66.5
+     ],
+     [
+      37.2,
+      72.3
+     ],
+     [
+      36.9,
+      80.4
+     ],
+     [
+      38.5,
+      82.8
+     ],
+     [
+      44.5,
+      80.9
+     ],
+     [
+      48.5,
+      75.2
+     ],
+     [
+      51,
+      70
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "npc": 179460,
+  "map": 1543,
+  "name": "Fallen Charger",
+  "source": "Warcraft Wiki (Fallen Charger): spawn by covenant assault and the waypoints of two paths; the Necrolord path has one waypoint there - its join to the Night Fae path is a guess; no Kyrian data",
+  "routes": [
+   {
+    "name": "Venthyr",
+    "spawn": [
+     28.3,
+     15.5
+    ],
+    "line": [
+     [
+      28.3,
+      15.5
+     ],
+     [
+      33.4,
+      19.4
+     ],
+     [
+      33.8,
+      24.1
+     ],
+     [
+      36.2,
+      28.3
+     ],
+     [
+      37.5,
+      33.5
+     ],
+     [
+      41.0,
+      39.2
+     ],
+     [
+      43.8,
+      43.4
+     ],
+     [
+      42.6,
+      48.6
+     ],
+     [
+      46.0,
+      56.2
+     ],
+     [
+      47.2,
+      60.6
+     ],
+     [
+      51.4,
+      62.3
+     ],
+     [
+      59.0,
+      63.6
+     ],
+     [
+      62.7,
+      69.4
+     ],
+     [
+      60.6,
+      74.8
+     ]
+    ]
+   },
+   {
+    "name": "Night Fae",
+    "spawn": [
+     17.7,
+     49.5
+    ],
+    "line": [
+     [
+      17.7,
+      49.5
+     ],
+     [
+      21.6,
+      41.4
+     ],
+     [
+      25.0,
+      36.2
+     ],
+     [
+      32.0,
+      37.5
+     ],
+     [
+      32.5,
+      45.4
+     ],
+     [
+      36.2,
+      47.7
+     ],
+     [
+      35.0,
+      53.4
+     ],
+     [
+      37.0,
+      64.0
+     ],
+     [
+      44.2,
+      63.4
+     ],
+     [
+      45.6,
+      71.8
+     ],
+     [
+      46.4,
+      79.0
+     ],
+     [
+      52.3,
+      84.4
+     ],
+     [
+      56.7,
+      86.7
+     ]
+    ]
+   },
+   {
+    "name": "Necrolord",
+    "spawn": [
+     28.1,
+     64.7
+    ],
+    "line": [
+     [
+      28.1,
+      64.7
+     ],
+     [
+      31.2,
+      57.2
+     ],
+     [
+      35.0,
+      53.4
+     ]
+    ]
+   }
+  ]
+ },
+ {
+  "npc": 50062,
+  "map": 207,
+  "name": "Aeonaxx",
+  "source": "Warcraft Wiki: six spawn points; it circles the spawn point",
+  "spawns": [
+   [
+    42,
+    47
+   ],
+   [
+    44,
+    43
+   ],
+   [
+    42,
+    60
+   ],
+   [
+    47,
+    57
+   ],
+   [
+    52,
+    64
+   ],
+   [
+    51,
+    43
+   ]
+  ]
+ },
+ {
+  "npc": 50992,
+  "map": 525,
+  "name": "Gorok",
+  "source": "Warcraft Wiki",
+  "spawns": [
+   [
+    23.2,
+    65.6
+   ],
+   [
+    51.6,
+    50.4
+   ],
+   [
+    64.6,
+    52.0
+   ],
+   [
+    58.4,
+    19.2
+   ],
+   [
+    63.6,
+    80.4
+   ]
+  ]
+ },
+ {
+  "npc": 50985,
+  "map": 543,
+  "name": "Poundfist",
+  "source": "Wowhead NPC map",
+  "spawns": [
+   [
+    42,
+    25
+   ],
+   [
+    43.2,
+    55.5
+   ],
+   [
+    45.4,
+    47.5
+   ],
+   [
+    47,
+    54.1
+   ],
+   [
+    51.4,
+    43.1
+   ]
+  ]
+ },
+ {
+  "npc": 179472,
+  "map": 1961,
+  "name": "Konthrogz the Obliterator",
+  "source": "Warcraft Wiki",
+  "spawns": [
+   [
+    53.0,
+    22.3
+   ],
+   [
+    44.6,
+    29.0
+   ],
+   [
+    47.1,
+    36.1
+   ],
+   [
+    56.3,
+    66.1
+   ],
+   [
+    28.3,
+    60.2
+   ]
+  ]
+ },
+ {
+  "npc": 69769,
+  "map": 371,
+  "name": "Zandalari Warbringer",
+  "source": "Warcraft Wiki",
+  "spawns": [
+   [
+    52.6,
+    18.8
+   ]
+  ]
+ },
+ {
+  "npc": 69769,
+  "map": 418,
+  "name": "Zandalari Warbringer",
+  "source": "Warcraft Wiki",
+  "spawns": [
+   [
+    38.8,
+    63.3
+   ]
+  ]
+ },
+ {
+  "npc": 69769,
+  "map": 379,
+  "name": "Zandalari Warbringer",
+  "source": "Warcraft Wiki",
+  "spawns": [
+   [
+    75,
+    67
+   ]
+  ]
+ },
+ {
+  "npc": 69769,
+  "map": 388,
+  "name": "Zandalari Warbringer",
+  "source": "Warcraft Wiki",
+  "spawns": [
+   [
+    36.5,
+    85.8
+   ]
+  ]
+ },
+ {
+  "npc": 69769,
+  "map": 422,
+  "name": "Zandalari Warbringer",
+  "source": "Warcraft Wiki",
+  "spawns": [
+   [
+    47.3,
+    62.1
+   ]
+  ]
+ },
+ {
+  "npc": 69841,
+  "map": 371,
+  "name": "Zandalari Warbringer",
+  "source": "Warcraft Wiki",
+  "spawns": [
+   [
+    52.6,
+    18.8
+   ]
+  ]
+ },
+ {
+  "npc": 69841,
+  "map": 379,
+  "name": "Zandalari Warbringer",
+  "source": "Warcraft Wiki",
+  "spawns": [
+   [
+    75,
+    67
+   ]
+  ]
+ },
+ {
+  "npc": 69841,
+  "map": 388,
+  "name": "Zandalari Warbringer",
+  "source": "Warcraft Wiki",
+  "spawns": [
+   [
+    36.5,
+    85.8
+   ]
+  ]
+ },
+ {
+  "npc": 69841,
+  "map": 422,
+  "name": "Zandalari Warbringer",
+  "source": "Warcraft Wiki",
+  "spawns": [
+   [
+    47.3,
+    62.1
+   ]
+  ]
+ },
+ {
+  "npc": 69842,
+  "map": 371,
+  "name": "Zandalari Warbringer",
+  "source": "Warcraft Wiki",
+  "spawns": [
+   [
+    52.6,
+    18.8
+   ]
+  ]
+ },
+ {
+  "npc": 69842,
+  "map": 379,
+  "name": "Zandalari Warbringer",
+  "source": "Warcraft Wiki",
+  "spawns": [
+   [
+    75,
+    67
+   ]
+  ]
+ },
+ {
+  "npc": 69842,
+  "map": 388,
+  "name": "Zandalari Warbringer",
+  "source": "Warcraft Wiki",
+  "spawns": [
+   [
+    36.5,
+    85.8
+   ]
+  ]
+ },
+ {
+  "npc": 69842,
+  "map": 422,
+  "name": "Zandalari Warbringer",
+  "source": "Warcraft Wiki",
+  "spawns": [
+   [
+    47.3,
+    62.1
+   ]
+  ]
+ }
+]

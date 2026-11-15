@@ -163,10 +163,25 @@ function Region:CreateTexture(name, layer, template, sublevel)
   local t = NewRegion("Texture", name, self, nil); t._layer, t._sublevel = layer, sublevel; return t
 end
 function Region:SetTexture(t) self._texture = t; self._color = nil end
+function Region:GetParent() return self._parent end
+function Region:GetScale() return self._scale or 1 end
+function Region:SetDesaturated(v) self._desaturated = v and true or false end
+function Region:CreateLine(name, layer)
+  local t = NewRegion("Line", name, self, nil); t._layer = layer; return t
+end
+function Region:SetThickness(v) assert(self._type == "Line" and type(v) == "number" and v > 0, "mock: SetThickness on a Line, > 0"); self._thickness = v end
+function Region:SetStartPoint(point, rel, x, y)
+  assert(self._type == "Line" and type(point) == "string" and type(rel) == "table" and type(x) == "number" and type(y) == "number", "mock: SetStartPoint(point, region, x, y)")
+  self._start = { x, y }
+end
+function Region:SetEndPoint(point, rel, x, y)
+  assert(self._type == "Line" and type(point) == "string" and type(rel) == "table" and type(x) == "number" and type(y) == "number", "mock: SetEndPoint(point, region, x, y)")
+  self._finish = { x, y }
+end
 function Region:SetTexCoord(...) self._texcoord = { ... } end
 function Region:SetAllPoints(rel) self._points = { { point = "ALL", rel = rel or self._parent, relPoint = "ALL", x = 0, y = 0 } } end
 function Region:SetColorTexture(r, g, b, a)
-  assert(self._type == "Texture", "mock: SetColorTexture on " .. tostring(self._type))
+  assert(self._type == "Texture" or self._type == "Line", "mock: SetColorTexture on " .. tostring(self._type))
   self._color, self._texture = { r, g, b, a }, nil
 end
 function Region:GetCenter() if self._center then return self._center[1], self._center[2] end return nil end
