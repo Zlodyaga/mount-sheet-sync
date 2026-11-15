@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.6 — подсказки о маунтах
+Mount Sheet Sync — подсказки о маунтах
 ============================================
 При наведении на рара (UnitClassification «rare» / «rareelite») со строки «Мировых боссов» — у скольких персонажей
 он на этой неделе ещё не убит и его маунт: попытки и шанс за все попытки. Боссам подсказки юнита нет: в рейдах и
@@ -130,10 +130,17 @@ local function OnUnitTooltip(tooltip, data)
       return
     end
   end
-  -- только рары: у боссов в подземельях игра прячет имена (сравнить их нельзя), а мировые боссы и так в Атласе
+  -- рары и мировые боссы под открытым небом (с 3.0.7; у мирового босса игра отдаёт класс «worldboss», как и у боссов
+  -- рейдов — поэтому в подземельях и рейдах его не берём: там имена спрятаны и сравнить их нельзя)
   local class = unit and UnitClassification and UnitClassification(unit)
-  if class == nil or Secret(class) or (class ~= "rare" and class ~= "rareelite") then
-    Debug(string.format("«%s» is not a rare (%s) — the hint is only for rares", plain, class == nil and "nil" or Secret(class) and "secret" or class))
+  local inside = false
+  if IsInInstance then
+    local flag = IsInInstance()
+    inside = not Secret(flag) and flag and true or false
+  end
+  local fits = not Secret(class) and (class == "rare" or class == "rareelite" or (class == "worldboss" and not inside))
+  if class == nil or not fits then
+    Debug(string.format("«%s» is not a rare or a world boss (%s) — no hint", plain, class == nil and "nil" or Secret(class) and "secret" or class))
     return
   end
   local hint = ns.BossHintLines(plain, nil, "world")

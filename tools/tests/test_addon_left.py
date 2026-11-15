@@ -28,27 +28,7 @@ def check(name, cond, extra=None):
     print(("PASS " if cond else "FAIL ") + name + ("" if cond or extra is None else "\n     " + repr(extra)))
 
 
-# ---- the sheet's status reply -> SheetData.lua
-def lua_str(s):
-    out = []
-    for ch in s:
-        o = ord(ch)
-        if ch == "\\": out.append("\\\\")
-        elif ch == '"': out.append('\\"')
-        elif ch == "\n": out.append("\\n")
-        elif ch == "\r": out.append("\\r")
-        elif o < 32 or o == 127: out.append("\\%03d" % o)
-        else: out.append(ch)
-    return '"' + "".join(out) + '"'
-
-
-def sheet_lua(v):
-    if v is None: return "nil"
-    if isinstance(v, bool): return "true" if v else "false"
-    if isinstance(v, (int, float)): return repr(v)
-    if isinstance(v, str): return lua_str(v)
-    if isinstance(v, list): return "{" + ", ".join(sheet_lua(x) for x in v) + "}"
-    return "{" + ", ".join("[%s] = %s" % (lua_str(k), sheet_lua(x)) for k, x in v.items() if x is not None and k != "ok") + "}"
+from addon_env import lua_str, sheet_lua   # the sheet's status reply -> SheetData.lua
 
 
 if SHEET_FILE:
@@ -223,7 +203,7 @@ def under_window(x):
 
 
 tabs = [x for x in regions("Button") if x._isTab]
-check("four tabs above the list, achievements next to «Осталось»", [str(t._text) for t in tabs] == ["Осталось (26)", "Достижения", "Попытки", "Журнал"],
+check("five tabs above the list, achievements next to «Осталось», «Выпавшие» last (3.0.7)", [str(t._text) for t in tabs] == ["Осталось (26)", "Достижения", "Попытки", "Журнал", "Выпавшие"],
       [str(t._text) for t in tabs])
 check("3.0: «Осталось» selected by default", win.selectedTab == 1 and not tabs[0].IsEnabled(tabs[0]) and tabs[3].IsEnabled(tabs[3]))
 
@@ -971,7 +951,7 @@ check("3.0.5: the chain's next step has no place: where to go, in words; no pin"
 L.execute("""
 MOCK.gt = MOCK.gt + 1000
 SAVED_STEPS = MSS_NS.ACCESS[777].steps
-MSS_NS.ACCESS[777].steps = { MSS_NS.ACCESS[1180].steps[2] }
+MSS_NS.ACCESS[777].steps = { MSS_NS.ACCESS[1180].steps[4] }
 ROUTE.pin = nil; ROUTE.waypoint = nil""")
 n_chat = len(chat_all())
 row.MockClick(row)
@@ -983,12 +963,27 @@ check("3.0.6: a step given inside a place (Chamber of Heart): a pin at the way i
 L.execute("""
 MOCK.gt = MOCK.gt + 1000
 MSS_NS.ACCESS[777].steps = MSS_NS.ACCESS[1180].steps
+SAVED_FACTION = UnitFactionGroup
+UnitFactionGroup = function() return "Horde" end
 ROUTE.pin = nil; ROUTE.waypoint = nil""")
 n_chat = len(chat_all())
 row.MockClick(row)
 said = chat_all()[n_chat:]
-check("3.0.6: Ny'alotha with nothing done: the chain's first quest (Essential Empowerment), Nazjatar in words, no pin",
-      g.ROUTE.waypoint is None and g.ROUTE.pin is None and "Essential Empowerment" in said and "Назжатар" in said, said)
+check("3.0.7: Ny'alotha with nothing done: the very start (Send the Fleet, the way to Nazjatar), ports in words, no pin",
+      g.ROUTE.waypoint is None and g.ROUTE.pin is None and "Send the Fleet" in said and "Назжатар" in said and "Дазар'алора" in said, said)
+L.execute("MOCK.gt = MOCK.gt + 1000; QUEST_DONE[56043] = true; QUEST_DONE[56044] = true")
+n_chat = len(chat_all())
+row.MockClick(row)
+said = chat_all()[n_chat:]
+check("…the fleet is sent: Essential Empowerment (Magni in Nazjatar) is next, no pin",
+      g.ROUTE.waypoint is None and g.ROUTE.pin is None and "Essential Empowerment" in said and "Send the Fleet" not in said, said)
+L.execute("MOCK.gt = MOCK.gt + 1000; QUEST_DONE[56044] = nil; QUEST_DONE[55851] = true")
+n_chat = len(chat_all())
+row.MockClick(row)
+said = chat_all()[n_chat:]
+check("…a later step is done though the game never marked the early one: on from the last done step, not back to the fleet",
+      "Harnessing the Power" in said and "Send the Fleet" not in said, said)
+L.execute("QUEST_DONE[56043] = nil; QUEST_DONE[55851] = nil; UnitFactionGroup = SAVED_FACTION; ROUTE.waypoint = nil")
 L.execute("MSS_NS.ACCESS[777].steps = SAVED_STEPS; ROUTE.waypoint = nil")
 L.execute("MOCK.gt = MOCK.gt + 1000; QUEST_DONE[57010] = true")
 row.MockClick(row)

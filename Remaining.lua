@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.6 — «Осталось на этой неделе»
+Mount Sheet Sync — «Осталось на этой неделе»
 ==================================================
 Список приходит из Google-таблицы: программа MountSheetSync.exe записывает его
 в SheetData.lua (глобальная MountSheetSyncSheet), а игра читает этот файл при
@@ -415,6 +415,38 @@ local function ResetTime(kills, weekEnd)
   return last
 end
 
+-- Строка маунта одной фракции (в каталоге имя кончается на «[Орда]» / «[Альянс]») у персонажа другой фракции.
+-- Фракцию персонажа запоминает Collection.lua при входе (c.faction); не знаем её — строку показываем.
+-- Маунт с двойником у другой фракции (номера журнала маунтов): строка каталога одна на обе стороны — Альянсу с тех же
+-- боссов падает свой мамонт, а в коллекции аккаунта они считаются одним. Такую строку не прячем и показываем без пометки.
+local SIDE_MARKS = { ["[Орда]"] = "Horde", ["[Альянс]"] = "Alliance" }
+ns.SIDE_TWINS = { [287] = 286, [286] = 287 }   -- Большой черный боевой мамонт (Склеп Аркавона): Орда / Альянс
+local function OtherSide(item, key)
+  if ns.SIDE_TWINS[tonumber(item.id) or 0] then
+    return false
+  end
+  local mount = type(item.mount) == "string" and item.mount or ""
+  local db = MountSheetSyncDB
+  local faction
+  if key and type(db) == "table" and type(db.chars) == "table" then
+    for name, c in pairs(db.chars) do   -- ключ персонажа в списках — его GUID, а у старых записей «Имя-Сервер»
+      if type(c) == "table" and (c.guid == key or name == key) then
+        faction = c.faction
+        break
+      end
+    end
+  end
+  if faction ~= "Horde" and faction ~= "Alliance" then
+    return false
+  end
+  for mark, side in pairs(SIDE_MARKS) do
+    if side ~= faction and mount:sub(-#mark) == mark then
+      return true
+    end
+  end
+  return false
+end
+
 -- ch — строка персонажа из таблицы, если она уже известна (список всех персонажей), иначе ищется по player.
 function ns.BuildRemaining(data, player, weekEnd, kills, ch)
   local result = { generated = tonumber(data.generated) }
@@ -445,11 +477,45 @@ function ns.BuildRemaining(data, player, weekEnd, kills, ch)
 
   local known = KnownIds(data)
   local hidden = ns.NotFarmed and ns.NotFarmed(player.key, tonumber(data.generated)) or {}
+  local again = ns.FarmAgain and ns.FarmAgain(player.key, tonumber(data.generated)) or {}
   local afterReset = result.afterReset
   local items, left, total = {}, 0, 0
   local now = time()
-  for _, item in ipairs(type(ch.items) == "table" and ch.items or {}) do
-    if type(item) == "table" and item.kind == "rare" then
+  -- строки персонажа: из списка и те «не фармлю» (ch.off), что в игре уже вернули, а программа ещё не видела;
+  -- result.off — что этот персонаж не фармит (для меню и сетки «Все персонажи»)
+  local source, off = type(ch.items) == "table" and ch.items or {}, {}
+  if #hidden > 0 then
+    for _, item in ipairs(source) do
+      if type(item) == "table" and ns.IsNotFarmed(hidden, item) and not OtherSide(item, player.key) then
+        off[#off + 1] = item
+      end
+    end
+  end
+  if type(ch.off) == "table" and #ch.off > 0 then
+    local copied
+    for _, item in ipairs(ch.off) do
+      if type(item) == "table" and not OtherSide(item, player.key) then
+        if #again > 0 and ns.IsNotFarmed(again, item) and not ns.IsNotFarmed(hidden, item) then
+          if not copied then
+            copied = {}
+            for i, v in ipairs(source) do
+              copied[i] = v
+            end
+            source = copied
+          end
+          source[#source + 1] = item
+        else
+          off[#off + 1] = item
+        end
+      end
+    end
+  end
+  result.off = off
+  local marked = {}
+  for _, item in ipairs(source) do
+    if type(item) == "table" and OtherSide(item, player.key) then
+      -- маунт другой фракции («… [Орда]»): этому персонажу он не выпадет — ни в списке, ни в счёте
+    elseif type(item) == "table" and item.kind == "rare" then
       -- откат свой, неделя ни при чём: последнее убийство этим персонажем из всего журнала. Рары «100 %» и фарм мобов
       -- (item.group) показываем своими группами, но не считаем: это не «убить на этой неделе»
       local counts = item.group ~= "guaranteed" and item.group ~= "mobs"
@@ -488,6 +554,8 @@ function ns.BuildRemaining(data, player, weekEnd, kills, ch)
         local partsLeft = CountPartsLeft(killed)
         items[#items + 1] = { item = item, done = partsLeft == 0, by = by, killed = killed, partsLeft = partsLeft }
         left = left + partsLeft
+      else
+        marked[#marked + 1] = item
       end
     elseif type(item) == "table" and not ns.IsNotFarmed(hidden, item) then
       -- достижения и награды показываем, но не считаем: их не убить
@@ -507,9 +575,14 @@ function ns.BuildRemaining(data, player, weekEnd, kills, ch)
         if not by and counts then
           left = left + 1
         end
+      else
+        marked[#marked + 1] = item
       end
     end
   end
+  -- в списке программы уже «Да» (убит на этой неделе): в «Осталось» персонажа таких строк нет, но сетке «Все персонажи»
+  -- они нужны — иначе убитый босс выглядит как «не фармит»
+  result.marked = marked
   result.state = "ok"
   result.name = ch.name
   result.items = items
@@ -569,6 +642,7 @@ function ns.GetAllRemaining()
         who = { name = ch.name, key = "?" }   -- персонаж с другого аккаунта: его записей здесь нет
       end
       list[#list + 1] = {
+        who = who,
         name = tostring(ch.name or who.name or "?"),
         classFile = known and known.classFile or nil,
         current = ch == current,
@@ -632,9 +706,51 @@ function ns.GetSummary()
       end
     end
   end
+  -- убит и уже отмечен программой (r.marked): в сетке это «убит», а не «не фармит»
+  for _, c in ipairs(all) do
+    if c.r.state == "ok" then
+      for _, it in ipairs(c.r.marked or {}) do
+        local k = summaryKey[it]
+        if not k then
+          k = table.concat({ tostring(it.kind), Norm(it.boss), Norm(it.diff), Norm(it.mount) }, "|")
+          summaryKey[it] = k
+        end
+        local row = byKey[k]
+        if row then
+          row.done[c.name] = true
+        end
+      end
+    end
+  end
+  -- кто строку не фармит (галочка «Фармлю» снята): row.off; строка, которую не фармит никто, — row.offOnly
+  -- (в сетке — только с настройкой «показывать, что никто не фармит»)
+  for _, c in ipairs(all) do
+    if c.r.state == "ok" then
+      for _, it in ipairs(c.r.off or {}) do
+        local k = summaryKey[it]
+        if not k then
+          k = table.concat({ tostring(it.kind), Norm(it.boss), Norm(it.diff), Norm(it.mount) }, "|")
+          summaryKey[it] = k
+        end
+        local row = byKey[k]
+        if row == nil then
+          row = { kind = ns.GroupOf(it), item = it, names = {}, total = 0, done = {} }
+          byKey[k] = row
+          rows[#rows + 1] = row
+        end
+        if row then
+          row.off = row.off or {}
+          row.off[c.name] = true
+        end
+      end
+    end
+  end
   local open = {}
   for _, row in ipairs(rows) do
     if #row.names > 0 then   -- убито у всех — в сетке не нужно
+      open[#open + 1] = row
+    elseif row.off and next(row.done) == nil then
+      row.offOnly = true
       open[#open + 1] = row
     end
   end
@@ -653,6 +769,14 @@ function ns.GetSummary()
     end
     return tostring(a.item.boss) < tostring(b.item.boss)
   end)
+  -- у кого строка есть (фармит, убил или не фармит) — им в меню можно менять «фармлю»
+  local whoBy = {}
+  for _, c in ipairs(all) do
+    whoBy[c.name] = c.who
+  end
+  for _, row in ipairs(rows) do
+    row.who = whoBy
+  end
   summaryFor, summaryResult = all, rows
   return rows
 end
@@ -733,11 +857,7 @@ local function Translated(want, key)
 end
 
 --- Название из строки списка (field: boss, mount, place) на языке аддона.
-function ns.Shown(item, field)
-  local text = type(item) == "table" and item[field] or nil
-  if type(text) ~= "string" or text == "" then
-    return text
-  end
+local function ShownRaw(item, field, text)
   local want = LANG_OF[ns.CurrentLanguage and ns.CurrentLanguage() or ""] or "en"
   if GetLocale and want == LANG_OF[GetLocale()] then
     local own = GameName(item, field, text)
@@ -746,6 +866,32 @@ function ns.Shown(item, field)
     end
   end
   return Translated(want, text) or text
+end
+
+-- Совет по фарму из каталога (Tips.lua) на языке аддона; нет на нём — по-английски, потом по-русски.
+-- Выключается в настройках (db.tips == false).
+function ns.FarmTip(id)
+  id = tonumber(id)
+  local all = ns.FARM_TIPS
+  local db = MountSheetSyncDB
+  if not id or type(all) ~= "table" or (type(db) == "table" and db.tips == false) then
+    return nil
+  end
+  id = all.ru and not all.ru[id] and ns.SIDE_TWINS and ns.SIDE_TWINS[id] or id
+  local want = LANG_OF[ns.CurrentLanguage and ns.CurrentLanguage() or ""] or "en"
+  return (all[want] and all[want][id]) or (all.en and all.en[id]) or (all.ru and all.ru[id]) or nil
+end
+
+function ns.Shown(item, field)
+  local text = type(item) == "table" and item[field] or nil
+  if type(text) ~= "string" or text == "" then
+    return text
+  end
+  local shown = ShownRaw(item, field, text)
+  if field == "mount" and ns.SIDE_TWINS[tonumber(item.id) or 0] and type(shown) == "string" then
+    shown = shown:gsub("%s*%[[^%]]*%]$", "")   -- «… [Орда]»: у строки с двойником пометка фракции лишняя
+  end
+  return shown
 end
 
 --- Условие достижения на языке аддона. own — текст из игры: он на языке клиента.
@@ -770,9 +916,26 @@ local function AttemptRows()
 end
 
 -- Сколько попыток у строки сейчас: из таблицы плюс подходящие убийства после списка.
+-- Ключ строки счётчика для правки числа попыток: номер маунта (или название) и босс.
+function ns.AttemptKey(m)
+  return (tonumber(m.id) and tostring(tonumber(m.id)) or Norm(m.mount)) .. "|" .. Norm(m.boss)
+end
+
 local function CountNow(m, data, kills, known)
   local generated = tonumber(data.generated) or 0
   local n = tonumber(m.n) or 0
+  -- число поправили в игре, а программа списка с ним ещё не прислала: считаем от правки
+  local db = MountSheetSyncDB
+  local edits = type(db) == "table" and type(db.attemptEdits) == "table" and db.attemptEdits or nil
+  local key = edits and ns.AttemptKey(m)
+  local edit = key and edits[key]
+  if type(edit) == "table" then
+    if (tonumber(edit.time) or 0) >= generated and tonumber(edit.n) then
+      n, generated = tonumber(edit.n), tonumber(edit.time)
+    else
+      edits[key] = nil   -- список новее правки: в нём уже её число
+    end
+  end
   for _, rec in ipairs(kills) do
     if (tonumber(rec.time) or 0) > generated and IsAttempt(m, rec, RecordName(rec), known) then
       n = n + 1
@@ -790,6 +953,15 @@ function ns.FormatChance(n, p)
     text = text:gsub("%.", ",")
   end
   return text .. "%"
+end
+
+-- Шанс выпадения за одно убийство, 0..1 → «1%», «0,5%» (тот же вид, что у ns.FormatChance); nil — шанса нет.
+function ns.FormatDropChance(p)
+  p = tonumber(p)
+  if not p or p <= 0 then
+    return nil
+  end
+  return ns.FormatChance(1, p)
 end
 
 -- Убийство rec (уже в журнале): строки, для которых оно попытка, — { name, n, p } (n — вместе с этой попыткой).
@@ -1029,7 +1201,7 @@ function ns.GetAttemptsList()
     local p = type(m) == "table" and tonumber(m.p)
     if p and p > 0 and p < 1 and not Collected(m) then
       local n = CountNow(m, data, kills, known)
-      out[#out + 1] = { name = MountName(m), n = n, p = p, left = CharactersLeft(m, data, kills, known, weekEnd), diff = m.diff, kind = m.kind, boss = ns.Shown(m, "boss"), id = m.id, je = m.je, im = m.im }
+      out[#out + 1] = { name = MountName(m), n = n, p = p, left = CharactersLeft(m, data, kills, known, weekEnd), diff = m.diff, kind = m.kind, boss = ns.Shown(m, "boss"), id = m.id, je = m.je, im = m.im, raw = m }
     end
   end
   table.sort(out, function(a, b)
@@ -1042,6 +1214,71 @@ function ns.GetAttemptsList()
     end
   end)
   attemptsStamp, attemptsResult = stamp, out
+  return out
+end
+
+-- Вкладка «Выпавшие»: маунты списка, которые выпали, пока стоит аддон, { id, name, boss, n, p, time, char }, новые сверху.
+-- Источники: db.drops (пишется при выпадении: попытки на тот момент, время, персонаж — переживает очистку журнала) и
+-- записи журнала о новых маунтах (kind = "mount") — для выпавших до 3.0.7; у них попытки считаются как во вкладке «Попытки».
+function ns.GetDrops()
+  local data = AttemptRows()
+  local db = ns.GetDB()
+  if not data or not db then
+    return nil
+  end
+  local byId = {}
+  for _, m in ipairs(data.mounts) do
+    local p = type(m) == "table" and tonumber(m.p)
+    if p and p > 0 and p < 1 and tonumber(m.id) then
+      byId[tonumber(m.id)] = m
+    end
+  end
+  local kills = db.kills or {}
+  local known = KnownIds(data)
+  local out, seen = {}, {}
+  local function Add(id, n, when, char)
+    local m = byId[id]
+    if m and not seen[id] then
+      seen[id] = true
+      out[#out + 1] = { id = id, name = MountName(m), boss = ns.Shown(m, "boss"), p = tonumber(m.p),
+        n = tonumber(n) or CountNow(m, data, kills, known), time = tonumber(when) or 0, char = char }
+    end
+  end
+  for id, d in pairs(type(db.drops) == "table" and db.drops or {}) do
+    if type(d) == "table" then
+      Add(tonumber(id), d.n, d.time, d.char)
+    end
+  end
+  for i = #kills, 1, -1 do
+    local rec = kills[i]
+    if rec.kind == "mount" and tonumber(rec.mountID) then
+      Add(tonumber(rec.mountID), nil, rec.time, rec.char)
+    end
+  end
+  -- собранное раньше, чем аддон начал запоминать выпадения (data.had, программа 2.10.2): без даты и персонажа,
+  -- попытки — сколько записано в таблице
+  local names = {}
+  for _, d in ipairs(out) do
+    names[d.name] = true
+  end
+  for _, m in ipairs(type(data.had) == "table" and data.had or {}) do
+    local p = type(m) == "table" and tonumber(m.p)
+    local id = p and tonumber(m.id)
+    local name = p and MountName(m)
+    if p and p > 0 and p < 1 and not (id and seen[id]) and not names[name] then
+      if id then
+        seen[id] = true
+      end
+      names[name] = true
+      out[#out + 1] = { id = id, name = name, boss = ns.Shown(m, "boss"), p = p, n = tonumber(m.n) or 0, time = 0, old = true }
+    end
+  end
+  table.sort(out, function(a, b)
+    if a.time ~= b.time then
+      return a.time > b.time
+    end
+    return a.name < b.name
+  end)
   return out
 end
 
@@ -1091,6 +1328,26 @@ end
 function ns.NotFarmed(charKey, generated)
   local db = ns.GetDB()
   local all = db and type(db.notFarmed) == "table" and db.notFarmed or nil
+  local mine = all and charKey and all[charKey]
+  if type(mine) ~= "table" then
+    return {}
+  end
+  local keep = {}
+  for _, e in ipairs(mine) do
+    if type(e) == "table" and (not generated or (tonumber(e.time) or 0) >= generated) then
+      keep[#keep + 1] = e
+    end
+  end
+  if #keep ~= #mine then
+    all[charKey] = #keep > 0 and keep or nil
+  end
+  return keep
+end
+
+-- «Снова фармлю», которое таблица ещё не видела (устроено как ns.NotFarmed).
+function ns.FarmAgain(charKey, generated)
+  local db = ns.GetDB()
+  local all = db and type(db.farmAgain) == "table" and db.farmAgain or nil
   local mine = all and charKey and all[charKey]
   if type(mine) ~= "table" then
     return {}

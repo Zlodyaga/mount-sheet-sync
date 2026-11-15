@@ -332,6 +332,10 @@ namespace MountSheetSync
             foreach (Dictionary<string, object> ch in chars)
             {
                 rows.AddRange((List<object>)ch["items"]);
+                if (ch.ContainsKey("off"))   // «не фармлю»: аддон показывает и их — нужны те же номера и подсказки
+                {
+                    rows.AddRange((List<object>)ch["off"]);
+                }
             }
             foreach (object o in rows)
             {
@@ -447,6 +451,15 @@ namespace MountSheetSync
 
         public static List<object> StatusMounts(IBook book, HashSet<string> collected)
         {
+            return StatusMounts(book, collected, null);
+        }
+
+        /// <summary>
+        /// had — сюда попадают уже собранные маунты со случайным шансом (вкладка аддона «Выпавшие»: что выпало до
+        /// того, как аддон начал это запоминать): маунт, босс, сколько попыток в таблице, шанс и номер.
+        /// </summary>
+        public static List<object> StatusMounts(IBook book, HashSet<string> collected, List<object> had)
+        {
             List<object> list = new List<object>();
             foreach (string[] m in new[]
             {
@@ -485,6 +498,25 @@ namespace MountSheetSync
                     }
                     if ((cCollected >= 0 && IsYes(At(row, cCollected))) || collected.Contains(Norm(mount)))
                     {
+                        if (had != null && p < 1)
+                        {
+                            Dictionary<string, object> old = new Dictionary<string, object>();
+                            old["kind"] = m[1];
+                            old["mount"] = mount;
+                            old["boss"] = boss;
+                            old["n"] = Math.Max(0, Math.Floor(n));
+                            old["p"] = p;
+                            long oldId = cId >= 0 ? MountIndex.IdOf(At(row, cId)) : 0;
+                            if (oldId <= 0)
+                            {
+                                oldId = CatalogIndex().Find(MountIndex.KindOfSheet(m[0]), At(row, cMount), boss);
+                            }
+                            if (oldId > 0)
+                            {
+                                old["id"] = (double)oldId;
+                            }
+                            had.Add(old);
+                        }
                         continue;
                     }
                     Dictionary<string, object> item = StatusItem(m[1], entry.Name, r, At(row, cPlace), boss, cDiff >= 0 ? At(row, cDiff) : "", mount, false);
@@ -509,6 +541,80 @@ namespace MountSheetSync
                 }
             }
             return list;
+        }
+
+        /// <summary>
+        /// Число попыток, поправленное в игре (запись аддона kind = "attempts"): «Попыток» у строки маунта на общем
+        /// листе становится равным n. Строка — по номеру маунта (или названию) и боссу.
+        /// </summary>
+        /// <summary>То же без записи журнала (окно «Попытки» в программе): true — число изменилось.</summary>
+        public static bool SetAttemptsFor(IBook book, string mount, string boss, long id, double n)
+        {
+            Dictionary<string, object> kill = new Dictionary<string, object>();
+            kill["mount"] = mount;
+            kill["boss"] = boss;
+            kill["n"] = n;
+            if (id > 0)
+            {
+                kill["mountID"] = (double)id;
+            }
+            Dictionary<string, object> o = new Dictionary<string, object>();
+            o["cells"] = new List<object>();
+            return J.Str(SetAttempts(book, kill, o), "status") == "attempts";
+        }
+
+        static Dictionary<string, object> SetAttempts(IBook book, Dictionary<string, object> kill, Dictionary<string, object> o)
+        {
+            o["kind"] = "attempts";
+            double want = Math.Max(0, Math.Floor(Number(J.Get(kill, "n"))));
+            o["n"] = want;
+            string mount = Norm(J.Get(kill, "mount"));
+            string boss = Norm(J.Get(kill, "boss"));
+            long wantId = MountIndex.IdOf(J.Get(kill, "mountID"));
+            List<object> cells = (List<object>)o["cells"];
+            foreach (string name in new[] { SheetBuilder.RaidsSheet, SheetBuilder.DungeonsSheet, SheetBuilder.WorldSheet, RareSheet })
+            {
+                SheetEntry entry = ByName(book, name);
+                if (entry == null || entry.Data.Count < 2)
+                {
+                    continue;
+                }
+                object[] header = entry.Data[0];
+                int cAttempts = FindCol(header, AttemptsPattern, -1);
+                if (cAttempts < 0)
+                {
+                    continue;
+                }
+                int cBoss = FindCol(header, "босс", 4);
+                int cMount = FindCol(header, "маунт", 3);
+                int cId = FindCol(header, "^id в игре$", -1);
+                for (int r = 1; r < entry.Data.Count; r++)
+                {
+                    object[] row = entry.Data[r];
+                    long rowId = cId >= 0 ? MountIndex.IdOf(At(row, cId)) : 0;
+                    bool same = wantId > 0 && rowId > 0 ? rowId == wantId : mount.Length > 0 && Norm(At(row, cMount)) == mount;
+                    if (!same || Norm(At(row, cBoss)) != boss || entry.Formulas.Contains(Key(r, cAttempts)))
+                    {
+                        continue;
+                    }
+                    double have;
+                    bool changed = !AttemptCount(At(row, cAttempts), out have) || Math.Floor(have) != want;
+                    if (changed)
+                    {
+                        book.Set(entry, r, cAttempts, want);
+                    }
+                    cells.Add(CellInfo(entry, r, CellText(At(row, cMount)), changed));
+                }
+            }
+            if (cells.Any(c => (bool)((Dictionary<string, object>)c)["changed"]))
+            {
+                o["status"] = "attempts";
+            }
+            else if (cells.Count > 0)
+            {
+                o["status"] = "already";
+            }
+            return o;
         }
 
         /// <summary>Значения новых колонок для строки общего листа: «Попыток» = 0 и формула шанса (или пусто).</summary>

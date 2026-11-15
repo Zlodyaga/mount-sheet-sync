@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.6 — ядро
+Mount Sheet Sync — ядро
 =============================
 Записывает убийства боссов на текущем персонаже и новые маунты, чтобы программа
 Mount Sheet Sync (MountSheetSync.exe в трее Windows) отметила их в Google-таблице маунтов:
@@ -26,7 +26,7 @@ SavedVariables. Игра сохраняет файл
 
 local ADDON_NAME, ns = ...
 
-local VERSION = "3.0.6"
+local VERSION = "3.0.7"
 local MAX_RECORDS = 400               -- храним не больше стольких записей
 local MAX_AGE = 21 * 24 * 60 * 60     -- и не старше трёх недель
 local DUPLICATE_WINDOW = 120          -- ENCOUNTER_END и BOSS_KILL об одном бое, сек
@@ -646,6 +646,8 @@ local function OnMountAdded(mountID)
   if not name or not player.name then
     return
   end
+  -- оповещение: что известно о маунте, пока он ещё числится несобранным
+  local drop = ns.DropInfo and select(2, pcall(ns.DropInfo, mountID))
   if ns.CollectionAdd then
     SafeCall(ns.CollectionAdd, mountID, name)
   end
@@ -661,8 +663,22 @@ local function OnMountAdded(mountID)
   rec.mount = name
   rec.mountID = mountID
   rec.from = from          -- откуда маунт, по журналу маунтов: по нему таблица узнаёт босса
-  if AddRecord(rec) and not db.quiet then
+  local added = AddRecord(rec)
+  if added and not db.quiet then
     Print(string.format(L.mount_added, name))
+  end
+  if added and type(drop) == "table" then
+    -- памятка для вкладки «Выпавшие»: с какой попытки, когда и кому (журнал могут очистить, а это останется)
+    db.drops = type(db.drops) == "table" and db.drops or {}
+    db.drops[tostring(mountID)] = { n = tonumber(drop.n) or 0, time = rec.time, char = player.name }
+    local _, _, icon = journal.GetMountInfoByID(mountID)
+    drop.icon = icon
+    if (tonumber(drop.n) or 0) > 0 and not db.quiet then
+      Print(string.format(L.alert_chat, name, drop.n))
+    end
+    if ns.ShowDrop then
+      SafeCall(ns.ShowDrop, drop)
+    end
   end
 end
 
@@ -694,17 +710,76 @@ end
 
 function ns.AddManual(text)
   local ok, added = pcall(AddManual, text)
+  if ok and added then
+    ns.Count("manual")
+  end
   return ok and added or false
+end
+
+-- Счётчики пользования: только числа по дням (db.usage.days["2026-11-14"].tab_left = 3), хранятся 7 дней. Их читает
+-- программа и отправляет, только если игрок согласился на анонимную статистику; без программы они никуда не уходят.
+local USAGE_DAYS = 7
+function ns.Count(what)
+  if type(db) ~= "table" or type(what) ~= "string" then
+    return
+  end
+  local usage = type(db.usage) == "table" and db.usage or {}
+  db.usage = usage
+  local days = type(usage.days) == "table" and usage.days or {}
+  usage.days = days
+  local today = (date or os.date)("%Y-%m-%d")
+  local day = days[today]
+  if type(day) ~= "table" then
+    day = {}
+    days[today] = day
+    local known = {}
+    for key in pairs(days) do
+      known[#known + 1] = key
+    end
+    table.sort(known)
+    for i = 1, #known - USAGE_DAYS do
+      days[known[i]] = nil
+    end
+  end
+  day[what] = (tonumber(day[what]) or 0) + 1
+  usage.mapzeroth = C_AddOns and C_AddOns.IsAddOnLoaded and C_AddOns.IsAddOnLoaded("Mapzeroth") and true or false
+end
+
+-- Та же ли строка в отметке «не фармлю» / «снова фармлю»: список, босс, маунт и сложность.
+local function SamePlan(e, rec)
+  return type(e) == "table" and e.scope == rec.scope and e.list == rec.list and e.boss == rec.boss and e.mount == rec.mount
+    and e.diff == rec.diff and e.place == rec.place
+end
+
+local function DropPlans(all, key, rec)
+  local mine = type(all) == "table" and all[key]
+  if type(mine) ~= "table" then
+    return
+  end
+  for i = #mine, 1, -1 do
+    if SamePlan(mine[i], rec) then
+      table.remove(mine, i)
+    end
+  end
+  if #mine == 0 then
+    all[key] = nil
+  end
 end
 
 -- «Не фармлю»: строка (scope = "row") или весь рейд / подземелье (scope = "place") из списка «Осталось».
 -- Программа снимет галочку «Фармлю» на листе персонажа; до этого строки прячутся здесь, в аддоне.
-local function AddPlan(item, scope)
+-- farm = true — наоборот, «снова фармлю» (только строка): программа вернёт галочку, до этого строку показывает аддон.
+-- who — другой персонаж из таблицы ({ name, realm, key }, с этого аккаунта); nil — текущий.
+local function AddPlan(item, scope, farm, who)
   if type(item) ~= "table" or (item.kind ~= "raid" and item.kind ~= "dungeon") then
     return false
   end
-  local player = GetPlayer()
-  if not player.name then
+  local player = who or GetPlayer()
+  if not player.name or not player.key or player.key == "?" then
+    return false
+  end
+  farm = farm == true
+  if farm and scope == "place" then
     return false
   end
   scope = scope == "place" and "place" or "row"
@@ -722,25 +797,65 @@ local function AddPlan(item, scope)
   rec.mount = Clean(item.mount)
   rec.diff = Clean(item.diff)
   rec.place = place
-  rec.farm = false
+  rec.farm = farm
   if not AddRecord(rec) then
     return false
   end
+  -- отметка в аддоне, пока программа не прислала новый список: db.notFarmed прячет строку, db.farmAgain показывает
   db.notFarmed = type(db.notFarmed) == "table" and db.notFarmed or {}
-  local mine = type(db.notFarmed[player.key]) == "table" and db.notFarmed[player.key] or {}
-  db.notFarmed[player.key] = mine
+  db.farmAgain = type(db.farmAgain) == "table" and db.farmAgain or {}
+  DropPlans(db.notFarmed, player.key, rec)
+  DropPlans(db.farmAgain, player.key, rec)
+  local into = farm and db.farmAgain or db.notFarmed
+  local mine = type(into[player.key]) == "table" and into[player.key] or {}
+  into[player.key] = mine
   mine[#mine + 1] = { scope = scope, list = rec.list, boss = rec.boss, mount = rec.mount, diff = rec.diff,
                       place = place, time = stamp }
-  if scope == "place" then
-    Print(string.format(L.plan_place, ns.Shown(item, "place") or place, player.name))
+  if farm then
+    Print(string.format(L.plan_on, PlanWhat(rec), player.name))
+  elseif scope == "place" then
+    Print(string.format(L.plan_place, ns.Shown(item, "place") or place, player.name) .. " " .. L.plan_back)
   else
-    Print(string.format(L.plan_row, PlanWhat(rec), player.name))
+    Print(string.format(L.plan_row, PlanWhat(rec), player.name) .. " " .. L.plan_back)
   end
   return true
 end
 
-function ns.AddPlan(item, scope)
-  local ok, added = pcall(AddPlan, item, scope)
+-- Число попыток, поправленное игроком (вкладка «Попытки», правый щелчок): запись для программы — она поставит его в
+-- «Попыток» таблицы — и отметка db.attemptEdits, по которой аддон показывает новое число уже сейчас.
+-- m — строка счётчика из списка программы (MountSheetSyncSheet.mounts).
+local function SetAttempts(m, n)
+  n = tonumber(n)
+  local player = GetPlayer()
+  if type(m) ~= "table" or not n or n < 0 or n > 100000 or not player.name or not Clean(m.boss) or not ns.AttemptKey then
+    return false
+  end
+  n = math.floor(n)
+  local stamp = time()
+  local rec = BaseRecord(player, stamp)
+  rec.id = string.format("A-%s-%d-%d", player.key, stamp, #db.kills + 1)
+  rec.kind = "attempts"
+  rec.list = m.kind
+  rec.boss = Clean(m.boss)
+  rec.mount = Clean(m.mount)
+  rec.mountID = tonumber(m.id)
+  rec.n = n
+  if not AddRecord(rec) then
+    return false
+  end
+  db.attemptEdits = type(db.attemptEdits) == "table" and db.attemptEdits or {}
+  db.attemptEdits[ns.AttemptKey(m)] = { n = n, time = stamp }
+  Print(string.format(L.attempts_set, ns.Shown(m, "mount") or "?", n))
+  return true
+end
+
+function ns.SetAttempts(m, n)
+  local ok, done = pcall(SetAttempts, m, n)
+  return ok and done or false
+end
+
+function ns.AddPlan(item, scope, farm, who)
+  local ok, added = pcall(AddPlan, item, scope, farm, who)
   return ok and added or false
 end
 
@@ -828,6 +943,7 @@ local function ShowHelp()
     CMD .. "/mss|r — " .. L.help_open,
     CMD .. "/mss sync|r — " .. L.help_sync,
     CMD .. "/mss left|r — " .. L.help_left,
+    CMD .. "/mss drop|r — " .. L.help_drop,
     CMD .. "/mss list|r — " .. L.help_list,
     CMD .. "/mss add " .. L.help_add_arg .. "|r — " .. L.help_add,
     CMD .. "/mss scan|r — " .. L.help_scan,
@@ -860,6 +976,11 @@ SlashCmdList["MOUNTSHEETSYNC"] = function(msg)
     end
   elseif cmd == "help" or cmd == "?" then
     ShowHelp()
+  elseif cmd == "drop" then
+    -- проверка оповещения о выпавшем маунте: выдуманное выпадение, ничего не записывается
+    if ns.TestDrop then
+      SafeCall(ns.TestDrop)
+    end
   elseif cmd == "tip" then
     -- проверка подсказки о боссе: пишет в чат, что видит аддон при наведении (до /reload)
     ns.tipDebug = not ns.tipDebug

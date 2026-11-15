@@ -1,5 +1,5 @@
 --[[
-Mount Sheet Sync 3.0.6 — входы, закрытые сюжетом или фазой зоны.
+Mount Sheet Sync — входы, закрытые сюжетом или фазой зоны.
 
 ns.ACCESS[journalInstanceID]: что нужно, чтобы дойти до входа.
   quests  — задания, любое из которых открывает доступ (C_QuestLog.IsQuestFlaggedCompleted);
@@ -30,6 +30,10 @@ ns.ACCESS = {
   [1180] = {
     quests = { 56376 }, inlog = true, hint = "nyalotha", after = "nyalotha_phase",
     steps = {
+      -- самое начало — путь в Назжатар (8.2): «Отправка флота» у каждой фракции своя (номера и порядок — с Wowhead, цепочки
+      -- «Welcome to Nazjatar»: Send the Fleet > A Way Home > Essential Empowerment)
+      { quest = 56043, faction = "Alliance", name = "Send the Fleet", where = "fleet" },
+      { quest = 56044, faction = "Horde", name = "Send the Fleet", where = "fleet" },
       -- начало цепочки к Залу Сердца (8.2): без него Транслокатор титанов в Силитусе не пускает (проверено в игре 13.11.2026);
       -- приходит от Магни после прибытия в Назжатар — по тексту задания, в игре не проверено
       { quest = 55851, name = "Essential Empowerment", where = "nazjatar" },
@@ -130,15 +134,22 @@ function ns.QuestTitle(step)
   return step.name or tostring(step.quest)
 end
 
--- Первый невыполненный шаг цепочки для фракции этого персонажа; inLog — задание уже взято.
+-- Следующий шаг цепочки для фракции этого персонажа: первый невыполненный после последнего выполненного (ранние шаги
+-- игра могла и не отметить — пропуск сюжета, старые персонажи; зря назад не отправляем). inLog — задание уже взято.
 local function NextStep(a)
   local faction = UnitFactionGroup and Call(UnitFactionGroup, "player")
+  local mine, last = {}, 0
   for _, s in ipairs(a.steps or {}) do
     if not s.faction or s.faction == faction then
-      if not QuestDone(s.quest, a.account) then
-        return s, QuestInLog(s.quest)
+      mine[#mine + 1] = s
+      if QuestDone(s.quest, a.account) then
+        last = #mine
       end
     end
+  end
+  local s = mine[last + 1]
+  if s then
+    return s, QuestInLog(s.quest)
   end
   return nil
 end

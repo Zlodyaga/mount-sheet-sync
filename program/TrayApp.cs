@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -10,7 +11,7 @@ using Microsoft.Win32;
 namespace MountSheetSync
 {
     /// <summary>Значок в трее: меню по правой (и левой) кнопке, всплывающие уведомления.</summary>
-    sealed class TrayApp : ApplicationContext
+    sealed partial class TrayApp : ApplicationContext
     {
         readonly Control invoker = new Control();
         readonly NotifyIcon tray = new NotifyIcon();
@@ -34,6 +35,9 @@ namespace MountSheetSync
         ToolStripMenuItem notifyItem;
         ToolStripMenuItem autoAddItem;
         ToolStripMenuItem languageItem;
+        ToolStripMenuItem restoreItem;
+        ToolStripMenuItem statsItem;
+        ToolStripMenuItem statsShowItem;
         ToolStripMenuItem updateItem;
         ToolStripMenuItem checkUpdatesItem;
         ToolStripMenuItem testVersionsItem;
@@ -81,6 +85,10 @@ namespace MountSheetSync
             else
             {
                 worker.Start(settings, true, TimeSpan.Zero, TimeSpan.Zero);
+            }
+            if (Stats.Available && settings.StatsChoice.Length == 0)
+            {
+                Post(AskStats);
             }
             SingleInstance.Listen(instanceSuffix, delegate { Post(OnSecondInstance); });
             SingleInstance.ListenExit(instanceSuffix, delegate { Post(ExitApp); });   // установка или удаление
@@ -160,12 +168,18 @@ namespace MountSheetSync
             createItem = Item(Tr._("Создать таблицу…"), delegate { OpenCharacters(false); });
             addCharsItem = Item(Tr._("Персонажи в таблице…"), delegate { OpenCharacters(true); });
             farmItem = Item(Tr._("Что фармить…"), delegate { OpenFarm(); });
+            attemptsItem = Item(Tr._("Попытки…"), delegate { OpenAttempts(); });
+            exportItem = Item(Tr._("Выгрузить в таблицу Google…"), delegate { ExportToGoogle(); });
             collectionItem = Item(Tr._("Сверить с коллекцией"), delegate { worker.SyncCollectionNow(); });
             collectionItem.ToolTipText = Tr._("Отметить «Собрано?» у маунтов, которые уже есть в игре, и убрать их с листов персонажей");
             autostartItem = Item(Tr._("Запускать вместе с Windows"), delegate { ToggleAutostart(); });
             notifyItem = Item(Tr._("Показывать уведомления"), delegate { ToggleNotifications(); });
             autoAddItem = Item(Tr._("Добавлять новых персонажей самим"), delegate { ToggleAutoAdd(); });
             autoAddItem.ToolTipText = Tr._("Персонаж, которым вы зашли в игру, сам попадает в список. Выключено — добавляйте через «Персонажи…»");
+            restoreItem = new ToolStripMenuItem(Tr._("Вернуть данные за день"));
+            statsItem = Item(Tr._("Отправлять анонимную статистику"), delegate { SetStats(!statsItem.Checked); });
+            statsItem.ToolTipText = Tr._("Раз в сутки: версии, язык, режим и счётчики пользования. Без имён персонажей и данных таблицы");
+            statsShowItem = Item(Tr._("Что отправляется…"), delegate { ShowStats(); });
             languageItem = new ToolStripMenuItem(Tr._("Язык") + (Tr.Lang != "en" ? " / Language" : ""));
             foreach (string code in new[] { "auto" }.Concat(Tr.Languages))
             {
@@ -178,10 +192,11 @@ namespace MountSheetSync
             menu.Items.AddRange(new ToolStripItem[]
             {
                 title, updateItem, statusItem, detailItem, addonItem, new ToolStripSeparator(),
-                syncItem, recentItem, leftItem, openSheetItem, signInItem, createItem, addCharsItem, farmItem, collectionItem, new ToolStripSeparator(),
+                syncItem, recentItem, leftItem, openSheetItem, signInItem, createItem, addCharsItem, farmItem, attemptsItem, exportItem, collectionItem, new ToolStripSeparator(),
                 Item(Tr._("Настройки…"), delegate { OpenSettings(false); }),
                 Item(Tr._("Журнал работы"), delegate { OpenLog(); }),
-                autostartItem, notifyItem, autoAddItem, checkUpdatesItem, testVersionsItem, languageItem, new ToolStripSeparator(),
+                Item(Tr._("Папка данных…"), delegate { ChooseDataFolder(); }),
+                autostartItem, notifyItem, autoAddItem, restoreItem, statsItem, statsShowItem, checkUpdatesItem, testVersionsItem, languageItem, new ToolStripSeparator(),
                 Item(Tr._("Выход"), delegate { ExitApp(); }),
             });
         }
@@ -362,10 +377,16 @@ namespace MountSheetSync
             addCharsItem.Text = settings.IsLocal ? Tr._("Персонажи…") : Tr._("Персонажи в таблице…");
             collectionItem.Visible = haveSheet;
             farmItem.Visible = haveSheet;
+            attemptsItem.Visible = haveSheet;
+            exportItem.Visible = haveSheet && settings.IsLocal;
             autostartItem.Checked = Autostart.IsEnabled();
             notifyItem.Checked = settings.Notifications;
             autoAddItem.Checked = settings.AutoAddCharacters;
             autoAddItem.Visible = settings.IsLocal;
+            FillRestore();
+            statsItem.Visible = Stats.Available;
+            statsShowItem.Visible = Stats.Available;
+            statsItem.Checked = settings.StatsChoice == "yes";
             checkUpdatesItem.Checked = settings.CheckUpdates;
             testVersionsItem.Checked = settings.TestVersions;
             testVersionsItem.Enabled = settings.CheckUpdates;
@@ -849,41 +870,6 @@ namespace MountSheetSync
                 return;
             }
             ExitApp();
-        }
-
-        void ToggleAutoAdd()
-        {
-            settings.AutoAddCharacters = !settings.AutoAddCharacters;
-            try
-            {
-                settings.Save(AppPaths.SettingsFile);
-            }
-            catch (Exception ex)
-            {
-                Log.Write(Tr.L("Не удалось сохранить настройки: {0}", ex.Message));
-            }
-            if (worker != null)
-            {
-                worker.Reload(settings.Clone(), false);
-            }
-        }
-
-        void ToggleNotifications()
-        {
-            settings.Notifications = !settings.Notifications;
-            try
-            {
-                settings.Save(AppPaths.SettingsFile);
-            }
-            catch (Exception ex)
-            {
-                Log.Write(Tr.L("Не удалось сохранить настройки: {0}", ex.Message));
-            }
-            if (!settings.Notifications)
-            {
-                ShowNote(MakeNote(Tr._("Уведомления выключены"),
-                    Tr._("Что отправлено, видно в меню значка: «Последние события» и «Журнал работы»."), false));
-            }
         }
 
         void OpenLog()

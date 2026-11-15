@@ -2,6 +2,22 @@
 
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
+## 3.0.7
+- “All characters”: a boss a character has killed this week no longer turns into “not farming” once the program has saved the kill.
+- World bosses now show their mount and your attempts in the unit tooltip, like rares do.
+- Farming tips in the row tooltips: where the boss is, what you need to get in, how to farm faster. In the addon's language where there is a translation, in English otherwise. Can be turned off in the settings.
+- The number of attempts can be corrected in the game: on the “Attempts” tab right-click a row, type the number, press Enter (needs the program 2.10.2).
+- The “Dropped” tab also lists the mounts you collected before the addon kept track of drops, without a date (needs the program 2.10.2).
+- The Vault of Archavon mammoth is listed for Alliance characters too: both factions get their own version from the same bosses.
+- “Farming / not farming” can now be changed in the game, for any character of your account: on the “All characters” tab right-click a raid or dungeon row and tick or untick a character. A row you turned off can be turned back on the same way (needs the program 2.10.2). A new setting shows the rows nobody farms, in grey.
+- The settings window is rebuilt in two columns with sections; the week reset, the journal clean-up and the report are together, and there is a button that shows an example of the mount drop notice.
+- A notice when a mount from your list drops: a panel at the top of the screen strikes the mount out, left to right, the “left to collect” count goes down by one, and you see the attempt it dropped on. With its own two sounds. Two ticks in the settings turn the notice or its sound off; `/mss drop` shows a test one. A third tick keeps our notice silent while Rarity is enabled.
+- A new tab, “Dropped”: the mounts from your list that have dropped since the addon was installed, with the attempt they dropped on, the day and the character.
+- The game's addon list shows Mount Sheet Sync under “Collections”, next to other collection addons.
+- A mount only one faction can get (“… [Horde]”) is no longer listed or counted for characters of the other faction. The addon learns a character's faction when you log in with it.
+- The addon counts how often its window, tabs and pins are used (numbers only, kept for 7 days in its saved file). Nothing leaves your computer unless you agree to anonymous statistics in the tray program.
+- Ny'alotha's chain starts even earlier: “Send the Fleet”, the way to Nazjatar. If a later quest of a chain is already done, the addon no longer sends you back to an earlier one.
+
 ## 3.0.6
 - Routes through portals with Mapzeroth: when the Mapzeroth addon is installed, Ctrl + click hands it the pin (entrance, rare,
   world boss, the next quest of a gated entrance) and its navigator leads the way, through portals and flights too. Without

@@ -205,6 +205,15 @@ en: [-] {0}: not farming “{1}” — “Farming” unticked (rows: {2})
 @ [-] {0}: не фармит «{1}» — галочка «Фармлю» уже была снята
 en: [-] {0}: not farming “{1}” — “Farming” was already unticked
 
+@ [~] {0}: «{1}» — попыток теперь {2} (поправлено в игре)
+en: [~] {0}: “{1}” — attempts are now {2} (changed in the game)
+
+@ [!] {0}: число попыток «{1}» не изменено — такой строки со счётчиком нет
+en: [!] {0}: attempts for “{1}” not changed — there is no such row with a counter
+
+@ [+] {0}: снова фармит «{1}» — галочка «Фармлю» стоит
+en: [+] {0}: farming “{1}” again — “Farming” is ticked
+
 @ [!] {0}: «не фармлю» {1} — {2}
 en: [!] {0}: “not farming” {1} — {2}
 
@@ -458,3 +467,36 @@ en: Could not start watching the file ({0}): checking it every few seconds.
 
 @ Не получилось, работаю дальше ({0})
 en: That did not work, carrying on ({0})
+
+@ Данные возвращены из копии за {0}; прежние сохранены: {1}
+en: Data brought back from the copy of {0}; the previous data is kept: {1}
+
+@ Анонимная статистика включена.
+en: Anonymous statistics turned on.
+
+@ Анонимная статистика выключена.
+en: Anonymous statistics turned off.
+
+@ Данные уже в папке {0}.
+en: The data is already in {0}.
+
+@ Данные теперь в папке {0}; прежние файлы остались в {1}.
+en: The data is now in {0}; the old files stay in {1}.
+
+@ Попытки: {0}
+en: Attempts: {0}
+
+@ Попытки: маунта «{0}» со счётчиком нет.
+en: Attempts: there is no mount “{0}” with a counter.
+
+@ Попытки: изменено маунтов — {0}.
+en: Attempts: mounts changed — {0}.
+
+@ Неизвестный параметр запуска: {0}. Программа не запущена.
+en: Unknown start option: {0}. The program was not started.
+
+@ Выгрузить данные в таблицу Google не получилось: {0}
+en: Could not export the data to a Google spreadsheet: {0}
+
+@ Данные с этого компьютера выгружены в таблицу «{0}»: перенесено ячеек — {1}. Файл на компьютере остался.
+en: The data of this computer is exported to the spreadsheet “{0}”: cells copied — {1}. The file on the computer stays.

@@ -668,3 +668,234 @@ de: Ein Charakter, mit dem du dich einloggst, kommt von selbst in die Liste. Aus
 fr: Un personnage avec lequel vous vous connectez rejoint la liste tout seul. Désactivé : ajoutez-les via « Personnages… »
 es: Un personaje con el que entras al juego se añade solo a la lista. Desactivado: añádelos desde «Personajes…»
 pt: Um personagem com que você entra no jogo vai sozinho para a lista. Desligado: adicione por “Personagens…”
+
+@ Вернуть данные за день
+en: Bring back the data of a day
+de: Daten eines Tages zurückholen
+fr: Reprendre les données d'un jour
+es: Recuperar los datos de un día
+pt: Recuperar os dados de um dia
+
+@ Вернуть данные, какими они были {0}? Отметки, попытки и персонажи, добавленные позже, пропадут. Нынешние данные сохранятся рядом: {1}.
+en: Bring the data back to what it was on {0}? Marks, attempts and characters added later will be lost. The current data will be kept next to it: {1}.
+de: Die Daten auf den Stand vom {0} zurücksetzen? Später hinzugekommene Markierungen, Versuche und Charaktere gehen verloren. Die jetzigen Daten bleiben daneben erhalten: {1}.
+fr: Reprendre les données telles qu'elles étaient le {0} ? Les marques, tentatives et personnages ajoutés ensuite seront perdus. Les données actuelles seront gardées à côté : {1}.
+es: ¿Recuperar los datos tal como estaban el {0}? Las marcas, los intentos y los personajes añadidos después se perderán. Los datos actuales se guardarán al lado: {1}.
+pt: Recuperar os dados como estavam em {0}? Marcas, tentativas e personagens adicionados depois serão perdidos. Os dados atuais ficam guardados ao lado: {1}.
+
+@ Не удалось вернуть данные из копии: {0}
+en: Couldn't bring the data back from the copy: {0}
+de: Die Daten konnten nicht aus der Kopie zurückgeholt werden: {0}
+fr: Impossible de reprendre les données de la copie : {0}
+es: No se pudieron recuperar los datos de la copia: {0}
+pt: Não foi possível recuperar os dados da cópia: {0}
+
+@ в копии нет данных
+en: the copy has no data
+de: die Kopie enthält keine Daten
+fr: la copie ne contient pas de données
+es: la copia no tiene datos
+pt: a cópia não tem dados
+
+@ Отправлять анонимную статистику
+en: Send anonymous statistics
+de: Anonyme Statistik senden
+fr: Envoyer des statistiques anonymes
+es: Enviar estadísticas anónimas
+pt: Enviar estatísticas anônimas
+
+@ Раз в сутки: версии, язык, режим и счётчики пользования. Без имён персонажей и данных таблицы
+en: Once a day: versions, language, mode and usage counters. No character names, nothing from your list
+de: Einmal am Tag: Versionen, Sprache, Modus und Nutzungszähler. Keine Charakternamen, nichts aus deiner Liste
+fr: Une fois par jour : versions, langue, mode et compteurs d'utilisation. Aucun nom de personnage, rien de votre liste
+es: Una vez al día: versiones, idioma, modo y contadores de uso. Sin nombres de personajes ni datos de tu lista
+pt: Uma vez por dia: versões, idioma, modo e contadores de uso. Sem nomes de personagens nem dados da sua lista
+
+@ Что отправляется…
+en: What is sent…
+de: Was gesendet wird…
+fr: Ce qui est envoyé…
+es: Qué se envía…
+pt: O que é enviado…
+
+@ Помочь автору понять, чем в Mount Sheet Sync пользуются?\n\nРаз в сутки программа будет отправлять автору короткое сообщение: версии программы, аддона и Windows, язык, где хранятся данные, сколько персонажей (примерно), сколько раз открывали вкладки и ставили метки, и случайный номер установки. Ни имён персонажей, ни серверов, ни данных таблицы в нём нет.\n\nТочный текст сообщения — «Что отправляется…» в меню значка; там же это выключается.\n\nОтправлять?
+en: Help the author see what people use in Mount Sheet Sync?\n\nOnce a day the program will send the author a short message: the versions of the program, the addon and Windows, the language, where the data is kept, roughly how many characters, how many times tabs were opened and pins were set, and a random installation number. It has no character names, no realms and nothing from your list.\n\nThe exact text of the message is under “What is sent…” in the tray menu; you can turn it off there too.\n\nSend it?
+de: Dem Autor zeigen, was in Mount Sheet Sync genutzt wird?\n\nEinmal am Tag sendet das Programm dem Autor eine kurze Nachricht: die Versionen von Programm, Addon und Windows, die Sprache, wo die Daten liegen, ungefähr wie viele Charaktere, wie oft Reiter geöffnet und Markierungen gesetzt wurden, und eine zufällige Installationsnummer. Sie enthält keine Charakternamen, keine Realms und nichts aus deiner Liste.\n\nDen genauen Text der Nachricht zeigt „Was gesendet wird…“ im Menü des Symbols; dort lässt es sich auch ausschalten.\n\nSenden?
+fr: Aider l'auteur à voir ce qui sert dans Mount Sheet Sync ?\n\nUne fois par jour, le programme enverra à l'auteur un court message : les versions du programme, de l'addon et de Windows, la langue, l'endroit où sont gardées les données, le nombre approximatif de personnages, le nombre d'ouvertures d'onglets et de repères posés, et un numéro d'installation aléatoire. Il ne contient ni nom de personnage, ni royaume, ni rien de votre liste.\n\nLe texte exact du message se trouve sous « Ce qui est envoyé… » dans le menu de l'icône ; on peut aussi le désactiver là.\n\nEnvoyer ?
+es: ¿Ayudar al autor a ver qué se usa en Mount Sheet Sync?\n\nUna vez al día el programa enviará al autor un mensaje corto: las versiones del programa, del addon y de Windows, el idioma, dónde se guardan los datos, cuántos personajes hay aproximadamente, cuántas veces se abrieron pestañas y se pusieron marcas, y un número de instalación aleatorio. No lleva nombres de personajes, reinos ni nada de tu lista.\n\nEl texto exacto del mensaje está en «Qué se envía…» en el menú del icono; ahí también se desactiva.\n\n¿Enviar?
+pt: Ajudar o autor a ver o que é usado no Mount Sheet Sync?\n\nUma vez por dia o programa enviará ao autor uma mensagem curta: as versões do programa, do addon e do Windows, o idioma, onde os dados ficam, quantos personagens há aproximadamente, quantas vezes abas foram abertas e marcas foram colocadas, e um número de instalação aleatório. Não há nomes de personagens, reinos nem nada da sua lista.\n\nO texto exato da mensagem está em “O que é enviado…” no menu do ícone; lá também dá para desligar.\n\nEnviar?
+
+@ Статистика включена. Вот сообщение, которое уходит раз в сутки:
+en: Statistics are on. This is the message that is sent once a day:
+de: Die Statistik ist an. Diese Nachricht wird einmal am Tag gesendet:
+fr: Les statistiques sont activées. Voici le message envoyé une fois par jour :
+es: Las estadísticas están activadas. Este es el mensaje que se envía una vez al día:
+pt: As estatísticas estão ligadas. Esta é a mensagem enviada uma vez por dia:
+
+@ Статистика выключена, ничего не отправляется. Вот что уходило бы раз в сутки:
+en: Statistics are off, nothing is sent. This is what would be sent once a day:
+de: Die Statistik ist aus, es wird nichts gesendet. Das würde einmal am Tag gesendet:
+fr: Les statistiques sont désactivées, rien n'est envoyé. Voici ce qui serait envoyé une fois par jour :
+es: Las estadísticas están desactivadas, no se envía nada. Esto es lo que se enviaría una vez al día:
+pt: As estatísticas estão desligadas, nada é enviado. Isto é o que seria enviado uma vez por dia:
+
+@ Папка данных…
+en: Data folder…
+de: Datenordner…
+fr: Dossier des données…
+es: Carpeta de datos…
+pt: Pasta de dados…
+
+@ Программа запущена с ключом --data: папка данных задана им ({0}).
+en: The program was started with --data: that option sets the data folder ({0}).
+de: Das Programm wurde mit --data gestartet: Diese Option legt den Datenordner fest ({0}).
+fr: Le programme a été lancé avec --data : cette option fixe le dossier des données ({0}).
+es: El programa se inició con --data: esa opción fija la carpeta de datos ({0}).
+pt: O programa foi iniciado com --data: essa opção define a pasta de dados ({0}).
+
+@ Где хранить настройки и данные программы. Сейчас: {0}. Нынешние файлы будут скопированы в новую папку, прежние останутся на месте.
+en: Where to keep the program's settings and data. Now: {0}. The current files will be copied to the new folder; the old ones stay where they are.
+de: Wo die Einstellungen und Daten des Programms liegen sollen. Jetzt: {0}. Die jetzigen Dateien werden in den neuen Ordner kopiert, die alten bleiben, wo sie sind.
+fr: Où conserver les réglages et les données du programme. Actuellement : {0}. Les fichiers actuels seront copiés dans le nouveau dossier ; les anciens restent en place.
+es: Dónde guardar los ajustes y los datos del programa. Ahora: {0}. Los archivos actuales se copiarán a la nueva carpeta; los antiguos se quedan donde están.
+pt: Onde guardar as configurações e os dados do programa. Agora: {0}. Os arquivos atuais serão copiados para a nova pasta; os antigos ficam onde estão.
+
+@ В этой папке уже есть данные программы. Использовать их? Нынешние данные останутся в прежней папке.
+en: This folder already has the program's data. Use it? The current data will stay in the old folder.
+de: In diesem Ordner liegen bereits Daten des Programms. Diese verwenden? Die jetzigen Daten bleiben im alten Ordner.
+fr: Ce dossier contient déjà des données du programme. Les utiliser ? Les données actuelles resteront dans l'ancien dossier.
+es: Esta carpeta ya tiene datos del programa. ¿Usarlos? Los datos actuales se quedarán en la carpeta anterior.
+pt: Esta pasta já tem dados do programa. Usá-los? Os dados atuais ficarão na pasta antiga.
+
+@ Не удалось перенести данные: {0}
+en: Could not move the data: {0}
+de: Die Daten konnten nicht verschoben werden: {0}
+fr: Impossible de déplacer les données : {0}
+es: No se pudieron mover los datos: {0}
+pt: Não foi possível mover os dados: {0}
+
+@ Данные теперь в папке {0}. Программа перезапустится.
+en: The data is now in {0}. The program will restart.
+de: Die Daten liegen jetzt in {0}. Das Programm startet neu.
+fr: Les données sont maintenant dans {0}. Le programme va redémarrer.
+es: Los datos están ahora en {0}. El programa se reiniciará.
+pt: Os dados agora estão em {0}. O programa será reiniciado.
+
+@ попытки
+en: attempts
+de: Versuche
+fr: tentatives
+es: intentos
+pt: tentativas
+
+@ Сколько попыток уже было по каждому маунту. Выберите строку и поправьте число — например, если часть убийств была до установки аддона.
+en: How many attempts there have been for each mount. Pick a row and correct the number — for example, if some kills happened before the addon was installed.
+de: Wie viele Versuche es für jedes Reittier schon gab. Zeile wählen und die Zahl korrigieren — zum Beispiel, wenn ein Teil der Kills vor der Installation des Addons lag.
+fr: Combien de tentatives il y a déjà eu pour chaque monture. Choisissez une ligne et corrigez le nombre — par exemple si une partie des victoires date d'avant l'installation de l'addon.
+es: Cuántos intentos ha habido ya para cada montura. Elija una fila y corrija el número; por ejemplo, si parte de las muertes fueron antes de instalar el addon.
+pt: Quantas tentativas já houve para cada montaria. Escolha uma linha e corrija o número — por exemplo, se parte dos abates foi antes de instalar o addon.
+
+@ Маунт
+en: Mount
+de: Reittier
+fr: Monture
+es: Montura
+pt: Montaria
+
+@ Босс
+en: Boss
+de: Boss
+fr: Boss
+es: Jefe
+pt: Chefe
+
+@ Попыток
+en: Attempts
+de: Versuche
+fr: Tentatives
+es: Intentos
+pt: Tentativas
+
+@ Попыток у выбранного маунта:
+en: Attempts for the selected mount:
+de: Versuche für das gewählte Reittier:
+fr: Tentatives pour la monture choisie :
+es: Intentos de la montura elegida:
+pt: Tentativas da montaria escolhida:
+
+@ Счётчика попыток пока нет.
+en: There is no attempt counter yet.
+de: Es gibt noch keinen Versuchszähler.
+fr: Il n'y a pas encore de compteur de tentatives.
+es: Todavía no hay contador de intentos.
+pt: Ainda não há contador de tentativas.
+
+@ Попытки…
+en: Attempts…
+de: Versuche…
+fr: Tentatives…
+es: Intentos…
+pt: Tentativas…
+
+@ Попытки: сохранено
+en: Attempts: saved
+de: Versuche: gespeichert
+fr: Tentatives : enregistré
+es: Intentos: guardado
+pt: Tentativas: salvo
+
+@ Изменено маунтов: {0}. В игре числа обновятся после входа или /reload.
+en: Mounts changed: {0}. In the game the numbers update after you log in or /reload.
+de: Geänderte Reittiere: {0}. Im Spiel aktualisieren sich die Zahlen nach dem Einloggen oder /reload.
+fr: Montures modifiées : {0}. En jeu, les nombres se mettent à jour après la connexion ou /reload.
+es: Monturas cambiadas: {0}. En el juego los números se actualizan al entrar o con /reload.
+pt: Montarias alteradas: {0}. No jogo os números atualizam depois de entrar ou /reload.
+
+@ данных на этом компьютере нет — выгружать нечего
+en: there is no data on this computer — nothing to export
+de: auf diesem Computer gibt es keine Daten — nichts zu exportieren
+fr: il n'y a pas de données sur cet ordinateur — rien à exporter
+es: no hay datos en este ordenador: nada que exportar
+pt: não há dados neste computador — nada para exportar
+
+@ Выгрузить в таблицу Google…
+en: Export to a Google spreadsheet…
+de: In eine Google-Tabelle exportieren…
+fr: Exporter vers une feuille Google…
+es: Exportar a una hoja de Google…
+pt: Exportar para uma planilha do Google…
+
+@ Сначала войдите через Google: «Настройки…» > «Таблица Google» > «Войти». Потом верните «На этом компьютере» и выберите этот пункт ещё раз.
+en: Sign in with Google first: “Settings…” > “Google spreadsheet” > “Sign in”. Then go back to “On this computer” and pick this item again.
+de: Zuerst mit Google anmelden: „Einstellungen…“ > „Google-Tabelle“ > „Anmelden“. Danach wieder „Auf diesem Computer“ wählen und diesen Punkt erneut aufrufen.
+fr: Connectez-vous d'abord avec Google : « Réglages… » > « Feuille Google » > « Se connecter ». Revenez ensuite à « Sur cet ordinateur » et choisissez de nouveau cet élément.
+es: Primero inicie sesión con Google: «Ajustes…» > «Hoja de Google» > «Iniciar sesión». Después vuelva a «En este ordenador» y elija de nuevo esta opción.
+pt: Primeiro entre com o Google: “Configurações…” > “Planilha do Google” > “Entrar”. Depois volte para “Neste computador” e escolha este item de novo.
+
+@ Создать новую таблицу Google и перенести в неё данные с этого компьютера (отметки, «Фармлю», попытки)? Программа перейдёт на эту таблицу; файл на компьютере останется, вернуться можно в настройках.
+en: Make a new Google spreadsheet and copy this computer's data into it (marks, “Farming”, attempts)? The program will switch to that spreadsheet; the file on the computer stays, and you can go back in the settings.
+de: Eine neue Google-Tabelle anlegen und die Daten dieses Computers hineinkopieren (Markierungen, „Farme ich“, Versuche)? Das Programm wechselt zu dieser Tabelle; die Datei auf dem Computer bleibt, zurück geht es in den Einstellungen.
+fr: Créer une nouvelle feuille Google et y copier les données de cet ordinateur (marques, « Je farme », tentatives) ? Le programme passera à cette feuille ; le fichier sur l'ordinateur reste, et vous pouvez revenir en arrière dans les réglages.
+es: ¿Crear una nueva hoja de Google y copiar en ella los datos de este ordenador (marcas, «Lo farmeo», intentos)? El programa pasará a esa hoja; el archivo del ordenador se queda y puede volver atrás en los ajustes.
+pt: Criar uma nova planilha do Google e copiar para ela os dados deste computador (marcas, “Farmo”, tentativas)? O programa passará a usar essa planilha; o arquivo no computador fica, e dá para voltar nas configurações.
+
+@ Выгрузить данные не получилось: {0}
+en: Could not export the data: {0}
+de: Die Daten konnten nicht exportiert werden: {0}
+fr: Impossible d'exporter les données : {0}
+es: No se pudieron exportar los datos: {0}
+pt: Não foi possível exportar os dados: {0}
+
+@ Данные выгружены в таблицу Google
+en: The data is exported to a Google spreadsheet
+de: Die Daten sind in eine Google-Tabelle exportiert
+fr: Les données sont exportées vers une feuille Google
+es: Los datos se exportaron a una hoja de Google
+pt: Os dados foram exportados para uma planilha do Google
+
+@ Таблица «{0}» создана, программа теперь ведёт её.
+en: The spreadsheet “{0}” is made; the program keeps it from now on.
+de: Die Tabelle „{0}“ ist angelegt; das Programm führt sie ab jetzt.
+fr: La feuille « {0} » est créée ; le programme la tient désormais.
+es: La hoja «{0}» está creada; el programa la lleva desde ahora.
+pt: A planilha “{0}” foi criada; o programa passa a mantê-la.

@@ -18,6 +18,10 @@ function MenuUtil.CreateContextMenu(owner, generator)
     local b = { kind = "button", text = t, cb = cb }; self.items[#self.items + 1] = b; return b
   end
   function root:CreateDivider() self.items[#self.items + 1] = { kind = "divider" } end
+  function root:CreateCheckbox(t, isSelected, setSelected)
+    assert(type(t) == "string" and type(isSelected) == "function" and type(setSelected) == "function", "mock: CreateCheckbox(text, isSelected, setSelected)")
+    local b = { kind = "checkbox", text = t, on = isSelected, cb = setSelected }; self.items[#self.items + 1] = b; return b
+  end
   generator(owner, root)
   MENUS[#MENUS + 1] = root
   return root
@@ -84,6 +88,7 @@ end
 function Region:EnableMouseWheel(v) self._wheel = v end
 function Region:LockHighlight() self._locked = true end
 function Region:UnlockHighlight() self._locked = false end
+function Region:SetAlpha(a) assert(type(a) == "number", "mock: SetAlpha(number)"); self._alpha = a end
 function Region:SetVertexColor(...) self._vertex = { ... } end
 function Region:GetLeft() return self._left or 0 end
 function Region:GetTop() return self._top or 0 end
@@ -143,6 +148,7 @@ function Region:SetChecked(v) self._checked = not not v end
 function Region:GetChecked() return self._checked or false end
 function Region:SetAutoFocus(v) end
 function Region:SetMaxLetters(n) self._maxLetters = n end
+function Region:SetNumeric(on) self._numeric = on end
 function Region:ClearFocus() self._focus = false end
 function Region:HighlightText(a, b) self._highlighted = true end
 function Region:SetCursorPosition(n) self._cursor = n end

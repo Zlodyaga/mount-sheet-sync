@@ -25,6 +25,10 @@ namespace MountSheetSync
         public string Secret = DefaultSecret;
         public string WowPath = "";
         public bool Notifications = true;
+        /// <summary>Анонимная статистика: "" — ещё не спрашивали, "yes" / "no" — ответ игрока.</summary>
+        public string StatsChoice = "";
+        /// <summary>Случайный номер установки для статистики; есть только при согласии, при отказе стирается.</summary>
+        public string InstallId = "";
         /// <summary>Данные на компьютере: новые персонажи из игры попадают в список сами (2.10.1; выключено — только через «Персонажи…»).</summary>
         public bool AutoAddCharacters = true;
         /// <summary>Раз в сутки смотреть, нет ли новой версии на GitHub.</summary>
@@ -182,6 +186,9 @@ namespace MountSheetSync
                 {
                     s.Notifications = J.Truthy(d, "notifications");
                 }
+                string stats = J.Str(d, "stats");
+                s.StatsChoice = stats == "yes" || stats == "no" ? stats : "";
+                s.InstallId = s.StatsChoice == "yes" ? J.Str(d, "installId").Trim() : "";
                 if (d.ContainsKey("autoAddCharacters"))
                 {
                     s.AutoAddCharacters = J.Truthy(d, "autoAddCharacters");
@@ -223,6 +230,14 @@ namespace MountSheetSync
             d["secret"] = Secret;
             d["wowPath"] = WowPath;
             d["notifications"] = Notifications;
+            if (StatsChoice.Length > 0)
+            {
+                d["stats"] = StatsChoice;
+            }
+            if (InstallId.Length > 0)
+            {
+                d["installId"] = InstallId;
+            }
             if (!AutoAddCharacters)
             {
                 d["autoAddCharacters"] = false;

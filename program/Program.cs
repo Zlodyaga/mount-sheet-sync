@@ -27,6 +27,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
 using System.Text;
@@ -37,7 +38,7 @@ namespace MountSheetSync
 {
     static class Program
     {
-        public const string Version = "2.10.1";
+        public const string Version = "2.10.2";
         /// <summary>Пробная сборка: «alpha1», «beta2» (подставляет release.yml по тегу v2.8.0-alpha1); "" — обычная.</summary>
         public const string Prerelease = "";
         /// <summary>
@@ -76,13 +77,18 @@ namespace MountSheetSync
                 return 1;
             }
             bool console = opts.Once || opts.Test || opts.GoogleLogin || opts.CreateSheet || opts.AddChars || opts.SyncCollection
-                || opts.CreateLocal || opts.ImportLocal || opts.Storage != null
+                || opts.CreateLocal || opts.ImportLocal || opts.ExportGoogle || opts.Storage != null || opts.DataFolder != null || opts.SetAttemptsFile != null || opts.Unknown != null
                 || opts.SetCharsFile != null || opts.CheckUpdate || opts.Update || opts.Install || (opts.Uninstall && opts.Yes);
             Tr.Use(Settings.Load(AppPaths.SettingsFile).Language);
             Log.Init(AppPaths.LogFile, console);
             ConfigureNetwork();
             GoogleConfig.ApplyTestOverride();
 
+            if (opts.Unknown != null)
+            {
+                Log.Write(Tr.L("Неизвестный параметр запуска: {0}. Программа не запущена.", opts.Unknown));
+                return 2;
+            }
             if (opts.Test)
             {
                 return RunTest();
@@ -103,9 +109,21 @@ namespace MountSheetSync
             {
                 return RunImportLocal(opts.Yes);
             }
+            if (opts.ExportGoogle)
+            {
+                return RunExportGoogle();
+            }
             if (opts.Storage != null)
             {
                 return RunStorage(opts.Storage);
+            }
+            if (opts.DataFolder != null)
+            {
+                return RunDataFolder(opts.DataFolder);
+            }
+            if (opts.SetAttemptsFile != null)
+            {
+                return RunSetAttempts(opts.SetAttemptsFile);
             }
             if (opts.AddChars)
             {
@@ -497,6 +515,132 @@ namespace MountSheetSync
             Log.Write(Tr.L("Данные перенесены из таблицы на этот компьютер: {0}", file));
         }
 
+        static int RunExportGoogle()
+        {
+            Settings settings = Settings.Load(AppPaths.SettingsFile);
+            try
+            {
+                CreatedSheet sheet = ExportToGoogle(settings, Log.Write);
+                Log.Write(Tr.L("Готово: {0}", sheet.Url));
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                if (!(ex is SyncException) && !(ex is ArgumentException))
+                {
+                    throw;
+                }
+                Log.Write(Tr.L("Выгрузить данные в таблицу Google не получилось: {0}", ex.Message));
+                return 1;
+            }
+        }
+
+        /// <summary>
+        /// Данные «на этом компьютере» → новая таблица Google: таблица создаётся по свежему каталогу для тех же
+        /// персонажей, потом в неё переносятся отметки, «Фармлю», попытки и «Собрано?» (SheetLogic.CopyState).
+        /// settings переходит на новую таблицу; файл на компьютере остаётся как был.
+        /// </summary>
+        public static CreatedSheet ExportToGoogle(Settings settings, Action<string> progress)
+        {
+            string file = AppPaths.LocalBookFile;
+            if (!File.Exists(file))
+            {
+                throw new SyncException(Tr._("данных на этом компьютере нет — выгружать нечего"));
+            }
+            LocalBook local;
+            using (LocalBook.Exclusive(file))
+            {
+                local = LocalBook.Load(file);
+            }
+            List<CharacterInTable> chars = SheetCreator.TableCharacters(local);
+            if (chars.Count == 0)
+            {
+                throw new SyncException(Tr._("данных на этом компьютере нет — выгружать нечего"));
+            }
+            GameSnapshot game = ReadGame(settings);
+            BuildPlan plan = PlanFor(game, local.Title, null);
+            plan.Lang = local.Lang ?? plan.Lang;
+            plan.Characters.Clear();
+            foreach (CharacterInTable c in chars)
+            {
+                plan.Characters.Add(new BuildCharacter(c.Name, c.RaidSheet != null, c.DungeonSheet != null));
+            }
+            CreatedSheet sheet = SheetCreator.Create(plan, progress);
+            GoogleBook book = GoogleBook.Load(sheet.Id);
+            int copied = SheetLogic.CopyState(local, book, chars.Select(c => c.Name));
+            book.Flush();
+            // что уже учтено в данных на компьютере, новой таблице заново не шлём (иначе попытки посчитаются дважды)
+            string sentLocal = AppPaths.SentFileFor(settings);
+            UseNewSheet(settings, sheet);
+            if (File.Exists(sentLocal))
+            {
+                File.Copy(sentLocal, AppPaths.SentFileFor(settings), true);
+            }
+            progress(Tr.L("Данные с этого компьютера выгружены в таблицу «{0}»: перенесено ячеек — {1}. Файл на компьютере остался.", sheet.Title, copied));
+            return sheet;
+        }
+
+        /// <summary>--data-folder &lt;папка&gt;: перенести данные программы в другую папку (то же, что «Папка данных…» в меню).</summary>
+        static int RunDataFolder(string dir)
+        {
+            try
+            {
+                if (!DataFolder.Move(AppPaths.DataDir, dir))
+                {
+                    Log.Write(Tr.L("Данные уже в папке {0}.", AppPaths.DataDir));
+                    return 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Write(Tr.L("Не удалось перенести данные: {0}", ex.Message));
+                return 1;
+            }
+            Log.Write(Tr.L("Данные теперь в папке {0}; прежние файлы остались в {1}.", dir, AppPaths.DataDir));
+            return 0;
+        }
+
+        /// <summary>
+        /// --set-attempts &lt;файл.json&gt;: [{ "mount": "…", "boss": "…", "n": 12 }, …] — поставить число попыток, как окно
+        /// «Попытки» (для проверок и для тех, кому удобнее файлом).
+        /// </summary>
+        static int RunSetAttempts(string file)
+        {
+            try
+            {
+                Settings settings = Settings.Load(AppPaths.SettingsFile);
+                List<object> want = J.Arr(Json.Parse(File.ReadAllText(file, FileUtil.Utf8NoBom)));
+                using (settings.ExclusiveBook())
+                {
+                    IStructuredBook book = settings.OpenBook();
+                    List<AttemptRow> rows = AttemptsEdit.Rows(book);
+                    List<AttemptRow> changed = new List<AttemptRow>();
+                    foreach (object o in want)
+                    {
+                        Dictionary<string, object> w = J.Obj(o);
+                        AttemptRow row = rows.FirstOrDefault(r => SheetLogic.Norm(r.Mount) == SheetLogic.Norm(J.Str(w, "mount"))
+                            && (J.Str(w, "boss").Length == 0 || SheetLogic.Norm(r.Boss) == SheetLogic.Norm(J.Str(w, "boss"))));
+                        if (row == null)
+                        {
+                            Log.Write(Tr.L("Попытки: маунта «{0}» со счётчиком нет.", J.Str(w, "mount")));
+                            continue;
+                        }
+                        row.N = Math.Max(0, Math.Floor(SheetLogic.Number(J.Get(w, "n"))));
+                        changed.Add(row);
+                    }
+                    int written = AttemptsEdit.Save(book, changed);
+                    book.Flush();
+                    Log.Write(Tr.L("Попытки: изменено маунтов — {0}.", written));
+                }
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                Log.Write(Tr.L("Попытки: {0}", ex.Message));
+                return 1;
+            }
+        }
+
         static int RunStorage(string storage)
         {
             Settings settings = Settings.Load(AppPaths.SettingsFile);
@@ -686,7 +830,11 @@ namespace MountSheetSync
         public bool CreateSheet;
         public bool CreateLocal;
         public bool ImportLocal;
+        public bool ExportGoogle;
         public string Storage;
+        public string DataFolder;
+        public string SetAttemptsFile;
+        public string Unknown;
         public bool AddChars;
         public bool SyncCollection;
         public string SetCharsFile;
@@ -744,9 +892,21 @@ namespace MountSheetSync
                 {
                     o.ImportLocal = true;
                 }
+                else if (a == "export-google")
+                {
+                    o.ExportGoogle = true;
+                }
                 else if (a == "storage" && i + 1 < args.Length)
                 {
                     o.Storage = args[++i];
+                }
+                else if (a == "set-attempts" && i + 1 < args.Length)
+                {
+                    o.SetAttemptsFile = args[++i];
+                }
+                else if (a == "data-folder" && i + 1 < args.Length)
+                {
+                    o.DataFolder = Path.GetFullPath(args[++i]);
                 }
                 else if (a == "sheet-lang" && i + 1 < args.Length)
                 {
@@ -800,6 +960,12 @@ namespace MountSheetSync
                 {
                     o.DataDir = Path.GetFullPath(args[++i]);
                 }
+                else if (args[i].StartsWith("--", StringComparison.Ordinal) && o.Unknown == null)
+                {
+                    // незнакомый ключ — не повод открывать окно программы: так тест со старой сборкой показал окно
+                    // настроек посреди игры (15.11.2026)
+                    o.Unknown = args[i];
+                }
             }
             return o;
         }
@@ -846,8 +1012,8 @@ namespace MountSheetSync
         public static void Init(string overrideDir)
         {
             CustomDataDir = overrideDir;
-            DataDir = overrideDir ?? Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MountSheetSync");
+            // без --data: папка, которую выбрал игрок (DataFolder), иначе обычная
+            DataDir = overrideDir ?? DataFolder.Chosen() ?? DataFolder.DefaultDir;
             Directory.CreateDirectory(DataDir);
             SettingsFile = Path.Combine(DataDir, "settings.json");
             SentFile = Path.Combine(DataDir, "sent-ids.txt");

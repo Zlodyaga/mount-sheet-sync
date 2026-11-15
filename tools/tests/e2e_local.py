@@ -161,6 +161,75 @@ check("--test works", code == 0, out[-500:])
 code, out = run(A, "--once")
 check("--once: list made, no upgrade, Google never asked", code == 0 and "Таблица обновлена" not in out and "нет связи" not in out, out[-800:])
 check("SheetData.lua for the addon", "Сильвана Ветрокрылая" in sheet_lua() and 'name = "Эйра"' in sheet_lua(), sheet_lua()[:300])
+check("2.10.2: mounts already collected go to the addon apart (had), for its «Выпавшие» tab", "had = {" in sheet_lua() and "Пепел Ал" in sheet_lua().split("had = {")[1][:4000], sheet_lua()[-300:])
+
+# 2.10.2: anonymous statistics — nothing without a «yes», then one message a day to the receiver, no names in it
+import http.server
+import threading
+STATS = []
+
+
+class StatsReceiver(http.server.BaseHTTPRequestHandler):
+    def do_POST(self):
+        STATS.append(self.rfile.read(int(self.headers.get("Content-Length") or 0)).decode("utf-8"))
+        self.send_response(200)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", "11")
+        self.end_headers()
+        self.wfile.write(b'{"ok":true}')
+
+    def log_message(self, *args):
+        pass
+
+
+stats_server = http.server.HTTPServer(("127.0.0.1", PORT + 2), StatsReceiver)
+threading.Thread(target=stats_server.serve_forever, daemon=True).start()
+STATS_ENV = dict(ENV, MSS_STATS_URL="http://127.0.0.1:%d/exec" % (PORT + 2))
+
+
+def set_stats(choice, install=None, day=None):
+    f = os.path.join(A, "settings.json")
+    d = json.load(open(f, encoding="utf-8"))
+    d.pop("stats", None), d.pop("installId", None)
+    if choice:
+        d["stats"] = choice
+    if install:
+        d["installId"] = install
+    json.dump(d, open(f, "w", encoding="utf-8"))
+    state = os.path.join(A, "stats.json")
+    if day and os.path.exists(state):
+        st = json.load(open(state, encoding="utf-8"))
+        st["day"] = day
+        json.dump(st, open(state, "w", encoding="utf-8"))
+
+
+run(A, "--once", env=STATS_ENV)
+check("2.10.2: statistics: the player was not asked yet — nothing is sent", STATS == [], STATS)
+set_stats("no")
+run(A, "--once", env=STATS_ENV)
+check("…the player said no — nothing is sent", STATS == [], STATS)
+set_stats("yes", "0123456789abcdef0123456789abcdef")
+code, out = run(A, "--once", env=STATS_ENV)
+msg = json.loads(STATS[0]) if STATS else {}
+check("…the player said yes: one message with the number, the versions, the mode and a range of characters",
+      len(STATS) == 1 and msg.get("v") == 1 and msg.get("id") == "0123456789abcdef0123456789abcdef" and msg.get("mode") == "local"
+      and re.match(r"^\d+\.\d+\.\d+$", str(msg.get("program"))) and msg.get("chars") in ("1", "2-5", "6-10", "11+") and msg.get("lang") == "ru",
+      (out[-300:], STATS[:1]))
+check("…no character names or realms in it", STATS and "Эйра" not in STATS[0] and "Ревущий" not in STATS[0] and "\\u042d" not in STATS[0], STATS[:1])
+check("…what was sent is kept for «Что отправляется…»", os.path.exists(os.path.join(A, "stats.json"))
+      and json.load(open(os.path.join(A, "stats.json"), encoding="utf-8")).get("last", {}).get("id") == msg.get("id"))
+run(A, "--once", env=STATS_ENV)
+check("…once a day: a second pass the same day sends nothing", len(STATS) == 1, len(STATS))
+set_stats("yes", "0123456789abcdef0123456789abcdef", day="2020-01-01")
+run(A, "--once", env=STATS_ENV)
+check("…the next day it sends again", len(STATS) == 2, len(STATS))
+stats_server.shutdown()
+stats_server.server_close()   # the port refuses connections from here on
+set_stats("yes", "0123456789abcdef0123456789abcdef", day="2020-01-01")
+code, out = run(A, "--once", env=STATS_ENV)
+check("…a receiver that is down does not break the pass and is not retried the same day",
+      code == 0 and json.load(open(os.path.join(A, "stats.json"), encoding="utf-8")).get("day") != "2020-01-01", out[-400:])
+set_stats(None)
 
 
 def sheet_rows():
@@ -176,6 +245,62 @@ check("every row of the catalog has its mount's ID", all(i.id for i in mirna), [
 PREFIXES = ("Слава герою", "Слава рейдеру", "Мастер ключей", "Мифик ключей", "Легенда ключей", "Герой своего времени", "Притворяйся", "Безупречный мастер")
 not_marked = [i.boss for i in mirna if str(i.boss).startswith(PREFIXES) and i.src != "reward"]
 check("achievements and season rewards are all marked as not a boss kill", not not_marked, not_marked)
+
+# 2.10.2: «не фармлю» for another character from the game, and back — the list carries the rows that are off
+def farm_lists(name):
+    rt = lua51.LuaRuntime(unpack_returned_tuples=True)
+    rt.execute(sheet_lua())
+    for ch in rt.globals().MountSheetSyncSheet.chars.values():
+        if ch.name == name:
+            return ([i for i in ch["items"].values()], [i for i in ch.off.values()] if ch.off else [])
+    return [], []
+
+
+def plan(uid, item, farm, char):
+    return {"id": uid, "time": NOW - 30, "char": char, "realm": "Ревущий фьорд", "charKey": "Player-1-B", "kind": "plan", "list": "raid",
+            "scope": "row", "boss": str(item.boss), "mount": str(item.mount), "diff": str(item.diff or ""), "farm": farm}
+
+
+target = [i for i in mirna if i.kind == "raid" and str(i.boss) == "Сильвана Ветрокрылая"][0]
+same = lambda rows: [i for i in rows if str(i.boss) == str(target.boss) and str(i.mount) == str(target.mount) and str(i.diff) == str(target.diff)]
+check("2.10.2: nothing is off at first: the list has no «off» rows", farm_lists("Мирна")[1] == [] and "off = {" not in sheet_lua())
+write_sv([plan("P-off-1", target, False, "Мирна")])
+fcode, fout = run(A, "--once")
+items, off = farm_lists("Мирна")
+check("…«не фармлю» sent from another character: the row leaves «Осталось» of that character and comes in its «off» list",
+      fcode == 0 and same(items) == [] and len(same(off)) == 1, (fout[-300:], len(same(items)), len(same(off))))
+check("…the «off» row has what the addon needs to show it and to bring it back: kind, place, mount ID",
+      same(off) and same(off)[0].kind == "raid" and same(off)[0].place and same(off)[0].id, same(off) and (same(off)[0].kind, same(off)[0].place))
+check("…the other character still farms it", len(same(farm_lists("Эйра")[0])) == 1 and same(farm_lists("Эйра")[1]) == [])
+write_sv([plan("P-off-1", target, False, "Мирна"), plan("P-on-1", target, True, "Мирна")])
+fcode, fout = run(A, "--once")
+items, off = farm_lists("Мирна")
+check("…«снова фармлю» from the game: the row is back in «Осталось», nothing is off",
+      fcode == 0 and len(same(items)) == 1 and off == [], (fout[-300:], len(same(items)), len(off)))
+# 2.10.2: the number of attempts corrected in the game
+write_sv([{"id": "A-edit-1", "time": NOW - 20, "char": "Эйра", "realm": "Ревущий фьорд", "charKey": "Player-1-A", "kind": "attempts", "list": "raid",
+           "boss": str(target.boss), "mount": str(target.mount), "mountID": int(target.id), "n": 37}])
+fcode, fout = run(A, "--once")
+check("2.10.2: attempts corrected in the game: «Попыток» of that row becomes the number", fcode == 0 and attempts(A, str(target.boss)) == 37,
+      (fout[-300:], attempts(A, str(target.boss))))
+rt = lua51.LuaRuntime(unpack_returned_tuples=True)
+rt.execute(sheet_lua())
+listed = [m.n for m in (rt.globals().MountSheetSyncSheet.mounts or {}).values() if str(m.boss) == str(target.boss) and str(m.mount) == str(target.mount)]
+check("…and the addon's list carries it", listed == [37], listed)
+write_sv([{"id": "A-edit-2", "time": NOW - 10, "char": "Эйра", "realm": "Ревущий фьорд", "charKey": "Player-1-A", "kind": "attempts", "list": "raid",
+           "boss": str(target.boss), "mount": str(target.mount), "mountID": int(target.id), "n": 0}])
+run(A, "--once")
+# 2.10.2: the same from the program itself (the «Попытки…» window works through AttemptsEdit; --set-attempts drives it)
+want = os.path.join(W, "attempts.json")
+json.dump([{"mount": str(target.mount), "boss": str(target.boss), "n": 12}, {"mount": "Нет такого маунта", "n": 3}], open(want, "w", encoding="utf-8"), ensure_ascii=False)
+fcode, fout = run(A, "--set-attempts", want)
+check("2.10.2: attempts set in the program: the number is written, an unknown mount is named in the log",
+      fcode == 0 and attempts(A, str(target.boss)) == 12 and "Нет такого маунта" in fout and "изменено маунтов — 1" in fout, (fout[-300:], attempts(A, str(target.boss))))
+write_sv([{"id": "A-edit-3", "time": NOW - 5, "char": "Эйра", "realm": "Ревущий фьорд", "charKey": "Player-1-A", "kind": "attempts", "list": "raid",
+           "boss": str(target.boss), "mount": str(target.mount), "mountID": int(target.id), "n": 0}])
+run(A, "--once")
+check("…and back to 0 for the checks below", attempts(A, str(target.boss)) == 0, attempts(A, str(target.boss)))
+write_sv()
 KILLS = ("Малигос", "Альтаирий", "Анзу", "Сильвана Ветрокрылая", "Сартарион", "Ловчий Аттумен", "Камнедроб", "Мешок Каши", "Король Дазар")
 wrongly = [i.boss for i in mirna if str(i.boss).startswith(KILLS) and i.src == "reward"]
 check("boss drops are not", not wrongly and any(str(i.boss).startswith("Малигос") for i in mirna), wrongly)
@@ -370,6 +495,24 @@ try:
     check("--storage local: and here again, the data is still there", code == 0 and "Да" in row_of(sheet(G, "Рейды Эйра"), "Сильвана Ветрокрылая"), out[-400:])
     code, out = run(G, "--storage", "disk", env=GENV)
     check("an unknown storage is refused", code == 1, out[-300:])
+    # 2.10.2: the other way round — the data of this computer goes to a new table in Google
+    had = set(state()["spreadsheets"].keys())
+    local_before = open(os.path.join(G, "local-data.json"), "rb").read()
+    code, out = run(G, "--export-google", env=GENV)
+    made = set(state()["spreadsheets"].keys()) - had
+    cfg = json.load(open(os.path.join(G, "settings.json"), encoding="utf-8-sig"))
+    check("--export-google: a new table is made and the program switches to it", code == 0 and len(made) == 1 and cfg.get("mode") == "google"
+          and cfg.get("spreadsheetId") in made, (out[-500:], len(made), cfg.get("mode")))
+    check("…the file on this computer stays as it was", open(os.path.join(G, "local-data.json"), "rb").read() == local_before)
+    code, out = run(G, "--once", env=GENV)
+    check("…records already counted here are not sent to the new table again", code == 0, out[-400:])
+    code, out = run(G, "--import-local", "--yes", env=GENV)   # read the new table back to look inside it
+    check("…the new table has the kills and the attempts of this computer: nothing lost, nothing counted twice",
+          code == 0 and "Да" in row_of(sheet(G, "Рейды Эйра"), "Сильвана Ветрокрылая") and "Да" in row_of(sheet(G, "Рейды Эйра"), "Тюремщик")
+          and attempts(G, "Сильвана Ветрокрылая") == 1, (out[-300:], attempts(G, "Сильвана Ветрокрылая")))
+    N2 = new_data("nolocal")
+    code, out = run(N2, "--export-google", env=GENV)
+    check("…without data on this computer there is nothing to export", code == 1 and "выгружать нечего" in out, out[-300:])
     # one character: the «left» formula is a number, not TRUE/FALSE, or the column would look like another character's tick boxes
     write_sv(chars=CHARS[:1])
     code, out = run(G, "--create-sheet", "Один персонаж", env=GENV)

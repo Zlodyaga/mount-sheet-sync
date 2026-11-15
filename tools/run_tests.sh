@@ -12,6 +12,7 @@ bash tools/build_test_exe.sh "$EXE" || exit 1
 bash tools/cs_host/build.sh || exit 1
 python3 tools/i18n/build.py --check || exit 1
 python3 tools/i18n/build_sheet.py --check || exit 1
+python3 tools/catalog/tips.py || exit 1               # Tips.lua matches the catalog's farming tips
 python3 tools/catalog/statistic_ids.py || exit 1   # catalog «ID статистики» and Statistics.lua match the list
 cd tools/tests
 F=fixtures
@@ -28,6 +29,8 @@ run() {
 }
 run test_addon2.py
 run test_addon_left.py
+run test_addon_drops.py
+run test_addon_farm.py
 run test_minimap.py
 run test_offline.py
 run test_attempts_addon.py
@@ -39,6 +42,8 @@ run test_collection_sync.py
 run test_layout22.py
 run test_attempts.py
 run test_local_book.py
+run test_stats_receiver.py
+run test_bump.py
 run test_release_plan.py
 run e2e_google.py "$EXE"
 run e2e_week.py "$EXE"
@@ -47,6 +52,7 @@ run e2e_chars.py "$EXE" "$F/MountSheetSync-2.1-test.exe"
 run e2e_script.py "$EXE"
 run e2e_lang.py "$EXE"
 run e2e_local.py "$EXE"
+run e2e_data_folder.py "$EXE"
 run e2e_update.py "$EXE"
 if [ "${1:-}" != "--no-ui" ]; then
   run ui_google.py "$EXE"

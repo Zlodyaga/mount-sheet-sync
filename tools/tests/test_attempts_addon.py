@@ -188,7 +188,11 @@ check("…a plain rare too", any("Дракон Четырех Ветров" in t
 L.execute('UNIT_CLASS = "worldboss"; TIP_UNIT = { "Сильвана Ветрокрылая", "target" }')
 check("a raid boss: nothing (only the Adventure Guide shows bosses)", tipl() == [])
 L.execute('TIP_UNIT = { "Галеон", "target" }')
-check("a world boss: nothing", tipl() == [])
+tip = tipl()
+check("3.0.7: a world boss in the open world: its mount and attempts, like a rare", any("Сын Галеона" in t for t in tip), tip)
+L.execute('_IN = IsInInstance; IsInInstance = function() return true, "raid" end')
+check("…the same class inside an instance (a raid boss): nothing", tipl() == [])
+L.execute('IsInInstance = _IN')
 L.execute('UNIT_CLASS = "SECRET"; TIP_UNIT = { "%s", "target" }' % ISHAK_NAME)
 check("classification hidden by the game: nothing", tipl() == [])
 L.execute('UNIT_CLASS = "rareelite"; TIP_UNIT = { "SECRET", "target" }')
@@ -197,9 +201,9 @@ g.SlashCmdList["MOUNTSHEETSYNC"]("tip")
 n0 = len(g.CHAT)
 tipl()
 check("/mss tip: the chat says why there is no hint (the game hides the name)", any("hides this name" in c for c in chat(g, n0)), chat(g, n0))
-L.execute('TIP_UNIT = { "Сильвана Ветрокрылая", "target" }; UNIT_CLASS = "worldboss"')
+L.execute('TIP_UNIT = { "Сильвана Ветрокрылая", "target" }; UNIT_CLASS = "elite"')
 tipl()
-check("…and that a boss is not a rare", any("is not a rare (worldboss)" in c for c in chat(g, n0)), chat(g, n0))
+check("…and that an ordinary elite is neither a rare nor a world boss", any("is not a rare or a world boss (elite)" in c for c in chat(g, n0)), chat(g, n0))
 L.execute('TIP_UNIT = { nil, "target" }; TARGET.name = "SECRET"; UNIT_CLASS = "rareelite"')
 g.GameTooltip.lines = L.table()
 g.UNIT_POSTCALL(g.GameTooltip, L.eval('{ lines = { { leftText = "%s" } } }' % ISHAK_NAME))
@@ -557,7 +561,7 @@ rep = g.MountSheetSyncReportFrame
 boxes = [r for r in regs + [g.ALL_REGIONS[i] for i in range(len(regs) + 1, len(g.ALL_REGIONS) + 1)] if r._type == "EditBox" and r._multiline]
 text = str(boxes[0]._text) if boxes else ""
 check("report window: the text selected for Ctrl+C", rep is not None and rep._shown and boxes and boxes[0]._highlighted, text)
-check("…versions, program state and counts", "Mount Sheet Sync bug report" in text and "Addon: 3.0.6" in text and "Game: 12.1.5 (build 65000" in text
+check("…versions, program state and counts", "Mount Sheet Sync bug report" in text and ("Addon: " + str(ns.VERSION)) in text and "Game: 12.1.5 (build 65000" in text
       and "Program: online (version 2.9.2, sheet connected" in text and ("attempt rows %d" % len(status["mounts"])) in text and "Journal: 5 records" in text, text)
 check("…no character names, realm or spreadsheet title", "Эйра" not in text and "Ревущий" not in text and "Мирна" not in text, text)
 boxes[0]._scripts.OnTextChanged(boxes[0], True)
