@@ -77,7 +77,7 @@ namespace MountSheetSync
                 return 1;
             }
             bool console = opts.Once || opts.Test || opts.GoogleLogin || opts.CreateSheet || opts.AddChars || opts.SyncCollection
-                || opts.CreateLocal || opts.ImportLocal || opts.Storage != null || opts.DataFolder != null || opts.SetAttemptsFile != null || opts.Unknown != null
+                || opts.CreateLocal || opts.ImportLocal || opts.ExportGoogle || opts.Storage != null || opts.DataFolder != null || opts.SetAttemptsFile != null || opts.Unknown != null
                 || opts.SetCharsFile != null || opts.CheckUpdate || opts.Update || opts.Install || (opts.Uninstall && opts.Yes);
             Tr.Use(Settings.Load(AppPaths.SettingsFile).Language);
             Log.Init(AppPaths.LogFile, console);
@@ -108,6 +108,10 @@ namespace MountSheetSync
             if (opts.ImportLocal)
             {
                 return RunImportLocal(opts.Yes);
+            }
+            if (opts.ExportGoogle)
+            {
+                return RunExportGoogle();
             }
             if (opts.Storage != null)
             {
@@ -511,6 +515,71 @@ namespace MountSheetSync
             Log.Write(Tr.L("Данные перенесены из таблицы на этот компьютер: {0}", file));
         }
 
+        static int RunExportGoogle()
+        {
+            Settings settings = Settings.Load(AppPaths.SettingsFile);
+            try
+            {
+                CreatedSheet sheet = ExportToGoogle(settings, Log.Write);
+                Log.Write(Tr.L("Готово: {0}", sheet.Url));
+                return 0;
+            }
+            catch (Exception ex)
+            {
+                if (!(ex is SyncException) && !(ex is ArgumentException))
+                {
+                    throw;
+                }
+                Log.Write(Tr.L("Выгрузить данные в таблицу Google не получилось: {0}", ex.Message));
+                return 1;
+            }
+        }
+
+        /// <summary>
+        /// Данные «на этом компьютере» → новая таблица Google: таблица создаётся по свежему каталогу для тех же
+        /// персонажей, потом в неё переносятся отметки, «Фармлю», попытки и «Собрано?» (SheetLogic.CopyState).
+        /// settings переходит на новую таблицу; файл на компьютере остаётся как был.
+        /// </summary>
+        public static CreatedSheet ExportToGoogle(Settings settings, Action<string> progress)
+        {
+            string file = AppPaths.LocalBookFile;
+            if (!File.Exists(file))
+            {
+                throw new SyncException(Tr._("данных на этом компьютере нет — выгружать нечего"));
+            }
+            LocalBook local;
+            using (LocalBook.Exclusive(file))
+            {
+                local = LocalBook.Load(file);
+            }
+            List<CharacterInTable> chars = SheetCreator.TableCharacters(local);
+            if (chars.Count == 0)
+            {
+                throw new SyncException(Tr._("данных на этом компьютере нет — выгружать нечего"));
+            }
+            GameSnapshot game = ReadGame(settings);
+            BuildPlan plan = PlanFor(game, local.Title, null);
+            plan.Lang = local.Lang ?? plan.Lang;
+            plan.Characters.Clear();
+            foreach (CharacterInTable c in chars)
+            {
+                plan.Characters.Add(new BuildCharacter(c.Name, c.RaidSheet != null, c.DungeonSheet != null));
+            }
+            CreatedSheet sheet = SheetCreator.Create(plan, progress);
+            GoogleBook book = GoogleBook.Load(sheet.Id);
+            int copied = SheetLogic.CopyState(local, book, chars.Select(c => c.Name));
+            book.Flush();
+            // что уже учтено в данных на компьютере, новой таблице заново не шлём (иначе попытки посчитаются дважды)
+            string sentLocal = AppPaths.SentFileFor(settings);
+            UseNewSheet(settings, sheet);
+            if (File.Exists(sentLocal))
+            {
+                File.Copy(sentLocal, AppPaths.SentFileFor(settings), true);
+            }
+            progress(Tr.L("Данные с этого компьютера выгружены в таблицу «{0}»: перенесено ячеек — {1}. Файл на компьютере остался.", sheet.Title, copied));
+            return sheet;
+        }
+
         /// <summary>--data-folder &lt;папка&gt;: перенести данные программы в другую папку (то же, что «Папка данных…» в меню).</summary>
         static int RunDataFolder(string dir)
         {
@@ -761,6 +830,7 @@ namespace MountSheetSync
         public bool CreateSheet;
         public bool CreateLocal;
         public bool ImportLocal;
+        public bool ExportGoogle;
         public string Storage;
         public string DataFolder;
         public string SetAttemptsFile;
@@ -821,6 +891,10 @@ namespace MountSheetSync
                 else if (a == "import-local")
                 {
                     o.ImportLocal = true;
+                }
+                else if (a == "export-google")
+                {
+                    o.ExportGoogle = true;
                 }
                 else if (a == "storage" && i + 1 < args.Length)
                 {

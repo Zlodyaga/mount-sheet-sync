@@ -3,6 +3,7 @@
 The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [CHANGELOG-addon.md](CHANGELOG-addon.md).
 
 ## 2.10.2
+- “Export to a Google spreadsheet…” in the tray menu (data on this computer): makes a new spreadsheet and copies your marks, “Farming” ticks and attempts into it. The file on the computer stays.
 - “Attempts…” in the tray menu: correct the number of attempts for any mount.
 - An unknown start option no longer starts the program as usual: it writes a line to the log and exits.
 - “Data folder…” in the tray menu: keep the settings and the data in a folder of your choice (another drive, a synced folder). The files are copied there and the program restarts; the old ones stay.

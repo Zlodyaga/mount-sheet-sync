@@ -850,3 +850,52 @@ de: Geänderte Reittiere: {0}. Im Spiel aktualisieren sich die Zahlen nach dem E
 fr: Montures modifiées : {0}. En jeu, les nombres se mettent à jour après la connexion ou /reload.
 es: Monturas cambiadas: {0}. En el juego los números se actualizan al entrar o con /reload.
 pt: Montarias alteradas: {0}. No jogo os números atualizam depois de entrar ou /reload.
+
+@ данных на этом компьютере нет — выгружать нечего
+en: there is no data on this computer — nothing to export
+de: auf diesem Computer gibt es keine Daten — nichts zu exportieren
+fr: il n'y a pas de données sur cet ordinateur — rien à exporter
+es: no hay datos en este ordenador: nada que exportar
+pt: não há dados neste computador — nada para exportar
+
+@ Выгрузить в таблицу Google…
+en: Export to a Google spreadsheet…
+de: In eine Google-Tabelle exportieren…
+fr: Exporter vers une feuille Google…
+es: Exportar a una hoja de Google…
+pt: Exportar para uma planilha do Google…
+
+@ Сначала войдите через Google: «Настройки…» > «Таблица Google» > «Войти». Потом верните «На этом компьютере» и выберите этот пункт ещё раз.
+en: Sign in with Google first: “Settings…” > “Google spreadsheet” > “Sign in”. Then go back to “On this computer” and pick this item again.
+de: Zuerst mit Google anmelden: „Einstellungen…“ > „Google-Tabelle“ > „Anmelden“. Danach wieder „Auf diesem Computer“ wählen und diesen Punkt erneut aufrufen.
+fr: Connectez-vous d'abord avec Google : « Réglages… » > « Feuille Google » > « Se connecter ». Revenez ensuite à « Sur cet ordinateur » et choisissez de nouveau cet élément.
+es: Primero inicie sesión con Google: «Ajustes…» > «Hoja de Google» > «Iniciar sesión». Después vuelva a «En este ordenador» y elija de nuevo esta opción.
+pt: Primeiro entre com o Google: “Configurações…” > “Planilha do Google” > “Entrar”. Depois volte para “Neste computador” e escolha este item de novo.
+
+@ Создать новую таблицу Google и перенести в неё данные с этого компьютера (отметки, «Фармлю», попытки)? Программа перейдёт на эту таблицу; файл на компьютере останется, вернуться можно в настройках.
+en: Make a new Google spreadsheet and copy this computer's data into it (marks, “Farming”, attempts)? The program will switch to that spreadsheet; the file on the computer stays, and you can go back in the settings.
+de: Eine neue Google-Tabelle anlegen und die Daten dieses Computers hineinkopieren (Markierungen, „Farme ich“, Versuche)? Das Programm wechselt zu dieser Tabelle; die Datei auf dem Computer bleibt, zurück geht es in den Einstellungen.
+fr: Créer une nouvelle feuille Google et y copier les données de cet ordinateur (marques, « Je farme », tentatives) ? Le programme passera à cette feuille ; le fichier sur l'ordinateur reste, et vous pouvez revenir en arrière dans les réglages.
+es: ¿Crear una nueva hoja de Google y copiar en ella los datos de este ordenador (marcas, «Lo farmeo», intentos)? El programa pasará a esa hoja; el archivo del ordenador se queda y puede volver atrás en los ajustes.
+pt: Criar uma nova planilha do Google e copiar para ela os dados deste computador (marcas, “Farmo”, tentativas)? O programa passará a usar essa planilha; o arquivo no computador fica, e dá para voltar nas configurações.
+
+@ Выгрузить данные не получилось: {0}
+en: Could not export the data: {0}
+de: Die Daten konnten nicht exportiert werden: {0}
+fr: Impossible d'exporter les données : {0}
+es: No se pudieron exportar los datos: {0}
+pt: Não foi possível exportar os dados: {0}
+
+@ Данные выгружены в таблицу Google
+en: The data is exported to a Google spreadsheet
+de: Die Daten sind in eine Google-Tabelle exportiert
+fr: Les données sont exportées vers une feuille Google
+es: Los datos se exportaron a una hoja de Google
+pt: Os dados foram exportados para uma planilha do Google
+
+@ Таблица «{0}» создана, программа теперь ведёт её.
+en: The spreadsheet “{0}” is made; the program keeps it from now on.
+de: Die Tabelle „{0}“ ist angelegt; das Programm führt sie ab jetzt.
+fr: La feuille « {0} » est créée ; le programme la tient désormais.
+es: La hoja «{0}» está creada; el programa la lleva desde ahora.
+pt: A planilha “{0}” foi criada; o programa passa a mantê-la.

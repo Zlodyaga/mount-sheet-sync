@@ -14,6 +14,64 @@ namespace MountSheetSync
     sealed partial class TrayApp
     {
         ToolStripMenuItem attemptsItem;
+        ToolStripMenuItem exportItem;
+        bool exporting;
+
+        /// <summary>«Выгрузить в таблицу Google…»: данные с этого компьютера — в новую таблицу (Program.ExportToGoogle).</summary>
+        void ExportToGoogle()
+        {
+            if (exporting || settingsForm != null)
+            {
+                return;
+            }
+            if (!GoogleSession.SignedIn)
+            {
+                MessageBox.Show(Tr._("Сначала войдите через Google: «Настройки…» > «Таблица Google» > «Войти». Потом верните «На этом компьютере» и выберите этот пункт ещё раз."),
+                    Program.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            if (MessageBox.Show(Tr._("Создать новую таблицу Google и перенести в неё данные с этого компьютера (отметки, «Фармлю», попытки)? Программа перейдёт на эту таблицу; файл на компьютере останется, вернуться можно в настройках."),
+                    Program.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2) != DialogResult.Yes)
+            {
+                return;
+            }
+            exporting = true;
+            Settings s = settings.Clone();
+            System.Threading.ThreadPool.QueueUserWorkItem(delegate
+            {
+                CreatedSheet sheet = null;
+                string error = null;
+                try
+                {
+                    sheet = Program.ExportToGoogle(s, Log.Write);
+                }
+                catch (Exception ex)
+                {
+                    if (ex is OutOfMemoryException)
+                    {
+                        throw;
+                    }
+                    Log.Write(Tr.L("Выгрузить данные в таблицу Google не получилось: {0}", ex.Message));
+                    error = ex.Message;
+                }
+                Post(delegate
+                {
+                    exporting = false;
+                    if (error != null)
+                    {
+                        MessageBox.Show(Tr.F("Выгрузить данные не получилось: {0}", error), Program.Title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
+                    }
+                    settings = Settings.Load(AppPaths.SettingsFile);
+                    if (worker != null)
+                    {
+                        worker.Reload(settings.Clone(), false);
+                    }
+                    RefreshMenu();
+                    ShowNote(MakeNote(Tr._("Данные выгружены в таблицу Google"), Tr.F("Таблица «{0}» создана, программа теперь ведёт её.", sheet.Title), false));
+                });
+            });
+        }
 
         /// <summary>«Попытки…»: поправить число попыток по маунтам.</summary>
         void OpenAttempts()

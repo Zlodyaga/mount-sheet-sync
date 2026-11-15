@@ -495,6 +495,24 @@ try:
     check("--storage local: and here again, the data is still there", code == 0 and "Да" in row_of(sheet(G, "Рейды Эйра"), "Сильвана Ветрокрылая"), out[-400:])
     code, out = run(G, "--storage", "disk", env=GENV)
     check("an unknown storage is refused", code == 1, out[-300:])
+    # 2.10.2: the other way round — the data of this computer goes to a new table in Google
+    had = set(state()["spreadsheets"].keys())
+    local_before = open(os.path.join(G, "local-data.json"), "rb").read()
+    code, out = run(G, "--export-google", env=GENV)
+    made = set(state()["spreadsheets"].keys()) - had
+    cfg = json.load(open(os.path.join(G, "settings.json"), encoding="utf-8-sig"))
+    check("--export-google: a new table is made and the program switches to it", code == 0 and len(made) == 1 and cfg.get("mode") == "google"
+          and cfg.get("spreadsheetId") in made, (out[-500:], len(made), cfg.get("mode")))
+    check("…the file on this computer stays as it was", open(os.path.join(G, "local-data.json"), "rb").read() == local_before)
+    code, out = run(G, "--once", env=GENV)
+    check("…records already counted here are not sent to the new table again", code == 0, out[-400:])
+    code, out = run(G, "--import-local", "--yes", env=GENV)   # read the new table back to look inside it
+    check("…the new table has the kills and the attempts of this computer: nothing lost, nothing counted twice",
+          code == 0 and "Да" in row_of(sheet(G, "Рейды Эйра"), "Сильвана Ветрокрылая") and "Да" in row_of(sheet(G, "Рейды Эйра"), "Тюремщик")
+          and attempts(G, "Сильвана Ветрокрылая") == 1, (out[-300:], attempts(G, "Сильвана Ветрокрылая")))
+    N2 = new_data("nolocal")
+    code, out = run(N2, "--export-google", env=GENV)
+    check("…without data on this computer there is nothing to export", code == 1 and "выгружать нечего" in out, out[-300:])
     # one character: the «left» formula is a number, not TRUE/FALSE, or the column would look like another character's tick boxes
     write_sv(chars=CHARS[:1])
     code, out = run(G, "--create-sheet", "Один персонаж", env=GENV)
