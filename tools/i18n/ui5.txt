@@ -738,3 +738,45 @@ de: Die Statistik ist aus, es wird nichts gesendet. Das würde einmal am Tag ges
 fr: Les statistiques sont désactivées, rien n'est envoyé. Voici ce qui serait envoyé une fois par jour :
 es: Las estadísticas están desactivadas, no se envía nada. Esto es lo que se enviaría una vez al día:
 pt: As estatísticas estão desligadas, nada é enviado. Isto é o que seria enviado uma vez por dia:
+
+@ Папка данных…
+en: Data folder…
+de: Datenordner…
+fr: Dossier des données…
+es: Carpeta de datos…
+pt: Pasta de dados…
+
+@ Программа запущена с ключом --data: папка данных задана им ({0}).
+en: The program was started with --data: that option sets the data folder ({0}).
+de: Das Programm wurde mit --data gestartet: Diese Option legt den Datenordner fest ({0}).
+fr: Le programme a été lancé avec --data : cette option fixe le dossier des données ({0}).
+es: El programa se inició con --data: esa opción fija la carpeta de datos ({0}).
+pt: O programa foi iniciado com --data: essa opção define a pasta de dados ({0}).
+
+@ Где хранить настройки и данные программы. Сейчас: {0}. Нынешние файлы будут скопированы в новую папку, прежние останутся на месте.
+en: Where to keep the program's settings and data. Now: {0}. The current files will be copied to the new folder; the old ones stay where they are.
+de: Wo die Einstellungen und Daten des Programms liegen sollen. Jetzt: {0}. Die jetzigen Dateien werden in den neuen Ordner kopiert, die alten bleiben, wo sie sind.
+fr: Où conserver les réglages et les données du programme. Actuellement : {0}. Les fichiers actuels seront copiés dans le nouveau dossier ; les anciens restent en place.
+es: Dónde guardar los ajustes y los datos del programa. Ahora: {0}. Los archivos actuales se copiarán a la nueva carpeta; los antiguos se quedan donde están.
+pt: Onde guardar as configurações e os dados do programa. Agora: {0}. Os arquivos atuais serão copiados para a nova pasta; os antigos ficam onde estão.
+
+@ В этой папке уже есть данные программы. Использовать их? Нынешние данные останутся в прежней папке.
+en: This folder already has the program's data. Use it? The current data will stay in the old folder.
+de: In diesem Ordner liegen bereits Daten des Programms. Diese verwenden? Die jetzigen Daten bleiben im alten Ordner.
+fr: Ce dossier contient déjà des données du programme. Les utiliser ? Les données actuelles resteront dans l'ancien dossier.
+es: Esta carpeta ya tiene datos del programa. ¿Usarlos? Los datos actuales se quedarán en la carpeta anterior.
+pt: Esta pasta já tem dados do programa. Usá-los? Os dados atuais ficarão na pasta antiga.
+
+@ Не удалось перенести данные: {0}
+en: Could not move the data: {0}
+de: Die Daten konnten nicht verschoben werden: {0}
+fr: Impossible de déplacer les données : {0}
+es: No se pudieron mover los datos: {0}
+pt: Não foi possível mover os dados: {0}
+
+@ Данные теперь в папке {0}. Программа перезапустится.
+en: The data is now in {0}. The program will restart.
+de: Die Daten liegen jetzt in {0}. Das Programm startet neu.
+fr: Les données sont maintenant dans {0}. Le programme va redémarrer.
+es: Los datos están ahora en {0}. El programa se reiniciará.
+pt: Os dados agora estão em {0}. O programa será reiniciado.

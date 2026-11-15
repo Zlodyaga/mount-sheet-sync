@@ -193,6 +193,7 @@ namespace MountSheetSync
                 syncItem, recentItem, leftItem, openSheetItem, signInItem, createItem, addCharsItem, farmItem, collectionItem, new ToolStripSeparator(),
                 Item(Tr._("Настройки…"), delegate { OpenSettings(false); }),
                 Item(Tr._("Журнал работы"), delegate { OpenLog(); }),
+                Item(Tr._("Папка данных…"), delegate { ChooseDataFolder(); }),
                 autostartItem, notifyItem, autoAddItem, restoreItem, statsItem, statsShowItem, checkUpdatesItem, testVersionsItem, languageItem, new ToolStripSeparator(),
                 Item(Tr._("Выход"), delegate { ExitApp(); }),
             });

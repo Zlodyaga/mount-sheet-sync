@@ -51,6 +51,7 @@ run e2e_chars.py "$EXE" "$F/MountSheetSync-2.1-test.exe"
 run e2e_script.py "$EXE"
 run e2e_lang.py "$EXE"
 run e2e_local.py "$EXE"
+run e2e_data_folder.py "$EXE"
 run e2e_update.py "$EXE"
 if [ "${1:-}" != "--no-ui" ]; then
   run ui_google.py "$EXE"

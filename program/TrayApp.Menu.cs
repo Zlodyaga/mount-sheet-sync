@@ -13,6 +13,57 @@ namespace MountSheetSync
 {
     sealed partial class TrayApp
     {
+        /// <summary>«Папка данных…»: выбрать папку, скопировать туда данные и запуститься из неё.</summary>
+        void ChooseDataFolder()
+        {
+            if (AppPaths.CustomDataDir != null)
+            {
+                MessageBox.Show(Tr.F("Программа запущена с ключом --data: папка данных задана им ({0}).", AppPaths.DataDir), Program.Title,
+                    MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+            string dir;
+            using (FolderBrowserDialog dialog = new FolderBrowserDialog())
+            {
+                dialog.Description = Tr.F("Где хранить настройки и данные программы. Сейчас: {0}. Нынешние файлы будут скопированы в новую папку, прежние останутся на месте.", AppPaths.DataDir);
+                dialog.SelectedPath = AppPaths.DataDir;
+                dialog.ShowNewFolderButton = true;
+                if (dialog.ShowDialog() != DialogResult.OK)
+                {
+                    return;
+                }
+                dir = dialog.SelectedPath;
+            }
+            try
+            {
+                if (DataFolder.HasData(dir) && !string.Equals(Path.GetFullPath(dir), Path.GetFullPath(AppPaths.DataDir), StringComparison.OrdinalIgnoreCase)
+                    && MessageBox.Show(Tr._("В этой папке уже есть данные программы. Использовать их? Нынешние данные останутся в прежней папке."), Program.Title,
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Question) != DialogResult.Yes)
+                {
+                    return;
+                }
+                if (!DataFolder.Move(AppPaths.DataDir, dir))
+                {
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(Tr.F("Не удалось перенести данные: {0}", ex.Message), Program.Title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+            MessageBox.Show(Tr.F("Данные теперь в папке {0}. Программа перезапустится.", dir), Program.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            try
+            {
+                Updater.RestartSelf();
+            }
+            catch (Exception ex)
+            {
+                Log.Write(Tr.L("Не удалось перезапустить программу: {0}", ex.Message));
+            }
+            ExitApp();
+        }
+
         /// <summary>Подменю «Вернуть данные за день»: дневные копии из «backups» (LocalBook.KeepDaily), новые первыми.</summary>
         void FillRestore()
         {

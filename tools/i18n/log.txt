@@ -476,3 +476,9 @@ en: Anonymous statistics turned on.
 
 @ Анонимная статистика выключена.
 en: Anonymous statistics turned off.
+
+@ Данные уже в папке {0}.
+en: The data is already in {0}.
+
+@ Данные теперь в папке {0}; прежние файлы остались в {1}.
+en: The data is now in {0}; the old files stay in {1}.

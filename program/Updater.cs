@@ -509,6 +509,16 @@ namespace MountSheetSync
             Process.Start(psi);
         }
 
+        /// <summary>Запустить программу заново (после смены папки данных); новая подождёт, пока этот процесс выйдет.</summary>
+        public static void RestartSelf()
+        {
+            List<string> args = new List<string> { "--wait-pid", Process.GetCurrentProcess().Id.ToString(CultureInfo.InvariantCulture) };
+            ProcessStartInfo psi = new ProcessStartInfo(ExePath, string.Join(" ", args.Select(Quote).ToArray()));
+            psi.UseShellExecute = false;
+            psi.WorkingDirectory = Path.GetDirectoryName(ExePath);
+            Process.Start(psi);
+        }
+
         static string Quote(string a)
         {
             return a.IndexOfAny(new[] { ' ', '\t', '"' }) < 0 ? a : "\"" + a.Replace("\"", "\\\"") + "\"";

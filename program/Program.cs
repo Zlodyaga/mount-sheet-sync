@@ -76,7 +76,7 @@ namespace MountSheetSync
                 return 1;
             }
             bool console = opts.Once || opts.Test || opts.GoogleLogin || opts.CreateSheet || opts.AddChars || opts.SyncCollection
-                || opts.CreateLocal || opts.ImportLocal || opts.Storage != null
+                || opts.CreateLocal || opts.ImportLocal || opts.Storage != null || opts.DataFolder != null
                 || opts.SetCharsFile != null || opts.CheckUpdate || opts.Update || opts.Install || (opts.Uninstall && opts.Yes);
             Tr.Use(Settings.Load(AppPaths.SettingsFile).Language);
             Log.Init(AppPaths.LogFile, console);
@@ -106,6 +106,10 @@ namespace MountSheetSync
             if (opts.Storage != null)
             {
                 return RunStorage(opts.Storage);
+            }
+            if (opts.DataFolder != null)
+            {
+                return RunDataFolder(opts.DataFolder);
             }
             if (opts.AddChars)
             {
@@ -497,6 +501,26 @@ namespace MountSheetSync
             Log.Write(Tr.L("Данные перенесены из таблицы на этот компьютер: {0}", file));
         }
 
+        /// <summary>--data-folder &lt;папка&gt;: перенести данные программы в другую папку (то же, что «Папка данных…» в меню).</summary>
+        static int RunDataFolder(string dir)
+        {
+            try
+            {
+                if (!DataFolder.Move(AppPaths.DataDir, dir))
+                {
+                    Log.Write(Tr.L("Данные уже в папке {0}.", AppPaths.DataDir));
+                    return 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                Log.Write(Tr.L("Не удалось перенести данные: {0}", ex.Message));
+                return 1;
+            }
+            Log.Write(Tr.L("Данные теперь в папке {0}; прежние файлы остались в {1}.", dir, AppPaths.DataDir));
+            return 0;
+        }
+
         static int RunStorage(string storage)
         {
             Settings settings = Settings.Load(AppPaths.SettingsFile);
@@ -687,6 +711,7 @@ namespace MountSheetSync
         public bool CreateLocal;
         public bool ImportLocal;
         public string Storage;
+        public string DataFolder;
         public bool AddChars;
         public bool SyncCollection;
         public string SetCharsFile;
@@ -747,6 +772,10 @@ namespace MountSheetSync
                 else if (a == "storage" && i + 1 < args.Length)
                 {
                     o.Storage = args[++i];
+                }
+                else if (a == "data-folder" && i + 1 < args.Length)
+                {
+                    o.DataFolder = Path.GetFullPath(args[++i]);
                 }
                 else if (a == "sheet-lang" && i + 1 < args.Length)
                 {
@@ -846,8 +875,8 @@ namespace MountSheetSync
         public static void Init(string overrideDir)
         {
             CustomDataDir = overrideDir;
-            DataDir = overrideDir ?? Path.Combine(
-                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "MountSheetSync");
+            // без --data: папка, которую выбрал игрок (DataFolder), иначе обычная
+            DataDir = overrideDir ?? DataFolder.Chosen() ?? DataFolder.DefaultDir;
             Directory.CreateDirectory(DataDir);
             SettingsFile = Path.Combine(DataDir, "settings.json");
             SentFile = Path.Combine(DataDir, "sent-ids.txt");
