@@ -471,10 +471,41 @@ function ns.BuildRemaining(data, player, weekEnd, kills, ch)
 
   local known = KnownIds(data)
   local hidden = ns.NotFarmed and ns.NotFarmed(player.key, tonumber(data.generated)) or {}
+  local again = ns.FarmAgain and ns.FarmAgain(player.key, tonumber(data.generated)) or {}
   local afterReset = result.afterReset
   local items, left, total = {}, 0, 0
   local now = time()
-  for _, item in ipairs(type(ch.items) == "table" and ch.items or {}) do
+  -- строки персонажа: из списка и те «не фармлю» (ch.off), что в игре уже вернули, а программа ещё не видела;
+  -- result.off — что этот персонаж не фармит (для меню и сетки «Все персонажи»)
+  local source, off = type(ch.items) == "table" and ch.items or {}, {}
+  if #hidden > 0 then
+    for _, item in ipairs(source) do
+      if type(item) == "table" and ns.IsNotFarmed(hidden, item) and not OtherSide(item, player.key) then
+        off[#off + 1] = item
+      end
+    end
+  end
+  if type(ch.off) == "table" and #ch.off > 0 then
+    local copied
+    for _, item in ipairs(ch.off) do
+      if type(item) == "table" and not OtherSide(item, player.key) then
+        if #again > 0 and ns.IsNotFarmed(again, item) and not ns.IsNotFarmed(hidden, item) then
+          if not copied then
+            copied = {}
+            for i, v in ipairs(source) do
+              copied[i] = v
+            end
+            source = copied
+          end
+          source[#source + 1] = item
+        else
+          off[#off + 1] = item
+        end
+      end
+    end
+  end
+  result.off = off
+  for _, item in ipairs(source) do
     if type(item) == "table" and OtherSide(item, player.key) then
       -- маунт другой фракции («… [Орда]»): этому персонажу он не выпадет — ни в списке, ни в счёте
     elseif type(item) == "table" and item.kind == "rare" then
@@ -597,6 +628,7 @@ function ns.GetAllRemaining()
         who = { name = ch.name, key = "?" }   -- персонаж с другого аккаунта: его записей здесь нет
       end
       list[#list + 1] = {
+        who = who,
         name = tostring(ch.name or who.name or "?"),
         classFile = known and known.classFile or nil,
         current = ch == current,
@@ -660,9 +692,35 @@ function ns.GetSummary()
       end
     end
   end
+  -- кто строку не фармит (галочка «Фармлю» снята): row.off; строка, которую не фармит никто, — row.offOnly
+  -- (в сетке — только с настройкой «показывать, что никто не фармит»)
+  for _, c in ipairs(all) do
+    if c.r.state == "ok" then
+      for _, it in ipairs(c.r.off or {}) do
+        local k = summaryKey[it]
+        if not k then
+          k = table.concat({ tostring(it.kind), Norm(it.boss), Norm(it.diff), Norm(it.mount) }, "|")
+          summaryKey[it] = k
+        end
+        local row = byKey[k]
+        if row == nil then
+          row = { kind = ns.GroupOf(it), item = it, names = {}, total = 0, done = {} }
+          byKey[k] = row
+          rows[#rows + 1] = row
+        end
+        if row then
+          row.off = row.off or {}
+          row.off[c.name] = true
+        end
+      end
+    end
+  end
   local open = {}
   for _, row in ipairs(rows) do
     if #row.names > 0 then   -- убито у всех — в сетке не нужно
+      open[#open + 1] = row
+    elseif row.off and next(row.done) == nil then
+      row.offOnly = true
       open[#open + 1] = row
     end
   end
@@ -681,6 +739,14 @@ function ns.GetSummary()
     end
     return tostring(a.item.boss) < tostring(b.item.boss)
   end)
+  -- у кого строка есть (фармит, убил или не фармит) — им в меню можно менять «фармлю»
+  local whoBy = {}
+  for _, c in ipairs(all) do
+    whoBy[c.name] = c.who
+  end
+  for _, row in ipairs(rows) do
+    row.who = whoBy
+  end
   summaryFor, summaryResult = all, rows
   return rows
 end
@@ -1175,6 +1241,26 @@ end
 function ns.NotFarmed(charKey, generated)
   local db = ns.GetDB()
   local all = db and type(db.notFarmed) == "table" and db.notFarmed or nil
+  local mine = all and charKey and all[charKey]
+  if type(mine) ~= "table" then
+    return {}
+  end
+  local keep = {}
+  for _, e in ipairs(mine) do
+    if type(e) == "table" and (not generated or (tonumber(e.time) or 0) >= generated) then
+      keep[#keep + 1] = e
+    end
+  end
+  if #keep ~= #mine then
+    all[charKey] = #keep > 0 and keep or nil
+  end
+  return keep
+end
+
+-- «Снова фармлю», которое таблица ещё не видела (устроено как ns.NotFarmed).
+function ns.FarmAgain(charKey, generated)
+  local db = ns.GetDB()
+  local all = db and type(db.farmAgain) == "table" and db.farmAgain or nil
   local mine = all and charKey and all[charKey]
   if type(mine) ~= "table" then
     return {}

@@ -25,6 +25,8 @@ row = r["goodRow"]
 text = [c.get("text") for c in row]
 
 check("a good message is taken: a header row (frozen) and one row", r["goodOk"] is True and len(r["header"]) == 12 and r["frozen"] == 1, r["header"])
+check("…the columns under the header are plain text, so a version written by an older script or by hand stays a version",
+      r["format"] == {"from": 2, "columns": 12, "format": "@"}, r["format"])
 check("…every value is written as text: «2.10.2» must not turn into a date, an all-digit number into a number",
       all("text" in c for c in row), row)
 check("…the day it came (no time), the number, versions, languages, mode, range of characters, Mapzeroth, the day of the counters",

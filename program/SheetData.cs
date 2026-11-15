@@ -84,6 +84,10 @@ namespace MountSheetSync
                 {
                     AddShown(shown, J.Obj(it));
                 }
+                foreach (object it in J.Arr(J.Get(J.Obj(ch), "off")))   // «не фармлю»: аддон показывает и их
+                {
+                    AddShown(shown, J.Obj(it));
+                }
             }
             foreach (object m in J.Arr(J.Get(data, "mounts")))
             {

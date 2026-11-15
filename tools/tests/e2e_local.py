@@ -244,6 +244,39 @@ check("every row of the catalog has its mount's ID", all(i.id for i in mirna), [
 PREFIXES = ("Слава герою", "Слава рейдеру", "Мастер ключей", "Мифик ключей", "Легенда ключей", "Герой своего времени", "Притворяйся", "Безупречный мастер")
 not_marked = [i.boss for i in mirna if str(i.boss).startswith(PREFIXES) and i.src != "reward"]
 check("achievements and season rewards are all marked as not a boss kill", not not_marked, not_marked)
+
+# 2.10.2: «не фармлю» for another character from the game, and back — the list carries the rows that are off
+def farm_lists(name):
+    rt = lua51.LuaRuntime(unpack_returned_tuples=True)
+    rt.execute(sheet_lua())
+    for ch in rt.globals().MountSheetSyncSheet.chars.values():
+        if ch.name == name:
+            return ([i for i in ch["items"].values()], [i for i in ch.off.values()] if ch.off else [])
+    return [], []
+
+
+def plan(uid, item, farm, char):
+    return {"id": uid, "time": NOW - 30, "char": char, "realm": "Ревущий фьорд", "charKey": "Player-1-B", "kind": "plan", "list": "raid",
+            "scope": "row", "boss": str(item.boss), "mount": str(item.mount), "diff": str(item.diff or ""), "farm": farm}
+
+
+target = [i for i in mirna if i.kind == "raid" and str(i.boss) == "Сильвана Ветрокрылая"][0]
+same = lambda rows: [i for i in rows if str(i.boss) == str(target.boss) and str(i.mount) == str(target.mount) and str(i.diff) == str(target.diff)]
+check("2.10.2: nothing is off at first: the list has no «off» rows", farm_lists("Мирна")[1] == [] and "off = {" not in sheet_lua())
+write_sv([plan("P-off-1", target, False, "Мирна")])
+code, out = run(A, "--once")
+items, off = farm_lists("Мирна")
+check("…«не фармлю» sent from another character: the row leaves «Осталось» of that character and comes in its «off» list",
+      code == 0 and same(items) == [] and len(same(off)) == 1, (out[-300:], len(same(items)), len(same(off))))
+check("…the «off» row has what the addon needs to show it and to bring it back: kind, place, mount ID",
+      same(off) and same(off)[0].kind == "raid" and same(off)[0].place and same(off)[0].id, same(off) and (same(off)[0].kind, same(off)[0].place))
+check("…the other character still farms it", len(same(farm_lists("Эйра")[0])) == 1 and same(farm_lists("Эйра")[1]) == [])
+write_sv([plan("P-off-1", target, False, "Мирна"), plan("P-on-1", target, True, "Мирна")])
+code, out = run(A, "--once")
+items, off = farm_lists("Мирна")
+check("…«снова фармлю» from the game: the row is back in «Осталось», nothing is off",
+      code == 0 and len(same(items)) == 1 and off == [], (out[-300:], len(same(items)), len(off)))
+write_sv()
 KILLS = ("Малигос", "Альтаирий", "Анзу", "Сильвана Ветрокрылая", "Сартарион", "Ловчий Аттумен", "Камнедроб", "Мешок Каши", "Король Дазар")
 wrongly = [i.boss for i in mirna if str(i.boss).startswith(KILLS) and i.src == "reward"]
 check("boss drops are not", not wrongly and any(str(i.boss).startswith("Малигос") for i in mirna), wrongly)

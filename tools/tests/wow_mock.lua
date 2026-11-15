@@ -18,6 +18,10 @@ function MenuUtil.CreateContextMenu(owner, generator)
     local b = { kind = "button", text = t, cb = cb }; self.items[#self.items + 1] = b; return b
   end
   function root:CreateDivider() self.items[#self.items + 1] = { kind = "divider" } end
+  function root:CreateCheckbox(t, isSelected, setSelected)
+    assert(type(t) == "string" and type(isSelected) == "function" and type(setSelected) == "function", "mock: CreateCheckbox(text, isSelected, setSelected)")
+    local b = { kind = "checkbox", text = t, on = isSelected, cb = setSelected }; self.items[#self.items + 1] = b; return b
+  end
   generator(owner, root)
   MENUS[#MENUS + 1] = root
   return root

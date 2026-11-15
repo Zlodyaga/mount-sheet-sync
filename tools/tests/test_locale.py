@@ -163,17 +163,25 @@ check("long French button text: the button grows", scan and scan[0]._w > 156, sc
 # ---------------------------------------------------------------- 5. quiet and minimap in the settings
 q = [r for r in [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
      if r._type == "CheckButton" and r._parent is not None and r._parent._uid == sf._uid and rg(r, "code") is None and rg(r, "view") is None]
-check("six more ticks: chat messages, minimap button, route through Mapzeroth, the drop notice, its sound, not with Rarity (3.0.7)", len(q) == 6, len(q))
+check("seven ticks, in the order of the window: rows nobody farms, the drop notice, its sound, not with Rarity, chat messages, minimap button, Mapzeroth (3.0.7)",
+      len(q) == 7, len(q))
 q[0].MockClick(q[0])
+check("«show rows nobody farms» from the settings: remembered", g.MountSheetSyncDB.showOff is True)
+q[0].MockClick(q[0])
+check("…and off again (the default: nothing saved)", g.MountSheetSyncDB.showOff is None)
+q[4].MockClick(q[4])
 check("“no chat messages” from the settings", g.MountSheetSyncDB.quiet is True)
-q[1].MockClick(q[1])
+q[5].MockClick(q[5])
 check("minimap button hidden from the settings", g.MountSheetSyncMinimapButton._shown is False)
-q[1].MockClick(q[1])
+q[5].MockClick(q[5])
 check("…and shown again", g.MountSheetSyncMinimapButton._shown is True)
-q[2].MockClick(q[2])
+q[6].MockClick(q[6])
 check("«route through Mapzeroth» off from the settings: remembered", g.MountSheetSyncDB.mapzeroth is False)
-q[2].MockClick(q[2])
+q[6].MockClick(q[6])
 check("…and on again (the default: nothing saved)", g.MountSheetSyncDB.mapzeroth is None)
+example = [r for r in [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
+           if r._type == "Button" and r._parent is not None and r._parent._uid == sf._uid and r._text == "Montrer un exemple"]
+check("the settings have a button that shows an example of the drop notice (3.0.7)", len(example) == 1, len(example))
 
 # ---------------------------------------------------------------- 6. chat commands
 L, g, ns = new_game("zhCN")

@@ -745,14 +745,41 @@ function ns.Count(what)
   usage.mapzeroth = C_AddOns and C_AddOns.IsAddOnLoaded and C_AddOns.IsAddOnLoaded("Mapzeroth") and true or false
 end
 
+-- Та же ли строка в отметке «не фармлю» / «снова фармлю»: список, босс, маунт и сложность.
+local function SamePlan(e, rec)
+  return type(e) == "table" and e.scope == rec.scope and e.list == rec.list and e.boss == rec.boss and e.mount == rec.mount
+    and e.diff == rec.diff and e.place == rec.place
+end
+
+local function DropPlans(all, key, rec)
+  local mine = type(all) == "table" and all[key]
+  if type(mine) ~= "table" then
+    return
+  end
+  for i = #mine, 1, -1 do
+    if SamePlan(mine[i], rec) then
+      table.remove(mine, i)
+    end
+  end
+  if #mine == 0 then
+    all[key] = nil
+  end
+end
+
 -- «Не фармлю»: строка (scope = "row") или весь рейд / подземелье (scope = "place") из списка «Осталось».
 -- Программа снимет галочку «Фармлю» на листе персонажа; до этого строки прячутся здесь, в аддоне.
-local function AddPlan(item, scope)
+-- farm = true — наоборот, «снова фармлю» (только строка): программа вернёт галочку, до этого строку показывает аддон.
+-- who — другой персонаж из таблицы ({ name, realm, key }, с этого аккаунта); nil — текущий.
+local function AddPlan(item, scope, farm, who)
   if type(item) ~= "table" or (item.kind ~= "raid" and item.kind ~= "dungeon") then
     return false
   end
-  local player = GetPlayer()
-  if not player.name then
+  local player = who or GetPlayer()
+  if not player.name or not player.key or player.key == "?" then
+    return false
+  end
+  farm = farm == true
+  if farm and scope == "place" then
     return false
   end
   scope = scope == "place" and "place" or "row"
@@ -770,25 +797,32 @@ local function AddPlan(item, scope)
   rec.mount = Clean(item.mount)
   rec.diff = Clean(item.diff)
   rec.place = place
-  rec.farm = false
+  rec.farm = farm
   if not AddRecord(rec) then
     return false
   end
+  -- отметка в аддоне, пока программа не прислала новый список: db.notFarmed прячет строку, db.farmAgain показывает
   db.notFarmed = type(db.notFarmed) == "table" and db.notFarmed or {}
-  local mine = type(db.notFarmed[player.key]) == "table" and db.notFarmed[player.key] or {}
-  db.notFarmed[player.key] = mine
+  db.farmAgain = type(db.farmAgain) == "table" and db.farmAgain or {}
+  DropPlans(db.notFarmed, player.key, rec)
+  DropPlans(db.farmAgain, player.key, rec)
+  local into = farm and db.farmAgain or db.notFarmed
+  local mine = type(into[player.key]) == "table" and into[player.key] or {}
+  into[player.key] = mine
   mine[#mine + 1] = { scope = scope, list = rec.list, boss = rec.boss, mount = rec.mount, diff = rec.diff,
                       place = place, time = stamp }
-  if scope == "place" then
-    Print(string.format(L.plan_place, ns.Shown(item, "place") or place, player.name))
+  if farm then
+    Print(string.format(L.plan_on, PlanWhat(rec), player.name))
+  elseif scope == "place" then
+    Print(string.format(L.plan_place, ns.Shown(item, "place") or place, player.name) .. " " .. L.plan_back)
   else
-    Print(string.format(L.plan_row, PlanWhat(rec), player.name))
+    Print(string.format(L.plan_row, PlanWhat(rec), player.name) .. " " .. L.plan_back)
   end
   return true
 end
 
-function ns.AddPlan(item, scope)
-  local ok, added = pcall(AddPlan, item, scope)
+function ns.AddPlan(item, scope, farm, who)
+  local ok, added = pcall(AddPlan, item, scope, farm, who)
   return ok and added or false
 end
 

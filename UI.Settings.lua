@@ -16,7 +16,7 @@ local SETTINGS_NAME = "MountSheetSyncSettingsFrame"
 local settingsFrame
 local languageButtons = {}
 local settingsQuiet, settingsMinimap
-local alertRarityCheck
+local alertRarityCheck, showOffCheck
 local defaultOn = {}   -- галочки «включено, пока не выключили»: { check, поле db }
 local gridButtons = {}
 
@@ -36,14 +36,17 @@ local function RefreshSettings()
     c.check:SetChecked(not (db and db[c.field] == false))
   end
   alertRarityCheck:SetChecked(db and db.alertRarity and true or false)
+  showOffCheck:SetChecked(db and db.showOff and true or false)
   for _, b in ipairs(gridButtons) do
     b:SetChecked(b.view == (db and db.gridView or "scroll"))
   end
 end
 
-local function SettingsCheck(parent, y, key, onClick)
+local COLUMN_LEFT, COLUMN_RIGHT = 20, 320   -- окно настроек — два столбца
+
+local function SettingsCheck(parent, y, key, onClick, x)
   local c = Skin.Check(parent, false)
-  c:SetPoint("TOPLEFT", 20, y)
+  c:SetPoint("TOPLEFT", (x or COLUMN_RIGHT) + 6, y)
   Label(c.Text, key)
   c:SetScript("OnClick", onClick)
   return c
@@ -211,8 +214,8 @@ local function CreateSettings()
   for _, code in ipairs(ns.LANGUAGES) do
     codes[#codes + 1] = code
   end
-  local height = 100 + #codes * 24 + 70 + 96 + 86 + 26 + 52 + 26
-  settingsFrame = Skin.Window(SETTINGS_NAME, 330, height, "DIALOG")
+  local height = math.max(400, 62 + #codes * 24 + 98 + 44)
+  settingsFrame = Skin.Window(SETTINGS_NAME, 620, height, "DIALOG")
   settingsFrame:SetPoint("CENTER", 0, 60)
   local function title()
     settingsFrame.titleText:SetText(L.settings_title)
@@ -244,12 +247,19 @@ local function CreateSettings()
     languageButtons[#languageButtons + 1] = b
   end
 
-  local gridHead = settingsFrame:CreateFontString(nil, "OVERLAY", "MSSFontTitle")
-  gridHead:SetPoint("TOPLEFT", 20, -62 - #codes * 24 - 10)
-  Label(gridHead, "settings_grid")
+  -- Заголовок раздела: слева язык и данные, справа — окно, оповещение и прочее.
+  local function Head(key, x, y)
+    local h = settingsFrame:CreateFontString(nil, "OVERLAY", "MSSFontTitle")
+    h:SetPoint("TOPLEFT", x, y)
+    Label(h, key)
+    return h
+  end
+
+  -- «Все персонажи»: вид сетки и строки, которые никто не фармит
+  Head("settings_grid", COLUMN_RIGHT, -40)
   for i, choice in ipairs({ { "scroll", "settings_grid_scroll", "tip_grid_scroll" }, { "all", "settings_grid_all", "tip_grid_all" } }) do
     local b = Skin.Check(settingsFrame, true)
-    b:SetPoint("TOPLEFT", 26, -62 - #codes * 24 - 32 - (i - 1) * 24)
+    b:SetPoint("TOPLEFT", COLUMN_RIGHT + 6, -62 - (i - 1) * 24)
     b.view = choice[1]
     Label(b.Text, choice[2])
     AttachTooltip(b, choice[2], choice[3])
@@ -259,41 +269,59 @@ local function CreateSettings()
     end)
     gridButtons[#gridButtons + 1] = b
   end
-
-  local y = -62 - #codes * 24 - 96
-  settingsQuiet = SettingsCheck(settingsFrame, y, "quiet", function(self)
-    ns.SetQuiet(self:GetChecked())
-  end)
-  AttachTooltip(settingsQuiet, "quiet", "tip_quiet")
-  settingsMinimap = SettingsCheck(settingsFrame, y - 26, "settings_minimap", function(self)
+  showOffCheck = SettingsCheck(settingsFrame, -110, "set_show_off", function(self)
     local db = ns.GetDB()
-    local shown = not (db and type(db.minimap) == "table" and db.minimap.hide)
-    if shown ~= (self:GetChecked() and true or false) then
-      ns.ToggleMinimapButton()
+    if db then
+      db.showOff = self:GetChecked() and true or nil
+      if S.frame and S.frame:IsShown() then
+        UI.Refresh()
+      end
     end
   end)
-  DefaultOnCheck(settingsFrame, y - 52, "settings_mapzeroth", "mapzeroth", "tip_mapzeroth")
+  AttachTooltip(showOffCheck, "set_show_off", "set_show_off_tip")
+
   -- оповещение о выпавшем маунте (Alert.lua)
-  DefaultOnCheck(settingsFrame, y - 78, "settings_alert", "alert", "tip_alert")
-  DefaultOnCheck(settingsFrame, y - 104, "settings_alert_sound", "alertSound", "tip_alert")
-  alertRarityCheck = SettingsCheck(settingsFrame, y - 130, "settings_alert_rarity", function(self)
+  Head("settings_alert_head", COLUMN_RIGHT, -146)
+  DefaultOnCheck(settingsFrame, -168, "settings_alert", "alert", "tip_alert")
+  DefaultOnCheck(settingsFrame, -192, "settings_alert_sound", "alertSound", "tip_alert")
+  alertRarityCheck = SettingsCheck(settingsFrame, -216, "settings_alert_rarity", function(self)
     local db = ns.GetDB()
     if db then
       db.alertRarity = self:GetChecked() and true or nil   -- по умолчанию выключено: показываем и вместе с Rarity
     end
   end)
   AttachTooltip(alertRarityCheck, "settings_alert_rarity", "tip_alert_rarity")
+  local testButton = MakeButton(settingsFrame, "button_alert_test", 200, "tip_alert_test", function()
+    ns.SafeCall(ns.TestDrop)
+  end)
+  testButton:SetPoint("TOPLEFT", COLUMN_RIGHT + 6, -244)
+
+  Head("settings_other", COLUMN_RIGHT, -284)
+  settingsQuiet = SettingsCheck(settingsFrame, -306, "quiet", function(self)
+    ns.SetQuiet(self:GetChecked())
+  end)
+  AttachTooltip(settingsQuiet, "quiet", "tip_quiet")
+  settingsMinimap = SettingsCheck(settingsFrame, -330, "settings_minimap", function(self)
+    local db = ns.GetDB()
+    local shown = not (db and type(db.minimap) == "table" and db.minimap.hide)
+    if shown ~= (self:GetChecked() and true or false) then
+      ns.ToggleMinimapButton()
+    end
+  end)
+  DefaultOnCheck(settingsFrame, -354, "settings_mapzeroth", "mapzeroth", "tip_mapzeroth")
+
+  -- слева под языком: неделя, журнал, отчёт
+  Head("settings_data", COLUMN_LEFT, -62 - #codes * 24 - 14)
+  local resetButton = MakeButton(settingsFrame, "button_reset", 200, "tip_reset", UI.ConfirmResetWeek)
+  resetButton:SetPoint("TOPLEFT", COLUMN_LEFT + 6, -62 - #codes * 24 - 38)
+
+  local clearButton = MakeButton(settingsFrame, "button_clear", 200, "tip_clear", ConfirmClear)
+  clearButton:SetPoint("TOPLEFT", COLUMN_LEFT + 6, -62 - #codes * 24 - 68)
 
   local reportButton = MakeButton(settingsFrame, "button_report", 200, "tip_report", function()
     ns.SafeCall(ShowReport)
   end)
-  reportButton:SetPoint("BOTTOMLEFT", 20, 16)
-
-  local clearButton = MakeButton(settingsFrame, "button_clear", 200, "tip_clear", ConfirmClear)
-  clearButton:SetPoint("BOTTOMLEFT", 20, 46)
-
-  local resetButton = MakeButton(settingsFrame, "button_reset", 200, "tip_reset", UI.ConfirmResetWeek)
-  resetButton:SetPoint("BOTTOMLEFT", 20, 76)
+  reportButton:SetPoint("TOPLEFT", COLUMN_LEFT + 6, -62 - #codes * 24 - 98)
 
   settingsFrame:SetScript("OnShow", RefreshSettings)
   settingsFrame:Hide()

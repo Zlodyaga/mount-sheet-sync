@@ -3,6 +3,8 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.7
+- “Farming / not farming” can now be changed in the game, for any character of your account: on the “All characters” tab right-click a raid or dungeon row and tick or untick a character. A row you turned off can be turned back on the same way (needs the program 2.10.2). A new setting shows the rows nobody farms, in grey.
+- The settings window is rebuilt in two columns with sections; the week reset, the journal clean-up and the report are together, and there is a button that shows an example of the mount drop notice.
 - A notice when a mount from your list drops: a panel at the top of the screen strikes the mount out, left to right, the “left to collect” count goes down by one, and you see the attempt it dropped on. With its own two sounds. Two ticks in the settings turn the notice or its sound off; `/mss drop` shows a test one. A third tick keeps our notice silent while Rarity is enabled.
 - A new tab, “Dropped”: the mounts from your list that have dropped since the addon was installed, with the attempt they dropped on, the day and the character.
 - The game's addon list shows Mount Sheet Sync under “Collections”, next to other collection addons.

@@ -33,8 +33,18 @@ function sheet_() {
   if (sheet.getLastRow() === 0) {
     sheet.appendRow(HEADER);
     sheet.setFrozenRows(1);
+    textColumns_(sheet);
   }
   return sheet;
+}
+
+/**
+ * Все колонки листа — «обычный текст»: иначе Google читает версию «2.10.2» как дату 2.10.2002, а номер из одних цифр —
+ * как число. Апостроф перед значением делает то же для одной ячейки; формат колонок — запас на случай, когда строку
+ * добавляет старая версия скрипта или человек.
+ */
+function textColumns_(sheet) {
+  sheet.getRange(2, 1, Math.max(1, sheet.getMaxRows() - 1), HEADER.length).setNumberFormat('@');
 }
 
 function clean_(message, field) {
@@ -95,7 +105,7 @@ function prune() {
 
 /** Запустить один раз руками: лист «data» и ежедневная уборка. */
 function setup() {
-  sheet_();
+  textColumns_(sheet_());
   ScriptApp.getProjectTriggers().forEach(function (t) {
     if (t.getHandlerFunction() === 'prune') {
       ScriptApp.deleteTrigger(t);

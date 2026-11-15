@@ -332,6 +332,10 @@ namespace MountSheetSync
             foreach (Dictionary<string, object> ch in chars)
             {
                 rows.AddRange((List<object>)ch["items"]);
+                if (ch.ContainsKey("off"))   // «не фармлю»: аддон показывает и их — нужны те же номера и подсказки
+                {
+                    rows.AddRange((List<object>)ch["off"]);
+                }
             }
             foreach (object o in rows)
             {

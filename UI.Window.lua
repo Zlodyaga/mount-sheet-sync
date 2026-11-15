@@ -238,7 +238,7 @@ function UI.Refresh()
   local key, build
   if tab == TAB_LEFT and showAll then
     local rows = ns.GetSummary()
-    key = "all|" .. tostring(rows) .. "|" .. tostring(db.gridView)
+    key = "all|" .. tostring(rows) .. "|" .. tostring(db.gridView) .. "|" .. tostring(db.showOff)
     build = function() return GridView(rows, all) end
   elseif tab == TAB_LEFT then
     local r = sel and sel.r or own

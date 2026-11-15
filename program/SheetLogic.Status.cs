@@ -162,11 +162,23 @@ namespace MountSheetSync
                         {
                             continue;
                         }
-                        if (cFarm >= 0 && IsUnticked(At(row, cFarm)))
-                        {
-                            continue;   // «Фармлю» снята: этот персонаж эту строку не фармит
-                        }
+                        // «Фармлю» снята: этот персонаж эту строку не фармит. Аддону такие строки идут отдельным списком
+                        // (off) — чтобы галочку можно было вернуть из игры («Все персонажи», правый щелчок)
+                        bool off = cFarm >= 0 && IsUnticked(At(row, cFarm));
                         Dictionary<string, object> statusItem = StatusItem(kind, entry.Name, r, At(row, cPlace), boss, At(row, cDiff), mount, yes);
+                        if (off)
+                        {
+                            if (SeparateRow(At(row, cDiff)))
+                            {
+                                statusItem["sep"] = true;
+                            }
+                            if (!ch.ContainsKey("off"))
+                            {
+                                ch["off"] = new List<object>();
+                            }
+                            ((List<object>)ch["off"]).Add(statusItem);
+                            continue;
+                        }
                         if (SeparateRow(At(row, cDiff)))
                         {
                             statusItem["sep"] = true;

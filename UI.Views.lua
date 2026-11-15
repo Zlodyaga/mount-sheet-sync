@@ -396,8 +396,12 @@ local function GridView(rows, all)
   grid.offset = math.min(grid.offset, math.max(0, #all - grid.shown))
   local list, kind, stripe = {}, nil, false
   local toKill, attempts = 0, 0
+  local showOff = ns.GetDB().showOff == true
+  local shown = 0
   for _, row in ipairs(rows) do
-    if row.kind ~= "reward" then
+   if not row.offOnly or showOff then
+    shown = shown + 1
+    if row.kind ~= "reward" and not row.offOnly then
       toKill = toKill + 1
       attempts = attempts + row.total
     end
@@ -428,29 +432,33 @@ local function GridView(rows, all)
     for _, c in ipairs(all) do
       if row.done and row.done[c.name] then
         killedThisWeek[#killedThisWeek + 1] = Safe(c.name)
-      elseif not names[c.name] then
+      elseif row.off and row.off[c.name] then
         notFarming[#notFarming + 1] = Safe(c.name)
       end
     end
+    -- строка, которую никто не фармит, — серая
+    local mountColor, totalColor = row.offOnly and "|cff8c8c8c" or "|cffc9a0ff", row.offOnly and "|cff8c8c8c" or "|cffd8c98f"
     if #killedThisWeek > 0 then
       tip[#tip + 1] = "|cff8c8c8c" .. string.format(L.grid_tip_done, table.concat(killedThisWeek, ", ")) .. "|r"
     end
     if #notFarming > 0 then
       tip[#tip + 1] = "|cff8c8c8c" .. string.format(L.grid_tip_none, table.concat(notFarming, ", ")) .. "|r"
     end
-    list[#list + 1] = WithPlace({ cols = cols, names = names, killed = row.killed or false, done = row.done or false, icon = ns.MountIcon(item.id or id), mountID = KnownMount(item.id or id), stripe = stripe,
+    list[#list + 1] = WithPlace({ cols = cols, names = names, killed = row.killed or false, done = row.done or false,
+      off = row.off or false, who = row.who, gridItem = item, icon = ns.MountIcon(item.id or id), mountID = KnownMount(item.id or id), stripe = stripe,
       tip = tip, values = {
         boss = ShortBoss(ns.Shown(item, "boss")),
         diff = "|cffb7ae9a" .. ShortDiff(item.diff) .. "|r",
-        mount = "|cffc9a0ff" .. Safe(ns.Shown(item, "mount")) .. "|r",
-        total = "|cffd8c98f" .. row.total .. "|r",
+        mount = mountColor .. Safe(ns.Shown(item, "mount")) .. "|r",
+        total = totalColor .. (row.offOnly and "-" or row.total) .. "|r",
       } }, item)
     stripe = not stripe
+   end
   end
-  if #rows == 0 then
+  if shown == 0 then
     list[#list + 1] = Line("|cff8cff8c" .. L.all_empty .. "|r")
   end
-  return { list = list, cols = #rows > 0 and cols or nil, grid = #rows > 0,
+  return { list = list, cols = shown > 0 and cols or nil, grid = shown > 0,
     summary = "|cff8c8c8c" .. string.format(L.all_head, toKill, attempts, #all) .. "|r" }
 end
 

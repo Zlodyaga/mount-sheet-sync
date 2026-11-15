@@ -16,8 +16,11 @@ function makeSheet(name) {
       rows.push(row.map(function (v) { return typeof v === 'string' && v.charAt(0) === "'" ? { text: v.slice(1) } : { raw: v }; }));
     },
     setFrozenRows: function (n) { this.frozen = n; },
+    getMaxRows: function () { return 1000; },
     getRange: function (r, c, n, m) {
-      return { getDisplayValues: function () {
+      const sheet = this;
+      return { setNumberFormat: function (f) { sheet.format = { from: r, columns: m, format: f }; },
+        getDisplayValues: function () {
         return rows.slice(r - 1, r - 1 + n).map(function (row) {
           return row.slice(c - 1, c - 1 + m).map(function (v) { return String(v.text !== undefined ? v.text : v.raw); });
         });
@@ -66,6 +69,7 @@ r.goodOk = post(good);
 r.header = cells(0).map(function (c) { return c.raw; });
 r.goodRow = cells(1);
 r.frozen = sheets.data.frozen;
+r.format = sheets.data.format || null;
 r.badJson = post('{not json');
 r.empty = post(null);
 r.noId = post(Object.assign({}, good, { id: 'short' }));

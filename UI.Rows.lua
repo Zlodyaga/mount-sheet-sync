@@ -45,6 +45,43 @@ local function ShowRowMenu(button)
   end)
 end
 
+-- Меню по правому щелчку на строке сетки «Все персонажи»: галочка «фармит» у каждого персонажа, у кого эта строка
+-- есть (рейды и подземелья). Меняет ns.AddPlan — программа поставит или снимет «Фармлю» на листе персонажа.
+local function ShowGridMenu(button)
+  local elem = button.elem
+  local item = elem and elem.gridItem
+  if not item or (item.kind ~= "raid" and item.kind ~= "dungeon") or not MenuUtil or not MenuUtil.CreateContextMenu then
+    return
+  end
+  local state, order = {}, {}
+  for _, c in ipairs(grid.chars) do
+    local who = elem.who and elem.who[c.name]
+    local farms = elem.names[c.name] or (elem.done and elem.done[c.name]) or false
+    local off = elem.off and elem.off[c.name] or false
+    if who and who.key and who.key ~= "?" and (farms or off) then
+      state[c.name] = farms and true or false
+      order[#order + 1] = { c = c, who = who }
+    end
+  end
+  if #order == 0 then
+    return
+  end
+  MenuUtil.CreateContextMenu(button, function(owner, root)
+    root:CreateTitle(ns.Shown(item, "boss") or "?")
+    root:CreateTitle(L.menu_farm_title)
+    for _, o in ipairs(order) do
+      local name = o.c.name
+      root:CreateCheckbox(o.c.colored, function()
+        return state[name]
+      end, function()
+        if ns.AddPlan(item, "row", not state[name], o.who) then
+          state[name] = not state[name]
+        end
+      end)
+    end
+  end)
+end
+
 local function HideTooltip()
   GameTooltip:Hide()
 end
@@ -78,7 +115,11 @@ end
 
 local function ClickRow(button, mouse)
   if mouse == "RightButton" then
-    ShowRowMenu(button)
+    if button.elem and button.elem.names then
+      ShowGridMenu(button)
+    else
+      ShowRowMenu(button)
+    end
     return
   end
   local elem = button.elem
@@ -126,6 +167,9 @@ local function ShowRowTooltip(button)
     end
     if elem.entry then
       GameTooltip:AddLine(L.tip_row_menu, 0.6, 0.6, 0.6, true)
+    end
+    if elem.gridItem and (elem.gridItem.kind == "raid" or elem.gridItem.kind == "dungeon") then
+      GameTooltip:AddLine(L.tip_grid_menu, 0.6, 0.6, 0.6, true)
     end
   else
     GameTooltip:SetText(L.tip_row_menu, 1, 1, 1)
@@ -438,3 +482,4 @@ end
 -- нужны следующим файлам окна
 P.HideTooltip, P.FocusColumn, P.PartsText, P.DrawGrid, P.InitRow, P.DONE_TEXTURE = HideTooltip, FocusColumn, PartsText, DrawGrid, InitRow, DONE_TEXTURE
 P.ClassColored, P.InitCharRow, P.Line, P.GroupLine = ClassColored, InitCharRow, Line, GroupLine
+P.ShowGridMenu = ShowGridMenu   -- для проверок (test_addon_farm.py)
