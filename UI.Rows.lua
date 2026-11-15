@@ -115,7 +115,9 @@ end
 
 local function ClickRow(button, mouse)
   if mouse == "RightButton" then
-    if button.elem and button.elem.names then
+    if button.elem and button.elem.attempt then
+      UI.EditAttempts(button.elem.attempt)   -- UI.Edit.lua
+    elseif button.elem and button.elem.names then
       ShowGridMenu(button)
     else
       ShowRowMenu(button)
@@ -167,6 +169,9 @@ local function ShowRowTooltip(button)
     end
     if elem.entry then
       GameTooltip:AddLine(L.tip_row_menu, 0.6, 0.6, 0.6, true)
+    end
+    if elem.attempt then
+      GameTooltip:AddLine(L.tip_attempts_edit, 0.6, 0.6, 0.6, true)
     end
     if elem.gridItem and (elem.gridItem.kind == "raid" or elem.gridItem.kind == "dungeon") then
       GameTooltip:AddLine(L.tip_grid_menu, 0.6, 0.6, 0.6, true)

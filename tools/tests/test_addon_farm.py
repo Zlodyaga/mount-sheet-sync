@@ -209,4 +209,50 @@ n = F.nobody
 check("a row nobody farms is kept apart (offOnly) and is not in the grid by default", n.row and n.offOnly and n.hidden, (n.row, n.offOnly, n.hidden))
 check("…with «show rows nobody farms» it is in the grid, in grey", n.shown and n.grey, (n.shown, n.grey))
 
+# 3.0.7: the number of attempts can be corrected in the game (the «Попытки» tab, right-click)
+L.execute("""
+local ns = MSS_NS
+EDIT = { oldMounts = MountSheetSyncSheet.mounts }
+MountSheetSyncSheet.mounts = { { id = 990363, mount = "Непобедимый", boss = "Король-лич", p = 0.01, n = 10, kind = "raid", sheet = "Рейды" } }
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+local e = ns.GetAttemptsList()[1]
+EDIT.before = e and e.n
+EDIT.bad = { ns.SetAttempts(e.raw, -1), ns.SetAttempts(e.raw, "много"), ns.SetAttempts(nil, 5) }
+local n = #MountSheetSyncDB.kills
+EDIT.ok = ns.SetAttempts(e.raw, 55)
+local rec = MountSheetSyncDB.kills[#MountSheetSyncDB.kills]
+EDIT.rec = { added = #MountSheetSyncDB.kills - n, kind = rec.kind, n = rec.n, id = rec.mountID, boss = rec.boss, mount = rec.mount, list = rec.list }
+EDIT.after = ns.GetAttemptsList()[1].n
+-- the little window: the number now, a new one, Enter
+ns.UI.EditAttempts(ns.GetAttemptsList()[1])
+local box
+for i = 1, #ALL_REGIONS do
+  local r = ALL_REGIONS[i]
+  if r._type == "EditBox" and r._parent == MountSheetSyncAttemptsFrame then box = r end
+end
+EDIT.window = { shown = MountSheetSyncAttemptsFrame:IsShown(), text = box and box:GetText() }
+if box then box:SetText("77") end
+ns.UI.private.SaveAttempts()
+EDIT.window.n = ns.GetAttemptsList()[1].n
+EDIT.window.closed = not MountSheetSyncAttemptsFrame:IsShown()
+-- a newer list from the program carries the number: the local mark goes
+MountSheetSyncSheet.mounts[1].n = 77
+local was = MountSheetSyncSheet.generated
+MountSheetSyncSheet.generated = time() + 100
+EDIT.seen = ns.GetAttemptsList()[1].n
+EDIT.left = next(MountSheetSyncDB.attemptEdits or {}) ~= nil
+MountSheetSyncSheet.generated = was
+MountSheetSyncSheet.mounts = EDIT.oldMounts
+""")
+E = g.EDIT
+check("3.0.7: attempts corrected in the game: a record for the program (kind attempts, the mount, the boss, the number)",
+      E.before == 10 and E.ok is True and E.rec.added == 1 and E.rec.kind == "attempts" and E.rec.n == 55 and E.rec.id == 990363
+      and E.rec.boss == "Король-лич" and E.rec.mount == "Непобедимый" and E.rec.list == "raid", (E.before, E.ok, E.rec.kind, E.rec.n))
+check("…the tab shows the new number at once; the record itself is not counted as one more attempt", E.after == 55, E.after)
+check("…a negative number, a word or no row are refused", [E.bad[1], E.bad[2], E.bad[3]] == [False, False, False])
+w = E.window
+check("…right-click opens a small window with the number; a new number and Enter save it and close the window",
+      w.shown and w.text == "55" and w.n == 77 and w.closed, (w.shown, w.text, w.n, w.closed))
+check("…a newer list from the program carries the number, the local mark is dropped", E.seen == 77 and not E.left, (E.seen, E.left))
+
 env.finish()

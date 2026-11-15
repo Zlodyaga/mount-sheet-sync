@@ -161,6 +161,7 @@ check("--test works", code == 0, out[-500:])
 code, out = run(A, "--once")
 check("--once: list made, no upgrade, Google never asked", code == 0 and "Таблица обновлена" not in out and "нет связи" not in out, out[-800:])
 check("SheetData.lua for the addon", "Сильвана Ветрокрылая" in sheet_lua() and 'name = "Эйра"' in sheet_lua(), sheet_lua()[:300])
+check("2.10.2: mounts already collected go to the addon apart (had), for its «Выпавшие» tab", "had = {" in sheet_lua() and "Пепел Ал" in sheet_lua().split("had = {")[1][:4000], sheet_lua()[-300:])
 
 # 2.10.2: anonymous statistics — nothing without a «yes», then one message a day to the receiver, no names in it
 import http.server
@@ -276,6 +277,20 @@ code, out = run(A, "--once")
 items, off = farm_lists("Мирна")
 check("…«снова фармлю» from the game: the row is back in «Осталось», nothing is off",
       code == 0 and len(same(items)) == 1 and off == [], (out[-300:], len(same(items)), len(off)))
+# 2.10.2: the number of attempts corrected in the game
+write_sv([{"id": "A-edit-1", "time": NOW - 20, "char": "Эйра", "realm": "Ревущий фьорд", "charKey": "Player-1-A", "kind": "attempts", "list": "raid",
+           "boss": str(target.boss), "mount": str(target.mount), "mountID": int(target.id), "n": 37}])
+code, out = run(A, "--once")
+check("2.10.2: attempts corrected in the game: «Попыток» of that row becomes the number", code == 0 and attempts(A, str(target.boss)) == 37,
+      (out[-300:], attempts(A, str(target.boss))))
+rt = lua51.LuaRuntime(unpack_returned_tuples=True)
+rt.execute(sheet_lua())
+listed = [m.n for m in (rt.globals().MountSheetSyncSheet.mounts or {}).values() if str(m.boss) == str(target.boss) and str(m.mount) == str(target.mount)]
+check("…and the addon's list carries it", listed == [37], listed)
+write_sv([{"id": "A-edit-2", "time": NOW - 10, "char": "Эйра", "realm": "Ревущий фьорд", "charKey": "Player-1-A", "kind": "attempts", "list": "raid",
+           "boss": str(target.boss), "mount": str(target.mount), "mountID": int(target.id), "n": 0}])
+run(A, "--once")
+check("…and back to 0 for the checks below", attempts(A, str(target.boss)) == 0, attempts(A, str(target.boss)))
 write_sv()
 KILLS = ("Малигос", "Альтаирий", "Анзу", "Сильвана Ветрокрылая", "Сартарион", "Ловчий Аттумен", "Камнедроб", "Мешок Каши", "Король Дазар")
 wrongly = [i.boss for i in mirna if str(i.boss).startswith(KILLS) and i.src == "reward"]

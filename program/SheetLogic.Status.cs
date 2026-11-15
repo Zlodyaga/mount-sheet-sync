@@ -291,11 +291,16 @@ namespace MountSheetSync
             }
             reply["known"] = KnownDifficultyIds();
             reply["chars"] = order.Select(k => (object)chars[k]).ToList();
-            List<object> mounts = StatusMounts(book, collected);
+            List<object> had = new List<object>();
+            List<object> mounts = StatusMounts(book, collected, had);
             AddRowInfo(book, order.Select(k => chars[k]), mounts);
             if (mounts.Count > 0)
             {
                 reply["mounts"] = mounts;   // счётчик попыток (таблица программы 2.8+)
+            }
+            if (had.Count > 0)
+            {
+                reply["had"] = had;   // собранные маунты со случайным шансом — для вкладки аддона «Выпавшие» (2.10.2)
             }
             List<object> rewards = RewardRows(book);
             if (rewards.Count > 0)

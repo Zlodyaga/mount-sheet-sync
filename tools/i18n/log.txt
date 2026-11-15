@@ -205,6 +205,15 @@ en: [-] {0}: not farming “{1}” — “Farming” unticked (rows: {2})
 @ [-] {0}: не фармит «{1}» — галочка «Фармлю» уже была снята
 en: [-] {0}: not farming “{1}” — “Farming” was already unticked
 
+@ [~] {0}: «{1}» — попыток теперь {2} (поправлено в игре)
+en: [~] {0}: “{1}” — attempts are now {2} (changed in the game)
+
+@ [!] {0}: число попыток «{1}» не изменено — такой строки со счётчиком нет
+en: [!] {0}: attempts for “{1}” not changed — there is no such row with a counter
+
+@ [+] {0}: снова фармит «{1}» — галочка «Фармлю» стоит
+en: [+] {0}: farming “{1}” again — “Farming” is ticked
+
 @ [!] {0}: «не фармлю» {1} — {2}
 en: [!] {0}: “not farming” {1} — {2}
 

@@ -370,8 +370,8 @@ function UI.DropsView(rows)
         boss = Safe(d.boss),
         n = d.n and d.n > 0 and tostring(d.n) or "-",
         chance = ns.FormatDropChance(d.p) or "",
-        when = d.time and d.time > 0 and (date or os.date)("%d.%m.%Y", d.time) or "-",
-        who = Safe(d.char),
+        when = d.time and d.time > 0 and (date or os.date)("%d.%m.%Y", d.time) or (d.old and "|cff8c8c8c" .. L.drops_earlier .. "|r" or "-"),
+        who = d.char and Safe(d.char) or "",
       } }
   end
   return { list = list, cols = cols, summary = "|cff8c8c8c" .. string.format(L.drops_head, #rows) .. "|r" }
@@ -524,7 +524,7 @@ local function AttemptsView(rows, chars)
     if hasTries then
       color, bar, v = ChanceColor(m.n, m.p)
     end
-    list[i] = WithPlace({ cols = cols, icon = ns.MountIcon(m.id), mountID = KnownMount(m.id), stripe = i % 2 == 0, tip = tip, bar = v, barColor = bar, values = {
+    list[i] = WithPlace({ cols = cols, attempt = m, icon = ns.MountIcon(m.id), mountID = KnownMount(m.id), stripe = i % 2 == 0, tip = tip, bar = v, barColor = bar, values = {
       mount = "|cffc9a0ff" .. Safe(m.name) .. "|r",
       boss = ShortBoss(m.boss),
       diff = "|cffb7ae9a" .. ShortDiff(m.diff) .. "|r",

@@ -170,7 +170,8 @@ function ns.DropInfo(mountID)
   end
   local list = ns.GetAttemptsList()
   for _, e in ipairs(list) do
-    if tonumber(e.id) == tonumber(mountID) then
+    -- у другой фракции выпадает двойник (ns.SIDE_TWINS) — строка та же
+    if tonumber(e.id) == tonumber(mountID) or (ns.SIDE_TWINS and ns.SIDE_TWINS[tonumber(mountID) or 0] == tonumber(e.id)) then
       return { name = e.name, n = e.n, p = e.p, left = #list }
     end
   end

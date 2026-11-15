@@ -488,7 +488,7 @@ namespace MountSheetSync
             if (Settings.UsesScript)
             {
                 // «Не фармлю» из игры — только для таблицы программы; скрипт Code.gs принял бы её за убийство
-                List<Dictionary<string, object>> plans = pending.Where(r => J.Str(r, "kind") == "plan").ToList();
+                List<Dictionary<string, object>> plans = pending.Where(r => J.Str(r, "kind") == "plan" || J.Str(r, "kind") == "attempts").ToList();
                 if (plans.Count > 0)
                 {
                     long at = Epoch.Now;
@@ -497,7 +497,7 @@ namespace MountSheetSync
                         sent.Mark(Id(r), at);
                     }
                     sent.Save();
-                    pending.RemoveAll(r => J.Str(r, "kind") == "plan");
+                    pending.RemoveAll(r => J.Str(r, "kind") == "plan" || J.Str(r, "kind") == "attempts");
                     Log.Write(Tr.L("«Не фармлю» из игры ({0}) в таблицу со скриптом не отправляется — снимите галочку «Фармлю» в самой таблице.", plans.Count));
                 }
             }
@@ -643,6 +643,23 @@ namespace MountSheetSync
                 if (mountIds.Contains(J.Str(r, "id")))
                 {
                     ReportMount(r, who, boss, status, message, sum);
+                    continue;
+                }
+                if (J.Str(r, "kind") == "attempts")
+                {
+                    if (status == "attempts" || status == "already")
+                    {
+                        Log.Write(Tr.L("[~] {0}: «{1}» — попыток теперь {2} (поправлено в игре)", who, boss, SheetLogic.Number(J.Get(r, "n"))));
+                    }
+                    else
+                    {
+                        Log.Write(Tr.L("[!] {0}: число попыток «{1}» не изменено — такой строки со счётчиком нет", who, boss));
+                    }
+                    continue;
+                }
+                if (J.Str(r, "kind") == "plan" && J.Truthy(r, "farm") && (status == "planned" || status == "already"))
+                {
+                    Log.Write(Tr.L("[+] {0}: снова фармит «{1}» — галочка «Фармлю» стоит", who, boss));
                     continue;
                 }
                 if (J.Str(r, "kind") == "plan")

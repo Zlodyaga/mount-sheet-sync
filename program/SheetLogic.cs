@@ -239,6 +239,10 @@ namespace MountSheetSync
             {
                 return SetFarm(book, kill, o);   // «Не фармлю» из игры — не зависит от недели
             }
+            if (kind == "attempts")
+            {
+                return SetAttempts(book, kill, o);   // число попыток, поправленное в игре
+            }
             double weekEnd = Number(J.Get(kill, "weekEnd"));
             if (weekEnd > 0 && weekEnd * 1000 <= NowMs())
             {
@@ -489,6 +493,7 @@ namespace MountSheetSync
         {
             o["kind"] = "plan";
             bool farm = Truthy(J.Get(kill, "farm"));
+            o["farm"] = farm;
             string list = J.Str(kill, "list");
             bool byPlace = J.Str(kill, "scope") == "place";
             string mount = Norm(J.Get(kill, "mount"));

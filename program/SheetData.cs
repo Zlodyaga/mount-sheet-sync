@@ -97,6 +97,10 @@ namespace MountSheetSync
             {
                 AddShown(shown, J.Obj(m));
             }
+            foreach (object m in J.Arr(J.Get(data, "had")))
+            {
+                AddShown(shown, J.Obj(m));
+            }
             if (shown.Count == 0)
             {
                 return null;

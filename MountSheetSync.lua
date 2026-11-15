@@ -821,6 +821,39 @@ local function AddPlan(item, scope, farm, who)
   return true
 end
 
+-- Число попыток, поправленное игроком (вкладка «Попытки», правый щелчок): запись для программы — она поставит его в
+-- «Попыток» таблицы — и отметка db.attemptEdits, по которой аддон показывает новое число уже сейчас.
+-- m — строка счётчика из списка программы (MountSheetSyncSheet.mounts).
+local function SetAttempts(m, n)
+  n = tonumber(n)
+  local player = GetPlayer()
+  if type(m) ~= "table" or not n or n < 0 or n > 100000 or not player.name or not Clean(m.boss) or not ns.AttemptKey then
+    return false
+  end
+  n = math.floor(n)
+  local stamp = time()
+  local rec = BaseRecord(player, stamp)
+  rec.id = string.format("A-%s-%d-%d", player.key, stamp, #db.kills + 1)
+  rec.kind = "attempts"
+  rec.list = m.kind
+  rec.boss = Clean(m.boss)
+  rec.mount = Clean(m.mount)
+  rec.mountID = tonumber(m.id)
+  rec.n = n
+  if not AddRecord(rec) then
+    return false
+  end
+  db.attemptEdits = type(db.attemptEdits) == "table" and db.attemptEdits or {}
+  db.attemptEdits[ns.AttemptKey(m)] = { n = n, time = stamp }
+  Print(string.format(L.attempts_set, ns.Shown(m, "mount") or "?", n))
+  return true
+end
+
+function ns.SetAttempts(m, n)
+  local ok, done = pcall(SetAttempts, m, n)
+  return ok and done or false
+end
+
 function ns.AddPlan(item, scope, farm, who)
   local ok, added = pcall(AddPlan, item, scope, farm, who)
   return ok and added or false

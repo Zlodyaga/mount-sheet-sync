@@ -148,6 +148,7 @@ function Region:SetChecked(v) self._checked = not not v end
 function Region:GetChecked() return self._checked or false end
 function Region:SetAutoFocus(v) end
 function Region:SetMaxLetters(n) self._maxLetters = n end
+function Region:SetNumeric(on) self._numeric = on end
 function Region:ClearFocus() self._focus = false end
 function Region:HighlightText(a, b) self._highlighted = true end
 function Region:SetCursorPosition(n) self._cursor = n end

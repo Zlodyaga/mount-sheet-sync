@@ -417,8 +417,14 @@ end
 
 -- Строка маунта одной фракции (в каталоге имя кончается на «[Орда]» / «[Альянс]») у персонажа другой фракции.
 -- Фракцию персонажа запоминает Collection.lua при входе (c.faction); не знаем её — строку показываем.
+-- Маунт с двойником у другой фракции (номера журнала маунтов): строка каталога одна на обе стороны — Альянсу с тех же
+-- боссов падает свой мамонт, а в коллекции аккаунта они считаются одним. Такую строку не прячем и показываем без пометки.
 local SIDE_MARKS = { ["[Орда]"] = "Horde", ["[Альянс]"] = "Alliance" }
+ns.SIDE_TWINS = { [287] = 286, [286] = 287 }   -- Большой черный боевой мамонт (Склеп Аркавона): Орда / Альянс
 local function OtherSide(item, key)
+  if ns.SIDE_TWINS[tonumber(item.id) or 0] then
+    return false
+  end
   local mount = type(item.mount) == "string" and item.mount or ""
   local db = MountSheetSyncDB
   local faction
@@ -827,11 +833,7 @@ local function Translated(want, key)
 end
 
 --- Название из строки списка (field: boss, mount, place) на языке аддона.
-function ns.Shown(item, field)
-  local text = type(item) == "table" and item[field] or nil
-  if type(text) ~= "string" or text == "" then
-    return text
-  end
+local function ShownRaw(item, field, text)
   local want = LANG_OF[ns.CurrentLanguage and ns.CurrentLanguage() or ""] or "en"
   if GetLocale and want == LANG_OF[GetLocale()] then
     local own = GameName(item, field, text)
@@ -840,6 +842,18 @@ function ns.Shown(item, field)
     end
   end
   return Translated(want, text) or text
+end
+
+function ns.Shown(item, field)
+  local text = type(item) == "table" and item[field] or nil
+  if type(text) ~= "string" or text == "" then
+    return text
+  end
+  local shown = ShownRaw(item, field, text)
+  if field == "mount" and ns.SIDE_TWINS[tonumber(item.id) or 0] and type(shown) == "string" then
+    shown = shown:gsub("%s*%[[^%]]*%]$", "")   -- «… [Орда]»: у строки с двойником пометка фракции лишняя
+  end
+  return shown
 end
 
 --- Условие достижения на языке аддона. own — текст из игры: он на языке клиента.
@@ -864,9 +878,26 @@ local function AttemptRows()
 end
 
 -- Сколько попыток у строки сейчас: из таблицы плюс подходящие убийства после списка.
+-- Ключ строки счётчика для правки числа попыток: номер маунта (или название) и босс.
+function ns.AttemptKey(m)
+  return (tonumber(m.id) and tostring(tonumber(m.id)) or Norm(m.mount)) .. "|" .. Norm(m.boss)
+end
+
 local function CountNow(m, data, kills, known)
   local generated = tonumber(data.generated) or 0
   local n = tonumber(m.n) or 0
+  -- число поправили в игре, а программа списка с ним ещё не прислала: считаем от правки
+  local db = MountSheetSyncDB
+  local edits = type(db) == "table" and type(db.attemptEdits) == "table" and db.attemptEdits or nil
+  local key = edits and ns.AttemptKey(m)
+  local edit = key and edits[key]
+  if type(edit) == "table" then
+    if (tonumber(edit.time) or 0) >= generated and tonumber(edit.n) then
+      n, generated = tonumber(edit.n), tonumber(edit.time)
+    else
+      edits[key] = nil   -- список новее правки: в нём уже её число
+    end
+  end
   for _, rec in ipairs(kills) do
     if (tonumber(rec.time) or 0) > generated and IsAttempt(m, rec, RecordName(rec), known) then
       n = n + 1
@@ -1132,7 +1163,7 @@ function ns.GetAttemptsList()
     local p = type(m) == "table" and tonumber(m.p)
     if p and p > 0 and p < 1 and not Collected(m) then
       local n = CountNow(m, data, kills, known)
-      out[#out + 1] = { name = MountName(m), n = n, p = p, left = CharactersLeft(m, data, kills, known, weekEnd), diff = m.diff, kind = m.kind, boss = ns.Shown(m, "boss"), id = m.id, je = m.je, im = m.im }
+      out[#out + 1] = { name = MountName(m), n = n, p = p, left = CharactersLeft(m, data, kills, known, weekEnd), diff = m.diff, kind = m.kind, boss = ns.Shown(m, "boss"), id = m.id, je = m.je, im = m.im, raw = m }
     end
   end
   table.sort(out, function(a, b)
@@ -1184,6 +1215,24 @@ function ns.GetDrops()
     local rec = kills[i]
     if rec.kind == "mount" and tonumber(rec.mountID) then
       Add(tonumber(rec.mountID), nil, rec.time, rec.char)
+    end
+  end
+  -- собранное раньше, чем аддон начал запоминать выпадения (data.had, программа 2.10.2): без даты и персонажа,
+  -- попытки — сколько записано в таблице
+  local names = {}
+  for _, d in ipairs(out) do
+    names[d.name] = true
+  end
+  for _, m in ipairs(type(data.had) == "table" and data.had or {}) do
+    local p = type(m) == "table" and tonumber(m.p)
+    local id = p and tonumber(m.id)
+    local name = p and MountName(m)
+    if p and p > 0 and p < 1 and not (id and seen[id]) and not names[name] then
+      if id then
+        seen[id] = true
+      end
+      names[name] = true
+      out[#out + 1] = { id = id, name = name, boss = ns.Shown(m, "boss"), p = p, n = tonumber(m.n) or 0, time = 0, old = true }
     end
   end
   table.sort(out, function(a, b)

@@ -34,6 +34,25 @@ check("3.0.7: a Horde-only mount is listed for a Horde character and when the fa
 check("…and neither listed nor counted for an Alliance character",
       not side["Alliance"].seen and side["Alliance"].total == side["Horde"].total - 1, side["Alliance"].total)
 
+# …but a mount that has a twin on the other side (the Vault of Archavon mammoth) is one row for both: shown, without the mark
+L.execute("""
+local first = MSS_NS.GetAllRemaining()[1].name
+for _, ch in ipairs(MountSheetSyncSheet.chars) do
+  if ch.name == first then
+    ch.items[#ch.items + 1] = { mount = "Большой черный боевой мамонт [Орда]", id = 287, boss = "Любой босс Склепа Аркавона", sheet = "Рейды", kind = "raid", row = 998 }
+  end
+end
+for _, c in pairs(MountSheetSyncDB.chars) do c.faction = "Alliance" end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+TWIN = { seen = false }
+for _, it in ipairs(MSS_NS.GetAllRemaining()[1].r.items) do
+  if it.item.id == 287 then TWIN.seen = true; TWIN.name = MSS_NS.Shown(it.item, "mount") end
+end
+for _, c in pairs(MountSheetSyncDB.chars) do c.faction = nil end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1""")
+check("3.0.7: the mammoth of the Vault of Archavon is listed for an Alliance character too, without «[Орда]»",
+      g.TWIN.seen and g.TWIN.name == "Большой черный боевой мамонт", (g.TWIN.seen, g.TWIN.name))
+
 # 3.0.7: the mount drop notice — the row is struck out left to right, the count goes down by one, then it goes away
 L.execute("""
 ALERT = { sounds = {} }
@@ -123,5 +142,28 @@ check("3.0.7: usage counters: opening the window, tab switches, a manual mark an
       today.get("open") == 1 and today.get("tab_left") == 2 and today.get("tab_attempts") == 1 and today.get("manual") == 1 and today.get("route") == 1, today)
 check("…only numbers are stored", all(isinstance(v, (int, float)) for v in today.values()))
 check("…seven days are kept, Mapzeroth is noted", g.USAGE_KEPT == 7 and g.USAGE.mapzeroth in (True, False), g.USAGE_KEPT)
+
+# 3.0.7: mounts collected before the addon kept track (the program's «had» list): on the tab, without a date, last
+L.execute("""
+local id = DROPS.id
+MountSheetSyncSheet.mounts = { { id = 363, mount = "Непобедимый", boss = "Король-лич", p = 0.01, kind = "raid", sheet = "Рейды" } }
+MountSheetSyncDB.drops = { [tostring(id)] = { n = 42, time = 1700000000, char = "Эйра" } }
+MountSheetSyncSheet.had = {
+  { kind = "raid", mount = "Старый проверочный маунт", boss = "Старый босс", n = 17, p = 0.01, id = 999001 },
+  { kind = "raid", mount = "Уже записанный", boss = "Босс", n = 5, p = 0.01, id = id },
+  { kind = "raid", mount = "Гарантированный", boss = "Босс", n = 1, p = 1, id = 999002 },
+}
+local rows = MSS_NS.GetDrops()
+OLD = { n = #rows, last = rows[#rows] and { name = rows[#rows].name, n = rows[#rows].n, old = rows[#rows].old, time = rows[#rows].time } }
+local view = MSS_NS.UI.DropsView(rows)
+OLD.when = view.list[#view.list].values.when
+MountSheetSyncSheet.had = nil
+MountSheetSyncSheet.mounts = DROPS.oldMounts
+MountSheetSyncDB.drops = nil
+""")
+check("3.0.7: a mount collected earlier is on «Выпавшие» with the attempts from the list, after the dated ones; no doubles, no 100 % ones",
+      g.OLD.n == 2 and g.OLD.last.name == "Старый проверочный маунт" and g.OLD.last.n == 17 and g.OLD.last.old is True and g.OLD.last.time == 0,
+      (g.OLD.n, g.OLD.last and g.OLD.last.name))
+check("…instead of a date it says «раньше»", "раньше" in g.OLD.when, g.OLD.when)
 
 env.finish()

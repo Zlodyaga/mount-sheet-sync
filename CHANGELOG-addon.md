@@ -3,6 +3,9 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.7
+- The number of attempts can be corrected in the game: on the “Attempts” tab right-click a row, type the number, press Enter (needs the program 2.10.2).
+- The “Dropped” tab also lists the mounts you collected before the addon kept track of drops, without a date (needs the program 2.10.2).
+- The Vault of Archavon mammoth is listed for Alliance characters too: both factions get their own version from the same bosses.
 - “Farming / not farming” can now be changed in the game, for any character of your account: on the “All characters” tab right-click a raid or dungeon row and tick or untick a character. A row you turned off can be turned back on the same way (needs the program 2.10.2). A new setting shows the rows nobody farms, in grey.
 - The settings window is rebuilt in two columns with sections; the week reset, the journal clean-up and the report are together, and there is a button that shows an example of the mount drop notice.
 - A notice when a mount from your list drops: a panel at the top of the screen strikes the mount out, left to right, the “left to collect” count goes down by one, and you see the attempt it dropped on. With its own two sounds. Two ticks in the settings turn the notice or its sound off; `/mss drop` shows a test one. A third tick keeps our notice silent while Rarity is enabled.
