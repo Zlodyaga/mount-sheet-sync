@@ -118,6 +118,7 @@ T.esES = {
   access_step_track = "Siguiente paso: «%s» está en tu registro - seguida.",
   access_step_pin = "Siguiente paso: «%s» - una marca donde se recoge.",
   access_step_text = "Siguiente paso: «%s» - %s.",
+  access_where_fleet = "el principio: el camino a Nazjatar (Battle for Azeroth 8.2). La Alianza la acepta en el puerto de Boralus, la Horda en el puerto de Dazar'alor; la cadena hacia la Cámara del Corazón viene después",
   access_where_heart = "se entrega en la Cámara del Corazón; allí te lleva el Trasladador titánico de Silithus (43, 44.5)",
   access_where_nazjatar = "la primera misión de la cadena hacia la Cámara del Corazón; Magni la envía cuando llegas a Nazjatar (Battle for Azeroth 8.2). Hasta entonces, el Trasladador titánico de Silithus no te lleva allí",
   access_where_wrathion = "Wrathion; la misión llega tras el paso anterior",

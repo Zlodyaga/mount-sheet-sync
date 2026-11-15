@@ -118,6 +118,7 @@ T.frFR = {
   access_step_track = "Étape suivante : « %s » est dans votre journal - suivie.",
   access_step_pin = "Étape suivante : « %s » - un repère là où on la donne.",
   access_step_text = "Étape suivante : « %s » - %s.",
+  access_where_fleet = "le tout début : la route vers Nazjatar (Battle for Azeroth 8.2). L'Alliance la prend au port de Boralus, la Horde au port de Dazar'alor ; la suite vers la Chambre du Cœur vient après",
   access_where_heart = "elle se prend dans la Chambre du Cœur ; le Transposeur des Titans à Silithus (43, 44.5) vous y emmène",
   access_where_nazjatar = "la première quête de la suite vers la Chambre du Cœur ; Magni l'envoie quand vous arrivez à Nazjatar (Battle for Azeroth 8.2). Avant cela, le Transposeur des Titans à Silithus ne vous y emmène pas",
   access_where_wrathion = "Wrathion ; la quête arrive après l'étape précédente",

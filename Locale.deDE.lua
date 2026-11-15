@@ -118,6 +118,7 @@ T.deDE = {
   access_step_track = "Nächster Schritt: „%s“ ist im Questlog - wird verfolgt.",
   access_step_pin = "Nächster Schritt: „%s“ - Kartenmarkierung, wo es die Quest gibt.",
   access_step_text = "Nächster Schritt: „%s“ - %s.",
+  access_where_fleet = "ganz am Anfang: der Weg nach Nazjatar (Battle for Azeroth 8.2). Die Allianz nimmt die Quest im Hafen von Boralus an, die Horde im Hafen von Dazar'alor; die Kette in die Herzkammer folgt danach",
   access_where_heart = "es wird in der Herzkammer vergeben; dorthin bringt dich der Titanentranslokator in Silithus (43, 44.5)",
   access_where_nazjatar = "die erste Quest der Kette in die Herzkammer; Magni schickt sie, sobald du Nazjatar erreichst (Battle for Azeroth 8.2). Bis dahin bringt dich der Titanentranslokator in Silithus nicht dorthin",
   access_where_wrathion = "Wrathion; die Quest kommt nach dem vorigen Schritt",

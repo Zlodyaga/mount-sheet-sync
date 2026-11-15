@@ -121,6 +121,7 @@ T.enUS = {
   access_step_track = "Next step: “%s” is in your quest log - tracking it.",
   access_step_pin = "Next step: “%s” - a map pin where it is given.",
   access_step_text = "Next step: “%s” - %s.",
+  access_where_fleet = "the very start: the way to Nazjatar (Battle for Azeroth 8.2). The Alliance takes it in Boralus Harbor, the Horde in the port of Dazar'alor; the chain into the Chamber of Heart comes after it",
   access_where_heart = "it is given in the Chamber of Heart; the Titan Translocator in Silithus (43, 44.5) takes you there",
   access_where_nazjatar = "the first quest of the chain into the Chamber of Heart; Magni sends it once you reach Nazjatar (Battle for Azeroth 8.2). Until then the Titan Translocator in Silithus won't take you there",
   access_where_wrathion = "Wrathion; the quest comes after the previous step",
