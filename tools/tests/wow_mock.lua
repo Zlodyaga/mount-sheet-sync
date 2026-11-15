@@ -125,6 +125,7 @@ function Region:HookScript(k, fn)
   self._scripts[k] = function(...) if old then old(...) end fn(...) end
 end
 function Region:RegisterEvent(e) self._events = self._events or {}; self._events[e] = true end
+function Region:IsMouseOver() return true end
 function Region:UnregisterEvent(e) if self._events then self._events[e] = nil end end
 function Region:CreateFontString(name, layer, font)
   local fs = NewRegion("FontString", name, self, nil); fs._font = font; return fs
@@ -312,6 +313,7 @@ Minimap._center = { 1800, 950 }
 CURSOR = { 0, 0 }
 function GetCursorPosition() return CURSOR[1], CURSOR[2] end
 function IsControlKeyDown() return MOCK_CTRL == true end
+function IsAltKeyDown() return MOCK_ALT == true end
 UISpecialFrames = {}
 ChatFontNormal = {}
 function GetBuildInfo() return "12.1.5", "65000", "Oct 1 2026", 120105 end

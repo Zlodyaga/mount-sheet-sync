@@ -988,15 +988,30 @@ function ns.AttemptsFor(rec)
   return out
 end
 
+-- У строки свой список номеров существ (`npcs`): true — этот номер в нём, false — нет, nil — списка нет.
+-- false значит «другой НИП с тем же именем»: у трёх завоевателей Зандалари имя одно, а ящер у каждого свой.
+function ns.RowHasNpc(m, npc)
+  if type(m) ~= "table" or type(m.npcs) ~= "table" or #m.npcs == 0 or not npc or npc <= 0 then
+    return nil
+  end
+  for _, n in ipairs(m.npcs) do
+    if tonumber(n) == npc then
+      return true
+    end
+  end
+  return false
+end
+
 -- Труп с таким именем роняет несобранный маунт со строки «Мировые боссы» (рар без боя и сохранений).
-function ns.RareRow(name)
+-- npc — номер существа, если он известен: строка с другим списком номеров не подходит, хоть имя и то же.
+function ns.RareRow(name, npc)
   local data = AttemptRows()
   if not data or type(name) ~= "string" or name == "" then
     return false
   end
   local want = Prepare(Norm(name))
   for _, m in ipairs(data.mounts) do
-    if type(m) == "table" and (m.kind == "world" or m.kind == "rare") and not Collected(m) then
+    if type(m) == "table" and (m.kind == "world" or m.kind == "rare") and not Collected(m) and ns.RowHasNpc(m, npc) ~= false then
       for _, n in ipairs(type(m.names) == "table" and m.names or {}) do
         if MatchPrepared(want, Prepare(n), false) then
           return true
@@ -1124,8 +1139,10 @@ local function SameStamp(data, kills, weekEnd, collected)
 end
 
 -- Подсказка о боссе по имени из игры (подсказка юнита, Атлас приключений):
--- { { name, n, p, left } … } — несобранные маунты со счётчиком, которые с него падают.
-function ns.BossHint(bossName)
+-- { { name, n, p, left } … } — несобранные маунты со счётчиком, которые с него падают. npc — номер существа под
+-- курсором (если игра его отдала): тогда чужие строки с тем же именем убраны, а уже собранный маунт именно этого
+-- существа идёт строкой { name, have = true }.
+function ns.BossHint(bossName, npc)
   local data = AttemptRows()
   if not data or type(bossName) ~= "string" or bossName == "" then
     return {}
@@ -1139,19 +1156,22 @@ function ns.BossHint(bossName)
     hintStamp = { lang = ns.CurrentLanguage(), data = data, generated = data.generated, kills = #kills0, last = kills0[#kills0], weekEnd = weekEnd0,
                   collected = collected, minute = RareMinute(data) }
   end
-  local cached = hintCache[bossName]
+  npc = tonumber(npc)
+  local cacheKey = npc and npc > 0 and (bossName .. "|" .. npc) or bossName
+  local cached = hintCache[cacheKey]
   if cached then
     return cached
   end
-  local out = ns.BossHintNow(bossName, data)
+  local out = ns.BossHintNow(bossName, data, npc)
   if hintCount < 200 then   -- имён за неделю немного; на всякий случай не копим без конца
-    hintCache[bossName] = out
+    hintCache[cacheKey] = out
     hintCount = hintCount + 1
   end
   return out
 end
 
-function ns.BossHintNow(bossName, data)
+function ns.BossHintNow(bossName, data, npc)
+  npc = tonumber(npc)
   local want = Prepare(Norm(bossName))
   local db = ns.GetDB()
   local kills = db and db.kills or {}
@@ -1160,9 +1180,14 @@ function ns.BossHintNow(bossName, data)
   local out = {}
   for _, m in ipairs(data.mounts) do
     local p = type(m) == "table" and tonumber(m.p)
-    if p and p > 0 and p < 1 and not Collected(m) then
-      local named = false
-      for _, n in ipairs(type(m.names) == "table" and m.names or {}) do
+    local mine = p and ns.RowHasNpc(m, npc)
+    if p and p > 0 and p < 1 and mine ~= false and Collected(m) then
+      if mine then
+        out[#out + 1] = { name = MountName(m), kind = m.kind, have = true }
+      end
+    elseif p and p > 0 and p < 1 and mine ~= false then
+      local named = mine or false
+      for _, n in ipairs(not named and type(m.names) == "table" and m.names or {}) do
         if MatchPrepared(want, Prepare(n), false) then
           named = true
           break
@@ -1172,6 +1197,12 @@ function ns.BossHintNow(bossName, data)
         out[#out + 1] = { name = MountName(m), kind = m.kind, n = CountNow(m, data, kills, known), p = p,
           left = CharactersLeft(m, data, kills, known, weekEnd), diff = m.diff }
       end
+    end
+  end
+  -- собранное по таблице (data.had, программа 2.10.2 шлёт и его `npcs`): маунт этого существа уже в коллекции
+  for _, m in ipairs(type(data.had) == "table" and data.had or {}) do
+    if ns.RowHasNpc(m, npc) then
+      out[#out + 1] = { name = MountName(m), kind = m.kind, have = true }
     end
   end
   return out

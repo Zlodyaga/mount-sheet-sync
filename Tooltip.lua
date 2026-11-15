@@ -8,6 +8,8 @@ Mount Sheet Sync — подсказки о маунтах
 всех его боссов; строки — в подсказке значка; на вкладке «Модель» значка нет.
 Данные — из списка таблицы (ns.BossHint, Remaining.lua); без таблицы программы 2.8+ подсказки нет. «Секретные»
 значения не сравниваем. /mss tip — в чат, что аддон видит при наведении.
+Рар узнаётся по имени и, если игра отдаёт GUID, по номеру существа: у тёзок (три завоевателя Зандалари) маунты разные;
+маунт именно этого существа уже собран — строка «уже в коллекции».
 ]]
 
 local ADDON_NAME, ns = ...
@@ -22,11 +24,11 @@ end
 
 -- Строки подсказки для босса с таким именем (пусто — ничего не показываем): сначала «ещё не убит у N
 -- персонажей», потом по строке на маунт.
-function ns.BossHintLines(name, maxLines, kind)
+function ns.BossHintLines(name, maxLines, kind, npc)
   if type(name) ~= "string" or Secret(name) or name == "" or not ns.BossHint then
     return {}
   end
-  local ok, hints = pcall(ns.BossHint, name)
+  local ok, hints = pcall(ns.BossHint, name, npc)
   if not ok or type(hints) ~= "table" or #hints == 0 then
     return {}
   end
@@ -40,7 +42,8 @@ function ns.BossHintLines(name, maxLines, kind)
       left = math.max(left, h.left or 0)
       local mount = "|cffc9a0ff" .. tostring(h.name):gsub("|", "||") .. "|r"
       local n = h.n or 0
-      local tail = n > 0 and string.format(L.boss_hint, n, ns.FormatChance(n, h.p)) or L.boss_hint_none
+      local tail = h.have and ("|cff8cff8c" .. L.boss_hint_have .. "|r")
+        or n > 0 and string.format(L.boss_hint, n, ns.FormatChance(n, h.p)) or L.boss_hint_none
       lines[#lines + 1] = ICON .. mount .. " — " .. tail
     end
   end
@@ -143,7 +146,13 @@ local function OnUnitTooltip(tooltip, data)
     Debug(string.format("«%s» is not a rare or a world boss (%s) — no hint", plain, class == nil and "nil" or Secret(class) and "secret" or class))
     return
   end
-  local hint = ns.BossHintLines(plain, nil, "world")
+  -- номер существа: у тёзок (три завоевателя Зандалари) маунты разные, по имени их не различить
+  local npc
+  local guid = unit and UnitGUID and UnitGUID(unit)
+  if Plain(guid) then
+    npc = tonumber(guid:match("^%a+%-%d+%-%d+%-%d+%-%d+%-(%d+)%-"))
+  end
+  local hint = ns.BossHintLines(plain, nil, "world", npc)
   if #hint == 0 then
     local data0 = MountSheetSyncSheet
     Debug(string.format("«%s» — no uncollected mount with a chance (list from the sheet: %s)", plain,

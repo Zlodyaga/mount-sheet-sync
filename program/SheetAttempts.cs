@@ -515,6 +515,11 @@ namespace MountSheetSync
                             {
                                 old["id"] = (double)oldId;
                             }
+                            List<object> oldNpcs;
+                            if (m[1] == "rare" && oldId > 0 && RareNpcs().TryGetValue(oldId, out oldNpcs))
+                            {
+                                old["npcs"] = oldNpcs;   // аддон 3.0.7: у тёзки-рара этот маунт уже собран
+                            }
                             had.Add(old);
                         }
                         continue;

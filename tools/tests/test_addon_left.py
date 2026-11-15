@@ -358,7 +358,14 @@ check("…the header: boss, difficulty, mount, a column per character, total",
 check("…all fit: no scroll bar under the columns", not win.gridSlider._shown)
 gr._scripts.OnEnter(gr)
 tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
-check("…hover: every name in the tooltip", ", ".join(str(first.names[i]) for i in range(1, len(first.names) + 1)) in tt, tt)
+check("3.0.7: hover — a long list of names is short, the clicks are behind Alt",
+      any("(%d)" % len(first.names) in t for t in tt) and tt[-1].startswith("Alt") and not any("щелчок" in t for t in tt), tt)
+g.MOCK_ALT = True
+gr._scripts.OnEvent(gr, "MODIFIER_STATE_CHANGED")
+tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
+g.MOCK_ALT = False
+check("…with Alt held: every name in the tooltip, and what the clicks do",
+      ", ".join(str(first.names[i]) for i in range(1, len(first.names) + 1)) in tt and any("щелчок" in t for t in tt), tt)
 others = [str(allr[i].name) for i in range(1, len(allr) + 1) if not first.names or str(allr[i].name) not in [str(first.names[j]) for j in range(1, len(first.names) + 1)]]
 check("…and the rest: who killed it this week, who doesn't farm it", all(any(n in line and ("Убит на этой неделе" in line or "Не фармят" in line) for line in tt) for n in others), (others, tt))
 gr._scripts.OnLeave(gr)
@@ -837,9 +844,11 @@ row = [f for f in pool(ROW) if f.elem.instance is not None][0]
 check("3.0.4: a row knows its raid from the journal", row.elem.instance == 777 and row.elem.encounter == 555, (row.elem.instance, row.elem.encounter))
 boss_col = [c for c in lua_list(row.elem.cols) if c.key == "boss"][0]
 g.CURSOR[1] = boss_col.x + 1
+g.MOCK_ALT = True
 row._scripts.OnEnter(row)
+g.MOCK_ALT = False
 tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
-check("3.0.4: the tooltip names the clicks", any("по боссу" in t for t in tt) and any("Ctrl" in t for t in tt), tt)
+check("3.0.4: the tooltip names the clicks (3.0.7: with Alt held)", any("по боссу" in t for t in tt) and any("Ctrl" in t for t in tt), tt)
 check("3.0.4: the tooltip stands beside the table, covering no rows", g.GameTooltip.anchor == "ANCHOR_NONE" and g.GameTooltip.relPoint == "LEFT", g.GameTooltip.anchor)
 row._scripts.OnLeave(row)
 row.MockClick(row)

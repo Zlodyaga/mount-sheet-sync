@@ -142,42 +142,58 @@ local function ClickRow(button, mouse)
 end
 
 -- Подсказка строки: elem.tip = { заголовок, строка, … }; у строк с меню — ещё «ПКМ — не фармлю».
-local function ShowRowTooltip(button)
+local function ShowRowTooltip(button, event)
+  if event == "MODIFIER_STATE_CHANGED" and not button:IsMouseOver() then
+    button:UnregisterEvent(event)   -- строку переиспользовали, а мышь уже не на ней
+    return
+  end
   local elem = button.elem
   if not elem or not (elem.tip or elem.entry) then
     return
   end
+  local shift = IsAltKeyDown and IsAltKeyDown() or false   -- Alt, не Shift: Shift + Ctrl переключает раскладку Windows
   -- слева от таблицы: так подсказка не закрывает строки
   GameTooltip:SetOwner(button, "ANCHOR_NONE")
   GameTooltip:SetPoint("RIGHT", button, "LEFT", -8, 0)
   if elem.tip then
     GameTooltip:SetText(elem.tip[1], 1, 0.82, 0)
     for i = 2, #elem.tip do
-      GameTooltip:AddLine(elem.tip[i], 1, 1, 1, true)
+      GameTooltip:AddLine(shift and elem.tipLong and elem.tipLong[i] or elem.tip[i], 1, 1, 1, true)
     end
     if elem.farmTip then
       GameTooltip:AddLine(elem.farmTip, 0.72, 0.85, 0.72, true)   -- совет по фарму из каталога (Tips.lua)
     end
+    -- что делают щелчки: одинаково на каждой строке, поэтому под Alt (одна строка — показываем сразу)
+    local help = {}
     if elem.instance then
-      GameTooltip:AddLine(L.tip_row_guide, 0.6, 0.6, 0.6, true)
+      help[#help + 1] = L.tip_row_guide
     end
     if elem.achievement then
-      GameTooltip:AddLine(L.tip_row_ach, 0.6, 0.6, 0.6, true)
+      help[#help + 1] = L.tip_row_ach
     end
     if elem.mountID then
-      GameTooltip:AddLine(L.tip_row_open, 0.6, 0.6, 0.6, true)
+      help[#help + 1] = L.tip_row_open
     end
     if elem.route then
-      GameTooltip:AddLine(L.tip_row_route, 0.6, 0.6, 0.6, true)
+      help[#help + 1] = L.tip_row_route
     end
     if elem.entry then
-      GameTooltip:AddLine(L.tip_row_menu, 0.6, 0.6, 0.6, true)
+      help[#help + 1] = L.tip_row_menu
     end
     if elem.attempt then
-      GameTooltip:AddLine(L.tip_attempts_edit, 0.6, 0.6, 0.6, true)
+      help[#help + 1] = L.tip_attempts_edit
     end
     if elem.gridItem and (elem.gridItem.kind == "raid" or elem.gridItem.kind == "dungeon") then
-      GameTooltip:AddLine(L.tip_grid_menu, 0.6, 0.6, 0.6, true)
+      help[#help + 1] = L.tip_grid_menu
+    end
+    if shift or (#help <= 1 and not elem.tipLong) then
+      for _, line in ipairs(help) do
+        GameTooltip:AddLine(line, 0.6, 0.6, 0.6, true)
+      end
+    else
+      GameTooltip:AddLine(L.tip_details, 0.6, 0.6, 0.6, true)
+      button:SetScript("OnEvent", ShowRowTooltip)
+      button:RegisterEvent("MODIFIER_STATE_CHANGED")
     end
   else
     GameTooltip:SetText(L.tip_row_menu, 1, 1, 1)
@@ -190,6 +206,7 @@ end
 
 local function LeaveRow(button)
   button:SetScript("OnUpdate", nil)
+  button:UnregisterEvent("MODIFIER_STATE_CHANGED")
   HideTooltip()
   if button.elem and button.elem.names then
     FocusColumn(nil)

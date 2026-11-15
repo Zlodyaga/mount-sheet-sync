@@ -3,6 +3,7 @@
 The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [CHANGELOG-addon.md](CHANGELOG-addon.md).
 
 ## 2.10.2
+- The list for the addon tells which creature drops a mount you already have (addon 3.0.7 shows “already collected” on that rare).
 - “Export to a Google spreadsheet…” in the tray menu (data on this computer): makes a new spreadsheet and copies your marks, “Farming” ticks and attempts into it. The file on the computer stays.
 - “Attempts…” in the tray menu: correct the number of attempts for any mount.
 - An unknown start option no longer starts the program as usual: it writes a line to the log and exits.

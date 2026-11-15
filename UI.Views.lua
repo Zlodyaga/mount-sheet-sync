@@ -428,7 +428,15 @@ local function GridView(rows, all)
       end
     end
     local _, _, id = ns.ItemAttempts(item)
-    local tip = { Safe(ns.Shown(item, "mount")), BossAndDiff(ns.Shown(item, "boss"), item.diff), table.concat(shownNames, ", ") }
+    -- кто фармит: коротко, полный список — под Alt (tipLong)
+    local who = table.concat(shownNames, ", ")
+    local whoShort = who
+    if #shownNames > 3 and #shownNames == #all then
+      whoShort = string.format(L.grid_tip_all, #all)
+    elseif #shownNames > 3 then
+      whoShort = string.format(L.grid_tip_more, Safe(row.names[1]), Safe(row.names[2]), #shownNames - 2)
+    end
+    local tip = { Safe(ns.Shown(item, "mount")), BossAndDiff(ns.Shown(item, "boss"), item.diff), whoShort }
     local killedThisWeek, notFarming = {}, {}
     for _, c in ipairs(all) do
       if row.done and row.done[c.name] then
@@ -447,7 +455,7 @@ local function GridView(rows, all)
     end
     list[#list + 1] = WithPlace({ cols = cols, names = names, killed = row.killed or false, done = row.done or false,
       off = row.off or false, who = row.who, gridItem = item, icon = ns.MountIcon(item.id or id), mountID = KnownMount(item.id or id), stripe = stripe,
-      tip = tip, values = {
+      tip = tip, tipLong = who ~= whoShort and { [3] = who } or nil, values = {
         boss = ShortBoss(ns.Shown(item, "boss")),
         diff = "|cffb7ae9a" .. ShortDiff(item.diff) .. "|r",
         mount = mountColor .. Safe(ns.Shown(item, "mount")) .. "|r",
