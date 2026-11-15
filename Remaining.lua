@@ -844,6 +844,20 @@ local function ShownRaw(item, field, text)
   return Translated(want, text) or text
 end
 
+-- Совет по фарму из каталога (Tips.lua) на языке аддона; нет на нём — по-английски, потом по-русски.
+-- Выключается в настройках (db.tips == false).
+function ns.FarmTip(id)
+  id = tonumber(id)
+  local all = ns.FARM_TIPS
+  local db = MountSheetSyncDB
+  if not id or type(all) ~= "table" or (type(db) == "table" and db.tips == false) then
+    return nil
+  end
+  id = all.ru and not all.ru[id] and ns.SIDE_TWINS and ns.SIDE_TWINS[id] or id
+  local want = LANG_OF[ns.CurrentLanguage and ns.CurrentLanguage() or ""] or "en"
+  return (all[want] and all[want][id]) or (all.en and all.en[id]) or (all.ru and all.ru[id]) or nil
+end
+
 function ns.Shown(item, field)
   local text = type(item) == "table" and item[field] or nil
   if type(text) ~= "string" or text == "" then

@@ -255,4 +255,34 @@ check("…right-click opens a small window with the number; a new number and Ent
       w.shown and w.text == "55" and w.n == 77 and w.closed, (w.shown, w.text, w.n, w.closed))
 check("…a newer list from the program carries the number, the local mark is dropped", E.seen == 77 and not E.left, (E.seen, E.left))
 
+# 3.0.7: farming tips of the catalog in the row tooltip (Tips.lua), in the addon's language
+L.execute("""
+local ns = MSS_NS
+TIPS = { ru = ns.FarmTip(363), none = ns.FarmTip(99999999), twin = ns.FarmTip(286) == ns.FarmTip(287) and ns.FarmTip(287) ~= nil }
+local count = 0
+for _ in pairs(ns.FARM_TIPS.ru) do count = count + 1 end
+TIPS.count = count
+ns.SetLanguage("deDE")
+local rare
+for id in pairs(ns.FARM_TIPS.de) do rare = id break end
+TIPS.de = ns.FarmTip(rare) == ns.FARM_TIPS.de[rare]
+TIPS.deFallsBack = ns.FarmTip(363) == ns.FARM_TIPS.en[363]
+ns.SetLanguage("ruRU")
+MountSheetSyncDB.tips = false
+TIPS.off = ns.FarmTip(363)
+MountSheetSyncDB.tips = nil
+TIPS.bad = false
+for _, t in pairs(ns.FARM_TIPS) do
+  for _, text in pairs(t) do
+    if text:find(string.char(226, 134)) or text:find(string.char(194, 183)) then TIPS.bad = true end
+  end
+end
+""")
+T = g.TIPS
+check("3.0.7: a farming tip for a mount of the catalog, in Russian for a Russian addon; none for an unknown mount",
+      isinstance(T.ru, str) and len(T.ru) > 10 and T.none is None and T.count > 200, (T.ru, T.count))
+check("…in the addon's language where there is one (rares in German), in English otherwise", T.de is True and T.deFallsBack is True, (T.de, T.deFallsBack))
+check("…the mammoth's twin has the same tip; the setting turns tips off", T.twin is True and T.off is None, (T.twin, T.off))
+check("…no arrows or middle dots the game's fonts cannot draw", T.bad is False)
+
 env.finish()

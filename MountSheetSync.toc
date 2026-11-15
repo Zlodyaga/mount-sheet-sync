@@ -43,6 +43,7 @@ Locales.lua
 MountSheetSync.lua
 Statistics.lua
 Entrances.lua
+Tips.lua
 Access.lua
 Collection.lua
 Remaining.lua

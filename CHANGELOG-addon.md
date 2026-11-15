@@ -3,6 +3,7 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.7
+- Farming tips in the row tooltips: where the boss is, what you need to get in, how to farm faster. In the addon's language where there is a translation, in English otherwise. Can be turned off in the settings.
 - The number of attempts can be corrected in the game: on the “Attempts” tab right-click a row, type the number, press Enter (needs the program 2.10.2).
 - The “Dropped” tab also lists the mounts you collected before the addon kept track of drops, without a date (needs the program 2.10.2).
 - The Vault of Archavon mammoth is listed for Alliance characters too: both factions get their own version from the same bosses.

@@ -155,6 +155,9 @@ local function ShowRowTooltip(button)
     for i = 2, #elem.tip do
       GameTooltip:AddLine(elem.tip[i], 1, 1, 1, true)
     end
+    if elem.farmTip then
+      GameTooltip:AddLine(elem.farmTip, 0.72, 0.85, 0.72, true)   -- совет по фарму из каталога (Tips.lua)
+    end
     if elem.instance then
       GameTooltip:AddLine(L.tip_row_guide, 0.6, 0.6, 0.6, true)
     end

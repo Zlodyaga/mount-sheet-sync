@@ -214,7 +214,7 @@ local function CreateSettings()
   for _, code in ipairs(ns.LANGUAGES) do
     codes[#codes + 1] = code
   end
-  local height = math.max(400, 62 + #codes * 24 + 98 + 44)
+  local height = math.max(424, 62 + #codes * 24 + 98 + 44)
   settingsFrame = Skin.Window(SETTINGS_NAME, 620, height, "DIALOG")
   settingsFrame:SetPoint("CENTER", 0, 60)
   local function title()
@@ -309,6 +309,12 @@ local function CreateSettings()
     end
   end)
   DefaultOnCheck(settingsFrame, -354, "settings_mapzeroth", "mapzeroth", "tip_mapzeroth")
+  local tipsCheck = DefaultOnCheck(settingsFrame, -378, "settings_tips", "tips", "tip_settings_tips")
+  tipsCheck:HookScript("OnClick", function()
+    if S.frame and S.frame:IsShown() then
+      UI.Refresh(true)
+    end
+  end)
 
   -- слева под языком: неделя, журнал, отчёт
   Head("settings_data", COLUMN_LEFT, -62 - #codes * 24 - 14)

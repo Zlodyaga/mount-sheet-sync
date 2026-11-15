@@ -115,6 +115,7 @@
   → `python3 tools/i18n/build.py`. Русские слова таблицы — `tools/i18n/sheet_words.txt` → `build_sheet.py`.
 - Концы строк сохранять как в файле (`.gitattributes`: `* -text`): часть файлов аддона CRLF (Collection.lua,
   Tooltip.lua, toc, Statistics.lua…), часть LF. Правя файл, не превращать CRLF в LF и наоборот.
+- `Tips.lua` (советы по фарму для подсказок) — тоже генерируется: `python3 tools/catalog/tips.py --write` после правки каталога или переводов.
 - `Statistics.lua` не править руками — генерирует `python3 tools/catalog/statistic_ids.py --write`. `Entrances.lua` — тоже:
   `python3 tools/catalog/entrances.py --write` (таблицы игры с wago.tools; там же точки раров из колонки «Точка»); после новых мест и раров в каталоге — перезапустить.
   Точки, которые показала сама игра, — `tools/catalog/entrances_game.json` (их собирает аддон-сборщик `tools/probe/MountSheetSyncProbe`,

@@ -137,6 +137,7 @@ end
 
 -- Куда ведут щелчки по строке: путеводитель и путь к входу в рейд или подземелье, а к мировому боссу — метка, где его показывает игра.
 local function WithPlace(elem, item)
+  elem.farmTip = ns.FarmTip(item.id)
   elem.instance = ns.ItemInstance(item)
   elem.encounter = tonumber(item.je)
   elem.world = item.kind == "world" or nil
