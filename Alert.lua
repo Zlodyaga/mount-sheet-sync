@@ -72,11 +72,11 @@ local function Create()
   f.tries:SetPoint("RIGHT", f, "TOPRIGHT", -12, -49)
   f.tries:SetJustifyH("RIGHT")
 
-  -- черта: растёт от левого края имени
+  -- черта: растёт от левого края имени и не выходит за буквы (выступ читался как тире после слова)
   f.line = f:CreateTexture(nil, "OVERLAY")
   f.line:SetColorTexture(COLOR.gold[1], COLOR.gold[2], COLOR.gold[3])
   f.line:SetHeight(2)
-  f.line:SetPoint("LEFT", f.name, "LEFT", -2, -1)
+  f.line:SetPoint("LEFT", f.name, "LEFT", 1, -1)
   f.line:SetWidth(1)
   f.line:Hide()
 
@@ -109,7 +109,7 @@ local function OnUpdate(self)
     Play(SOUND_STRIKE)
   end
   if info.striking and not info.struck then
-    local full = math.min(self.name:GetStringWidth() + 4, WIDTH - 150)
+    local full = math.min(self.name:GetStringWidth() - 2, WIDTH - 150)
     local part = Ease((t - STRIKE_AT) / STRIKE_TIME)
     self.line:SetWidth(math.max(1, full * part))
     if part >= 1 then
