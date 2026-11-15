@@ -194,7 +194,7 @@ namespace MountSheetSync
             list.BeginUpdate();
             foreach (AttemptRow row in rows)
             {
-                ListViewItem item = new ListViewItem(new[] { row.Mount, row.Boss, Text(row.N) });
+                ListViewItem item = new ListViewItem(new[] { row.Mount, row.Boss, Count(row.N) });
                 item.Tag = row;
                 list.Items.Add(item);
             }
@@ -202,7 +202,7 @@ namespace MountSheetSync
             ShowStatus(rows.Count == 0 ? Tr._("Счётчика попыток пока нет.") : "", SystemColors.GrayText);
         }
 
-        static string Text(double n)
+        static string Count(double n)
         {
             return n.ToString("0", CultureInfo.InvariantCulture);
         }
@@ -229,7 +229,7 @@ namespace MountSheetSync
                 return;
             }
             row.N = (double)number.Value;
-            list.SelectedItems[0].SubItems[2].Text = Text(row.N);
+            list.SelectedItems[0].SubItems[2].Text = Count(row.N);
             int n = Changes().Count;
             okButton.Enabled = !busy;
             ShowStatus(n == 0 ? "" : Tr.F("Изменено строк: {0} — нажмите «Сохранить».", n), SystemColors.ControlText);
