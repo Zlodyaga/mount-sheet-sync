@@ -316,3 +316,5 @@ Freesound, лицензия CC0: «cartoon_wink_magic_sparkle» (MLaudio, 511485
 Alt, а не Shift: Shift + Ctrl переключает раскладку Windows, а Ctrl + щелчок — путь. `elem.tipLong[i]` — полный вариант
 строки `elem.tip[i]`: в сетке «Все персонажи» это список имён (коротко — `L.grid_tip_all` / `L.grid_tip_more`, если имён
 больше трёх). `BossAndDiff` не пишет «любую» сложность и переводит слова из `DIFF_WORDS`.
+Клавишу выбирают в настройках (слева внизу, «Подсказка строки: подробности»): `db.detailsKey` — нет поля (Alt), `"shift"`,
+`"ctrl"` или `"always"` (всё сразу, как до 3.0.7); читает `DetailsNow` в `UI.Rows.lua`, напоминание — `L.tip_details` с названием клавиши.

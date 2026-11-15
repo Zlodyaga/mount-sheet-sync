@@ -141,6 +141,21 @@ local function ClickRow(button, mouse)
   end
 end
 
+-- Подробности подсказки (щелчки, полный список имён): пока зажата клавиша из настроек (db.detailsKey; нет поля — Alt)
+-- или всегда ("always" — как было до 3.0.7). Отдаёт: показывать ли сейчас, и название клавиши для строки-напоминания.
+local function DetailsNow()
+  local db = ns.GetDB()
+  local key = db and db.detailsKey or "alt"
+  if key == "always" then
+    return true
+  elseif key == "shift" then
+    return IsShiftKeyDown and IsShiftKeyDown() or false, "Shift"
+  elseif key == "ctrl" then
+    return IsControlKeyDown and IsControlKeyDown() or false, "Ctrl"
+  end
+  return IsAltKeyDown and IsAltKeyDown() or false, "Alt"   -- по умолчанию Alt: Shift + Ctrl переключает раскладку Windows
+end
+
 -- Подсказка строки: elem.tip = { заголовок, строка, … }; у строк с меню — ещё «ПКМ — не фармлю».
 local function ShowRowTooltip(button, event)
   if event == "MODIFIER_STATE_CHANGED" and not button:IsMouseOver() then
@@ -151,7 +166,7 @@ local function ShowRowTooltip(button, event)
   if not elem or not (elem.tip or elem.entry) then
     return
   end
-  local shift = IsAltKeyDown and IsAltKeyDown() or false   -- Alt, не Shift: Shift + Ctrl переключает раскладку Windows
+  local shift, keyName = DetailsNow()
   -- слева от таблицы: так подсказка не закрывает строки
   GameTooltip:SetOwner(button, "ANCHOR_NONE")
   GameTooltip:SetPoint("RIGHT", button, "LEFT", -8, 0)
@@ -191,7 +206,7 @@ local function ShowRowTooltip(button, event)
         GameTooltip:AddLine(line, 0.6, 0.6, 0.6, true)
       end
     else
-      GameTooltip:AddLine(L.tip_details, 0.6, 0.6, 0.6, true)
+      GameTooltip:AddLine(string.format(L.tip_details, keyName), 0.6, 0.6, 0.6, true)
       button:SetScript("OnEvent", ShowRowTooltip)
       button:RegisterEvent("MODIFIER_STATE_CHANGED")
     end

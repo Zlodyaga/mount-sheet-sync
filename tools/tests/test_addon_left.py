@@ -364,6 +364,14 @@ g.MOCK_ALT = True
 gr._scripts.OnEvent(gr, "MODIFIER_STATE_CHANGED")
 tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
 g.MOCK_ALT = False
+g.MountSheetSyncDB.detailsKey = "shift"
+gr._scripts.OnEnter(gr)
+check("…another key from the settings: the reminder names it", str(g.GameTooltip.lines[len(g.GameTooltip.lines)]).startswith("Shift"), str(g.GameTooltip.lines[len(g.GameTooltip.lines)]))
+g.MountSheetSyncDB.detailsKey = "always"
+gr._scripts.OnEnter(gr)
+check("…«always»: the long tooltip without any key, as before 3.0.7",
+      any("щелчок" in str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)))
+g.MountSheetSyncDB.detailsKey = None
 check("…with Alt held: every name in the tooltip, and what the clicks do",
       ", ".join(str(first.names[i]) for i in range(1, len(first.names) + 1)) in tt and any("щелчок" in t for t in tt), tt)
 others = [str(allr[i].name) for i in range(1, len(allr) + 1) if not first.names or str(allr[i].name) not in [str(first.names[j]) for j in range(1, len(first.names) + 1)]]

@@ -4,7 +4,7 @@ The addon and the Windows program are released separately; the program's changes
 
 ## 3.0.7
 - Rares that share a name (the three Zandalari Warbringers) are told apart by the creature: the tooltip shows the mount of that very Warbringer, says “already collected” when you have it, and a kill no longer counts as an attempt for another Warbringer's mount.
-- Row tooltips in the window are shorter: what the clicks do and the full list of characters show while Alt is held; “any difficulty” is no longer written.
+- Row tooltips in the window are shorter: what the clicks do and the full list of characters show while Alt is held (the key — Alt, Shift, Ctrl or “always show everything” — is in the settings); “any difficulty” is no longer written.
 - Ny'alotha's chain: the step “Return of the Black Prince” / “An Unwelcome Advisor” now has a pin — at the letter that starts it, in the port of Zuldazar or in Boralus Harbor.
 - “All characters”: a boss a character has killed this week no longer turns into “not farming” once the program has saved the kill.
 - World bosses now show their mount and your attempts in the unit tooltip, like rares do.
