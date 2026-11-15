@@ -39,8 +39,10 @@ ns.ACCESS = {
       { quest = 55851, name = "Essential Empowerment", where = "nazjatar" },
       -- выдают в Зале Сердца; туда переносит Транслокатор титанов в Силитусе (объект 289521, точка с Wowhead)
       { quest = 57010, name = "Harnessing the Power", where = "heart", map = 81, x = 0.43, y = 0.445 },
-      { quest = 58582, faction = "Horde", name = "Return of the Black Prince", where = "wrathion" },
-      { quest = 58496, faction = "Alliance", name = "An Unwelcome Advisor", where = "wrathion" },
+      -- задание начинается с письма «Urgent Missive» на корабле в порту (Warcraft Wiki: Зулдазар 58.5, 62.6 — у Натаноса;
+      -- Боралус 68.1, 22.4 — у Сайруса); в игре точки не проверены
+      { quest = 58582, faction = "Horde", name = "Return of the Black Prince", where = "missive_horde", map = 862, x = 0.585, y = 0.626 },
+      { quest = 58496, faction = "Alliance", name = "An Unwelcome Advisor", where = "missive_alliance", map = 1161, x = 0.681, y = 0.224 },
       { quest = 56376, name = "Surfacing Threats", map = 1527, x = 0.548, y = 0.328 },
     },
   },

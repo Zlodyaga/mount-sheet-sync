@@ -162,7 +162,7 @@ check("long French button text: the button grows", scan and scan[0]._w > 156, sc
 
 # ---------------------------------------------------------------- 5. quiet and minimap in the settings
 q = [r for r in [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
-     if r._type == "CheckButton" and r._parent is not None and r._parent._uid == sf._uid and rg(r, "code") is None and rg(r, "view") is None]
+     if r._type == "CheckButton" and r._parent is not None and r._parent._uid == sf._uid and rg(r, "code") is None and rg(r, "view") is None and rg(r, "details") is None]
 check("eight ticks, in the order of the window: rows nobody farms, the drop notice, its sound, not with Rarity, chat messages, minimap button, Mapzeroth, farming tips (3.0.7)",
       len(q) == 8, len(q))
 q[0].MockClick(q[0])
@@ -182,6 +182,16 @@ check("…and on again (the default: nothing saved)", g.MountSheetSyncDB.mapzero
 example = [r for r in [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
            if r._type == "Button" and r._parent is not None and r._parent._uid == sf._uid and r._text == "Montrer un exemple"]
 check("the settings have a button that shows an example of the drop notice (3.0.7)", len(example) == 1, len(example))
+keys = [r for r in [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
+        if r._type == "CheckButton" and r._parent is not None and r._parent._uid == sf._uid and rg(r, "details") is not None]
+check("3.0.7: the key of the row tooltip's details — Alt, Shift, Ctrl or always; Alt is ticked",
+      [str(rg(r, "details")) for r in keys] == ["alt", "shift", "ctrl", "always"] and [str(rg(r, "details")) for r in keys if r._checked] == ["alt"]
+      and "Alt" in str(keys[0].Text._text), [(str(rg(r, "details")), r._checked, str(r.Text._text)) for r in keys])
+keys[3].MockClick(keys[3])
+check("…«always show everything»: remembered, the only one ticked", g.MountSheetSyncDB.detailsKey == "always"
+      and [str(rg(r, "details")) for r in keys if r._checked] == ["always"], g.MountSheetSyncDB.detailsKey)
+keys[0].MockClick(keys[0])
+check("…back to Alt: nothing kept in the saved variables", g.MountSheetSyncDB.detailsKey is None, g.MountSheetSyncDB.detailsKey)
 
 # ---------------------------------------------------------------- 6. chat commands
 L, g, ns = new_game("zhCN")

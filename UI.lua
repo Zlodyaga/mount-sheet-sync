@@ -281,8 +281,12 @@ end
 
 local function BossAndDiff(boss, diff)
   local text = Safe(boss)
+  local word = DIFF_WORDS[Safe(diff)]
+  if word == "diff_any" then
+    return text   -- «любая сложность» ничего не сообщает
+  end
   if Safe(diff) ~= "" then
-    text = text .. " (" .. Safe(diff) .. ")"
+    text = text .. " (" .. (word and L[word] or Safe(diff)) .. ")"
   end
   return text
 end

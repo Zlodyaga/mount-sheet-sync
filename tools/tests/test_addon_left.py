@@ -358,7 +358,22 @@ check("…the header: boss, difficulty, mount, a column per character, total",
 check("…all fit: no scroll bar under the columns", not win.gridSlider._shown)
 gr._scripts.OnEnter(gr)
 tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
-check("…hover: every name in the tooltip", ", ".join(str(first.names[i]) for i in range(1, len(first.names) + 1)) in tt, tt)
+check("3.0.7: hover — a long list of names is short, the clicks are behind Alt",
+      any("(%d)" % len(first.names) in t for t in tt) and tt[-1].startswith("Alt") and not any("щелчок" in t for t in tt), tt)
+g.MOCK_ALT = True
+gr._scripts.OnEvent(gr, "MODIFIER_STATE_CHANGED")
+tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
+g.MOCK_ALT = False
+g.MountSheetSyncDB.detailsKey = "shift"
+gr._scripts.OnEnter(gr)
+check("…another key from the settings: the reminder names it", str(g.GameTooltip.lines[len(g.GameTooltip.lines)]).startswith("Shift"), str(g.GameTooltip.lines[len(g.GameTooltip.lines)]))
+g.MountSheetSyncDB.detailsKey = "always"
+gr._scripts.OnEnter(gr)
+check("…«always»: the long tooltip without any key, as before 3.0.7",
+      any("щелчок" in str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)))
+g.MountSheetSyncDB.detailsKey = None
+check("…with Alt held: every name in the tooltip, and what the clicks do",
+      ", ".join(str(first.names[i]) for i in range(1, len(first.names) + 1)) in tt and any("щелчок" in t for t in tt), tt)
 others = [str(allr[i].name) for i in range(1, len(allr) + 1) if not first.names or str(allr[i].name) not in [str(first.names[j]) for j in range(1, len(first.names) + 1)]]
 check("…and the rest: who killed it this week, who doesn't farm it", all(any(n in line and ("Убит на этой неделе" in line or "Не фармят" in line) for line in tt) for n in others), (others, tt))
 gr._scripts.OnLeave(gr)
@@ -837,9 +852,11 @@ row = [f for f in pool(ROW) if f.elem.instance is not None][0]
 check("3.0.4: a row knows its raid from the journal", row.elem.instance == 777 and row.elem.encounter == 555, (row.elem.instance, row.elem.encounter))
 boss_col = [c for c in lua_list(row.elem.cols) if c.key == "boss"][0]
 g.CURSOR[1] = boss_col.x + 1
+g.MOCK_ALT = True
 row._scripts.OnEnter(row)
+g.MOCK_ALT = False
 tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
-check("3.0.4: the tooltip names the clicks", any("по боссу" in t for t in tt) and any("Ctrl" in t for t in tt), tt)
+check("3.0.4: the tooltip names the clicks (3.0.7: with Alt held)", any("по боссу" in t for t in tt) and any("Ctrl" in t for t in tt), tt)
 check("3.0.4: the tooltip stands beside the table, covering no rows", g.GameTooltip.anchor == "ANCHOR_NONE" and g.GameTooltip.relPoint == "LEFT", g.GameTooltip.anchor)
 row._scripts.OnLeave(row)
 row.MockClick(row)
@@ -983,6 +1000,13 @@ row.MockClick(row)
 said = chat_all()[n_chat:]
 check("…a later step is done though the game never marked the early one: on from the last done step, not back to the fleet",
       "Harnessing the Power" in said and "Send the Fleet" not in said, said)
+L.execute("MOCK.gt = MOCK.gt + 1000; QUEST_DONE[57010] = true; ROUTE.waypoint = nil; ROUTE.pin = nil")
+n_chat = len(chat_all())
+row.MockClick(row)
+said = chat_all()[n_chat:]
+check("3.0.7: «Return of the Black Prince» (Horde): a pin at the letter that starts it, on the ship in the port of Zuldazar",
+      g.ROUTE.waypoint is not None and g.ROUTE.waypoint.map == 862 and abs(g.ROUTE.waypoint.x - 0.585) < 1e-9 and "Натанос" in said, (g.ROUTE.waypoint, said))
+L.execute("QUEST_DONE[57010] = nil")
 L.execute("QUEST_DONE[56043] = nil; QUEST_DONE[55851] = nil; UnitFactionGroup = SAVED_FACTION; ROUTE.waypoint = nil")
 L.execute("MSS_NS.ACCESS[777].steps = SAVED_STEPS; ROUTE.waypoint = nil")
 L.execute("MOCK.gt = MOCK.gt + 1000; QUEST_DONE[57010] = true")

@@ -58,3 +58,5 @@ UI.Settings.lua
 UI.Minimap.lua
 Alert.lua
 Tooltip.lua
+Routes.lua
+Map.lua

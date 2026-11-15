@@ -19,6 +19,7 @@ local settingsQuiet, settingsMinimap
 local alertRarityCheck, showOffCheck
 local defaultOn = {}   -- галочки «включено, пока не выключили»: { check, поле db }
 local gridButtons = {}
+local detailsButtons = {}
 
 local function RefreshSettings()
   if not settingsFrame then
@@ -39,6 +40,9 @@ local function RefreshSettings()
   showOffCheck:SetChecked(db and db.showOff and true or false)
   for _, b in ipairs(gridButtons) do
     b:SetChecked(b.view == (db and db.gridView or "scroll"))
+  end
+  for _, b in ipairs(detailsButtons) do
+    b:SetChecked(b.details == (db and db.detailsKey or "alt"))
   end
 end
 
@@ -214,7 +218,7 @@ local function CreateSettings()
   for _, code in ipairs(ns.LANGUAGES) do
     codes[#codes + 1] = code
   end
-  local height = math.max(424, 62 + #codes * 24 + 98 + 44)
+  local height = math.max(424, 62 + #codes * 24 + 98 + 44 + 138)
   settingsFrame = Skin.Window(SETTINGS_NAME, 620, height, "DIALOG")
   settingsFrame:SetPoint("CENTER", 0, 60)
   local function title()
@@ -328,6 +332,29 @@ local function CreateSettings()
     ns.SafeCall(ShowReport)
   end)
   reportButton:SetPoint("TOPLEFT", COLUMN_LEFT + 6, -62 - #codes * 24 - 98)
+
+  -- подсказка строки окна: какой клавишей открываются подробности (UI.Rows.lua, DetailsNow); в сохранениях — только не Alt
+  local detailsTop = -62 - #codes * 24 - 98 - 40
+  Head("settings_details", COLUMN_LEFT, detailsTop)
+  for i, choice in ipairs({ { "alt", "Alt" }, { "shift", "Shift" }, { "ctrl", "Ctrl" }, { "always" } }) do
+    local b = Skin.Check(settingsFrame, true)
+    b:SetPoint("TOPLEFT", COLUMN_LEFT + 6, detailsTop - 22 - (i - 1) * 24)
+    b.details = choice[1]
+    local function text()
+      b.Text:SetText(choice[2] and string.format(L.settings_details_key, choice[2]) or L.settings_details_always)
+    end
+    text()
+    relabel[#relabel + 1] = text
+    AttachTooltip(b, "settings_details", "tip_settings_details")
+    b:SetScript("OnClick", function(self)
+      local db = ns.GetDB()
+      if db then
+        db.detailsKey = self.details ~= "alt" and self.details or nil
+      end
+      RefreshSettings()
+    end)
+    detailsButtons[#detailsButtons + 1] = b
+  end
 
   settingsFrame:SetScript("OnShow", RefreshSettings)
   settingsFrame:Hide()

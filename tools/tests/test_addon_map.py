@@ -1,0 +1,81 @@
+"""Mount Sheet Sync 3.0.7: routes and spawn points of rares on the world map (Map.lua, Routes.lua) — the icon is there
+only on a map with an uncollected mount that has data, nothing stays drawn on another map, what was switched on comes
+back with the map, several mounts of one map are switched one by one.
+
+    python3 test_addon_map.py
+"""
+from addon_env import start
+
+env = start()
+L, g, ns, check = env.L, env.g, env.ns, env.check
+check("without the world map the layer waits (nothing breaks at login)", ns.InitMapRoutes() is False)
+L.execute("""
+WorldMapFrame = MockNewRegion("Frame", "WorldMapFrame", UIParent)
+WorldMapFrame.ScrollContainer = MockNewRegion("Frame", nil, WorldMapFrame)
+CANVAS = MockNewRegion("Frame", nil, WorldMapFrame.ScrollContainer)
+CANVAS:SetSize(1000, 600)
+MAPID = 120
+function WorldMapFrame:GetCanvas() return CANVAS end
+function WorldMapFrame:GetMapID() return MAPID end
+function WorldMapFrame:AddDataProvider(p) PROVIDER = p end
+function WorldMapFrame:GetPinFrameLevelsManager()
+  return { GetValidFrameLevel = function(self, kind) LEVEL_ASKED = kind; return 2500 end }
+end
+MapCanvasDataProviderMixin = {}
+function CreateFromMixins(m) local t = {} for k, v in pairs(m) do t[k] = v end return t end
+function GoTo(id) MAPID = id; PROVIDER:OnMapChanged() end
+function Drawn() local a, b, c, d = MSS_NS.MapRoutesDrawn(); return { lines = a, dots = b, map = c, button = d } end
+function Click() local b = MountSheetSyncMapButton; b:GetScript("OnClick")(b) end
+""")
+check("with the world map the layer is made", ns.InitMapRoutes() is True and g.PROVIDER is not None)
+d = g.Drawn()
+check("Storm Peaks, the proto-drake is not collected: the icon is there, nothing is drawn until it is clicked",
+      d.button and d.lines == 0 and d.dots == 0, (d.button, d.lines, d.dots))
+overlay = [r for r in [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)] if r._type == "Frame" and r._parent is not None and r._parent._uid == g.CANVAS._uid][0]
+check("the layer sits at a map pin level, above the textures of explored land (not just above the canvas)",
+      overlay._level == 2500 and str(g.LEVEL_ASKED) == "PIN_FRAME_LEVEL_AREA_POI", (overlay._level, g.LEVEL_ASKED))
+g.Click()
+d = g.Drawn()
+lines = [r for r in [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)] if r._type == "Line" and r._shown]
+check("one mount on the map: a click draws its four routes as lines and its four spawn points",
+      d.lines > 40 and d.dots == 4 and d.map == 120 and g.MountSheetSyncDB.routes[120][265] is True, (d.lines, d.dots, d.map))
+check("…a line starts at its spawn point, in the canvas's own units (52, 34 of a 1000 x 600 canvas)",
+      abs(lines[0]._start[1] - 520) < 0.01 and abs(lines[0]._start[2] + 204) < 0.01, list(lines[0]._start.values()))
+check("…four routes — four colours", len({tuple(round(c, 2) for c in list(l._color.values())[:3]) for l in lines}) == 4)
+g.CANVAS._scale = 0.5
+g.PROVIDER.OnCanvasScaleChanged(g.PROVIDER)
+check("zoomed out to a half: the lines are twice as thick in canvas units, so they look the same", lines[0]._thickness == 6, lines[0]._thickness)
+g.GoTo(947)
+d = g.Drawn()
+check("another map without such a mount: no icon and nothing left drawn", not d.button and d.lines == 0 and d.dots == 0, (d.button, d.lines, d.dots))
+g.GoTo(120)
+d2 = g.Drawn()
+check("back on the map: the same routes are on again, without a click", d2.button and d2.lines > 40 and d2.dots == 4, (d2.lines, d2.dots))
+
+# several mounts on one map (the three Zandalari Warbringers in the Jade Forest): a list, each one on its own
+g.GoTo(371)
+d = g.Drawn()
+check("a map with three mounts: the icon, nothing drawn yet", d.button and d.dots == 0, (d.button, d.dots))
+before = len(g.MENUS)
+g.Click()
+menu = g.MENUS[len(g.MENUS)]
+boxes = [menu["items"][i] for i in range(1, len(menu["items"]) + 1) if menu["items"][i]["kind"] == "checkbox"]
+check("a click opens a list of the three mounts instead of drawing", len(g.MENUS) == before + 1 and len(boxes) == 3 and g.Drawn().dots == 0, len(boxes))
+boxes[0]["cb"]()
+check("the first one on: its spawn point", g.Drawn().dots == 1 and boxes[0]["on"]() and not boxes[1]["on"]())
+boxes[1]["cb"]()
+check("the second one on: the first stays", g.Drawn().dots == 2 and boxes[0]["on"]() and boxes[1]["on"]())
+boxes[0]["cb"]()
+check("the first one off: only the second is left", g.Drawn().dots == 1 and not boxes[0]["on"]() and boxes[1]["on"]())
+g.GoTo(120)
+check("Storm Peaks again: its own state, not the Jade Forest's", g.Drawn().dots == 4)
+g.GoTo(371)
+check("the Jade Forest again: the second mount is still on", g.Drawn().dots == 1)
+
+# a collected mount has no route and no icon
+L.execute('MOCK.mounts[265] = { "Затерянный во времени протодракон", 60002, "" }')
+g.GoTo(120)
+d = g.Drawn()
+check("the proto-drake is collected: no icon on its map and nothing drawn, though the route was on",
+      not d.button and d.lines == 0 and d.dots == 0, (d.button, d.lines, d.dots))
+env.finish()

@@ -479,7 +479,7 @@ local function OnLootReady()
       lootedGuids[guid] = true   -- имени нет — труп ещё не решён: может, откроют снова, выбрав его целью
     end
     local stamp = time()
-    if name and player.name and (byNpc or ns.RareRow(name)) and not RecentlyRecorded(player, name, stamp, byNpc and npc) then
+    if name and player.name and (byNpc or ns.RareRow(name, tonumber(npc))) and not RecentlyRecorded(player, name, stamp, byNpc and npc) then
       local rec = BaseRecord(player, stamp)
       rec.id = string.format("D-%s-%s-%d", player.key, npc, stamp)
       rec.boss = name
