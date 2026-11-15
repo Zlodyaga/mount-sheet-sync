@@ -151,3 +151,5 @@ Windows). «Выйти» удаляет ключ и отзывает его у G
 
 `MSS_UPDATE_TEST` (адрес имитации GitHub), `MSS_UPDATE_DELAY`, `MSS_TEST_PRERELEASE`, `MSS_INSTALL_DIR`,
 `MSS_DOWNLOADS_DIR`, `MSS_SYSTEM_LANG`, `MSS_WOW_RUNNING`, адрес имитации Google — см. [testing.md](testing.md).
+
+`TrayApp` — два файла (с 15.11.2026): `TrayApp.cs` — значок, меню, окна, обновление; `TrayApp.Menu.cs` — переключатели и подменю (возврат дневной копии, автодобавление персонажей, статистика, уведомления). Новые пункты меню — во второй.
