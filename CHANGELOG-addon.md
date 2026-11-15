@@ -3,6 +3,7 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.7
+- World bosses now show their mount and your attempts in the unit tooltip, like rares do.
 - Farming tips in the row tooltips: where the boss is, what you need to get in, how to farm faster. In the addon's language where there is a translation, in English otherwise. Can be turned off in the settings.
 - The number of attempts can be corrected in the game: on the “Attempts” tab right-click a row, type the number, press Enter (needs the program 2.10.2).
 - The “Dropped” tab also lists the mounts you collected before the addon kept track of drops, without a date (needs the program 2.10.2).
