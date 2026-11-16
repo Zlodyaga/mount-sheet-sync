@@ -38,6 +38,7 @@ run test_addon_npc.py
 run test_addon_map.py
 run test_addon_coin.py
 run test_addon_login.py
+run test_addon_rarity.py
 run test_layout7.py
 run test_routes_from_probe.py
 run test_minimap.py

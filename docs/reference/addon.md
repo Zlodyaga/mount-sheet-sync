@@ -27,6 +27,7 @@
 | `UI.Settings.lua` | Окно настроек (язык, галочки, вид сетки, кнопки) и «Сведения для отчёта об ошибке» |
 | `UI.Minimap.lua` | Кнопка у миникарты, Data Broker, Addon Compartment |
 | `Alert.lua` | Оповещение о выпавшем маунте (`ns.ShowDrop`, `/mss drop`) |
+| `Import.lua` | Попытки из Rarity (`ns.RarityPlan`, `/mss rarity`) |
 | `Tooltip.lua` | Подсказка о боссе: подсказка юнита (`TooltipDataProcessor`) и строка в Атласе приключений |
 | `Media/Icon*` | Значок-подкова (тот же, что у программы) |
 
@@ -398,3 +399,13 @@ data provider (`RefreshAllData`, `OnMapChanged`, `OnCanvasScaleChanged`) и со
   <первое неубитое место>. Список - /mss» или «на этой неделе всё убито». Выключается галочкой «При входе - что
   осталось» (`db.loginNote = false`) и «Не писать в чат».
 - Шапка «Осталось» (`UI.Views.lua`, `ResetIn`): « - до сброса 2 д 5 ч» по `ns.WeekEnd()`.
+
+## Попытки из Rarity (3.0.7, 16.11.2026)
+
+- `Import.lua`: `ns.RarityPlan()` — что перенести; `ns.RarityImport(apply)` — `/mss rarity` (показать, до 15 строк) и
+  `/mss rarity ok` (перенести). Берётся `Rarity.db.profile.groups.mounts` (AceDB раскладывает туда встроенную базу
+  Rarity, поэтому у записей есть `spellId` / `itemId`; в самом файле сохранений Rarity — только названия и числа).
+  Маунт — `C_MountJournal.GetMountFromSpell`, иначе `GetMountFromItem`; строки — `ns.GetAttemptsList()` (несобранные, с
+  шансом). На маунт — наибольшее число из записей Rarity; переносится, только если оно больше нашего, через
+  `ns.SetAttempts` (запись `attempts` для программы и `db.attemptEdits`). Маунт с несколькими строками — пропуск и счёт.
+- Работает с Rarity и с Rarity: Collector's Edition (тот же глобальный `Rarity`, папка `Rarity`).

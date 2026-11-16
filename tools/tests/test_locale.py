@@ -108,7 +108,7 @@ for locale, want, sample in [("ruRU", "ruRU", "открыть окно"), ("deDE
                              ("koKR", "enUS", "open the window")]:
     L, g, ns = new_game(locale)
     g.SlashCmdList["MOUNTSHEETSYNC"]("help")
-    out = "\n".join(chat(g, 14))
+    out = "\n".join(chat(g, 18))   # the whole /mss help (it grows with commands)
     check("client %s → addon in %s (help: “%s”)" % (locale, want, sample), ns.CurrentLanguage() == want and sample in out, out[-400:])
 
 # ---------------------------------------------------------------- 3. window, tooltip and records in German

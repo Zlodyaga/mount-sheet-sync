@@ -1021,6 +1021,7 @@ local function ShowHelp()
     CMD .. "/mss sync|r — " .. L.help_sync,
     CMD .. "/mss left|r — " .. L.help_left,
     CMD .. "/mss drop|r — " .. L.help_drop,
+    CMD .. "/mss rarity|r — " .. L.help_rarity,
     CMD .. "/mss list|r — " .. L.help_list,
     CMD .. "/mss add " .. L.help_add_arg .. "|r — " .. L.help_add,
     CMD .. "/mss scan|r — " .. L.help_scan,
@@ -1057,6 +1058,11 @@ SlashCmdList["MOUNTSHEETSYNC"] = function(msg)
     -- проверка оповещения о выпавшем маунте: выдуманное выпадение, ничего не записывается
     if ns.TestDrop then
       SafeCall(ns.TestDrop)
+    end
+  elseif cmd == "rarity" then
+    -- попытки из Rarity, где у него больше (Import.lua): без «ok» — только показать
+    if ns.RarityImport then
+      SafeCall(ns.RarityImport, rest:lower() == "ok")
     end
   elseif cmd == "tip" then
     -- проверка подсказки о боссе: пишет в чат, что видит аддон при наведении (до /reload)
