@@ -108,6 +108,36 @@ check("…a spot next to a named place: its name from the game's table, in the a
 ns.SetRouteShown(1961, 1514, False)
 g.GoTo(371)
 
+# a rare in this character's list: the spawn point says if it can be killed now or when again
+L.execute("""
+local s = MountSheetSyncSheet
+for _, c in ipairs(s.chars) do
+  if c.name == "Эйра" then
+    c.items[#c.items + 1] = { kind = "rare", mount = "Огромный сероклык", boss = "Горок", names = { "горок" }, id = 627, every = 86400, sheet = "Редкие монстры", row = 501 }
+  end
+end
+s.mounts = s.mounts or {}
+s.mounts[#s.mounts + 1] = { kind = "rare", mount = "Огромный сероклык", boss = "Горок", names = { "горок" }, n = 0, p = 1, id = 627 }
+s.generated = s.generated + 1
+""")
+g.GoTo(525)
+ns.SetRouteShown(525, 627, True)
+def gorok_tip():
+    d = [r for r in [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)] if r._type == "Frame" and r._shown and r._mouseClick is False and r.mount == 627][0]
+    d._scripts.OnEnter(d)
+    return [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
+tt = gorok_tip()
+check("a rare of this character's list, not killed: «can kill it now» at its spawn point", "Этот персонаж может убить его сейчас" in tt, tt)
+L.execute("""
+local t = MountSheetSyncDB.kills
+t[#t + 1] = { id = "D-x-50992-1", boss = "Горок", kind = "world", difficultyID = 0, char = MOCK.name, realm = MOCK.realm, charKey = MOCK.guid,
+              time = MOCK.now - 3600, weekEnd = MSS_NS.WeekEnd() }
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+""")
+tt = gorok_tip()
+check("…killed an hour ago with a day's cooldown: «killed, again in 23 h …»", any(t.startswith("Убит этим персонажем - снова через 23 ч") for t in tt), tt)
+ns.SetRouteShown(525, 627, False)
+
 # a collected mount has no route and no icon
 L.execute('MOCK.mounts[265] = { "Затерянный во времени протодракон", 60002, "" }')
 g.GoTo(120)

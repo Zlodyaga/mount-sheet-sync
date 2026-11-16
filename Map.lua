@@ -152,12 +152,36 @@ local function PlaceName(area)
   return names[ns.CurrentLanguage and ns.CurrentLanguage() or "enUS"] or names.enUS
 end
 
+-- Откат рара у этого персонажа — из его списка «Осталось» (там же, где окно берёт «убит, снова через …»):
+-- nil — рара в его списке нет (не фармит или списка нет), 0 — можно убить, иначе секунд до отката.
+local function RareWait(mount)
+  if not ns.GetRemaining then
+    return nil
+  end
+  local ok, r = pcall(ns.GetRemaining)
+  if not ok or type(r) ~= "table" or r.state ~= "ok" or type(r.items) ~= "table" then
+    return nil
+  end
+  for _, e in ipairs(r.items) do
+    if type(e.item) == "table" and e.item.kind == "rare" and tonumber(e.item.id) == mount then
+      return e.again or 0
+    end
+  end
+  return nil
+end
+
 local function DotEnter(self)
   GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
   GameTooltip:SetText(MountName(self.mount), 1, 0.82, 0)
   local place = PlaceName(self.place)
   if place then
     GameTooltip:AddLine(place, 1, 1, 1, true)
+  end
+  local wait = RareWait(self.mount)
+  if wait and wait > 0 then
+    GameTooltip:AddLine(string.format(L.map_routes_wait, ns.FormatDuration and ns.FormatDuration(wait) or tostring(wait)), 1, 0.5, 0.4, true)
+  elseif wait then
+    GameTooltip:AddLine(L.map_routes_ready, 0.55, 1, 0.55, true)
   end
   GameTooltip:AddLine(string.format(L.map_routes_spawn, self.x, self.y), 0.8, 0.8, 0.8, true)
   GameTooltip:Show()
