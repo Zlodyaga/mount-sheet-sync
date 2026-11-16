@@ -42,8 +42,17 @@ g.AddWorld("W-2", "Галеон")
 g.Advance(700)
 g.Fire("CURRENCY_DISPLAY_UPDATE", 697, 7, -1)
 check("more than ten minutes after the kill: nothing", g.Kills() == n0 + 4)
+g.Advance(30)
+g.AddWorld("W-3", "Налак")
+L.execute('''local t = MountSheetSyncDB.kills
+t[#t + 1] = { id = "R-1", boss = "Джин'ха", kind = "raid", difficultyID = 14, char = MOCK.name, realm = MOCK.realm, charKey = MOCK.guid, time = time(), weekEnd = 123 }''')
+n1 = g.Kills()
+g.Fire("CURRENCY_DISPLAY_UPDATE", 697, 6, -1)
+check("a coin after a raid boss that followed a world boss: not the world boss's", g.Kills() == n1)
+check("the coin record is not one more kill of the week", ns.CountThisWeek() == sum(1 for i in range(1, g.Kills() + 1) if g.MountSheetSyncDB.kills[i].weekEnd == ns.WeekEnd() and not g.MountSheetSyncDB.kills[i].coin
+      and str(g.MountSheetSyncDB.kills[i].kind) not in ("reset", "mount")))
 L.execute('Fire("CURRENCY_DISPLAY_UPDATE", SECRET, SECRET, SECRET)')
-check("secret values in the event are left alone", g.Kills() == n0 + 4)
+check("secret values in the event are left alone", g.Kills() == n1)
 # the «Попытки» tab: how many of the attempts are bonus rolls
 L.execute("""
 local s = MountSheetSyncSheet

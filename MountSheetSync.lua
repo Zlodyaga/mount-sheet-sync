@@ -519,10 +519,12 @@ local function OnCurrency(currencyID, _, change)
     if (tonumber(rec.time) or 0) < stamp - COIN_WINDOW then
       break
     end
-    -- убийство мирового босса этим персонажем (не рар: у его записи номер «D-…», бонусного броска у раров нет)
-    if rec.charKey == player.key and rec.kind == "world" and tostring(rec.id or ""):sub(1, 2) ~= "D-" then
-      if rec.coin or rec.coined then
-        return   -- на одно убийство — один бросок
+    -- последнее убийство босса этим персонажем: бросок — за него. Если это не мировой босс (рейд, подземелье) или рар
+    -- (номер «D-…», бонусного броска у раров нет) — бросок не наш, дальше назад не смотрим
+    local boss = rec.kind == "world" or rec.kind == "raid" or rec.kind == "party" or rec.kind == "scenario"
+    if rec.charKey == player.key and boss and not rec.coin then
+      if rec.kind ~= "world" or tostring(rec.id or ""):sub(1, 2) == "D-" or rec.coined then
+        return   -- бросок за рейд или подземелье, за рара не бывает; на одно убийство — один бросок
       end
       rec.coined = true
       local extra = BaseRecord(player, stamp)
@@ -957,7 +959,7 @@ function ns.CountThisWeek()
   local count = 0
   if weekEnd and db then
     for _, rec in ipairs(db.kills) do
-      if rec.weekEnd == weekEnd and rec.kind ~= "reset" and rec.kind ~= "mount" then
+      if rec.weekEnd == weekEnd and rec.kind ~= "reset" and rec.kind ~= "mount" and not rec.coin then
         count = count + 1
       end
     end

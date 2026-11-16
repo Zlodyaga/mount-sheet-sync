@@ -194,12 +194,23 @@ namespace MountSheetSync
                 return 0;
             }
             int changed = 0;
-            foreach (SheetEntry e in book.Entries)
+            string[] sheets = { SheetBuilder.RaidsSheet, SheetBuilder.DungeonsSheet, SheetBuilder.WorldSheet, SheetBuilder.RareSheet };
+            foreach (SheetEntry e in book.Entries.Where(x => sheets.Any(n => SheetLogic.Norm(n) == SheetLogic.Norm(x.Name)) && x.Data.Count > 0))
             {
+                // только колонки текстов каталога: свои заметки игрока на других колонках и листах не трогаем
+                HashSet<int> cols = new HashSet<int>();
+                for (int c = 0; c < e.Data[0].Length; c++)
+                {
+                    string head = SheetLogic.Norm(SheetLogic.StripNote(e.Data[0][c]));
+                    if (head == SheetLogic.Norm("Совет по фарму") || head == SheetLogic.Norm("Как работает скип") || head == SheetLogic.Norm("Скип / маршрут"))
+                    {
+                        cols.Add(c);
+                    }
+                }
                 for (int r = 1; r < e.Data.Count; r++)
                 {
                     object[] row = e.Data[r];
-                    for (int c = 0; c < row.Length; c++)
+                    foreach (int c in cols.Where(x => x < row.Length))
                     {
                         string text = row[c] as string;
                         string fresh;

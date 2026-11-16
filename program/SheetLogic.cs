@@ -420,8 +420,9 @@ namespace MountSheetSync
         /// Дописать выпавшего маунта на лист «Выпавшие маунты»: дата, маунт, босс, сколько было попыток и шанс за все попытки
         /// на тот момент. Маунт на листе уже есть — ничего (повтор записи). Листа нет или его колонки поменяли — ничего.
         /// Любая ошибка здесь не должна мешать отметке «Собрано?», поэтому она только пишется в журнал. true — строка дописана.
+        /// batch — копить запросы Google сюда (вызывающий отправит их одним пакетом); null — отправить сразу.
         /// </summary>
-        public static bool AddDropRow(IBook book, double stamp, string mount, string boss, double attempts, double p)
+        public static bool AddDropRow(IBook book, double stamp, string mount, string boss, double attempts, double p, List<object> batch)
         {
             try
             {
@@ -455,9 +456,12 @@ namespace MountSheetSync
                 IStructuredBook structured = book as IStructuredBook;
                 if (structured != null)
                 {
-                    List<object> req = new List<object>();
+                    List<object> req = batch ?? new List<object>();
                     SheetBuilder.AppendDrop(req, (int)entry.SheetId, at, row);
-                    structured.Apply(req, null, null);
+                    if (batch == null)
+                    {
+                        structured.Apply(req, null, null);
+                    }
                     entry.Data.Add(row);
                 }
                 else
@@ -557,9 +561,9 @@ namespace MountSheetSync
                     }
                 }
             }
-            if (dropMount != null)
+            if (dropMount != null && dropP > 0)   // только маунт со случайной добычей: не награда за достижение или седло
             {
-                AddDropRow(book, Number(J.Get(kill, "time")), dropMount, dropBoss, dropAttempts, dropP);
+                AddDropRow(book, Number(J.Get(kill, "time")), dropMount, dropBoss, dropAttempts, dropP, null);
             }
             if (cells.Any(c => (bool)((Dictionary<string, object>)c)["changed"]))
             {

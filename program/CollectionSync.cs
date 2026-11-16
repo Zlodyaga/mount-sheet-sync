@@ -527,15 +527,20 @@ namespace MountSheetSync
             {
                 return;
             }
+            List<object> batch = new List<object>();   // все строки — одним запросом к Google
             foreach (DroppedMount d in game.Dropped.Values.OrderBy(x => x.Time))
             {
                 string mount, boss;
                 double p;
                 if (SheetLogic.FindMountRow(book, d.Id, out mount, out boss, out p)
-                    && SheetLogic.AddDropRow(book, d.Time, mount, boss, d.Attempts, p))
+                    && SheetLogic.AddDropRow(book, d.Time, mount, boss, d.Attempts, p, batch))
                 {
                     res.DropsAdded++;
                 }
+            }
+            if (batch.Count > 0)
+            {
+                book.Apply(batch, null, null);
             }
         }
 

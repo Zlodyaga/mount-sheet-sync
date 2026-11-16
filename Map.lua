@@ -62,12 +62,15 @@ local function MapList(mapID)
     return merged[mapID]
   end
   local list, byMount = {}, {}
+  local complete = true
   for _, e in ipairs(ns.RARE_ROUTES[mapID] or {}) do
     list[#list + 1] = e
   end
   for _, child in ipairs(children) do
     local ok, minX, maxX, minY, maxY = pcall(C_Map.GetMapRectOnMap, child, mapID)
-    if ok and type(minX) == "number" and type(maxY) == "number" and maxX > minX and maxY > minY then
+    if not (ok and type(minX) == "number" and type(maxY) == "number" and maxX > minX and maxY > minY) then
+      complete = false   -- карта зоны ещё не известна игре: собрать заново при следующем показе
+    else
       for _, e in ipairs(ns.RARE_ROUTES[child] or {}) do
         local to = byMount[e.mount]
         if not to then
@@ -86,7 +89,9 @@ local function MapList(mapID)
       end
     end
   end
-  merged[mapID] = list
+  if complete then
+    merged[mapID] = list
+  end
   return list
 end
 
@@ -104,8 +109,11 @@ function ns.RouteEntries(mapID)
   local out = {}
   local list = mapID and ns.RARE_ROUTES and MapList(mapID)
   local mine = PlayerFaction()
+  local seen = {}
   for _, e in ipairs(list or {}) do
-    if not Collected(e.mount) and not (e.faction and mine and e.faction ~= mine) then
+    -- фракция неизвестна: у маунта две записи (по рару на фракцию) — в списке он один, точки — первой
+    if not Collected(e.mount) and not (e.faction and mine and e.faction ~= mine) and not seen[e.mount] then
+      seen[e.mount] = true
       out[#out + 1] = e
     end
   end

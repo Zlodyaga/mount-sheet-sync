@@ -146,8 +146,8 @@ g.MOCK_FACTION = "Alliance"
 moxo_a = [e for e in ns.RouteEntries(62).values() if e.mount == 1203]
 g.MOCK_FACTION = None
 moxo_n = [e for e in ns.RouteEntries(62).values() if e.mount == 1203]
-check("Darkshore: the Horde sees Athil Dewfire's spot, the Alliance Moxo's, an unknown faction both",
-      len(moxo) == 1 and abs(moxo[0].spawns[2] - 75.0) < 0.01 and len(moxo_a) == 1 and abs(moxo_a[0].spawns[2] - 19.6) < 0.01 and len(moxo_n) == 2,
+check("Darkshore: the Horde sees Athil Dewfire's spot, the Alliance Moxo's; an unknown faction gets the mount once in the list",
+      len(moxo) == 1 and abs(moxo[0].spawns[2] - 75.0) < 0.01 and len(moxo_a) == 1 and abs(moxo_a[0].spawns[2] - 19.6) < 0.01 and len(moxo_n) == 1,
       (len(moxo), len(moxo_a), len(moxo_n)))
 
 # a collected mount has no route and no icon

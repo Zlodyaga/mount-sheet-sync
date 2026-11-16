@@ -18,7 +18,7 @@ namespace MountSheetSync
         public const string DungeonsSheet = "Подземелья";
         public const string WorldSheet = "Мировые боссы";
         public const string RareSheet = "Редкие монстры";
-        /// <summary>Памятка: какие маунты выпали (вид таблицы 7). Строки дописывает SheetLogic.NoteDrop.</summary>
+        /// <summary>Памятка: какие маунты выпали (вид таблицы 7). Строки дописывает SheetLogic.AddDropRow (при записи маунта и из CollectionSync.ImportDrops).</summary>
         public const string DropsSheet = "Выпавшие маунты";
         public const string LastKill = "Последнее убийство";
         public const string SummarySheet = "Сводка";
