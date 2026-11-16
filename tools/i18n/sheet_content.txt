@@ -411,225 +411,521 @@ en: The Voidspire: Quest: Flicker in the Hollow; The Dreamrift and March on Quel
 
 @ Считай коллекционным маунтом Ан'Киража; ездить на нём можно только внутри Храма Ан'Киража.
 en: Count it as a collectible AQ mount; it is usually only usable inside Temple of Ahn'Qiraj.
+de: Zählt als Sammel-Reittier aus AQ; meist nur im Tempel von Ahn'Qiraj nutzbar.
+fr: À compter comme monture de collection d'AQ ; utilisable en général seulement dans le temple d'Ahn'Qiraj.
+es: Cuéntala como montura de colección de AQ; normalmente solo se usa dentro del Templo de Ahn'Qiraj.
+pt: Conte como montaria de coleção de AQ; em geral só dá para usar dentro do Templo de Ahn'Qiraj.
 
 @ Самый редкий из боевых танков Ан'Киража; проверь, нужен ли он тебе именно для коллекции.
 en: The rarest of the AQ battle tank drops; check whether you really need it for the collection.
+de: Der seltenste der AQ-Kampfpanzer; prüfe, ob du ihn für die Sammlung wirklich brauchst.
+fr: Le plus rare des chars d'assaut d'AQ ; vérifie s'il te faut vraiment pour la collection.
+es: El más raro de los tanques de batalla de AQ; comprueba si de verdad lo necesitas para la colección.
+pt: O mais raro dos tanques de batalha de AQ; veja se você realmente precisa dele para a coleção.
 
 @ Очень быстрый забег: Ловчий Аттумен стоит в самом начале Каражана.
 en: A very quick run: Attumen is at the start of Karazhan.
+de: Ein sehr schneller Lauf: Attumen steht am Anfang von Karazhan.
+fr: Une course très rapide : Attumen est au début de Karazhan.
+es: Una carrera muy rápida: Attumen está al principio de Karazhan.
+pt: Uma corrida bem rápida: Attumen fica no começo de Karazhan.
 
 @ Один из самых приоритетных старых рейдовых маунтов; убивай Кель'таса каждым персонажем.
 en: One of the top-priority old raid mounts; kill Kael'thas on every alt.
+de: Eines der wichtigsten alten Schlachtzugsreittiere; töte Kael'thas mit jedem Twink.
+fr: Une des vieilles montures de raid les plus prioritaires ; tue Kael'thas avec chaque reroll.
+es: Una de las monturas de banda antiguas más prioritarias; mata a Kael'thas con cada alter.
+pt: Uma das montarias antigas de raide mais prioritárias; mate Kael'thas com cada alt.
 
 @ В актуальной версии игры больше не фармится; оставлено в таблице как историческая строка.
 en: No longer farmable in Retail; kept in the sheet as a historical/collection entry.
+de: In Retail nicht mehr farmbar; als historischer Sammeleintrag in der Tabelle.
+fr: Ne se farme plus en Retail ; gardée dans le tableau comme entrée historique.
+es: Ya no se farmea en Retail; queda en la hoja como entrada histórica.
+pt: Não dá mais para farmar no Retail; fica na planilha como item histórico.
 
 @ Быстрый еженедельный килл.
 en: A quick weekly kill.
+de: Ein schneller wöchentlicher Kill.
+fr: Un kill hebdomadaire rapide.
+es: Una muerte semanal rápida.
+pt: Uma morte semanal rápida.
 
 @ Есть и источник в подземелье — тайник Окулуса; см. лист «Подземелья».
 en: There is also a dungeon source through the Oculus cache; see the Dungeons sheet.
+de: Es gibt auch eine Dungeon-Quelle über die Truhe im Oculus; siehe Blatt Dungeons.
+fr: Il y a aussi une source en donjon via le coffre de l'Oculus ; voir la feuille Donjons.
+es: También hay una fuente en mazmorra con el cofre del Oculus; mira la hoja Mazmorras.
+pt: Também há uma fonte em masmorra pelo baú do Óculus; veja a planilha Masmorras.
 
 @ Оставь трёх драконов живыми и убей Сартариона.
 en: Leave the three drakes alive and kill Sartharion.
+de: Lass die drei Drachen leben und töte Sartharion.
+fr: Laisse les trois drakes en vie et tue Sartharion.
+es: Deja vivos a los tres dracos y mata a Sartharion.
+pt: Deixe os três dracos vivos e mate Sartharion.
 
 @ Нужен доступ к Озеру Ледяных Оков; шанс с любого босса.
 en: Needs access to Wintergrasp / the old zone; a chance from any boss.
+de: Braucht Zugang zu Tausendwintersee / der alten Zone; Chance bei jedem Boss.
+fr: Nécessite l'accès au lac Joug-d'hiver / l'ancienne zone ; chance sur n'importe quel boss.
+es: Necesita acceso a Conquista del Invierno / la zona antigua; probabilidad con cualquier jefe.
+pt: Precisa de acesso a Invernada / à zona antiga; chance em qualquer chefe.
 
 @ Быстрое еженедельное убийство; маунт иногда бывает и на Чёрном рынке.
 en: A quick weekly kill; the mount sometimes shows up on the BMAH too.
+de: Ein schneller wöchentlicher Kill; das Reittier gibt es manchmal auch im Schwarzmarkt-Auktionshaus.
+fr: Un kill hebdomadaire rapide ; la monture apparaît parfois aussi à l'hôtel des ventes du marché noir.
+es: Una muerte semanal rápida; la montura a veces aparece también en la casa de subastas del mercado negro.
+pt: Uma morte semanal rápida; a montaria às vezes aparece também na casa de leilões do mercado negro.
 
 @ Один из самых долгих старых забегов без скипа.
 en: One of the longest old runs without a skip.
+de: Einer der längsten alten Läufe ohne Abkürzung.
+fr: Une des plus longues vieilles courses sans raccourci.
+es: Una de las carreras antiguas más largas sin atajo.
+pt: Uma das corridas antigas mais longas sem atalho.
 
 @ Длинный забег; проверь сохранение, если ведёшь много персонажей.
 en: A long run; check the lockout if you play many alts.
+de: Ein langer Lauf; prüfe die Sperre, wenn du viele Twinks spielst.
+fr: Une longue course ; vérifie le verrouillage si tu joues beaucoup de rerolls.
+es: Una carrera larga; revisa el bloqueo si juegas muchos alters.
+pt: Uma corrida longa; confira o bloqueio se você joga com muitos alts.
 
 @ В актуальной версии игры больше не фармится; историческая строка.
 en: No longer farmable in Retail; historical row.
+de: In Retail nicht mehr farmbar; historische Zeile.
+fr: Ne se farme plus en Retail ; ligne historique.
+es: Ya no se farmea en Retail; fila histórica.
+pt: Não dá mais para farmar no Retail; linha histórica.
 
 @ В актуальной версии игры через достижение не получить; может появляться на Чёрном рынке.
 en: Not farmable through the achievement in Retail; may appear on the Black Market Auction House.
+de: In Retail nicht über den Erfolg farmbar; kann im Schwarzmarkt-Auktionshaus auftauchen.
+fr: Ne s'obtient plus par le haut fait en Retail ; peut apparaître au marché noir.
+es: En Retail no se consigue por el logro; puede aparecer en el mercado negro.
+pt: No Retail não se obtém pela conquista; pode aparecer no mercado negro.
 
 @ В актуальной версии игры через достижение не получить; историческая строка.
 en: Not farmable through the achievement in Retail; historical row.
+de: In Retail nicht über den Erfolg farmbar; historische Zeile.
+fr: Ne s'obtient plus par le haut fait en Retail ; ligne historique.
+es: En Retail no se consigue por el logro; fila histórica.
+pt: No Retail não se obtém pela conquista; linha histórica.
 
 @ Многие ачивы соло, но отдельные механики могут требовать аккуратности/группы.
 en: Many achievements are soloable, but some mechanics may need care or a group.
+de: Viele Erfolge gehen solo, manche Mechaniken brauchen aber Sorgfalt oder eine Gruppe.
+fr: Beaucoup de hauts faits se font en solo, mais certaines mécaniques demandent du soin ou un groupe.
+es: Muchos logros se hacen en solitario, pero algunas mecánicas piden cuidado o un grupo.
+pt: Muitas conquistas dá para fazer sozinho, mas algumas mecânicas pedem cuidado ou um grupo.
 
 @ Можно делать отдельно от фарма маунта «Непобедимый».
 en: Can be done separately from farming Invincible.
+de: Kann getrennt vom Farmen von Unbesiegbar erledigt werden.
+fr: Peut se faire à part du farm d'Invincible.
+es: Se puede hacer aparte del farmeo de Invencible.
+pt: Dá para fazer separado do farm de Invencível.
 
 @ Проверь, открыт ли у персонажа или аккаунта доступ к секретам старого Наксрамаса.
 en: Check that the character/account has current access to the old Naxxramas secrets.
+de: Prüfe, ob Charakter oder Account noch Zugang zu den alten Geheimnissen von Naxxramas haben.
+fr: Vérifie que le personnage ou le compte a encore accès aux anciens secrets de Naxxramas.
+es: Comprueba que el personaje o la cuenta tenga acceso a los antiguos secretos de Naxxramas.
+pt: Veja se o personagem ou a conta ainda tem acesso aos antigos segredos de Naxxramas.
 
 @ Рейд короткий; один из удобных еженедельных маршрутов.
 en: A short raid; one of the handy weekly routes.
+de: Ein kurzer Schlachtzug; eine der praktischen wöchentlichen Runden.
+fr: Un raid court ; une des tournées hebdomadaires pratiques.
+es: Una banda corta; una de las rutas semanales cómodas.
+pt: Uma raide curta; uma das rotas semanais práticas.
 
 @ Если нужен только Рагнарос, после Алисразор путь можно ускорить перьями.
 en: If you only need Ragnaros, the feathers after Alysrazor make the route faster.
+de: Brauchst du nur Ragnaros, machen die Federn nach Alysrazar den Weg schneller.
+fr: Si seul Ragnaros t'intéresse, les plumes après Alysrazor accélèrent le trajet.
+es: Si solo necesitas a Ragnaros, las plumas tras Alysrazor acortan la ruta.
+pt: Se você só precisa de Ragnaros, as penas depois de Alysrazor encurtam o caminho.
 
 @ Не пропускай Алисразор, если фармишь именно её маунта.
 en: Do not skip Alysrazor if you are farming the Flametalon.
+de: Überspringe Alysrazar nicht, wenn du ihr Reittier farmst.
+fr: Ne saute pas Alysrazor si tu farmes sa monture.
+es: No te saltes a Alysrazor si farmeas su montura.
+pt: Não pule Alysrazor se estiver farmando a montaria dela.
 
 @ Длинный забег с RP/сценами; хорош для мульти-маунт фарма.
 en: A long run with RP/cutscenes; good for farming several mounts at once.
+de: Ein langer Lauf mit Zwischensequenzen; gut, um mehrere Reittiere auf einmal zu farmen.
+fr: Une longue course avec des cinématiques ; bien pour farmer plusieurs montures à la fois.
+es: Una carrera larga con cinemáticas; buena para farmear varias monturas a la vez.
+pt: Uma corrida longa com cenas; boa para farmar várias montarias de uma vez.
 
 @ Фармится вместе с маунтом «Служанка Хранительницы жизни».
 en: Farmed together with Life-Binder's Handmaiden.
+de: Wird zusammen mit der Dienerin der Lebensbinderin gefarmt.
+fr: Se farme avec la Servante de la Lieuse-de-vie.
+es: Se farmea junto con la Sirvienta de la Protectora.
+pt: Farmada junto com a Serva da Protetora da Vida.
 
 @ Ставь героическую сложность, если нужен этот маунт.
 en: Set Heroic if you need this mount.
+de: Stelle heroisch ein, wenn du dieses Reittier brauchst.
+fr: Mets le mode héroïque si tu veux cette monture.
+es: Pon heroico si necesitas esta montura.
+pt: Use o heroico se você precisa desta montaria.
 
 @ Часть достижений может требовать контроля урона, чтобы не убить босса слишком быстро.
 en: Some achievements may need damage control so the boss does not die too fast.
+de: Manche Erfolge brauchen Schadenskontrolle, damit der Boss nicht zu schnell stirbt.
+fr: Certains hauts faits demandent de contrôler les dégâts pour que le boss ne meure pas trop vite.
+es: Algunos logros piden controlar el daño para que el jefe no muera demasiado rápido.
+pt: Algumas conquistas pedem controle de dano para o chefe não morrer rápido demais.
 
 @ Лучше делать отдельным забегом за достижениями, а не в скоростном забеге за маунтом.
 en: Better done as a separate achievement run rather than in a fast mount run.
+de: Besser als eigener Erfolgslauf als in einem schnellen Reittierlauf.
+fr: Mieux vaut une course à part pour les hauts faits qu'une course rapide de montures.
+es: Mejor como carrera aparte de logros que en una carrera rápida de monturas.
+pt: Melhor como corrida separada de conquistas do que numa corrida rápida de montarias.
 
 @ Достижения лучше закрывать группой, если соло-механики ломаются.
 en: Better to do the achievements in a group if the mechanics break solo.
+de: Erfolge besser in der Gruppe, wenn die Mechaniken solo nicht funktionieren.
+fr: Mieux vaut faire les hauts faits en groupe si les mécaniques ne passent pas en solo.
+es: Mejor hacer los logros en grupo si las mecánicas no salen en solitario.
+pt: Melhor fazer as conquistas em grupo se as mecânicas não funcionam sozinho.
 
 @ До Элегона идти недолго; один из лучших быстрых забегов Пандарии.
 en: Elegon is not far in; one of the best quick MoP runs.
+de: Elegon ist nicht weit; einer der besten schnellen MoP-Läufe.
+fr: Elegon n'est pas loin ; une des meilleures courses rapides de MoP.
+es: Elegon no está lejos; una de las mejores carreras rápidas de MoP.
+pt: Elegon não fica longe; uma das melhores corridas rápidas de MoP.
 
 @ Хорридон — ранний босс, поэтому фарм быстрый.
 en: Horridon is an early boss, so the farm is quick.
+de: Horridon ist ein früher Boss, das Farmen geht schnell.
+fr: Horridon est un boss du début, le farm est rapide.
+es: Horridon es un jefe temprano, así que el farmeo es rápido.
+pt: Horridon é um chefe do começo, então o farm é rápido.
 
 @ Нужно дойти до Цзи-Кунь; пропуска боссов в этом рейде нет.
 en: You have to get to Ji-Kun; the raid has no skip.
+de: Du musst bis Ji-Kun; der Schlachtzug hat keine Abkürzung.
+fr: Il faut atteindre Ji-Kun ; le raid n'a pas de raccourci.
+es: Hay que llegar hasta Ji-Kun; la banda no tiene atajo.
+pt: É preciso chegar a Ji-Kun; a raide não tem atalho.
 
 @ Главный полезный пропуск боссов Пандарии для фарма маунтов.
 en: The most useful MoP skip for mount farming.
+de: Die nützlichste MoP-Abkürzung zum Reittierfarmen.
+fr: Le raccourci de MoP le plus utile pour farmer les montures.
+es: El atajo de MoP más útil para farmear monturas.
+pt: O atalho de MoP mais útil para farmar montarias.
 
 @ Забег за достижениями; не путать с добычей с босса.
 en: Achievement run; not to be confused with a direct boss drop.
+de: Erfolgslauf; nicht mit direkter Bossbeute verwechseln.
+fr: Course de hauts faits ; à ne pas confondre avec un butin de boss.
+es: Carrera de logros; no confundir con botín directo de jefe.
+pt: Corrida de conquistas; não confundir com espólio direto de chefe.
 
 @ Лучше делать отдельным забегом: часть достижений мешает быстрой зачистке.
 en: Better done as a separate run, because some achievements get in the way of a speed clear.
+de: Besser als eigener Lauf, weil manche Erfolge eine schnelle Säuberung stören.
+fr: Mieux vaut une course à part, certains hauts faits gênent un nettoyage rapide.
+es: Mejor como carrera aparte: algunos logros estorban a una limpieza rápida.
+pt: Melhor como corrida separada, porque algumas conquistas atrapalham uma limpeza rápida.
 
 @ Не используй скип, пока не закрыты нужные боссы/ачивки.
 en: Do not use the skip until the bosses/achievements you need are done.
+de: Nutze die Abkürzung erst, wenn die nötigen Bosse und Erfolge erledigt sind.
+fr: N'utilise pas le raccourci avant d'avoir fait les boss et hauts faits nécessaires.
+es: No uses el atajo hasta tener los jefes y logros que necesitas.
+pt: Não use o atalho antes de fazer os chefes e conquistas de que precisa.
 
 @ Нужны условия достижения гильдии.
 en: Needs the guild achievement conditions.
+de: Braucht die Bedingungen des Gildenerfolgs.
+fr: Demande les conditions du haut fait de guilde.
+es: Necesita las condiciones del logro de hermandad.
+pt: Precisa das condições da conquista de guilda.
 
 @ Историческая строка; в актуальной версии игры не фармится.
 en: Historical row; not farmable in Retail.
+de: Historische Zeile; in Retail nicht farmbar.
+fr: Ligne historique ; ne se farme pas en Retail.
+es: Fila histórica; no se farmea en Retail.
+pt: Linha histórica; não dá para farmar no Retail.
 
 @ Один из самых полезных пропусков боссов для фарма старых маунтов.
 en: One of the most useful raid skips for old mount farming.
+de: Eine der nützlichsten Schlachtzugsabkürzungen für alte Reittiere.
+fr: Un des raccourcis de raid les plus utiles pour les vieilles montures.
+es: Uno de los atajos de banda más útiles para monturas antiguas.
+pt: Um dos atalhos de raide mais úteis para montarias antigas.
 
 @ Открыть оба пропуска в Цитадели Адского Пламени — высокий приоритет.
 en: Unlocking both HFC skips is a high priority.
+de: Beide Abkürzungen der Höllenfeuerzitadelle freizuschalten hat hohe Priorität.
+fr: Débloquer les deux raccourcis de la Citadelle des Flammes infernales est prioritaire.
+es: Desbloquear los dos atajos de la Ciudadela del Fuego Infernal es prioritario.
+pt: Liberar os dois atalhos da Cidadela Fogo do Inferno é prioridade.
 
 @ Забег за достижениями; не пользуйся пропуском, пока не закрыты нужные достижения.
 en: Achievement run; do not use the skip until the achievements you need are done.
+de: Erfolgslauf; nutze die Abkürzung erst, wenn die nötigen Erfolge erledigt sind.
+fr: Course de hauts faits ; n'utilise pas le raccourci avant les hauts faits nécessaires.
+es: Carrera de logros; no uses el atajo hasta tener los logros que necesitas.
+pt: Corrida de conquistas; não use o atalho antes das conquistas de que precisa.
 
 @ Проверь требования к гильдейской группе.
 en: Check the guild group requirements.
+de: Prüfe die Anforderungen an die Gildengruppe.
+fr: Vérifie les exigences du groupe de guilde.
+es: Revisa los requisitos del grupo de hermandad.
+pt: Confira os requisitos do grupo de guilda.
 
 @ Не используй скип до закрытия нужных боссов.
 en: Do not use the skip until the bosses you need are done.
+de: Nutze die Abkürzung erst, wenn die nötigen Bosse erledigt sind.
+fr: N'utilise pas le raccourci avant d'avoir tué les boss nécessaires.
+es: No uses el atajo hasta matar a los jefes que necesitas.
+pt: Não use o atalho antes de matar os chefes de que precisa.
 
 @ Пропуск полезен, если нужен только Гул'дан. В эпохальном режиме шанс есть сразу на оба инфернала.
 en: The skip helps if you only need Gul'dan. On Mythic there is a chance for both infernals at once.
+de: Die Abkürzung hilft, wenn du nur Gul'dan brauchst. Mythisch gibt es eine Chance auf beide Höllenbestien.
+fr: Le raccourci aide si seul Gul'dan t'intéresse. En mythique, il y a une chance pour les deux infernaux à la fois.
+es: El atajo sirve si solo necesitas a Gul'dan. En mítico hay probabilidad de ambos infernales a la vez.
+pt: O atalho ajuda se você só precisa de Gul'dan. No mítico há chance dos dois infernais de uma vez.
 
 @ Пропуск полезен для эпохального Гул'дана.
 en: The skip helps for Mythic Gul'dan.
+de: Die Abkürzung hilft beim mythischen Gul'dan.
+fr: Le raccourci aide pour Gul'dan en mythique.
+es: El atajo sirve para Gul'dan mítico.
+pt: O atalho ajuda para Gul'dan mítico.
 
 @ Не пользуйся пропуском, если идёшь за маунтом «Червь бездны»: Госпожу Сашж'ин можно проскочить.
 en: Do not use the skip if you are after the Abyss Worm: you can skip past Mistress Sassz'ine.
+de: Nutze die Abkürzung nicht, wenn du den Abgrundwurm willst: Herrin Sassz'ine kann sonst übersprungen werden.
+fr: N'utilise pas le raccourci si tu vises le Ver des abysses : on peut sauter la maîtresse Sassz'ine.
+es: No uses el atajo si vas por el Gusano abisal: se puede saltar a la señora Sassz'ine.
+pt: Não use o atalho se for atrás do Verme do Abismo: dá para pular a senhora Sassz'ine.
 
 @ Не пользуйся пропуском до Аргуса, если фармишь маунтов с Гончих Саргераса.
 en: Do not use the skip to Argus if you are farming the Felhounds.
+de: Nutze die Abkürzung zu Argus nicht, wenn du die Teufelshunde farmst.
+fr: N'utilise pas le raccourci vers Argus si tu farmes les gangrechiens.
+es: No uses el atajo a Argus si farmeas los manáfagos viles.
+pt: Não use o atalho para Argus se estiver farmando os vilcães.
 
 @ Один из главных пропусков Legion для фарма маунтов.
 en: One of the main Legion skips for mount farming.
+de: Eine der wichtigsten Legion-Abkürzungen zum Reittierfarmen.
+fr: Un des principaux raccourcis de Legion pour farmer les montures.
+es: Uno de los principales atajos de Legion para farmear monturas.
+pt: Um dos principais atalhos de Legion para farmar montarias.
 
 @ Забег за достижениями — отдельно от быстрой зачистки.
 en: Achievement run, separate from a speed clear.
+de: Erfolgslauf, getrennt von einer schnellen Säuberung.
+fr: Course de hauts faits, à part d'un nettoyage rapide.
+es: Carrera de logros, aparte de una limpieza rápida.
+pt: Corrida de conquistas, separada de uma limpeza rápida.
 
 @ Не используй скип до закрытия нужных достижений.
 en: Do not use the skip until the achievements you need are done.
+de: Nutze die Abkürzung erst, wenn die nötigen Erfolge erledigt sind.
+fr: N'utilise pas le raccourci avant les hauts faits nécessaires.
+es: No uses el atajo hasta tener los logros que necesitas.
+pt: Não use o atalho antes das conquistas de que precisa.
 
 @ Не пользуйся пропуском до Джайны, если цель — Меггакрут.
 en: Do not use the Jaina skip if you are after Mekkatorque.
+de: Nutze die Abkürzung zu Jaina nicht, wenn du Mekkadrill willst.
+fr: N'utilise pas le raccourci vers Jaina si tu vises Mekkanivelle.
+es: No uses el atajo a Jaina si vas por Mekkatorque.
+pt: Não use o atalho para Jaina se for atrás de Mekkatorque.
 
 @ Очень полезный пропуск для эпохальной Джайны.
 en: A very useful skip for Mythic Jaina.
+de: Eine sehr nützliche Abkürzung für die mythische Jaina.
+fr: Un raccourci très utile pour Jaina en mythique.
+es: Un atajo muy útil para Jaina mítica.
+pt: Um atalho muito útil para Jaina mítica.
 
 @ Один из главных пропусков BfA.
 en: One of the main BfA skips.
+de: Eine der wichtigsten BfA-Abkürzungen.
+fr: Un des principaux raccourcis de BfA.
+es: Uno de los principales atajos de BfA.
+pt: Um dos principais atalhos de BfA.
 
 @ Забег за достижениями; некоторые условия проще в группе.
 en: Achievement run; some conditions are easier in a group.
+de: Erfolgslauf; manche Bedingungen sind in der Gruppe leichter.
+fr: Course de hauts faits ; certaines conditions sont plus simples en groupe.
+es: Carrera de logros; algunas condiciones son más fáciles en grupo.
+pt: Corrida de conquistas; algumas condições são mais fáceis em grupo.
 
 @ Сначала закрой достижения, потом пользуйся пропуском до Джайны.
 en: Do the achievements first, then use the skip for Jaina.
+de: Erst die Erfolge, dann die Abkürzung zu Jaina.
+fr: D'abord les hauts faits, puis le raccourci vers Jaina.
+es: Primero los logros, luego el atajo a Jaina.
+pt: Primeiro as conquistas, depois o atalho para Jaina.
 
 @ Забег за достижениями; не добыча с босса.
 en: Achievement run; not a direct boss drop.
+de: Erfolgslauf; keine direkte Bossbeute.
+fr: Course de hauts faits ; pas un butin direct de boss.
+es: Carrera de logros; no es botín directo de jefe.
+pt: Corrida de conquistas; não é espólio direto de chefe.
 
 @ Высокий приоритет: пропуск сильно сокращает путь к Сильване.
 en: High priority: the skip cuts the way to Sylvanas a lot.
+de: Hohe Priorität: die Abkürzung verkürzt den Weg zu Sylvanas stark.
+fr: Prioritaire : le raccourci réduit beaucoup le trajet vers Sylvanas.
+es: Prioridad alta: el atajo acorta mucho el camino a Sylvanas.
+pt: Prioridade alta: o atalho encurta muito o caminho até Sylvanas.
 
 @ Не пользуйся пропуском, если цель — маунт «Темный скакун из Святилища».
 en: Do not use the skip if you are after the Sanctum Gloomcharger.
+de: Nutze die Abkürzung nicht, wenn du den Düsterlader des Sanktums willst.
+fr: N'utilise pas le raccourci si tu vises le Chargeur sombre du Sanctum.
+es: No uses el atajo si vas por el Cargador lúgubre del Sagrario.
+pt: Não use o atalho se for atrás do Corcel Lúgubre do Sacrário.
 
 @ Полезен, если фармишь эпохального Тюремщика.
 en: Useful if you are farming Mythic Jailer.
+de: Nützlich, wenn du den mythischen Kerkermeister farmst.
+fr: Utile si tu farmes le Geôlier en mythique.
+es: Útil si farmeas al Carcelero mítico.
+pt: Útil se você farma o Carcereiro mítico.
 
 @ Если нужна «Слава», не спеши пользоваться пропуском.
 en: For Glory, do not hurry to use the skip.
+de: Für den Ruhm: nicht zu früh die Abkürzung nutzen.
+fr: Pour la Gloire, ne te presse pas d'utiliser le raccourci.
+es: Para la Gloria, no te apresures a usar el atajo.
+pt: Para a Glória, não tenha pressa em usar o atalho.
 
 @ Главный пропуск боссов Dragonflight для фарма маунтов.
 en: The main DF raid skip for mount farming.
+de: Die wichtigste DF-Schlachtzugsabkürzung zum Reittierfarmen.
+fr: Le principal raccourci de raid de DF pour farmer les montures.
+es: El principal atajo de banda de DF para farmear monturas.
+pt: O principal atalho de raide de DF para farmar montarias.
 
 @ Для «Славы» часть боссов нужна, поэтому пропуск включай осознанно.
 en: Glory needs some of the bosses, so use the skip deliberately.
+de: Für den Ruhm braucht man einige Bosse, also die Abkürzung bewusst nutzen.
+fr: La Gloire demande certains boss : utilise le raccourci en connaissance de cause.
+es: La Gloria necesita algunos jefes, así que usa el atajo con cabeza.
+pt: A Glória precisa de alguns chefes, então use o atalho com cuidado.
 
 @ Теперь это великий подвиг: маунта больше не получить; историческая строка.
 en: Now a Feat of Strength: the mount can no longer be obtained; historical row.
+de: Jetzt eine Heldentat: das Reittier ist nicht mehr erhältlich; historische Zeile.
+fr: Désormais un tour de force : la monture ne s'obtient plus ; ligne historique.
+es: Ahora es una Proeza de fuerza: la montura ya no se consigue; fila histórica.
+pt: Agora é um Feito de Força: a montaria não pode mais ser obtida; linha histórica.
 
 @ Можно фармить на любой сложности, где доступен лут.
 en: Farmable on any difficulty where the loot is available.
+de: Auf jeder Schwierigkeit farmbar, auf der die Beute verfügbar ist.
+fr: Se farme dans toute difficulté où le butin est disponible.
+es: Se farmea en cualquier dificultad donde haya botín.
+pt: Dá para farmar em qualquer dificuldade em que o espólio esteja disponível.
 
 @ Только эпохальный режим; в Midnight это ещё не совсем старый контент.
 en: Mythic-only; in Midnight it is not quite a legacy farm yet.
+de: Nur mythisch; in Midnight noch kein ganz altes Farmziel.
+fr: Mythique seulement ; dans Midnight ce n'est pas encore un vieux farm.
+es: Solo mítico; en Midnight aún no es un farmeo antiguo del todo.
+pt: Só mítico; no Midnight ainda não é um farm totalmente antigo.
 
 @ Забег за достижениями; не пользуйся пропуском, пока нужны ранние боссы.
 en: Achievement run; do not use the skip while you still need the early bosses.
+de: Erfolgslauf; nutze die Abkürzung nicht, solange du frühe Bosse brauchst.
+fr: Course de hauts faits ; n'utilise pas le raccourci tant qu'il te faut les premiers boss.
+es: Carrera de logros; no uses el atajo mientras necesites los primeros jefes.
+pt: Corrida de conquistas; não use o atalho enquanto precisar dos primeiros chefes.
 
 @ Фармить вместе с маунтом «Большой Гэ», если есть группа для эпохального режима.
 en: Farm together with The Big G if you have a Mythic group.
+de: Zusammen mit dem Großen G farmen, wenn du eine mythische Gruppe hast.
+fr: À farmer avec le Grand G si tu as un groupe mythique.
+es: Farmear junto con el Gran G si tienes grupo mítico.
+pt: Farmar junto com o Grande G se você tem grupo mítico.
 
 @ Только эпохальный режим; после TWW шанс выпадения обычно понижают.
 en: Mythic-only; after TWW the drop rate is usually lower.
+de: Nur mythisch; nach TWW sinkt die Droprate meist.
+fr: Mythique seulement ; après TWW le taux de butin baisse en général.
+es: Solo mítico; tras TWW la probabilidad suele bajar.
+pt: Só mítico; depois de TWW a chance costuma cair.
 
 @ Забег за достижениями; пропуском пользуйся только после нужных боссов.
 en: Achievement run; use the skip only after the bosses you need are done.
+de: Erfolgslauf; Abkürzung erst nach den nötigen Bossen.
+fr: Course de hauts faits ; raccourci seulement après les boss nécessaires.
+es: Carrera de logros; usa el atajo solo tras los jefes que necesitas.
+pt: Corrida de conquistas; use o atalho só depois dos chefes de que precisa.
 
 @ Только эпохальный режим; в Midnight это ещё свежий контент.
 en: Mythic-only; in Midnight this is still recent content.
+de: Nur mythisch; in Midnight noch aktueller Inhalt.
+fr: Mythique seulement ; dans Midnight c'est encore du contenu récent.
+es: Solo mítico; en Midnight aún es contenido reciente.
+pt: Só mítico; no Midnight ainda é conteúdo recente.
 
 @ Забег за достижениями; пропуском пользуйся аккуратно.
 en: Achievement run; use the skip carefully.
+de: Erfolgslauf; Abkürzung vorsichtig nutzen.
+fr: Course de hauts faits ; utilise le raccourci avec prudence.
+es: Carrera de logros; usa el atajo con cuidado.
+pt: Corrida de conquistas; use o atalho com cuidado.
 
 @ Актуальный эпохальный рейд; нужна рейдовая группа.
 en: Current Mythic gate; needs a raid group.
+de: Aktuelle mythische Hürde; braucht eine Schlachtzugsgruppe.
+fr: Palier mythique actuel ; il faut un groupe de raid.
+es: Barrera mítica actual; necesita un grupo de banda.
+pt: Barreira mítica atual; precisa de um grupo de raide.
 
 @ Проверь сложность и правила добычи в путеводителе приключений на своём персонаже.
 en: Check the difficulty and loot rules in the Adventure Guide on your character.
+de: Prüfe Schwierigkeit und Beuteregeln im Abenteuerführer mit deinem Charakter.
+fr: Vérifie la difficulté et les règles de butin dans le guide de l'aventurier avec ton personnage.
+es: Revisa la dificultad y las reglas de botín en la guía de aventura con tu personaje.
+pt: Confira a dificuldade e as regras de espólio no guia de aventura com seu personagem.
 
 @ Нужны группа и выполнение условий в трёх рейдах Midnight.
 en: Needs a group and the conditions in three Midnight raids.
+de: Braucht eine Gruppe und die Bedingungen in drei Midnight-Schlachtzügen.
+fr: Il faut un groupe et les conditions dans trois raids de Midnight.
+es: Necesita un grupo y las condiciones en tres bandas de Midnight.
+pt: Precisa de um grupo e das condições em três raides de Midnight.
 
 @ Рейд 2-го сезона Midnight; пока дополнение актуально — 3 маунта за убийство (личная добыча), нужна группа для эпохального режима.
 en: Midnight Season 2 raid; while the expansion is current, 3 mounts per kill (personal loot), needs a Mythic group.
+de: Schlachtzug der Saison 2 von Midnight; solange die Erweiterung aktuell ist, 3 Reittiere pro Kill (persönliche Beute), braucht eine mythische Gruppe.
+fr: Raid de la saison 2 de Midnight ; tant que l'extension est actuelle, 3 montures par kill (butin personnel), il faut un groupe mythique.
+es: Banda de la temporada 2 de Midnight; mientras la expansión es actual, 3 monturas por muerte (botín personal), necesita grupo mítico.
+pt: Raide da temporada 2 de Midnight; enquanto a expansão for atual, 3 montarias por morte (espólio pessoal), precisa de grupo mítico.
 
 @ Забег за достижениями; пропуск включай только после нужных боссов.
 en: Achievement run; turn the skip on only after the bosses you need are done.
+de: Erfolgslauf; Abkürzung erst nach den nötigen Bossen einschalten.
+fr: Course de hauts faits ; active le raccourci seulement après les boss nécessaires.
+es: Carrera de logros; activa el atajo solo tras los jefes que necesitas.
+pt: Corrida de conquistas; ative o atalho só depois dos chefes de que precisa.
 
 @ 3 за килл (пока Midnight актуален)
 en: 3 per kill (while Midnight is current)
@@ -942,129 +1238,297 @@ en: 20% per player without the mount (up to 100% with a group of 5)
 
 @ Просто проходи подземелья «Путешествия во времени» подряд, пока идёт событие.
 en: Just spam Timewalking dungeons during the event.
+de: Einfach während des Events Zeitwanderungsdungeons laufen.
+fr: Enchaîne simplement les donjons des Marcheurs du temps pendant l'événement.
+es: Simplemente repite mazmorras de Paseo en el tiempo durante el evento.
+pt: É só repetir masmorras de Caminhada Temporal durante o evento.
 
 @ Один из классических ежедневных/массовых фармов; удобно на быстрых классах.
 en: One of the classic daily/mass farms; handy on fast classes.
+de: Einer der klassischen täglichen Farms; praktisch mit schnellen Klassen.
+fr: Un des farms quotidiens classiques ; pratique avec des classes rapides.
+es: Uno de los farmeos diarios clásicos; cómodo con clases rápidas.
+pt: Um dos farms diários clássicos; prático com classes rápidas.
 
 @ Героический режим сбрасывается каждый день; удобно проходить несколькими персонажами.
 en: Heroic resets daily; handy to run on alts.
+de: Heroisch wird täglich zurückgesetzt; praktisch mit Twinks.
+fr: L'héroïque se réinitialise chaque jour ; pratique avec des rerolls.
+es: El heroico se reinicia cada día; cómodo con alters.
+pt: O heroico reinicia todo dia; prático com alts.
 
 @ Быстрый ежедневный забег.
 en: A quick daily run.
+de: Ein schneller täglicher Lauf.
+fr: Une course quotidienne rapide.
+es: Una carrera diaria rápida.
+pt: Uma corrida diária rápida.
 
 @ Обычно 100%, если уложиться во время.
 en: Usually 100% when the timed run is done.
+de: Meist 100 %, wenn der Lauf in der Zeit geschafft wird.
+fr: En général 100 % si la course est faite dans le temps.
+es: Normalmente 100 % si se completa a tiempo.
+pt: Em geral 100 % se a corrida for feita no tempo.
 
 @ Героический режим сбрасывается каждый день; фармится несколькими персонажами.
 en: Heroic resets daily; farmed on alts.
+de: Heroisch wird täglich zurückgesetzt; mit Twinks gefarmt.
+fr: L'héroïque se réinitialise chaque jour ; se farme avec des rerolls.
+es: El heroico se reinicia cada día; se farmea con alters.
+pt: O heroico reinicia todo dia; farmado com alts.
 
 @ Этот же маунт падает с Малигоса в рейде «Око Вечности».
 en: The same mount also drops from Malygos in the Eye of Eternity raid.
+de: Dasselbe Reittier gibt es auch bei Malygos im Schlachtzug Auge der Ewigkeit.
+fr: La même monture tombe aussi sur Malygos dans le raid de l'Œil de l'éternité.
+es: La misma montura cae también de Malygos en la banda El Ojo de la Eternidad.
+pt: A mesma montaria também cai de Malygos na raide Olho da Eternidade.
 
 @ Многие ачивки легко закрываются соло, но проверь механики.
 en: Many achievements are easy solo, but check the mechanics.
+de: Viele Erfolge gehen leicht solo, aber prüfe die Mechaniken.
+fr: Beaucoup de hauts faits sont faciles en solo, mais vérifie les mécaniques.
+es: Muchos logros son fáciles en solitario, pero revisa las mecánicas.
+pt: Muitas conquistas são fáceis sozinho, mas confira as mecânicas.
 
 @ Одно из удобных подземелий для фарма подряд.
 en: One of the handy dungeon spam farms.
+de: Einer der praktischen Dungeon-Farms zum Wiederholen.
+fr: Un des donjons pratiques à enchaîner.
+es: Una de las mazmorras cómodas para repetir.
+pt: Uma das masmorras práticas para repetir.
 
 @ Можно фармить чаще в обычном режиме, если маунт там падает в текущей версии.
 en: Can be farmed more often on Normal if the drop is available in the current version.
+de: Auf normal öfter farmbar, wenn die Beute in der aktuellen Version verfügbar ist.
+fr: Peut se farmer plus souvent en normal si le butin y est disponible dans la version actuelle.
+es: Se puede farmear más a menudo en normal si el botín está disponible en la versión actual.
+pt: Dá para farmar mais vezes no normal se o espólio estiver disponível na versão atual.
 
 @ Фармить вместе с маунтом «Стремительная зульская пантера».
 en: Farm together with the Swift Zulian Panther.
+de: Zusammen mit dem Schnellen Zulianischen Panther farmen.
+fr: À farmer avec la Panthère zulienne rapide.
+es: Farmear junto con la Pantera zulian presta.
+pt: Farmar junto com a Pantera Zulian Veloz.
 
 @ Фармить вместе с маунтом «Бронированный ящер Раззаши».
 en: Farm together with the Armored Razzashi Raptor.
+de: Zusammen mit dem Gepanzerten Razzashiraptor farmen.
+fr: À farmer avec le Raptor razzashi cuirassé.
+es: Farmear junto con el Raptor Razzashi acorazado.
+pt: Farmar junto com o Raptor Razzashi Blindado.
 
 @ В отличие от старого маунта «Аманийский боевой медведь», этот фармится.
 en: Unlike the old Amani War Bear, this one is farmable.
+de: Anders als der alte Amanikriegsbär ist dieser farmbar.
+fr: Contrairement à l'ancien Ours de guerre amani, celui-ci se farme.
+es: A diferencia del antiguo Oso de guerra amani, este sí se farmea.
+pt: Ao contrário do antigo Urso de Guerra Amani, este dá para farmar.
 
 @ Забег за достижениями; часть условий проще, если сдерживать урон.
 en: Achievement run; some conditions are easier with damage control.
+de: Erfolgslauf; manche Bedingungen sind mit Schadenskontrolle leichter.
+fr: Course de hauts faits ; certaines conditions sont plus simples en contrôlant les dégâts.
+es: Carrera de logros; algunas condiciones son más fáciles controlando el daño.
+pt: Corrida de conquistas; algumas condições são mais fáceis controlando o dano.
 
 @ Забег за достижениями; на высоком уровне обычно закрывается быстро.
 en: Achievement run; usually quick at a high level.
+de: Erfolgslauf; auf hohem Level meist schnell erledigt.
+fr: Course de hauts faits ; en général rapide à haut niveau.
+es: Carrera de logros; suele ser rápida a nivel alto.
+pt: Corrida de conquistas; costuma ser rápida em nível alto.
 
 @ Забег за достижениями; часть условий проще группой.
 en: Achievement run; some conditions are easier in a group.
+de: Erfolgslauf; manche Bedingungen sind in der Gruppe leichter.
+fr: Course de hauts faits ; certaines conditions sont plus simples en groupe.
+es: Carrera de logros; algunas condiciones son más fáciles en grupo.
+pt: Corrida de conquistas; algumas condições são mais fáceis em grupo.
 
 @ Нужен правильный маршрут и таймер; соло шанс 20%, полная группа без маунта — 100%.
 en: Needs the right route and timer; 20% solo, 100% with a full group without the mount.
+de: Braucht den richtigen Weg und die Zeit; solo 20 %, 100 % mit voller Gruppe ohne das Reittier.
+fr: Il faut le bon trajet et le bon temps ; 20 % en solo, 100 % avec un groupe complet sans la monture.
+es: Necesita la ruta y el tiempo correctos; 20 % en solitario, 100 % con grupo completo sin la montura.
+pt: Precisa da rota e do tempo certos; 20 % sozinho, 100 % com grupo completo sem a montaria.
 
 @ Фармить вместе с Ночной Погибелью, если проходишь Каражан целиком.
 en: Farm together with Nightbane if you do a full Kara run.
+de: Zusammen mit Schrecken der Nacht farmen, wenn du Karazhan komplett läufst.
+fr: À farmer avec Plaie-de-nuit si tu fais Karazhan en entier.
+es: Farmear junto con Nocturno si haces Karazhan entero.
+pt: Farmar junto com Praga Noturna se você faz Karazhan inteira.
 
 @ Забег за достижениями; некоторые условия требуют не убивать босса слишком быстро.
 en: Achievement run; some conditions need you not to kill the boss too fast.
+de: Erfolgslauf; manche Bedingungen verlangen, den Boss nicht zu schnell zu töten.
+fr: Course de hauts faits ; certaines conditions demandent de ne pas tuer le boss trop vite.
+es: Carrera de logros; algunas condiciones piden no matar al jefe demasiado rápido.
+pt: Corrida de conquistas; algumas condições pedem não matar o chefe rápido demais.
 
 @ Гробница королей есть в списке подземелий M+ 2-го сезона Midnight: маунт падает с Дазара в эпохальном режиме и в ключах.
 en: Kings' Rest is in the Midnight Season 2 M+ pool: the mount drops from Dazar on Mythic and in keys.
+de: Die Königsruh ist im M+-Pool der Saison 2 von Midnight: das Reittier droppt von Dazar auf mythisch und in Schlüsseln.
+fr: Le Repos des rois est dans la liste M+ de la saison 2 de Midnight : la monture tombe sur Dazar en mythique et en clés.
+es: El Reposo de los Reyes está en la lista de M+ de la temporada 2 de Midnight: la montura cae de Dazar en mítico y en piedras.
+pt: O Repouso dos Reis está na lista de M+ da temporada 2 de Midnight: a montaria cai de Dazar no mítico e nas chaves.
 
 @ Эпохальный режим сохраняется на неделю; проверь, доступен ли источник в M+ в текущем сезоне.
 en: Weekly Mythic lockout; check whether the M+ source is available this season.
+de: Mythische Sperre wöchentlich; prüfe, ob die M+-Quelle in dieser Saison verfügbar ist.
+fr: Verrouillage mythique hebdomadaire ; vérifie si la source M+ est disponible cette saison.
+es: Bloqueo mítico semanal; comprueba si la fuente de M+ está disponible esta temporada.
+pt: Bloqueio mítico semanal; veja se a fonte de M+ está disponível nesta temporada.
 
 @ Эпохальный режим сохраняется на неделю; Вольную Гавань удобно проходить быстрыми персонажами.
 en: Weekly Mythic lockout; Freehold is often handy on fast characters.
+de: Mythische Sperre wöchentlich; Freihafen ist mit schnellen Charakteren oft praktisch.
+fr: Verrouillage mythique hebdomadaire ; Port-Liberté est souvent pratique avec des personnages rapides.
+es: Bloqueo mítico semanal; Puerto Libre suele ser cómodo con personajes rápidos.
+pt: Bloqueio mítico semanal; Porto Livre costuma ser prático com personagens rápidos.
 
 @ 100% только в усложнённом бою с Королём Мехагона в эпохальном режиме; фармить вместе с маунтом «Мехагонский миротворец».
 en: 100% only from the hard mode of King Mechagon on Mythic; farm together with the Mechagon Peacekeeper.
+de: 100 % nur im schweren Modus von König Mechagon auf mythisch; zusammen mit dem Mechagon-Friedenswahrer farmen.
+fr: 100 % seulement en mode difficile du roi Mécagone en mythique ; à farmer avec le Gardien de la paix de Mécagone.
+es: 100 % solo en el modo difícil del rey Mecandria en mítico; farmear junto con el Pacificador de Mecandria.
+pt: 100 % só no modo difícil do Rei Mecandria no mítico; farmar junto com o Pacificador de Mecandria.
 
 @ Фармить вместе с маунтом «Воздушное судно R-21/X».
 en: Farm together with the Aerial Unit R-21/X.
+de: Zusammen mit der Lufteinheit R-21/X farmen.
+fr: À farmer avec l'Unité aérienne R-21/X.
+es: Farmear junto con la Unidad aérea R-21/X.
+pt: Farmar junto com a Unidade Aérea R-21/X.
 
 @ Забег за достижениями; некоторые достижения проще в группе.
 en: Achievement run; some achievements are easier in a group.
+de: Erfolgslauf; manche Erfolge sind in der Gruppe leichter.
+fr: Course de hauts faits ; certains hauts faits sont plus simples en groupe.
+es: Carrera de logros; algunos logros son más fáciles en grupo.
+pt: Corrida de conquistas; algumas conquistas são mais fáceis em grupo.
 
 @ С обновления 12.0.5 старые маунты за рейтинг M+ (KSM / KSL) возвращены через «Затерянное во времени седло».
 en: Since patch 12.0.5 the old KSM/KSL mounts are back through the Timelost Saddle.
+de: Seit Patch 12.0.5 gibt es die alten KSM/KSL-Reittiere wieder über den Zeitverlorenen Sattel.
+fr: Depuis le patch 12.0.5, les anciennes montures KSM/KSL reviennent via la Selle perdue dans le temps.
+es: Desde el parche 12.0.5 las antiguas monturas KSM/KSL vuelven con la Silla perdida en el tiempo.
+pt: Desde o patch 12.0.5 as antigas montarias KSM/KSL voltaram pela Sela Perdida no Tempo.
 
 @ Проверь актуальные условия: важно пройти последние бои корректно.
 en: Check the current conditions: the last fights must be done correctly.
+de: Prüfe die aktuellen Bedingungen: die letzten Kämpfe müssen richtig ablaufen.
+fr: Vérifie les conditions actuelles : les derniers combats doivent être faits correctement.
+es: Revisa las condiciones actuales: los últimos combates deben hacerse bien.
+pt: Confira as condições atuais: as últimas lutas precisam ser feitas corretamente.
 
 @ Фармить вместе с маунтом за достижение — «Тазавешский техноглайдер».
 en: Farm together with the Tazavesh Gearglider achievement mount.
+de: Zusammen mit dem Erfolgsreittier Tazavesh-Zahnradgleiter farmen.
+fr: À farmer avec la monture de haut fait Planeur à engrenages de Tazavesh.
+es: Farmear junto con la montura de logro Planeador de engranajes de Tazavesh.
+pt: Farmar junto com a montaria de conquista Planador de Engrenagens de Tazavesh.
 
 @ Не добыча с босса; делай отдельным забегом под достижение.
 en: Not a boss drop; do a separate run for the achievement.
+de: Keine Bossbeute; eigener Lauf für den Erfolg.
+fr: Pas un butin de boss ; fais une course à part pour le haut fait.
+es: No es botín de jefe; haz una carrera aparte para el logro.
+pt: Não é espólio de chefe; faça uma corrida separada para a conquista.
 
 @ Забег за достижениями; часть условий может требовать двух и более игроков.
 en: Achievement run; some conditions may need 2+ players.
+de: Erfolgslauf; manche Bedingungen brauchen 2+ Spieler.
+fr: Course de hauts faits ; certaines conditions demandent 2 joueurs ou plus.
+es: Carrera de logros; algunas condiciones pueden necesitar 2 o más jugadores.
+pt: Corrida de conquistas; algumas condições podem precisar de 2 ou mais jogadores.
 
 @ Можно выбрать через «Затерянное во времени седло», когда получено текущее достижение «Мифический герой ключей».
 en: Can be picked with the Timelost Saddle once the current Keystone Myth is earned.
+de: Über den Zeitverlorenen Sattel wählbar, sobald der aktuelle Schlüsselmythos erreicht ist.
+fr: Se choisit avec la Selle perdue dans le temps une fois le Mythe de la clé actuel obtenu.
+es: Se elige con la Silla perdida en el tiempo al conseguir el Mito de piedra actual.
+pt: Pode ser escolhida pela Sela Perdida no Tempo ao obter o Mito da Chave atual.
 
 @ Можно выбрать через «Затерянное во времени седло».
 en: Can be picked with the Timelost Saddle.
+de: Über den Zeitverlorenen Sattel wählbar.
+fr: Se choisit avec la Selle perdue dans le temps.
+es: Se elige con la Silla perdida en el tiempo.
+pt: Pode ser escolhida pela Sela Perdida no Tempo.
 
 @ Не подземелье на пятерых, но фарм Shadowlands в отдельной зоне; оставлено для полноты.
 en: Not a 5-player dungeon, but an instanced Shadowlands farm; kept for completeness.
+de: Kein Dungeon für 5 Spieler, aber ein instanziertes Shadowlands-Farm; der Vollständigkeit halber.
+fr: Pas un donjon à 5, mais un farm instancié de Shadowlands ; gardé pour être complet.
+es: No es una mazmorra de 5, sino un farmeo instanciado de Shadowlands; se deja por completitud.
+pt: Não é uma masmorra de 5, mas um farm instanciado de Shadowlands; mantido por completude.
 
 @ Дропает предмет, который запускает короткую цепочку.
 en: Drops an item that starts a short quest chain.
+de: Lässt einen Gegenstand fallen, der eine kurze Questreihe startet.
+fr: Donne un objet qui lance une courte suite de quêtes.
+es: Suelta un objeto que inicia una cadena corta de misiones.
+pt: Deixa cair um item que inicia uma cadeia curta de missões.
 
 @ Фармь в эпохальном режиме и в M+, когда это доступно.
 en: Farm on Mythic/M+ when available.
+de: Auf mythisch/M+ farmen, wenn verfügbar.
+fr: À farmer en mythique/M+ quand c'est disponible.
+es: Farmear en mítico/M+ cuando esté disponible.
+pt: Farmar no mítico/M+ quando disponível.
 
 @ Уровень KSL; можно выбрать через «Затерянное во времени седло».
 en: KSL level; can be picked with the Timelost Saddle.
+de: KSL-Stufe; über den Zeitverlorenen Sattel wählbar.
+fr: Niveau KSL ; se choisit avec la Selle perdue dans le temps.
+es: Nivel KSL; se elige con la Silla perdida en el tiempo.
+pt: Nível KSL; pode ser escolhida pela Sela Perdida no Tempo.
 
 @ Падает в подземелье Midnight; актуальный контент.
 en: Midnight dungeon drop; current content.
+de: Midnight-Dungeonbeute; aktueller Inhalt.
+fr: Butin de donjon de Midnight ; contenu actuel.
+es: Botín de mazmorra de Midnight; contenido actual.
+pt: Espólio de masmorra de Midnight; conteúdo atual.
 
 @ Новый маунт обновления 12.1; Altar of Fangs есть в списке подземелий M+ 2-го сезона.
 en: A new mount of patch 12.1; Altar of Fangs is in the Season 2 M+ pool.
+de: Ein neues Reittier aus Patch 12.1; Altar of Fangs ist im M+-Pool der Saison 2.
+fr: Une nouvelle monture du patch 12.1 ; Altar of Fangs est dans la liste M+ de la saison 2.
+es: Una montura nueva del parche 12.1; Altar of Fangs está en la lista de M+ de la temporada 2.
+pt: Uma montaria nova do patch 12.1; Altar of Fangs está na lista de M+ da temporada 2.
 
 @ 1-й сезон закончился 18.08.2026; по руководствам маунт добавлен в «Затерянное во времени седло» — проверь у Линдорми.
 en: Season 1 ended on 2026-08-18; according to the guides the mount was added to the Timelost Saddle pool — check with Lindormi.
+de: Saison 1 endete am 18.08.2026; laut Guides ist das Reittier im Pool des Zeitverlorenen Sattels — bei Lindormi prüfen.
+fr: La saison 1 s'est terminée le 18.08.2026 ; selon les guides la monture est dans la Selle perdue dans le temps — vérifie chez Lindormi.
+es: La temporada 1 terminó el 18.08.2026; según las guías la montura está en la Silla perdida en el tiempo — compruébalo con Lindormi.
+pt: A temporada 1 terminou em 18.08.2026; segundo os guias a montaria está na Sela Perdida no Tempo — confira com Lindormi.
 
 @ Текущий маунт за KSM во 2-м сезоне Midnight.
 en: The current KSM mount of Midnight Season 2.
+de: Das aktuelle KSM-Reittier der Saison 2 von Midnight.
+fr: La monture KSM actuelle de la saison 2 de Midnight.
+es: La montura KSM actual de la temporada 2 de Midnight.
+pt: A montaria KSM atual da temporada 2 de Midnight.
 
 @ Текущий маунт за KSL во 2-м сезоне Midnight.
 en: The current KSL mount of Midnight Season 2.
+de: Das aktuelle KSL-Reittier der Saison 2 von Midnight.
+fr: La monture KSL actuelle de la saison 2 de Midnight.
+es: La montura KSL actual de la temporada 2 de Midnight.
+pt: A montaria KSL atual da temporada 2 de Midnight.
 
 @ Новая расцветка Midnight из «Затерянного во времени седла».
 en: A new Midnight recolor from the Timelost Saddle pool.
+de: Eine neue Midnight-Farbvariante aus dem Pool des Zeitverlorenen Sattels.
+fr: Une nouvelle variante de couleur de Midnight dans la Selle perdue dans le temps.
+es: Un nuevo recolor de Midnight de la Silla perdida en el tiempo.
+pt: Uma nova variação de cor de Midnight da Sela Perdida no Tempo.
 
 @ Ша Злости
 en: Sha of Anger
@@ -1089,9 +1553,17 @@ en: Ishak of the Four Winds
 
 @ Респ 15 минут
 en: Respawns in 15 minutes
+de: Erscheint nach 15 Minuten wieder
+fr: Réapparaît en 15 minutes
+es: Reaparece en 15 minutos
+pt: Reaparece em 15 minutos
 
 @ Мировые боссы BfA сменяются по неделям.
 en: BfA world boss rotation
+de: Rotation der BfA-Weltbosse
+fr: Rotation des boss mondiaux de BfA
+es: Rotación de jefes del mundo de BfA
+pt: Rotação de chefes mundiais de BfA
 
 @ Рар в Ульдуме, появляется во время нападений Н'Зота; лут раз в день на персонажа.
 en: A rare in Uldum during N'Zoth assaults; loot once a day per character.
@@ -1866,6 +2338,10 @@ pt: Cai de qualquer raro da ilha (são 15), muito raramente. Cada um dá saque u
 
 @ Эпохальный режим сохраняется на неделю.
 en: Mythic lockout is weekly.
+de: Mythische Sperre ist wöchentlich.
+fr: Le verrouillage mythique est hebdomadaire.
+es: El bloqueo mítico es semanal.
+pt: O bloqueio mítico é semanal.
 
 @ Задание «For Nerubian Eyes Only».
 en: Quest: For Nerubian Eyes Only.

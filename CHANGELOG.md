@@ -3,6 +3,7 @@
 The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [CHANGELOG-addon.md](CHANGELOG-addon.md).
 
 ## 2.10.2
+- Farming tips of the catalog in German, French, Spanish and Portuguese for every mount (new spreadsheets in those languages).
 - New sheet “Dropped Mounts” (spreadsheet layout 7): a row with the date, the mount, the boss, the attempts and the chance over all attempts at that moment for each mount that drops; drops the addon 3.0.7 has remembered are added too. Existing spreadsheets get the sheet on the next start, and their Russian catalog texts are updated where you have not edited them.
 - The catalog's Russian texts about raid skips and dungeon routes are rewritten the same way.
 - Russian farming tips of the catalog are rewritten without English jargon (new spreadsheets and the addon's tooltips; a spreadsheet made earlier keeps its texts).

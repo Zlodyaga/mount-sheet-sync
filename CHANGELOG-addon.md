@@ -3,6 +3,7 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.7
+- Farming tips in German, French, Spanish and Portuguese for every mount (before, only the rares had them; the rest were in English).
 - Russian farming tips no longer mix in English words (“Mythic-only”, “Achievement-run”, boss and mount names): about a hundred tips are rewritten.
 - A bonus roll after a world boss now counts as one more attempt for its mount, as Rarity does; the “Attempts” tab says how many of them were bonus rolls.
 - World map: a small icon on the right shows the routes and spawn points of rares whose mount you do not have (routes: Time-Lost Proto-Drake, Fallen Charger; spawn points: Aeonaxx, Poseidus, the Mysterious Camel Figurine, the Zandalari Warbringers, the Draenor rares, Soundless, Konthrogz and single spots of a dozen more). Hover over a spawn point to see whose it is; the Pandaria map shows the Warbringers of all its zones. It is there only on a map that has such a rare; with several mounts on one map you pick which to show.
