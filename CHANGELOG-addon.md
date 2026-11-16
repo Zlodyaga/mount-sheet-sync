@@ -3,6 +3,7 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.7
+- How long a run takes, from your own runs: from entering the instance to the last boss with a mount from the list. “~12 min a run (from 5)” in the row tooltip, a Min column on the Attempts tab (sorting by it: chance per minute); right-click a row > Runs: count a run in the average or delete it.
 - Raids where a boss skip through another character's saved lockout is reported to work (ICC, Ulduar, the Nighthold, Battle of Dazar'alor, Tazavesh): one line about it in the row tooltip.
 - When a mount from the list drops, one line can go to the group and/or guild chat — two settings, both off by default.
 - Holiday mounts (the Headless Horseman, Coren Direbrew, Apothecary Hummel): while the holiday is on and a mount is missing, a line on login and in the head of “Remaining”.

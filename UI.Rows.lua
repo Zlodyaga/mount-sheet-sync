@@ -26,6 +26,49 @@ local function OverColumn(button, key)
 end
 
 -- Меню по правому щелчку на строке «Осталось» (только у текущего персонажа): не фармить строку или весь рейд / подземелье.
+-- Правый щелчок по строке «Попыток», когда у её подземелья есть замеренные заходы: поправить число или заходы
+-- (учитывать в среднем / удалить). Без заходов — сразу окно правки числа, как раньше.
+local function RunLabel(r)
+  local when = (date or os.date)("%d.%m", tonumber(r.start) or 0)
+  local diff = r.diff and GetDifficultyInfo and GetDifficultyInfo(r.diff) or nil
+  local text = string.format(L.runs_row, when, tostring(r.char or "?"), ns.RunMinutes(r.secs or 0)) .. (diff and (", " .. diff) or "")
+  if r.long then
+    text = text .. " (" .. L.runs_long .. ")"
+  end
+  return ns.RunCounted(r) and text or ("|cff8c8c8c" .. text .. "|r")
+end
+
+local function ShowAttemptsMenu(button)
+  local elem = button.elem
+  local inst = elem.instance
+  local runs = ns.Runs and ns.Runs(inst)
+  if not runs or not MenuUtil or not MenuUtil.CreateContextMenu then
+    UI.EditAttempts(elem.attempt)   -- UI.Edit.lua
+    return
+  end
+  MenuUtil.CreateContextMenu(button, function(owner, root)
+    root:CreateTitle(Safe(elem.attempt.name))
+    root:CreateButton(L.runs_edit_attempts, function()
+      UI.EditAttempts(elem.attempt)
+    end)
+    local list = root:CreateButton(string.format(L.runs_menu, #runs))
+    for i = #runs, 1, -1 do
+      local r = runs[i]
+      local one = list:CreateButton(RunLabel(r))
+      one:CreateCheckbox(L.runs_counted, function()
+        return ns.RunCounted(r)
+      end, function()
+        ns.SetRunCounted(inst, i, not ns.RunCounted(r))
+        UI.Refresh()
+      end)
+      one:CreateButton(L.runs_delete, function()
+        ns.DeleteRun(inst, i)
+        UI.Refresh()
+      end)
+    end
+  end)
+end
+
 local function ShowRowMenu(button)
   local entry = button.elem and button.elem.entry
   if not entry or entry.done or not MenuUtil or not MenuUtil.CreateContextMenu then
@@ -116,7 +159,7 @@ end
 local function ClickRow(button, mouse)
   if mouse == "RightButton" then
     if button.elem and button.elem.attempt then
-      UI.EditAttempts(button.elem.attempt)   -- UI.Edit.lua
+      ShowAttemptsMenu(button)   -- правка числа (UI.Edit.lua) и заходы (Runs.lua)
     elseif button.elem and button.elem.names then
       ShowGridMenu(button)
     else
@@ -180,6 +223,9 @@ local function ShowRowTooltip(button, event)
     end
     if elem.anchorTip then
       GameTooltip:AddLine(elem.anchorTip, 0.62, 0.76, 0.9, true)   -- пропуск через чужое сохранение (ns.ANCHOR_RAIDS)
+    end
+    if elem.runTip then
+      GameTooltip:AddLine(elem.runTip, 0.8, 0.8, 0.8, true)   -- средний заход игрока (Runs.lua)
     end
     -- что делают щелчки: одинаково на каждой строке, поэтому под Alt (одна строка — показываем сразу)
     local help = {}

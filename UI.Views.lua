@@ -51,6 +51,7 @@ local function AttemptsColumns()
       { key = "chance", w = 38, right = true, bold = true, label = "col_chance", sort = "p", tip = "tip_col_chance", span = CHANCE_BAR_WIDTH + COLUMN_GAP },
       { key = "bar", w = CHANCE_BAR_WIDTH },
       { key = "left", w = 56, right = true, bold = true, label = "col_left", sort = "left", tip = "tip_col_left" },
+      { key = "min", w = 40, right = true, label = "col_min", sort = "value", tip = "tip_col_min" },
     }, S.listWidth)
   end
   return attemptsCols
@@ -140,6 +141,7 @@ local function WithPlace(elem, item)
   elem.farmTip = ns.FarmTip(item.id)
   elem.instance = ns.ItemInstance(item)
   elem.anchorTip = ns.AnchorTip(elem.instance)
+  elem.runTip = ns.RunTip and ns.RunTip(elem.instance)   -- «~12 мин на заход (по 5)», по заходам игрока (Runs.lua)
   elem.encounter = tonumber(item.je)
   elem.world = item.kind == "world" or nil
   elem.spot = item.kind == "rare" and ns.RARE_SPOTS and ns.RARE_SPOTS[tonumber(item.id)] or nil
@@ -507,8 +509,13 @@ local function AttemptsSorted(rows, st)
       out[#out + 1] = m
     end
   end
+  for _, m in ipairs(out) do
+    m.runAvg = ns.RunAverage and ns.RunAverage(ns.ItemInstance(m)) or nil   -- средний заход, секунды (Runs.lua)
+  end
   local function value(m)
-    if st.sort == "name" or st.sort == "boss" then
+    if st.sort == "value" then
+      return m.runAvg and m.p / m.runAvg or -1   -- шанс за минуту; без замеров — в конце
+    elseif st.sort == "name" or st.sort == "boss" then
       return tostring(m[st.sort] or "")
     elseif st.sort == "p" then
       return m.n * m.p
@@ -557,6 +564,7 @@ local function AttemptsView(rows, chars)
       n = hasTries and tostring(m.n) or "|cff8c8c8c-|r",
       chance = "|cff" .. color .. (hasTries and ns.FormatChance(m.n, m.p) or "-") .. "|r",
       left = (m.left > 0 and "|cff7fdc7f" or "|cff8c8c8c") .. m.left .. "/" .. chars .. "|r",
+      min = m.runAvg and ("~" .. ns.RunMinutes(m.runAvg)) or "|cff8c8c8c-|r",
     } }, m)
   end
   return { list = list, cols = cols, attempts = true, count = #sorted }

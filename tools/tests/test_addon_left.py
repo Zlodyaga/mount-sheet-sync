@@ -559,10 +559,11 @@ MountSheetSyncSheet = copy""")
 tabs[2].MockClick(tabs[2]); g.RunTimers()
 check("«Попытки» with rows (for the picture): most expected drops first", ns.GetAttemptsList()[1].name == "Пламенное Крыло Алисразор", ns.GetAttemptsList()[1].name)
 rows = shown_rows()
-check("3.0.3: «Попытки» in columns: mount, boss, difficulty, attempts, chance, characters left",
-      plain(rows[0]).startswith("Пламенное Крыло Алисразор | Алисразор | N/H | ") and "%" in rows[0] and "/" in plain(rows[0]).split(" | ")[-1], rows[0])
+check("3.0.3: «Попытки» in columns: mount, boss, difficulty, attempts, chance, characters left (3.0.7: then the average run, «-» without runs)",
+      plain(rows[0]).startswith("Пламенное Крыло Алисразор | Алисразор | N/H | ") and "%" in rows[0] and "/" in plain(rows[0]).split(" | ")[-2]
+      and plain(rows[0]).split(" | ")[-1] == "-", rows[0])
 check("…a chance bar next to the number", pool(ROW)[0].barFill._shown)
-check("…the header", [str(c.text._text) for c in head_cells()] == ["Маунт", "Босс", "Слож.", "Попыток", "Шанс", "Осталось"], [str(c.text._text) for c in head_cells()])
+check("…the header", [str(c.text._text) for c in head_cells()] == ["Маунт", "Босс", "Слож.", "Попыток", "Шанс", "Осталось", "Мин."], [str(c.text._text) for c in head_cells()])
 sort_by = {str(c.text._text): c for c in head_cells()}
 sort_by["Маунт"].MockClick(sort_by["Маунт"]); g.RunTimers()
 names = [plain(t).split(" | ")[0] for t in shown_rows()]

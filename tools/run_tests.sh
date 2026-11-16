@@ -40,6 +40,7 @@ run test_addon_coin.py
 run test_addon_login.py
 run test_addon_rarity.py
 run test_addon_extras.py
+run test_addon_runs.py
 run test_layout7.py
 run test_routes_from_probe.py
 run test_minimap.py
