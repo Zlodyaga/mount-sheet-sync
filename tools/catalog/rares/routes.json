@@ -1178,7 +1178,8 @@
     50.5,
     32.5
    ]
-  ]
+  ],
+  "faction": "Alliance"
  },
  {
   "npc": 149663,
@@ -1190,7 +1191,8 @@
     39.6,
     33.1
    ]
-  ]
+  ],
+  "faction": "Horde"
  },
  {
   "npc": 147701,
@@ -1202,7 +1204,8 @@
     64.9,
     19.6
    ]
-  ]
+  ],
+  "faction": "Alliance"
  },
  {
   "npc": 148037,
@@ -1214,7 +1217,8 @@
     41.1,
     75.0
    ]
-  ]
+  ],
+  "faction": "Horde"
  },
  {
   "npc": 73167,
@@ -1317,6 +1321,21 @@
     72.6,
     41.5
    ]
+  ]
+ },
+ {
+  "npc": 219281,
+  "map": 2248,
+  "name": "Alunira",
+  "source": "Warcraft Wiki: circles the peak of Dhar Oztan, 16.8, 61.2 (its map pin); Wowhead sightings at 23.1, 58.5 are where players saw it from",
+  "spawns": [
+   [
+    16.8,
+    61.2
+   ]
+  ],
+  "places": [
+   14789
   ]
  }
 ]

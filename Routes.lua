@@ -13,12 +13,16 @@ ns.RARE_ROUTES = {
     { mount = 1199, spawns = { 49.5, 24.9 },   -- Agathe Wyrmwood / Blackpaw
       lines = { } },
     { mount = 1203, spawns = { 64.9, 19.6 },   -- Moxo the Beheader
+      faction = "Alliance",   -- only this faction meets it
       lines = { } },
     { mount = 1203, spawns = { 41.1, 75 },   -- Athil Dewfire
+      faction = "Horde",   -- only this faction meets it
       lines = { } },
     { mount = 1205, spawns = { 50.5, 32.5 },   -- Croz Bloodrage
+      faction = "Alliance",   -- only this faction meets it
       lines = { } },
     { mount = 1205, spawns = { 39.6, 33.1 },   -- Shadowclaw
+      faction = "Horde",   -- only this faction meets it
       lines = { } },
   },
   [120] = {
@@ -143,6 +147,11 @@ ns.RARE_ROUTES = {
     { mount = 2192, spawns = { 25.8, 57.5, 32.8, 39.5, 37, 72, 37.5, 45.9, 38.5, 24.5, 42.8, 31.5, 45.2, 25.5, 47, 55, 48.8, 32.3, 50.5, 48.5, 51.4, 70.5, 54.8, 36.8, 58, 48.8, 58.5, 29.1, 60.5, 18.5, 61.5, 7.6, 62.5, 38.8, 68.2, 30.5, 71.8, 65, 72.6, 41.5 },   -- Beledar's Spawn
       lines = { } },
   },
+  [2248] = {
+    { mount = 2176, spawns = { 16.8, 61.2 },   -- Alunira
+      places = { 14789 },
+      lines = { } },
+  },
   [2371] = {
     { mount = 2601, spawns = { 70, 49.6 },   -- Urmag
       lines = { } },
@@ -169,4 +178,5 @@ ns.ROUTE_PLACES = {
   [13626] = { deDE = "Zerfleischerausguck", enUS = "Mauler's Outlook", esES = "Mirador del Magullador", frFR = "Pavillon du Marteleur", ptBR = "Vista do Espancador", ruRU = "Площадка терзателей" },
   [13631] = { deDE = "Archiv der Geheimnisse", enUS = "Vault of Secrets", esES = "Cámara de los Secretos", frFR = "Caveau des Secrets", ptBR = "Cripta dos Segredos", ruRU = "Хранилище тайн" },
   [13700] = { deDE = "Gromitwinkel", enUS = "Gromit Hollow", esES = "Cueva de los Grómits", frFR = "Grotte aux Gronils", ptBR = "Oco do Gromito", ruRU = "Лощина громитов" },
+  [14789] = { deDE = "Dhar Oztan", enUS = "Dhar Oztan", esES = "Dhar Oztan", frFR = "Dhar Oztan", ptBR = "Dhar Oztan", ruRU = "Дар Озтан" },
 }

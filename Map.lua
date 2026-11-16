@@ -90,12 +90,22 @@ local function MapList(mapID)
   return list
 end
 
--- Несобранные маунты с данными для этой карты.
+local function PlayerFaction()
+  local ok, faction = pcall(UnitFactionGroup, "player")
+  if ok and type(faction) == "string" and not (issecretvalue and issecretvalue(faction)) then
+    return faction
+  end
+  return nil
+end
+
+-- Несобранные маунты с данными для этой карты. Рар одной фракции (Тёмные берега: Альянсу — один, Орде — другой) — только
+-- своей; фракция неизвестна — показываем оба.
 function ns.RouteEntries(mapID)
   local out = {}
   local list = mapID and ns.RARE_ROUTES and MapList(mapID)
+  local mine = PlayerFaction()
   for _, e in ipairs(list or {}) do
-    if not Collected(e.mount) then
+    if not Collected(e.mount) and not (e.faction and mine and e.faction ~= mine) then
       out[#out + 1] = e
     end
   end

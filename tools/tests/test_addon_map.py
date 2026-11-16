@@ -138,6 +138,18 @@ tt = gorok_tip()
 check("…killed an hour ago with a day's cooldown: «killed, again in 23 h …»", any(t.startswith("Убит этим персонажем - снова через 23 ч") for t in tt), tt)
 ns.SetRouteShown(525, 627, False)
 
+# Darkshore: a rare of one faction is shown to that faction only (the Alliance and the Horde each have their own)
+L.execute('function UnitFactionGroup() return MOCK_FACTION end')
+g.MOCK_FACTION = "Horde"
+moxo = [e for e in ns.RouteEntries(62).values() if e.mount == 1203]
+g.MOCK_FACTION = "Alliance"
+moxo_a = [e for e in ns.RouteEntries(62).values() if e.mount == 1203]
+g.MOCK_FACTION = None
+moxo_n = [e for e in ns.RouteEntries(62).values() if e.mount == 1203]
+check("Darkshore: the Horde sees Athil Dewfire's spot, the Alliance Moxo's, an unknown faction both",
+      len(moxo) == 1 and abs(moxo[0].spawns[2] - 75.0) < 0.01 and len(moxo_a) == 1 and abs(moxo_a[0].spawns[2] - 19.6) < 0.01 and len(moxo_n) == 2,
+      (len(moxo), len(moxo_a), len(moxo_n)))
+
 # a collected mount has no route and no icon
 L.execute('MOCK.mounts[265] = { "Затерянный во времени протодракон", 60002, "" }')
 g.GoTo(120)
