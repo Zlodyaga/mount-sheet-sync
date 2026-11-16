@@ -3,6 +3,9 @@
 -- On login (after 15 s) and on /mssprobe: this character's quests and achievements of the gated entrances
 -- (Access.lua), where the character stands, and the dungeon entrances the game gives on every map.
 -- All the time: rares under the mouse, targeted or on a nameplate — creature number, name and where the player was.
+-- /mssprobe route (with a rare targeted): record the route — every 2 s, while that rare is the target, where the player is
+-- (follow it); /mssprobe route again stops. Runs go to db.routes[creature]; tools/catalog/routes_from_probe.py moves them
+-- to the map data. The game gives no position of a creature, so the player's own position is the route.
 
 local PREFIX = "|cff33ff99MSS Probe|r: "
 
@@ -275,6 +278,78 @@ local function SeeUnit(unit)
 end
 
 ---------------------------------------------------------------------------
+-- route recording
+---------------------------------------------------------------------------
+local ROUTE_STEP = 2         -- seconds between points
+local ROUTE_MIN = 0.003      -- a new point only after moving this far (0.3 % of the map)
+local ROUTE_MAX = 3000       -- points in one run
+local recording, ticker
+
+local function TargetNpc()
+  local guid = Call(UnitGUID, "target")
+  if type(guid) ~= "string" or Secret(guid) then
+    return nil
+  end
+  return guid:match("^Creature%-%d+%-%d+%-%d+%-%d+%-(%d+)%-") or guid:match("^Vehicle%-%d+%-%d+%-%d+%-%d+%-(%d+)%-")
+end
+
+local function RouteTick()
+  if not recording or TargetNpc() ~= recording.npc then
+    return   -- lost the target: wait, target it again to go on
+  end
+  local map, x, y = PlayerSpot()
+  if not (map and x and y) then
+    return
+  end
+  if not recording.map then
+    recording.map = map
+  elseif map ~= recording.map then
+    return   -- another map (a subzone map, a cave): only points of the first map
+  end
+  local p = recording.points
+  local n = #p
+  if n >= 2 and math.abs(p[n - 1] - x) < ROUTE_MIN and math.abs(p[n] - y) < ROUTE_MIN then
+    return
+  end
+  if n < ROUTE_MAX * 2 then
+    p[n + 1], p[n + 2] = x, y
+  end
+end
+
+local function Route()
+  if recording then
+    if ticker then
+      ticker:Cancel()
+      ticker = nil
+    end
+    local run = recording
+    recording = nil
+    local count = #run.points / 2
+    if count < 2 or not run.map then
+      Print("route: too few points, nothing saved")
+      return
+    end
+    local db = DB()
+    db.routes = db.routes or {}
+    db.routes[run.npc] = db.routes[run.npc] or {}
+    local runs = db.routes[run.npc]
+    runs[#runs + 1] = { map = run.map, points = run.points, started = run.started, name = run.name }
+    Print(string.format("route of %s saved: %d points (run %d). /reload to write it to disk.", run.name or run.npc, count, #runs))
+    return
+  end
+  local npc = TargetNpc()
+  if not npc then
+    Print("route: target the rare first")
+    return
+  end
+  local name = Call(UnitName, "target")
+  recording = { npc = npc, points = {}, started = time(), name = type(name) == "string" and not Secret(name) and name or nil }
+  RouteTick()
+  ticker = C_Timer.NewTicker(ROUTE_STEP, function() pcall(RouteTick) end)
+  Print(string.format("recording the route of %s: follow it; /mssprobe route again to stop", recording.name or npc))
+end
+
+---------------------------------------------------------------------------
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("PLAYER_LOGIN")
 frame:RegisterEvent("PLAYER_TARGET_CHANGED")
@@ -293,7 +368,11 @@ frame:SetScript("OnEvent", function(_, event, unit)
 end)
 
 SLASH_MOUNTSHEETSYNCPROBE1 = "/mssprobe"
-SlashCmdList["MOUNTSHEETSYNCPROBE"] = function()
+SlashCmdList["MOUNTSHEETSYNCPROBE"] = function(msg)
+  if type(msg) == "string" and msg:lower():match("^%s*route") then
+    Route()
+    return
+  end
   Print("collecting…")
   Collect(true)
 end
