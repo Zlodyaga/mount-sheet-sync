@@ -268,13 +268,13 @@ en: Removed reward
 @ 10 игроков
 en: 10 player
 
-@ Для Classic, TBC и Cataclysm официальных raid-skip нет
+@ В рейдах Classic, TBC и Cataclysm пропуска боссов нет
 en: No official raid skips for Classic, TBC and Cataclysm
 
 @ Официального скипа нет
 en: No official skip
 
-@ Для TBC официальных raid-skip нет
+@ В рейдах TBC пропуска боссов нет
 en: No official raid skips for TBC
 
 @ Скипа нет; рейд состоит из одного босса
@@ -283,130 +283,130 @@ en: No skip; the raid is a single boss
 @ Скипа нет; рейд короткий
 en: No skip; the raid is short
 
-@ Naxxramas имеет Orb skip, но сама награда в Retail удалена из Glory
+@ В Наксрамасе есть пропуск через сферу, но сама награда в актуальной версии игры убрана из «Славы рейдеру»
 en: Naxxramas has the Orb skip, but the reward itself was removed from Glory in Retail
 
-@ Orb of Naxxramas после входа скипает к Sapphiron / Kel'Thuzad wing
+@ Сфера Наксрамаса у входа переносит к крылу Сапфирона и Кел'Тузада
 en: The Orb of Naxxramas near the entrance skips to the Sapphiron / Kel'Thuzad wing
 
-@ Для Cataclysm официальных raid-skip нет
+@ В рейдах Cataclysm пропуска боссов нет
 en: No official raid skips for Cataclysm
 
-@ Официального скипа нет; есть неофициальный перелёт через перья Alysrazor
+@ Пропуска боссов нет; есть обходной перелёт на перьях Алисразор
 en: No official skip; there is an unofficial flight with Alysrazor's feathers
 
 @ Официальных скипов нет
 en: No official skips
 
-@ Убей Garrosh один раз; затем жми scroll у входа рядом с Lorewalker Cho, скип к Garrosh. Warband-wide.
+@ Убей Гарроша один раз; потом у входа, рядом с Хранителем истории Чо, возьми свиток — он переносит к Гаррошу. Действует на весь отряд.
 en: Kill Garrosh once; then click the scroll near Lorewalker Cho at the entrance to skip to Garrosh. Warband-wide.
 
 @ Официальных скипов для этих рейдов нет
 en: No official skips for these raids
 
-@ Скип к Garrosh есть, но для Glory обычно нужны разные боссы, поэтому скип не всегда использовать.
+@ Пропуск к Гаррошу есть, но для «Славы рейдеру» обычно нужны разные боссы, поэтому пользоваться им стоит не всегда.
 en: There is a skip to Garrosh, but Glory usually needs several different bosses, so the skip is not always worth using.
 
-@ SoO скип существует, но AOTC-награда удалена
+@ Пропуск в Осаде Оргриммара есть, но награда за «На острие атаки» убрана
 en: The SoO skip exists, but the AOTC reward was removed
 
-@ Quest: Sigil of the Black Hand; Warband-wide; скип к последнему боссу.
+@ Задание «Sigil of the Black Hand»; действует на весь отряд; пропуск к последнему боссу.
 en: Quest: Sigil of the Black Hand; Warband-wide; skips to the last boss.
 
-@ Quests: Well of Souls + The Fel Spire; Warband-wide; скип к Upper Citadel / Destructor's Rise.
+@ Задания «Well of Souls» и «The Fel Spire»; действуют на весь отряд; пропуск к верхней части цитадели и к её вершине.
 en: Quests: Well of Souls + The Fel Spire; Warband-wide; skips to the Upper Citadel / Destructor's Rise.
 
-@ Blackrock Foundry имеет скип, но Glory требует разные боссы.
+@ В Литейной клана Черной горы пропуск есть, но для «Славы рейдеру» нужны разные боссы.
 en: Blackrock Foundry has a skip, but Glory needs different bosses.
 
-@ Blackrock Foundry имеет скип, но guild-achievement требует условия.
+@ В Литейной клана Черной горы пропуск есть, но у достижения гильдии свои условия.
 en: Blackrock Foundry has a skip, but the guild achievement has its own conditions.
 
-@ HFC имеет два скипа, но для Glory обычно нужны разные боссы.
+@ В Цитадели Адского Пламени два пропуска, но для «Славы рейдеру» обычно нужны разные боссы.
 en: HFC has two skips, but Glory usually needs different bosses.
 
-@ HFC скип существует, но AOTC-награда удалена
+@ Пропуск в Цитадели Адского Пламени есть, но награда за «На острие атаки» убрана
 en: The HFC skip exists, but the AOTC reward was removed
 
-@ Quest: Talisman of the Shal'dorei; скип к последним двум зонам.
+@ Задание «Talisman of the Shal'dorei»; пропуск к последним двум частям рейда.
 en: Quest: Talisman of the Shal'dorei; skips to the last two areas.
 
-@ Quest: Aegwynn's Path; скипает боссов 2-6.
+@ Задание «Aegwynn's Path»; пропускает боссов 2-6.
 en: Quest: Aegwynn's Path; skips bosses 2-6.
 
-@ Quests: Dark Passage + The Heart of Argus; есть два скипа.
+@ Задания «Dark Passage» и «The Heart of Argus»; пропусков два.
 en: Quests: Dark Passage + The Heart of Argus; there are two skips.
 
-@ The Heart of Argus скипает к поздней части рейда; Warband-wide.
+@ Задание «The Heart of Argus» переносит к поздней части рейда; действует на весь отряд.
 en: The Heart of Argus skips to the late part of the raid; Warband-wide.
 
-@ Emerald Nightmare и Nighthold имеют скипы; Glory требует разные боссы.
+@ В Изумрудном Кошмаре и Цитадели Ночи пропуски есть; для «Славы рейдеру» нужны разные боссы.
 en: Emerald Nightmare and Nighthold have skips; Glory needs different bosses.
 
-@ Antorus имеет два скипа; Glory часто требует разных боссов.
+@ В Анторусе два пропуска; для «Славы рейдеру» часто нужны разные боссы.
 en: Antorus has two skips; Glory often needs different bosses.
 
-@ Antorus skip существует, но AOTC-награда удалена
+@ Пропуск в Анторусе есть, но награда за «На острие атаки» убрана
 en: The Antorus skip exists, but the AOTC reward was removed
 
-@ Mythic-only скип к Jaina после полного Mythic clear.
+@ Пропуск к Джайне только в эпохальном режиме, после полного прохождения рейда в нём.
 en: Mythic-only skip to Jaina after a full Mythic clear.
 
-@ Mythic-only: после полного Mythic clear поговори с Otoye / Ensign Roberst у входа.
+@ Только эпохальный режим: после полного прохождения рейда в нём поговори у входа с Otoye или Ensign Roberst.
 en: Mythic-only: after a full Mythic clear, talk to Otoye / Ensign Roberst at the entrance.
 
-@ Quest: MOTHER's Guidance; скипает боссов 2-10.
+@ Задание «MOTHER's Guidance»; пропускает боссов 2-10.
 en: Quest: MOTHER's Guidance; skips bosses 2-10.
 
-@ Скип к Jaina есть только на Mythic и не заменяет achievement-run.
+@ Пропуск к Джайне есть только в эпохальном режиме и забега за достижениями не заменяет.
 en: The skip to Jaina is Mythic-only and does not replace an achievement run.
 
-@ MOTHER's Guidance есть, но Glory требует разные боссы.
+@ Задание «MOTHER's Guidance» есть, но для «Славы рейдеру» нужны разные боссы.
 en: MOTHER's Guidance exists, but Glory needs different bosses.
 
-@ Ny'alotha skip существует, но AOTC-награда удалена
+@ Пропуск в Ни'алоте есть, но награда за «На острие атаки» убрана
 en: The Ny'alotha skip exists, but the AOTC reward was removed
 
-@ Quest: Damned If You Don't; скипает боссов 2-8.
+@ Задание «Damned If You Don't»; пропускает боссов 2-8.
 en: Quest: Damned If You Don't; skips bosses 2-8.
 
-@ Sanctum skip ведёт далеко вперёд и может проскочить The Nine.
+@ Пропуск в Святилище Господства ведёт далеко вперёд и может проскочить Девять.
 en: The Sanctum skip goes far ahead and can skip past The Nine.
 
-@ Quest: Heavy is the Crown; скипает боссов 2-7.
+@ Задание «Heavy is the Crown»; пропускает боссов 2-7.
 en: Quest: Heavy is the Crown; skips bosses 2-7.
 
-@ Quest: Getting a Head; скипает боссов 2-6.
+@ Задание «Getting a Head»; пропускает боссов 2-6.
 en: Quest: Getting a Head; skips bosses 2-6.
 
-@ Sanctum skip есть, но Glory требует разные боссы.
+@ Пропуск в Святилище Господства есть, но для «Славы рейдеру» нужны разные боссы.
 en: The Sanctum skip exists, but Glory needs different bosses.
 
-@ Sepulcher skip есть, но Glory требует разные боссы.
+@ Пропуск в Гробнице Предвечных есть, но для «Славы рейдеру» нужны разные боссы.
 en: The Sepulcher skip exists, but Glory needs different bosses.
 
-@ Sepulcher skip существует, но AOTC-награда удалена
+@ Пропуск в Гробнице Предвечных есть, но награда за «На острие атаки» убрана
 en: The Sepulcher skip exists, but the AOTC reward was removed
 
-@ Quest: Up in Smoke; скипает боссов 3-6.
+@ Задание «Up in Smoke»; пропускает боссов 3-6.
 en: Quest: Up in Smoke; skips bosses 3-6.
 
-@ Quest: Break a Few Eggs; скипает боссов 2-6.
+@ Задание «Break a Few Eggs»; пропускает боссов 2-6.
 en: Quest: Break a Few Eggs; skips bosses 2-6.
 
-@ Quest: Echoes of the Earth-Warder; скипает боссов 2-7.
+@ Задание «Echoes of the Earth-Warder»; пропускает боссов 2-7.
 en: Quest: Echoes of the Earth-Warder; skips bosses 2-7.
 
-@ Awakened-режим был только в 4-м сезоне Dragonflight.
+@ Режим «Пробуждение» был только в 4-м сезоне Dragonflight.
 en: The Awakened mode was only in Dragonflight Season 4.
 
-@ У March on Quel'Danas скипа нет.
+@ В рейде March on Quel'Danas пропуска нет.
 en: March on Quel'Danas has no skip.
 
-@ Скип для Sporefall в актуальном skip-списке не указан.
+@ Для Sporefall пропуск в актуальном списке не указан.
 en: No skip for Sporefall in the current skip list.
 
-@ The Voidspire: Quest: Flicker in the Hollow; у The Dreamrift и March on Quel'Danas скипов нет.
+@ The Voidspire: задание «Flicker in the Hollow»; в The Dreamrift и March on Quel'Danas пропусков нет.
 en: The Voidspire: Quest: Flicker in the Hollow; The Dreamrift and March on Quel'Danas have no skips.
 
 @ Считай коллекционным маунтом Ан'Киража; ездить на нём можно только внутри Храма Ан'Киража.
@@ -850,10 +850,10 @@ en: Weekly / M+ per season
 @ Нет постоянного маршрута
 en: No fixed route
 
-@ Короткий маршрут к Baron/Rivendare
+@ Короткий путь к барону Ривендеру
 en: Short route to Baron Rivendare
 
-@ Беги к Anzu
+@ Беги к Анзу
 en: Run to Anzu
 
 @ Финальный босс
@@ -862,70 +862,70 @@ en: Final boss
 @ Успей в таймер
 en: Beat the timer
 
-@ Маршрут до Skadi
+@ Путь до Скади
 en: Route to Skadi
 
-@ Нужен random dungeon reward cache
+@ Нужен сундук за случайное подземелье
 en: Needs the random dungeon reward cache
 
 @ Разные подземелья WotLK
 en: Various WotLK dungeons
 
-@ Беги до Slabhide
+@ Беги до Камнешкура
 en: Run to Slabhide
 
-@ Беги до Altairus
+@ Беги до Альтаирия
 en: Run to Altairus
 
-@ Маршрут до Mandokir
+@ Путь до Мандокира
 en: Route to Mandokir
 
-@ Маршрут до Kilnara
+@ Путь до Килнары
 en: Route to Kilnara
 
 @ Успей спасти пленников
 en: Save the prisoners in time
 
-@ Разные Cataclysm dungeons
+@ Разные подземелья Cataclysm
 en: Various Cataclysm dungeons
 
-@ Разные MoP dungeons
+@ Разные подземелья MoP
 en: Various MoP dungeons
 
 @ Удалённый режим
 en: Removed mode
 
-@ Разные WoD dungeons
+@ Разные подземелья WoD
 en: Various WoD dungeons
 
-@ Собери кристаллы для Nightbane
+@ Собери кристаллы для Ночной Погибели
 en: Collect the crystals for Nightbane
 
-@ Разные Legion dungeons
+@ Разные подземелья Legion
 en: Various Legion dungeons
 
-@ Финальная часть Mechagon
+@ Заключительная часть Мехагона
 en: The final part of Mechagon
 
-@ Разные BfA dungeons
+@ Разные подземелья BfA
 en: Various BfA dungeons
 
 @ M+ рейтинг → Keystone Myth → Timelost Saddle
 en: M+ rating → Keystone Myth → Timelost Saddle
 
-@ Обычно нужен solo-kill последних двух боссов
+@ Обычно нужно в одиночку убить двух последних боссов
 en: Usually needs a solo kill of the last two bosses
 
-@ Финальный босс Tazavesh
+@ Последний босс Тазавеша
 en: Tazavesh final boss
 
-@ Разные Shadowlands dungeons
+@ Разные подземелья Shadowlands
 en: Various Shadowlands dungeons
 
-@ Фарм Torghast bosses
+@ Фарм боссов Торгаста
 en: Farm the Torghast bosses
 
-@ Разные Dragonflight dungeons
+@ Разные подземелья Dragonflight
 en: Various Dragonflight dungeons
 
 @ Финальный/указанный босс
@@ -1866,3 +1866,27 @@ pt: Cai de qualquer raro da ilha (são 15), muito raramente. Cada um dá saque u
 
 @ Эпохальный режим сохраняется на неделю.
 en: Mythic lockout is weekly.
+
+@ Задание «For Nerubian Eyes Only».
+en: Quest: For Nerubian Eyes Only.
+
+@ Задание «Splitting Pairs».
+en: Quest: Splitting Pairs.
+
+@ Задание «A Walking Shadow».
+en: Quest: A Walking Shadow.
+
+@ Задание «Deception Unmasked».
+en: Quest: Deception Unmasked.
+
+@ Аттумен — в начале пути
+en: Attumen early route
+
+@ Путь через Мастерскую
+en: Workshop route
+
+@ Забег за достижениями в Тазавеше
+en: Tazavesh achievement-run
+
+@ 16-й этаж без единой смерти
+en: Layer 16 flawless
