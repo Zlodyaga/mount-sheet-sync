@@ -31,6 +31,8 @@ run() {
 run test_addon2.py
 run test_addon_left.py
 run test_addon_drops.py
+run test_addon_plan_menu.py
+run test_addon_speed.py
 run test_addon_farm.py
 run test_addon_npc.py
 run test_addon_map.py

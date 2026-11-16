@@ -14,6 +14,9 @@ def check(name, cond, extra=None):
     print(("PASS " if cond else "FAIL ") + name + ("" if cond or extra is None else "\n     " + repr(extra)[:1200]))
 
 
+# on Windows a bare «bash» may be WSL's: it gets neither Windows paths nor the environment — take Git's bash
+GIT_BASH = os.path.join(os.environ.get("ProgramFiles", r"C:\Program Files"), "Git", "bin", "bash.exe")
+BASH = GIT_BASH if os.name == "nt" and os.path.exists(GIT_BASH) else "bash"
 repo = tempfile.mkdtemp(prefix="mss-plan-")
 os.makedirs(os.path.join(repo, "program"))
 os.makedirs(os.path.join(repo, "tools"))
@@ -39,7 +42,7 @@ def plan(**env):
     open(out, "w").close()
     e = dict(os.environ, GITHUB_OUTPUT=out, **env)
     e.pop("GITHUB_EVENT_NAME", None) if "GITHUB_EVENT_NAME" not in env else None
-    p = subprocess.run(["bash", os.path.join(repo, "tools", "release_plan.sh")], env=e, capture_output=True, text=True)
+    p = subprocess.run([BASH, os.path.join(repo, "tools", "release_plan.sh").replace("\\", "/")], env=e, capture_output=True, text=True)
     vals = dict(line.split("=", 1) for line in open(out).read().splitlines() if "=" in line)
     return p.returncode, vals, p.stdout + p.stderr
 
