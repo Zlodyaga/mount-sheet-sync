@@ -148,6 +148,7 @@ local function ApplyChrome(view)
   end
   if view.attempts then
     S.attemptsCount:SetText(view.count and string.format(L.attempts_count, view.count) or "")
+    S.rarityButton:SetShown(ns.RarityAvailable and ns.RarityAvailable() or false)
     local st = AttemptsState()
     for _, b in ipairs(filterButtons) do
       Skin.ChipState(b, b.kind == st.kind)
@@ -423,6 +424,18 @@ local function CreateToolbar(inset)
   end)
   S.attemptsCount = S.attemptsBar:CreateFontString(nil, "OVERLAY", "MSSFontSmall")
   S.attemptsCount:SetPoint("RIGHT", -4, 0)
+  -- «Из Rarity»: видна, только когда Rarity включён (Import.lua)
+  S.rarityButton = Skin.Chip(S.attemptsBar, 22)
+  local function rarityLabel()
+    S.rarityButton:SetText(L.attempts_rarity)
+    S.rarityButton:SetWidth(math.max(44, S.rarityButton.label:GetStringWidth() + 22))
+  end
+  rarityLabel()
+  relabel[#relabel + 1] = rarityLabel
+  S.rarityButton:SetPoint("RIGHT", S.attemptsCount, "LEFT", -12, 0)
+  S.rarityButton:SetScript("OnClick", UI.ConfirmRarity)
+  AttachTooltip(S.rarityButton, "attempts_rarity", "tip_attempts_rarity")
+  S.rarityButton:Hide()
 
   S.logBar = CreateFrame("Frame", nil, S.toolbar)
   S.logBar:SetAllPoints()

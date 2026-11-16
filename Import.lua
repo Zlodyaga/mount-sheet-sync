@@ -78,6 +78,45 @@ function ns.RarityPlan()
   return plan, shared
 end
 
+--- С какой попытки выпали собранные маунты, по Rarity: { [номер маунта] = попыток }. Даты находки Rarity не хранит.
+function ns.RarityFinds()
+  local items = RarityMounts()
+  local out = {}
+  if not items then
+    return out
+  end
+  for _, item in pairs(items) do
+    local finds = type(item) == "table" and type(item.finds) == "table" and item.finds or nil
+    local last = finds and finds[#finds]
+    local n = type(last) == "table" and (tonumber(last.totalAttempts) or tonumber(last.attempts))
+      or (type(item) == "table" and item.found and tonumber(item.lastAttempts))
+    if n and n > 0 then
+      local ok, id = pcall(MountOf, item)
+      if ok and id then
+        out[id] = math.floor(n)
+      end
+    end
+  end
+  return out
+end
+
+function ns.RarityAvailable()
+  return RarityMounts() ~= nil
+end
+
+--- Один раз на учётную запись, при входе: «у Rarity больше попыток у N маунтов — перенести можно…».
+function ns.RarityHint()
+  local db = ns.GetDB()
+  if not db or db.quiet or db.rarityHinted then
+    return
+  end
+  local plan = ns.RarityPlan()
+  if plan and #plan > 0 then
+    db.rarityHinted = true
+    ns.Print(string.format(L.rarity_hint, #plan))
+  end
+end
+
 --- /mss rarity [ok]
 function ns.RarityImport(apply)
   local plan, shared = ns.RarityPlan()

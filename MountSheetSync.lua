@@ -1175,6 +1175,7 @@ frame:SetScript("OnEvent", function(self, event, ...)
     end
     C_Timer.After(3, RequestLockouts)
     C_Timer.After(8, function() SafeCall(LoginNote) end)   -- после сохранений: список уже учитывает их
+    C_Timer.After(10, function() SafeCall(ns.RarityHint or function() end) end)   -- один раз: можно взять попытки из Rarity
   elseif event == "ENCOUNTER_END" then
     local encounterID, encounterName, difficultyID, groupSize, success = ...
     if not issecretvalue(success) and (success == 1 or success == true) then

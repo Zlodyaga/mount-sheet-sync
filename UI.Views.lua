@@ -379,7 +379,7 @@ function UI.DropsView(rows)
   local cols, list = dropCols, {}
   for i, d in ipairs(rows) do
     list[#list + 1] = { cols = cols, icon = ns.MountIcon(d.id), mountID = KnownMount(d.id), stripe = i % 2 == 0,
-      tip = { Safe(d.name), Safe(d.boss) }, values = {
+      tip = { Safe(d.name), Safe(d.boss), d.rarity and "|cff8c8c8c" .. L.drops_rarity .. "|r" or nil }, values = {
         mount = "|cffc9a0ff" .. Safe(d.name) .. "|r",
         boss = Safe(d.boss),
         n = d.n and d.n > 0 and tostring(d.n) or "-",

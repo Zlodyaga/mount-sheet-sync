@@ -416,7 +416,8 @@ Interface\AddOns\MountSheetSync\SheetData.lua.
 Всё это есть и в чате: /mss (окно), /mss help, /mss sync, /mss left (что
 осталось), /mss list, /mss add <босс>, /mss scan, /mss reset, /mss quiet,
 /mss clear, /mss drop (показать оповещение о выпавшем маунте, для проверки),
-/mss rarity (перенести попытки из Rarity, где у него больше: сначала список, потом /mss rarity ok), /mss minimap (спрятать или вернуть кнопку у миникарты),
+/mss rarity (перенести попытки из Rarity, где у него больше: сначала список, потом /mss rarity ok;
+то же — кнопка «Из Rarity» на вкладке «Попытки»), /mss minimap (спрятать или вернуть кнопку у миникарты),
 /mss settings (настройки), /mss lang ru|en|de|fr|es|pt|auto (язык),
 /mss chars (запомненные персонажи и сколько маунтов собрано),
 /mss forget <имя> (убрать персонажа из этого списка — например, удалённого).

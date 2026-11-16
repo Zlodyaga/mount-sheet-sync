@@ -1294,7 +1294,8 @@ function ns.GetDrops()
     end
   end
   -- собранное раньше, чем аддон начал запоминать выпадения (data.had, программа 2.10.2): без даты и персонажа,
-  -- попытки — сколько записано в таблице
+  -- попытки — сколько записано в таблице, а где там 0 — с какой попытки выпал по Rarity (если он включён)
+  local finds = ns.RarityFinds and ns.RarityFinds() or {}
   local names = {}
   for _, d in ipairs(out) do
     names[d.name] = true
@@ -1308,7 +1309,9 @@ function ns.GetDrops()
         seen[id] = true
       end
       names[name] = true
-      out[#out + 1] = { id = id, name = name, boss = ns.Shown(m, "boss"), p = p, n = tonumber(m.n) or 0, time = 0, old = true }
+      local n = tonumber(m.n) or 0
+      local rarity = n == 0 and id and finds[id] or nil
+      out[#out + 1] = { id = id, name = name, boss = ns.Shown(m, "boss"), p = p, n = rarity or n, time = 0, old = true, rarity = rarity and true or nil }
     end
   end
   table.sort(out, function(a, b)

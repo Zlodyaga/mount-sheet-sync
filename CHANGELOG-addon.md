@@ -3,7 +3,7 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.7
-- /mss rarity copies attempt counts from Rarity (or Rarity: Collector's Edition) where Rarity has more; it shows the list first, /mss rarity ok copies.
+- /mss rarity copies attempt counts from Rarity (or Rarity: Collector's Edition) where Rarity has more; it shows the list first, /mss rarity ok copies. The same as a From Rarity button on the Attempts tab; one chat line on login says when there is something to copy. On Dropped, mounts collected earlier get the attempt of the drop from Rarity where the sheet has none.
 - World map: the same icon can also show the entrances of the raids and dungeons this character still has to do this week, with what is left in each (its own tick in the icon's list).
 - On login, one chat line: how much this character has left this week and where to start (a setting turns it off).
 - The head of “Remaining” says how long until the weekly reset.

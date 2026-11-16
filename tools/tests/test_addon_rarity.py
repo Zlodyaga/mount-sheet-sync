@@ -51,6 +51,11 @@ out = env.chat()
 check("preview lists the mount and the numbers, nothing is written", "3 > 25" in out and "/mss rarity ok" in out and g.Kills() == n0 and g.Edits() == e0, out[-300:])
 check("…and says about the skipped one", "пропущено" in out)
 
+check("Rarity is there: the Attempts tab shows its button", ns.RarityAvailable() is True)
+ns.RarityHint()
+ns.RarityHint()
+check("login hint once per account", env.chat().count("Перенести: кнопка «Из Rarity»") == 1 and g.MountSheetSyncDB.rarityHinted is True, env.chat()[-300:])
+
 ns.RarityImport(True)
 last = g.MountSheetSyncDB.kills[g.Kills()]
 check("ok: one attempts record for the program, like a manual edit", g.Kills() == n0 + 1 and str(last.kind) == "attempts" and last.n == 25 and last.mountID == 473,
@@ -63,8 +68,24 @@ check("a second run: nothing left to copy", len(plan) == 0)
 ns.RarityImport(True)
 check("…says so and writes nothing", "переносить нечего" in env.chat() and g.Kills() == n0 + 1)
 
+# «Выпавшие»: collected before the addon kept track — where the sheet has 0 attempts, the number at the drop from Rarity
+L.execute("""
+SPELL_TO_MOUNT[555] = 900; SPELL_TO_MOUNT[556] = 901
+Rarity.db.profile.groups.mounts["Found one"] = { spellId = 555, attempts = 60, found = true, finds = { { num = 1, totalAttempts = 48, attempts = 48 } } }
+Rarity.db.profile.groups.mounts["Found old"] = { spellId = 556, attempts = 9, found = true, lastAttempts = 9 }
+MountSheetSyncSheet.had = {
+  { mount = "Маунт с нулём", boss = "Босс А", p = 0.01, n = 0, id = 900 },
+  { mount = "Маунт с числом", boss = "Босс Б", p = 0.01, n = 5, id = 901 },
+}
+""")
+rows = {r.id: r for r in ns.GetDrops().values()}
+check("earlier drop with 0 in the sheet: attempts from Rarity's find, marked", 900 in rows and rows[900].n == 48 and rows[900].rarity is True,
+      900 in rows and (rows[900].n, rows[900].rarity))
+check("…where the sheet has a number, it stays", 901 in rows and rows[901].n == 5 and not rows[901].rarity, 901 in rows and rows[901].n)
+check("RarityFinds: lastAttempts when there is no finds list", ns.RarityFinds()[901] == 9)
+L.execute("MountSheetSyncSheet.had = nil")
 L.execute("Rarity = { db = {} }")
-check("Rarity without its profile (not loaded yet): nil", ns.RarityPlan() is None)
+check("Rarity without its profile (not loaded yet): nil, no button", ns.RarityPlan() is None and ns.RarityAvailable() is False)
 g.SlashCmdList.MOUNTSHEETSYNC("help")
 check("…/mss rarity in the help", "/mss rarity" in env.chat())
 

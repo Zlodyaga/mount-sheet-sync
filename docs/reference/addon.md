@@ -409,3 +409,9 @@ data provider (`RefreshAllData`, `OnMapChanged`, `OnCanvasScaleChanged`) и со
   шансом). На маунт — наибольшее число из записей Rarity; переносится, только если оно больше нашего, через
   `ns.SetAttempts` (запись `attempts` для программы и `db.attemptEdits`). Маунт с несколькими строками — пропуск и счёт.
 - Работает с Rarity и с Rarity: Collector's Edition (тот же глобальный `Rarity`, папка `Rarity`).
+- Кнопка «Из Rarity» на панели вкладки «Попытки» (`S.rarityButton`, видна при `ns.RarityAvailable()`): список в чат,
+  потом `UI.ConfirmRarity` — окно подтверждения. Через 10 с после входа — одна строка `L.rarity_hint`, один раз на
+  учётную запись (`db.rarityHinted`), если есть что переносить; молчит при «Не писать в чат».
+- «Выпавшие»: у «собранных раньше» (`had`) с 0 попыток в таблице — с какой попытки выпал по Rarity
+  (`ns.RarityFinds()`: последняя запись `finds` — `totalAttempts`, иначе `lastAttempts`), в подсказке строки —
+  `L.drops_rarity`. Даты находки Rarity не хранит.
