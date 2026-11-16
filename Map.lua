@@ -71,12 +71,14 @@ local function MapList(mapID)
       for _, e in ipairs(ns.RARE_ROUTES[child] or {}) do
         local to = byMount[e.mount]
         if not to then
-          to = { mount = e.mount, spawns = {}, lines = {} }
+          to = { mount = e.mount, spawns = {}, lines = {}, places = {} }
           byMount[e.mount] = to
           list[#list + 1] = to
         end
-        for _, v in ipairs(Moved(e.spawns or {}, minX, maxX, minY, maxY)) do
-          to.spawns[#to.spawns + 1] = v
+        for i = 1, #(e.spawns or {}) / 2 do
+          to.places[#to.spawns / 2 + 1] = e.places and e.places[i] or 0
+          local moved = Moved({ e.spawns[i * 2 - 1], e.spawns[i * 2] }, minX, maxX, minY, maxY)
+          to.spawns[#to.spawns + 1], to.spawns[#to.spawns + 2] = moved[1], moved[2]
         end
         for _, points in ipairs(e.lines or {}) do
           to.lines[#to.lines + 1] = Moved(points, minX, maxX, minY, maxY)
@@ -141,10 +143,23 @@ end
 
 -- Точка появления — маленький кадр: при наведении говорит, чей это рар. Щелчки проходят сквозь него к карте;
 -- если клиент не умеет «только наведение», мышь точке не включаем вовсе, чтобы не мешать карте.
+-- Название места у точки — на языке аддона, иначе английское (таблица игры, Routes.lua).
+local function PlaceName(area)
+  local names = area and area > 0 and ns.ROUTE_PLACES and ns.ROUTE_PLACES[area]
+  if not names then
+    return nil
+  end
+  return names[ns.CurrentLanguage and ns.CurrentLanguage() or "enUS"] or names.enUS
+end
+
 local function DotEnter(self)
   GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
   GameTooltip:SetText(MountName(self.mount), 1, 0.82, 0)
-  GameTooltip:AddLine(string.format(L.map_routes_spawn, self.x, self.y), 1, 1, 1, true)
+  local place = PlaceName(self.place)
+  if place then
+    GameTooltip:AddLine(place, 1, 1, 1, true)
+  end
+  GameTooltip:AddLine(string.format(L.map_routes_spawn, self.x, self.y), 0.8, 0.8, 0.8, true)
   GameTooltip:Show()
 end
 
@@ -223,6 +238,7 @@ local function Refresh()
           local dot = Dot(nDot)
           dot.tex:SetVertexColor(c[1], c[2], c[3], 1)
           dot.mount, dot.x, dot.y = e.mount, spawns[i], spawns[i + 1]
+          dot.place = e.places and e.places[index] or 0
           dot:SetSize(DOT_SIZE / scale, DOT_SIZE / scale)
           dot:ClearAllPoints()
           dot:SetPoint("CENTER", overlay, "TOPLEFT", spawns[i] / 100 * width, -spawns[i + 1] / 100 * height)

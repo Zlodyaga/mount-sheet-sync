@@ -365,3 +365,10 @@ data provider (`RefreshAllData`, `OnMapChanged`, `OnCanvasScaleChanged`) и со
 `/reload` — на диске. `python3 tools/catalog/routes_from_probe.py <SavedVariables сборщика> --write` дописывает каждую
 запись маршрутом в `tools/catalog/rares/routes.json` (точки 0–100, прорежены до шага 0,5, первая — место появления;
 запись дважды не берётся), потом `tools/catalog/routes.py --write`.
+
+Названия мест у точек (16.11.2026): в `routes.json` у записи `places` (номера AreaTable по порядку `spawns`), у маршрута
+`place`; `tools/catalog/place_names.py` берёт их названия из таблицы игры на шести языках (`rares/place_names.json`),
+`routes.py` кладёт их в `ns.ROUTE_PLACES[area][locale]` и `places` записи в `Routes.lua`. Подсказка точки: маунт,
+название места на языке аддона (иначе английское), координаты. Названия есть у протодракона (Ульдуар, Бруннхильдар),
+Павшего коня, Посейдуса, Горока, Контрогза, Холона; у остальных мест в таблице игры подходящей области нет.
+Порождение Беледар: 20 мест по точкам Wowhead (игра сама показывает, где он, но так видно все места заранее).

@@ -98,6 +98,15 @@ dot._scripts.OnEnter(dot)
 tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
 check("hover over a spawn point: the mount and the coordinates; clicks go through to the map",
       len(tt) == 2 and "52.6, 18.8" in tt[1], tt)
+g.GoTo(1961)
+ns.SetRouteShown(1961, 1514, True)
+dot = [r for r in [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)] if r._type == "Frame" and r._shown and r._mouseClick is False and r.x == 53.0][0]
+dot._scripts.OnEnter(dot)
+tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
+check("…a spot next to a named place: its name from the game's table, in the addon's language (Konthrogz: «Святилище наставлений»)",
+      len(tt) == 3 and tt[1] == "Святилище наставлений" and "53.0, 22.3" in tt[2], tt)
+ns.SetRouteShown(1961, 1514, False)
+g.GoTo(371)
 
 # a collected mount has no route and no icon
 L.execute('MOCK.mounts[265] = { "Затерянный во времени протодракон", 60002, "" }')
