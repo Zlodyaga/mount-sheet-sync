@@ -291,6 +291,9 @@ local function Describe(rec)
   if rec.kind == "reset" then
     return L.reset_week
   end
+  if rec.coin then
+    return tostring(rec.boss) .. " - " .. L.coin_roll
+  end
   if rec.difficulty then
     return string.format("%s (%s)", rec.boss, rec.difficulty)
   end
@@ -489,6 +492,50 @@ local function OnLootReady()
       if AddRecord(rec) then
         Announce(rec)
       end
+    end
+  end
+end
+
+---------------------------------------------------------------------------
+-- Бонусный бросок («монетка») после мирового босса
+---------------------------------------------------------------------------
+-- Ещё один бросок на добычу — ещё одна попытка на маунта (так считает и Rarity; отсюда были расхождения у Ша Злости,
+-- Галеона, Налака и Ундасты). Узнаём по тому, что валюта бонусного броска убыла на 1 вскоре после убийства мирового
+-- босса; попытка — вторая запись того же босса с coin = true (программа считает её как обычное убийство).
+local COIN_CURRENCIES = { [697] = true, [752] = true, [776] = true, [994] = true, [1129] = true, [1273] = true, [1580] = true }
+local COIN_WINDOW = 600
+
+local function OnCurrency(currencyID, _, change)
+  if issecretvalue(currencyID) or issecretvalue(change) then
+    return
+  end
+  if not COIN_CURRENCIES[ToNumber(currencyID) or 0] or (ToNumber(change) or 0) >= 0 then
+    return
+  end
+  local player = GetPlayer()
+  local stamp = time()
+  for i = #db.kills, 1, -1 do
+    local rec = db.kills[i]
+    if (tonumber(rec.time) or 0) < stamp - COIN_WINDOW then
+      break
+    end
+    -- убийство мирового босса этим персонажем (не рар: у его записи номер «D-…», бонусного броска у раров нет)
+    if rec.charKey == player.key and rec.kind == "world" and tostring(rec.id or ""):sub(1, 2) ~= "D-" then
+      if rec.coin or rec.coined then
+        return   -- на одно убийство — один бросок
+      end
+      rec.coined = true
+      local extra = BaseRecord(player, stamp)
+      extra.id = string.format("B-%s-%d", player.key, stamp)
+      extra.boss = rec.boss
+      extra.kind = "world"
+      extra.difficultyID = 0
+      extra.weekEnd = rec.weekEnd
+      extra.coin = true
+      if AddRecord(extra) then
+        Announce(extra)
+      end
+      return
     end
   end
 end
@@ -1075,6 +1122,7 @@ frame:SetScript("OnEvent", function(self, event, ...)
       self:RegisterEvent("UPDATE_INSTANCE_INFO")
       self:RegisterEvent("NEW_MOUNT_ADDED")
       self:RegisterEvent("LOOT_READY")
+      self:RegisterEvent("CURRENCY_DISPLAY_UPDATE")
       self:RegisterEvent("PLAYER_TARGET_CHANGED")
       self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
       self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
@@ -1100,6 +1148,8 @@ frame:SetScript("OnEvent", function(self, event, ...)
     SafeCall(OnBossKilled, encounterID, encounterName)
   elseif event == "UPDATE_INSTANCE_INFO" then
     QueueScan()
+  elseif event == "CURRENCY_DISPLAY_UPDATE" then
+    SafeCall(OnCurrency, ...)
   elseif event == "LOOT_READY" then
     SafeCall(OnLootReady)
   elseif event == "PLAYER_TARGET_CHANGED" then

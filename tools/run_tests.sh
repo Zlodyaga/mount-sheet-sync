@@ -34,6 +34,7 @@ run test_addon_drops.py
 run test_addon_farm.py
 run test_addon_npc.py
 run test_addon_map.py
+run test_addon_coin.py
 run test_minimap.py
 run test_offline.py
 run test_attempts_addon.py

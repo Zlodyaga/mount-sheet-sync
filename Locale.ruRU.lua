@@ -13,6 +13,7 @@ local T = ns.TRANSLATIONS
 T.ruRU = {
   error = "ошибка:",
   desc_mount = "Новый маунт: %s",
+  coin_roll = "бонусный бросок",
   desc_plan = "Не фармлю: %s",
   reset_week = "Сброс недели",
   announce = "%s — записано для %s.",

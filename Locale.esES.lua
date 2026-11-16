@@ -13,6 +13,7 @@ local T = ns.TRANSLATIONS
 T.esES = {
   error = "error:",
   desc_mount = "Montura nueva: %s",
+  coin_roll = "tirada extra",
   desc_plan = "No lo farmeo: %s",
   reset_week = "Reinicio semanal",
   announce = "%s — guardado para %s.",

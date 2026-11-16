@@ -13,6 +13,7 @@ local T = ns.TRANSLATIONS
 T.ptBR = {
   error = "erro:",
   desc_mount = "Montaria nova: %s",
+  coin_roll = "rolagem bônus",
   desc_plan = "Não farmo: %s",
   reset_week = "Reinício semanal",
   announce = "%s — registrado para %s.",

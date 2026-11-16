@@ -3,6 +3,7 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.7
+- A bonus roll after a world boss now counts as one more attempt for its mount, as Rarity does.
 - World map: a small icon on the right shows the routes and spawn points of rares whose mount you do not have (routes: Time-Lost Proto-Drake, Fallen Charger; spawn points: Aeonaxx, Poseidus, the Mysterious Camel Figurine, the Zandalari Warbringers, the Draenor rares, Soundless, Konthrogz and single spots of a dozen more). Hover over a spawn point to see whose it is; the Pandaria map shows the Warbringers of all its zones. It is there only on a map that has such a rare; with several mounts on one map you pick which to show.
 - Rares that share a name (the three Zandalari Warbringers) are told apart by the creature: the tooltip shows the mount of that very Warbringer, says “already collected” when you have it, and a kill no longer counts as an attempt for another Warbringer's mount.
 - Row tooltips in the window are shorter: what the clicks do and the full list of characters show while Alt is held (the key — Alt, Shift, Ctrl or “always show everything” — is in the settings); “any difficulty” is no longer written.
