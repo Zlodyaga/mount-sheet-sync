@@ -1185,5 +1185,17 @@
     75.0
    ]
   ]
+ },
+ {
+  "npc": 73167,
+  "map": 554,
+  "name": "Huolon",
+  "source": "where it is pulled down: the bridge by the Blazing Way - 67, 60 (rpgradar.com mounts guide); Wowhead sightings cluster at 67.0, 58.3; its flight circuit is not mapped anywhere found",
+  "spawns": [
+   [
+    67.0,
+    59.0
+   ]
+  ]
  }
 ]
