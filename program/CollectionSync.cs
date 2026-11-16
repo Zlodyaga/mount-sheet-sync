@@ -169,6 +169,7 @@ namespace MountSheetSync
         public int Removed;
         /// <summary>Сколько ячеек получили название «как в игре».</summary>
         public int Renamed;
+        public int DropsAdded;
         /// <summary>Листы, где появилась колонка «ID в игре».</summary>
         public List<string> IdColumnsAdded = new List<string>();
         /// <summary>«Да» → «Нет»: таблица 2.0 спутала маунты с одним названием.</summary>
@@ -200,6 +201,10 @@ namespace MountSheetSync
             {
                 parts.Add(Tr.F("убрано строк с листов персонажей: {0}", Removed));
             }
+            if (DropsAdded > 0)
+            {
+                parts.Add(Tr.F("на лист «Выпавшие маунты»: {0}", DropsAdded));
+            }
             if (Renamed > 0)
             {
                 parts.Add(Tr.F("названий «как в игре»: {0}", Renamed));
@@ -227,6 +232,7 @@ namespace MountSheetSync
             Rename(book, index, res);
             Mark(book, game, index, res);
             ImportAttempts(book, game, index, res);
+            ImportDrops(book, game, res);
             book.Flush();
             res.Removed = RemoveCollected(book);
             return res;
@@ -510,6 +516,29 @@ namespace MountSheetSync
         /// Собранный маунт — только пока у него 0 (так видно, сколько попыток ушло, например, на Непобедимого);
         /// дальше его число не растёт. Формулы и строки без счётчика не трогаем.
         /// </summary>
+        /// <summary>
+        /// Лист «Выпавшие маунты»: выпадения, которые запомнил аддон 3.0.7 (db.drops), — и те, что случились до перехода
+        /// таблицы на вид 7 или пока программа не работала. Маунт ищется по ID в строках общих листов (как его назвала
+        /// таблица, босс, шанс выпадения); уже записанный на листе маунт пропускается (SheetLogic.AddDropRow).
+        /// </summary>
+        static void ImportDrops(IStructuredBook book, GameSnapshot game, CollectionResult res)
+        {
+            if (game.Dropped.Count == 0 || SheetLogic.ByName(book, SheetBuilder.DropsSheet) == null)
+            {
+                return;
+            }
+            foreach (DroppedMount d in game.Dropped.Values.OrderBy(x => x.Time))
+            {
+                string mount, boss;
+                double p;
+                if (SheetLogic.FindMountRow(book, d.Id, out mount, out boss, out p)
+                    && SheetLogic.AddDropRow(book, d.Time, mount, boss, d.Attempts, p))
+                {
+                    res.DropsAdded++;
+                }
+            }
+        }
+
         static void ImportAttempts(IStructuredBook book, GameSnapshot game, MountIndex index, CollectionResult res)
         {
             if (game == null || game.CharactersWithStats == 0)

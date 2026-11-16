@@ -64,8 +64,8 @@ namespace MountSheetSync
             Collected, "Аддон", "Локация", "Маунт", "Босс / достижение / сундук", "Сброс / частота", LastKill,
             "Совет по фарму", "Шанс выпадения", AttemptsColumn, ChanceColumn, "Источник", IdColumn,
         };
-        public static readonly string[] DropsHeader = { "Дата", "Персонаж", "Маунт", "Босс / достижение / сундук", AttemptsColumn };
-        static readonly int[] DropsWidths = { 110, 170, 300, 300, 100 };
+        public static readonly string[] DropsHeader = { "Дата", "Маунт", "Босс / достижение / сундук", AttemptsColumn, ChanceColumn };
+        static readonly int[] DropsWidths = { 110, 300, 300, 100, 140 };
         static readonly int[] RareWidths = { 71, 134, 160, 216, 200, 97, 170, 260, 83, 90, 110, 279, 90 };
 
         static readonly string[] RaidChar =
@@ -986,6 +986,9 @@ namespace MountSheetSync
             req.Add(RepeatFormat(sheetId, start, start + 1, 0, row.Length,
                 O("textFormat", O("fontFamily", Font, "fontSize", 11), "verticalAlignment", "TOP", "wrapStrategy", "WRAP"),
                 "userEnteredFormat.textFormat,userEnteredFormat.verticalAlignment,userEnteredFormat.wrapStrategy"));
+            int cChance = Array.IndexOf(DropsHeader, ChanceColumn);
+            req.Add(RepeatFormat(sheetId, start, start + 1, cChance, cChance + 1,
+                O("numberFormat", O("type", "PERCENT", "pattern", "0.0%")), "userEnteredFormat.numberFormat"));
         }
 
         public static void AddRare(List<object> req, int sheetId, int index, List<object[]> data)

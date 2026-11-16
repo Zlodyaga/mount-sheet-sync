@@ -373,6 +373,46 @@ namespace MountSheetSync
             }
         }
 
+        /// <summary>Строка маунта на общих листах по mountID: как он там назван, его босс и шанс выпадения.</summary>
+        public static bool FindMountRow(IBook book, long id, out string mount, out string boss, out double p)
+        {
+            mount = boss = null;
+            p = 0;
+            foreach (string name in new[] { SheetBuilder.RaidsSheet, SheetBuilder.DungeonsSheet, SheetBuilder.WorldSheet, RareSheet })
+            {
+                SheetEntry entry = ByName(book, name);
+                if (entry == null || entry.Data.Count < 2)
+                {
+                    continue;
+                }
+                object[] header = entry.Data[0];
+                int cMount = FindCol(header, "маунт", -1), cBoss = FindCol(header, "босс", -1);
+                int cId = FindCol(header, "^id в игре$", -1), cDrop = FindCol(header, DropPattern, -1);
+                if (cMount < 0)
+                {
+                    continue;
+                }
+                for (int r = 1; r < entry.Data.Count; r++)
+                {
+                    object[] row = entry.Data[r];
+                    long rowId = cId >= 0 ? MountIndex.IdOf(At(row, cId)) : 0;
+                    if (rowId <= 0)
+                    {
+                        rowId = CatalogIndex().Find(MountIndex.KindOfSheet(name), At(row, cMount), cBoss >= 0 ? At(row, cBoss) : "");
+                    }
+                    if (rowId != id)
+                    {
+                        continue;
+                    }
+                    mount = CellText(At(row, cMount));
+                    boss = cBoss >= 0 ? CellText(At(row, cBoss)) : "";
+                    p = cDrop >= 0 ? DropChance(At(row, cDrop)) : 0;
+                    return mount.Length > 0;
+                }
+            }
+            return false;
+        }
+
         static MountIndex catalogIndex;
 
         static MountIndex CatalogIndex()

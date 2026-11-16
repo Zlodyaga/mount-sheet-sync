@@ -35,7 +35,7 @@ def sheet(out, name):
     return found[0] if found else None
 
 
-HEAD = ["Дата", "Персонаж", "Маунт", "Босс / достижение / сундук", "Попыток"]
+HEAD = ["Дата", "Маунт", "Босс / достижение / сундук", "Попыток", "Шанс за все попытки"]
 
 # ---------------------------------------------------------------- a new spreadsheet
 p = subprocess.run(["mono", BUILD], input=json.dumps({"title": "T", "chars": [{"name": "Эйра", "raids": True, "dungeons": True}]}).encode(),
@@ -47,7 +47,7 @@ check("a new spreadsheet has the sheet «Выпавшие маунты», the la
       [(a["title"], a["index"]) for a in added])
 cells = [r["updateCells"] for r in reqs if "updateCells" in r and r["updateCells"].get("start", {}).get("sheetId") == (drops[0]["sheetId"] if drops else -1)]
 head = [v["userEnteredValue"]["stringValue"] for v in cells[0]["rows"][0]["values"]] if cells else []
-check("…with the header: date, character, mount, boss, attempts", head == HEAD, head)
+check("…with the header: date, mount, boss, attempts, the chance over all attempts", head == HEAD, head)
 
 # ---------------------------------------------------------------- an older spreadsheet (layout 6) is upgraded
 OLD_TIP = "Mythic-only; после TWW drop rate обычно понижается."
@@ -97,23 +97,33 @@ def handle(sheets, kills):
 h = handle(up["sheets"], [KILL])
 rows = sheet(h, "Выпавшие маунты")["rows"]
 check("a mount record: «Собрано?» = «Да» as before", sheet(h, "Рейды")["rows"][1][0] == "Да", sheet(h, "Рейды")["rows"][1][:4])
-check("…and a row on «Выпавшие маунты»: the date, the character, the mount and the boss as the table names them, the attempts so far",
-      len(rows) == 2 and rows[1] == ["2026-11-16", "Эйра", "Отмщение", "Сильвана Ветрокрылая", 36], rows)
+check("…and a row on «Выпавшие маунты»: the date, the mount and the boss as the table names them, the attempts, the chance over them (1%, 36 > 30.4%)",
+      len(rows) == 2 and rows[1][:4] == ["2026-11-16", "Отмщение", "Сильвана Ветрокрылая", 36] and abs(rows[1][4] - 0.3036) < 0.0001, rows)
 h2 = handle(h["sheets"], [dict(KILL, id="M-2")])
 check("the same mount again (a repeated record): no second row", len(sheet(h2, "Выпавшие маунты")["rows"]) == 2, sheet(h2, "Выпавшие маунты")["rows"])
 h3 = handle(h2["sheets"], [dict(KILL, id="M-3", boss="Смотритель Зерета", mount="Смотритель Зерета", mountID=1587, char="Мирна", time=STAMP + 86400)])
 rows = sheet(h3, "Выпавшие маунты")["rows"]
-check("another mount: the next row", len(rows) == 3 and rows[2][:4] == ["2026-11-17", "Мирна", "Смотритель Зерета", "Тюремщик"] and rows[2][4] == 5, rows)
+check("another mount: the next row", len(rows) == 3 and rows[2][:4] == ["2026-11-17", "Смотритель Зерета", "Тюремщик", 5] and abs(rows[2][4] - 0.049) < 0.0001, rows)
 
 # the player changed the sheet's columns: the program does not write into them
 changed = json.loads(json.dumps(up["sheets"]))
-sheet({"sheets": changed}, "Выпавшие маунты")["rows"][0] = ["Когда", "Кто", "Маунт", "Заметка", "Попыток"]
+sheet({"sheets": changed}, "Выпавшие маунты")["rows"][0] = ["Когда", "Маунт", "Заметка", "Попыток", "Шанс"]
 h4 = handle(changed, [KILL])
 check("a sheet with other columns is left alone, the mount is still marked collected",
       len(sheet(h4, "Выпавшие маунты")["rows"]) == 1 and sheet(h4, "Рейды")["rows"][1][0] == "Да", sheet(h4, "Выпавшие маунты")["rows"])
 # no such sheet at all (the player deleted it)
 h5 = handle([s for s in up["sheets"] if s["name"] != "Выпавшие маунты"], [KILL])
 check("no sheet «Выпавшие маунты»: nothing breaks, the mount is marked collected", sheet(h5, "Рейды")["rows"][1][0] == "Да" and sheet(h5, "Выпавшие маунты") is None)
+
+# drops the addon remembered (db.drops, addon 3.0.7) before the sheet existed: added by the collection check
+c = run({"catalog": None, "sheets": up["sheets"], "properties": {"layout": "7"},
+         "game": {"ids": [1471, 1587], "names": [], "updated": STAMP, "dropped": {"1587": {"n": 12, "time": STAMP - 86400}, "1471": {"n": 36, "time": STAMP}, "999999": {"n": 3, "time": STAMP}}}})
+rows = sheet(c, "Выпавшие маунты")["rows"]
+check("drops the addon remembered go to the sheet, oldest first, named as the table names them now; a mount not in the table is skipped",
+      c["result"]["dropsAdded"] == 2 and [r[1] for r in rows[1:]] == [sheet(c, "Рейды")["rows"][2][3], "Отмщение"] and rows[1][3] == 12 and rows[1][0] == "2026-11-15", rows)
+c2 = run({"catalog": None, "sheets": c["sheets"], "properties": {"layout": "7"},
+          "game": {"ids": [1471, 1587], "names": [], "updated": STAMP + 60, "dropped": {"1587": {"n": 12, "time": STAMP - 86400}}}})
+check("…and not twice", c2["result"]["dropsAdded"] == 0 and len(sheet(c2, "Выпавшие маунты")["rows"]) == 3)
 
 failed = [n for n, ok in checks if not ok]
 print("\n%d/%d checks passed" % (len(checks) - len(failed), len(checks)))

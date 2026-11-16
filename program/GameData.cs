@@ -486,6 +486,13 @@ namespace MountSheetSync
     }
 
     /// <summary>Маунт из журнала маунтов: имя, откуда он (текст источника) и собран ли.</summary>
+    sealed class DroppedMount
+    {
+        public long Id;
+        public double Attempts;
+        public long Time;
+    }
+
     sealed class GameDrop
     {
         public long Id;
@@ -527,6 +534,8 @@ namespace MountSheetSync
         public List<GameDrop> Mounts = new List<GameDrop>();
         /// <summary>Только маунты-добыча (sourceType 1).</summary>
         public List<GameDrop> Drops = new List<GameDrop>();
+        /// <summary>Маунты, выпадение которых запомнил аддон 3.0.7 (db.drops): mountID → попыток на тот момент и время.</summary>
+        public Dictionary<long, DroppedMount> Dropped = new Dictionary<long, DroppedMount>();
         /// <summary>Когда аддон последний раз читал журнал маунтов (0 — ни разу: аддон старше 2.0 или не было входа).</summary>
         public long CollectionUpdated;
         public int JournalSize;
@@ -597,6 +606,25 @@ namespace MountSheetSync
                 }
                 AddCharacters(chars, J.Get(db, "chars"));
                 AddFromKills(chars, J.Get(db, "kills"));
+                Dictionary<string, object> dropped = J.Obj(J.Get(db, "drops"));
+                if (dropped != null)
+                {
+                    foreach (KeyValuePair<string, object> kv in dropped)
+                    {
+                        long id;
+                        Dictionary<string, object> d = J.Obj(kv.Value);
+                        if (d == null || !long.TryParse(kv.Key, NumberStyles.Integer, CultureInfo.InvariantCulture, out id) || id <= 0)
+                        {
+                            continue;
+                        }
+                        long when = J.Long(d, "time");
+                        DroppedMount was;
+                        if (!snap.Dropped.TryGetValue(id, out was) || (when > 0 && (was.Time == 0 || when < was.Time)))
+                        {
+                            snap.Dropped[id] = new DroppedMount { Id = id, Attempts = SheetLogic.Number(J.Get(d, "n")), Time = when };
+                        }
+                    }
+                }
                 Dictionary<string, object> col = J.Obj(J.Get(db, "collection"));
                 if (col != null)
                 {

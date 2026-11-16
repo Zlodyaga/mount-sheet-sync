@@ -516,9 +516,3 @@ fr: Date
 es: Fecha
 pt: Data
 
-@ Персонаж
-en: Character
-de: Charakter
-fr: Personnage
-es: Personaje
-pt: Personagem

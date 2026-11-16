@@ -500,3 +500,9 @@ en: Could not export the data to a Google spreadsheet: {0}
 
 @ Данные с этого компьютера выгружены в таблицу «{0}»: перенесено ячеек — {1}. Файл на компьютере остался.
 en: The data of this computer is exported to the spreadsheet “{0}”: cells copied — {1}. The file on the computer stays.
+
+@ тексты каталога на русском без английских слов ({0})
+en: Russian catalog texts without English words ({0})
+
+@ лист «Выпавшие маунты»
+en: the “Dropped Mounts” sheet

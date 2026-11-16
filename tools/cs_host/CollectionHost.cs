@@ -64,6 +64,12 @@ namespace MountSheetSync
             }
             game.CollectedMounts = J.Arr(J.Get(g, "names")).Select(n => SheetLogic.JsString(n)).ToList();
             game.CollectionUpdated = J.Long(g, "updated");
+            foreach (KeyValuePair<string, object> kv in J.Obj(J.Get(g, "dropped")) ?? new Dictionary<string, object>())
+            {
+                Dictionary<string, object> d = J.Obj(kv.Value);
+                long id = long.Parse(kv.Key);
+                game.Dropped[id] = new DroppedMount { Id = id, Attempts = SheetLogic.Number(J.Get(d, "n")), Time = J.Long(d, "time") };
+            }
             foreach (object o in J.Arr(J.Get(g, "chars")))
             {
                 Dictionary<string, object> c = J.Obj(o);
@@ -121,7 +127,7 @@ namespace MountSheetSync
                 {
                     { "marked", res.Marked.Cast<object>().ToList() }, { "removed", (double)res.Removed },
                     { "renamed", (double)res.Renamed }, { "idColumns", res.IdColumnsAdded.Cast<object>().ToList() },
-                    { "attempts", res.Attempts.Cast<object>().ToList() },
+                    { "attempts", res.Attempts.Cast<object>().ToList() }, { "dropsAdded", (double)res.DropsAdded },
                     { "changed", res.Changed }, { "summary", res.Summary() },
                 };
             }
