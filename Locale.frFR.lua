@@ -13,6 +13,7 @@ local T = ns.TRANSLATIONS
 T.frFR = {
   error = "erreur :",
   desc_mount = "Nouvelle monture : %s",
+  attempts_coins = "dont jets bonus (depuis que l'addon les compte) : %d",
   coin_roll = "jet bonus",
   desc_plan = "Pas farmé : %s",
   reset_week = "Réinitialisation de la semaine",

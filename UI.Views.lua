@@ -525,6 +525,9 @@ local function AttemptsView(rows, chars)
   for i, m in ipairs(sorted) do
     local count = m.n > 0 and string.format(L.boss_hint, m.n, ns.FormatChance(m.n, m.p)) or L.boss_hint_none
     local tip = { Safe(m.name), BossAndDiff(m.boss, m.diff), count }
+    if (m.coins or 0) > 0 then
+      tip[#tip + 1] = "|cff8c8c8c" .. string.format(L.attempts_coins, m.coins) .. "|r"
+    end
     if m.left > 0 then
       tip[#tip + 1] = string.format(L.boss_hint_left, m.left)
     end

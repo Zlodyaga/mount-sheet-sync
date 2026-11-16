@@ -14,6 +14,7 @@ T.enUS = {
   error = "error:",
   -- records
   desc_mount = "New mount: %s",
+  attempts_coins = "of them bonus rolls (since the addon counts them): %d",
   coin_roll = "bonus roll",
   desc_plan = "Not farming: %s",
   reset_week = "Weekly reset",

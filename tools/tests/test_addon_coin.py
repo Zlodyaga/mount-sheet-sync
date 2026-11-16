@@ -44,4 +44,14 @@ g.Fire("CURRENCY_DISPLAY_UPDATE", 697, 7, -1)
 check("more than ten minutes after the kill: nothing", g.Kills() == n0 + 4)
 L.execute('Fire("CURRENCY_DISPLAY_UPDATE", SECRET, SECRET, SECRET)')
 check("secret values in the event are left alone", g.Kills() == n0 + 4)
+# the «Попытки» tab: how many of the attempts are bonus rolls
+L.execute("""
+local s = MountSheetSyncSheet
+s.mounts = s.mounts or {}
+s.mounts[#s.mounts + 1] = { kind = "world", mount = "Небесный ониксовый облачный змей", boss = "Ша Злости", names = { "ша злости" }, n = 3, p = 0.01, id = 473 }
+s.generated = s.generated + 1
+""")
+row = [r for r in ns.GetAttemptsList().values() if r.id == 473]
+check("the «Попытки» list: the Sha of Anger's mount knows one of its attempts is a bonus roll",
+      len(row) == 1 and row[0].coins == 1, [(r.id, r.coins) for r in ns.GetAttemptsList().values()][:5])
 env.finish()

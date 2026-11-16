@@ -13,6 +13,7 @@ local T = ns.TRANSLATIONS
 T.deDE = {
   error = "Fehler:",
   desc_mount = "Neues Reittier: %s",
+  attempts_coins = "davon Bonuswürfe (seit das Addon sie zählt): %d",
   coin_roll = "Bonuswurf",
   desc_plan = "Farme ich nicht: %s",
   reset_week = "Wochenreset",

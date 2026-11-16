@@ -1232,7 +1232,14 @@ function ns.GetAttemptsList()
     local p = type(m) == "table" and tonumber(m.p)
     if p and p > 0 and p < 1 and not Collected(m) then
       local n = CountNow(m, data, kills, known)
-      out[#out + 1] = { name = MountName(m), n = n, p = p, left = CharactersLeft(m, data, kills, known, weekEnd), diff = m.diff, kind = m.kind, boss = ns.Shown(m, "boss"), id = m.id, je = m.je, im = m.im, raw = m }
+      -- бонусные броски этого маунта в журнале (3.0.7): сколько из попыток — «монетки»
+      local coins = 0
+      for _, rec in ipairs(kills) do
+        if rec.coin and IsAttempt(m, rec, RecordName(rec), known) then
+          coins = coins + 1
+        end
+      end
+      out[#out + 1] = { name = MountName(m), n = n, p = p, left = CharactersLeft(m, data, kills, known, weekEnd), diff = m.diff, kind = m.kind, boss = ns.Shown(m, "boss"), id = m.id, je = m.je, im = m.im, raw = m, coins = coins }
     end
   end
   table.sort(out, function(a, b)
