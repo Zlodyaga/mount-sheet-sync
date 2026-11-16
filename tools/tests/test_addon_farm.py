@@ -266,7 +266,11 @@ ns.SetLanguage("deDE")
 local rare
 for id in pairs(ns.FARM_TIPS.de) do rare = id break end
 TIPS.de = ns.FarmTip(rare) == ns.FARM_TIPS.de[rare]
+TIPS.deAll = ns.FarmTip(363) == ns.FARM_TIPS.de[363]   -- since 16.11.2026 every mount has German
+local saved = ns.FARM_TIPS.de[363]
+ns.FARM_TIPS.de[363] = nil
 TIPS.deFallsBack = ns.FarmTip(363) == ns.FARM_TIPS.en[363]
+ns.FARM_TIPS.de[363] = saved
 ns.SetLanguage("ruRU")
 MountSheetSyncDB.tips = false
 TIPS.off = ns.FarmTip(363)
@@ -281,7 +285,7 @@ end
 T = g.TIPS
 check("3.0.7: a farming tip for a mount of the catalog, in Russian for a Russian addon; none for an unknown mount",
       isinstance(T.ru, str) and len(T.ru) > 10 and T.none is None and T.count > 200, (T.ru, T.count))
-check("…in the addon's language where there is one (rares in German), in English otherwise", T.de is True and T.deFallsBack is True, (T.de, T.deFallsBack))
+check("…in the addon's language (German for rares and the rest), in English where a language has no text", T.de is True and T.deAll is True and T.deFallsBack is True, (T.de, T.deAll, T.deFallsBack))
 check("…the mammoth's twin has the same tip; the setting turns tips off", T.twin is True and T.off is None, (T.twin, T.off))
 check("…no arrows or middle dots the game's fonts cannot draw", T.bad is False)
 
