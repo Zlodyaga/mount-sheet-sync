@@ -18,6 +18,8 @@ namespace MountSheetSync
         public const string DungeonsSheet = "Подземелья";
         public const string WorldSheet = "Мировые боссы";
         public const string RareSheet = "Редкие монстры";
+        /// <summary>Памятка: какие маунты выпали (вид таблицы 7). Строки дописывает SheetLogic.NoteDrop.</summary>
+        public const string DropsSheet = "Выпавшие маунты";
         public const string LastKill = "Последнее убийство";
         public const string SummarySheet = "Сводка";
         public const string MetadataKey = "mountSheetSync";
@@ -62,6 +64,8 @@ namespace MountSheetSync
             Collected, "Аддон", "Локация", "Маунт", "Босс / достижение / сундук", "Сброс / частота", LastKill,
             "Совет по фарму", "Шанс выпадения", AttemptsColumn, ChanceColumn, "Источник", IdColumn,
         };
+        public static readonly string[] DropsHeader = { "Дата", "Персонаж", "Маунт", "Босс / достижение / сундук", AttemptsColumn };
+        static readonly int[] DropsWidths = { 110, 170, 300, 300, 100 };
         static readonly int[] RareWidths = { 71, 134, 160, 216, 200, 97, 170, 260, 83, 90, 110, 279, 90 };
 
         static readonly string[] RaidChar =
@@ -483,6 +487,7 @@ namespace MountSheetSync
             {
                 AddRare(req, 450, index++, l.Rare.Select(r => r.Cells).ToList());
             }
+            AddDrops(req, 460, index++);
 
             req.AddRange(late);
             req.Add(O("deleteSheet", O("sheetId", defaultSheetId)));
@@ -962,6 +967,25 @@ namespace MountSheetSync
         public static List<object[]> RareRows(BuildPlan plan)
         {
             return MasterRows(plan.Catalog.Rare, RareMaster, plan).Select(r => r.Cells).ToList();
+        }
+
+        /// <summary>Лист «Выпавшие маунты»: пока только заголовок.</summary>
+        public static void AddDrops(List<object> req, int sheetId, int index)
+        {
+            AddTable(req, sheetId, DropsSheet, index, DropsHeader, new List<object[]>(), DropsWidths);
+        }
+
+        /// <summary>
+        /// Строка выпавшего маунта в конец листа (start — её номер, 0 — заголовок). Сначала к сетке добавляется строка:
+        /// так запись не выйдет за сетку, даже если пустые строки листа удалили.
+        /// </summary>
+        public static void AppendDrop(List<object> req, int sheetId, int start, object[] row)
+        {
+            req.Add(O("appendDimension", O("sheetId", sheetId, "dimension", "ROWS", "length", 1)));
+            req.Add(UpdateCells(sheetId, start, 0, new List<object[]> { row }));
+            req.Add(RepeatFormat(sheetId, start, start + 1, 0, row.Length,
+                O("textFormat", O("fontFamily", Font, "fontSize", 11), "verticalAlignment", "TOP", "wrapStrategy", "WRAP"),
+                "userEnteredFormat.textFormat,userEnteredFormat.verticalAlignment,userEnteredFormat.wrapStrategy"));
         }
 
         public static void AddRare(List<object> req, int sheetId, int index, List<object[]> data)

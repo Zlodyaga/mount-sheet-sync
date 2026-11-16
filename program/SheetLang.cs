@@ -33,7 +33,7 @@ namespace MountSheetSync
             "Шанс выпадения",
         };
 
-        static readonly string[] Masters = { SheetBuilder.RaidsSheet, SheetBuilder.DungeonsSheet, SheetBuilder.WorldSheet, SheetBuilder.RareSheet, SheetBuilder.SummarySheet };
+        static readonly string[] Masters = { SheetBuilder.RaidsSheet, SheetBuilder.DungeonsSheet, SheetBuilder.WorldSheet, SheetBuilder.RareSheet, SheetBuilder.SummarySheet, SheetBuilder.DropsSheet };
         static readonly string[] Prefixes = { SheetBuilder.RaidsSheet, SheetBuilder.DungeonsSheet };
         public const string DefaultTitle = "Маунты WoW";
 
@@ -98,8 +98,22 @@ namespace MountSheetSync
             public Dictionary<string, Dictionary<string, string>> ContentL10n =
                 new Dictionary<string, Dictionary<string, string>>(StringComparer.Ordinal);
             public Dictionary<long, string> Mounts = new Dictionary<long, string>();
+            /// <summary>Переписанные русские тексты каталога: старый → новый (вид таблицы 7 меняет их в готовых таблицах).</summary>
+            public Dictionary<string, string> Renamed = new Dictionary<string, string>(StringComparer.Ordinal);
             /// <summary>Названия из таблиц игры: mounts / bosses / places → ID → язык → название; rewards → ID маунта → достижение.</summary>
             public Dictionary<string, object> Names = new Dictionary<string, object>();
+        }
+
+        /// <summary>Переписанные русские тексты каталога: старый текст → новый.</summary>
+        public static Dictionary<string, string> RenamedTexts
+        {
+            get
+            {
+                lock (sync)
+                {
+                    return Load().Renamed;
+                }
+            }
         }
 
         static Texts texts;
@@ -131,6 +145,10 @@ namespace MountSheetSync
                     foreach (KeyValuePair<string, object> kv in J.Obj(J.Get(root, "content")) ?? new Dictionary<string, object>())
                     {
                         t.Content[kv.Key] = SheetLogic.JsString(kv.Value);
+                    }
+                    foreach (KeyValuePair<string, object> kv in J.Obj(J.Get(root, "renamed")) ?? new Dictionary<string, object>())
+                    {
+                        t.Renamed[kv.Key] = SheetLogic.JsString(kv.Value);
                     }
                     foreach (KeyValuePair<string, object> lang in J.Obj(J.Get(root, "contentL10n")) ?? new Dictionary<string, object>())
                     {

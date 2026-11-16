@@ -102,7 +102,7 @@ OLD = [
     {"name": "Мировые боссы", "rows": [WH, ["Нет", "MoP", "Valley of the Four Winds", "Сын Галеона", "Галеон", "Еженедельно", "", "", 0.01, "", False, True]], "grid": 12},
 ]
 up = run({"catalog": None, "sheets": OLD, "mode": "upgrade", "properties": {"layout": "2"}})
-check("upgrade to layout 6 in one batch", up["changed"] is True and up["properties"].get("layout") == "6" and len(up["applied"]) == 1, up["structure"])
+check("upgrade to the current layout (7) in one batch", up["changed"] is True and up["properties"].get("layout") == "7" and len(up["applied"]) == 1, up["structure"])
 RARE_ROWS = [s for s in json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "program", "catalog.json"), encoding="utf-8"))["sheets"] if s["key"] == "rare"][0]["rows"]
 ur6 = sheet(up, "Редкие монстры")
 check("layout 6: a 2.0 table without rares gets «Редкие монстры» with every rare of the catalog",
@@ -134,10 +134,10 @@ check("characters of the upgraded table found where they are now", sorted((t["na
 again = run({"catalog": None, "sheets": up["sheets"], "mode": "upgrade", "properties": {"layout": "3"}})
 ab = again["applied"][0] if again["applied"] else []
 check("layout 3 (a 2.8 table): formats of both columns again, cell by cell, on the three sheets, no new columns",
-      again["changed"] is True and again["properties"].get("layout") == "6" and not any("insertDimension" in r for r in ab)
+      again["changed"] is True and again["properties"].get("layout") == "7" and not any("insertDimension" in r for r in ab)
       and sorted({r["updateCells"]["range"]["sheetId"] for r in ab if "updateCells" in r}) == sorted([ids["Рейды"], ids["Подземелья"], ids["Мировые боссы"]]), again)
-again = run({"catalog": None, "sheets": up["sheets"], "mode": "upgrade", "properties": {"layout": "6"}})
-check("layout 6: nothing more to do", again["changed"] is False)
+again = run({"catalog": None, "sheets": up["sheets"], "mode": "upgrade", "properties": {"layout": "7"}})
+check("layout 7: nothing more to do", again["changed"] is False)
 # ---- layout 5: rares of the catalog move from «Мировые боссы» to their own sheet, with «Собрано?» and the counter
 moved = [s for s in json.loads(json.dumps(up["sheets"])) if s["name"] != "Редкие монстры"]   # a 2.8 table: no rare sheet yet
 w = [s for s in moved if s["name"] == "Мировые боссы"][0]
@@ -171,7 +171,7 @@ rs["formulas"] = [f for f in rs.get("formulas", []) if f[0] < 2]
 ad = run({"catalog": None, "sheets": old_rare, "mode": "upgrade", "properties": {"layout": "5"}})
 ar = {s["name"]: s for s in ad["sheets"]}["Редкие монстры"]
 areq = ad["applied"][0] if ad["applied"] else []
-check("layout 6: the new rares are added after Ishak, Ishak keeps his 4 attempts", ad["properties"].get("layout") == "6"
+check("layout 6: the new rares are added after Ishak, Ishak keeps his 4 attempts (layout 7 now)", ad["properties"].get("layout") == "7"
       and len(ar["rows"]) == len(RARE_ROWS) + 1 and ar["rows"][1][rh.index("Попыток")] == 4
       and all(r[rh.index("Попыток")] in (0, "") and r[0] == "Нет" for r in ar["rows"][2:]), ar["rows"][:3])
 # rows with a number for a chance get the counter; «Гарантированно» (rares with a sure drop) gets none
@@ -239,7 +239,7 @@ base = {s["name"]: s["rows"] for s in rare_sheets}["Редкие монстры"
 check("«Сброс недели» does not touch the rare sheet", rs == base, rs[:2])
 # a 2.0/2.1 table goes 0 → 3 in one go
 up0 = run({"catalog": None, "sheets": OLD, "mode": "upgrade"})
-check("2.0/2.1 table: colours, «Фармлю» and the counter in one batch, layout 6", up0["properties"].get("layout") == "6" and len(up0["applied"]) == 1
+check("2.0/2.1 table: colours, «Фармлю» and the counter in one batch, layout 7", up0["properties"].get("layout") == "7" and len(up0["applied"]) == 1
       and any("insertDimension" in r for r in up0["applied"][0]), up0["structure"])
 
 # ---------------------------------------------------------------- kills

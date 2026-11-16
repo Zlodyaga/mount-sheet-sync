@@ -15,7 +15,7 @@ namespace MountSheetSync
 {
     static class SheetUpgrade
     {
-        public const int Current = 6;
+        public const int Current = 7;
         public const string Property = "layout";
 
         static readonly string[] Masters = { SheetBuilder.RaidsSheet, SheetBuilder.DungeonsSheet, SheetBuilder.WorldSheet };
@@ -126,6 +126,24 @@ namespace MountSheetSync
                     done.Add(raids);
                 }
             }
+            if (layout < 7)
+            {
+                foreach (Action a in memory)
+                {
+                    a();   // новый лист встаёт после уже добавленных выше: их номера и места должны быть в памяти
+                }
+                memory.Clear();
+                string drops = AddDrops(book, req, memory);
+                if (drops != null)
+                {
+                    done.Add(drops);
+                }
+                int texts = RefreshTexts(book);
+                if (texts > 0)
+                {
+                    done.Add(Tr.L("тексты каталога на русском без английских слов ({0})", texts));
+                }
+            }
             book.Apply(req, Property, Current.ToString(CultureInfo.InvariantCulture));
             foreach (Action a in memory)
             {
@@ -137,6 +155,63 @@ namespace MountSheetSync
                 Log.Write(Tr.L("Таблица обновлена: {0}.", string.Join("; ", done.ToArray())));
             }
             return true;
+        }
+
+        /// <summary>Вид 7: лист «Выпавшие маунты» (пока только заголовок) — в конец таблицы. Лист с таким именем есть — не трогаем.</summary>
+        static string AddDrops(IStructuredBook book, List<object> req, List<Action> memory)
+        {
+            if (SheetLogic.ByName(book, SheetBuilder.DropsSheet) != null || book.Entries.Count == 0)
+            {
+                return null;
+            }
+            string[] header = SheetBuilder.DropsHeader;
+            long sheetId = book.Entries.Max(e => e.SheetId) + 1;
+            int index = book.Entries.Count;
+            SheetBuilder.AddDrops(req, (int)sheetId, index);
+            memory.Add(() =>
+            {
+                SheetEntry entry = new SheetEntry { Name = SheetBuilder.DropsSheet, SheetId = sheetId, GridColumns = header.Length };
+                entry.Data.Add(header.Cast<object>().ToArray());
+                book.Entries.Add(entry);
+            });
+            return Tr.L("лист «Выпавшие маунты»");
+        }
+
+        /// <summary>
+        /// Вид 7: русские тексты каталога, переписанные без английских слов (советы, пропуски боссов, пути) — и в готовой
+        /// таблице. Меняется только ячейка, где текст в точности старый: поправленное игроком остаётся. В таблице на другом
+        /// языке делать нечего: перевод тот же, а в памяти её тексты уже новые.
+        /// </summary>
+        static int RefreshTexts(IStructuredBook book)
+        {
+            if (book.Lang != null && !book.Lang.IsRussian)
+            {
+                return 0;
+            }
+            Dictionary<string, string> renamed = SheetLang.RenamedTexts;
+            if (renamed.Count == 0)
+            {
+                return 0;
+            }
+            int changed = 0;
+            foreach (SheetEntry e in book.Entries)
+            {
+                for (int r = 1; r < e.Data.Count; r++)
+                {
+                    object[] row = e.Data[r];
+                    for (int c = 0; c < row.Length; c++)
+                    {
+                        string text = row[c] as string;
+                        string fresh;
+                        if (text != null && text.Length > 0 && renamed.TryGetValue(text, out fresh) && !e.Formulas.Contains(SheetLogic.Key(r, c)))
+                        {
+                            book.Set(e, r, c, fresh);
+                            changed++;
+                        }
+                    }
+                }
+            }
+            return changed;
         }
 
         /// <summary>

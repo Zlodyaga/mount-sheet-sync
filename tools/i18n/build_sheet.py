@@ -107,6 +107,10 @@ def main():
         "contentL10n": {lang: {k: v for k, v in sorted(t.items()) if k in used} for lang, t in parse_content_l10n().items()},
         "mounts": {str(i): mounts[i] for i in sorted(ids)},
     }
+    # Russian catalog texts that were reworded: old -> new (SheetUpgrade.RefreshTexts updates spreadsheets made earlier)
+    renamed_file = os.path.join(HERE, "sheet_renamed.json")
+    if os.path.exists(renamed_file):
+        data["renamed"] = json.load(open(renamed_file, encoding="utf-8"))
     # names from the game's tables in six languages and the reward rows' achievements (tools/catalog/game_names.py)
     names_file = os.path.join(ROOT, "tools", "catalog", "game_names.json")
     if os.path.exists(names_file):

@@ -200,7 +200,7 @@ try:
     book = books[0]
     titles = [x["title"] for x in book["sheets"]]
     check("sheets: masters, per-character, summary, world bosses",
-          titles == ["Рейды", "Рейды Мирна", "Рейды Эйра", "Подземелья", "Подземелья Мирна", "Подземелья Эйра", "Сводка", "Мировые боссы", "Редкие монстры"], titles)
+          titles == ["Рейды", "Рейды Мирна", "Рейды Эйра", "Подземелья", "Подземелья Мирна", "Подземелья Эйра", "Сводка", "Мировые боссы", "Редкие монстры", "Выпавшие маунты"], titles)
     check("title and Russian locale", book["title"] == "Маунты (тест)" and book["locale"] == "ru_RU", (book["title"], book["locale"]))
     raids = sheet_cells(book, "Рейды")
     r = find_row(raids, 3, "Пепел Ал'ара")
@@ -295,7 +295,7 @@ try:
     book = state()["spreadsheets"][book["id"]]
     titles = [x["title"] for x in book["sheets"]]
     check("--add-chars: new sheets next to the others", code == 0 and titles == ["Рейды", "Рейды Мирна", "Рейды Эйра", "Рейды Каэлия", "Подземелья",
-          "Подземелья Мирна", "Подземелья Эйра", "Подземелья Каэлия", "Сводка", "Мировые боссы", "Редкие монстры"], (titles, out[-1000:]))
+          "Подземелья Мирна", "Подземелья Эйра", "Подземелья Каэлия", "Сводка", "Мировые боссы", "Редкие монстры", "Выпавшие маунты"], (titles, out[-1000:]))
     lok = sheet_cells(book, "Рейды Каэлия")
     check("new character's rows follow «Собрано?» now (Зеретский смотритель is collected)",
           find_row(lok, 3, "Зеретский смотритель") is None and find_row(lok, 3, "Отмщение") is not None and len(lok) > 10)
