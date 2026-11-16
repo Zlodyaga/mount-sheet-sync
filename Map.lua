@@ -40,10 +40,58 @@ local function MountName(id)
   return "#" .. tostring(id)
 end
 
+-- Карта материка показывает то же, что карты её зон: точки пересчитываются через место зоны на материке.
+local PARENTS = { [424] = { 371, 418, 379, 388, 422 } }   -- Пандария: зоны завоевателей Зандалари
+local merged = {}
+
+local function Moved(points, minX, maxX, minY, maxY)
+  local out = {}
+  for i = 1, #points - 1, 2 do
+    out[i] = (minX + points[i] / 100 * (maxX - minX)) * 100
+    out[i + 1] = (minY + points[i + 1] / 100 * (maxY - minY)) * 100
+  end
+  return out
+end
+
+local function MapList(mapID)
+  local children = PARENTS[mapID]
+  if not children or not (C_Map and C_Map.GetMapRectOnMap) then
+    return ns.RARE_ROUTES[mapID]
+  end
+  if merged[mapID] then
+    return merged[mapID]
+  end
+  local list, byMount = {}, {}
+  for _, e in ipairs(ns.RARE_ROUTES[mapID] or {}) do
+    list[#list + 1] = e
+  end
+  for _, child in ipairs(children) do
+    local ok, minX, maxX, minY, maxY = pcall(C_Map.GetMapRectOnMap, child, mapID)
+    if ok and type(minX) == "number" and type(maxY) == "number" and maxX > minX and maxY > minY then
+      for _, e in ipairs(ns.RARE_ROUTES[child] or {}) do
+        local to = byMount[e.mount]
+        if not to then
+          to = { mount = e.mount, spawns = {}, lines = {} }
+          byMount[e.mount] = to
+          list[#list + 1] = to
+        end
+        for _, v in ipairs(Moved(e.spawns or {}, minX, maxX, minY, maxY)) do
+          to.spawns[#to.spawns + 1] = v
+        end
+        for _, points in ipairs(e.lines or {}) do
+          to.lines[#to.lines + 1] = Moved(points, minX, maxX, minY, maxY)
+        end
+      end
+    end
+  end
+  merged[mapID] = list
+  return list
+end
+
 -- Несобранные маунты с данными для этой карты.
 function ns.RouteEntries(mapID)
   local out = {}
-  local list = mapID and ns.RARE_ROUTES and ns.RARE_ROUTES[mapID]
+  local list = mapID and ns.RARE_ROUTES and MapList(mapID)
   for _, e in ipairs(list or {}) do
     if not Collected(e.mount) then
       out[#out + 1] = e
@@ -91,10 +139,32 @@ local function Line(i)
   return lines[i]
 end
 
+-- Точка появления — маленький кадр: при наведении говорит, чей это рар. Щелчки проходят сквозь него к карте;
+-- если клиент не умеет «только наведение», мышь точке не включаем вовсе, чтобы не мешать карте.
+local function DotEnter(self)
+  GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+  GameTooltip:SetText(MountName(self.mount), 1, 0.82, 0)
+  GameTooltip:AddLine(string.format(L.map_routes_spawn, self.x, self.y), 1, 1, 1, true)
+  GameTooltip:Show()
+end
+
+local function DotLeave()
+  GameTooltip:Hide()
+end
+
 local function Dot(i)
   if not dots[i] then
-    dots[i] = overlay:CreateTexture(nil, "OVERLAY")
-    dots[i]:SetTexture(DOT)
+    local f = CreateFrame("Frame", nil, overlay)
+    f.tex = f:CreateTexture(nil, "OVERLAY")
+    f.tex:SetAllPoints(f)
+    f.tex:SetTexture(DOT)
+    if f.SetMouseClickEnabled then
+      f:EnableMouse(true)
+      f:SetMouseClickEnabled(false)
+      f:SetScript("OnEnter", DotEnter)
+      f:SetScript("OnLeave", DotLeave)
+    end
+    dots[i] = f
   end
   return dots[i]
 end
@@ -151,7 +221,8 @@ local function Refresh()
           end
           nDot = nDot + 1
           local dot = Dot(nDot)
-          dot:SetVertexColor(c[1], c[2], c[3], 1)
+          dot.tex:SetVertexColor(c[1], c[2], c[3], 1)
+          dot.mount, dot.x, dot.y = e.mount, spawns[i], spawns[i + 1]
           dot:SetSize(DOT_SIZE / scale, DOT_SIZE / scale)
           dot:ClearAllPoints()
           dot:SetPoint("CENTER", overlay, "TOPLEFT", spawns[i] / 100 * width, -spawns[i + 1] / 100 * height)

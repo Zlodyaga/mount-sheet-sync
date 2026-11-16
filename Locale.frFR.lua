@@ -81,6 +81,7 @@ T.frFR = {
   tip_grid_menu = "Clic droit - qui le farme (cocher ou décocher un personnage)",
   map_routes_title = "Trajets des monstres rares",
   map_routes_tip = "Clic - afficher ou masquer le trajet et les points d'apparition d'un rare dont la monture vous manque",
+  map_routes_spawn = "Point d'apparition : %.1f, %.1f",
   map_routes_pick = "Quel trajet afficher",
   tip_details = "%s - clics et détails",
   settings_details = "Infobulle de ligne : détails",

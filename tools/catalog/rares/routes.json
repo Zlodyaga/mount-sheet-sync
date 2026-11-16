@@ -1053,5 +1053,137 @@
     51.5
    ]
   ]
+ },
+ {
+  "npc": 203625,
+  "map": 2133,
+  "name": "Karokta",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    42.2,
+    65.5
+   ]
+  ]
+ },
+ {
+  "npc": 234845,
+  "map": 2371,
+  "name": "Sthaarbs",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    74.0,
+    32.5
+   ]
+  ]
+ },
+ {
+  "npc": 232195,
+  "map": 2371,
+  "name": "Urmag",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    70.0,
+    49.6
+   ]
+  ]
+ },
+ {
+  "npc": 195353,
+  "map": 2024,
+  "name": "Breezebiter",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    27.7,
+    46.2
+   ]
+  ]
+ },
+ {
+  "npc": 142741,
+  "map": 14,
+  "name": "Doomrider Helgrim",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    53.4,
+    57.6
+   ]
+  ]
+ },
+ {
+  "npc": 142739,
+  "map": 14,
+  "name": "Knight-Captain Aldrin",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    48.8,
+    40.1
+   ]
+  ]
+ },
+ {
+  "npc": 149652,
+  "map": 62,
+  "name": "Agathe Wyrmwood / Blackpaw",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    49.5,
+    24.9
+   ]
+  ]
+ },
+ {
+  "npc": 149655,
+  "map": 62,
+  "name": "Croz Bloodrage",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    50.5,
+    32.5
+   ]
+  ]
+ },
+ {
+  "npc": 149663,
+  "map": 62,
+  "name": "Shadowclaw",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    39.6,
+    33.1
+   ]
+  ]
+ },
+ {
+  "npc": 147701,
+  "map": 62,
+  "name": "Moxo the Beheader",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    64.9,
+    19.6
+   ]
+  ]
+ },
+ {
+  "npc": 148037,
+  "map": 62,
+  "name": "Athil Dewfire",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    41.1,
+    75.0
+   ]
+  ]
  }
 ]

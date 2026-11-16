@@ -72,6 +72,33 @@ check("Storm Peaks again: its own state, not the Jade Forest's", g.Drawn().dots 
 g.GoTo(371)
 check("the Jade Forest again: the second mount is still on", g.Drawn().dots == 1)
 
+# the continent map shows what its zones have: the Warbringers' spots, moved to where the zone lies on Pandaria
+L.execute("""
+C_Map = C_Map or {}
+function C_Map.GetMapRectOnMap(child, parent)
+  if parent == 424 and child == 371 then return 0.5, 0.9, 0.2, 0.6 end   -- the Jade Forest: the east of the continent
+  if parent == 424 and child == 422 then return 0.1, 0.4, 0.6, 0.9 end
+  return nil
+end""")
+g.GoTo(424)
+d = g.Drawn()
+entries = list(ns.RouteEntries(424).values())
+check("Pandaria: the icon is there, and the list has the three mounts of its zones", d.button and len(entries) == 3, len(entries))
+ns.SetRouteShown(424, 535, True)
+moved = [e for e in entries if e.mount == 535][0]
+check("…the slate direhorn: its spots of the two known zones, in the continent's coordinates (52.6, 18.8 of the Jade Forest > 71.04, 27.52)",
+      g.Drawn().dots == 2 and abs(moved.spawns[1] - 71.04) < 0.01 and abs(moved.spawns[2] - 27.52) < 0.01, (g.Drawn().dots, moved.spawns[1], moved.spawns[2]))
+ns.SetRouteShown(424, 535, False)
+g.GoTo(371)
+check("…and the Jade Forest keeps its own state", g.Drawn().dots == 1)
+
+# a spawn point says whose it is
+dot = [r for r in [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)] if r._type == "Frame" and r._shown and r._mouseClick is False][0]
+dot._scripts.OnEnter(dot)
+tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
+check("hover over a spawn point: the mount and the coordinates; clicks go through to the map",
+      len(tt) == 2 and "52.6, 18.8" in tt[1], tt)
+
 # a collected mount has no route and no icon
 L.execute('MOCK.mounts[265] = { "Затерянный во времени протодракон", 60002, "" }')
 g.GoTo(120)

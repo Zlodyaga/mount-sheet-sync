@@ -81,6 +81,7 @@ T.deDE = {
   tip_grid_menu = "Rechtsklick - wer es farmt (Häkchen für einen Charakter setzen oder entfernen)",
   map_routes_title = "Routen seltener Gegner",
   map_routes_tip = "Klick - Route und Spawnpunkte eines seltenen Gegners zeigen oder verbergen, dessen Reittier noch fehlt",
+  map_routes_spawn = "Spawnpunkt: %.1f, %.1f",
   map_routes_pick = "Wessen Route zeigen",
   tip_details = "%s - Klicks und Details",
   settings_details = "Zeilen-Tooltip: Details",

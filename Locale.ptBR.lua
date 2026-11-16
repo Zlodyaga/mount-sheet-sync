@@ -81,6 +81,7 @@ T.ptBR = {
   tip_grid_menu = "Clique direito - quem farma (marcar ou desmarcar um personagem)",
   map_routes_title = "Rotas de monstros raros",
   map_routes_tip = "Clique - mostrar ou ocultar a rota e os pontos de surgimento de um raro cuja montaria você ainda não tem",
+  map_routes_spawn = "Ponto de surgimento: %.1f, %.1f",
   map_routes_pick = "Qual rota mostrar",
   tip_details = "%s - cliques e detalhes",
   settings_details = "Dica da linha: detalhes",

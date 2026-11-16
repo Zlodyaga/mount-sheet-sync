@@ -81,6 +81,7 @@ T.esES = {
   tip_grid_menu = "Clic derecho - quién lo farmea (marcar o desmarcar un personaje)",
   map_routes_title = "Rutas de monstruos raros",
   map_routes_tip = "Clic - mostrar u ocultar la ruta y los puntos de aparición de un raro cuya montura aún no tienes",
+  map_routes_spawn = "Punto de aparición: %.1f, %.1f",
   map_routes_pick = "Qué ruta mostrar",
   tip_details = "%s - clics y detalles",
   settings_details = "Descripción de la fila: detalles",

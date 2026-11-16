@@ -3,6 +3,24 @@
 local _, ns = ...
 
 ns.RARE_ROUTES = {
+  [14] = {
+    { mount = 1173, spawns = { 48.8, 40.1 },   -- Knight-Captain Aldrin
+      lines = { } },
+    { mount = 1174, spawns = { 53.4, 57.6 },   -- Doomrider Helgrim
+      lines = { } },
+  },
+  [62] = {
+    { mount = 1199, spawns = { 49.5, 24.9 },   -- Agathe Wyrmwood / Blackpaw
+      lines = { } },
+    { mount = 1203, spawns = { 64.9, 19.6 },   -- Moxo the Beheader
+      lines = { } },
+    { mount = 1203, spawns = { 41.1, 75 },   -- Athil Dewfire
+      lines = { } },
+    { mount = 1205, spawns = { 50.5, 32.5 },   -- Croz Bloodrage
+      lines = { } },
+    { mount = 1205, spawns = { 39.6, 33.1 },   -- Shadowclaw
+      lines = { } },
+  },
   [120] = {
     { mount = 265, spawns = { 52, 34, 31, 69, 35, 76, 51, 70 },   -- Time-Lost Proto-Drake
       lines = {
@@ -100,6 +118,20 @@ ns.RARE_ROUTES = {
   },
   [1961] = {
     { mount = 1514, spawns = { 53, 22.3, 44.6, 29, 47.1, 36.1, 56.3, 66.1, 28.3, 60.2 },   -- Konthrogz the Obliterator
+      lines = { } },
+  },
+  [2024] = {
+    { mount = 1553, spawns = { 27.7, 46.2 },   -- Breezebiter
+      lines = { } },
+  },
+  [2133] = {
+    { mount = 1732, spawns = { 42.2, 65.5 },   -- Karokta
+      lines = { } },
+  },
+  [2371] = {
+    { mount = 2601, spawns = { 70, 49.6 },   -- Urmag
+      lines = { } },
+    { mount = 2603, spawns = { 74, 32.5 },   -- Sthaarbs
       lines = { } },
   },
 }

@@ -84,6 +84,7 @@ T.enUS = {
   tip_grid_menu = "Right-click - who farms it (tick or untick a character)",
   map_routes_title = "Routes of rare monsters",
   map_routes_tip = "Click - show or hide the route and the spawn points of a rare whose mount you do not have yet",
+  map_routes_spawn = "Spawn point: %.1f, %.1f",
   map_routes_pick = "Whose route to show",
   tip_details = "%s - clicks and details",
   settings_details = "Row tooltip: details",
