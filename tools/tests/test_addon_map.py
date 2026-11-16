@@ -150,6 +150,44 @@ check("Darkshore: the Horde sees Athil Dewfire's spot, the Alliance Moxo's; an u
       len(moxo) == 1 and abs(moxo[0].spawns[2] - 75.0) < 0.01 and len(moxo_a) == 1 and abs(moxo_a[0].spawns[2] - 19.6) < 0.01 and len(moxo_n) == 1,
       (len(moxo), len(moxo_a), len(moxo_n)))
 
+# entrances of what is left for this character (raids and dungeons of «Осталось»), behind their own tick in the menu
+L.execute("""
+SAVED_ITEM_INSTANCE = MSS_NS.ItemInstance
+MSS_NS.ItemInstance = function(item) if item.kind == "raid" then return 187 end end   -- every raid row: Dragon Soul (map 75)
+local rect = C_Map.GetMapRectOnMap
+function C_Map.GetMapRectOnMap(child, parent)
+  if child == 75 and parent == 12 then return 0.5, 0.7, 0.6, 0.9 end   -- Tanaris on Kalimdor
+  return rect(child, parent)
+end
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+""")
+RAWGET = L.eval("rawget")
+def gates_shown():
+    return [r for r in [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)] if r._type == "Frame" and r._shown and RAWGET(r, "pin") is not None]
+g.GoTo(75)
+d = g.Drawn()
+pins = list(ns.EntrancePins(75).values())
+check("a map with an entrance of «Осталось»: the icon is there, nothing drawn until it is ticked",
+      d.button and len(pins) == 1 and pins[0].raid and not gates_shown(), (d.button, len(pins)))
+g.Click()
+menu = g.MENUS[len(g.MENUS)]
+boxes = [menu["items"][i] for i in range(1, len(menu["items"]) + 1) if menu["items"][i]["kind"] == "checkbox"]
+check("…a click opens the list with «Входы: что осталось у этого персонажа» first", boxes and str(boxes[0]["text"]) == "Входы: что осталось у этого персонажа", [str(b["text"]) for b in boxes])
+boxes[0]["cb"]()
+gs = gates_shown()
+check("…ticked: one raid entrance on the map", len(gs) == 1, len(gs))
+gs[0]._scripts.OnEnter(gs[0])
+tt = [str(g.GameTooltip.lines[i]) for i in range(1, len(g.GameTooltip.lines) + 1)]
+check("…its tooltip: the place, «Осталось здесь на этой неделе», boss - mount rows", len(tt) >= 3 and tt[1] == "Осталось здесь на этой неделе:" and " - " in tt[2], tt[:4])
+g.GoTo(12)
+check("the continent: the same entrance, moved onto it; the tick is one for every map", len(gates_shown()) == 1 and g.Drawn().button)
+g.GoTo(947)
+check("a map without entrances or rares: no icon, nothing drawn", not g.Drawn().button and not gates_shown())
+g.GoTo(75)
+boxes[0]["cb"]()
+check("ticked off: no entrances", not gates_shown() and g.MountSheetSyncDB.mapEntrances is None)
+L.execute("MSS_NS.ItemInstance = SAVED_ITEM_INSTANCE")
+
 # a collected mount has no route and no icon
 L.execute('MOCK.mounts[265] = { "Затерянный во времени протодракон", 60002, "" }')
 g.GoTo(120)

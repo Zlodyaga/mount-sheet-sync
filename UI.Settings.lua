@@ -314,6 +314,7 @@ local function CreateSettings()
   end)
   DefaultOnCheck(settingsFrame, -354, "settings_mapzeroth", "mapzeroth", "tip_mapzeroth")
   local tipsCheck = DefaultOnCheck(settingsFrame, -378, "settings_tips", "tips", "tip_settings_tips")
+  DefaultOnCheck(settingsFrame, -402, "settings_login", "loginNote", "tip_settings_login")
   tipsCheck:HookScript("OnClick", function()
     if S.frame and S.frame:IsShown() then
       UI.Refresh(true)

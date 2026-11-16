@@ -543,6 +543,34 @@ local function OnCurrency(currencyID, _, change)
 end
 
 ---------------------------------------------------------------------------
+-- Напоминание при входе: сколько осталось у этого персонажа и с чего начать (настройка «При входе — что осталось»)
+---------------------------------------------------------------------------
+local function LoginNote()
+  if db.quiet or db.loginNote == false or not ns.GetRemaining then
+    return
+  end
+  local r = ns.GetRemaining()
+  if type(r) ~= "table" or r.state ~= "ok" or (tonumber(r.total) or 0) == 0 then
+    return
+  end
+  if r.left == 0 then
+    Print(string.format(L.login_done, r.name))
+    return
+  end
+  -- первое, что ещё не убито, — рейд или подземелье (где), иначе мировой босс или рар (кто)
+  local first
+  for _, e in ipairs(r.items or {}) do
+    if not e.done and type(e.item) == "table" then
+      local where = ns.Shown(e.item, "place")
+      first = (where and where ~= "") and where or ns.Shown(e.item, "boss")
+      break
+    end
+  end
+  Print(string.format(L.login_left, r.name, r.left, r.total, tostring(first or "?")))
+end
+ns.LoginNote = LoginNote
+
+---------------------------------------------------------------------------
 -- Сохранения подземелий и мировых боссов этой недели
 ---------------------------------------------------------------------------
 local function WeekKey(kind, difficultyID, boss)
@@ -1140,6 +1168,7 @@ frame:SetScript("OnEvent", function(self, event, ...)
       SafeCall(ns.RememberAccess)   -- доступ к входу, общий на аккаунт: запомнить у этого персонажа (Access.lua)
     end
     C_Timer.After(3, RequestLockouts)
+    C_Timer.After(8, function() SafeCall(LoginNote) end)   -- после сохранений: список уже учитывает их
   elseif event == "ENCOUNTER_END" then
     local encounterID, encounterName, difficultyID, groupSize, success = ...
     if not issecretvalue(success) and (success == 1 or success == true) then

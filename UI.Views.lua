@@ -186,6 +186,19 @@ local function RemainingRow(entry, menu, stripe)
   } }, item)
 end
 
+-- « - до сброса 2 д 5 ч» для шапки «Осталось»: когда список снова станет полным.
+local function ResetIn()
+  local weekEnd = ns.WeekEnd and ns.WeekEnd()
+  if not weekEnd or not ns.FormatDuration then
+    return ""
+  end
+  local left = weekEnd - time()
+  if left <= 0 then
+    return ""
+  end
+  return " - " .. string.format(L.reset_in, ns.FormatDuration(left))
+end
+
 -- Вкладка «Осталось» у персонажа: строки «Нет» из таблицы, убитые после обновления списка — с галочкой внизу группы.
 -- own — список текущего персонажа: только у него правый щелчок «Не фармлю».
 local function RemainingView(r, own)
@@ -227,7 +240,7 @@ local function RemainingView(r, own)
     list[#list + 1] = Line("|cff8cff8c" .. L.left_alldone .. "|r")
   end
   return { list = list, cols = LeftColumns(),
-    summary = "|cff8c8c8c" .. string.format(L.left_head, r.left, r.total, ns.FormatWhen(r.generated)) .. "|r" }
+    summary = "|cff8c8c8c" .. string.format(L.left_head, r.left, r.total, ns.FormatWhen(r.generated)) .. ResetIn() .. "|r" }
 end
 
 -- Вкладка «Достижения»: достижение (щелчок — открыть его), условие, маунт. Полученное — серое и внизу. Попыток у них нет.

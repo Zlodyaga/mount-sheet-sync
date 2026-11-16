@@ -19,6 +19,9 @@ local COLORS = {
 local LINE_THICKNESS, DOT_SIZE = 3, 14   -- в точках экрана: делим на масштаб холста, чтобы не толстели при приближении
 local ICON = "Interface\\AddOns\\MountSheetSync\\Media\\Icon"
 local DOT = "Interface\\COMMON\\Indicator-Gray"
+local GATE_RAID = "Interface\\Minimap\\Raid"
+local GATE_DUNGEON = "Interface\\Minimap\\Dungeon"
+local GATE_SIZE = 22
 
 local overlay, button, provider
 local lines, dots = {}, {}
@@ -142,6 +145,8 @@ function ns.RouteShown(mapID, mount)
   return state and state[mount] == true or false
 end
 
+local gates = {}   -- значки входов в рейды и подземелья из «Осталось» этого персонажа
+
 local function HideAll()
   for _, line in ipairs(lines) do
     line:Hide()
@@ -149,7 +154,96 @@ local function HideAll()
   for _, dot in ipairs(dots) do
     dot:Hide()
   end
+  for _, gate in ipairs(gates) do
+    gate:Hide()
+  end
   shownMap = nil
+end
+
+---------------------------------------------------------------------------
+-- Входы из «Осталось»: где на этой карте рейды и подземелья, в которых у персонажа ещё есть что убить
+---------------------------------------------------------------------------
+-- Точка входа (Entrances.lua, 0–1 на карте зоны) на открытой карте: та же карта или карта выше (материк, мир).
+local function OnThisMap(entrance, mapID)
+  if entrance.map == mapID then
+    return entrance.x, entrance.y
+  end
+  if not (C_Map and C_Map.GetMapRectOnMap) then
+    return nil
+  end
+  local ok, minX, maxX, minY, maxY = pcall(C_Map.GetMapRectOnMap, entrance.map, mapID)
+  if not (ok and type(minX) == "number" and type(maxY) == "number" and maxX > minX and maxY > minY) then
+    return nil
+  end
+  return minX + entrance.x * (maxX - minX), minY + entrance.y * (maxY - minY)
+end
+
+-- { { x, y, place, rows = { "Босс - маунт", … }, raid } } — по входу на подземелье, где ещё что-то осталось.
+function ns.EntrancePins(mapID)
+  local out = {}
+  if not (mapID and ns.ENTRANCES and ns.GetRemaining and ns.ItemInstance) then
+    return out
+  end
+  local ok, r = pcall(ns.GetRemaining)
+  if not ok or type(r) ~= "table" or r.state ~= "ok" or type(r.items) ~= "table" then
+    return out
+  end
+  local byInstance = {}
+  for _, e in ipairs(r.items) do
+    local item = e.item
+    if not e.done and type(item) == "table" and (item.kind == "raid" or item.kind == "dungeon") then
+      local found, instance = pcall(ns.ItemInstance, item)
+      local entrance = found and instance and ns.ENTRANCES[instance]
+      if entrance and entrance.x then
+        local pin = byInstance[instance]
+        if not pin then
+          local x, y = OnThisMap(entrance, mapID)
+          if x then
+            pin = { x = x, y = y, place = ns.Shown(item, "place"), rows = {}, raid = item.kind == "raid" }
+            byInstance[instance] = pin
+            out[#out + 1] = pin
+          else
+            byInstance[instance] = false
+          end
+        end
+        if pin and #pin.rows < 12 then
+          pin.rows[#pin.rows + 1] = tostring(ns.Shown(item, "boss") or "?") .. " - " .. tostring(ns.Shown(item, "mount") or "?")
+        end
+      end
+    end
+  end
+  return out
+end
+
+function ns.EntrancesShown()
+  local db = ns.GetDB()
+  return db and db.mapEntrances == true or false
+end
+
+local function GateEnter(self)
+  GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+  GameTooltip:SetText(tostring(self.pin.place or "?"), 1, 0.82, 0)
+  GameTooltip:AddLine(L.map_gates_left, 0.8, 0.8, 0.8, true)
+  for _, row in ipairs(self.pin.rows) do
+    GameTooltip:AddLine(row, 1, 1, 1, true)
+  end
+  GameTooltip:Show()
+end
+
+local function Gate(i)
+  if not gates[i] then
+    local f = CreateFrame("Frame", nil, overlay)
+    f.tex = f:CreateTexture(nil, "OVERLAY")
+    f.tex:SetAllPoints(f)
+    if f.SetMouseClickEnabled then
+      f:EnableMouse(true)
+      f:SetMouseClickEnabled(false)
+      f:SetScript("OnEnter", GateEnter)
+      f:SetScript("OnLeave", function() GameTooltip:Hide() end)
+    end
+    gates[i] = f
+  end
+  return gates[i]
 end
 
 local function Line(i)
@@ -238,8 +332,28 @@ local function Refresh()
   HideAll()
   local mapID = MapID()
   local entries = ns.RouteEntries(mapID)
+  local pins = ns.EntrancePins(mapID)
   local state = mapID and State(mapID)
   local any = false
+  if #pins > 0 and ns.EntrancesShown() then
+    any = true
+    local canvas = overlay:GetParent()
+    local width, height = canvas:GetWidth(), canvas:GetHeight()
+    local scale = canvas:GetScale()
+    if not scale or scale <= 0 then
+      scale = 1
+    end
+    for i, pin in ipairs(pins) do
+      local gate = Gate(i)
+      gate.pin = pin
+      gate.tex:SetTexture(pin.raid and GATE_RAID or GATE_DUNGEON)
+      gate:SetSize(GATE_SIZE / scale, GATE_SIZE / scale)
+      gate:ClearAllPoints()
+      gate:SetPoint("CENTER", overlay, "TOPLEFT", pin.x * width, -pin.y * height)
+      gate:Show()
+    end
+    shownMap = mapID
+  end
   if #entries > 0 then
     local canvas = overlay:GetParent()
     local width, height = canvas:GetWidth(), canvas:GetHeight()
@@ -293,7 +407,7 @@ local function Refresh()
     end
     shownMap = mapID
   end
-  button:SetShown(#entries > 0)
+  button:SetShown(#entries > 0 or #pins > 0)
   button.icon:SetDesaturated(not any)
   button.icon:SetAlpha(any and 1 or 0.75)
 end
@@ -312,7 +426,32 @@ end
 local function OnClick(self)
   local mapID = MapID()
   local entries = ns.RouteEntries(mapID)
-  if #entries == 0 then
+  local pins = ns.EntrancePins(mapID)
+  if #entries == 0 and #pins == 0 then
+    return
+  end
+  if #pins > 0 then
+    -- на карте есть входы из «Осталось»: всегда список — входы отдельной галочкой (общей для всех карт), потом маунты
+    MenuUtil.CreateContextMenu(self, function(_, root)
+      root:CreateTitle(L.map_routes_title)
+      root:CreateCheckbox(L.map_gates, function()
+        return ns.EntrancesShown()
+      end, function()
+        local db = ns.GetDB()
+        if db then
+          db.mapEntrances = not ns.EntrancesShown() or nil
+        end
+        Refresh()
+      end)
+      for _, e in ipairs(entries) do
+        local mount = e.mount
+        root:CreateCheckbox(MountName(mount), function()
+          return ns.RouteShown(mapID, mount)
+        end, function()
+          ns.SetRouteShown(mapID, mount, not ns.RouteShown(mapID, mount))
+        end)
+      end
+    end)
     return
   end
   if #entries == 1 then

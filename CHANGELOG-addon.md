@@ -3,6 +3,9 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.7
+- World map: the same icon can also show the entrances of the raids and dungeons this character still has to do this week, with what is left in each (its own tick in the icon's list).
+- On login, one chat line: how much this character has left this week and where to start (a setting turns it off).
+- The head of “Remaining” says how long until the weekly reset.
 - Farming tips in German, French, Spanish and Portuguese for every mount (before, only the rares had them; the rest were in English).
 - Russian farming tips no longer mix in English words (“Mythic-only”, “Achievement-run”, boss and mount names): about a hundred tips are rewritten.
 - A bonus roll after a world boss now counts as one more attempt for its mount, as Rarity does; the “Attempts” tab says how many of them were bonus rolls.
