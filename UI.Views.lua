@@ -139,6 +139,7 @@ end
 local function WithPlace(elem, item)
   elem.farmTip = ns.FarmTip(item.id)
   elem.instance = ns.ItemInstance(item)
+  elem.anchorTip = ns.AnchorTip(elem.instance)
   elem.encounter = tonumber(item.je)
   elem.world = item.kind == "world" or nil
   elem.spot = item.kind == "rare" and ns.RARE_SPOTS and ns.RARE_SPOTS[tonumber(item.id)] or nil
@@ -240,7 +241,7 @@ local function RemainingView(r, own)
     list[#list + 1] = Line("|cff8cff8c" .. L.left_alldone .. "|r")
   end
   return { list = list, cols = LeftColumns(),
-    summary = "|cff8c8c8c" .. string.format(L.left_head, r.left, r.total, ns.FormatWhen(r.generated)) .. ResetIn() .. "|r" }
+    summary = "|cff8c8c8c" .. string.format(L.left_head, r.left, r.total, ns.FormatWhen(r.generated)) .. ResetIn() .. (ns.HolidayHead and ns.HolidayHead() or "") .. "|r" }
 end
 
 -- Вкладка «Достижения»: достижение (щелчок — открыть его), условие, маунт. Полученное — серое и внизу. Попыток у них нет.

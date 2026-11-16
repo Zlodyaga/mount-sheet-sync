@@ -16,7 +16,7 @@ local SETTINGS_NAME = "MountSheetSyncSettingsFrame"
 local settingsFrame
 local languageButtons = {}
 local settingsQuiet, settingsMinimap
-local alertRarityCheck, showOffCheck
+local alertRarityCheck, showOffCheck, tellGroupCheck, tellGuildCheck
 local defaultOn = {}   -- галочки «включено, пока не выключили»: { check, поле db }
 local gridButtons = {}
 local detailsButtons = {}
@@ -37,6 +37,8 @@ local function RefreshSettings()
     c.check:SetChecked(not (db and db[c.field] == false))
   end
   alertRarityCheck:SetChecked(db and db.alertRarity and true or false)
+  tellGroupCheck:SetChecked(db and db.tellGroup and true or false)
+  tellGuildCheck:SetChecked(db and db.tellGuild and true or false)
   showOffCheck:SetChecked(db and db.showOff and true or false)
   for _, b in ipairs(gridButtons) do
     b:SetChecked(b.view == (db and db.gridView or "scroll"))
@@ -218,7 +220,7 @@ local function CreateSettings()
   for _, code in ipairs(ns.LANGUAGES) do
     codes[#codes + 1] = code
   end
-  local height = math.max(424, 62 + #codes * 24 + 98 + 44 + 138)
+  local height = math.max(500, 62 + #codes * 24 + 98 + 44 + 138)   -- справа до -474 (галочки «в группу / в гильдию»)
   settingsFrame = Skin.Window(SETTINGS_NAME, 620, height, "DIALOG")
   settingsFrame:SetPoint("CENTER", 0, 60)
   local function title()
@@ -315,6 +317,21 @@ local function CreateSettings()
   DefaultOnCheck(settingsFrame, -354, "settings_mapzeroth", "mapzeroth", "tip_mapzeroth")
   local tipsCheck = DefaultOnCheck(settingsFrame, -378, "settings_tips", "tips", "tip_settings_tips")
   DefaultOnCheck(settingsFrame, -402, "settings_login", "loginNote", "tip_settings_login")
+  -- о выпавшем маунте — в группу и в гильдию (Alert.lua, ns.TellDrop): каждое своей галочкой, по умолчанию выключено
+  tellGroupCheck = SettingsCheck(settingsFrame, -426, "settings_tell_group", function(self)
+    local db = ns.GetDB()
+    if db then
+      db.tellGroup = self:GetChecked() and true or nil
+    end
+  end)
+  AttachTooltip(tellGroupCheck, "settings_tell_group", "tip_settings_tell")
+  tellGuildCheck = SettingsCheck(settingsFrame, -450, "settings_tell_guild", function(self)
+    local db = ns.GetDB()
+    if db then
+      db.tellGuild = self:GetChecked() and true or nil
+    end
+  end)
+  AttachTooltip(tellGuildCheck, "settings_tell_guild", "tip_settings_tell")
   tipsCheck:HookScript("OnClick", function()
     if S.frame and S.frame:IsShown() then
       UI.Refresh(true)

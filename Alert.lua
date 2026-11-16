@@ -131,6 +131,33 @@ local function OnUpdate(self)
 end
 
 --- Показать оповещение. info = { name, icon, n (попыток), p (шанс 0..1), left (сколько было в списке несобранных) }.
+-- Сообщение о выпавшем маунте в группу и в гильдию (3.0.7): каждое — своей галочкой (db.tellGroup, db.tellGuild),
+-- по умолчанию выключены. Только при настоящем выпадении (не /mss drop). Текст — на языке аддона, без цветов.
+-- Возвращает, в сколько каналов ушло.
+function ns.TellDrop(name, n)
+  local db = ns.GetDB and ns.GetDB()
+  local send = (C_ChatInfo and C_ChatInfo.SendChatMessage) or SendChatMessage
+  if type(db) ~= "table" or not (db.tellGroup or db.tellGuild) or not send or type(name) ~= "string" or name == "" then
+    return 0
+  end
+  n = tonumber(n) or 0
+  local text = n > 0 and string.format(L.tell_drop_n, name, n) or string.format(L.tell_drop, name)
+  local sent = 0
+  if db.tellGroup and IsInGroup and IsInGroup() then
+    local channel = IsInRaid and IsInRaid() and "RAID" or "PARTY"
+    if LE_PARTY_CATEGORY_INSTANCE and IsInGroup(LE_PARTY_CATEGORY_INSTANCE) and not IsInGroup(LE_PARTY_CATEGORY_HOME) then
+      channel = "INSTANCE_CHAT"   -- группа поиска: «группа» и «рейд» там не доходят
+    end
+    if pcall(send, text, channel) then
+      sent = sent + 1
+    end
+  end
+  if db.tellGuild and IsInGuild and IsInGuild() and pcall(send, text, "GUILD") then
+    sent = sent + 1
+  end
+  return sent
+end
+
 function ns.ShowDrop(info)
   if type(info) ~= "table" or not info.name then
     return false

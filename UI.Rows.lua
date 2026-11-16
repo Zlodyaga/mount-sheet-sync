@@ -178,6 +178,9 @@ local function ShowRowTooltip(button, event)
     if elem.farmTip then
       GameTooltip:AddLine(elem.farmTip, 0.72, 0.85, 0.72, true)   -- совет по фарму из каталога (Tips.lua)
     end
+    if elem.anchorTip then
+      GameTooltip:AddLine(elem.anchorTip, 0.62, 0.76, 0.9, true)   -- пропуск через чужое сохранение (ns.ANCHOR_RAIDS)
+    end
     -- что делают щелчки: одинаково на каждой строке, поэтому под Alt (одна строка — показываем сразу)
     local help = {}
     if elem.instance then

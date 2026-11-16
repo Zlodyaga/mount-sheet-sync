@@ -870,6 +870,20 @@ end
 
 -- Совет по фарму из каталога (Tips.lua) на языке аддона; нет на нём — по-английски, потом по-русски.
 -- Выключается в настройках (db.tips == false).
+-- Пропуск боссов через чужое сохранение (Icy Veins, 07.2025; игроки, не Blizzard): персонаж с продлённым сохранением
+-- собирает группу, альт заходит к нему и сразу идёт к нужному боссу. По сообщениям работает в этих рейдах (номера
+-- путеводителя); в Душе Дракона — нет. ЦЛК — свой порядок (хранитель на 25 обычном, альт на 25 героическом).
+ns.ANCHOR_RAIDS = { [758] = "icc", [759] = true, [786] = true, [1176] = true, [1194] = true }
+
+function ns.AnchorTip(instance)
+  local kind = tonumber(instance) and ns.ANCHOR_RAIDS[tonumber(instance)]
+  local db = MountSheetSyncDB
+  if not kind or (type(db) == "table" and db.tips == false) then
+    return nil
+  end
+  return kind == "icc" and L.anchor_tip_icc or L.anchor_tip
+end
+
 function ns.FarmTip(id)
   id = tonumber(id)
   local all = ns.FARM_TIPS

@@ -163,8 +163,12 @@ check("long French button text: the button grows", scan and scan[0]._w > 156, sc
 # ---------------------------------------------------------------- 5. quiet and minimap in the settings
 q = [r for r in [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)]
      if r._type == "CheckButton" and r._parent is not None and r._parent._uid == sf._uid and rg(r, "code") is None and rg(r, "view") is None and rg(r, "details") is None]
-check("nine ticks, in the order of the window: rows nobody farms, the drop notice, its sound, not with Rarity, chat messages, minimap button, Mapzeroth, farming tips, the login line (3.0.7)",
-      len(q) == 9, len(q))
+check("eleven ticks, in the order of the window: rows nobody farms, the drop notice, its sound, not with Rarity, chat messages, minimap button, Mapzeroth, farming tips, the login line, tell the group, tell the guild (3.0.7)",
+      len(q) == 11, len(q))
+check("…the drop is told to the group / guild only when turned on: both start unticked", not q[9].GetChecked(q[9]) and not q[10].GetChecked(q[10]))
+q[10].MockClick(q[10])
+check("…the guild tick alone: tellGuild, the group stays off", g.MountSheetSyncDB.tellGuild is True and g.MountSheetSyncDB.tellGroup is None)
+q[10].MockClick(q[10])
 q[0].MockClick(q[0])
 check("«show rows nobody farms» from the settings: remembered", g.MountSheetSyncDB.showOff is True)
 q[0].MockClick(q[0])

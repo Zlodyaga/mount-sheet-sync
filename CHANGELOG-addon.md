@@ -3,6 +3,9 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.7
+- Raids where a boss skip through another character's saved lockout is reported to work (ICC, Ulduar, the Nighthold, Battle of Dazar'alor, Tazavesh): one line about it in the row tooltip.
+- When a mount from the list drops, one line can go to the group and/or guild chat — two settings, both off by default.
+- Holiday mounts (the Headless Horseman, Coren Direbrew, Apothecary Hummel): while the holiday is on and a mount is missing, a line on login and in the head of “Remaining”.
 - /mss rarity copies attempt counts from Rarity (or Rarity: Collector's Edition) where Rarity has more; it shows the list first, /mss rarity ok copies. The same as a From Rarity button on the Attempts tab; one chat line on login says when there is something to copy. On Dropped, mounts collected earlier get the attempt of the drop from Rarity where the sheet has none.
 - World map: the same icon can also show the entrances of the raids and dungeons this character still has to do this week, with what is left in each (its own tick in the icon's list).
 - On login, one chat line: how much this character has left this week and where to start (a setting turns it off).

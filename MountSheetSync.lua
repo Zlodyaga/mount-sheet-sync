@@ -756,6 +756,9 @@ local function OnMountAdded(mountID)
     if ns.ShowDrop then
       SafeCall(ns.ShowDrop, drop)
     end
+    if ns.TellDrop then
+      SafeCall(ns.TellDrop, name, drop.n)   -- в группу / гильдию — только если игрок включил (настройки)
+    end
   end
 end
 
@@ -1176,6 +1179,7 @@ frame:SetScript("OnEvent", function(self, event, ...)
     C_Timer.After(3, RequestLockouts)
     C_Timer.After(8, function() SafeCall(LoginNote) end)   -- после сохранений: список уже учитывает их
     C_Timer.After(10, function() SafeCall(ns.RarityHint or function() end) end)   -- один раз: можно взять попытки из Rarity
+    C_Timer.After(12, function() SafeCall(ns.HolidayNote or function() end) end)   -- идёт праздник с маунтом (Holidays.lua)
   elseif event == "ENCOUNTER_END" then
     local encounterID, encounterName, difficultyID, groupSize, success = ...
     if not issecretvalue(success) and (success == 1 or success == true) then
