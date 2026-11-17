@@ -413,6 +413,79 @@ namespace MountSheetSync
         }
 
         // ------------------------------------------------------------------
+        // Новый маунт → строка на листе «Выпавшие маунты» (вид таблицы 7)
+        // ------------------------------------------------------------------
+
+        /// <summary>
+        /// Дописать выпавшего маунта на лист «Выпавшие маунты»: дата, маунт, босс, сколько было попыток и шанс за все попытки
+        /// на тот момент. Маунт на листе уже есть — ничего (повтор записи). Листа нет или его колонки поменяли — ничего.
+        /// Любая ошибка здесь не должна мешать отметке «Собрано?», поэтому она только пишется в журнал. true — строка дописана.
+        /// batch — копить запросы Google сюда (вызывающий отправит их одним пакетом); null — отправить сразу.
+        /// </summary>
+        public static bool AddDropRow(IBook book, double stamp, string mount, string boss, double attempts, double p, List<object> batch)
+        {
+            try
+            {
+                SheetEntry entry = ByName(book, SheetBuilder.DropsSheet);
+                if (entry == null || entry.Data.Count == 0 || mount == null || mount.Trim().Length == 0)
+                {
+                    return false;
+                }
+                object[] header = entry.Data[0];
+                string[] want = SheetBuilder.DropsHeader;
+                if (header.Length < want.Length || want.Where((h, i) => Norm(StripNote(header[i])) != Norm(h)).Any())
+                {
+                    return false;   // колонки правили руками — в чужие колонки не пишем
+                }
+                int cMount = Array.IndexOf(want, "Маунт");
+                if (entry.Data.Skip(1).Any(r => Norm(At(r, cMount)) == Norm(mount)))
+                {
+                    return false;
+                }
+                string date = stamp > 0
+                    ? new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(stamp).ToLocalTime().ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
+                    : "";
+                object[] row = Enumerable.Repeat((object)"", header.Length).ToArray();
+                row[0] = date;
+                row[1] = mount;
+                row[2] = boss ?? "";
+                row[3] = attempts >= 0 ? (object)attempts : "";
+                // шанс получить маунт хотя бы раз за столько попыток: 1 - (1 - p)^n
+                row[4] = attempts > 0 && p > 0 && p < 1 ? (object)Math.Round(1 - Math.Pow(1 - p, attempts), 4) : "";
+                int at = entry.Data.Count;
+                IStructuredBook structured = book as IStructuredBook;
+                if (structured != null)
+                {
+                    List<object> req = batch ?? new List<object>();
+                    SheetBuilder.AppendDrop(req, (int)entry.SheetId, at, row);
+                    if (batch == null)
+                    {
+                        structured.Apply(req, null, null);
+                    }
+                    entry.Data.Add(row);
+                }
+                else
+                {
+                    entry.Data.Add(Enumerable.Repeat((object)"", header.Length).ToArray());
+                    for (int c = 0; c < want.Length; c++)
+                    {
+                        book.Set(entry, at, c, row[c]);
+                    }
+                }
+                return true;
+            }
+            catch (Exception ex)
+            {
+                if (ex is OutOfMemoryException)
+                {
+                    throw;
+                }
+                Log.Quiet("AddDropRow: the «Выпавшие маунты» sheet", ex);
+                return false;
+            }
+        }
+
+        // ------------------------------------------------------------------
         // Новый маунт → «Собрано?»
         // ------------------------------------------------------------------
 
@@ -422,6 +495,8 @@ namespace MountSheetSync
             string name = Truthy(J.Get(kill, "mount")) ? JsString(J.Get(kill, "mount")) : JsString(J.Get(kill, "boss"));
             string from = JsString(J.Get(kill, "from"));
             List<object> cells = (List<object>)o["cells"];
+            string dropMount = null, dropBoss = "";
+            double dropAttempts = -1, dropP = 0;
             foreach (SheetEntry entry in book.Entries)
             {
                 List<object[]> data = entry.Data;
@@ -467,7 +542,28 @@ namespace MountSheetSync
                         continue;
                     }
                     cells.Add(CellInfo(entry, r, Truthy(row[cMount]) ? JsString(row[cMount]) : "", changed));
+                    // для листа «Выпавшие маунты»: как маунт и босс названы в таблице и сколько было попыток
+                    if (dropMount == null)
+                    {
+                        dropMount = JsString(row[cMount]);
+                        dropBoss = cBoss >= 0 ? JsString(row[cBoss]) : "";
+                    }
+                    int cDropChance = FindCol(header, DropPattern, -1);
+                    if (dropP <= 0 && cDropChance >= 0)
+                    {
+                        dropP = DropChance(row[cDropChance]);
+                    }
+                    int cAttempts = FindCol(header, AttemptsPattern, -1);
+                    double n;
+                    if (cAttempts >= 0 && !entry.Formulas.Contains(Key(r, cAttempts)) && AttemptCount(row[cAttempts], out n) && n > dropAttempts)
+                    {
+                        dropAttempts = n;
+                    }
                 }
+            }
+            if (dropMount != null && dropP > 0)   // только маунт со случайной добычей: не награда за достижение или седло
+            {
+                AddDropRow(book, Number(J.Get(kill, "time")), dropMount, dropBoss, dropAttempts, dropP, null);
             }
             if (cells.Any(c => (bool)((Dictionary<string, object>)c)["changed"]))
             {

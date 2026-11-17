@@ -899,3 +899,10 @@ de: Die Tabelle „{0}“ ist angelegt; das Programm führt sie ab jetzt.
 fr: La feuille « {0} » est créée ; le programme la tient désormais.
 es: La hoja «{0}» está creada; el programa la lleva desde ahora.
 pt: A planilha “{0}” foi criada; o programa passa a mantê-la.
+
+@ на лист «Выпавшие маунты»: {0}
+en: to the “Dropped Mounts” sheet: {0}
+de: auf das Blatt „Erhaltene Reittiere“: {0}
+fr: sur la feuille « Montures obtenues » : {0}
+es: a la hoja «Monturas obtenidas»: {0}
+pt: na planilha “Montarias obtidas”: {0}

@@ -12,7 +12,7 @@ bash tools/build_test_exe.sh "$EXE" || exit 1
 bash tools/cs_host/build.sh || exit 1
 python3 tools/i18n/build.py --check || exit 1
 python3 tools/i18n/build_sheet.py --check || exit 1
-python3 tools/catalog/routes.py || exit 1             # Routes.lua matches tools/catalog/rares/routes.json
+python3 tools/catalog/routes.py || exit 1             # (place names: rares/place_names.json from place_names.py)             # Routes.lua matches tools/catalog/rares/routes.json
 python3 tools/catalog/tips.py || exit 1               # Tips.lua matches the catalog's farming tips
 python3 tools/catalog/statistic_ids.py || exit 1   # catalog «ID статистики» and Statistics.lua match the list
 cd tools/tests
@@ -31,9 +31,18 @@ run() {
 run test_addon2.py
 run test_addon_left.py
 run test_addon_drops.py
+run test_addon_plan_menu.py
+run test_addon_speed.py
 run test_addon_farm.py
 run test_addon_npc.py
 run test_addon_map.py
+run test_addon_coin.py
+run test_addon_login.py
+run test_addon_rarity.py
+run test_addon_extras.py
+run test_addon_runs.py
+run test_layout7.py
+run test_routes_from_probe.py
 run test_minimap.py
 run test_offline.py
 run test_attempts_addon.py

@@ -455,6 +455,7 @@ for _, ch in ipairs(MountSheetSyncSheet.chars) do
   if ch.name == "Эйра" then RARE_ITEM = it end
 end
 MountSheetSyncSheet._hasRare = nil
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1   -- a changed list comes with a new stamp (the login line has cached the old one)
 for _, m in ipairs(MountSheetSyncSheet.mounts) do
   if m.mount == "Дракон Четырех Ветров" then m.kind = "rare" end
 end

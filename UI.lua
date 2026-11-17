@@ -212,6 +212,19 @@ local function ConfirmClear()
     end)
 end
 
+-- Кнопка «Из Rarity» вкладки «Попытки» (Import.lua): список — в чат, перенос — после подтверждения.
+function UI.ConfirmRarity()
+  local plan = ns.RarityPlan and ns.RarityPlan()
+  ns.RarityImport(false)
+  if plan and #plan > 0 then
+    Confirm(string.format(L.confirm_rarity, #plan), L.confirm_rarity_button,
+      function()
+        ns.RarityImport(true)
+        UI.Refresh()
+      end)
+  end
+end
+
 local function SubmitManual()
   local text = S.editBox:GetText()
   if ns.AddManual(text) then

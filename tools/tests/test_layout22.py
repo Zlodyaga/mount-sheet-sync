@@ -58,8 +58,8 @@ OLD = [
 
 # ---------------------------------------------------------------- upgrade 2.0/2.1 → 2.2
 up = run({"catalog": None, "sheets": OLD, "mode": "upgrade"})
-check("upgrade ran once, layout=6 stored in the same batch", up["changed"] is True and up["properties"].get("layout") == "6"
-      and len(up["applied"]) == 1 and "apply" in up["structure"][0] and "layout=6" in up["structure"][0], up["structure"])
+check("upgrade ran once, layout=7 stored in the same batch", up["changed"] is True and up["properties"].get("layout") == "7"
+      and len(up["applied"]) == 1 and "apply" in up["structure"][0] and "layout=7" in up["structure"][0], up["structure"])
 reqs = up["applied"][0]
 cf = [r["addConditionalFormatRule"]["rule"] for r in reqs if "addConditionalFormatRule" in r]
 texteq = [(c["ranges"][0]["sheetId"], c["ranges"][0]["startColumnIndex"], c["booleanRule"]["condition"]["values"][0]["userEnteredValue"])
@@ -84,7 +84,7 @@ check("checkbox validation on the new column", all(v["rule"]["condition"]["type"
 left = [r["updateCells"] for r in reqs if "updateCells" in r and r["updateCells"].get("start", {}).get("sheetId") == ids["Рейды"]]
 f = left[0]["rows"][0]["values"][0]["userEnteredValue"]["formulaValue"] if left else ""
 check("«Осталось попыток выбить» counts only rows ticked «Фармлю»", "COUNTIFS('Рейды Эйра'!D:D, m, 'Рейды Эйра'!A:A, \"Нет\", 'Рейды Эйра'!H:H, TRUE)" in f, f)
-again = run({"catalog": None, "sheets": up["sheets"], "mode": "upgrade", "properties": {"layout": "6"}})
+again = run({"catalog": None, "sheets": up["sheets"], "mode": "upgrade", "properties": {"layout": "7"}})
 check("already current: nothing to do", again["changed"] is False and again["applied"] == [])
 mixed = copy.deepcopy(OLD)
 mixed[1]["rows"][0].append("Фармлю")

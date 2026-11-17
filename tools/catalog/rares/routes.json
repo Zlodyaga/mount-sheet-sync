@@ -84,7 +84,8 @@
       52,
       34
      ]
-    ]
+    ],
+    "place": 4273
    },
    {
     "name": "Frozen Lake",
@@ -145,7 +146,8 @@
       31,
       69
      ]
-    ]
+    ],
+    "place": 0
    },
    {
     "name": "Waterfall",
@@ -190,7 +192,8 @@
       35,
       76
      ]
-    ]
+    ],
+    "place": 0
    },
    {
     "name": "Brunnhildar",
@@ -239,7 +242,8 @@
       51,
       70
      ]
-    ]
+    ],
+    "place": 4422
    }
   ]
  },
@@ -312,7 +316,8 @@
       60.6,
       74.8
      ]
-    ]
+    ],
+    "place": 0
    },
    {
     "name": "Night Fae",
@@ -373,7 +378,8 @@
       56.7,
       86.7
      ]
-    ]
+    ],
+    "place": 13599
    },
    {
     "name": "Necrolord",
@@ -394,7 +400,8 @@
       35.0,
       53.4
      ]
-    ]
+    ],
+    "place": 13598
    }
   ]
  },
@@ -456,6 +463,13 @@
     63.6,
     80.4
    ]
+  ],
+  "places": [
+   6869,
+   0,
+   0,
+   6775,
+   6779
   ]
  },
  {
@@ -512,6 +526,13 @@
     28.3,
     60.2
    ]
+  ],
+  "places": [
+   13624,
+   13626,
+   0,
+   13631,
+   13700
   ]
  },
  {
@@ -900,6 +921,12 @@
     40.0,
     67.8
    ]
+  ],
+  "places": [
+   0,
+   4966,
+   4963,
+   4967
   ]
  },
  {
@@ -912,6 +939,9 @@
     41.4,
     76.3
    ]
+  ],
+  "places": [
+   4974
   ]
  },
  {
@@ -1052,6 +1082,260 @@
     64.6,
     51.5
    ]
+  ]
+ },
+ {
+  "npc": 203625,
+  "map": 2133,
+  "name": "Karokta",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    42.2,
+    65.5
+   ]
+  ]
+ },
+ {
+  "npc": 234845,
+  "map": 2371,
+  "name": "Sthaarbs",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    74.0,
+    32.5
+   ]
+  ]
+ },
+ {
+  "npc": 232195,
+  "map": 2371,
+  "name": "Urmag",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    70.0,
+    49.6
+   ]
+  ]
+ },
+ {
+  "npc": 195353,
+  "map": 2024,
+  "name": "Breezebiter",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    27.7,
+    46.2
+   ]
+  ]
+ },
+ {
+  "npc": 142741,
+  "map": 14,
+  "name": "Doomrider Helgrim",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    53.4,
+    57.6
+   ]
+  ]
+ },
+ {
+  "npc": 142739,
+  "map": 14,
+  "name": "Knight-Captain Aldrin",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    48.8,
+    40.1
+   ]
+  ]
+ },
+ {
+  "npc": 149652,
+  "map": 62,
+  "name": "Agathe Wyrmwood / Blackpaw",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    49.5,
+    24.9
+   ]
+  ]
+ },
+ {
+  "npc": 149655,
+  "map": 62,
+  "name": "Croz Bloodrage",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    50.5,
+    32.5
+   ]
+  ],
+  "faction": "Alliance"
+ },
+ {
+  "npc": 149663,
+  "map": 62,
+  "name": "Shadowclaw",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    39.6,
+    33.1
+   ]
+  ],
+  "faction": "Horde"
+ },
+ {
+  "npc": 147701,
+  "map": 62,
+  "name": "Moxo the Beheader",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    64.9,
+    19.6
+   ]
+  ],
+  "faction": "Alliance"
+ },
+ {
+  "npc": 148037,
+  "map": 62,
+  "name": "Athil Dewfire",
+  "source": "Wowhead NPC map (player sightings): one tight spot",
+  "spawns": [
+   [
+    41.1,
+    75.0
+   ]
+  ],
+  "faction": "Horde"
+ },
+ {
+  "npc": 73167,
+  "map": 554,
+  "name": "Huolon",
+  "source": "where it is pulled down: the bridge by the Blazing Way - 67, 60 (rpgradar.com mounts guide); Wowhead sightings cluster at 67.0, 58.3; its flight circuit is not mapped anywhere found",
+  "spawns": [
+   [
+    67.0,
+    59.0
+   ]
+  ],
+  "places": [
+   6825
+  ]
+ },
+ {
+  "npc": 207802,
+  "map": 2215,
+  "name": "Beledar's Spawn",
+  "source": "Wowhead NPC map (player sightings), nearby points merged into spots; appears when Beledar darkens, every 3 hours; the game itself shows where",
+  "spawns": [
+   [
+    25.8,
+    57.5
+   ],
+   [
+    32.8,
+    39.5
+   ],
+   [
+    37.0,
+    72.0
+   ],
+   [
+    37.5,
+    45.9
+   ],
+   [
+    38.5,
+    24.5
+   ],
+   [
+    42.8,
+    31.5
+   ],
+   [
+    45.2,
+    25.5
+   ],
+   [
+    47.0,
+    55.0
+   ],
+   [
+    48.8,
+    32.3
+   ],
+   [
+    50.5,
+    48.5
+   ],
+   [
+    51.4,
+    70.5
+   ],
+   [
+    54.8,
+    36.8
+   ],
+   [
+    58.0,
+    48.8
+   ],
+   [
+    58.5,
+    29.1
+   ],
+   [
+    60.5,
+    18.5
+   ],
+   [
+    61.5,
+    7.6
+   ],
+   [
+    62.5,
+    38.8
+   ],
+   [
+    68.2,
+    30.5
+   ],
+   [
+    71.8,
+    65.0
+   ],
+   [
+    72.6,
+    41.5
+   ]
+  ]
+ },
+ {
+  "npc": 219281,
+  "map": 2248,
+  "name": "Alunira",
+  "source": "Warcraft Wiki: circles the peak of Dhar Oztan, 16.8, 61.2 (its map pin); Wowhead sightings at 23.1, 58.5 are where players saw it from",
+  "spawns": [
+   [
+    16.8,
+    61.2
+   ]
+  ],
+  "places": [
+   14789
   ]
  }
 ]

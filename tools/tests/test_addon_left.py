@@ -559,10 +559,11 @@ MountSheetSyncSheet = copy""")
 tabs[2].MockClick(tabs[2]); g.RunTimers()
 check("«Попытки» with rows (for the picture): most expected drops first", ns.GetAttemptsList()[1].name == "Пламенное Крыло Алисразор", ns.GetAttemptsList()[1].name)
 rows = shown_rows()
-check("3.0.3: «Попытки» in columns: mount, boss, difficulty, attempts, chance, characters left",
-      plain(rows[0]).startswith("Пламенное Крыло Алисразор | Алисразор | N/H | ") and "%" in rows[0] and "/" in plain(rows[0]).split(" | ")[-1], rows[0])
+check("3.0.3: «Попытки» in columns: mount, boss, difficulty, attempts, chance, characters left (3.0.7: then the average run, «-» without runs)",
+      plain(rows[0]).startswith("Пламенное Крыло Алисразор | Алисразор | N/H | ") and "%" in rows[0] and "/" in plain(rows[0]).split(" | ")[-2]
+      and plain(rows[0]).split(" | ")[-1] == "-", rows[0])
 check("…a chance bar next to the number", pool(ROW)[0].barFill._shown)
-check("…the header", [str(c.text._text) for c in head_cells()] == ["Маунт", "Босс", "Слож.", "Попыток", "Шанс", "Осталось"], [str(c.text._text) for c in head_cells()])
+check("…the header", [str(c.text._text) for c in head_cells()] == ["Маунт", "Босс", "Слож.", "Попыток", "Шанс", "Осталось", "Мин."], [str(c.text._text) for c in head_cells()])
 sort_by = {str(c.text._text): c for c in head_cells()}
 sort_by["Маунт"].MockClick(sort_by["Маунт"]); g.RunTimers()
 names = [plain(t).split(" | ")[0] for t in shown_rows()]
@@ -1416,135 +1417,7 @@ g.Fire("NEW_MOUNT_ADDED", 363)
 check("no mount journal API: ignored quietly", "ошибка" not in chat_all())
 g.C_MountJournal = saved_journal
 
-# ---- «не фармлю» from the «Осталось» tab (right click on a row)
-raw = L.eval("rawget")
-tabs[0].MockClick(tabs[0]); g.RunTimers()
-
-
-def row_buttons():
-    """Rows of the main list that have the right-click menu (in list order)."""
-    return [f for f in pool(ROW) if f.elem.entry is not None]
-
-
-rb = row_buttons()
-texts = [row_text(b) for b in rb]
-check("right-click buttons only on raid/dungeon rows that are left (not headers, world bosses or ticked rows)",
-      len(rb) > 10 and all("убит" not in t for t in texts)
-      and not any("Галлеон" in t or "Налак" in t for t in texts), texts[:5])
-left0 = remaining().left
-first = None
-for i in range(1, len(remaining()["items"]) + 1):
-    it = remaining()["items"][i]
-    if not it.done and str(it.item.kind) in ("raid", "dungeon") and not it.item.sep:
-        first = it.item
-        break
-boss0, place0 = str(first.boss), str(first.place)
-btn = [b for b in rb if row_text(b).startswith(boss0)][0]
-n_kills = len(g.MountSheetSyncDB.kills)
-btn.MockClick(btn, "RightButton")
-menu = g.MENUS[len(g.MENUS)]
-items = [(str(menu["items"][i].kind), str(menu["items"][i].text)) for i in range(1, len(menu["items"]) + 1)]
-check("menu: title + «не фармлю эту строку» + «весь …»", items == [("title", boss0),
-      ("button", "Не фармлю эту строку на этом персонаже"), ("button", "Не фармлю весь «%s» на этом персонаже" % place0)], items)
-L.eval("function(b) b.cb() end")(menu["items"][2])
-rec = dict(g.MountSheetSyncDB.kills[n_kills + 1].items())
-check("record «plan»: row scope, the row's boss, mount, difficulty, place, list", rec["kind"] == "plan" and rec["scope"] == "row"
-      and rec["boss"] == boss0 and rec["list"] == str(first.kind) and rec.get("mount") == (str(first.mount) or None)
-      and rec["place"] == place0 and rec["farm"] is False and rec["char"] == "Эйра"
-      and rec["id"].startswith("P-Player-1602-0ABCDEF1-") and "weekEnd" not in rec, rec)
-r = remaining()
-check("the row is gone from «Осталось» right away", r.left == left0 - 1
-      and not any(str(r["items"][i].item.boss) == boss0 and str(r["items"][i].item.mount) == str(first.mount)
-                  for i in range(1, len(r["items"]) + 1)), r.left)
-check("chat explains and says how to undo", "не фармлю на Эйра" in chat_all() and "«Что фармить…»" in chat_all(), chat_all().split("\n")[-1])
-g.RunTimers()
-check("window refreshed, tab title updated", not any(t.startswith(boss0) for t in shown_rows())
-      and tabs[0]._text == "Осталось (%d)" % (left0 - 1), tabs[0]._text)
-# whole place
-rb = row_buttons()
-target_place = None
-for i in range(1, len(remaining()["items"]) + 1):
-    it = remaining()["items"][i]
-    if not it.done and str(it.item.kind) == "dungeon" and str(it.item.place) != place0:
-        target_place = str(it.item.place)
-        break
-dbtn = [b for b in rb if target_place and target_place in row_text(b)][0]
-dbtn.MockClick(dbtn, "RightButton")
-menu = g.MENUS[len(g.MENUS)]
-L.eval("function(b) b.cb() end")(menu["items"][3])
-r = remaining()
-check("«весь …» hides every row of that dungeon", not any(str(r["items"][i].item.place) == target_place for i in range(1, len(r["items"]) + 1))
-      and dict(g.MountSheetSyncDB.kills[len(g.MountSheetSyncDB.kills)].items())["scope"] == "place", target_place)
-hidden = g.MountSheetSyncDB.notFarmed["Player-1602-0ABCDEF1"]
-check("pending «не фармлю» kept per character until the sheet's list is newer", len(hidden) == 2)
-g.MOCK.name = "Элтара"; g.MOCK.guid = "Player-1602-0E1715"
-check("another character is not affected", remaining().total == 18)
-g.MOCK.name = "Эйра"; g.MOCK.guid = "Player-1602-0ABCDEF1"
-saved_generated = g.MountSheetSyncSheet.generated
-g.MountSheetSyncSheet.generated = NOW + 3600   # the program sent it and brought a newer list
-r = remaining()
-check("newer list from the sheet: local hiding dropped (the sheet decides now)", g.MountSheetSyncDB.notFarmed["Player-1602-0ABCDEF1"] is None
-      and any(str(r["items"][i].item.boss) == boss0 for i in range(1, len(r["items"]) + 1)))
-g.MountSheetSyncSheet.generated = saved_generated
-tabs[3].MockClick(tabs[3]); g.RunTimers()
-check("journal shows «Не фармлю» in grey", any("|cff9d9d9dНе фармлю: " + boss0 in t for t in shown_rows()), [t for t in shown_rows() if "фармлю" in t])
-check("world rows have no «не фармлю» menu", ns.AddPlan(L.table_from({"kind": "world", "boss": "Галлеон"}), "row") is False)
-
-# ---- speed: full journal + list
-L.execute("""
-local kills = MountSheetSyncDB.kills
-for i = #kills + 1, 400 do
-  kills[i] = { id = "X" .. i, boss = "Босс номер " .. i, char = "Эйра", charKey = MOCK.guid, kind = (i % 2 == 0) and "raid" or "party",
-               difficultyID = 16, weekEnd = kills[1].weekEnd, time = MOCK.now - i }
-end
-""")
-build = L.eval("""function(ns) return function()
-  return ns.BuildRemaining(MountSheetSyncSheet, ns.GetPlayer(), ns.WeekEnd(), MountSheetSyncDB.kills) end end""")(ns)
-build()   # names prepared once, like after the first refresh in the game
-t0 = time.perf_counter()
-for _ in range(20):
-    build()
-ms = (time.perf_counter() - t0) / 20 * 1000
-check("list rebuilt with 400 records of this week: %.1f ms" % ms, ms < 10)
-t0 = time.perf_counter()
-for _ in range(200):
-    ns.GetRemaining()
-ms = (time.perf_counter() - t0) / 200 * 1000
-check("unchanged journal: cached list, %.3f ms" % ms, ms < 0.5)
-
-# 3.0: many characters (the sheet's characters copied up to 20+), 400 records — the left panel and «Все персонажи»
-L.execute("""
-local chars = MountSheetSyncSheet.chars
-local n = #chars
-for k = 1, 5 do
-  for i = 1, n do
-    local c = chars[i]
-    chars[#chars + 1] = { name = c.name .. " " .. k, keys = { "copy " .. k .. " " .. i }, items = c.items }
-  end
-end
-""")
-check("speed test sheet has 20+ characters", len(g.MountSheetSyncSheet.chars) >= 20, len(g.MountSheetSyncSheet.chars))
-rebuild_all = L.eval("""function(ns) return function()
-  MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1   -- new list: caches are dropped
-  ns.GetSummary()
-  ns.GetAttemptsList()
-  return ns.GetAllRemaining() end end""")(ns)
-rebuild_all()
-t0 = time.perf_counter()
-for _ in range(10):
-    rebuild_all()
-ms = (time.perf_counter() - t0) / 10 * 1000
-check("all %d characters + summary + attempts rebuilt: %.1f ms" % (len(g.MountSheetSyncSheet.chars), ms), ms < 40)
-t0 = time.perf_counter()
-for _ in range(200):
-    ns.GetSummary()
-    ns.GetAllRemaining()
-ms = (time.perf_counter() - t0) / 200 * 1000
-check("unchanged: cached characters and summary, %.3f ms" % ms, ms < 0.5)
-win.Show(win)
-click_all()
-check("«Все персонажи» with 20+ characters: the bar under the columns", win.gridSlider._shown and win.gridSlider._max == len(g.MountSheetSyncSheet.chars) - 7, win.gridSlider._max)
-check("left panel lists them all (the ScrollBox scrolls)", len(char_rows()) == len(g.MountSheetSyncSheet.chars) + 1, len(char_rows()))
+# «не фармлю» from the «Осталось» tab: test_addon_plan_menu.py; speed: test_addon_speed.py (moved 16.11.2026)
 
 check("no Lua errors reported in chat", "ошибка" not in chat_all())
 failed = [nm for nm, ok in checks if not ok]

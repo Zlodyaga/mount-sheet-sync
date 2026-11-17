@@ -291,6 +291,9 @@ local function Describe(rec)
   if rec.kind == "reset" then
     return L.reset_week
   end
+  if rec.coin then
+    return tostring(rec.boss) .. " - " .. L.coin_roll
+  end
   if rec.difficulty then
     return string.format("%s (%s)", rec.boss, rec.difficulty)
   end
@@ -494,6 +497,80 @@ local function OnLootReady()
 end
 
 ---------------------------------------------------------------------------
+-- Бонусный бросок («монетка») после мирового босса
+---------------------------------------------------------------------------
+-- Ещё один бросок на добычу — ещё одна попытка на маунта (так считает и Rarity; отсюда были расхождения у Ша Злости,
+-- Галеона, Налака и Ундасты). Узнаём по тому, что валюта бонусного броска убыла на 1 вскоре после убийства мирового
+-- босса; попытка — вторая запись того же босса с coin = true (программа считает её как обычное убийство).
+local COIN_CURRENCIES = { [697] = true, [752] = true, [776] = true, [994] = true, [1129] = true, [1273] = true, [1580] = true }
+local COIN_WINDOW = 600
+
+local function OnCurrency(currencyID, _, change)
+  if issecretvalue(currencyID) or issecretvalue(change) then
+    return
+  end
+  if not COIN_CURRENCIES[ToNumber(currencyID) or 0] or (ToNumber(change) or 0) >= 0 then
+    return
+  end
+  local player = GetPlayer()
+  local stamp = time()
+  for i = #db.kills, 1, -1 do
+    local rec = db.kills[i]
+    if (tonumber(rec.time) or 0) < stamp - COIN_WINDOW then
+      break
+    end
+    -- последнее убийство босса этим персонажем: бросок — за него. Если это не мировой босс (рейд, подземелье) или рар
+    -- (номер «D-…», бонусного броска у раров нет) — бросок не наш, дальше назад не смотрим
+    local boss = rec.kind == "world" or rec.kind == "raid" or rec.kind == "party" or rec.kind == "scenario"
+    if rec.charKey == player.key and boss and not rec.coin then
+      if rec.kind ~= "world" or tostring(rec.id or ""):sub(1, 2) == "D-" or rec.coined then
+        return   -- бросок за рейд или подземелье, за рара не бывает; на одно убийство — один бросок
+      end
+      rec.coined = true
+      local extra = BaseRecord(player, stamp)
+      extra.id = string.format("B-%s-%d", player.key, stamp)
+      extra.boss = rec.boss
+      extra.kind = "world"
+      extra.difficultyID = 0
+      extra.weekEnd = rec.weekEnd
+      extra.coin = true
+      if AddRecord(extra) then
+        Announce(extra)
+      end
+      return
+    end
+  end
+end
+
+---------------------------------------------------------------------------
+-- Напоминание при входе: сколько осталось у этого персонажа и с чего начать (настройка «При входе — что осталось»)
+---------------------------------------------------------------------------
+local function LoginNote()
+  if db.quiet or db.loginNote == false or not ns.GetRemaining then
+    return
+  end
+  local r = ns.GetRemaining()
+  if type(r) ~= "table" or r.state ~= "ok" or (tonumber(r.total) or 0) == 0 then
+    return
+  end
+  if r.left == 0 then
+    Print(string.format(L.login_done, r.name))
+    return
+  end
+  -- первое, что ещё не убито, — рейд или подземелье (где), иначе мировой босс или рар (кто)
+  local first
+  for _, e in ipairs(r.items or {}) do
+    if not e.done and type(e.item) == "table" then
+      local where = ns.Shown(e.item, "place")
+      first = (where and where ~= "") and where or ns.Shown(e.item, "boss")
+      break
+    end
+  end
+  Print(string.format(L.login_left, r.name, r.left, r.total, tostring(first or "?")))
+end
+ns.LoginNote = LoginNote
+
+---------------------------------------------------------------------------
 -- Сохранения подземелий и мировых боссов этой недели
 ---------------------------------------------------------------------------
 local function WeekKey(kind, difficultyID, boss)
@@ -678,6 +755,9 @@ local function OnMountAdded(mountID)
     end
     if ns.ShowDrop then
       SafeCall(ns.ShowDrop, drop)
+    end
+    if ns.TellDrop then
+      SafeCall(ns.TellDrop, name, drop.n)   -- в группу / гильдию — только если игрок включил (настройки)
     end
   end
 end
@@ -910,7 +990,7 @@ function ns.CountThisWeek()
   local count = 0
   if weekEnd and db then
     for _, rec in ipairs(db.kills) do
-      if rec.weekEnd == weekEnd and rec.kind ~= "reset" and rec.kind ~= "mount" then
+      if rec.weekEnd == weekEnd and rec.kind ~= "reset" and rec.kind ~= "mount" and not rec.coin then
         count = count + 1
       end
     end
@@ -944,6 +1024,7 @@ local function ShowHelp()
     CMD .. "/mss sync|r — " .. L.help_sync,
     CMD .. "/mss left|r — " .. L.help_left,
     CMD .. "/mss drop|r — " .. L.help_drop,
+    CMD .. "/mss rarity|r — " .. L.help_rarity,
     CMD .. "/mss list|r — " .. L.help_list,
     CMD .. "/mss add " .. L.help_add_arg .. "|r — " .. L.help_add,
     CMD .. "/mss scan|r — " .. L.help_scan,
@@ -980,6 +1061,11 @@ SlashCmdList["MOUNTSHEETSYNC"] = function(msg)
     -- проверка оповещения о выпавшем маунте: выдуманное выпадение, ничего не записывается
     if ns.TestDrop then
       SafeCall(ns.TestDrop)
+    end
+  elseif cmd == "rarity" then
+    -- попытки из Rarity, где у него больше (Import.lua): без «ok» — только показать
+    if ns.RarityImport then
+      SafeCall(ns.RarityImport, rest:lower() == "ok")
     end
   elseif cmd == "tip" then
     -- проверка подсказки о боссе: пишет в чат, что видит аддон при наведении (до /reload)
@@ -1075,6 +1161,7 @@ frame:SetScript("OnEvent", function(self, event, ...)
       self:RegisterEvent("UPDATE_INSTANCE_INFO")
       self:RegisterEvent("NEW_MOUNT_ADDED")
       self:RegisterEvent("LOOT_READY")
+      self:RegisterEvent("CURRENCY_DISPLAY_UPDATE")
       self:RegisterEvent("PLAYER_TARGET_CHANGED")
       self:RegisterEvent("UPDATE_MOUSEOVER_UNIT")
       self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
@@ -1090,6 +1177,9 @@ frame:SetScript("OnEvent", function(self, event, ...)
       SafeCall(ns.RememberAccess)   -- доступ к входу, общий на аккаунт: запомнить у этого персонажа (Access.lua)
     end
     C_Timer.After(3, RequestLockouts)
+    C_Timer.After(8, function() SafeCall(LoginNote) end)   -- после сохранений: список уже учитывает их
+    C_Timer.After(10, function() SafeCall(ns.RarityHint or function() end) end)   -- один раз: можно взять попытки из Rarity
+    C_Timer.After(12, function() SafeCall(ns.HolidayNote or function() end) end)   -- идёт праздник с маунтом (Holidays.lua)
   elseif event == "ENCOUNTER_END" then
     local encounterID, encounterName, difficultyID, groupSize, success = ...
     if not issecretvalue(success) and (success == 1 or success == true) then
@@ -1100,6 +1190,8 @@ frame:SetScript("OnEvent", function(self, event, ...)
     SafeCall(OnBossKilled, encounterID, encounterName)
   elseif event == "UPDATE_INSTANCE_INFO" then
     QueueScan()
+  elseif event == "CURRENCY_DISPLAY_UPDATE" then
+    SafeCall(OnCurrency, ...)
   elseif event == "LOOT_READY" then
     SafeCall(OnLootReady)
   elseif event == "PLAYER_TARGET_CHANGED" then

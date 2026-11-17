@@ -51,6 +51,7 @@ local function AttemptsColumns()
       { key = "chance", w = 38, right = true, bold = true, label = "col_chance", sort = "p", tip = "tip_col_chance", span = CHANCE_BAR_WIDTH + COLUMN_GAP },
       { key = "bar", w = CHANCE_BAR_WIDTH },
       { key = "left", w = 56, right = true, bold = true, label = "col_left", sort = "left", tip = "tip_col_left" },
+      { key = "min", w = 40, right = true, label = "col_min", sort = "value", tip = "tip_col_min" },
     }, S.listWidth)
   end
   return attemptsCols
@@ -139,6 +140,8 @@ end
 local function WithPlace(elem, item)
   elem.farmTip = ns.FarmTip(item.id)
   elem.instance = ns.ItemInstance(item)
+  elem.anchorTip = ns.AnchorTip(elem.instance)
+  elem.runTip = ns.RunTip and ns.RunTip(elem.instance)   -- «~12 мин на заход (по 5)», по заходам игрока (Runs.lua)
   elem.encounter = tonumber(item.je)
   elem.world = item.kind == "world" or nil
   elem.spot = item.kind == "rare" and ns.RARE_SPOTS and ns.RARE_SPOTS[tonumber(item.id)] or nil
@@ -186,6 +189,19 @@ local function RemainingRow(entry, menu, stripe)
   } }, item)
 end
 
+-- « - до сброса 2 д 5 ч» для шапки «Осталось»: когда список снова станет полным.
+local function ResetIn()
+  local weekEnd = ns.WeekEnd and ns.WeekEnd()
+  if not weekEnd or not ns.FormatDuration then
+    return ""
+  end
+  local left = weekEnd - time()
+  if left <= 0 then
+    return ""
+  end
+  return " - " .. string.format(L.reset_in, ns.FormatDuration(left))
+end
+
 -- Вкладка «Осталось» у персонажа: строки «Нет» из таблицы, убитые после обновления списка — с галочкой внизу группы.
 -- own — список текущего персонажа: только у него правый щелчок «Не фармлю».
 local function RemainingView(r, own)
@@ -227,7 +243,7 @@ local function RemainingView(r, own)
     list[#list + 1] = Line("|cff8cff8c" .. L.left_alldone .. "|r")
   end
   return { list = list, cols = LeftColumns(),
-    summary = "|cff8c8c8c" .. string.format(L.left_head, r.left, r.total, ns.FormatWhen(r.generated)) .. "|r" }
+    summary = "|cff8c8c8c" .. string.format(L.left_head, r.left, r.total, ns.FormatWhen(r.generated)) .. ResetIn() .. (ns.HolidayHead and ns.HolidayHead() or "") .. "|r" }
 end
 
 -- Вкладка «Достижения»: достижение (щелчок — открыть его), условие, маунт. Полученное — серое и внизу. Попыток у них нет.
@@ -366,7 +382,7 @@ function UI.DropsView(rows)
   local cols, list = dropCols, {}
   for i, d in ipairs(rows) do
     list[#list + 1] = { cols = cols, icon = ns.MountIcon(d.id), mountID = KnownMount(d.id), stripe = i % 2 == 0,
-      tip = { Safe(d.name), Safe(d.boss) }, values = {
+      tip = { Safe(d.name), Safe(d.boss), d.rarity and "|cff8c8c8c" .. L.drops_rarity .. "|r" or nil }, values = {
         mount = "|cffc9a0ff" .. Safe(d.name) .. "|r",
         boss = Safe(d.boss),
         n = d.n and d.n > 0 and tostring(d.n) or "-",
@@ -493,8 +509,13 @@ local function AttemptsSorted(rows, st)
       out[#out + 1] = m
     end
   end
+  for _, m in ipairs(out) do
+    m.runAvg = ns.RunAverage and ns.RunAverage(ns.ItemInstance(m)) or nil   -- средний заход, секунды (Runs.lua)
+  end
   local function value(m)
-    if st.sort == "name" or st.sort == "boss" then
+    if st.sort == "value" then
+      return m.runAvg and m.p / m.runAvg or -1   -- шанс за минуту; без замеров — в конце
+    elseif st.sort == "name" or st.sort == "boss" then
       return tostring(m[st.sort] or "")
     elseif st.sort == "p" then
       return m.n * m.p
@@ -525,6 +546,9 @@ local function AttemptsView(rows, chars)
   for i, m in ipairs(sorted) do
     local count = m.n > 0 and string.format(L.boss_hint, m.n, ns.FormatChance(m.n, m.p)) or L.boss_hint_none
     local tip = { Safe(m.name), BossAndDiff(m.boss, m.diff), count }
+    if (m.coins or 0) > 0 then
+      tip[#tip + 1] = "|cff8c8c8c" .. string.format(L.attempts_coins, m.coins) .. "|r"
+    end
     if m.left > 0 then
       tip[#tip + 1] = string.format(L.boss_hint_left, m.left)
     end
@@ -540,6 +564,7 @@ local function AttemptsView(rows, chars)
       n = hasTries and tostring(m.n) or "|cff8c8c8c-|r",
       chance = "|cff" .. color .. (hasTries and ns.FormatChance(m.n, m.p) or "-") .. "|r",
       left = (m.left > 0 and "|cff7fdc7f" or "|cff8c8c8c") .. m.left .. "/" .. chars .. "|r",
+      min = m.runAvg and ("~" .. ns.RunMinutes(m.runAvg)) or "|cff8c8c8c-|r",
     } }, m)
   end
   return { list = list, cols = cols, attempts = true, count = #sorted }

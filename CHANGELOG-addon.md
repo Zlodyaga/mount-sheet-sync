@@ -3,7 +3,18 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.7
-- World map: a small icon on the right shows the routes and spawn points of rares whose mount you do not have (routes: Time-Lost Proto-Drake, Fallen Charger; spawn points: Aeonaxx, Poseidus, the Mysterious Camel Figurine, the Zandalari Warbringers, the Draenor rares, Soundless, Konthrogz). It is there only on a map that has such a rare; with several mounts on one map you pick which to show.
+- How long a run takes, from your own runs: from entering the instance to the last boss with a mount from the list. “~12 min a run (from 5)” in the row tooltip, a Min column on the Attempts tab (sorting by it: chance per minute); right-click a row > Runs: count a run in the average or delete it.
+- Raids where a boss skip through another character's saved lockout is reported to work (ICC, Ulduar, the Nighthold, Battle of Dazar'alor, Tazavesh): one line about it in the row tooltip.
+- When a mount from the list drops, one line can go to the group and/or guild chat — two settings, both off by default.
+- Holiday mounts (the Headless Horseman, Coren Direbrew, Apothecary Hummel): while the holiday is on and a mount is missing, a line on login and in the head of “Remaining”.
+- /mss rarity copies attempt counts from Rarity (or Rarity: Collector's Edition) where Rarity has more; it shows the list first, /mss rarity ok copies. The same as a From Rarity button on the Attempts tab; one chat line on login says when there is something to copy. On Dropped, mounts collected earlier get the attempt of the drop from Rarity where the sheet has none.
+- World map: the same icon can also show the entrances of the raids and dungeons this character still has to do this week, with what is left in each (its own tick in the icon's list).
+- On login, one chat line: how much this character has left this week and where to start (a setting turns it off).
+- The head of “Remaining” says how long until the weekly reset.
+- Farming tips in German, French, Spanish and Portuguese for every mount (before, only the rares had them; the rest were in English).
+- Russian farming tips no longer mix in English words (“Mythic-only”, “Achievement-run”, boss and mount names): about a hundred tips are rewritten.
+- A bonus roll after a world boss now counts as one more attempt for its mount, as Rarity does; the “Attempts” tab says how many of them were bonus rolls.
+- World map: a small icon on the right shows the routes and spawn points of rares whose mount you do not have (routes: Time-Lost Proto-Drake, Fallen Charger; spawn points: Aeonaxx, Poseidus, the Mysterious Camel Figurine, the Zandalari Warbringers, the Draenor rares, Soundless, Konthrogz and single spots of a dozen more). Hover over a spawn point to see whose it is; the Pandaria map shows the Warbringers of all its zones. It is there only on a map that has such a rare; with several mounts on one map you pick which to show.
 - Rares that share a name (the three Zandalari Warbringers) are told apart by the creature: the tooltip shows the mount of that very Warbringer, says “already collected” when you have it, and a kill no longer counts as an attempt for another Warbringer's mount.
 - Row tooltips in the window are shorter: what the clicks do and the full list of characters show while Alt is held (the key — Alt, Shift, Ctrl or “always show everything” — is in the settings); “any difficulty” is no longer written.
 - Ny'alotha's chain: the step “Return of the Black Prince” / “An Unwelcome Advisor” now has a pin — at the letter that starts it, in the port of Zuldazar or in Boralus Harbor.

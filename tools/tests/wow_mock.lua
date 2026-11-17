@@ -164,6 +164,7 @@ function Region:CreateTexture(name, layer, template, sublevel)
 end
 function Region:SetTexture(t) self._texture = t; self._color = nil end
 function Region:GetParent() return self._parent end
+function Region:SetMouseClickEnabled(v) self._mouseClick = v and true or false end
 function Region:GetScale() return self._scale or 1 end
 function Region:SetDesaturated(v) self._desaturated = v and true or false end
 function Region:CreateLine(name, layer)

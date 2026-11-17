@@ -870,6 +870,20 @@ end
 
 -- Совет по фарму из каталога (Tips.lua) на языке аддона; нет на нём — по-английски, потом по-русски.
 -- Выключается в настройках (db.tips == false).
+-- Пропуск боссов через чужое сохранение (Icy Veins, 07.2025; игроки, не Blizzard): персонаж с продлённым сохранением
+-- собирает группу, альт заходит к нему и сразу идёт к нужному боссу. По сообщениям работает в этих рейдах (номера
+-- путеводителя); в Душе Дракона — нет. ЦЛК — свой порядок (хранитель на 25 обычном, альт на 25 героическом).
+ns.ANCHOR_RAIDS = { [758] = "icc", [759] = true, [786] = true, [1176] = true, [1194] = true }
+
+function ns.AnchorTip(instance)
+  local kind = tonumber(instance) and ns.ANCHOR_RAIDS[tonumber(instance)]
+  local db = MountSheetSyncDB
+  if not kind or (type(db) == "table" and db.tips == false) then
+    return nil
+  end
+  return kind == "icc" and L.anchor_tip_icc or L.anchor_tip
+end
+
 function ns.FarmTip(id)
   id = tonumber(id)
   local all = ns.FARM_TIPS
@@ -1232,7 +1246,14 @@ function ns.GetAttemptsList()
     local p = type(m) == "table" and tonumber(m.p)
     if p and p > 0 and p < 1 and not Collected(m) then
       local n = CountNow(m, data, kills, known)
-      out[#out + 1] = { name = MountName(m), n = n, p = p, left = CharactersLeft(m, data, kills, known, weekEnd), diff = m.diff, kind = m.kind, boss = ns.Shown(m, "boss"), id = m.id, je = m.je, im = m.im, raw = m }
+      -- бонусные броски этого маунта в журнале (3.0.7): сколько из попыток — «монетки»
+      local coins = 0
+      for _, rec in ipairs(kills) do
+        if rec.coin and IsAttempt(m, rec, RecordName(rec), known) then
+          coins = coins + 1
+        end
+      end
+      out[#out + 1] = { name = MountName(m), n = n, p = p, left = CharactersLeft(m, data, kills, known, weekEnd), diff = m.diff, kind = m.kind, boss = ns.Shown(m, "boss"), id = m.id, je = m.je, im = m.im, raw = m, coins = coins }
     end
   end
   table.sort(out, function(a, b)
@@ -1287,7 +1308,8 @@ function ns.GetDrops()
     end
   end
   -- собранное раньше, чем аддон начал запоминать выпадения (data.had, программа 2.10.2): без даты и персонажа,
-  -- попытки — сколько записано в таблице
+  -- попытки — сколько записано в таблице, а где там 0 — с какой попытки выпал по Rarity (если он включён)
+  local finds = ns.RarityFinds and ns.RarityFinds() or {}
   local names = {}
   for _, d in ipairs(out) do
     names[d.name] = true
@@ -1301,7 +1323,9 @@ function ns.GetDrops()
         seen[id] = true
       end
       names[name] = true
-      out[#out + 1] = { id = id, name = name, boss = ns.Shown(m, "boss"), p = p, n = tonumber(m.n) or 0, time = 0, old = true }
+      local n = tonumber(m.n) or 0
+      local rarity = n == 0 and id and finds[id] or nil
+      out[#out + 1] = { id = id, name = name, boss = ns.Shown(m, "boss"), p = p, n = rarity or n, time = 0, old = true, rarity = rarity and true or nil }
     end
   end
   table.sort(out, function(a, b)

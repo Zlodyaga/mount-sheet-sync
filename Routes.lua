@@ -3,8 +3,31 @@
 local _, ns = ...
 
 ns.RARE_ROUTES = {
+  [14] = {
+    { mount = 1173, spawns = { 48.8, 40.1 },   -- Knight-Captain Aldrin
+      lines = { } },
+    { mount = 1174, spawns = { 53.4, 57.6 },   -- Doomrider Helgrim
+      lines = { } },
+  },
+  [62] = {
+    { mount = 1199, spawns = { 49.5, 24.9 },   -- Agathe Wyrmwood / Blackpaw
+      lines = { } },
+    { mount = 1203, spawns = { 64.9, 19.6 },   -- Moxo the Beheader
+      faction = "Alliance",   -- only this faction meets it
+      lines = { } },
+    { mount = 1203, spawns = { 41.1, 75 },   -- Athil Dewfire
+      faction = "Horde",   -- only this faction meets it
+      lines = { } },
+    { mount = 1205, spawns = { 50.5, 32.5 },   -- Croz Bloodrage
+      faction = "Alliance",   -- only this faction meets it
+      lines = { } },
+    { mount = 1205, spawns = { 39.6, 33.1 },   -- Shadowclaw
+      faction = "Horde",   -- only this faction meets it
+      lines = { } },
+  },
   [120] = {
     { mount = 265, spawns = { 52, 34, 31, 69, 35, 76, 51, 70 },   -- Time-Lost Proto-Drake
+      places = { 4273, 0, 0, 4422 },
       lines = {
         { 52, 34, 49.9, 31.2, 41.9, 31, 34.5, 32.2, 26.4, 35.2, 26.4, 42.5, 27.9, 48.3, 26, 56.9, 26.7, 62.7, 27.9, 64.6, 36, 64.4, 40.5, 56.9, 44.2, 56.2, 48.9, 51.4, 49.7, 48.8, 47.2, 40.6, 48.2, 36.8, 52, 34 },
         { 31, 69, 27.9, 64.8, 26.9, 62.2, 27.5, 56.9, 28.4, 48.3, 29.9, 41.1, 34.5, 39.7, 39.7, 41.1, 40.5, 45.9, 40.2, 53.1, 37.9, 55.2, 36, 63.7, 31, 69 },
@@ -14,10 +37,12 @@ ns.RARE_ROUTES = {
   },
   [204] = {
     { mount = 420, spawns = { 41.4, 76.3 },   -- Poseidus
+      places = { 4974 },
       lines = { } },
   },
   [205] = {
     { mount = 420, spawns = { 66.6, 41.4, 58.4, 82.2, 46.6, 50, 40, 67.8 },   -- Poseidus
+      places = { 0, 4966, 4963, 4967 },
       lines = { } },
   },
   [207] = {
@@ -66,6 +91,7 @@ ns.RARE_ROUTES = {
   },
   [525] = {
     { mount = 627, spawns = { 23.2, 65.6, 51.6, 50.4, 64.6, 52, 58.4, 19.2, 63.6, 80.4 },   -- Gorok
+      places = { 6869, 0, 0, 6775, 6779 },
       lines = { } },
   },
   [535] = {
@@ -86,12 +112,18 @@ ns.RARE_ROUTES = {
     { mount = 614, spawns = { 66.6, 43.9, 72.5, 53.7, 75.2, 31.7, 79.6, 55.7, 84.2, 63.4 },   -- Luk'hok
       lines = { } },
   },
+  [554] = {
+    { mount = 561, spawns = { 67, 59 },   -- Huolon
+      places = { 6825 },
+      lines = { } },
+  },
   [1355] = {
     { mount = 1257, spawns = { 53.7, 42.1, 56.9, 50.2, 58.1, 41.7, 62.5, 59.4, 64.6, 51.5 },   -- Soundless
       lines = { } },
   },
   [1543] = {
     { mount = 1502, spawns = { 28.3, 15.5, 17.7, 49.5, 28.1, 64.7 },   -- Fallen Charger
+      places = { 0, 13599, 13598 },
       lines = {
         { 28.3, 15.5, 33.4, 19.4, 33.8, 24.1, 36.2, 28.3, 37.5, 33.5, 41, 39.2, 43.8, 43.4, 42.6, 48.6, 46, 56.2, 47.2, 60.6, 51.4, 62.3, 59, 63.6, 62.7, 69.4, 60.6, 74.8 },
         { 17.7, 49.5, 21.6, 41.4, 25, 36.2, 32, 37.5, 32.5, 45.4, 36.2, 47.7, 35, 53.4, 37, 64, 44.2, 63.4, 45.6, 71.8, 46.4, 79, 52.3, 84.4, 56.7, 86.7 },
@@ -100,6 +132,51 @@ ns.RARE_ROUTES = {
   },
   [1961] = {
     { mount = 1514, spawns = { 53, 22.3, 44.6, 29, 47.1, 36.1, 56.3, 66.1, 28.3, 60.2 },   -- Konthrogz the Obliterator
+      places = { 13624, 13626, 0, 13631, 13700 },
       lines = { } },
   },
+  [2024] = {
+    { mount = 1553, spawns = { 27.7, 46.2 },   -- Breezebiter
+      lines = { } },
+  },
+  [2133] = {
+    { mount = 1732, spawns = { 42.2, 65.5 },   -- Karokta
+      lines = { } },
+  },
+  [2215] = {
+    { mount = 2192, spawns = { 25.8, 57.5, 32.8, 39.5, 37, 72, 37.5, 45.9, 38.5, 24.5, 42.8, 31.5, 45.2, 25.5, 47, 55, 48.8, 32.3, 50.5, 48.5, 51.4, 70.5, 54.8, 36.8, 58, 48.8, 58.5, 29.1, 60.5, 18.5, 61.5, 7.6, 62.5, 38.8, 68.2, 30.5, 71.8, 65, 72.6, 41.5 },   -- Beledar's Spawn
+      lines = { } },
+  },
+  [2248] = {
+    { mount = 2176, spawns = { 16.8, 61.2 },   -- Alunira
+      places = { 14789 },
+      lines = { } },
+  },
+  [2371] = {
+    { mount = 2601, spawns = { 70, 49.6 },   -- Urmag
+      lines = { } },
+    { mount = 2603, spawns = { 74, 32.5 },   -- Sthaarbs
+      lines = { } },
+  },
+}
+
+-- Names of the places next to spawn points (the game's AreaTable): [areaID] = { locale = name }.
+ns.ROUTE_PLACES = {
+  [4273] = { deDE = "Ulduar", enUS = "Ulduar", esES = "Ulduar", frFR = "Ulduar", ptBR = "Ulduar", ruRU = "Ульдуар" },
+  [4422] = { deDE = "Brunnhildar", enUS = "Brunnhildar Village", esES = "Poblado Brunnhildar", frFR = "Brunnhildar", ptBR = "Aldeia Brunnhildar", ruRU = "Деревня Бруннхильдар" },
+  [4963] = { deDE = "Glimmertiefenschlucht", enUS = "Glimmerdeep Gorge", esES = "Barranco Brillohondo", frFR = "Gorge du Gouffre scintillant", ptBR = "Abismo das Profundezas Cintilantes", ruRU = "Теснина Мерцающих Глубин" },
+  [4966] = { deDE = "Biel'arangrat", enUS = "Biel'aran Ridge", esES = "Cresta de Biel'aran", frFR = "Crête de Biel’aran", ptBR = "Crista Biel'aran", ruRU = "Гряда Бейл'аран" },
+  [4967] = { deDE = "Ruinen von Vashj'ir", enUS = "Ruins of Vashj'ir", esES = "Ruinas de Vashj'ir", frFR = "Ruines de Vashj’ir", ptBR = "Ruínas de Vashj'ir", ruRU = "Руины Вайш'ира" },
+  [4974] = { deDE = "Tiefenlichtkluft", enUS = "Underlight Canyon", esES = "Cañón Sondaluz", frFR = "Canyon de Terradiance", ptBR = "Garganta Telúmina", ruRU = "Затемненная впадина" },
+  [6775] = { deDE = "Gigantensturz", enUS = "Colossal's Fall", esES = "Óbito del Coloso", frFR = "Trépas-du-Colosse", ptBR = "A Queda do Colosso", ruRU = "Погибель колосса" },
+  [6779] = { deDE = "Grom'gar", enUS = "Grom'gar", esES = "Grom'gar", frFR = "Grom’gar", ptBR = "Grom'gar", ruRU = "Гром'гар" },
+  [6825] = { deDE = "Feuerwächterruinen", enUS = "Firewalker Ruins", esES = "Ruinas del Caminante del Fuego", frFR = "Ruines du Marchefeu", ptBR = "Ruínas do Andarilho Ígneo", ruRU = "Руины Огнеходов" },
+  [6869] = { deDE = "Wor'gol", enUS = "Wor'gol", esES = "Wor'gol", frFR = "Wor’gol", ptBR = "Wor'gol", ruRU = "Вор'гол" },
+  [13598] = { deDE = "Verdammnisfestung", enUS = "Perdition Hold", esES = "Bastión de la Perdición", frFR = "Fort de la Perdition", ptBR = "Fortaleza da Perdição", ruRU = "Цитадель Вечных Мук" },
+  [13599] = { deDE = "Tiegel der Verdammten", enUS = "Crucible of the Damned", esES = "Crisol de los Malditos", frFR = "Creuset des damnés", ptBR = "Crisol dos Malditos", ruRU = "Горнило Проклятых" },
+  [13624] = { deDE = "Refugium der Weisung", enUS = "Sanctuary of Guidance", esES = "Santuario de la Guía", frFR = "Sanctuaire du Conseil", ptBR = "Santuário da Orientação", ruRU = "Святилище наставлений" },
+  [13626] = { deDE = "Zerfleischerausguck", enUS = "Mauler's Outlook", esES = "Mirador del Magullador", frFR = "Pavillon du Marteleur", ptBR = "Vista do Espancador", ruRU = "Площадка терзателей" },
+  [13631] = { deDE = "Archiv der Geheimnisse", enUS = "Vault of Secrets", esES = "Cámara de los Secretos", frFR = "Caveau des Secrets", ptBR = "Cripta dos Segredos", ruRU = "Хранилище тайн" },
+  [13700] = { deDE = "Gromitwinkel", enUS = "Gromit Hollow", esES = "Cueva de los Grómits", frFR = "Grotte aux Gronils", ptBR = "Oco do Gromito", ruRU = "Лощина громитов" },
+  [14789] = { deDE = "Dhar Oztan", enUS = "Dhar Oztan", esES = "Dhar Oztan", frFR = "Dhar Oztan", ptBR = "Dhar Oztan", ruRU = "Дар Озтан" },
 }

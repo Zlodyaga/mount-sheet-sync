@@ -19,6 +19,9 @@ local COLORS = {
 local LINE_THICKNESS, DOT_SIZE = 3, 14   -- в точках экрана: делим на масштаб холста, чтобы не толстели при приближении
 local ICON = "Interface\\AddOns\\MountSheetSync\\Media\\Icon"
 local DOT = "Interface\\COMMON\\Indicator-Gray"
+local GATE_RAID = "Interface\\Minimap\\Raid"
+local GATE_DUNGEON = "Interface\\Minimap\\Dungeon"
+local GATE_SIZE = 22
 
 local overlay, button, provider
 local lines, dots = {}, {}
@@ -40,12 +43,80 @@ local function MountName(id)
   return "#" .. tostring(id)
 end
 
--- Несобранные маунты с данными для этой карты.
+-- Карта материка показывает то же, что карты её зон: точки пересчитываются через место зоны на материке.
+local PARENTS = { [424] = { 371, 418, 379, 388, 422 } }   -- Пандария: зоны завоевателей Зандалари
+local merged = {}
+
+local function Moved(points, minX, maxX, minY, maxY)
+  local out = {}
+  for i = 1, #points - 1, 2 do
+    out[i] = (minX + points[i] / 100 * (maxX - minX)) * 100
+    out[i + 1] = (minY + points[i + 1] / 100 * (maxY - minY)) * 100
+  end
+  return out
+end
+
+local function MapList(mapID)
+  local children = PARENTS[mapID]
+  if not children or not (C_Map and C_Map.GetMapRectOnMap) then
+    return ns.RARE_ROUTES[mapID]
+  end
+  if merged[mapID] then
+    return merged[mapID]
+  end
+  local list, byMount = {}, {}
+  local complete = true
+  for _, e in ipairs(ns.RARE_ROUTES[mapID] or {}) do
+    list[#list + 1] = e
+  end
+  for _, child in ipairs(children) do
+    local ok, minX, maxX, minY, maxY = pcall(C_Map.GetMapRectOnMap, child, mapID)
+    if not (ok and type(minX) == "number" and type(maxY) == "number" and maxX > minX and maxY > minY) then
+      complete = false   -- карта зоны ещё не известна игре: собрать заново при следующем показе
+    else
+      for _, e in ipairs(ns.RARE_ROUTES[child] or {}) do
+        local to = byMount[e.mount]
+        if not to then
+          to = { mount = e.mount, spawns = {}, lines = {}, places = {} }
+          byMount[e.mount] = to
+          list[#list + 1] = to
+        end
+        for i = 1, #(e.spawns or {}) / 2 do
+          to.places[#to.spawns / 2 + 1] = e.places and e.places[i] or 0
+          local moved = Moved({ e.spawns[i * 2 - 1], e.spawns[i * 2] }, minX, maxX, minY, maxY)
+          to.spawns[#to.spawns + 1], to.spawns[#to.spawns + 2] = moved[1], moved[2]
+        end
+        for _, points in ipairs(e.lines or {}) do
+          to.lines[#to.lines + 1] = Moved(points, minX, maxX, minY, maxY)
+        end
+      end
+    end
+  end
+  if complete then
+    merged[mapID] = list
+  end
+  return list
+end
+
+local function PlayerFaction()
+  local ok, faction = pcall(UnitFactionGroup, "player")
+  if ok and type(faction) == "string" and not (issecretvalue and issecretvalue(faction)) then
+    return faction
+  end
+  return nil
+end
+
+-- Несобранные маунты с данными для этой карты. Рар одной фракции (Тёмные берега: Альянсу — один, Орде — другой) — только
+-- своей; фракция неизвестна — показываем оба.
 function ns.RouteEntries(mapID)
   local out = {}
-  local list = mapID and ns.RARE_ROUTES and ns.RARE_ROUTES[mapID]
+  local list = mapID and ns.RARE_ROUTES and MapList(mapID)
+  local mine = PlayerFaction()
+  local seen = {}
   for _, e in ipairs(list or {}) do
-    if not Collected(e.mount) then
+    -- фракция неизвестна: у маунта две записи (по рару на фракцию) — в списке он один, точки — первой
+    if not Collected(e.mount) and not (e.faction and mine and e.faction ~= mine) and not seen[e.mount] then
+      seen[e.mount] = true
       out[#out + 1] = e
     end
   end
@@ -74,6 +145,8 @@ function ns.RouteShown(mapID, mount)
   return state and state[mount] == true or false
 end
 
+local gates = {}   -- значки входов в рейды и подземелья из «Осталось» этого персонажа
+
 local function HideAll()
   for _, line in ipairs(lines) do
     line:Hide()
@@ -81,7 +154,96 @@ local function HideAll()
   for _, dot in ipairs(dots) do
     dot:Hide()
   end
+  for _, gate in ipairs(gates) do
+    gate:Hide()
+  end
   shownMap = nil
+end
+
+---------------------------------------------------------------------------
+-- Входы из «Осталось»: где на этой карте рейды и подземелья, в которых у персонажа ещё есть что убить
+---------------------------------------------------------------------------
+-- Точка входа (Entrances.lua, 0–1 на карте зоны) на открытой карте: та же карта или карта выше (материк, мир).
+local function OnThisMap(entrance, mapID)
+  if entrance.map == mapID then
+    return entrance.x, entrance.y
+  end
+  if not (C_Map and C_Map.GetMapRectOnMap) then
+    return nil
+  end
+  local ok, minX, maxX, minY, maxY = pcall(C_Map.GetMapRectOnMap, entrance.map, mapID)
+  if not (ok and type(minX) == "number" and type(maxY) == "number" and maxX > minX and maxY > minY) then
+    return nil
+  end
+  return minX + entrance.x * (maxX - minX), minY + entrance.y * (maxY - minY)
+end
+
+-- { { x, y, place, rows = { "Босс - маунт", … }, raid } } — по входу на подземелье, где ещё что-то осталось.
+function ns.EntrancePins(mapID)
+  local out = {}
+  if not (mapID and ns.ENTRANCES and ns.GetRemaining and ns.ItemInstance) then
+    return out
+  end
+  local ok, r = pcall(ns.GetRemaining)
+  if not ok or type(r) ~= "table" or r.state ~= "ok" or type(r.items) ~= "table" then
+    return out
+  end
+  local byInstance = {}
+  for _, e in ipairs(r.items) do
+    local item = e.item
+    if not e.done and type(item) == "table" and (item.kind == "raid" or item.kind == "dungeon") then
+      local found, instance = pcall(ns.ItemInstance, item)
+      local entrance = found and instance and ns.ENTRANCES[instance]
+      if entrance and entrance.x then
+        local pin = byInstance[instance]
+        if not pin then
+          local x, y = OnThisMap(entrance, mapID)
+          if x then
+            pin = { x = x, y = y, place = ns.Shown(item, "place"), rows = {}, raid = item.kind == "raid" }
+            byInstance[instance] = pin
+            out[#out + 1] = pin
+          else
+            byInstance[instance] = false
+          end
+        end
+        if pin and #pin.rows < 12 then
+          pin.rows[#pin.rows + 1] = tostring(ns.Shown(item, "boss") or "?") .. " - " .. tostring(ns.Shown(item, "mount") or "?")
+        end
+      end
+    end
+  end
+  return out
+end
+
+function ns.EntrancesShown()
+  local db = ns.GetDB()
+  return db and db.mapEntrances == true or false
+end
+
+local function GateEnter(self)
+  GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+  GameTooltip:SetText(tostring(self.pin.place or "?"), 1, 0.82, 0)
+  GameTooltip:AddLine(L.map_gates_left, 0.8, 0.8, 0.8, true)
+  for _, row in ipairs(self.pin.rows) do
+    GameTooltip:AddLine(row, 1, 1, 1, true)
+  end
+  GameTooltip:Show()
+end
+
+local function Gate(i)
+  if not gates[i] then
+    local f = CreateFrame("Frame", nil, overlay)
+    f.tex = f:CreateTexture(nil, "OVERLAY")
+    f.tex:SetAllPoints(f)
+    if f.SetMouseClickEnabled then
+      f:EnableMouse(true)
+      f:SetMouseClickEnabled(false)
+      f:SetScript("OnEnter", GateEnter)
+      f:SetScript("OnLeave", function() GameTooltip:Hide() end)
+    end
+    gates[i] = f
+  end
+  return gates[i]
 end
 
 local function Line(i)
@@ -91,10 +253,69 @@ local function Line(i)
   return lines[i]
 end
 
+-- Точка появления — маленький кадр: при наведении говорит, чей это рар. Щелчки проходят сквозь него к карте;
+-- если клиент не умеет «только наведение», мышь точке не включаем вовсе, чтобы не мешать карте.
+-- Название места у точки — на языке аддона, иначе английское (таблица игры, Routes.lua).
+local function PlaceName(area)
+  local names = area and area > 0 and ns.ROUTE_PLACES and ns.ROUTE_PLACES[area]
+  if not names then
+    return nil
+  end
+  return names[ns.CurrentLanguage and ns.CurrentLanguage() or "enUS"] or names.enUS
+end
+
+-- Откат рара у этого персонажа — из его списка «Осталось» (там же, где окно берёт «убит, снова через …»):
+-- nil — рара в его списке нет (не фармит или списка нет), 0 — можно убить, иначе секунд до отката.
+local function RareWait(mount)
+  if not ns.GetRemaining then
+    return nil
+  end
+  local ok, r = pcall(ns.GetRemaining)
+  if not ok or type(r) ~= "table" or r.state ~= "ok" or type(r.items) ~= "table" then
+    return nil
+  end
+  for _, e in ipairs(r.items) do
+    if type(e.item) == "table" and e.item.kind == "rare" and tonumber(e.item.id) == mount then
+      return e.again or 0
+    end
+  end
+  return nil
+end
+
+local function DotEnter(self)
+  GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+  GameTooltip:SetText(MountName(self.mount), 1, 0.82, 0)
+  local place = PlaceName(self.place)
+  if place then
+    GameTooltip:AddLine(place, 1, 1, 1, true)
+  end
+  local wait = RareWait(self.mount)
+  if wait and wait > 0 then
+    GameTooltip:AddLine(string.format(L.map_routes_wait, ns.FormatDuration and ns.FormatDuration(wait) or tostring(wait)), 1, 0.5, 0.4, true)
+  elseif wait then
+    GameTooltip:AddLine(L.map_routes_ready, 0.55, 1, 0.55, true)
+  end
+  GameTooltip:AddLine(string.format(L.map_routes_spawn, self.x, self.y), 0.8, 0.8, 0.8, true)
+  GameTooltip:Show()
+end
+
+local function DotLeave()
+  GameTooltip:Hide()
+end
+
 local function Dot(i)
   if not dots[i] then
-    dots[i] = overlay:CreateTexture(nil, "OVERLAY")
-    dots[i]:SetTexture(DOT)
+    local f = CreateFrame("Frame", nil, overlay)
+    f.tex = f:CreateTexture(nil, "OVERLAY")
+    f.tex:SetAllPoints(f)
+    f.tex:SetTexture(DOT)
+    if f.SetMouseClickEnabled then
+      f:EnableMouse(true)
+      f:SetMouseClickEnabled(false)
+      f:SetScript("OnEnter", DotEnter)
+      f:SetScript("OnLeave", DotLeave)
+    end
+    dots[i] = f
   end
   return dots[i]
 end
@@ -111,8 +332,28 @@ local function Refresh()
   HideAll()
   local mapID = MapID()
   local entries = ns.RouteEntries(mapID)
+  local pins = ns.EntrancePins(mapID)
   local state = mapID and State(mapID)
   local any = false
+  if #pins > 0 and ns.EntrancesShown() then
+    any = true
+    local canvas = overlay:GetParent()
+    local width, height = canvas:GetWidth(), canvas:GetHeight()
+    local scale = canvas:GetScale()
+    if not scale or scale <= 0 then
+      scale = 1
+    end
+    for i, pin in ipairs(pins) do
+      local gate = Gate(i)
+      gate.pin = pin
+      gate.tex:SetTexture(pin.raid and GATE_RAID or GATE_DUNGEON)
+      gate:SetSize(GATE_SIZE / scale, GATE_SIZE / scale)
+      gate:ClearAllPoints()
+      gate:SetPoint("CENTER", overlay, "TOPLEFT", pin.x * width, -pin.y * height)
+      gate:Show()
+    end
+    shownMap = mapID
+  end
   if #entries > 0 then
     local canvas = overlay:GetParent()
     local width, height = canvas:GetWidth(), canvas:GetHeight()
@@ -151,7 +392,9 @@ local function Refresh()
           end
           nDot = nDot + 1
           local dot = Dot(nDot)
-          dot:SetVertexColor(c[1], c[2], c[3], 1)
+          dot.tex:SetVertexColor(c[1], c[2], c[3], 1)
+          dot.mount, dot.x, dot.y = e.mount, spawns[i], spawns[i + 1]
+          dot.place = e.places and e.places[index] or 0
           dot:SetSize(DOT_SIZE / scale, DOT_SIZE / scale)
           dot:ClearAllPoints()
           dot:SetPoint("CENTER", overlay, "TOPLEFT", spawns[i] / 100 * width, -spawns[i + 1] / 100 * height)
@@ -164,7 +407,7 @@ local function Refresh()
     end
     shownMap = mapID
   end
-  button:SetShown(#entries > 0)
+  button:SetShown(#entries > 0 or #pins > 0)
   button.icon:SetDesaturated(not any)
   button.icon:SetAlpha(any and 1 or 0.75)
 end
@@ -183,7 +426,32 @@ end
 local function OnClick(self)
   local mapID = MapID()
   local entries = ns.RouteEntries(mapID)
-  if #entries == 0 then
+  local pins = ns.EntrancePins(mapID)
+  if #entries == 0 and #pins == 0 then
+    return
+  end
+  if #pins > 0 then
+    -- на карте есть входы из «Осталось»: всегда список — входы отдельной галочкой (общей для всех карт), потом маунты
+    MenuUtil.CreateContextMenu(self, function(_, root)
+      root:CreateTitle(L.map_routes_title)
+      root:CreateCheckbox(L.map_gates, function()
+        return ns.EntrancesShown()
+      end, function()
+        local db = ns.GetDB()
+        if db then
+          db.mapEntrances = not ns.EntrancesShown() or nil
+        end
+        Refresh()
+      end)
+      for _, e in ipairs(entries) do
+        local mount = e.mount
+        root:CreateCheckbox(MountName(mount), function()
+          return ns.RouteShown(mapID, mount)
+        end, function()
+          ns.SetRouteShown(mapID, mount, not ns.RouteShown(mapID, mount))
+        end)
+      end
+    end)
     return
   end
   if #entries == 1 then
