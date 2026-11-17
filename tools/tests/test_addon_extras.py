@@ -84,4 +84,19 @@ C_MountJournal.GetMountInfoByID = function(id) if id == 219 or id == 2623 then r
 """)
 check("all its mounts collected: the holiday is not shown", len(ns.HolidayNow()) == 0)
 
+# ---------------------------------------------------------------- «Скрыть» on «Осталось»: only what is shown
+def kinds(r):
+    return [str(e.item.kind) for e in r["items"].values()]
+r0 = ns.GetRemaining()
+check("the fixture character has dungeons and raids", "dungeon" in kinds(r0) and "raid" in kinds(r0), sorted(set(kinds(r0))))
+off0 = len(r0.off) if r0.off else 0
+ns.ToggleHidden("dungeon")
+r1 = ns.GetRemaining()
+check("dungeons hidden: none in the list, the count is smaller", "dungeon" not in kinds(r1) and r1.total < r0.total and r1.left <= r0.left, (r0.total, r1.total))
+check("…the head says what is hidden", str(ns.HiddenText()) == "Подземелья")
+check("…«Фармлю / Не фармлю» is untouched", (len(r1.off) if r1.off else 0) == off0 and g.MountSheetSyncDB.hideKinds.dungeon is True)
+ns.ToggleHidden("dungeon")
+r2 = ns.GetRemaining()
+check("pressed again: everything is back, nothing saved", g.MountSheetSyncDB.hideKinds is None and r2.total == r0.total and ns.HiddenText() is None)
+
 env.finish()

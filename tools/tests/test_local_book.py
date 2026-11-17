@@ -57,6 +57,9 @@ check("…the counters of the last full day only, numbers under plain names", st
 check("…no character names, realms or texts from the game file", r["statsNoNames"] is True)
 check("…characters as a range", r["statsBuckets"] == "0 1 2-5 6-10 11+", r["statsBuckets"])
 check("no file and no backup: a clear error", "не удалось прочитать" in r["missing"], r["missing"])
+check("2.10.2: tray «Осталось на неделе», nothing hidden: 3 left of 4 (as before)", r["hideNone"] == "3/4 3/4", r["hideNone"])
+check("…dungeons and rares hidden: 1 of 1, only the raid line", r["hideSome"] == "1/1 Рагнарос", r["hideSome"])
+check("…the choice is kept in the settings; nothing hidden by default", r["hideSaved"] == "dungeon|0", r["hideSaved"])
 
 passed = sum(1 for _, ok in checks if ok)
 print("\n%d/%d checks passed" % (passed, len(checks)))

@@ -3,6 +3,7 @@
 The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [CHANGELOG-addon.md](CHANGELOG-addon.md).
 
 ## 2.10.2
+- Tray menu, Remaining this week > Hide: tick raids, dungeons, world bosses or rares to leave them out of the counts and lists in the menu. Display only - Farm / Do not farm and the sheet stay as they are.
 - Farming tips of the catalog in German, French, Spanish and Portuguese for every mount (new spreadsheets in those languages).
 - New sheet “Dropped Mounts” (spreadsheet layout 7): a row with the date, the mount, the boss, the attempts and the chance over all attempts at that moment for each mount that drops; drops the addon 3.0.7 has remembered are added too. Existing spreadsheets get the sheet on the next start, and their Russian catalog texts are updated where you have not edited them.
 - The catalog's Russian texts about raid skips and dungeon routes are rewritten the same way.

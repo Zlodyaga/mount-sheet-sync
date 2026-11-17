@@ -607,6 +607,34 @@ fr:  · nouvel essai à {0}
 es:  · reintento a las {0}
 pt:  · nova tentativa às {0}
 
+@ {0} — всё скрыто
+en: {0} — all hidden
+de: {0} — alles ausgeblendet
+fr: {0} — tout est masqué
+es: {0}: todo oculto
+pt: {0} — tudo oculto
+
+@ Скрыть
+en: Hide
+de: Ausblenden
+fr: Masquer
+es: Ocultar
+pt: Ocultar
+
+@ Мировые боссы
+en: World bosses
+de: Weltbosse
+fr: Boss du monde
+es: Jefes del mundo
+pt: Chefes mundiais
+
+@ Редкие монстры
+en: Rares
+de: Seltene Gegner
+fr: Monstres rares
+es: Monstruos raros
+pt: Monstros raros
+
 @ {0} — всё отмечено
 en: {0} — all marked
 de: {0} — alles markiert

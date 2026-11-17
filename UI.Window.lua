@@ -140,6 +140,20 @@ local function ApplyChrome(view)
   S.focusText:SetShown(view.grid and true or false)
   S.columnGlow:Hide()
   S.attemptsBar:SetShown(view.attempts and true or false)
+  S.hideBar:SetShown(view.remaining and true or false)
+  if view.remaining then
+    local skip = ns.HiddenKinds()
+    for _, b in ipairs(S.hideButtons) do
+      Skin.ChipState(b, skip[b.kind] and true or false)
+    end
+    -- шапка не наезжает на кнопки: ширина — до надписи «Скрыть:»
+    local left, start = S.hideLabel:GetLeft(), S.toolbar:GetLeft()
+    if left and start and left - start > 120 then
+      S.summaryText:SetWidth(left - start - 16)
+    end
+  else
+    S.summaryText:SetWidth(0)
+  end
   S.logBar:SetShown(view.log and true or false)
   S.headRow:SetShown(view.cols ~= nil)
   S.shownHead = view.cols
@@ -389,6 +403,39 @@ local function CreateToolbar(inset)
   S.focusText = S.toolbar:CreateFontString(nil, "OVERLAY", "MSSFontBody")
   S.focusText:SetPoint("RIGHT", -4, 0)
   S.focusText:SetJustifyH("RIGHT")
+
+  -- «Скрыть» на вкладке «Осталось»: кнопки справа налево, нажатая — этот вид скрыт (ns.ToggleHidden)
+  S.hideBar = CreateFrame("Frame", nil, S.toolbar)
+  S.hideBar:SetAllPoints()
+  S.hideButtons = {}
+  local rightOf
+  for i = #ns.HIDE_KINDS, 1, -1 do
+    local b = Skin.Chip(S.hideBar, 22)
+    b.kind = ns.HIDE_KINDS[i]
+    local function apply()
+      b:SetText(L["hide_" .. b.kind])
+      b:SetWidth(math.max(44, b.label:GetStringWidth() + 22))
+    end
+    apply()
+    relabel[#relabel + 1] = apply
+    b:SetScript("OnClick", function(self)
+      ns.ToggleHidden(self.kind)
+      S.listBox:ScrollToBegin()
+      UI.Refresh()
+    end)
+    AttachTooltip(b, "hide_" .. b.kind, "tip_hide")
+    if rightOf then
+      b:SetPoint("RIGHT", rightOf, "LEFT", -6, 0)
+    else
+      b:SetPoint("RIGHT", -4, 0)
+    end
+    S.hideButtons[#S.hideButtons + 1] = b
+    rightOf = b
+  end
+  S.hideLabel = S.hideBar:CreateFontString(nil, "OVERLAY", "MSSFontSmall")
+  S.hideLabel:SetPoint("RIGHT", rightOf, "LEFT", -8, 0)
+  Label(S.hideLabel, "hide_label")
+  S.hideBar:Hide()
 
   S.attemptsBar = CreateFrame("Frame", nil, S.toolbar)
   S.attemptsBar:SetAllPoints()

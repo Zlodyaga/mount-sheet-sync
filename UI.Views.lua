@@ -237,13 +237,18 @@ local function RemainingView(r, own)
       end
     end
   end
-  if r.total == 0 then
+  local hiddenText = ns.HiddenText()
+  if r.total == 0 and hiddenText then
+    list[#list + 1] = Line("|cff8c8c8c" .. L.left_all_hidden .. "|r")
+  elseif r.total == 0 then
     list[#list + 1] = Line("|cff8c8c8c" .. L.left_norows .. "|r")
   elseif r.left == 0 then
     list[#list + 1] = Line("|cff8cff8c" .. L.left_alldone .. "|r")
   end
-  return { list = list, cols = LeftColumns(),
-    summary = "|cff8c8c8c" .. string.format(L.left_head, r.left, r.total, ns.FormatWhen(r.generated)) .. ResetIn() .. (ns.HolidayHead and ns.HolidayHead() or "") .. "|r" }
+  return { list = list, cols = LeftColumns(), remaining = true,
+    summary = "|cff8c8c8c" .. string.format(L.left_head, r.left, r.total, ns.FormatWhen(r.generated))
+      .. (hiddenText and (" (" .. string.format(L.left_hidden, hiddenText) .. ")") or "")
+      .. ResetIn() .. (ns.HolidayHead and ns.HolidayHead() or "") .. "|r" }
 end
 
 -- Вкладка «Достижения»: достижение (щелчок — открыть его), условие, маунт. Полученное — серое и внизу. Попыток у них нет.

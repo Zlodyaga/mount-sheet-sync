@@ -381,6 +381,39 @@ local function RareWait(t, every, now, weekEnd)
   return t >= now + untilReset - 86400 and untilReset or 0
 end
 
+-- «Скрыть» на вкладке «Осталось» (3.0.7): виды строк, которые сейчас не показывать — db.hideKinds = { dungeon = true, … }.
+-- Только показ: «Фармлю / Не фармлю» не меняется, таблица и программа ничего не знают. Скрытые строки не входят ни в
+-- список, ни в счёт «осталось N из M», ни в сетку «Все персонажи», ни в строку при входе.
+ns.HIDE_KINDS = { "raid", "dungeon", "world", "rare" }
+
+function ns.HiddenKinds()
+  local db = MountSheetSyncDB
+  return type(db) == "table" and type(db.hideKinds) == "table" and db.hideKinds or {}
+end
+
+function ns.ToggleHidden(kind)
+  local db = ns.GetDB()
+  if not db or not kind then
+    return
+  end
+  db.hideKinds = type(db.hideKinds) == "table" and db.hideKinds or {}
+  db.hideKinds[kind] = not db.hideKinds[kind] or nil
+  if next(db.hideKinds) == nil then
+    db.hideKinds = nil
+  end
+end
+
+--- «подземелья, рары» — что сейчас скрыто, по порядку кнопок; nil — ничего.
+function ns.HiddenText()
+  local skip, names = ns.HiddenKinds(), {}
+  for _, kind in ipairs(ns.HIDE_KINDS) do
+    if skip[kind] then
+      names[#names + 1] = L["hide_" .. kind]   -- без lower: в WoW он не меняет кириллицу
+    end
+  end
+  return #names > 0 and table.concat(names, ", ") or nil
+end
+
 function ns.GetRemaining()
   local data = MountSheetSyncSheet
   if type(data) ~= "table" or type(data.chars) ~= "table" then
@@ -392,7 +425,7 @@ function ns.GetRemaining()
   local kills = db and db.kills or {}
   local last = kills[#kills]
   local key = table.concat({ tostring(data), tostring(data.generated), tostring(data.resetAt), player.key or "?",
-    tostring(weekEnd), #kills, last and tostring(last.id) or "", RareMinute(data) }, "|")
+    tostring(weekEnd), #kills, last and tostring(last.id) or "", RareMinute(data), ns.HiddenText() or "" }, "|")   -- и «Скрыть»
   if key == cacheKey then
     return cacheResult
   end
@@ -479,6 +512,7 @@ function ns.BuildRemaining(data, player, weekEnd, kills, ch)
   local hidden = ns.NotFarmed and ns.NotFarmed(player.key, tonumber(data.generated)) or {}
   local again = ns.FarmAgain and ns.FarmAgain(player.key, tonumber(data.generated)) or {}
   local afterReset = result.afterReset
+  local skip = ns.HiddenKinds()   -- «Скрыть»: только показ
   local items, left, total = {}, 0, 0
   local now = time()
   -- строки персонажа: из списка и те «не фармлю» (ch.off), что в игре уже вернули, а программа ещё не видела;
@@ -515,6 +549,8 @@ function ns.BuildRemaining(data, player, weekEnd, kills, ch)
   for _, item in ipairs(source) do
     if type(item) == "table" and OtherSide(item, player.key) then
       -- маунт другой фракции («… [Орда]»): этому персонажу он не выпадет — ни в списке, ни в счёте
+    elseif type(item) == "table" and skip[item.kind] and item.src ~= "reward" then
+      -- скрыто кнопкой «Скрыть» (вкладка «Осталось»): ни в списке, ни в счёте, пока игрок не вернёт
     elseif type(item) == "table" and item.kind == "rare" then
       -- откат свой, неделя ни при чём: последнее убийство этим персонажем из всего журнала. Рары «100 %» и фарм мобов
       -- (item.group) показываем своими группами, но не считаем: это не «убить на этой неделе»
@@ -607,7 +643,7 @@ function ns.GetAllRemaining()
   local kills = db and db.kills or {}
   local last = kills[#kills]
   local key = table.concat({ tostring(data), tostring(data.generated), tostring(data.resetAt), player.key or "?",
-    tostring(weekEnd), #kills, last and tostring(last.id) or "", RareMinute(data) }, "|")
+    tostring(weekEnd), #kills, last and tostring(last.id) or "", RareMinute(data), ns.HiddenText() or "" }, "|")
   if key == allKey then
     return allResult
   end
