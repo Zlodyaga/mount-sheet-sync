@@ -381,19 +381,28 @@ function UI.DropsView(rows)
     { key = "boss", flex = 1.3, label = "col_boss" },
     { key = "n", w = 64, right = true, bold = true, label = "col_attempts" },
     { key = "chance", w = 46, right = true, label = "col_drop_chance" },
+    { key = "total", w = 80, right = true, bold = true, label = "col_drop_total", tip = "tip_col_drop_total" },
     { key = "when", w = 84, right = true, label = "col_when" },
-    { key = "who", flex = 0.7, label = "col_who" },
   }, S.listWidth)
   local cols, list = dropCols, {}
   for i, d in ipairs(rows) do
+    -- без дыр в списке: подсказка идёт до первого nil
+    local tip = { Safe(d.name), Safe(d.boss) }
+    if d.char then
+      tip[#tip + 1] = string.format(L.drops_who, Safe(d.char))   -- кому выпал (раньше — столбец «Персонаж»)
+    end
+    if d.rarity then
+      tip[#tip + 1] = "|cff8c8c8c" .. L.drops_rarity .. "|r"
+    end
     list[#list + 1] = { cols = cols, icon = ns.MountIcon(d.id), mountID = KnownMount(d.id), stripe = i % 2 == 0,
-      tip = { Safe(d.name), Safe(d.boss), d.rarity and "|cff8c8c8c" .. L.drops_rarity .. "|r" or nil }, values = {
+      tip = tip, values = {
         mount = "|cffc9a0ff" .. Safe(d.name) .. "|r",
         boss = Safe(d.boss),
         n = d.n and d.n > 0 and tostring(d.n) or "-",
         chance = ns.FormatDropChance(d.p) or "",
         when = d.time and d.time > 0 and (date or os.date)("%d.%m.%Y", d.time) or (d.old and "|cff8c8c8c" .. L.drops_earlier .. "|r" or "-"),
-        who = d.char and Safe(d.char) or "",
+        -- шанс за все попытки к выпадению (как «Шанс за все попытки» на листе «Выпавшие маунты»): 1 - (1 - p)^n
+        total = d.n and d.n > 0 and tonumber(d.p) and "|cff" .. ChanceColor(d.n, d.p) .. ns.FormatChance(d.n, d.p) .. "|r" or "-",
       } }
   end
   return { list = list, cols = cols, summary = "|cff8c8c8c" .. string.format(L.drops_head, #rows) .. "|r" }

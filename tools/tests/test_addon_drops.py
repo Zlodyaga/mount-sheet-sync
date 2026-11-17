@@ -96,7 +96,8 @@ MountSheetSyncDB.drops = { [tostring(DROPS.id)] = { n = 42, time = 1700000000, c
 local rows = MSS_NS.GetDrops()
 DROPS.after, DROPS.n, DROPS.char, DROPS.rowId = #rows, rows[1].n, rows[1].char, rows[1].id
 local view = MSS_NS.UI.DropsView(rows)
-DROPS.cells = view.list[1].values.n .. "|" .. view.list[1].values.when .. "|" .. view.list[1].values.who
+DROPS.cells = view.list[1].values.n .. "|" .. view.list[1].values.when .. "|" .. view.list[1].values.total
+DROPS.tip = table.concat(view.list[1].tip, "|")
 DROPS.emptyText = MSS_NS.UI.DropsView({}).empty
 MSS_NS.UI.SelectTab(5); MSS_NS.UI.Refresh()
 DROPS.tab = MountSheetSyncDB.tab
@@ -117,7 +118,8 @@ MountSheetSyncAlertFrame:Hide()""")
 dr = g.DROPS
 check("3.0.7: «Выпавшие»: a mount noted when it dropped is listed with its attempt and character",
       dr.after >= 1 and dr.after >= dr.before and dr.n == 42 and dr.char == "Эйра" and dr.rowId == dr.id, (dr.before, dr.after, dr.n))
-check("…the row shows the attempt, the day and the character; an empty list says so", dr.cells.startswith("42|") and ".2023|" in dr.cells and dr.cells.endswith("Эйра") and "не выпадали" in dr.emptyText, dr.cells)
+check("…the row shows the attempt, the day and the chance over all attempts (34 % after 42 at 1 %); an empty list says so", dr.cells.startswith("42|") and ".2023|" in dr.cells and dr.cells.endswith("34%|r") and "не выпадали" in dr.emptyText, dr.cells)
+check("…the character is in the row tooltip (no column for it any more)", "Выпал у: Эйра" in dr.tip, dr.tip)
 check("…the tab opens and is remembered", dr.tab == "drops")
 check("3.0.7: with Rarity on, the notice shows by default, not when the player ticked «without Rarity»; the test shows anyway",
       dr.withRarity is True and dr.rarityOff is False and dr.testAnyway is True)
