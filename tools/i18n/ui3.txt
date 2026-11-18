@@ -418,13 +418,6 @@ fr: Cocher « Obtenue ? » pour les montures déjà obtenues dans le jeu et les 
 es: Marcar «¿Conseguida?» en las monturas que ya tiene en el juego y quitarlas de las hojas de personajes
 pt: Marcar “Coletada?” nas montarias que você já tem no jogo e tirá-las das abas de personagens
 
-@ Запускать вместе с Windows
-en: Start with Windows
-de: Mit Windows starten
-fr: Lancer avec Windows
-es: Iniciar con Windows
-pt: Iniciar com o Windows
-
 @ Показывать уведомления
 en: Show notifications
 de: Benachrichtigungen anzeigen

@@ -31,16 +31,10 @@ namespace MountSheetSync
         ToolStripMenuItem addCharsItem;
         ToolStripMenuItem collectionItem;
         ToolStripMenuItem farmItem;
-        ToolStripMenuItem autostartItem;
-        ToolStripMenuItem notifyItem;
-        ToolStripMenuItem autoAddItem;
-        ToolStripMenuItem languageItem;
+        ToolStripMenuItem charsMenu;
         ToolStripMenuItem restoreItem;
-        ToolStripMenuItem statsItem;
         ToolStripMenuItem statsShowItem;
         ToolStripMenuItem updateItem;
-        ToolStripMenuItem checkUpdatesItem;
-        ToolStripMenuItem testVersionsItem;
         /// <summary>Новая версия на GitHub (null — нет или ещё не проверяли).</summary>
         UpdateInfo available;
         bool updating;
@@ -149,9 +143,6 @@ namespace MountSheetSync
             updateItem = Item("", delegate { StartUpdate(); });
             updateItem.Font = new Font(menu.Font, FontStyle.Bold);
             updateItem.Visible = false;
-            checkUpdatesItem = Item(Tr._("Проверять обновления"), delegate { ToggleUpdates(); });
-            testVersionsItem = Item(Tr._("Обновляться до пробных версий (альфа, бета)"), delegate { ToggleTestVersions(); });
-            testVersionsItem.ToolTipText = Tr._("Пробные версии выходят раньше обычных, но могут быть с ошибками. Снимите галочку — программа снова будет предлагать только обычные выпуски.");
             statusItem = Disabled(Tr._("Запуск…"));
             detailItem = Disabled("");
             detailItem.Visible = false;
@@ -172,33 +163,31 @@ namespace MountSheetSync
             exportItem = Item(Tr._("Выгрузить в таблицу Google…"), delegate { ExportToGoogle(); });
             collectionItem = Item(Tr._("Сверить с коллекцией"), delegate { worker.SyncCollectionNow(); });
             collectionItem.ToolTipText = Tr._("Отметить «Собрано?» у маунтов, которые уже есть в игре, и убрать их с листов персонажей");
-            autostartItem = Item(Tr._("Запускать вместе с Windows"), delegate { ToggleAutostart(); });
-            notifyItem = Item(Tr._("Показывать уведомления"), delegate { ToggleNotifications(); });
-            autoAddItem = Item(Tr._("Добавлять новых персонажей самим"), delegate { ToggleAutoAdd(); });
-            autoAddItem.ToolTipText = Tr._("Персонаж, которым вы зашли в игру, сам попадает в список. Выключено — добавляйте через «Персонажи…»");
             restoreItem = new ToolStripMenuItem(Tr._("Вернуть данные за день"));
-            statsItem = Item(Tr._("Отправлять анонимную статистику"), delegate { SetStats(!statsItem.Checked); });
-            statsItem.ToolTipText = Tr._("Раз в сутки: версии, язык, режим и счётчики пользования. Без имён персонажей и данных таблицы");
             statsShowItem = Item(Tr._("Что отправляется…"), delegate { ShowStats(); });
-            languageItem = new ToolStripMenuItem(Tr._("Язык") + (Tr.Lang != "en" ? " / Language" : ""));
-            foreach (string code in new[] { "auto" }.Concat(Tr.Languages))
+            // 2.10.3: восемь пунктов (решение пользователя 18.11.2026); галочки и язык — в окне «Настройки»
+            charsMenu = new ToolStripMenuItem(Tr._("Персонажи и фарм"));
+            charsMenu.DropDownItems.AddRange(new ToolStripItem[] { addCharsItem, farmItem, attemptsItem });
+            ToolStripMenuItem service = new ToolStripMenuItem(Tr._("Обслуживание"));
+            service.DropDownItems.AddRange(new ToolStripItem[]
             {
-                string c = code;
-                string text = c == "auto" ? Tr.F("Как в Windows ({0})", Tr.Names[Tr.SystemLanguage()]) : Tr.Names[c];
-                ToolStripMenuItem li = Item(text, delegate { SetLanguage(c); });
-                li.Checked = Tr.Setting == c;
-                languageItem.DropDownItems.Add(li);
-            }
+                collectionItem, exportItem, restoreItem, Item(Tr._("Папка данных…"), delegate { ChooseDataFolder(); }),
+                Item(Tr._("Журнал работы"), delegate { OpenLog(); }), statsShowItem,
+            });
             menu.Items.AddRange(new ToolStripItem[]
             {
                 title, updateItem, statusItem, detailItem, addonItem, new ToolStripSeparator(),
-                syncItem, recentItem, leftItem, openSheetItem, signInItem, createItem, addCharsItem, farmItem, attemptsItem, exportItem, collectionItem, new ToolStripSeparator(),
-                Item(Tr._("Настройки…"), delegate { OpenSettings(false); }),
-                Item(Tr._("Журнал работы"), delegate { OpenLog(); }),
-                Item(Tr._("Папка данных…"), delegate { ChooseDataFolder(); }),
-                autostartItem, notifyItem, autoAddItem, restoreItem, statsItem, statsShowItem, checkUpdatesItem, testVersionsItem, languageItem, new ToolStripSeparator(),
+                syncItem, leftItem, recentItem, openSheetItem, signInItem, createItem, new ToolStripSeparator(),
+                charsMenu, Item(SettingsText(), delegate { OpenSettings(false); }), service, new ToolStripSeparator(),
                 Item(Tr._("Выход"), delegate { ExitApp(); }),
             });
+        }
+
+        /// <summary>«Настройки…» и по-английски в скобках: пункт найдётся, даже если язык выбран не тот (просьба пользователя).</summary>
+        static string SettingsText()
+        {
+            string text = Tr._("Настройки…");
+            return Tr.Lang == "en" ? text : text.TrimEnd('…', '.') + " (Settings)…";
         }
 
         /// <summary>Язык программы из меню: сохраняется и действует сразу (меню, подсказка, новые окна).</summary>
@@ -379,17 +368,9 @@ namespace MountSheetSync
             farmItem.Visible = haveSheet;
             attemptsItem.Visible = haveSheet;
             exportItem.Visible = haveSheet && settings.IsLocal;
-            autostartItem.Checked = Autostart.IsEnabled();
-            notifyItem.Checked = settings.Notifications;
-            autoAddItem.Checked = settings.AutoAddCharacters;
-            autoAddItem.Visible = settings.IsLocal;
+            charsMenu.Visible = haveSheet;
             FillRestore();
-            statsItem.Visible = Stats.Available;
             statsShowItem.Visible = Stats.Available;
-            statsItem.Checked = settings.StatsChoice == "yes";
-            checkUpdatesItem.Checked = settings.CheckUpdates;
-            testVersionsItem.Checked = settings.TestVersions;
-            testVersionsItem.Enabled = settings.CheckUpdates;
             updateItem.Visible = available != null;
             updateItem.Enabled = !updating;
             if (available != null)
@@ -578,7 +559,13 @@ namespace MountSheetSync
                 }
                 if (result == DialogResult.OK && form.Result != null)
                 {
+                    Settings before = settings;
                     settings = form.Result;
+                    if (Stats.Available && form.StatsChecked != (before.StatsChoice == "yes"))
+                    {
+                        Stats.Apply(settings, form.StatsChecked);
+                        Log.Write(form.StatsChecked ? Tr.L("Анонимная статистика включена.") : Tr.L("Анонимная статистика выключена."));
+                    }
                     try
                     {
                         settings.Save(AppPaths.SettingsFile);
@@ -595,12 +582,44 @@ namespace MountSheetSync
                         SetAutostart(form.AutostartChecked);
                     }
                     worker.Reload(settings, true);
+                    AfterSettings(before);
                 }
                 else if (firstRun && !settings.IsConfigured)
                 {
                     ShowNote(MakeNote(settings.MissingText,
                         Tr._("Когда будете готовы: ПКМ по значку Mount Sheet Sync → «Настройки…»."), false));
                 }
+            }
+        }
+
+        /// <summary>То, что до 2.10.3 делали галочки меню: язык — сразу, обновления — спросить GitHub, уведомления выключены — сказать, где смотреть.</summary>
+        void AfterSettings(Settings before)
+        {
+            if (settings.Language != before.Language)
+            {
+                SetLanguage(settings.Language);
+            }
+            if (settings.TestVersions != before.TestVersions)
+            {
+                Log.Write(settings.TestVersions
+                    ? Tr.L("Обновления: и пробные версии (альфа, бета).")
+                    : Tr.L("Обновления: только обычные выпуски."));
+            }
+            if (settings.CheckUpdates != before.CheckUpdates || settings.TestVersions != before.TestVersions)
+            {
+                if (!settings.CheckUpdates || (!settings.TestVersions && available != null && available.Prerelease))
+                {
+                    available = null;
+                }
+                if (settings.CheckUpdates)
+                {
+                    CheckForUpdate(true);
+                }
+            }
+            if (before.Notifications && !settings.Notifications)
+            {
+                ShowNote(MakeNote(Tr._("Уведомления выключены"),
+                    Tr._("Что отправлено, видно в меню значка: «Последние события» и «Журнал работы»."), false));
             }
         }
 
@@ -739,46 +758,12 @@ namespace MountSheetSync
             }
         }
 
-        void ToggleAutostart()
-        {
-            SetAutostart(!Autostart.IsEnabled());
-        }
 
         // ------------------------------------------------------------------
         // Обновления
         // ------------------------------------------------------------------
 
-        void ToggleUpdates()
-        {
-            settings.CheckUpdates = !settings.CheckUpdates;
-            SaveSettings();
-            if (settings.CheckUpdates)
-            {
-                CheckForUpdate(true);
-            }
-            else
-            {
-                available = null;
-            }
-        }
 
-        /// <summary>Пробные версии: включили — сразу спросить GitHub; выключили — пробное предложение убрать.</summary>
-        void ToggleTestVersions()
-        {
-            settings.TestVersions = !settings.TestVersions;
-            SaveSettings();
-            Log.Write(settings.TestVersions
-                ? Tr.L("Обновления: и пробные версии (альфа, бета).")
-                : Tr.L("Обновления: только обычные выпуски."));
-            if (!settings.TestVersions && available != null && available.Prerelease)
-            {
-                available = null;
-            }
-            if (settings.CheckUpdates)
-            {
-                CheckForUpdate(true);
-            }
-        }
 
         void SaveSettings()
         {

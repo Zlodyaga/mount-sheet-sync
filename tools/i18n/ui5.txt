@@ -718,12 +718,12 @@ fr: Ce qui est envoyé…
 es: Qué se envía…
 pt: O que é enviado…
 
-@ Помочь автору понять, чем в Mount Sheet Sync пользуются?\n\nРаз в сутки программа будет отправлять автору короткое сообщение: версии программы, аддона и Windows, язык, где хранятся данные, сколько персонажей (примерно), сколько раз открывали вкладки и ставили метки, и случайный номер установки. Ни имён персонажей, ни серверов, ни данных таблицы в нём нет.\n\nТочный текст сообщения — «Что отправляется…» в меню значка; там же это выключается.\n\nОтправлять?
-en: Help the author see what people use in Mount Sheet Sync?\n\nOnce a day the program will send the author a short message: the versions of the program, the addon and Windows, the language, where the data is kept, roughly how many characters, how many times tabs were opened and pins were set, and a random installation number. It has no character names, no realms and nothing from your list.\n\nThe exact text of the message is under “What is sent…” in the tray menu; you can turn it off there too.\n\nSend it?
-de: Dem Autor zeigen, was in Mount Sheet Sync genutzt wird?\n\nEinmal am Tag sendet das Programm dem Autor eine kurze Nachricht: die Versionen von Programm, Addon und Windows, die Sprache, wo die Daten liegen, ungefähr wie viele Charaktere, wie oft Reiter geöffnet und Markierungen gesetzt wurden, und eine zufällige Installationsnummer. Sie enthält keine Charakternamen, keine Realms und nichts aus deiner Liste.\n\nDen genauen Text der Nachricht zeigt „Was gesendet wird…“ im Menü des Symbols; dort lässt es sich auch ausschalten.\n\nSenden?
-fr: Aider l'auteur à voir ce qui sert dans Mount Sheet Sync ?\n\nUne fois par jour, le programme enverra à l'auteur un court message : les versions du programme, de l'addon et de Windows, la langue, l'endroit où sont gardées les données, le nombre approximatif de personnages, le nombre d'ouvertures d'onglets et de repères posés, et un numéro d'installation aléatoire. Il ne contient ni nom de personnage, ni royaume, ni rien de votre liste.\n\nLe texte exact du message se trouve sous « Ce qui est envoyé… » dans le menu de l'icône ; on peut aussi le désactiver là.\n\nEnvoyer ?
-es: ¿Ayudar al autor a ver qué se usa en Mount Sheet Sync?\n\nUna vez al día el programa enviará al autor un mensaje corto: las versiones del programa, del addon y de Windows, el idioma, dónde se guardan los datos, cuántos personajes hay aproximadamente, cuántas veces se abrieron pestañas y se pusieron marcas, y un número de instalación aleatorio. No lleva nombres de personajes, reinos ni nada de tu lista.\n\nEl texto exacto del mensaje está en «Qué se envía…» en el menú del icono; ahí también se desactiva.\n\n¿Enviar?
-pt: Ajudar o autor a ver o que é usado no Mount Sheet Sync?\n\nUma vez por dia o programa enviará ao autor uma mensagem curta: as versões do programa, do addon e do Windows, o idioma, onde os dados ficam, quantos personagens há aproximadamente, quantas vezes abas foram abertas e marcas foram colocadas, e um número de instalação aleatório. Não há nomes de personagens, reinos nem nada da sua lista.\n\nO texto exato da mensagem está em “O que é enviado…” no menu do ícone; lá também dá para desligar.\n\nEnviar?
+@ Помочь автору понять, чем в Mount Sheet Sync пользуются?\n\nРаз в сутки программа будет отправлять автору короткое сообщение: версии программы, аддона и Windows, язык, где хранятся данные, сколько персонажей (примерно), сколько раз открывали вкладки и ставили метки, и случайный номер установки. Ни имён персонажей, ни серверов, ни данных таблицы в нём нет.\n\nТочный текст сообщения — «Обслуживание > Что отправляется…» в меню значка; выключается это в «Настройках».\n\nОтправлять?
+en: Help the author see what people use in Mount Sheet Sync?\n\nOnce a day the program will send the author a short message: the versions of the program, the addon and Windows, the language, where the data is kept, roughly how many characters, how many times tabs were opened and pins were set, and a random installation number. It has no character names, no realms and nothing from your list.\n\nThe exact text of the message is under “Maintenance > What is sent…” in the tray menu; you can turn it off in Settings.\n\nSend it?
+de: Dem Autor zeigen, was in Mount Sheet Sync genutzt wird?\n\nEinmal am Tag sendet das Programm dem Autor eine kurze Nachricht: die Versionen von Programm, Addon und Windows, die Sprache, wo die Daten liegen, ungefähr wie viele Charaktere, wie oft Reiter geöffnet und Markierungen gesetzt wurden, und eine zufällige Installationsnummer. Sie enthält keine Charakternamen, keine Realms und nichts aus deiner Liste.\n\nDen genauen Text der Nachricht zeigt „Wartung > Was gesendet wird…“ im Menü des Symbols; ausschalten lässt es sich in den Einstellungen.\n\nSenden?
+fr: Aider l'auteur à voir ce qui sert dans Mount Sheet Sync ?\n\nUne fois par jour, le programme enverra à l'auteur un court message : les versions du programme, de l'addon et de Windows, la langue, l'endroit où sont gardées les données, le nombre approximatif de personnages, le nombre d'ouvertures d'onglets et de repères posés, et un numéro d'installation aléatoire. Il ne contient ni nom de personnage, ni royaume, ni rien de votre liste.\n\nLe texte exact du message se trouve sous « Maintenance > Ce qui est envoyé… » dans le menu de l'icône ; on le désactive dans les Paramètres.\n\nEnvoyer ?
+es: ¿Ayudar al autor a ver qué se usa en Mount Sheet Sync?\n\nUna vez al día el programa enviará al autor un mensaje corto: las versiones del programa, del addon y de Windows, el idioma, dónde se guardan los datos, cuántos personajes hay aproximadamente, cuántas veces se abrieron pestañas y se pusieron marcas, y un número de instalación aleatorio. No lleva nombres de personajes, reinos ni nada de tu lista.\n\nEl texto exacto del mensaje está en «Mantenimiento > Qué se envía…» en el menú del icono; se desactiva en Ajustes.\n\n¿Enviar?
+pt: Ajudar o autor a ver o que é usado no Mount Sheet Sync?\n\nUma vez por dia o programa enviará ao autor uma mensagem curta: as versões do programa, do addon e do Windows, o idioma, onde os dados ficam, quantos personagens há aproximadamente, quantas vezes abas foram abertas e marcas foram colocadas, e um número de instalação aleatório. Não há nomes de personagens, reinos nem nada da sua lista.\n\nO texto exato da mensagem está em “Manutenção > O que é enviado…” no menu do ícone; desliga-se em Configurações.\n\nEnviar?
 
 @ Статистика включена. Вот сообщение, которое уходит раз в сутки:
 en: Statistics are on. This is the message that is sent once a day:
@@ -906,3 +906,17 @@ de: auf das Blatt „Erhaltene Reittiere“: {0}
 fr: sur la feuille « Montures obtenues » : {0}
 es: a la hoja «Monturas obtenidas»: {0}
 pt: na planilha “Montarias obtidas”: {0}
+
+@ Персонажи и фарм
+en: Characters and farming
+de: Charaktere und Farmen
+fr: Personnages et farm
+es: Personajes y farmeo
+pt: Personagens e farm
+
+@ Обслуживание
+en: Maintenance
+de: Wartung
+fr: Maintenance
+es: Mantenimiento
+pt: Manutenção
