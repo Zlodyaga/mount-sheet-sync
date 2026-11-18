@@ -432,18 +432,23 @@ namespace MountSheetSync
             }
             foreach (CharLeft c in last.Left)
             {
-                if (c.Total == 0)
+                int total, all;
+                List<string> lines = SheetData.Visible(c, settings.HiddenKinds, out total, out all);
+                if (total == 0)
                 {
-                    leftItem.DropDownItems.Add(Disabled(MenuText(Tr.F("{0} — всё отмечено", c.Name))));
+                    leftItem.DropDownItems.Add(Disabled(MenuText(all == 0 && settings.HiddenKinds.Count > 0
+                        ? Tr.F("{0} — всё скрыто", c.Name) : Tr.F("{0} — всё отмечено", c.Name))));
                     continue;
                 }
-                ToolStripMenuItem sub = new ToolStripMenuItem(MenuText(Tr.F("{0} — {1} из {2}", c.Name, c.Total, c.All)));
-                foreach (string line in c.Lines)
+                ToolStripMenuItem sub = new ToolStripMenuItem(MenuText(Tr.F("{0} — {1} из {2}", c.Name, total, all)));
+                foreach (string line in lines)
                 {
                     sub.DropDownItems.Add(Disabled(MenuText(TextUtil.Shorten(line, 90))));
                 }
                 leftItem.DropDownItems.Add(sub);
             }
+            leftItem.DropDownItems.Add(new ToolStripSeparator());
+            leftItem.DropDownItems.Add(HideMenu());
             if (last.LeftAt.HasValue || last.LeftNote.Length > 0)
             {
                 leftItem.DropDownItems.Add(new ToolStripSeparator());
@@ -456,6 +461,41 @@ namespace MountSheetSync
             {
                 leftItem.DropDownItems.Add(Disabled(settings.IsLocal ? Tr.F("Обновлён: {0}", TextUtil.When(last.LeftAt.Value)) : Tr.F("Из таблицы {0}", TextUtil.When(last.LeftAt.Value))));
             }
+        }
+
+        static readonly string[] HideKinds = { "raid", "dungeon", "world", "rare" };
+
+        /// <summary>«Скрыть ▸»: галочки видов строк. Только показ в этом меню — «Фармлю / Не фармлю» не меняется.</summary>
+        ToolStripMenuItem HideMenu()
+        {
+            ToolStripMenuItem hide = new ToolStripMenuItem(Tr._("Скрыть"));
+            string[] names = { Tr._("Рейды"), Tr._("Подземелья"), Tr._("Мировые боссы"), Tr._("Редкие монстры") };
+            for (int i = 0; i < HideKinds.Length; i++)
+            {
+                string kind = HideKinds[i];
+                ToolStripMenuItem item = new ToolStripMenuItem(names[i]);
+                item.Checked = settings.HiddenKinds.Contains(kind);
+                item.Click += delegate { ToggleHidden(kind); };
+                hide.DropDownItems.Add(item);
+            }
+            return hide;
+        }
+
+        void ToggleHidden(string kind)
+        {
+            if (!settings.HiddenKinds.Remove(kind))
+            {
+                settings.HiddenKinds.Add(kind);
+            }
+            try
+            {
+                settings.Save(AppPaths.SettingsFile);
+            }
+            catch (Exception ex)
+            {
+                Log.Write(Tr.L("Не удалось сохранить настройки: {0}", ex.Message));
+            }
+            FillLeft();
         }
 
         void ShowNote(Note n)

@@ -25,6 +25,8 @@ namespace MountSheetSync
         public string Secret = DefaultSecret;
         public string WowPath = "";
         public bool Notifications = true;
+        /// <summary>«Осталось на неделе» → «Скрыть»: виды строк, которых сейчас не показывать в меню (raid, dungeon, world, rare).</summary>
+        public List<string> HiddenKinds = new List<string>();
         /// <summary>Анонимная статистика: "" — ещё не спрашивали, "yes" / "no" — ответ игрока.</summary>
         public string StatsChoice = "";
         /// <summary>Случайный номер установки для статистики; есть только при согласии, при отказе стирается.</summary>
@@ -189,6 +191,14 @@ namespace MountSheetSync
                 string stats = J.Str(d, "stats");
                 s.StatsChoice = stats == "yes" || stats == "no" ? stats : "";
                 s.InstallId = s.StatsChoice == "yes" ? J.Str(d, "installId").Trim() : "";
+                foreach (object k in J.Arr(J.Get(d, "hiddenKinds")))
+                {
+                    string kind = k as string;
+                    if (!string.IsNullOrEmpty(kind) && !s.HiddenKinds.Contains(kind))
+                    {
+                        s.HiddenKinds.Add(kind);
+                    }
+                }
                 if (d.ContainsKey("autoAddCharacters"))
                 {
                     s.AutoAddCharacters = J.Truthy(d, "autoAddCharacters");
@@ -230,6 +240,10 @@ namespace MountSheetSync
             d["secret"] = Secret;
             d["wowPath"] = WowPath;
             d["notifications"] = Notifications;
+            if (HiddenKinds.Count > 0)
+            {
+                d["hiddenKinds"] = new List<object>(HiddenKinds.ToArray());
+            }
             if (StatsChoice.Length > 0)
             {
                 d["stats"] = StatsChoice;

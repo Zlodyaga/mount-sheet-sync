@@ -200,6 +200,34 @@ namespace MountSheetSync
             r["statsBuckets"] = Stats.Bucket(0) + " " + Stats.Bucket(1) + " " + Stats.Bucket(5) + " " + Stats.Bucket(6) + " " + Stats.Bucket(40);
             r["statsOffByDefault"] = new Settings().StatsChoice == "" && !Stats.Available && Stats.Url.StartsWith("https://script.google.com/macros/s/");
 
+            // «Скрыть» в меню «Осталось на неделе» (2.10.2): только счёт и строки меню, остальное не трогается
+            Dictionary<string, object> st = new Dictionary<string, object>();
+            List<object> its = new List<object>();
+            foreach (string[] it in new string[][] { new string[] { "raid", "Рагнарос", "" }, new string[] { "dungeon", "Скади", "" },
+                new string[] { "dungeon", "Принц Кель'тас", "y" }, new string[] { "rare", "Исхак", "" } })
+            {
+                Dictionary<string, object> one = new Dictionary<string, object>();
+                one["kind"] = it[0];
+                one["boss"] = it[1];
+                one["y"] = it[2] == "y";
+                its.Add(one);
+            }
+            Dictionary<string, object> ch1 = new Dictionary<string, object>();
+            ch1["name"] = "Эйлс";
+            ch1["items"] = its;
+            st["chars"] = new List<object> { ch1 };
+            CharLeft cl = SheetData.Summarize(st)[0];
+            int vt, va;
+            SheetData.Visible(cl, new List<string>(), out vt, out va);
+            r["hideNone"] = vt + "/" + va + " " + cl.Total + "/" + cl.All;
+            List<string> vl = SheetData.Visible(cl, new List<string> { "dungeon", "rare" }, out vt, out va);
+            r["hideSome"] = vt + "/" + va + " " + string.Join(";", vl.ToArray());
+            Settings hs = new Settings();
+            hs.HiddenKinds.Add("dungeon");
+            string hf = Path.Combine(args[0], "hide-settings.json");
+            hs.Save(hf);
+            r["hideSaved"] = string.Join(",", Settings.Load(hf).HiddenKinds.ToArray()) + "|" + new Settings().HiddenKinds.Count;
+
             // ни файла, ни копии: понятная ошибка
             string missing = Path.Combine(args[0], "none.json");
             try

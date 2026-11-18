@@ -9,8 +9,18 @@ using System.Text;
 namespace MountSheetSync
 {
     /// <summary>Что осталось одному персонажу — для меню значка.</summary>
+    /// <summary>Строка «Осталось» персонажа для меню: вид (raid, dungeon, world, rare), текст, отмечена ли.</summary>
+    sealed class LeftRow
+    {
+        public string Kind = "";
+        public string Text = "";
+        public bool Done;
+    }
+
     sealed class CharLeft
     {
+        /// <summary>Все строки (без достижений) — из них меню считает видимое, когда часть видов скрыта («Скрыть»).</summary>
+        public List<LeftRow> Rows = new List<LeftRow>();
         public string Name = "";
         /// <summary>Строк «Нет» — сколько осталось.</summary>
         public int Total;
@@ -439,6 +449,11 @@ namespace MountSheetSync
                         continue;   // достижения и награды не считаем: их не убить
                     }
                     left.All++;
+                    LeftRow row = new LeftRow();
+                    row.Kind = J.Str(item, "kind");
+                    row.Text = Describe(item);
+                    row.Done = J.Truthy(item, "y");
+                    left.Rows.Add(row);
                     if (J.Truthy(item, "y"))
                     {
                         continue;   // в таблице уже «Да» (аддону такие строки нужны после «Сброса недели»)
@@ -456,6 +471,39 @@ namespace MountSheetSync
                 result.Add(left);
             }
             return result;
+        }
+
+        /// <summary>
+        /// Строки персонажа без скрытых видов («Скрыть» в меню «Осталось на неделе»: только показ, «Фармлю» не меняется):
+        /// сколько осталось, сколько всего и до 30 строк текста.
+        /// </summary>
+        public static List<string> Visible(CharLeft c, ICollection<string> hidden, out int total, out int all)
+        {
+            List<string> lines = new List<string>();
+            total = 0;
+            all = 0;
+            foreach (LeftRow r in c.Rows)
+            {
+                if (hidden != null && hidden.Contains(r.Kind))
+                {
+                    continue;
+                }
+                all++;
+                if (r.Done)
+                {
+                    continue;
+                }
+                total++;
+                if (lines.Count < MenuLinesPerCharacter)
+                {
+                    lines.Add(r.Text);
+                }
+            }
+            if (total > lines.Count)
+            {
+                lines.Add(Tr.F("…и ещё {0}", total - lines.Count));
+            }
+            return lines;
         }
 
         static string Describe(Dictionary<string, object> item)
