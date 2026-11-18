@@ -2,7 +2,7 @@
 
 **All your alts in one table: which boss is still worth killing this week, and on whom.** One window, right in the game, with a row per boss and a column per character — only the bosses whose mount you don't have yet. The addon records every kill by itself, and a free companion program keeps the list for you: on your computer, no sign-in needed, or in a Google Sheet if you want one.
 
-![All your characters in one table: what is still to kill this week](https://media.forgecdn.net/attachments/2172/572/addon-all-png.png)
+![All your characters in one table: what is still to kill this week](https://media.forgecdn.net/attachments/2227/159/addon-all-png.png)
 
 ## Why it's handy
 
@@ -20,9 +20,11 @@
 - **Six languages.** English, Russian, German, French, Spanish and Portuguese — the addon, the program and the spreadsheet.
 - **Light and private.** The addon never sends anything anywhere (WoW addons can't). By default the data stays on your computer; the program sends anonymous usage statistics only if you agree. With a Google Sheet, the program can open only the spreadsheets it created itself.
 
-![The "Remaining" list of any character](https://media.forgecdn.net/attachments/2172/574/addon-remaining-png.png)
+![The "Remaining" list of any character](https://media.forgecdn.net/attachments/2227/160/addon-remaining-png.png)
 
-![Attempts and chance for every mount you still need](https://media.forgecdn.net/attachments/2172/575/addon-attempts-png.png)
+![Attempts and chance for every mount you still need](https://media.forgecdn.net/attachments/2227/161/addon-attempts-png.png)
+
+![Mounts that dropped: on which attempt, and the chance it took](https://media.forgecdn.net/attachments/2227/162/addon-drops-png.png)
 
 ![The spreadsheet the program keeps](https://media.forgecdn.net/attachments/2096/846/sheet-png.png)
 
@@ -34,7 +36,7 @@
 
 Without the program the addon still records kills, characters and mounts; the "Remaining" list and the spreadsheet need the program.
 
-![Every kill in the log](https://media.forgecdn.net/attachments/2172/576/addon-log-png.png)
+![Every kill in the log](https://media.forgecdn.net/attachments/2227/163/addon-log-png.png)
 
 ## Commands
 

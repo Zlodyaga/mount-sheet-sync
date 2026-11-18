@@ -528,6 +528,34 @@ end
 MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
 MSS_NS.OnChange()""")
 g.RunTimers()
+# tools/screens/english.py: the same pictures in another language (MSS_SCREEN_LANG=enUS) — the addon's own texts switch
+# with the language, the names of bosses, mounts and places come as the program sends them (`names`, from sheet-i18n.json)
+SCREEN_LANG = os.environ.get("MSS_SCREEN_LANG")
+if SCREEN_LANG:
+    sys.path.insert(0, os.path.join(HERE, "..", "screens"))
+    import names_en
+    screen_words = names_en.names(SCREEN_LANG[:2])
+    screen_words.setdefault("Галлеон", screen_words.get("Галеон", "Galleon"))
+    # the fixture's own mount wording: by the mount's number, as the program does (SheetData.Names)
+    by_id = names_en.mounts_by_id(SCREEN_LANG[:2])
+
+    def add_items(items):
+        for i in range(1, len(items) + 1 if items else 0):
+            it = items[i]
+            if it is not None and it["mount"] and it["id"] and str(int(it["id"])) in by_id:
+                screen_words.setdefault(str(it["mount"]), by_id[str(int(it["id"]))])
+    sheet = g.MountSheetSyncSheet
+    for name in ("mounts", "had", "rewards"):
+        add_items(sheet[name])
+    for i in range(1, len(sheet.chars) + 1):
+        add_items(sheet.chars[i]["items"])
+        add_items(sheet.chars[i]["off"])
+    json.dump(screen_words, open(os.path.join(os.path.dirname(os.path.abspath(OUT_LAYOUT)), "names.json"), "w", encoding="utf-8"),
+              ensure_ascii=False)
+    g.MSS_SCREEN_NAMES = L.table_from({SCREEN_LANG[:2]: L.table_from(screen_words)})
+    L.execute("GetLocale = function() return '%s' end" % SCREEN_LANG)   # the settings name the game's language too
+    L.execute("MountSheetSyncSheet.names = MSS_SCREEN_NAMES; MSS_NS.SetLanguage('%s'); MSS_NS.OnChange()" % SCREEN_LANG)
+    g.RunTimers()
 L.execute("MSS_SCREEN_STATE_SAVED = MSS_NS.ProgramState; MSS_NS.ProgramState = function() return 'online' end")
 win.ShowProgramState()   # the pictures show a running program: the quiet bottom line
 tabs[0].MockClick(tabs[0]); g.RunTimers()
@@ -555,40 +583,69 @@ SCREEN_OLD = MountSheetSyncSheet
 local copy = {}
 for k, v in pairs(MountSheetSyncSheet) do copy[k] = v end
 copy.mounts = SCREEN_MOUNTS
-MountSheetSyncSheet = copy""")
+MountSheetSyncSheet = copy
+-- 3.0.7 on the picture: the player's own run times (Runs.lua, «Мин.») and Rarity on (the «Из Rarity» button)
+SCREEN_JOURNAL, SCREEN_RUNS = MountSheetSyncDB.journal, MountSheetSyncDB.runs
+MountSheetSyncDB.journal = { encounters = {}, instances = { { id = 78, map = 720, raid = true }, { id = 187, map = 967, raid = true },
+  { id = 236, map = 329 } } }
+for _, m in ipairs(SCREEN_MOUNTS) do m.im = ({ ["Firelands"] = 720, ["Dragon Soul"] = 967, ["Stratholme"] = 329 })[m.place] end
+MountSheetSyncDB.runs = { ["78"] = { { start = MOCK.now - 86400, secs = 14 * 60 }, { start = MOCK.now - 8 * 86400, secs = 16 * 60 } },
+  ["187"] = { { start = MOCK.now - 86400, secs = 23 * 60 }, { start = MOCK.now - 8 * 86400, secs = 19 * 60 } },
+  ["236"] = { { start = MOCK.now - 2 * 86400, secs = 9 * 60 } } }
+Rarity = { db = { profile = { groups = { mounts = {} } } } }""")
+if SCREEN_LANG:   # the picture's own rows: their names too
+    add_items(g.SCREEN_MOUNTS)
+    for k, v in screen_words.items():
+        g.MSS_SCREEN_NAMES[SCREEN_LANG[:2]][k] = v
+    json.dump(screen_words, open(os.path.join(os.path.dirname(os.path.abspath(OUT_LAYOUT)), "names.json"), "w", encoding="utf-8"),
+              ensure_ascii=False)
 tabs[2].MockClick(tabs[2]); g.RunTimers()
+check("3.0.7 on the picture: Rarity on — its button on «Попытки»", g.MSS_NS.UI.state.rarityButton._shown is True)
 check("«Попытки» with rows (for the picture): most expected drops first", ns.GetAttemptsList()[1].name == "Пламенное Крыло Алисразор", ns.GetAttemptsList()[1].name)
 rows = shown_rows()
 check("3.0.3: «Попытки» in columns: mount, boss, difficulty, attempts, chance, characters left (3.0.7: then the average run, «-» without runs)",
       plain(rows[0]).startswith("Пламенное Крыло Алисразор | Алисразор | N/H | ") and "%" in rows[0] and "/" in plain(rows[0]).split(" | ")[-2]
-      and plain(rows[0]).split(" | ")[-1] == "-", rows[0])
+      and plain(rows[0]).split(" | ")[-1] == "~15", rows[0])
 check("…a chance bar next to the number", pool(ROW)[0].barFill._shown)
 check("…the header", [str(c.text._text) for c in head_cells()] == ["Маунт", "Босс", "Слож.", "Попыток", "Шанс", "Осталось", "Мин."], [str(c.text._text) for c in head_cells()])
-sort_by = {str(c.text._text): c for c in head_cells()}
-sort_by["Маунт"].MockClick(sort_by["Маунт"]); g.RunTimers()
-names = [plain(t).split(" | ")[0] for t in shown_rows()]
-check("click on «Маунт»: by name, A to Z", names == sorted(names), names)
-sort_by["Маунт"].MockClick(sort_by["Маунт"]); g.RunTimers()
-check("…again: Z to A", [plain(t).split(" | ")[0] for t in shown_rows()] == sorted(names, reverse=True))
-sort_by["Попыток"].MockClick(sort_by["Попыток"]); g.RunTimers()
-nums = [int(plain(t).split(" | ")[3]) for t in shown_rows()]
-check("click on «Попыток»: most first", nums == sorted(nums, reverse=True), nums)
-check("…remembered", g.MountSheetSyncDB.attemptsView.sort == "n")
-world = [x for x in regions("Button") if x._text == "Мировые боссы" and under_window(x)][0]
-world.MockClick(world); g.RunTimers()
-check("filter «Мировые боссы»: only world rows", all(str(f.elem["values"]["boss"]) in ("Налак", "Ша Злости", "Галлеон") for f in pool(ROW)) and len(pool(ROW)) == 3, shown_rows())
-every = [x for x in regions("Button") if x._text == "Все" and under_window(x)][0]
-every.MockClick(every); g.RunTimers()
-hide = [x for x in regions("CheckButton") if under_window(x)][0]
-L.execute("SCREEN_MOUNTS[9].n = 0; SCREEN_MOUNTS[9].p = 0.02; MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1")
-L.execute("MSS_NS.OnChange()"); g.RunTimers()
-check("a mount without attempts: dashes", any(" | - | - | " in plain(t) for t in shown_rows()), shown_rows())
-hide.MockClick(hide); g.RunTimers()
-check("«Скрыть без попыток»: gone", not any(" | - | - | " in plain(t) for t in shown_rows()))
-hide.MockClick(hide); g.RunTimers()
+if not SCREEN_LANG:   # sorting and filters: the buttons are found by their Russian labels
+    sort_by = {str(c.text._text): c for c in head_cells()}
+    sort_by["Маунт"].MockClick(sort_by["Маунт"]); g.RunTimers()
+    names = [plain(t).split(" | ")[0] for t in shown_rows()]
+    check("click on «Маунт»: by name, A to Z", names == sorted(names), names)
+    sort_by["Маунт"].MockClick(sort_by["Маунт"]); g.RunTimers()
+    check("…again: Z to A", [plain(t).split(" | ")[0] for t in shown_rows()] == sorted(names, reverse=True))
+    sort_by["Попыток"].MockClick(sort_by["Попыток"]); g.RunTimers()
+    nums = [int(plain(t).split(" | ")[3]) for t in shown_rows()]
+    check("click on «Попыток»: most first", nums == sorted(nums, reverse=True), nums)
+    check("…remembered", g.MountSheetSyncDB.attemptsView.sort == "n")
+    world = [x for x in regions("Button") if x._text == "Мировые боссы" and under_window(x)][0]
+    world.MockClick(world); g.RunTimers()
+    check("filter «Мировые боссы»: only world rows", all(str(f.elem["values"]["boss"]) in ("Налак", "Ша Злости", "Галлеон") for f in pool(ROW)) and len(pool(ROW)) == 3, shown_rows())
+    every = [x for x in regions("Button") if x._text == "Все" and under_window(x)][0]
+    every.MockClick(every); g.RunTimers()
+    hide = [x for x in regions("CheckButton") if under_window(x)][0]
+    L.execute("SCREEN_MOUNTS[9].n = 0; SCREEN_MOUNTS[9].p = 0.02; MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1")
+    L.execute("MSS_NS.OnChange()"); g.RunTimers()
+    check("a mount without attempts: dashes", any(" | - | - | " in plain(t) for t in shown_rows()), shown_rows())
+    hide.MockClick(hide); g.RunTimers()
+    check("«Скрыть без попыток»: gone", not any(" | - | - | " in plain(t) for t in shown_rows()))
+    hide.MockClick(hide); g.RunTimers()
 L.execute("MountSheetSyncDB.attemptsView = nil")
 tabs[0].MockClick(tabs[0]); tabs[2].MockClick(tabs[2]); g.RunTimers()
 dump_layout(win, os.path.join(LAYOUT_DIR, "layout_attempts.json"))
+# «Выпавшие» for the picture (3.0.7): three drops of the counter's mounts, with the attempt and the chance over all attempts
+L.execute(r"""MountSheetSyncDB.drops = { ["425"] = { n = 128, time = MOCK.now - 3 * 86400, char = "Эйра" },
+  ["442"] = { n = 74, time = MOCK.now - 9 * 86400, char = "Элтара" }, ["69"] = { n = 31, time = MOCK.now - 20 * 86400, char = "Мирна" },
+  ["445"] = { n = 112, time = MOCK.now - 27 * 86400, char = "Эллин" }, ["444"] = { n = 9, time = MOCK.now - 34 * 86400, char = "Каэлия" },
+  ["2805"] = { n = 46, time = MOCK.now - 41 * 86400, char = "Эйра" } }
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+MSS_NS.OnChange()""")
+tabs[4].MockClick(tabs[4]); g.RunTimers()
+check("«Выпавшие» for the picture: three drops", len(pool(ROW)) >= 3, len(pool(ROW)))
+dump_layout(win, os.path.join(LAYOUT_DIR, "layout_drops.json"))
+L.execute("MountSheetSyncDB.drops = nil; MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1")
+L.execute("MountSheetSyncDB.journal, MountSheetSyncDB.runs, Rarity = SCREEN_JOURNAL, SCREEN_RUNS, nil")
 L.execute("MountSheetSyncSheet = SCREEN_OLD")
 tabs[0].MockClick(tabs[0]); g.RunTimers()
 g.SlashCmdList["MOUNTSHEETSYNC"]("settings"); g.RunTimers()
