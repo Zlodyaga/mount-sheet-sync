@@ -61,5 +61,6 @@ Tooltip.lua
 Import.lua
 Holidays.lua
 Runs.lua
+Check.lua
 Routes.lua
 Map.lua

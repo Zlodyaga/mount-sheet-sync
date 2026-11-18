@@ -3,6 +3,7 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.8
+- /mss check: a self-check of everything the addon relies on in your game (mount journal, lockouts, statistics, holidays, Rarity, chat, map, events seen this session). The text is selected in a window - press Ctrl+C and send it to the author when something does not work.
 - Run times: the average is per difficulty of the row - 25 heroic and 10 normal runs no longer mix; no runs of that difficulty yet - no estimate.
 
 ## 3.0.7

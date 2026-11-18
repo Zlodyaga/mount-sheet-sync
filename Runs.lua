@@ -98,6 +98,7 @@ local function Where()
   local inst = instByMap[map]
   return inst, map, not Secret(diff) and tonumber(diff) or nil
 end
+ns.RunsWhere = Where   -- /mss check: в каком подземелье путеводителя игрок сейчас
 
 --- Вход в зону / подземелье (PLAYER_ENTERING_WORLD, ZONE_CHANGED_NEW_AREA).
 function ns.RunsOnZone()

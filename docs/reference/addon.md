@@ -29,6 +29,7 @@
 | `Alert.lua` | Оповещение о выпавшем маунте (`ns.ShowDrop`, `/mss drop`) |
 | `Import.lua` | Попытки из Rarity (`ns.RarityPlan`, `/mss rarity`) |
 | `Runs.lua` | Время захода по заходам игрока (`ns.RunAverage`, `db.runs`) |
+| `Check.lua` | Самопроверка в игре (`/mss check`, `ns.SelfCheck`, счётчик событий `ns.Seen`) |
 | `Holidays.lua` | Праздничные маунты (`ns.HolidayNow`, строка при входе, шапка «Осталось») |
 | `Tooltip.lua` | Подсказка о боссе: подсказка юнита (`TooltipDataProcessor`) и строка в Атласе приключений |
 | `Media/Icon*` | Значок-подкова (тот же, что у программы) |
@@ -436,6 +437,13 @@ data provider (`RefreshAllData`, `OnMapChanged`, `OnCanvasScaleChanged`) и со
 
 ## Время захода — по заходам игрока (3.0.7, 16.11.2026)
 
+- `Check.lua` (3.0.8): `/mss check` — окно отчёта (`UI.ShowReport("check")`, текст выделен) с `ns.SelfCheck()`: строка на
+  каждую часть — журнал маунтов (`GetMountInfoByID`, 11-е значение — собран), место (`GetInstanceInfo`, подземелье
+  путеводителя — `ns.RunsWhere`), журнал аддона, заходы, сохранения, статистика, праздники, Rarity, чат, задания,
+  подсказки, карта, Mapzeroth, «Скрыть»; затем события за сеанс (`ns.Seen` из обработчика `MountSheetSync.lua`: счётчик и
+  время, у `ENCOUNTER_END` / `BOSS_KILL` — номер, сложность, успех) и под ними `ns.BugReport()`. Метки `[OK]` / `[--]`
+  (нет данных, выключено) / `[!!]` (нет нужного API или часть упала — `pcall`, остальное всё равно печатается).
+  Секретные значения — словом «secret». По-английски: читает автор.
 - `Runs.lua` (свои события: `PLAYER_ENTERING_WORLD`, `ZONE_CHANGED_NEW_AREA`, `ENCOUNTER_END`): заход начинается при
   входе в подземелье (карта — 8-е значение `GetInstanceInfo` > `db.journal.instances[].map`), где есть несобранный маунт
   из списка (строки `ns.GetAttemptsList()` с `je` этого подземелья — `need`). Кончается, когда убиты все такие боссы;
