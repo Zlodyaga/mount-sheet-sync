@@ -6,3 +6,5 @@ tools/i18n/keys.json
 tools/tests/sv_collection.lua.bak
 tools/layout_*.json
 test-output/
+tools/screens/layouts-en/
+tools/screens/.cache/

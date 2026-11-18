@@ -1,9 +1,11 @@
 """Draw the addon's windows for the README and CurseForge from the layouts test_addon_left.py dumps (tools/layout_*.json):
 the real frames, sizes, anchors, colours and texts of the addon, with its own fonts and Media textures (render.html).
-Not a game screenshot: the characters come from the test fixture, and no Blizzard art is used, so mount icons are stand-ins.
+Not a game screenshot: the characters come from the test fixture. Mount icons are the game's own, from Blizzard's icon server
+(icons.py, cached in tools/screens/.cache, not kept in the repository); without one, a stand-in letter.
 
   python3 tools/tests/test_addon_left.py     -> tools/layout_*.json
   python3 tools/screens/render.py            -> docs/screens/addon-*.png
+  python3 tools/screens/english.py           -> docs/screens/en/addon-*.png (the same in English, for CurseForge)
 """
 import base64
 import glob
@@ -25,6 +27,7 @@ SCREENS = [
     ("addon-attempts.png", "layout_attempts.json"),
     ("addon-log.png", "layout_log.json"),
     ("addon-settings.png", "layout_settings.json"),
+    ("addon-drops.png", "layout_drops.json"),
 ]
 W, H, MARGIN = 1140, 680, 28
 FONTS = {"PTSans-Regular": "PT Sans", "PTSans-Bold": "PT Sans Bold"}
@@ -56,8 +59,17 @@ def font_faces():
     return "\n".join(css)
 
 
-def main():
-    os.makedirs(OUT, exist_ok=True)
+def main(layouts=os.path.join(ROOT, "tools"), out=OUT, fix_text=None, names=None):
+    """layouts — folder with layout_*.json; fix_text — applied to the layout's JSON text (english.py: Latin names);
+    names — the test's Russian > English names (english.py), so the icons find the fixture's own mount wording."""
+    os.makedirs(out, exist_ok=True)
+    texts = {}
+    for _, layout_file in SCREENS:
+        text = open(os.path.join(layouts, layout_file), encoding="utf-8").read()
+        texts[layout_file] = fix_text(text) if fix_text else text
+    import icons   # real mount icons (game art: downloaded into tools/screens/.cache, not kept in the repository)
+    icon_uris = icons.for_layouts(texts.values(), names)
+    print("icons:", len(icon_uris))
     masks = {}
     for path in glob.glob(os.path.join(MEDIA, "*.tga")):
         png = tga_alpha_png(path)
@@ -67,10 +79,11 @@ def main():
     with sync_playwright() as p:
         browser = p.chromium.launch()
         for name, layout_file in SCREENS:
-            layout = json.load(open(os.path.join(ROOT, "tools", layout_file), encoding="utf-8"))
+            layout = json.loads(texts[layout_file])
             page = browser.new_page(viewport={"width": W, "height": H}, device_scale_factor=2)
-            inject = "<script>window.LAYOUT=%s;window.OPT=%s;window.MASKS=%s;</script>" % (
-                json.dumps(layout, ensure_ascii=False), json.dumps({"w": W, "h": H, "fonts": FONTS}), json.dumps(masks))
+            inject = "<script>window.LAYOUT=%s;window.OPT=%s;window.MASKS=%s;window.ICONS=%s;</script>" % (
+                json.dumps(layout, ensure_ascii=False), json.dumps({"w": W, "h": H, "fonts": FONTS}), json.dumps(masks),
+                json.dumps(icon_uris, ensure_ascii=False))
             page.set_content(page_html.replace("<body>", "<body>" + inject, 1))
             page.evaluate("families => Promise.all(families.map(f => document.fonts.load('13px \"' + f + '\"', 'Яa')))", list(FONTS.values()))
             page.evaluate("window.draw()")
@@ -79,11 +92,13 @@ def main():
             clip = {"x": max(0, r["l"] - MARGIN), "y": max(0, r["t"] - MARGIN),
                     "width": min(W, r["r"] + MARGIN) - max(0, r["l"] - MARGIN),
                     "height": min(H, r["b"] + MARGIN) - max(0, r["t"] - MARGIN)}
-            page.screenshot(path=os.path.join(OUT, name), clip=clip)
+            page.screenshot(path=os.path.join(out, name), clip=clip)
             print(name, clip)
             page.close()
         browser.close()
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    # the test's own mount wording > English (english.py writes it): more rows find their icon
+    known = os.path.join(HERE, "layouts-en", "names.json")
+    sys.exit(main(names=json.load(open(known, encoding="utf-8")) if os.path.exists(known) else None))

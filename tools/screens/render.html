@@ -33,7 +33,7 @@
 <script>
 // Renders a layout dumped from the addon running in the mock WoW API (tools/tests/test_addon_left.py): every frame,
 // texture and line of text with the anchors, colours and fonts the addon gave it. Mount icons are game art, so they
-// are drawn as coloured stand-ins with the mount's first letter.
+// come from icons.py (Blizzard's icon server); a mount without one is a coloured stand-in with its first letter.
 const L = window.LAYOUT, OPT = window.OPT, MASKS = window.MASKS;
 document.body.style.setProperty("--w", OPT.w + "px");
 document.body.style.setProperty("--h", OPT.h + "px");
@@ -176,6 +176,12 @@ function rowLabel(x) {
 }
 function standIn(el, x) {
   const label = rowLabel(x);
+  const icon = (window.ICONS || {})[label];   // the real icon, when render.py found one (icons.py)
+  if (icon) {
+    el.style.background = "center / cover no-repeat url(" + icon + ")";
+    el.textContent = "";
+    return;
+  }
   let hash = 0;
   for (const ch of label) hash = (hash * 31 + ch.codePointAt(0)) % 360;
   el.classList.add("stand-in");
