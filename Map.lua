@@ -6,6 +6,8 @@ Mount Sheet Sync — маршруты и места появления редк�
 карте один — включить или выключить его маршрут; несколько — список с галочками, каждый включается отдельно.
 Что включено, помнится по карте и маунту (db.routes[карта][маунт]); рисуется только для открытой сейчас карты, поэтому
 на другой карте чужих линий нет, а при возврате всё как было.
+У летающих раров без карты маршрута (Алани, Холон, Кусачий Ветер) вместо линии — облако мелких полупрозрачных точек
+(e.seen: где их видели игроки, Wowhead): показывает, где летает, и не выдумывает порядок.
 Линии лежат на своём кадре поверх холста карты, выше слоя «изученной территории» (её текстуры — значки карты с высоким
 уровнем кадра; линия ниже них видна только на неизученном). В поля WorldMapFrame ничего не пишем.
 ]]
@@ -22,9 +24,10 @@ local DOT = "Interface\\COMMON\\Indicator-Gray"
 local GATE_RAID = "Interface\\Minimap\\Raid"
 local GATE_DUNGEON = "Interface\\Minimap\\Dungeon"
 local GATE_SIZE = 22
+local SEEN_SIZE, SEEN_ALPHA = 7, 0.6   -- точка облака наблюдений: мельче и прозрачнее места появления
 
 local overlay, button, provider
-local lines, dots = {}, {}
+local lines, dots, seenDots = {}, {}, {}
 local shownMap   -- карта, для которой сейчас нарисовано (для проверок)
 
 local function Collected(id)
@@ -77,7 +80,7 @@ local function MapList(mapID)
       for _, e in ipairs(ns.RARE_ROUTES[child] or {}) do
         local to = byMount[e.mount]
         if not to then
-          to = { mount = e.mount, spawns = {}, lines = {}, places = {} }
+          to = { mount = e.mount, spawns = {}, lines = {}, places = {}, seen = {} }
           byMount[e.mount] = to
           list[#list + 1] = to
         end
@@ -88,6 +91,9 @@ local function MapList(mapID)
         end
         for _, points in ipairs(e.lines or {}) do
           to.lines[#to.lines + 1] = Moved(points, minX, maxX, minY, maxY)
+        end
+        for _, c in ipairs(Moved(e.seen or {}, minX, maxX, minY, maxY)) do
+          to.seen[#to.seen + 1] = c
         end
       end
     end
@@ -156,6 +162,9 @@ local function HideAll()
   end
   for _, gate in ipairs(gates) do
     gate:Hide()
+  end
+  for _, tex in ipairs(seenDots) do
+    tex:Hide()
   end
   shownMap = nil
 end
@@ -320,6 +329,15 @@ local function Dot(i)
   return dots[i]
 end
 
+-- Точка облака наблюдений — просто текстура: без наведения (их десятки), щелчки идут к карте.
+local function SeenDot(i)
+  if not seenDots[i] then
+    seenDots[i] = overlay:CreateTexture(nil, "ARTWORK")
+    seenDots[i]:SetTexture(DOT)
+  end
+  return seenDots[i]
+end
+
 local function MapID()
   return WorldMapFrame and WorldMapFrame.GetMapID and WorldMapFrame:GetMapID() or nil
 end
@@ -361,7 +379,7 @@ local function Refresh()
     if not scale or scale <= 0 then
       scale = 1
     end
-    local nLine, nDot, color = 0, 0, 0
+    local nLine, nDot, nSeen, color = 0, 0, 0, 0
     for _, e in ipairs(entries) do
       if state and state[e.mount] == true then
         any = true
@@ -399,6 +417,19 @@ local function Refresh()
           dot:ClearAllPoints()
           dot:SetPoint("CENTER", overlay, "TOPLEFT", spawns[i] / 100 * width, -spawns[i + 1] / 100 * height)
           dot:Show()
+        end
+        local seen = e.seen or {}
+        if #seen > 1 then
+          local c = COLORS[first % #COLORS + 1]
+          for i = 1, #seen - 1, 2 do
+            nSeen = nSeen + 1
+            local tex = SeenDot(nSeen)
+            tex:SetVertexColor(c[1], c[2], c[3], SEEN_ALPHA)
+            tex:SetSize(SEEN_SIZE / scale, SEEN_SIZE / scale)
+            tex:ClearAllPoints()
+            tex:SetPoint("CENTER", overlay, "TOPLEFT", seen[i] / 100 * width, -seen[i + 1] / 100 * height)
+            tex:Show()
+          end
         end
         if nLines == 0 then
           color = color + 1
@@ -560,7 +591,13 @@ function ns.MapRoutesDrawn()
       nDots = nDots + 1
     end
   end
-  return nLines, nDots, shownMap, button and button:IsShown() or false
+  local nSeen = 0
+  for _, tex in ipairs(seenDots) do
+    if tex:IsShown() then
+      nSeen = nSeen + 1
+    end
+  end
+  return nLines, nDots, shownMap, button and button:IsShown() or false, nSeen
 end
 
 local watcher = CreateFrame("Frame")
