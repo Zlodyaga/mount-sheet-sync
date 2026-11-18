@@ -430,13 +430,14 @@ namespace MountSheetSync
                 leftItem.DropDownItems.Add(Disabled(last.LeftNote.Length > 0 ? last.LeftNote : settings.IsLocal ? Tr._("Списка пока нет") : Tr._("Список ещё не получен из таблицы")));
                 return;
             }
+            List<ToolStripItem> finished = new List<ToolStripItem>();   // у кого всё убито или скрыто — в конец списка
             foreach (CharLeft c in last.Left)
             {
                 int total, all;
                 List<string> lines = SheetData.Visible(c, settings.HiddenKinds, out total, out all);
                 if (total == 0)
                 {
-                    leftItem.DropDownItems.Add(Disabled(MenuText(all == 0 && settings.HiddenKinds.Count > 0
+                    finished.Add(Disabled(MenuText(all == 0 && settings.HiddenKinds.Count > 0
                         ? Tr.F("{0} — всё скрыто", c.Name) : Tr.F("{0} — всё отмечено", c.Name))));
                     continue;
                 }
@@ -446,6 +447,10 @@ namespace MountSheetSync
                     sub.DropDownItems.Add(Disabled(MenuText(TextUtil.Shorten(line, 90))));
                 }
                 leftItem.DropDownItems.Add(sub);
+            }
+            foreach (ToolStripItem item in finished)
+            {
+                leftItem.DropDownItems.Add(item);
             }
             leftItem.DropDownItems.Add(new ToolStripSeparator());
             leftItem.DropDownItems.Add(HideMenu());

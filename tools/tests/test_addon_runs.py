@@ -80,6 +80,19 @@ ns.DeleteRun(758, 2)
 check("delete: gone; the turned-off one alone gives no average", runs(758) == 1 and ns.RunAverage(758) is None and ns.RunTip(758) is None)
 ns.SetRunCounted(758, 1, True)
 
+# by difficulty: a row's own difficulties (item.d) average only their runs; a run of unknown difficulty fits any
+L.execute('MOCK.inst = { name = "x", type = "raid", diff = 3, max = 10, id = 631 }; Fire("PLAYER_ENTERING_WORLD")')
+g.Advance(600)
+g.Kill(1106)
+check("a 10-player run: kept with its difficulty", runs(758) == 2 and ns.Runs(758)[2].diff == 3, runs(758))
+check("…all runs: 12.5 min", ns.RunAverage(758)[0] == 750)
+check("…the row's 25 heroic: only its run", ns.RunAverage(758, L.table(6))[0] == 900 and str(ns.RunTip(758, L.table(6))) == "~15 мин на заход (по 1)")
+check("…the row's 10 normal: only its run", ns.RunAverage(758, L.table(3, 5))[0] == 600)
+check("…no runs of the row's difficulty: nothing", ns.RunAverage(758, L.table(16)) is None and ns.RunTip(758, L.table(16)) is None)
+ns.Runs(758)[2].diff = None
+check("…unknown difficulty: fits any row", ns.RunAverage(758, L.table(16))[0] == 600)
+ns.DeleteRun(758, 2)
+
 # a mount boss kill after leaving: not counted; a run left with a kill keeps the time up to that kill
 g.Enter(631)
 g.Advance(400)

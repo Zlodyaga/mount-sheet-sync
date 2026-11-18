@@ -2,6 +2,9 @@
 
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
+## 3.0.8
+- Run times: the average is per difficulty of the row - 25 heroic and 10 normal runs no longer mix; no runs of that difficulty yet - no estimate.
+
 ## 3.0.7
 - Needs the program 2.10.2 or newer (correcting attempts, “Farming” for other characters and the mounts collected earlier come from it); with an older one the window asks to update it.
 - Dropped tab: the character column is replaced by the chance over all attempts at the drop (as on the sheet); who got it is in the row tooltip.
