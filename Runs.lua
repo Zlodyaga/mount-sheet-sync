@@ -8,6 +8,10 @@ Mount Sheet Sync — сколько длится заход в подземел�
 
 db.runOpen — идущий заход; db.runs[<номер подземелья в путеводителе>] — последние 20: { start, secs, char, diff,
 kills, long, off, on }. long — дольше 2 ч: в среднее не идёт, пока игрок не вернёт (on); off — игрок сам убрал.
+Строка при входе (3.0.8, ns.EnterNote): «Здесь маунт: Непобедимый (Король-лич, 1%) - попытка 87» — маунты этого подземелья
+на текущей сложности, один раз на вход (db.enterSeen: та же карта за 10 мин — молчим); выкл. — «Не писать в чат» или
+галочка «При входе в подземелье - его маунты» (db.enterNote = false).
+
 Среднее — ns.RunAverage(inst, d): d — сложности строки (item.d, номера DifficultyID), заходы на других сложностях в него
 не идут (25 героический и 10 обычный в ЦЛК — разное время); заход без известной сложности идёт в любое. Правка — правый щелчок по строке «Попыток» > «Заходы» (UI.Rows.lua).
 ]]
@@ -65,6 +69,61 @@ local function MountBosses(inst)
   return out, n
 end
 
+-- заход на одной из сложностей строки (d пусто — любая; сложность захода неизвестна — тоже)
+local function DiffFits(r, d)
+  local id = tonumber(r.diff)
+  if type(d) ~= "table" or #d == 0 or not id then
+    return true
+  end
+  for _, x in ipairs(d) do
+    if tonumber(x) == id then
+      return true
+    end
+  end
+  return false
+end
+
+local NOTE_MAX = 3   -- маунтов в строке, остальные — «и ещё N»
+
+--- Маунты подземелья inst на сложности diff: строка для чата или nil (нет таких).
+function ns.EnterNoteText(inst, diff)
+  local parts, more = {}, 0
+  for _, m in ipairs(ns.GetAttemptsList and ns.GetAttemptsList() or {}) do
+    if ns.ItemInstance(m) == inst and DiffFits({ diff = diff }, (m.raw or m).d) then
+      if #parts < NOTE_MAX then
+        parts[#parts + 1] = string.format(L.enter_item, tostring(m.name), tostring(m.boss or "?"),
+          ns.FormatDropChance(m.p) or "?", (tonumber(m.n) or 0) + 1)
+      else
+        more = more + 1
+      end
+    end
+  end
+  if #parts == 0 then
+    return nil
+  end
+  local text = string.format(L.enter_note, table.concat(parts, "; "))
+  if more > 0 then
+    text = text .. " " .. string.format(L.enter_more, more)
+  end
+  return text
+end
+
+local function EnterNote(db, inst, map, diff, now)
+  if db.quiet or db.enterNote == false then
+    return
+  end
+  local last = type(db.enterSeen) == "table" and db.enterSeen or nil
+  if last and last.map == map and now - (tonumber(last.t) or 0) <= RESUME then
+    last.t = now   -- /reload, вылет, вышел и зашёл — уже сказано
+    return
+  end
+  db.enterSeen = { map = map, t = now }
+  local text = ns.EnterNoteText(inst, diff)
+  if text and ns.Print then
+    ns.Print(text)
+  end
+end
+
 local function Close(db)
   local run = db.runOpen
   db.runOpen = nil
@@ -110,6 +169,7 @@ function ns.RunsOnZone()
   local run = type(db.runOpen) == "table" and db.runOpen or nil
   local inst, map, diff = Where()
   if inst then
+    EnterNote(db, inst, map, diff, now)
     if run and run.map == map and (not run.left or now - run.left <= RESUME) then
       run.left = nil   -- тот же заход
       return
@@ -167,19 +227,6 @@ function ns.Runs(inst)
   return type(list) == "table" and #list > 0 and list or nil
 end
 
--- заход на одной из сложностей строки (d пусто — любая; сложность захода неизвестна — тоже)
-local function DiffFits(r, d)
-  local id = tonumber(r.diff)
-  if type(d) ~= "table" or #d == 0 or not id then
-    return true
-  end
-  for _, x in ipairs(d) do
-    if tonumber(x) == id then
-      return true
-    end
-  end
-  return false
-end
 
 --- Среднее по учитываемым заходам на сложностях d (item.d; nil — все): секунды, сколько заходов; nil — нет ни одного.
 function ns.RunAverage(inst, d)

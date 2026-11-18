@@ -231,7 +231,7 @@ local function CreateSettings()
   for _, code in ipairs(ns.LANGUAGES) do
     codes[#codes + 1] = code
   end
-  local height = math.max(500, 62 + #codes * 24 + 98 + 44 + 138)   -- справа до -474 (галочки «в группу / в гильдию»)
+  local height = math.max(500, 62 + #codes * 24 + 98 + 44 + 162)   -- справа до -498 (галочка «при входе в подземелье», 3.0.8)
   settingsFrame = Skin.Window(SETTINGS_NAME, 620, height, "DIALOG")
   settingsFrame:SetPoint("CENTER", 0, 60)
   local function title()
@@ -343,6 +343,7 @@ local function CreateSettings()
     end
   end)
   AttachTooltip(tellGuildCheck, "settings_tell_guild", "tip_settings_tell")
+  DefaultOnCheck(settingsFrame, -474, "settings_enter", "enterNote", "tip_settings_enter")   -- маунты подземелья при входе (Runs.lua)
   tipsCheck:HookScript("OnClick", function()
     if S.frame and S.frame:IsShown() then
       UI.Refresh(true)
