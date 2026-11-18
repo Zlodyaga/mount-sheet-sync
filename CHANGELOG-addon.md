@@ -3,6 +3,7 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.7
+- Needs the program 2.10.2 or newer (correcting attempts, “Farming” for other characters and the mounts collected earlier come from it); with an older one the window asks to update it.
 - Dropped tab: the character column is replaced by the chance over all attempts at the drop (as on the sheet); who got it is in the row tooltip.
 - Remaining: Hide buttons (raids, dungeons, world bosses, rares) to see only what you want this week. Display only - Farm / Do not farm stays as it is.
 - How long a run takes, from your own runs: from entering the instance to the last boss with a mount from the list. “~12 min a run (from 5)” in the row tooltip, a Min column on the Attempts tab (sorting by it: chance per minute); right-click a row > Runs: count a run in the average or delete it.

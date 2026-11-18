@@ -61,7 +61,7 @@ def new_game(program_src=None, lang=None):
 def mark(seen, sheet=True):
     # the same text ProgramMark.Text writes (C#)
     return ("-- Mount Sheet Sync: MountSheetSync.exe rewrites this file every minute while it runs,\r\n"
-            "MountSheetSyncProgram = { seen = %d, sheet = %s, version = \"2.9.2\" }\r\n" % (seen, "true" if sheet else "false"))
+            "MountSheetSyncProgram = { seen = %d, sheet = %s, version = \"2.10.2\" }\r\n" % (seen, "true" if sheet else "false"))
 
 
 def window_bits(L, g):
@@ -177,7 +177,7 @@ L, g, ns, _ = new_game(prog(NOW - 20, "2.7.0"))
 check("program 2.7.0 (older than the addon needs) → oldprogram", ns.ProgramState() == "oldprogram")
 broker, hint, tip = window_bits(L, g)
 check("…«Программа … устарела — обновите её»", hint is not None and "устарела" in hint, hint)
-L, g, ns, _ = new_game(prog(NOW - 20, "2.9.2", addon="2.8.0"))
+L, g, ns, _ = new_game(prog(NOW - 20, "2.10.2", addon="2.8.0"))
 check("same versions → online", ns.ProgramState() == "online")
 vl = ns.VersionLess
 check("version order like the program: 2.9 < 2.10, 2.9.0-alpha1 < alpha2 < beta1 < 2.9.0, 2.9.0 = 2.9",
@@ -190,13 +190,13 @@ def words_with(program):
     return str(ns2.L.button_sync), str(ns2.L.window_hint)
 
 
-local_words = words_with('MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.10.0", storage = "local" }\n' % NOW)
+local_words = words_with('MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.10.2", storage = "local" }\n' % NOW)
 check("data on this computer: «Сохранить отметки», no sheet named", local_words[0] == "Сохранить отметки" and "таблиц" not in local_words[1], local_words)
-google_words = words_with('MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.10.0", storage = "google" }\n' % NOW)
+google_words = words_with('MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.10.2", storage = "google" }\n' % NOW)
 check("a Google sheet: «Отправить в таблицу»", google_words[0] == "Отправить в таблицу" and "таблиц" in google_words[1], google_words)
-script_words = words_with('MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.10.0", storage = "script" }\n' % NOW)
+script_words = words_with('MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.10.2", storage = "script" }\n' % NOW)
 check("a sheet with the script: the same", script_words[0] == "Отправить в таблицу", script_words)
-old_words = words_with('MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.9.2" }\n' % NOW)
+old_words = words_with('MountSheetSyncProgram = { seen = %d, sheet = true, version = "2.10.2" }\n' % NOW)
 check("an older program says nothing, it always has a sheet", old_words[0] == "Отправить в таблицу", old_words)
 none_words = words_with("MountSheetSyncProgram = nil\n")
 check("no program at all: no sheet to name", none_words[0] == "Сохранить отметки", none_words)
