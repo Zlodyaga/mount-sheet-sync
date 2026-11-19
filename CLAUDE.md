@@ -139,9 +139,9 @@
 - Тесты: `bash tools/run_tests.sh` (или `--no-ui`) — нужны Linux, mono, python3 + lupa, node, Xvfb и т. п.
   (на Windows — WSL; иначе полагаться на CI `ci.yml`: на push в `main`, PR и Run workflow, ~4 мин). На ПК
   пользователя есть Python + lupa: тесты аддона идут локально (`python tools/tests/test_addon2.py`, что идёт и
-  что нет — в testing.md); `gh` есть (с 07.11.2026, вход Zlodyaga; если его нет в PATH — `C:\Program Files\GitHub CLI\gh.exe`). Тесты переписывают
-  `tools/tests/sv_collection.lua` и `status_left.json` (метки времени) — перед коммитом вернуть
-  `git checkout`, кроме случая, когда менялось содержимое (тогда закоммитить новые). В e2e индексы колонок
+  что нет — в testing.md); `gh` есть (с 07.11.2026, вход Zlodyaga; если его нет в PATH — `C:\Program Files\GitHub CLI\gh.exe`). Тестовые файлы
+  в git (`status_left.json`, `wb_left.json`, `sv_collection.lua`) тесты не переписывают, а сверяют: устарели — проверка
+  падает, обновить — `MSS_UPDATE_FIXTURES=1` у `test_addon_left.py` / `test_collection.py` (`tools/tests/fixtures.py`). В e2e индексы колонок
   заданы жёстко — при новых колонках сдвинуть.
 - Номер версии ставит `python3 tools/bump.py addon|program <версия>` (где он записан — таблица в `docs/reference/release.md`). Новой возможности нужна
   свежая другая половина — поднять `Program.MinAddon` или `MIN_PROGRAM` в `MountSheetSync.lua`.

@@ -1,6 +1,8 @@
 
 MountSheetSyncDB = {
-	["addonVersion"] = "3.0.3",
+	["access"] = {
+	},
+	["addonVersion"] = "3.0.7",
 	["chars"] = {
 		["Мирна-Ревущий фьорд"] = {
 			["class"] = "Жрица",
@@ -9,11 +11,11 @@ MountSheetSyncDB = {
 			["level"] = 72,
 			["name"] = "Мирна",
 			["realm"] = "Ревущий фьорд",
-			["seen"] = 1793408610,
+			["seen"] = 1795082703,
 			["stats"] = {
 				[5970] = 3,
 			},
-			["statsAt"] = 1793408610,
+			["statsAt"] = 1795082703,
 		},
 		["Эйра-Ревущий фьорд"] = {
 			["class"] = "Жрица",
@@ -22,12 +24,12 @@ MountSheetSyncDB = {
 			["level"] = 72,
 			["name"] = "Эйра",
 			["realm"] = "Ревущий фьорд",
-			["seen"] = 1793408610,
+			["seen"] = 1795082703,
 			["stats"] = {
 				[5970] = 13,
 				[6168] = 1234,
 			},
-			["statsAt"] = 1793408610,
+			["statsAt"] = 1795082703,
 		},
 	},
 	["collection"] = {
@@ -75,7 +77,7 @@ MountSheetSyncDB = {
 			"Пепел Ал'ара", -- [2]
 			"Синий протодракон", -- [3]
 		},
-		["updated"] = 1793408610,
+		["updated"] = 1795082703,
 	},
 	["journal"] = {
 		["build"] = "66300",
@@ -125,7 +127,7 @@ MountSheetSyncDB = {
 			}, -- [3]
 		},
 		["locale"] = "ruRU",
-		["updated"] = 1793408610,
+		["updated"] = 1795082703,
 	},
 	["kills"] = {
 		{
@@ -138,12 +140,9 @@ MountSheetSyncDB = {
 			["mount"] = "Синий протодракон",
 			["mountID"] = 363,
 			["realm"] = "Ревущий фьорд",
-			["source"] = "mount",
-			["spellID"] = 59996,
-			["time"] = 1793401440,
+			["time"] = 1795075533,
 		}, -- [1]
 	},
 	["minimap"] = {
 	},
-	["version"] = 1,
 }

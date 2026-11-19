@@ -12,6 +12,7 @@ import sys
 import time
 from lupa import lua51
 import paths
+import fixtures
 
 ADDON_DIR = paths.ADDON_DIR
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -34,10 +35,15 @@ from addon_env import lua_str, sheet_lua   # the sheet's status reply -> SheetDa
 if SHEET_FILE:
     sheet_src = open(SHEET_FILE, encoding="utf-8").read()
 else:
-    subprocess.run([sys.executable, os.path.join(HERE, "make_fixture.py"), os.path.join(HERE, "wb_left.json"), "real"], check=True)
-    subprocess.run(["node", os.path.join(HERE, "dump_status.js"), os.path.join(HERE, "wb_left.json"), os.path.join(HERE, "status_left.json")], check=True)
-    status = json.load(open(os.path.join(HERE, "status_left.json"), encoding="utf-8"))
+    # made in the scratch folder; the copies in git (other addon tests read status_left.json) are only compared
+    wb_made, status_made = fixtures.scratch("wb_left.json"), fixtures.scratch("status_left.json")
+    subprocess.run([sys.executable, os.path.join(HERE, "make_fixture.py"), wb_made, "real"], check=True)
+    subprocess.run(["node", os.path.join(HERE, "dump_status.js"), wb_made, status_made], check=True)
+    status = json.load(open(status_made, encoding="utf-8"))
     sheet_src = "MountSheetSyncSheet = " + sheet_lua(status) + "\n"
+    for name, made in (("wb_left.json", wb_made), ("status_left.json", status_made)):
+        ok, note = fixtures.compare(name, made)
+        check("the fixture %s in git is up to date" % name, ok, note)
 
 L = lua51.LuaRuntime(unpack_returned_tuples=True)
 L.execute(open(os.path.join(HERE, "wow_mock.lua"), encoding="utf-8").read())

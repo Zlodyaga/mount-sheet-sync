@@ -13,7 +13,8 @@ import paths
 
 ADDON_DIR = paths.ADDON_DIR
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT_SV = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "sv_collection.lua")
+import fixtures
+OUT_SV = sys.argv[1] if len(sys.argv) > 1 else fixtures.scratch("sv_collection.lua")   # the copy in git is only compared
 NOW = int(time.time())
 
 checks = []
@@ -338,6 +339,8 @@ def ser(v, ind):
 with open(OUT_SV, "w", encoding="utf-8", newline="\r\n") as f:
     f.write("\nMountSheetSyncDB = " + ser(py(db), 0) + "\n")
 print("SavedVariables written:", OUT_SV)
+ok, note = fixtures.compare("sv_collection.lua", OUT_SV)
+check("the fixture sv_collection.lua in git is up to date (test_gamedata.py and ui_google.py read it)", ok, note)
 
 passed = sum(1 for _, ok in checks if ok)
 print("\n%d/%d checks passed" % (passed, len(checks)))
