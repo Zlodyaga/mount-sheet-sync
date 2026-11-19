@@ -5,7 +5,8 @@
     python3 tools/bump.py                 # show both versions and where they are written
 
 The addon: "## Version" in MountSheetSync.toc and VERSION in MountSheetSync.lua (the tests read the version from the
-toc). The program: Program.Version, AssemblyInfo.cs and the tests and pictures that name the version.
+toc), and the test fixture sv_collection.lua. The program: Program.Version, AssemblyInfo.cs, the tests, the fixture
+status_left.json and the pictures that name the version (the fixtures are compared with what the tests make).
 It does not touch the changelogs, CLAUDE.md or docs/reference/README.md — those are written by hand
 (the list is printed at the end). Line endings of every file are kept.
 """
@@ -47,9 +48,9 @@ def replace(path, pattern, text, count):
 
 def main():
     if len(sys.argv) == 1:
-        print("addon   %s   MountSheetSync.toc, MountSheetSync.lua" % addon_version())
+        print("addon   %s   MountSheetSync.toc, MountSheetSync.lua, tools/tests/sv_collection.lua" % addon_version())
         print("program %s   program/Program.cs, program/AssemblyInfo.cs, tools/tests/e2e_install.py, tools/tests/e2e_update.py,"
-              " tools/screens/program.py" % program_version())
+              " tools/tests/status_left.json, tools/screens/program.py" % program_version())
         return 0
     if len(sys.argv) != 3 or sys.argv[1] not in ("addon", "program") or not VERSION.match(sys.argv[2]):
         sys.exit(__doc__)
@@ -59,6 +60,7 @@ def main():
         print("addon %s -> %s" % (old, new))
         replace("MountSheetSync.toc", r"^## Version: \S+", "## Version: " + new, 1)
         replace("MountSheetSync.lua", r'^local VERSION = "[^"]+"', 'local VERSION = "%s"' % new, 1)
+        replace("tools/tests/sv_collection.lua", r'\["addonVersion"\] = "[^"]+"', '["addonVersion"] = "%s"' % new, 1)
         print("By hand: CHANGELOG-addon.md (## %s), CLAUDE.md («Состояние»), docs/reference/README.md;" % new)
         print("a feature that needs a newer program: MIN_PROGRAM in MountSheetSync.lua.")
     else:
@@ -69,6 +71,7 @@ def main():
         replace("program/AssemblyInfo.cs", q, new, 3)
         replace("tools/tests/e2e_install.py", q, new, None)
         replace("tools/tests/e2e_update.py", q, new, None)
+        replace("tools/tests/status_left.json", r'"version": "%s"' % q, '"version": "%s"' % new, 1)
         replace("tools/screens/program.py", q, new, None)
         print("By hand: CHANGELOG.md (## %s), CLAUDE.md («Состояние»), docs/reference/README.md;" % new)
         print("a feature that needs a newer addon: Program.MinAddon.")
