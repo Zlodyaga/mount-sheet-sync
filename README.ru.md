@@ -80,3 +80,8 @@
 
 [MIT](LICENSE). Библиотеки в `Libs`: LibStub и LibDataBroker-1.1 (общественное достояние), CallbackHandler-1.0
 (лицензия Ace3, `Libs/CallbackHandler-1.0/LICENSE.txt`).
+
+Откуда данные — спасибо авторам: номера существ, шансы, задания отката и точки маунтов с редких монстров взяты из базы
+аддона [Rarity](https://github.com/WowRarity/Rarity) (GPL-2.0) — только факты, без его кода; имена, места появления и
+маршруты раров — [Wowhead](https://www.wowhead.com/) и [Warcraft Wiki](https://warcraft.wiki.gg/), таблицы игры —
+[wago.tools](https://wago.tools/).

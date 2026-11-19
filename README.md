@@ -116,5 +116,10 @@ Needs: `mono-devel`, `python3` with `lupa`, `nodejs`, and for the UI tests `xvfb
 [MIT](LICENSE). Bundled libraries: LibStub and LibDataBroker-1.1 (public domain), CallbackHandler-1.0 (BSD-style Ace3
 license, see `Libs/CallbackHandler-1.0/LICENSE.txt`).
 
+Data sources, with thanks: creature IDs, drop chances, lockout quests and spots of the rare-monster mounts were taken from
+the database of the [Rarity](https://github.com/WowRarity/Rarity) addon (GPL-2.0) — facts only, none of its code; names,
+spawn points and routes of rares come from [Wowhead](https://www.wowhead.com/) and [Warcraft Wiki](https://warcraft.wiki.gg/),
+game tables from [wago.tools](https://wago.tools/).
+
 World of Warcraft is a trademark of Blizzard Entertainment. Google Sheets and Google Drive are trademarks of Google LLC.
 This project is not affiliated with either.
