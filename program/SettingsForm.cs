@@ -219,7 +219,9 @@ namespace MountSheetSync
             testBox.Enabled = updatesBox.Checked;
             updatesBox.CheckedChanged += delegate { testBox.Enabled = updatesBox.Checked; };
             Label languageLabel = new Label();
-            languageLabel.Text = Tr._("Язык") + (Tr.Lang != "en" ? " / Language" : "");
+            // Alt+L — сразу в список языков на любом языке программы («&» — буква быстрого доступа)
+            languageLabel.Text = Tr.Lang != "en" ? Tr._("Язык") + " / &Language" : "&" + Tr._("Язык");
+            languageLabel.UseMnemonic = true;
             languageLabel.AutoSize = true;
             languageLabel.Anchor = AnchorStyles.Left;
             languageBox.DropDownStyle = ComboBoxStyle.DropDownList;

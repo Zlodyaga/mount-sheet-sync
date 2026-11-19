@@ -1,5 +1,5 @@
 """2.3: the tray program speaks the Windows language when it has it (en, ru, de, fr, es, pt), English otherwise;
-a choice in the tray menu («Language») wins and is saved. Runs under mono + Xvfb; screenshots go to the run folder.
+a choice in the settings window («Language», Alt+L; in the tray menu until 2.10.3) wins and is saved. Runs under mono + Xvfb; screenshots go to the run folder.
 
   python3 ui_lang.py <MountSheetSync.exe>
 """
@@ -107,29 +107,27 @@ try:
     shot("l2_settings_fr")
     stop(p)
 
-    # 5. the tray menu: «Language» submenu, pick Español → saved, menu in Spanish at once
+    # 5. the settings window: «Language» (Alt+L), pick Español, save → saved, menu in Spanish at once
     data, p = run("menu", "en", {"pollSeconds": 2, "mode": "google"})
     t = wait_title("settings")
     check("first run in English", t == "Mount Sheet Sync — settings", titles())
     time.sleep(2)
-    xdo("mousemove", "1112", "12")
-    xdo("click", "3")
-    time.sleep(2)
-    shot("l3_menu_en")
     st_before = json.load(open(os.path.join(data, "settings.json"), encoding="utf-8-sig"))
-    # the menu opens upwards/downwards depending on room; walk it with the keyboard: Up from the bottom
-    # (Exit, separator skipped, Language) and Right into the submenu
-    xdo("key", "Up", "Up")
-    time.sleep(0.6)
-    xdo("key", "Right")
+    wid = xdo("search", "--name", "settings").split()
+    if wid:
+        xdo("windowactivate", "--sync", wid[0])
     time.sleep(1)
-    shot("l4_language_submenu")
-    # submenu: Same as Windows, English, Русский, Deutsch, Français, Español, Português → Down ×5 from the first
+    shot("l3_settings_en")
+    # Alt+L: the language list; Same as Windows, English, Русский, Deutsch, Français, Español, Português → Down ×5 from
+    # «Same as Windows» (the setting is auto); Enter — «Save» (the window's AcceptButton)
+    xdo("key", "alt+l")
+    time.sleep(0.6)
     for _ in range(5):
         xdo("key", "Down")
         time.sleep(0.2)
+    shot("l4_language_es")
     xdo("key", "Return")
-    time.sleep(2)
+    time.sleep(3)
     st = json.load(open(os.path.join(data, "settings.json"), encoding="utf-8-sig"))
     check("menu pick saved: language = es", st.get("language") == "es", (st_before.get("language"), st.get("language")))
     check("…and logged in English (Spanish is not a journal language)", "Program language: Español." in log_text(data),

@@ -181,8 +181,13 @@ try:
 
     subprocess.run(["xdotool", "key", "Escape"], env=env)
     time.sleep(0.5)
-    # «Что фармить…»: снять галочку у первой строки и сохранить
-    menu_click(216)
+    # «Что фармить…» (2.10.3: в подменю «Персонажи и фарм»): с клавиатуры — Up от низа меню: Выход, Обслуживание,
+    # Настройки, «Персонажи и фарм»; Right — в подменю (первый пункт «Персонажи в таблице…»), Down — «Что фармить…»
+    subprocess.run(["xdotool", "mousemove", "1112", "12", "click", "3"], env=env)
+    time.sleep(1.5)
+    for k in ["Up", "Up", "Up", "Up", "Right", "Down", "Return"]:
+        subprocess.run(["xdotool", "key", k], env=env)
+        time.sleep(0.5 if k != "Right" else 1)
     fid = wait_window("что фармить", 20)
     check("«Что фармить…» opens from the tray menu", fid is not None, windows())
     time.sleep(4)
