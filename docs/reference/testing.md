@@ -30,8 +30,11 @@ ScrollBox в `wow_mock.lua` упрощён: `SetDataProvider` вызывает �
 видимых) на кадрах из `box._pool`; `box._inits` считает вызовы, `box._view._extent` отличает список (16) от
 персонажей (20). Строки списка в тестах читаются из `_pool`, а не по координатам FontString.
 
-Особенности: тесты переписывают `tools/tests/sv_collection.lua` и `status_left.json` (метки времени) — перед
-коммитом вернуть (`git checkout`), версию в `status_left.json` оставлять актуальной. Под mono нет общих между
+Особенности: файлы `tools/tests/wb_left.json`, `status_left.json` (их делает `test_addon_left.py`) и `sv_collection.lua`
+(`test_collection.py`) лежат в git, чтобы остальные тесты аддона обходились без node и mono. С 19.11.2026 тесты пишут их в
+папку для черновиков (`fixtures.scratch`) и только сравнивают с копией в git (`fixtures.compare`, без меток времени):
+устарела — проверка «the fixture … in git is up to date» падает; обновить — `MSS_UPDATE_FIXTURES=1 python
+tools/tests/test_addon_left.py` (или `test_collection.py`) и закоммитить. Рабочее дерево после тестов чистое. Под mono нет общих между
 процессами именованных мьютексов и ярлыков «Пуск» — тесты это учитывают. Индексы колонок в e2e жёстко заданы:
 при новых колонках таблицы их надо сдвинуть.
 
