@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -43,6 +44,15 @@ namespace MountSheetSync
         readonly Label wowHint = new Label();
         readonly Label statusLabel = new Label();
         readonly CheckBox autostartBox = new CheckBox();
+        // 2.10.3: галочки и язык, что раньше были в меню значка
+        readonly CheckBox notifyBox = new CheckBox();
+        readonly CheckBox autoAddBox = new CheckBox();
+        readonly CheckBox statsBox = new CheckBox();
+        readonly CheckBox updatesBox = new CheckBox();
+        readonly CheckBox testBox = new CheckBox();
+        readonly ComboBox languageBox = new ComboBox();
+        readonly List<string> languageCodes = new List<string>();
+        readonly ToolTip tips = new ToolTip();
         readonly Button checkButton = new Button();
         readonly Button saveButton = new Button();
         readonly Button cancelButton = new Button();
@@ -56,6 +66,11 @@ namespace MountSheetSync
         public bool AutostartChecked
         {
             get { return autostartBox.Checked; }
+        }
+
+        public bool StatsChecked
+        {
+            get { return statsBox.Checked; }
         }
 
         /// <param name="commit">Сохранить сразу (вход, новая таблица): настройки и «таблица сменилась».</param>
@@ -190,6 +205,35 @@ namespace MountSheetSync
             autostartBox.Checked = autostart;
             autostartBox.Margin = new Padding(3, unit / 2, 3, 3);
             AddWide(table, autostartBox);
+            Tick(table, notifyBox, Tr._("Показывать уведомления"), settings.Notifications, null);
+            Tick(table, autoAddBox, Tr._("Добавлять новых персонажей самим"), settings.AutoAddCharacters,
+                Tr._("Персонаж, которым вы зашли в игру, сам попадает в список. Выключено — добавляйте через «Персонажи…»"));
+            if (Stats.Available)
+            {
+                Tick(table, statsBox, Tr._("Отправлять анонимную статистику"), settings.StatsChoice == "yes",
+                    Tr._("Раз в сутки: версии, язык, режим и счётчики пользования. Без имён персонажей и данных таблицы"));
+            }
+            Tick(table, updatesBox, Tr._("Проверять обновления"), settings.CheckUpdates, null);
+            Tick(table, testBox, Tr._("Обновляться до пробных версий (альфа, бета)"), settings.TestVersions,
+                Tr._("Пробные версии выходят раньше обычных, но могут быть с ошибками. Снимите галочку — программа снова будет предлагать только обычные выпуски."));
+            testBox.Enabled = updatesBox.Checked;
+            updatesBox.CheckedChanged += delegate { testBox.Enabled = updatesBox.Checked; };
+            Label languageLabel = new Label();
+            // Alt+L — сразу в список языков на любом языке программы («&» — буква быстрого доступа)
+            languageLabel.Text = Tr.Lang != "en" ? Tr._("Язык") + " / &Language" : "&" + Tr._("Язык");
+            languageLabel.UseMnemonic = true;
+            languageLabel.AutoSize = true;
+            languageLabel.Anchor = AnchorStyles.Left;
+            languageBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            languageBox.Width = 220;
+            foreach (string code in new[] { "auto" }.Concat(Tr.Languages))
+            {
+                languageCodes.Add(code);
+                languageBox.Items.Add(code == "auto" ? Tr.F("Как в Windows ({0})", Tr.Names[Tr.SystemLanguage()]) : Tr.Names[code]);
+            }
+            languageBox.SelectedIndex = Math.Max(0, languageCodes.IndexOf(Tr.Normalize(settings.Language)));
+            table.Controls.Add(languageLabel);
+            table.Controls.Add(languageBox);
 
             if (Program.RunningFromTemp)
             {
@@ -254,6 +298,19 @@ namespace MountSheetSync
             p.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             p.Margin = new Padding(0, 2, 0, 0);
             return p;
+        }
+
+        void Tick(TableLayoutPanel table, CheckBox box, string text, bool on, string tip)
+        {
+            box.Text = text;
+            box.AutoSize = true;
+            box.Checked = on;
+            box.Margin = new Padding(3, 1, 3, 1);
+            if (tip != null)
+            {
+                tips.SetToolTip(box, tip);
+            }
+            AddWide(table, box);
         }
 
         static void AddWide(TableLayoutPanel table, Control control)
@@ -696,6 +753,11 @@ namespace MountSheetSync
                 result.Secret = secret;
             }
             result.WowPath = resolved;
+            result.Notifications = notifyBox.Checked;
+            result.AutoAddCharacters = autoAddBox.Checked;
+            result.CheckUpdates = updatesBox.Checked;
+            result.TestVersions = testBox.Checked;
+            result.Language = languageCodes[Math.Max(0, languageBox.SelectedIndex)];
             return null;
         }
 

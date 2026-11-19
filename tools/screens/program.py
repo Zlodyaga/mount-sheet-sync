@@ -93,16 +93,14 @@ def menu_html(w, h):
         ("dis", "Таблица «Маунты WoW» — связь есть"),
         ("dis", "Последняя отправка: сегодня в 18:42 — Отмечено в таблице: 2"),
         ("sep", None),
-        ("", "Отправить сейчас"), ("sub", "Последние события"), ("hotsub", "Осталось на неделе"), ("", "Открыть таблицу"),
-        ("", "Персонажи в таблице…"), ("", "Что фармить…"), ("", "Сверить с коллекцией"),
+        ("", "Отправить сейчас"), ("hotsub", "Осталось на неделе"), ("sub", "Последние события"), ("", "Открыть таблицу"),
         ("sep", None),
-        ("", "Настройки…"), ("", "Журнал работы"), ("chk", "Запускать вместе с Windows"), ("chk", "Показывать уведомления"),
-        ("sub", "Язык / Language"),
+        ("sub", "Персонажи и фарм"), ("", "Настройки (Settings)…"), ("sub", "Обслуживание"),
         ("sep", None),
         ("", "Выход"),
     ]
     sub = [("sub", "Эйра — 23 из 36"), ("sub", "Мирна — 12 из 30"), ("dis", "Каэлия — всё отмечено"), ("sep", None),
-           ("dis", "Из таблицы сегодня в 18:42")]
+           ("sub", "Скрыть"), ("sep", None), ("dis", "Из таблицы сегодня в 18:42")]
 
     def render(items):
         out = []
@@ -150,6 +148,12 @@ def settings_html(w, h):
    <div class='gray'>Список показывает окно аддона. Таблицы в браузере не будет, а на другой компьютер данные сами не перейдут.</div>
   </div>
   <div class='row' style='margin-top:14px'><span class='cbox on'>✓</span>Запускать вместе с Windows (значок будет в трее)</div>
+  <div class='row'><span class='cbox on'>✓</span>Показывать уведомления</div>
+  <div class='row'><span class='cbox on'>✓</span>Добавлять новых персонажей самим</div>
+  <div class='row'><span class='cbox'></span>Отправлять анонимную статистику</div>
+  <div class='row'><span class='cbox on'>✓</span>Проверять обновления</div>
+  <div class='row'><span class='cbox'></span>Обновляться до пробных версий (альфа, бета)</div>
+  <div class='row'>Язык / Language<span class='input' style='width:200px;margin-left:12px'>Как в Windows (Русский)</span></div>
   <div class='foot'><span class='btn primary'>Сохранить</span><span class='btn' style='margin-right:0'>Отмена</span></div>
  </div>
 </div>""".format(ic=ic)
@@ -246,7 +250,7 @@ def main():
     from PIL import Image
     Image.open(os.path.join(ROOT, "program", "app.ico")).convert("RGBA").resize((64, 64)).save(
         os.path.join(OUT, "icon-64.png"))
-    jobs = [("program-menu.png", menu_html, 1100, 760), ("program-settings.png", settings_html, 700, 700),
+    jobs = [("program-menu.png", menu_html, 1100, 760), ("program-settings.png", settings_html, 700, 900),
             ("sheet.png", sheet_html, 1180, 420)]
     with sync_playwright() as p:
         browser = p.chromium.launch()

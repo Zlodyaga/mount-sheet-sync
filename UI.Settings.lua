@@ -170,12 +170,14 @@ function ns.BugReport()
   return table.concat(lines, "\n")
 end
 
-local function ShowReport()
+-- what: nil — сведения для отчёта об ошибке; "check" — самопроверка (/mss check, Check.lua)
+local reportWhat, reportRelabel
+local function ShowReport(what)
   if not reportFrame then
     reportFrame = Skin.Window(REPORT_NAME, 520, 300, "DIALOG")
     reportFrame:SetPoint("CENTER", 0, 40)
     local function title()
-      reportFrame.titleText:SetText(L.report_title)
+      reportFrame.titleText:SetText(reportWhat == "check" and L.check_title or L.report_title)
     end
     title()
     relabel[#relabel + 1] = title
@@ -184,10 +186,14 @@ local function ShowReport()
     hint:SetPoint("TOPRIGHT", -18, -38)
     hint:SetJustifyH("LEFT")
     local function hintText()
-      hint:SetText(string.format(L.report_hint, ns.ISSUES_URL))
+      hint:SetText(reportWhat == "check" and L.check_hint or string.format(L.report_hint, ns.ISSUES_URL))
     end
     hintText()
     relabel[#relabel + 1] = hintText
+    reportRelabel = function()
+      title()
+      hintText()
+    end
     local scroll = CreateFrame("ScrollFrame", nil, reportFrame, "UIPanelScrollFrameTemplate")
     scroll:SetPoint("TOPLEFT", 16, -76)
     scroll:SetPoint("BOTTOMRIGHT", -34, 16)
@@ -207,20 +213,25 @@ local function ShowReport()
     end)
     scroll:SetScrollChild(reportBox)
   end
-  reportFrame.text = ns.BugReport()
+  reportWhat = what
+  reportRelabel()
+  reportFrame.text = what == "check" and ns.SelfCheck() or ns.BugReport()
   reportBox:SetText(reportFrame.text)
   reportFrame:Show()
   reportBox:SetFocus()
   reportBox:HighlightText()
 end
 UI.ShowReport = ShowReport
+function ns.ShowCheck()
+  ShowReport("check")
+end
 
 local function CreateSettings()
   local codes = { "auto" }
   for _, code in ipairs(ns.LANGUAGES) do
     codes[#codes + 1] = code
   end
-  local height = math.max(500, 62 + #codes * 24 + 98 + 44 + 138)   -- справа до -474 (галочки «в группу / в гильдию»)
+  local height = math.max(500, 62 + #codes * 24 + 98 + 44 + 162)   -- справа до -498 (галочка «при входе в подземелье», 3.0.8)
   settingsFrame = Skin.Window(SETTINGS_NAME, 620, height, "DIALOG")
   settingsFrame:SetPoint("CENTER", 0, 60)
   local function title()
@@ -332,6 +343,7 @@ local function CreateSettings()
     end
   end)
   AttachTooltip(tellGuildCheck, "settings_tell_guild", "tip_settings_tell")
+  DefaultOnCheck(settingsFrame, -474, "settings_enter", "enterNote", "tip_settings_enter")   -- маунты подземелья при входе (Runs.lua)
   tipsCheck:HookScript("OnClick", function()
     if S.frame and S.frame:IsShown() then
       UI.Refresh(true)

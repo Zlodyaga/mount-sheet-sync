@@ -141,7 +141,7 @@ local function WithPlace(elem, item)
   elem.farmTip = ns.FarmTip(item.id)
   elem.instance = ns.ItemInstance(item)
   elem.anchorTip = ns.AnchorTip(elem.instance)
-  elem.runTip = ns.RunTip and ns.RunTip(elem.instance)   -- «~12 мин на заход (по 5)», по заходам игрока (Runs.lua)
+  elem.runTip = ns.RunTip and ns.RunTip(elem.instance, item.d)   -- «~12 мин на заход (по 5)», по заходам игрока (Runs.lua)
   elem.encounter = tonumber(item.je)
   elem.world = item.kind == "world" or nil
   elem.spot = item.kind == "rare" and ns.RARE_SPOTS and ns.RARE_SPOTS[tonumber(item.id)] or nil
@@ -524,7 +524,7 @@ local function AttemptsSorted(rows, st)
     end
   end
   for _, m in ipairs(out) do
-    m.runAvg = ns.RunAverage and ns.RunAverage(ns.ItemInstance(m)) or nil   -- средний заход, секунды (Runs.lua)
+    m.runAvg = ns.RunAverage and ns.RunAverage(ns.ItemInstance(m), (m.raw or m).d) or nil   -- средний заход, секунды (Runs.lua)
   end
   local function value(m)
     if st.sort == "value" then

@@ -174,15 +174,20 @@ try:
     time.sleep(1.5)
     shot("u7_tray_menu")
 
-    def menu_click(y):
+    def chars_menu(down):
+        """A pick in «Персонажи и фарм» (2.10.3), by keyboard — the menu opens up or down depending on room: Up from the
+        bottom of the menu: Выход, Обслуживание, Настройки, «Персонажи и фарм»; Right — into the submenu (its first item
+        «Персонажи в таблице…», then «Что фармить…», «Попытки…»); Down × down; Enter."""
         subprocess.run(["xdotool", "mousemove", "1112", "12", "click", "3"], env=env)
-        time.sleep(1.2)
-        subprocess.run(["xdotool", "mousemove", "900", str(y), "click", "1"], env=env)
+        time.sleep(1.5)
+        for k in ["Up"] * 4 + ["Right"] + ["Down"] * down + ["Return"]:
+            subprocess.run(["xdotool", "key", k], env=env)
+            time.sleep(0.5 if k != "Right" else 1)
 
     subprocess.run(["xdotool", "key", "Escape"], env=env)
     time.sleep(0.5)
     # «Что фармить…»: снять галочку у первой строки и сохранить
-    menu_click(216)
+    chars_menu(1)
     fid = wait_window("что фармить", 20)
     check("«Что фармить…» opens from the tray menu", fid is not None, windows())
     time.sleep(4)
@@ -211,7 +216,7 @@ try:
           wait_window("что фармить", 1) is None and raid_rows and all(mim1[k3].get("boolValue") is False for k3 in raid_rows)
           and all(t == "Рейды Мирна" for t, _ in changed), (len(raid_rows), changed[:5]))
     # «Персонажи в таблице…»: окно со списком, без изменений
-    menu_click(193)
+    chars_menu(0)
     pid = wait_window("персонажи в таблице", 20)
     check("«Персонажи в таблице…» opens from the tray menu", pid is not None, windows())
     time.sleep(4)

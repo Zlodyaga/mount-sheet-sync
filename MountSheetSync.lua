@@ -1025,6 +1025,7 @@ local function ShowHelp()
     CMD .. "/mss left|r — " .. L.help_left,
     CMD .. "/mss drop|r — " .. L.help_drop,
     CMD .. "/mss rarity|r — " .. L.help_rarity,
+    CMD .. "/mss check|r — " .. L.help_check,
     CMD .. "/mss list|r — " .. L.help_list,
     CMD .. "/mss add " .. L.help_add_arg .. "|r — " .. L.help_add,
     CMD .. "/mss scan|r — " .. L.help_scan,
@@ -1066,6 +1067,11 @@ SlashCmdList["MOUNTSHEETSYNC"] = function(msg)
     -- попытки из Rarity, где у него больше (Import.lua): без «ok» — только показать
     if ns.RarityImport then
       SafeCall(ns.RarityImport, rest:lower() == "ok")
+    end
+  elseif cmd == "check" then
+    -- самопроверка в игре (Check.lua): окно с выделенным текстом — прислать автору
+    if ns.ShowCheck then
+      SafeCall(ns.ShowCheck)
     end
   elseif cmd == "tip" then
     -- проверка подсказки о боссе: пишет в чат, что видит аддон при наведении (до /reload)
@@ -1149,6 +1155,9 @@ end
 local frame = CreateFrame("Frame")
 frame:RegisterEvent("ADDON_LOADED")
 frame:SetScript("OnEvent", function(self, event, ...)
+  if event ~= "ADDON_LOADED" and ns.Seen then
+    ns.Seen(event, ...)   -- для /mss check: какие события приходили за сеанс (Check.lua)
+  end
   if event == "ADDON_LOADED" then
     if ... ~= ADDON_NAME then
       return

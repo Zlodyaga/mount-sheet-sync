@@ -24,7 +24,7 @@ end
 MapCanvasDataProviderMixin = {}
 function CreateFromMixins(m) local t = {} for k, v in pairs(m) do t[k] = v end return t end
 function GoTo(id) MAPID = id; PROVIDER:OnMapChanged() end
-function Drawn() local a, b, c, d = MSS_NS.MapRoutesDrawn(); return { lines = a, dots = b, map = c, button = d } end
+function Drawn() local a, b, c, d, e = MSS_NS.MapRoutesDrawn(); return { lines = a, dots = b, map = c, button = d, seen = e } end
 function Click() local b = MountSheetSyncMapButton; b:GetScript("OnClick")(b) end
 """)
 check("with the world map the layer is made", ns.InitMapRoutes() is True and g.PROVIDER is not None)
@@ -51,6 +51,18 @@ check("another map without such a mount: no icon and nothing left drawn", not d.
 g.GoTo(120)
 d2 = g.Drawn()
 check("back on the map: the same routes are on again, without a click", d2.button and d2.lines > 40 and d2.dots == 4, (d2.lines, d2.dots))
+
+# a flying rare without a route map (Huolon, Timeless Isle): its spot and a cloud of sightings instead of a line
+g.GoTo(554)
+g.Click()
+d = g.Drawn()
+check("Huolon: its spot and a cloud of 22 sightings, no line", d.dots == 1 and d.seen == 22 and d.lines == 0, (d.dots, d.seen, d.lines))
+cloud = [r for r in [g.ALL_REGIONS[i] for i in range(1, len(g.ALL_REGIONS) + 1)] if r._type == "Texture" and r._shown
+         and r._parent is not None and r._parent._uid == overlay._uid]
+check("…the cloud dots are see-through", len(cloud) == 22 and all(abs(r._vertex[4] - 0.6) < 0.01 for r in cloud), len(cloud))
+g.Click()
+check("…clicked off: the cloud is gone", g.Drawn().seen == 0)
+g.GoTo(120)
 
 # several mounts on one map (the three Zandalari Warbringers in the Jade Forest): a list, each one on its own
 g.GoTo(371)

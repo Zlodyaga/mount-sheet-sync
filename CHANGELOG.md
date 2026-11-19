@@ -2,6 +2,10 @@
 
 The tray program (GitHub releases). The addon has its own list from 2.8.0 on: [CHANGELOG-addon.md](CHANGELOG-addon.md).
 
+## 2.10.3
+- Tray menu, Remaining this week: characters with everything marked (or hidden) go to the end of the list.
+- Tray menu is shorter (8 items): Characters and farming ▸ (Characters, What to farm, Attempts), Settings, Maintenance ▸ (collection check, export to Google, restore a day, data folder, log, what is sent). The ticks (start with Windows, notifications, auto-add characters, statistics, updates, test versions) and the language are now in the Settings window. Settings has “(Settings)” next to it in every other language.
+
 ## 2.10.2
 - Tray menu, Remaining this week > Hide: tick raids, dungeons, world bosses or rares to leave them out of the counts and lists in the menu. Display only - Farm / Do not farm and the sheet stay as they are.
 - Farming tips of the catalog in German, French, Spanish and Portuguese for every mount (new spreadsheets in those languages).

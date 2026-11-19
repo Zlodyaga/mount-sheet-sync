@@ -2,6 +2,12 @@
 
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
+## 3.0.8
+- World map: Alani, Huolon and Breezebiter have no known route, so the places where players saw them are shown as a faint cloud of dots - it shows where they fly without guessing a line.
+- On entering a raid or dungeon, one chat line with its mounts from your list on this difficulty: “Mounts here: Invincible (The Lich King, 1%) - attempt 87”. Once per entering (a /reload or a quick exit and back stays quiet); a setting turns it off.
+- /mss check: a self-check of everything the addon relies on in your game (mount journal, lockouts, statistics, holidays, Rarity, chat, map, events seen this session). The text is selected in a window - press Ctrl+C and send it to the author when something does not work.
+- Run times: the average is per difficulty of the row - 25 heroic and 10 normal runs no longer mix; no runs of that difficulty yet - no estimate.
+
 ## 3.0.7
 - Needs the program 2.10.2 or newer (correcting attempts, “Farming” for other characters and the mounts collected earlier come from it); with an older one the window asks to update it.
 - Dropped tab: the character column is replaced by the chance over all attempts at the drop (as on the sheet); who got it is in the row tooltip.

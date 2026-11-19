@@ -200,22 +200,6 @@ namespace MountSheetSync
             }
         }
 
-        void ToggleAutoAdd()
-        {
-            settings.AutoAddCharacters = !settings.AutoAddCharacters;
-            try
-            {
-                settings.Save(AppPaths.SettingsFile);
-            }
-            catch (Exception ex)
-            {
-                Log.Write(Tr.L("Не удалось сохранить настройки: {0}", ex.Message));
-            }
-            if (worker != null)
-            {
-                worker.Reload(settings.Clone(), false);
-            }
-        }
 
         /// <summary>
         /// Вопрос об анонимной статистике — один раз: и после установки, и тем, кто обновился до версии с ней. Отказ и
@@ -224,7 +208,7 @@ namespace MountSheetSync
         void AskStats()
         {
             DialogResult answer = MessageBox.Show(
-                Tr._("Помочь автору понять, чем в Mount Sheet Sync пользуются?\n\nРаз в сутки программа будет отправлять автору короткое сообщение: версии программы, аддона и Windows, язык, где хранятся данные, сколько персонажей (примерно), сколько раз открывали вкладки и ставили метки, и случайный номер установки. Ни имён персонажей, ни серверов, ни данных таблицы в нём нет.\n\nТочный текст сообщения — «Что отправляется…» в меню значка; там же это выключается.\n\nОтправлять?"),
+                Tr._("Помочь автору понять, чем в Mount Sheet Sync пользуются?\n\nРаз в сутки программа будет отправлять автору короткое сообщение: версии программы, аддона и Windows, язык, где хранятся данные, сколько персонажей (примерно), сколько раз открывали вкладки и ставили метки, и случайный номер установки. Ни имён персонажей, ни серверов, ни данных таблицы в нём нет.\n\nТочный текст сообщения — «Обслуживание > Что отправляется…» в меню значка; выключается это в «Настройках».\n\nОтправлять?"),
                 Program.Title, MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button2);
             SetStats(answer == DialogResult.Yes);
         }
@@ -268,22 +252,5 @@ namespace MountSheetSync
                 + "\n\n" + text, Program.Title, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        void ToggleNotifications()
-        {
-            settings.Notifications = !settings.Notifications;
-            try
-            {
-                settings.Save(AppPaths.SettingsFile);
-            }
-            catch (Exception ex)
-            {
-                Log.Write(Tr.L("Не удалось сохранить настройки: {0}", ex.Message));
-            }
-            if (!settings.Notifications)
-            {
-                ShowNote(MakeNote(Tr._("Уведомления выключены"),
-                    Tr._("Что отправлено, видно в меню значка: «Последние события» и «Журнал работы»."), false));
-            }
-        }
     }
 }
