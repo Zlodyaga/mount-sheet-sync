@@ -12,8 +12,10 @@ import paths
 ROOT = paths.ROOT
 W = paths.work("bump")
 shutil.rmtree(W, ignore_errors=True)
-FILES = ["MountSheetSync.toc", "MountSheetSync.lua", "program/Program.cs", "program/AssemblyInfo.cs",
-         "tools/tests/e2e_install.py", "tools/tests/e2e_update.py", "tools/screens/program.py"]
+ADDON = ["MountSheetSync.toc", "MountSheetSync.lua", "tools/tests/sv_collection.lua"]
+PROGRAM = ["program/Program.cs", "program/AssemblyInfo.cs", "tools/tests/e2e_install.py", "tools/tests/e2e_update.py",
+           "tools/tests/status_left.json", "tools/screens/program.py"]
+FILES = ADDON + PROGRAM
 for f in FILES:
     os.makedirs(os.path.dirname(os.path.join(W, f)), exist_ok=True)
     shutil.copyfile(os.path.join(ROOT, f), os.path.join(W, f))
@@ -47,19 +49,20 @@ check("without arguments: both versions and where they are written", code == 0 a
 
 code, out = bump("addon", "9.8.7")
 toc, core = raw("MountSheetSync.toc").decode("utf-8"), raw("MountSheetSync.lua").decode("utf-8")
-check("addon: the toc and the core get the version", code == 0 and "## Version: 9.8.7" in toc and 'local VERSION = "9.8.7"' in core, out)
+check("addon: the toc, the core and the fixture sv_collection.lua get the version", code == 0 and "## Version: 9.8.7" in toc
+      and 'local VERSION = "9.8.7"' in core and b'["addonVersion"] = "9.8.7"' in raw("tools/tests/sv_collection.lua"), out)
 check("…and nothing else in them changes: same line endings, same size but for the number",
       crlf(raw("MountSheetSync.toc")) == crlf(before["MountSheetSync.toc"]) and crlf(raw("MountSheetSync.lua")) == crlf(before["MountSheetSync.lua"])
       and len(raw("MountSheetSync.lua")) - len(before["MountSheetSync.lua"]) == len("9.8.7") - len(old_addon))
-check("…the program's files are untouched", all(raw(f) == before[f] for f in FILES[2:]))
+check("…the program's files are untouched", all(raw(f) == before[f] for f in PROGRAM))
 
 code, out = bump("program", "9.8.6")
 cs = raw("program/Program.cs").decode("utf-8")
 asm = raw("program/AssemblyInfo.cs").decode("utf-8")
 check("program: Program.Version and the three lines of AssemblyInfo.cs", code == 0 and 'Version = "9.8.6"' in cs and asm.count("9.8.6") == 3 and old_program not in asm, out)
-check("…the tests and the picture that name the version follow",
-      all(old_program.encode() not in raw(f) and b"9.8.6" in raw(f) for f in FILES[4:]), out)
-check("…line endings stay", all(crlf(raw(f))[0] == crlf(before[f])[0] for f in FILES[2:]))
+check("…the tests, the fixture status_left.json and the picture that name the version follow",
+      all(old_program.encode() not in raw(f) and b"9.8.6" in raw(f) for f in PROGRAM[2:]), out)
+check("…line endings stay", all(crlf(raw(f))[0] == crlf(before[f])[0] for f in PROGRAM))
 
 code, out = bump("addon", "3.1")
 check("a version that is not three numbers is refused", code != 0 and 'local VERSION = "9.8.7"' in raw("MountSheetSync.lua").decode("utf-8"), out[:200])

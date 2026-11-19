@@ -38,7 +38,7 @@ namespace MountSheetSync
 {
     static class Program
     {
-        public const string Version = "2.10.2";
+        public const string Version = "2.10.3";
         /// <summary>Пробная сборка: «alpha1», «beta2» (подставляет release.yml по тегу v2.8.0-alpha1); "" — обычная.</summary>
         public const string Prerelease = "";
         /// <summary>

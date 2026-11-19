@@ -2,7 +2,7 @@
 MountSheetSyncDB = {
 	["access"] = {
 	},
-	["addonVersion"] = "3.0.7",
+	["addonVersion"] = "3.0.8",
 	["chars"] = {
 		["Мирна-Ревущий фьорд"] = {
 			["class"] = "Жрица",
