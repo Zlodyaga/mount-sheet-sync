@@ -1305,7 +1305,8 @@ function ns.GetAttemptsList()
   return out
 end
 
--- Вкладка «Выпавшие»: маунты списка, которые выпали, пока стоит аддон, { id, name, boss, n, p, time, char }, новые сверху.
+-- Вкладка «Выпавшие»: маунты списка, которые выпали, пока стоит аддон, { id, name, boss, n, p, time, char, group }, новые сверху;
+-- group — группа окна (ns.GroupOf: рейды, подземелья, мировые боссы, рары), по ней вкладка делит список (3.0.8).
 -- Источники: db.drops (пишется при выпадении: попытки на тот момент, время, персонаж — переживает очистку журнала) и
 -- записи журнала о новых маунтах (kind = "mount") — для выпавших до 3.0.7; у них попытки считаются как во вкладке «Попытки».
 function ns.GetDrops()
@@ -1329,7 +1330,7 @@ function ns.GetDrops()
     if m and not seen[id] then
       seen[id] = true
       out[#out + 1] = { id = id, name = MountName(m), boss = ns.Shown(m, "boss"), p = tonumber(m.p),
-        n = tonumber(n) or CountNow(m, data, kills, known), time = tonumber(when) or 0, char = char }
+        n = tonumber(n) or CountNow(m, data, kills, known), time = tonumber(when) or 0, char = char, group = ns.GroupOf(m) }
     end
   end
   for id, d in pairs(type(db.drops) == "table" and db.drops or {}) do
@@ -1361,7 +1362,8 @@ function ns.GetDrops()
       names[name] = true
       local n = tonumber(m.n) or 0
       local rarity = n == 0 and id and finds[id] or nil
-      out[#out + 1] = { id = id, name = name, boss = ns.Shown(m, "boss"), p = p, n = rarity or n, time = 0, old = true, rarity = rarity and true or nil }
+      out[#out + 1] = { id = id, name = name, boss = ns.Shown(m, "boss"), p = p, n = rarity or n, time = 0, old = true, rarity = rarity and true or nil,
+        group = ns.GroupOf(m) }
     end
   end
   table.sort(out, function(a, b)

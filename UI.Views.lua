@@ -365,7 +365,8 @@ local function AchievementsView(rows)
   return { list = list, cols = cols, summary = "|cff8c8c8c" .. string.format(L.ach_head, total, earned) .. "|r" }
 end
 
--- Вкладка «Выпавшие» (ns.GetDrops): маунт, босс, с какой попытки, когда и кому.
+-- Вкладка «Выпавшие» (ns.GetDrops): маунт, босс, с какой попытки, когда и кому. С 3.0.8 — по группам, как «Осталось»
+-- (рейды, подземелья, мировые боссы, рары; d.group), внутри группы — как пришло: новые сверху, собранное раньше — внизу.
 local dropCols
 
 function UI.DropsView(rows)
@@ -384,8 +385,30 @@ function UI.DropsView(rows)
     { key = "total", w = 80, right = true, bold = true, label = "col_drop_total", tip = "tip_col_drop_total" },
     { key = "when", w = 84, right = true, label = "col_when" },
   }, S.listWidth)
-  local cols, list = dropCols, {}
+  local cols, list, stripe = dropCols, {}, false
+  local rank, sorted = {}, {}
+  for i, kind in ipairs(ns.KIND_ORDER) do
+    rank[kind] = i
+  end
   for i, d in ipairs(rows) do
+    sorted[i] = { d = d, i = i, r = rank[d.group] or #ns.KIND_ORDER + 1 }   -- без группы (старый список) — в конце
+  end
+  table.sort(sorted, function(a, b)
+    if a.r ~= b.r then
+      return a.r < b.r
+    end
+    return a.i < b.i
+  end)
+  local group
+  for _, s in ipairs(sorted) do
+    local d = s.d
+    if d.group ~= group then
+      group = d.group
+      stripe = false
+      if rank[group] then
+        list[#list + 1] = GroupLine(group)
+      end
+    end
     -- без дыр в списке: подсказка идёт до первого nil
     local tip = { Safe(d.name), Safe(d.boss) }
     if d.char then
@@ -394,7 +417,7 @@ function UI.DropsView(rows)
     if d.rarity then
       tip[#tip + 1] = "|cff8c8c8c" .. L.drops_rarity .. "|r"
     end
-    list[#list + 1] = { cols = cols, icon = ns.MountIcon(d.id), mountID = KnownMount(d.id), stripe = i % 2 == 0,
+    list[#list + 1] = { cols = cols, icon = ns.MountIcon(d.id), mountID = KnownMount(d.id), stripe = stripe,
       tip = tip, values = {
         mount = "|cffc9a0ff" .. Safe(d.name) .. "|r",
         boss = Safe(d.boss),
@@ -404,6 +427,7 @@ function UI.DropsView(rows)
         -- шанс за все попытки к выпадению (как «Шанс за все попытки» на листе «Выпавшие маунты»): 1 - (1 - p)^n
         total = d.n and d.n > 0 and tonumber(d.p) and "|cff" .. ChanceColor(d.n, d.p) .. ns.FormatChance(d.n, d.p) .. "|r" or "-",
       } }
+    stripe = not stripe
   end
   return { list = list, cols = cols, summary = "|cff8c8c8c" .. string.format(L.drops_head, #rows) .. "|r" }
 end
