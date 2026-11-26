@@ -12,11 +12,12 @@
 - **Attempt counter.** After a kill that could drop a mount you still need, the chat says which attempt it was and the chance over all attempts ("attempt 37 · 31%"); the Adventure Guide (and a rare's tooltip) shows the same and how many of your characters still have that boss this week. Counted in the spreadsheet, all characters together — including the kills from before you installed the addon, taken from the game's own statistics. Bonus rolls after world bosses count as attempts too.
 - **A list that fills itself.** With the companion Windows program: about 250 mounts from raids, dungeons, world bosses, rare monsters and mob farming. A kill is ticked off on its own, collected mounts drop off the list. Want a sheet with skip and farming tips? Choose a Google Sheet in the program's settings: a sheet per character in your own Google Drive.
 - **The way there.** Ctrl + click a row to pin the raid or dungeon entrance, the rare's spot or the world boss on the map. If an entrance is locked behind a story chain, the addon says what to do and leads to the next quest. With the optional [Mapzeroth](https://www.curseforge.com/wow/addons/mapzeroth) addon installed the route goes through portals and flights too.
-- **Rare routes on the world map.** A small icon on the right of the map shows where a rare whose mount you still need spawns and, for some, its whole route (Time-Lost Proto-Drake, Fallen Charger, Aeonaxx, Poseidus, the camel figurine, the Zandalari Warbringers and more). Only on maps that have such a rare; with several, you pick which to show.
+- **Rare routes on the world map.** A small icon on the right of the map shows where a rare whose mount you still need spawns and, for some, its whole route (Time-Lost Proto-Drake, Fallen Charger, Aeonaxx, Poseidus, the camel figurine, the Zandalari Warbringers and more). Alani, Huolon and Breezebiter fly around with no fixed route, so a faint cloud of dots shows where players have seen them. Only on maps that have such a rare; with several, you pick which to show.
 - **Coming from Rarity?** The Attempts tab copies your attempt counts from Rarity (or Rarity: Collector's Edition) where it has more — you see the list first and confirm.
 - **Only what matters this week.** Hide dungeons, world bosses or rares from "Remaining" with one click on a busy week; your farm choices stay as they are, press again and everything is back.
-- **Your own run times.** The addon times your runs, from the entrance to the last boss with a mount you need, and the Attempts tab can sort by chance per minute. Any run can be left out or deleted.
-- **When it drops.** A notice right in the game, and the Dropped tab keeps the attempt and the chance it took; if you want, one line to your group or guild (off by default). While a holiday with a mount is on (Headless Horseman, Coren Direbrew, Apothecary Hummel) the addon reminds you.
+- **A reminder at the door.** Entering a raid or dungeon, one chat line names the mounts from your list on this difficulty, with the attempt it will be ("Mounts here: Invincible (The Lich King, 1%) - attempt 87"). It can be turned off.
+- **Your own run times.** The addon times your runs, from the entrance to the last boss with a mount you need, averaged per difficulty, and the Attempts tab can sort by chance per minute. Any run can be left out or deleted.
+- **When it drops.** A notice right in the game, and the Dropped tab keeps the attempt and the chance it took, grouped by raids, dungeons, world bosses and rares; if you want, one line to your group or guild (off by default). While a holiday with a mount is on (Headless Horseman, Coren Direbrew, Apothecary Hummel) the addon reminds you.
 - **Six languages.** English, Russian, German, French, Spanish and Portuguese — the addon, the program and the spreadsheet.
 - **Light and private.** The addon never sends anything anywhere (WoW addons can't). By default the data stays on your computer; the program sends anonymous usage statistics only if you agree. With a Google Sheet, the program can open only the spreadsheets it created itself.
 
@@ -40,7 +41,7 @@ Without the program the addon still records kills, characters and mounts; the "R
 
 ## Commands
 
-`/mss` opens the window, `/mss help` lists the commands. Right-click the minimap or Data Broker button (or the gear in the window) for the settings: language, chat messages, the minimap button, clearing the log.
+`/mss` opens the window, `/mss help` lists the commands. Something not working? `/mss check` checks everything the addon relies on in your game; copy the text and send it to the author. Right-click the minimap or Data Broker button (or the gear in the window) for the settings: language, chat messages, the minimap button, clearing the log.
 
 ---
 
