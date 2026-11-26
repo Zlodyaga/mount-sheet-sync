@@ -3,6 +3,7 @@
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
 ## 3.0.8
+- Dropped tab: mounts are in groups like on Remaining - raids, dungeons, world bosses, rares - instead of one mixed list; newest first inside each group.
 - World map: Alani, Huolon and Breezebiter have no known route, so the places where players saw them are shown as a faint cloud of dots - it shows where they fly without guessing a line.
 - On entering a raid or dungeon, one chat line with its mounts from your list on this difficulty: “Mounts here: Invincible (The Lich King, 1%) - attempt 87”. Once per entering (a /reload or a quick exit and back stays quiet); a setting turns it off.
 - /mss check: a self-check of everything the addon relies on in your game (mount journal, lockouts, statistics, holidays, Rarity, chat, map, events seen this session). The text is selected in a window - press Ctrl+C and send it to the author when something does not work.

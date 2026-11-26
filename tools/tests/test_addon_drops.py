@@ -96,8 +96,9 @@ MountSheetSyncDB.drops = { [tostring(DROPS.id)] = { n = 42, time = 1700000000, c
 local rows = MSS_NS.GetDrops()
 DROPS.after, DROPS.n, DROPS.char, DROPS.rowId = #rows, rows[1].n, rows[1].char, rows[1].id
 local view = MSS_NS.UI.DropsView(rows)
-DROPS.cells = view.list[1].values.n .. "|" .. view.list[1].values.when .. "|" .. view.list[1].values.total
-DROPS.tip = table.concat(view.list[1].tip, "|")
+local first = view.list[1].values and view.list[1] or view.list[2]   -- 3.0.8: первая строка — заголовок группы
+DROPS.cells = first.values.n .. "|" .. first.values.when .. "|" .. first.values.total
+DROPS.tip = table.concat(first.tip, "|")
 DROPS.emptyText = MSS_NS.UI.DropsView({}).empty
 MSS_NS.UI.SelectTab(5); MSS_NS.UI.Refresh()
 DROPS.tab = MountSheetSyncDB.tab
@@ -167,5 +168,37 @@ check("3.0.7: a mount collected earlier is on «Выпавшие» with the atte
       g.OLD.n == 2 and g.OLD.last.name == "Старый проверочный маунт" and g.OLD.last.n == 17 and g.OLD.last.old is True and g.OLD.last.time == 0,
       (g.OLD.n, g.OLD.last and g.OLD.last.name))
 check("…instead of a date it says «раньше»", "раньше" in g.OLD.when, g.OLD.when)
+
+# 3.0.8: «Выпавшие» по группам, как «Осталось»: рейды, подземелья, мировые боссы, рары — каждая под своим заголовком
+L.execute("""
+MountSheetSyncSheet.mounts = {
+  { id = 363, mount = "Непобедимый", boss = "Король-лич", p = 0.01, kind = "raid", sheet = "Рейды" },
+  { id = 999011, mount = "Подземельный", boss = "Босс подземелья", p = 0.01, kind = "dungeon", sheet = "Подземелья" },
+  { id = 999012, mount = "Рарный", boss = "Рар", p = 0.01, kind = "rare", sheet = "Редкие монстры" },
+  { id = 999013, mount = "Мировой", boss = "Мировой босс", p = 0.01, kind = "world", sheet = "Мировые боссы" },
+}
+MountSheetSyncDB.drops = { ["999012"] = { n = 3, time = 1700000300, char = "Эйра" }, ["363"] = { n = 42, time = 1700000000, char = "Эйра" },
+  ["999011"] = { n = 7, time = 1700000200, char = "Эйра" }, ["999013"] = { n = 9, time = 1700000100, char = "Эйра" } }
+MountSheetSyncSheet.had = { { kind = "raid", mount = "Старый рейдовый", boss = "Старый босс", n = 17, p = 0.01, id = 999014 } }
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+local view = MSS_NS.UI.DropsView(MSS_NS.GetDrops())
+local out = {}
+for _, r in ipairs(view.list) do
+  local text = r.group and ("# " .. r.text) or r.values.mount
+  out[#out + 1] = (text:gsub("|c%x%x%x%x%x%x%x%x", ""):gsub("|r", ""))
+end
+GROUPS = table.concat(out, ";")
+MountSheetSyncSheet.had = nil
+MountSheetSyncSheet.mounts = DROPS.oldMounts
+MountSheetSyncDB.drops = nil
+MountSheetSyncSheet.generated = MountSheetSyncSheet.generated + 1
+""")
+order = g.GROUPS.split(";")
+heads = [p[2:] for p in order if p.startswith("# ")]
+mounts = [p for p in order if not p.startswith("# ")]
+check("3.0.8: «Выпавшие» is split into groups like «Осталось»: raids, dungeons, world bosses, rares, each under its header",
+      len(heads) == 4 and heads[:3] == ["Рейды", "Подземелья", "Мировые боссы"], order)
+check("…each mount under its own group, the raid one collected earlier after the dated raid one",
+      mounts == ["Непобедимый", "Старый рейдовый", "Подземельный", "Мировой", "Рарный"], mounts)
 
 env.finish()
