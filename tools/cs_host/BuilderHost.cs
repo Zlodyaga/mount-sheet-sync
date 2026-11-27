@@ -18,6 +18,11 @@ namespace MountSheetSync
             Dictionary<string, object> job = (Dictionary<string, object>)Json.Parse(input);
             BuildPlan plan = new BuildPlan();
             plan.Title = J.Str(job, "title");
+            string lang = J.Str(job, "lang");
+            if (!string.IsNullOrEmpty(lang))
+            {
+                plan.Lang = SheetLang.Get(lang);   // the sheet in that language (tools/screens/program.py, English picture)
+            }
             plan.Today = new DateTime(2026, 10, 21);
             foreach (object o in J.Arr(J.Get(job, "chars")))
             {
