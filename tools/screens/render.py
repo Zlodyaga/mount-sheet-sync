@@ -17,6 +17,19 @@ import zlib
 
 from playwright.sync_api import sync_playwright
 
+
+def launch_browser(p):
+    """Playwright's own Chromium; without it (not downloaded after an update) - Edge or Chrome already installed."""
+    try:
+        return p.chromium.launch()
+    except Exception as first:
+        for channel in ("msedge", "chrome"):
+            try:
+                return p.chromium.launch(channel=channel)
+            except Exception:
+                pass
+        raise first
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 OUT = os.path.join(ROOT, "docs", "screens")
@@ -77,7 +90,7 @@ def main(layouts=os.path.join(ROOT, "tools"), out=OUT, fix_text=None, names=None
             masks[os.path.splitext(os.path.basename(path))[0]] = png
     page_html = open(os.path.join(HERE, "render.html"), encoding="utf-8").read().replace("/*FONT_FACES*/", font_faces())
     with sync_playwright() as p:
-        browser = p.chromium.launch()
+        browser = launch_browser(p)
         for name, layout_file in SCREENS:
             layout = json.loads(texts[layout_file])
             page = browser.new_page(viewport={"width": W, "height": H}, device_scale_factor=2)
