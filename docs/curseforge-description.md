@@ -25,7 +25,7 @@
 
 ![Attempts and chance for every mount you still need](https://media.forgecdn.net/attachments/2227/161/addon-attempts-png.png)
 
-![Mounts that dropped: on which attempt, and the chance it took](https://media.forgecdn.net/attachments/2227/162/addon-drops-png.png)
+![Mounts that dropped: on which attempt, and the chance it took](https://media.forgecdn.net/attachments/2288/260/addon-drops-png.png)
 
 ![The spreadsheet the program keeps](https://media.forgecdn.net/attachments/2096/846/sheet-png.png)
 
@@ -36,6 +36,8 @@
 3. Play as usual. Back at character select the sheet is updated, and the "Remaining" list comes back into the game.
 
 Without the program the addon still records kills, characters and mounts; the "Remaining" list and the spreadsheet need the program.
+
+![The companion program in the tray](https://media.forgecdn.net/attachments/2288/265/program-menu-png.png)
 
 ![Every kill in the log](https://media.forgecdn.net/attachments/2227/163/addon-log-png.png)
 

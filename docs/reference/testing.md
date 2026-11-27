@@ -40,8 +40,8 @@ tools/tests/test_addon_left.py` (или `test_collection.py`) и закомми�
 
 На Windows (Python + lupa, без mono): `paths.py` ставит локаль `C` — иначе Lua `string.lower` по системной cp1251
 портит кириллицу в UTF-8 (в игре локаль `C`). Идут `test_addon2`, `test_minimap`, `test_offline`, `test_locale`,
-`test_collection`; `test_attempts`, `test_collection_sync` и другие без `mono` в пути — с хостами, собранными `csc`, и заменой `mono.exe`, которая запускает exe напрямую; `test_addon_left` — с готовым `SheetData.lua` первым аргументом (Node-скрипт таблицы под Windows
-не работает; дата списка тогда старая — одна проверка «сегодня в» не проходит). `test_attempts_addon` — только в CI.
+`test_collection`; `test_attempts`, `test_collection_sync` и другие без `mono` в пути — с хостами, собранными `csc`, и заменой `mono.exe`, которая запускает exe напрямую; `test_addon_left` — целиком (с 27.11.2026 `dump_status.js` на Windows запускает `EngineHost.exe` сам, без mono; хосты
+собрать `csc` по текущему коду программы). `test_attempts_addon` — только в CI.
 `test_addon_left.py` (3.0.6): имитация `MapzerothAddon` — путь отдан ему, не нашёл пути — метка игры, галочка снята — не
 трогаем, нет Mapzeroth и цель на другом континенте — одна подсказка; `test_locale.py` — галочка «Путь через Mapzeroth».
 `test_addon_left.py` (3.0.7): оповещение о маунте — черта растёт постепенно, счёт уменьшается, звуки, выключатели, молчание при Rarity; вкладка «Выпавшие». `test_local_book.py` (2.10.1): дневные копии — одна за день, хранятся 7; (2.10.2) возврат из копии: нынешние данные остаются рядом, пустая копия не берётся; статистика: что входит в сообщение, нет имён, вилка персонажей (сама отправка не проверяется). `e2e_local.py`: с `autoAddCharacters = false` новый персонаж не добавляется.
@@ -163,4 +163,7 @@ Rarity на один маунт — одна правка с наибольши�
 повторное нажатие всё возвращает). `test_local_book.py` — 32: ещё «Скрыть» в трее (`SheetData.Visible`, настройка
 `hiddenKinds` сохраняется, по умолчанию пусто).
 
-Картинки на английском (для CurseForge): `python tools/screens/english.py` — запускает `test_addon_left.py` с `MSS_SCREEN_LANG=enUS` (аддон на английском, названия боссов, маунтов и мест — словарём `names`, как шлёт программа, из `sheet-i18n.json` и каталога; раскладки — в `tools/screens/layouts-en/`, проверки про русское окно в этом режиме падают — так и задумано) и рисует их в `docs/screens/en/` с вымышленными персонажами латиницей (`names_en.py`). Скажет, что осталось кириллицей (норма — «Русский» в списке языков). Значки маунтов — `icons.py` (кеш `tools/screens/.cache`). Картинка «Выпавших» — `layout_drops.json`; на «Попытках» для картинки — замеры заходов и включённый Rarity.
+Картинки на английском (для CurseForge): программа — `MSS_SCREEN_LANG=enUS python tools/screens/program.py` (меню значка и
+окно настроек с английскими текстами программы из `tools/i18n/ui*.txt`, словарь `EN` в скрипте; таблица — только русская).
+Нет своего Chromium у Playwright (после обновления) — `render.py` и `program.py` берут установленный Edge или Chrome
+(`launch_browser`). Аддон — `python tools/screens/english.py` — запускает `test_addon_left.py` с `MSS_SCREEN_LANG=enUS` (аддон на английском, названия боссов, маунтов и мест — словарём `names`, как шлёт программа, из `sheet-i18n.json` и каталога; раскладки — в `tools/screens/layouts-en/`, проверки про русское окно в этом режиме падают — так и задумано) и рисует их в `docs/screens/en/` с вымышленными персонажами латиницей (`names_en.py`). Скажет, что осталось кириллицей (норма — «Русский» в списке языков). Значки маунтов — `icons.py` (кеш `tools/screens/.cache`). Картинка «Выпавших» — `layout_drops.json`; на «Попытках» для картинки — замеры заходов и включённый Rarity.

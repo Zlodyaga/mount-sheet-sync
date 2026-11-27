@@ -6,6 +6,8 @@
   colours, "Yes"/"No" colours, the "Farming" ticks), a few sample marks set.
 
   python3 tools/screens/program.py      (needs tools/cs_host/BuilderHost.exe: tools/cs_host/build.sh)
+  MSS_SCREEN_LANG=enUS python3 tools/screens/program.py   -> docs/screens/en/program-menu.png, program-settings.png
+      (the CurseForge set: the same pictures with the program's English texts from tools/i18n/ui*.txt; no sheet)
 """
 import html
 import json
@@ -14,9 +16,43 @@ import subprocess
 
 from playwright.sync_api import sync_playwright
 
+from render import launch_browser   # noqa: E402 (same folder)
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", ".."))
 OUT = os.path.join(ROOT, "docs", "screens")
+LANG = os.environ.get("MSS_SCREEN_LANG", "ru")[:2]
+if LANG == "en":
+    OUT = os.path.join(OUT, "en")
+
+# The program in English (MSS_SCREEN_LANG=enUS): its own texts as tools/i18n/ui*.txt translate them, the sample
+# characters as on the addon's English pictures (names_en.py). Replaced in the finished HTML, longest first.
+EN = {
+    "Таблица «Маунты WoW» — связь есть": "Spreadsheet “WoW Mounts” — connected",
+    "Последняя отправка: сегодня в 18:42 — Отмечено в таблице: 2": "Last sent: today at 18:42 — Marked in the spreadsheet: 2",
+    "Отправить сейчас": "Send now", "Осталось на неделе": "Remaining this week", "Последние события": "Recent events",
+    "Открыть таблицу": "Open spreadsheet", "Персонажи и фарм": "Characters and farming", "Настройки (Settings)…": "Settings…",
+    "Обслуживание": "Maintenance", "Выход": "Exit",
+    "Эйра — 23 из 36": "Eira — 23 of 36", "Мирна — 12 из 30": "Mirna — 12 of 30", "Каэлия — всё отмечено": "Kaelia — all marked",
+    "Скрыть": "Hide", "Из таблицы сегодня в 18:42": "From the spreadsheet today at 18:42",
+    "Mount Sheet Sync — настройки": "Mount Sheet Sync — settings",
+    "Где хранить данные:": "Where to keep the data:",
+    "На этом компьютере, без Google и входа — рекомендуется": "On this computer, no Google and no sign-in (recommended)",
+    "Таблица Google: открывается в браузере, её можно править вручную (нужен вход через Google)":
+        "Google Sheet: opens in the browser and can be edited by hand (needs a Google sign-in)",
+    "Своя таблица со скриптом Code.gs (как в версиях 1.x)": "Your own spreadsheet with the Code.gs script (as in versions 1.x)",
+    "Папка World of Warcraft (если пусто — ищется сама):": "World of Warcraft folder (leave empty to find it automatically):",
+    "Обзор…": "Browse…", "Ок, файлы аддона ищутся в ": "OK, the addon files are looked up in ",
+    "Данные хранятся здесь: ": "The data is kept here: ", "Персонажи…": "Characters…", "Открыть папку": "Open folder",
+    "Список показывает окно аддона. Таблицы в браузере не будет, а на другой компьютер данные сами не перейдут.":
+        "The addon's window shows the list. There is no sheet in the browser, and the data doesn't move to another computer by itself.",
+    "Запускать вместе с Windows (значок будет в трее)": "Start with Windows (the icon will be in the tray)",
+    "Показывать уведомления": "Show notifications", "Добавлять новых персонажей самим": "Add new characters automatically",
+    "Отправлять анонимную статистику": "Send anonymous statistics", "Проверять обновления": "Check for updates",
+    "Обновляться до пробных версий (альфа, бета)": "Update to test versions (alpha, beta)",
+    "Язык / Language": "Language", "Как в Windows (Русский)": "Same as Windows (English)",
+    "Сохранить": "Save", "Отмена": "Cancel",
+}
 
 BASE_CSS = """
 :root { --fg:#f3f3f3; --muted:#a7a7a7; --accent:#f2c45a; --menu:#2b2b2b; --line:rgba(255,255,255,.08); }
@@ -77,13 +113,16 @@ def e(s):
 
 
 def page(css, body, w, h):
+    if LANG == "en":
+        for ru in sorted(EN, key=len, reverse=True):
+            body = body.replace(ru, EN[ru])
     return ("<!doctype html><html lang='ru'><head><meta charset='utf-8'><style>%s%s</style></head>"
             "<body style='--w:%dpx;--h:%dpx'>%s</body></html>") % (BASE_CSS, css, w, h, body)
 
 
 def icon_url():
     import base64
-    return "data:image/png;base64," + base64.b64encode(open(os.path.join(ROOT, "docs", "screens", "icon-64.png"), "rb").read()).decode()
+    return "data:image/png;base64," + base64.b64encode(open(os.path.join(OUT, "icon-64.png"), "rb").read()).decode()
 
 
 def menu_html(w, h):
@@ -252,8 +291,10 @@ def main():
         os.path.join(OUT, "icon-64.png"))
     jobs = [("program-menu.png", menu_html, 1100, 760), ("program-settings.png", settings_html, 700, 900),
             ("sheet.png", sheet_html, 1180, 420)]
+    if LANG == "en":
+        jobs = jobs[:2]   # the sheet is built in Russian (BuilderHost)
     with sync_playwright() as p:
-        browser = p.chromium.launch()
+        browser = launch_browser(p)
         for name, fn, w, h in jobs:
             pg = browser.new_page(viewport={"width": w, "height": h}, device_scale_factor=2)
             pg.set_content(fn(w, h))
