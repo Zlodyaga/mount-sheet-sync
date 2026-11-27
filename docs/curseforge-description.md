@@ -27,7 +27,7 @@
 
 ![Mounts that dropped: on which attempt, and the chance it took](https://media.forgecdn.net/attachments/2288/260/addon-drops-png.png)
 
-![The spreadsheet the program keeps](https://media.forgecdn.net/attachments/2096/846/sheet-png.png)
+![The spreadsheet the program keeps](https://media.forgecdn.net/attachments/2289/165/sheet-png.png)
 
 ## Getting started
 
