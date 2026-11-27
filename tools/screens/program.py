@@ -7,7 +7,8 @@
 
   python3 tools/screens/program.py      (needs tools/cs_host/BuilderHost.exe: tools/cs_host/build.sh)
   MSS_SCREEN_LANG=enUS python3 tools/screens/program.py   -> docs/screens/en/program-menu.png, program-settings.png
-      (the CurseForge set: the same pictures with the program's English texts from tools/i18n/ui*.txt; no sheet)
+      and sheet.png (the CurseForge set: the program's English texts from tools/i18n/ui*.txt, the sheet as SheetLang
+      writes an English one)
 """
 import html
 import json
@@ -205,15 +206,29 @@ def color(c, default):
     return "rgb(%d,%d,%d)" % tuple(round(255 * c.get(k, 0)) for k in ("red", "green", "blue"))
 
 
+# The sheet's own words: Russian, or English as SheetLang writes an English sheet (BuilderHost "lang").
+SHEET_WORDS = {
+    "ru": {"title": "Маунты WoW", "char": "Эйра", "yes": "Да", "no": "Нет",
+           "tabs": ["Рейды", "Рейды Эйра", "Подземелья", "Подземелья Эйра", "Мировые боссы", "Сводка"]},
+    "en": {"title": "WoW Mounts", "char": "Eira", "yes": "Yes", "no": "No",
+           "tabs": ["Raids", "Raids Eira", "Dungeons", "Dungeons Eira", "World Bosses", "Summary"]},
+}
+
+
 def sheet_html(w, h):
-    job = {"title": "Маунты WoW", "chars": [{"name": "Эйра", "raids": True, "dungeons": True}], "collected": [], "defaultSheetId": 0}
+    words = SHEET_WORDS["en" if LANG == "en" else "ru"]
+    job = {"title": words["title"], "chars": [{"name": words["char"], "raids": True, "dungeons": True}], "collected": [],
+           "defaultSheetId": 0}
+    if LANG == "en":
+        job["lang"] = "en"
     host = os.path.join(ROOT, "tools", "cs_host", "BuilderHost.exe")
-    out = json.loads(subprocess.run(["mono", host], input=json.dumps(job, ensure_ascii=False).encode(), capture_output=True,
-                                    check=True).stdout.decode("utf-8"))
+    cmd = [host] if os.name == "nt" else ["mono", host]   # on Windows the .NET host runs by itself
+    out = json.loads(subprocess.run(cmd, input=json.dumps(job, ensure_ascii=False).encode(), capture_output=True, check=True,
+                                    env=dict(os.environ, MSS_HOST_LANG="en" if LANG == "en" else "ru")).stdout.decode("utf-8"))
     reqs = out["requests"]
     sheet_id = [r["addSheet"]["properties"]["sheetId"] for r in reqs
-                if "addSheet" in r and r["addSheet"]["properties"]["title"] == "Рейды Эйра"][0]
-    rows = [r["updateCells"]["rows"] for r in reqs if "updateCells" in r and r["updateCells"]["start"]["sheetId"] == sheet_id][0]
+                if "addSheet" in r and r["addSheet"]["properties"]["title"] == words["tabs"][1]][0]
+    rows = [r["updateCells"]["rows"] for r in reqs if "updateCells" in r and r["updateCells"].get("start", {}).get("sheetId") == sheet_id][0]
     band = [r["addBanding"]["bandedRange"]["rowProperties"] for r in reqs
             if "addBanding" in r and r["addBanding"]["bandedRange"]["range"]["sheetId"] == sheet_id][0]
     rules = [r["addConditionalFormatRule"]["rule"] for r in reqs if "addConditionalFormatRule" in r
@@ -224,7 +239,7 @@ def sheet_html(w, h):
             cond = ru["booleanRule"]["condition"]
             if cond["type"] == "TEXT_EQ" and cond["values"][0]["userEnteredValue"] == text:
                 return ru["booleanRule"]["format"]
-    yes, no = rule_for("Да"), rule_for("Нет")
+    yes, no = rule_for(words["yes"]), rule_for(words["no"])
     grey = [ru["booleanRule"]["format"] for ru in rules if ru["booleanRule"]["condition"]["type"] == "CUSTOM_FORMULA"
             and "FALSE" in ru["booleanRule"]["condition"]["values"][0]["userEnteredValue"]][0]
 
@@ -234,8 +249,8 @@ def sheet_html(w, h):
     header = [val(c) for c in rows[0]["values"]]
     data = [[val(c) for c in r["values"]] for r in rows[1:10]]
     # sample marks: two kills this week, one row not farmed on this character
-    data[1][0] = "Да"
-    data[4][0] = "Да"
+    data[1][0] = words["yes"]
+    data[4][0] = words["yes"]
     data[6][7] = False
     cols = [118, 150, 150, 170, 150, 140, 82, 72]
     th = "".join("<th style='width:%dpx'>%s</th>" % (cw, e(t)) for cw, t in zip(cols, header))
@@ -249,7 +264,7 @@ def sheet_html(w, h):
             if not farmed:
                 style += "color:%s;" % color(grey["textFormat"]["foregroundColor"], "#999")
             if j == 0:
-                f = yes if v == "Да" else no
+                f = yes if v == words["yes"] else no
                 if farmed:
                     style += "background:%s;color:%s;" % (color(f["backgroundColor"], bg), color(f["textFormat"]["foregroundColor"], "#000"))
                 style += "text-align:center;font-weight:600;"
@@ -278,9 +293,10 @@ td.rn, th.rn { background:#f8f9fa; color:#5f6368; width:34px; text-align:center;
   display:flex; align-items:center; gap:2px; padding-left:44px; font-family:"Inter",sans-serif; font-size:12.5px; color:#444; }
 .tabs span { padding:8px 14px; } .tabs .on { background:#e1ebf6; color:#0b57d0; font-weight:600; border-radius:6px 6px 0 0; }
 """ % head_bg
-    tabs = "".join("<span%s>%s</span>" % (" class='on'" if t == "Рейды Эйра" else "", e(t))
-                   for t in ["Рейды", "Рейды Эйра", "Подземелья", "Подземелья Эйра", "Мировые боссы", "Сводка"])
-    body_html = ("<div class='card'><div class='top'><span class='doc'></span>Маунты WoW</div>"
+    # the sheets in the order the builder adds them (Raids, Raids <name>, ..., Rare Monsters, Dropped Mounts)
+    titles = [r["addSheet"]["properties"]["title"] for r in reqs if "addSheet" in r]
+    tabs = "".join("<span%s>%s</span>" % (" class='on'" if t == words["tabs"][1] else "", e(t)) for t in titles)
+    body_html = ("<div class='card'><div class='top'><span class='doc'></span>" + e(words["title"]) + "</div>"
                  "<table><tr><th class='rn'></th>%s</tr>%s</table><div class='tabs'>%s</div></div>") % (th, "".join(body), tabs)
     return page(css, body_html, w, h)
 
@@ -291,8 +307,6 @@ def main():
         os.path.join(OUT, "icon-64.png"))
     jobs = [("program-menu.png", menu_html, 1100, 760), ("program-settings.png", settings_html, 700, 900),
             ("sheet.png", sheet_html, 1180, 420)]
-    if LANG == "en":
-        jobs = jobs[:2]   # the sheet is built in Russian (BuilderHost)
     with sync_playwright() as p:
         browser = launch_browser(p)
         for name, fn, w, h in jobs:
