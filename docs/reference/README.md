@@ -16,7 +16,7 @@
 
 Картинки — в [docs/screens](../screens): `sheet.png`, `program-menu.png`, `program-settings.png`,
 `addon-log.png`, `addon-remaining.png`, `addon-all.png`, `addon-attempts.png`, `addon-drops.png`, `addon-settings.png` (их же использует README);
-английский набор для CurseForge — `docs/screens/en/` (окно аддона и, с 27.11.2026, меню и настройки программы).
+английский набор для CurseForge — `docs/screens/en/` (окно аддона и, с 27.11.2026, меню и настройки программы и таблица).
 
 ## Правила ведения
 
