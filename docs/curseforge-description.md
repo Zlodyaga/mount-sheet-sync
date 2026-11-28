@@ -6,7 +6,7 @@
 
 ## What it does
 
-![What it does: all your alts in one table, an attempt counter, a reminder at the door, the way there, rare routes, the drop notice, run times, Rarity import](FEATURES_PNG)
+![What it does: all your alts in one table, an attempt counter, a reminder at the door, the way there, rare routes, the drop notice, run times, Rarity import](https://media.forgecdn.net/attachments/2291/667/features-png.png)
 
 **Track**
 - **All your alts in one table** - every boss still worth a run this week and who still needs it; N, H and M lockouts apart. Kills are recorded by themselves, with difficulty.
