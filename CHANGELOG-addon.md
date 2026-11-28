@@ -2,6 +2,9 @@
 
 The addon and the Windows program are released separately; the program's changes are in CHANGELOG.md on GitHub.
 
+## 3.0.9
+- Run times: the Min column stayed empty although the row's tooltip had a time - right after entering, the game does not know the difficulty yet, and 3.0.8 kept that unknown difficulty, so the runs fitted no row. Such runs now count for any row, and the addon asks the game again a moment later (or takes the difficulty from the first boss fight). The "Mounts here" line waits for the difficulty too.
+
 ## 3.0.8
 - Dropped tab: mounts are in groups like on Remaining - raids, dungeons, world bosses, rares - instead of one mixed list; newest first inside each group.
 - World map: Alani, Huolon and Breezebiter have no known route, so the places where players saw them are shown as a faint cloud of dots - it shows where they fly without guessing a line.

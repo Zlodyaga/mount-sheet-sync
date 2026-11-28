@@ -13,13 +13,16 @@ kills, long, off, on }. long — дольше 2 ч: в среднее не ид�
 галочка «При входе в подземелье - его маунты» (db.enterNote = false).
 
 Среднее — ns.RunAverage(inst, d): d — сложности строки (item.d, номера DifficultyID), заходы на других сложностях в него
-не идут (25 героический и 10 обычный в ЦЛК — разное время); заход без известной сложности идёт в любое. Правка — правый щелчок по строке «Попыток» > «Заходы» (UI.Rows.lua).
+не идут (25 героический и 10 обычный в ЦЛК — разное время); заход без известной сложности идёт в любое.
+Сложность при входе игра называет не сразу (GetInstanceInfo даёт 0): тогда её спрашиваем ещё раз через DIFF_RETRY сек
+(LaterDiff, до DIFF_TRIES раз) и берём из ENCOUNTER_END; строка «Здесь маунт» ждёт её. 0 в старых заходах (3.0.8) — «неизвестна». Правка — правый щелчок по строке «Попыток» > «Заходы» (UI.Rows.lua).
 ]]
 
 local _, ns = ...
 local L = ns.L
 
 local RESUME = 600       -- секунд: вернулся в то же подземелье — тот же заход
+local DIFF_RETRY, DIFF_TRIES = 2, 5   -- сложность при входе ещё 0: спросить снова через 2 сек, не больше 5 раз
 local LONG = 2 * 3600    -- дольше — «долгий»
 local KEEP = 20          -- заходов на подземелье
 
@@ -72,7 +75,7 @@ end
 -- заход на одной из сложностей строки (d пусто — любая; сложность захода неизвестна — тоже)
 local function DiffFits(r, d)
   local id = tonumber(r.diff)
-  if type(d) ~= "table" or #d == 0 or not id then
+  if type(d) ~= "table" or #d == 0 or not id or id <= 0 then   -- 0: игра ещё не знала сложность (заходы 3.0.8)
     return true
   end
   for _, x in ipairs(d) do
@@ -155,9 +158,29 @@ local function Where()
     return nil
   end
   local inst = instByMap[map]
-  return inst, map, not Secret(diff) and tonumber(diff) or nil
+  diff = not Secret(diff) and tonumber(diff) or nil
+  return inst, map, diff and diff > 0 and diff or nil   -- 0 — сразу после входа игра сложность ещё не знает
 end
 ns.RunsWhere = Where   -- /mss check: в каком подземелье путеводителя игрок сейчас
+
+-- Сложность не известна при входе: спросить игру ещё раз чуть позже; узнали (или так и нет) — в заход и строка «Здесь маунт».
+local function LaterDiff(db, inst, map, tries)
+  C_Timer.After(DIFF_RETRY, function()
+    local inst2, map2, diff = Where()
+    if inst2 ~= inst or map2 ~= map then
+      return   -- уже вышел
+    end
+    if not diff and tries < DIFF_TRIES then
+      LaterDiff(db, inst, map, tries + 1)
+      return
+    end
+    local run = db.runOpen
+    if diff and type(run) == "table" and run.map == map and not run.diff then
+      run.diff = diff
+    end
+    EnterNote(db, inst, map, diff, time())
+  end)
+end
 
 --- Вход в зону / подземелье (PLAYER_ENTERING_WORLD, ZONE_CHANGED_NEW_AREA).
 function ns.RunsOnZone()
@@ -169,7 +192,11 @@ function ns.RunsOnZone()
   local run = type(db.runOpen) == "table" and db.runOpen or nil
   local inst, map, diff = Where()
   if inst then
-    EnterNote(db, inst, map, diff, now)
+    if diff or not C_Timer then
+      EnterNote(db, inst, map, diff, now)
+    else
+      LaterDiff(db, inst, map, 1)
+    end
     if run and run.map == map and (not run.left or now - run.left <= RESUME) then
       run.left = nil   -- тот же заход
       return
@@ -192,11 +219,15 @@ function ns.RunsOnZone()
 end
 
 --- Убит босс (ENCOUNTER_END, успех): босс с маунтом в идущем заходе — время до него идёт в заход.
-function ns.RunsOnKill(encounterID)
+function ns.RunsOnKill(encounterID, difficultyID)
   local db = DB()
   local run = db and type(db.runOpen) == "table" and db.runOpen or nil
   if not run or run.left or Secret(encounterID) or not Journal() then
     return
+  end
+  local diff = not Secret(difficultyID) and tonumber(difficultyID) or nil
+  if not run.diff and diff and diff > 0 then
+    run.diff = diff   -- при входе игра сложность не назвала — бой называет
   end
   local e = byEncounter[tonumber(encounterID) or 0]
   local je = e and e.i == run.inst and e.j
@@ -277,9 +308,9 @@ frame:RegisterEvent("ENCOUNTER_END")
 frame:SetScript("OnEvent", function(_, event, ...)
   local call = ns.SafeCall or pcall
   if event == "ENCOUNTER_END" then
-    local encounterID, _, _, _, success = ...
+    local encounterID, _, difficultyID, _, success = ...
     if not Secret(success) and (success == 1 or success == true) then
-      call(ns.RunsOnKill, encounterID)
+      call(ns.RunsOnKill, encounterID, difficultyID)
     end
   else
     call(ns.RunsOnZone)
