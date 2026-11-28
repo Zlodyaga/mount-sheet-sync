@@ -4,22 +4,26 @@
 
 ![All your characters in one table: what is still to kill this week](https://media.forgecdn.net/attachments/2227/159/addon-all-png.png)
 
-## Why it's handy
+## What it does
 
-- **All characters in one table.** See every raid, dungeon and world boss still worth a run this week, and which of your characters still need it, without logging in on them. A dot means still to kill, a dash means done, and the last column counts what is left. Raids where each difficulty has its own lockout show N, H and M separately.
-- **"Remaining" list for each character.** Click a character for their own list, with the attempts and chance for every mount. Kills are ticked off as they happen.
-- **Nothing to type.** Kills are recorded automatically, with difficulty. New mounts are noticed the moment you learn them. Kills from before you installed the addon are picked up from your lockouts with one click.
-- **Attempt counter.** After a kill that could drop a mount you still need, the chat says which attempt it was and the chance over all attempts ("attempt 37 · 31%"); the Adventure Guide (and a rare's tooltip) shows the same and how many of your characters still have that boss this week. Counted in the spreadsheet, all characters together — including the kills from before you installed the addon, taken from the game's own statistics. Bonus rolls after world bosses count as attempts too.
-- **A list that fills itself.** With the companion Windows program: about 250 mounts from raids, dungeons, world bosses, rare monsters and mob farming. A kill is ticked off on its own, collected mounts drop off the list. Want a sheet with skip and farming tips? Choose a Google Sheet in the program's settings: a sheet per character in your own Google Drive.
-- **The way there.** Ctrl + click a row to pin the raid or dungeon entrance, the rare's spot or the world boss on the map. If an entrance is locked behind a story chain, the addon says what to do and leads to the next quest. With the optional [Mapzeroth](https://www.curseforge.com/wow/addons/mapzeroth) addon installed the route goes through portals and flights too.
-- **Rare routes on the world map.** A small icon on the right of the map shows where a rare whose mount you still need spawns and, for some, its whole route (Time-Lost Proto-Drake, Fallen Charger, Aeonaxx, Poseidus, the camel figurine, the Zandalari Warbringers and more). Alani, Huolon and Breezebiter fly around with no fixed route, so a faint cloud of dots shows where players have seen them. Only on maps that have such a rare; with several, you pick which to show.
-- **Coming from Rarity?** The Attempts tab copies your attempt counts from Rarity (or Rarity: Collector's Edition) where it has more — you see the list first and confirm.
-- **Only what matters this week.** Hide dungeons, world bosses or rares from "Remaining" with one click on a busy week; your farm choices stay as they are, press again and everything is back.
-- **A reminder at the door.** Entering a raid or dungeon, one chat line names the mounts from your list on this difficulty, with the attempt it will be ("Mounts here: Invincible (The Lich King, 1%) - attempt 87"). It can be turned off.
-- **Your own run times.** The addon times your runs, from the entrance to the last boss with a mount you need, averaged per difficulty, and the Attempts tab can sort by chance per minute. Any run can be left out or deleted.
-- **When it drops.** A notice right in the game, and the Dropped tab keeps the attempt and the chance it took, grouped by raids, dungeons, world bosses and rares; if you want, one line to your group or guild (off by default). While a holiday with a mount is on (Headless Horseman, Coren Direbrew, Apothecary Hummel) the addon reminds you.
-- **Six languages.** English, Russian, German, French, Spanish and Portuguese — the addon, the program and the spreadsheet.
-- **Light and private.** The addon never sends anything anywhere (WoW addons can't). By default the data stays on your computer; the program sends anonymous usage statistics only if you agree. With a Google Sheet, the program can open only the spreadsheets it created itself.
+![What it does: all your alts in one table, an attempt counter, a reminder at the door, the way there, rare routes, the drop notice, run times, Rarity import](FEATURES_PNG)
+
+**Track**
+- **All your alts in one table** - every boss still worth a run this week and who still needs it; N, H and M lockouts apart. Kills are recorded by themselves, with difficulty.
+- **Attempt counter** - after a kill, the attempt and the chance over all of them; also in the Adventure Guide and on a rare's tooltip. Older kills come from the game's statistics, bonus rolls count too.
+- **When it drops** - a notice in the game; the Dropped tab keeps the attempt and the chance. One line to your group or guild if you want (off by default).
+
+**Farm**
+- **A list that fills itself** - with the free Windows program: about 250 mounts from raids, dungeons, world bosses, rares and mob farming. Kept on your computer, or in a Google Sheet if you want one.
+- **A reminder at the door** - entering a raid or dungeon, its mounts from your list on this difficulty.
+- **Only what matters this week** - hide dungeons, world bosses or rares with one click; holidays with a mount are reminded.
+- **Your own run times** and **Rarity import** - farm by chance per minute; copy your counts where Rarity has more.
+
+**Find**
+- **The way there** - Ctrl + click a row: the entrance, the rare or the world boss is pinned; story-locked entrances lead to the next quest; with [Mapzeroth](https://www.curseforge.com/wow/addons/mapzeroth), through portals and flights.
+- **Rare routes on the map** - where a rare spawns and how it moves; Alani, Huolon and Breezebiter as a cloud of sightings.
+
+**Six languages, light and private.** English, Russian, German, French, Spanish, Portuguese. The addon never sends anything (WoW addons can't); the data stays on your computer, and the program sends anonymous statistics only if you agree.
 
 ![The "Remaining" list of any character](https://media.forgecdn.net/attachments/2227/160/addon-remaining-png.png)
 
