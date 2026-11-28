@@ -148,4 +148,24 @@ g.Advance(700)
 g.Enter(631)
 check("…on again: the line", notes() == before + 2)
 g.Leave()
+
+# 3.0.9: right after entering the game does not know the difficulty yet (GetInstanceInfo gives 0) — 3.0.8 kept that 0,
+# and such runs fitted no row: «Мин.» stayed empty while the tooltip (all runs) had a time
+g.Advance(700)
+L.execute("MSS_NS.Runs(758)[1].diff = 0")
+check("3.0.9: a run kept with difficulty 0 (3.0.8) counts for any row", ns.RunAverage(758, L.table(6)) is not None)
+L.execute('MOCK.inst = { name = "x", type = "raid", diff = 0, max = 25, id = 631 }; Fire("PLAYER_ENTERING_WORLD")')
+run = g.MountSheetSyncDB.runOpen
+check("…entering with difficulty 0: the run starts without one, no line yet", run is not None and run.diff is None and notes() == before + 2,
+      (run and run.diff, notes() - before))
+L.execute("MOCK.inst.diff = 6; RunTimers()")
+check("…a moment later the game knows it: into the run, and the line (25 heroic: the Lich King's mount)",
+      g.MountSheetSyncDB.runOpen.diff == 6 and notes() == before + 3 and "Непобедимый" in env.chat().split(chr(10))[-1],
+      (g.MountSheetSyncDB.runOpen.diff, notes() - before))
+g.Leave()
+g.Advance(700)
+L.execute('MOCK.inst = { name = "x", type = "raid", diff = 0, max = 25, id = 631 }; Fire("PLAYER_ENTERING_WORLD")')
+L.execute('Fire("ENCOUNTER_END", 1101, "Лорд Ребрад", 5, 10, 1)')
+check("…or the first boss fight tells it (ENCOUNTER_END)", g.MountSheetSyncDB.runOpen.diff == 5, g.MountSheetSyncDB.runOpen.diff)
+g.Leave()
 env.finish()

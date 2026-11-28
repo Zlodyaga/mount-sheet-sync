@@ -141,7 +141,8 @@ local function WithPlace(elem, item)
   elem.farmTip = ns.FarmTip(item.id)
   elem.instance = ns.ItemInstance(item)
   elem.anchorTip = ns.AnchorTip(elem.instance)
-  elem.runTip = ns.RunTip and ns.RunTip(elem.instance, item.d)   -- «~12 мин на заход (по 5)», по заходам игрока (Runs.lua)
+  -- «~12 мин на заход (по 5)», по заходам игрока (Runs.lua); сложности — те же, что у столбца «Мин.» (строка «Попыток» — raw)
+  elem.runTip = ns.RunTip and ns.RunTip(elem.instance, (item.raw or item).d)
   elem.encounter = tonumber(item.je)
   elem.world = item.kind == "world" or nil
   elem.spot = item.kind == "rare" and ns.RARE_SPOTS and ns.RARE_SPOTS[tonumber(item.id)] or nil
